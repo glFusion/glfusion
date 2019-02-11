@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -16,8 +16,10 @@ require_once '../lib-common.php';
 require_once 'auth.inc.php';
 require_once $_CONF['path_system'] . 'lib-menu.php';
 
+use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\Admin\AdminAction;
 
 USES_lib_admin();
 $display = '';
@@ -35,11 +37,14 @@ if (!SEC_hasRights('menu.admin')) {
     exit;
 }
 
-function MB_displayMenuList( ) {
+function MB_displayMenuList( )
+{
     global $_CONF, $_USER, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN,$LANG_MB_MENU_TYPES;
 
     $retval = '';
     $menuArray = array();
+
+    $db = Database::getInstance();
 
     $mbadmin = SEC_hasRights('menu.admin');
     $root    = SEC_inGroup('Root');
@@ -50,8 +55,8 @@ function MB_displayMenuList( ) {
         $uid = $_USER['uid'];
     }
 
-    $result = DB_query("SELECT * FROM {$_TABLES['menu']}",1);
-    while ( $menu = DB_fetchArray($result) ) {
+    $stmt = $db->conn->query("SELECT * FROM `{$_TABLES['menu']}`");
+    while ($menu = $stmt->fetch(Database::ASSOCIATIVE)) {
         $menuID = $menu['id'];
         $menuArray[$menu['id']]['menu_name']   = $menu['menu_name'];
         $menuArray[$menu['id']]['menu_id']     = $menu['id'];
@@ -101,14 +106,7 @@ function MB_displayMenuList( ) {
                       'form_url'    => "{$_CONF['site_admin_url']}/menu.php"
     );
 
-    $form_arr['bottom'] = '
-    <input type="hidden" name="mode" value="menuactivate" />
-    ';
-/*
-    <script>
-        document.getElementById(\'menubuilder\').style.display=\'\'
-    </script>
-*/
+    $form_arr['bottom'] = '<input type="hidden" name="mode" value="menuactivate">';
 
     if ( is_array($menuArray) ) {
         foreach ($menuArray AS $menu) {
@@ -138,7 +136,8 @@ function MB_displayMenuList( ) {
  * Create a new menu
  */
 
-function MB_cloneMenu( $menu_id ) {
+function MB_cloneMenu( $menu_id )
+{
     global $_CONF, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_MENU_TYPES, $LANG_ADMIN;
 
@@ -176,45 +175,72 @@ function MB_cloneMenu( $menu_id ) {
  * Saves a clone menu element
  */
 
-function MB_saveCloneMenu( ) {
-    global $_CONF, $_TABLES, $_GROUPS;
+function MB_saveCloneMenu()
+{
+    global $_CONF, $_TABLES, $_GROUPS, $LANG_ADM_ACTIONS;
 
-    $menu_name  = DB_escapeString(COM_applyFilter($_POST['menuname']));
-    $menu       = COM_applyFilter($_POST['menu'],true);
+    $db = Database::getInstance();
+
+    $menu_name  = COM_applyFilter($_POST['menuname']);
+    $menu       = filter_input(INPUT_POST,'menu',FILTER_SANITIZE_NUMBER_INT);
 
     $pidmap = array();
 
-    $sql = "SELECT * FROM {$_TABLES['menu']} WHERE id=".(int) $menu;
-    $result = DB_query($sql);
-    if ( DB_numRows($result) > 0 ) {
-        $M = DB_fetchArray($result);
+    $M = $db->conn->fetchAssoc(
+                "SELECT * FROM `{$_TABLES['menu']}` WHERE id = ?",
+                array($menu),
+                array(Database::INTEGER)
+    );
+
+    if ( $M !== false && $M !== null ) {
         $menu_type   = $M['menu_type'];
         $menu_active = $M['menu_active'];
         $group_id    = $M['group_id'];
 
-        $sqlFieldList  = 'menu_name,menu_type,menu_active,group_id';
-        $sqlDataValues = "'$menu_name',$menu_type,$menu_active,$group_id";
-        DB_save($_TABLES['menu'], $sqlFieldList, $sqlDataValues);
-        $menu_id = DB_insertId();
+        $db->conn->insert(
+                $_TABLES['menu'],
+                array(
+                    'menu_name' => $menu_name,
+                    'menu_type' => $M['menu_type'],
+                    'menu_active' => $M['menu_active'],
+                    'group_id'    => $M['group_id']
+                ),
+                array(
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::INTEGER
+                )
+        );
+        $menu_id = $db->conn->lastInsertId();
+
         $meadmin    = SEC_hasRights('menu.admin');
         $root       = SEC_inGroup('Root');
         $groups     = $_GROUPS;
 
         $menuClass = menu::getInstance($menu_id);
 
-        $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int)$menu;
-        $result = DB_query($sql);
-        while ($M = DB_fetchArray($result)) {
-            $M['menu_id']       = $menu_id;
+        $stmt = $db->conn->executeQuery(
+                    "SELECT * FROM `{$_TABLES['menu_elements']}` WHERE menu_id=?",
+                    array($menu),
+                    array(Database::INTEGER)
+        );
+        while ($menuElements = $stmt->fetch(Database::ASSOCIATIVE)) {
+            $menuElements['menu_id']       = $menu_id;
             $element            = new menuElement();
-            $element->constructor( $M, $meadmin, $root, $groups );
-            $element->id        = $element->createElementID($M['menu_id']);
-            $pidmap[$M['id']] = $element->id;
+            $element->constructor( $menuElements, $meadmin, $root, $groups );
+            $element->id        = $element->createElementID($menuElements['menu_id']);
+            $pidmap[$menuElements['id']] = $element->id;
             $element->saveElement();
         }
         if ( is_array($pidmap) ) {
             foreach ( $pidmap AS $oldid => $newid ) {
-                DB_query("UPDATE {$_TABLES['menu_elements']} SET pid=".(int) $newid." WHERE menu_id=".(int) $menu_id." AND pid=".(int) $oldid);
+                $db->conn->update(
+                    $_TABLES['menu_elements'],
+                    array('pid' => $newid),
+                    array('menu_id' => $menu_id, 'pid' => $oldid),
+                    array(Database::INTEGER, Database::INTEGER, Database::INTEGER)
+                );
             }
         }
     }
@@ -223,7 +249,13 @@ function MB_saveCloneMenu( ) {
     CACHE_clearCSS();
 
     $randID = rand();
-    DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
+
+    $db->conn->executeQuery(
+        "REPLACE INTO `{$_TABLES['vars']}` (name,value) VALUES(?,?)",
+        array('cacheid',$randID),
+        array(Database::STRING, Database::STRING)
+    );
+    AdminAction::write('system','menu_clone',sprintf($LANG_ADM_ACTIONS['clone_menu'],$M['menu_name'],$menu_name));
 }
 
 
@@ -231,11 +263,14 @@ function MB_saveCloneMenu( ) {
  * Create a new menu
  */
 
-function MB_createMenu( ) {
+function MB_createMenu( )
+{
     global $_CONF, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_MENU_TYPES, $LANG_ADMIN;
 
     $retval = '';
+
+    $db = Database::getInstance();
 
     $menu_arr = array(
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
@@ -265,7 +300,7 @@ function MB_createMenu( ) {
 
     // build group select
 
-    $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
+    $rootUser = $db->getItem($_TABLES['group_assignments'],'ug_uid',array('ug_main_grp_id' => 1),array(Database::INTEGER));
     $usergroups = SEC_getUserGroups($rootUser);
     uksort($usergroups, "strnatcasecmp");
     $group_select = '<select id="group" name="group">' . LB;
@@ -293,8 +328,11 @@ function MB_createMenu( ) {
  * Saves a new menu element
  */
 
-function MB_saveNewMenu( ) {
-    global $_CONF, $_TABLES, $_GROUPS, $LANG_MB01;
+function MB_saveNewMenu()
+{
+    global $_CONF, $_TABLES, $_GROUPS, $LANG_MB01, $LANG_ADM_ACTIONS;
+
+    $db = Database::getInstance();
 
     $errors = 0;
     $errMsg = '';
@@ -310,7 +348,7 @@ function MB_saveNewMenu( ) {
             $errors++;
             $errMsg .= $LANG_MB01['menu_name_space'].'<br/>';
         }
-        $existing_id = DB_getItem($_TABLES['menu'],'id','menu_name="'.DB_escapeString($menuname).'"');
+        $existing_id = $db->getItem($_TABLES['menu'],'id',array('menu_name' => $menuname),array(Database::STRING));
         if ( $existing_id > 0 ) {
             $errors++;
             $errMsg .= $LANG_MB01['menu_name_exits'];
@@ -321,30 +359,53 @@ function MB_saveNewMenu( ) {
         return $errMsg;
     }
 
-    $menuname   = DB_escapeString(COM_applyFilter($_POST['menuname']));
+    $menuname   = COM_applyFilter($_POST['menuname']);
     $menutype   = COM_applyFilter($_POST['menutype'],true);
     $menuactive = isset($_POST['menuactive']) ? COM_applyFilter($_POST['menuactive'],true) : 0;
     $menugroup  = COM_applyFilter($_POST['group'],true);
 
     $sqlFieldList  = 'menu_name,menu_type,menu_active,group_id';
     $sqlDataValues = "'$menuname',$menutype,$menuactive,$menugroup";
-    DB_save($_TABLES['menu'], $sqlFieldList, $sqlDataValues);
 
-    $menu_id = DB_insertId();
+    $db->conn->insert(
+            $_TABLES['menu'],
+            array(
+                'menu_name' => $menuname,
+                'menu_type' => $menutype,
+                'menu_active'   => $menuactive,
+                'group_id'  => $menugroup
+            ),
+            array(
+                Database::STRING,
+                Database::INTEGER,
+                Database::INTEGER,
+                Database::INTEGER
+            )
+    );
+    $menu_id = $db->conn->lastInsertId();
 
     $c = Cache::getInstance();
     $c->deleteItemsByTags(array('menu'));
     CACHE_clearCSS();
+
     $randID = rand();
-    DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
+    $db->conn->executeQuery(
+        "REPLACE INTO `{$_TABLES['vars']}` (name,value) VALUES(?,?)",
+        array('cacheid',$randID),
+        array(Database::STRING, Database::STRING)
+    );
+    AdminAction::write('system','menu_create',sprintf($LANG_ADM_ACTIONS['create_menu'],$menuname));
     return '';
 }
 
-function MB_saveEditMenu( ) {
-    global $_CONF, $_TABLES, $_GROUPS, $LANG_MB01;
+function MB_saveEditMenu()
+{
+    global $_CONF, $_TABLES, $_GROUPS, $LANG_MB01, $LANG_ADM_ACTIONS;
 
     $errors = 0;
     $errMsg = '';
+
+    $db = Database::getInstance();
 
     // sanity check
 
@@ -352,8 +413,8 @@ function MB_saveEditMenu( ) {
         $errors++;
         $errMsg .= $LANG_MB01['menu_name_error'];
     } else {
-        $menuname = COM_applyFilter($_POST['menuname']);
-        if ( strstr($menuname,' ' ) !== FALSE ) {
+        $menuname = filter_input(INPUT_POST,'menuname',FILTER_SANITIZE_STRING);
+        if (strstr($menuname,' ' ) !== false) {
             $errors++;
             $errMsg .= $LANG_MB01['menu_name_space'];;
         }
@@ -363,29 +424,55 @@ function MB_saveEditMenu( ) {
         return $errMsg;
     }
 
-    $menu_id    = COM_applyFilter($_POST['menu_id'],true);
-    $menuname   = DB_escapeString(COM_applyFilter($_POST['menuname']));
-    $menutype   = COM_applyFilter($_POST['menutype'],true);
-    $menuactive = isset($_POST['menuactive']) ? COM_applyFilter($_POST['menuactive'],true) : 0;
-    $menugroup  = COM_applyFilter($_POST['group'],true);
+    $menu_id    = filter_input(INPUT_POST, 'menu_id',FILTER_SANITIZE_NUMBER_INT);
+    $menuname   = filter_input(INPUT_POST, 'menuname', FILTER_SANITIZE_STRING);
+    $menutype   = filter_input(INPUT_POST, 'menutype', FILTER_SANITIZE_NUMBER_INT);
+    $menuactive = isset($_POST['menuactive']) ? filter_input(INPUT_POST,'menuactive',FILTER_SANITIZE_NUMBER_INT) : 0;
+    $menugroup  = filter_input(INPUT_POST,'group',FILTER_SANITIZE_NUMBER_INT);
 
-    $sqlFieldList  = 'id,menu_name,menu_type,menu_active,group_id';
-    $sqlDataValues = "'$menu_id','$menuname',$menutype,$menuactive,$menugroup";
-    DB_save($_TABLES['menu'], $sqlFieldList, $sqlDataValues);
+    $db->conn->update(
+            $_TABLES['menu'],
+            array(
+                'id' => $menu_id,
+                'menu_name' => $menuname,
+                'menu_type' => $menutype,
+                'menu_active' => $menuactive,
+                'group_id'  => $menugroup
+            ),
+            array(
+                'id'    => $menu_id
+            ),
+            array(
+                Database::INTEGER,
+                Database::STRING,
+                Database::INTEGER,
+                Database::INTEGER,
+                Database::INTEGER,
+                Database::INTEGER
+            )
+    );
 
     $c = Cache::getInstance();
     $c->deleteItemsByTags(array('menu'));
     CACHE_clearCSS();
     $randID = rand();
-    DB_save($_TABLES['vars'],'name,value',"'cacheid',$randID");
+
+    $db->conn->executeQuery(
+        "REPLACE INTO `{$_TABLES['vars']}` (name,value) VALUES(?,?)",
+        array('cacheid',$randID),
+        array(Database::STRING, Database::STRING)
+    );
+
+    AdminAction::write('system','menu_edit',sprintf($LANG_ADM_ACTIONS['edit_menu'],$menuname));
+
     return '';
 }
 
 /*
  * Displays a list of all menu elements for the given menu
  */
-
-function MB_displayTree( $menu_id ) {
+function MB_displayTree($menu_id)
+{
     global $_CONF, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN;
 
     $retval = '';
@@ -429,11 +516,6 @@ function MB_displayTree( $menu_id ) {
 
     $form_arr['bottom'] = '<input type="hidden" id="menu" name="menu" value="'.$menu_id.'"/>' . LB
                         . '<input type="hidden" name="mode" value="activate"/>'. LB;
-/*
-                        . '<script>' . LB
-                        . '    document.getElementById(\'menubuilder\').style.display=\'\''.LB
-                        . '</script>';
-*/
 
     $data_arr = $menu->editTree();
 
@@ -448,15 +530,21 @@ function MB_displayTree( $menu_id ) {
 }
 
 
-function MB_getMenuList( $selected = '' )
+function MB_getMenuList($selected = '')
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
     $menu_select = '';
 
-    $result = DB_query("SELECT id, menu_name FROM {$_TABLES['menu']} ORDER BY menu_name ASC",1);
-    while ( ( $M = DB_fetchArray($result) ) ) {
-        $menu_select .= '<option value="' . $M['id'].'"' . ($M['id'] == $selected ? ' selected="selected"' : '') . '>' . $M['menu_name'] .'</option>' . LB;
+    $stmt = $db->conn->query(
+                "SELECT id, menu_name FROM `{$_TABLES['menu']}` ORDER BY menu_name ASC"
+    );
+    while ($menuRecord = $stmt->fetch(Database::ASSOCIATIVE)) {
+        $menu_select .= '<option value="' . $menuRecord['id'].'"'
+                     . ($menuRecord['id'] == $selected ? ' selected="selected"' : '')
+                     . '>' . $menuRecord['menu_name'] .'</option>' . LB;
     }
     return $menu_select;
 }
@@ -465,19 +553,40 @@ function MB_getMenuList( $selected = '' )
 /*
  * Moves a menu element up or down
  */
-function MB_moveElement( $menu_id, $mid, $direction ) {
+function MB_moveElement($menu_id, $mid, $direction)
+{
     global $_CONF, $_TABLES;
+
+    $db = Database::getInstance();
 
     $menu = menu::getInstance($menu_id);
 
     switch ( $direction ) {
         case 'up' :
             $neworder = $menu->menu_elements[$mid]->order - 11;
-            DB_query("UPDATE {$_TABLES['menu_elements']} SET element_order=" . $neworder . " WHERE menu_id=".$menu_id." AND id=" . $mid);
+            $db->conn->update(
+                $_TABLES['menu_elements'],
+                array('element_order' => $neworder),
+                array('menu_id' => $menu_id, 'id' => $mid),
+                array(
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::INTEGER
+                )
+            );
             break;
         case 'down' :
             $neworder = $menu->menu_elements[$mid]->order + 11;
-            DB_query("UPDATE {$_TABLES['menu_elements']} SET element_order=" . $neworder . " WHERE menu_id=".$menu_id." AND id=" . $mid);
+            $db->conn->update(
+                $_TABLES['menu_elements'],
+                array('element_order' => $neworder),
+                array('menu_id' => $menu_id, 'id' => $mid),
+                array(
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::INTEGER
+                )
+            );
             break;
     }
     $pid = $menu->menu_elements[$mid]->pid;
@@ -493,16 +602,17 @@ function MB_moveElement( $menu_id, $mid, $direction ) {
  * Creates a new menu element
  */
 
-function MB_createElement ( $menu_id ) {
+function MB_createElement ($menu_id)
+{
     global $_CONF, $_TABLES, $_PLUGINS, $LANG_MB01, $LANG_MB_ADMIN, $LANG_MB_TYPES,
            $LANG_MB_GLTYPES, $LANG_MB_GLFUNCTION, $LANG_ADMIN;
 
     $menu = menu::getInstance($menu_id);
 
+    $db = Database::getInstance();
+
     $retval = '';
     $group_select = '';
-
-
 
     $menu_arr = array(
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
@@ -524,15 +634,14 @@ function MB_createElement ( $menu_id ) {
 
     $sp_select = '<select id="spname" name="spname">' . LB;
     if (in_array('staticpages', $_PLUGINS)) {
-        $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} WHERE sp_status = 1 ORDER BY sp_title ";
-        $result = DB_query($sql);
-        while (list ($sp_id, $sp_title,$sp_label) = DB_fetchArray($result)) {
-            if ( $sp_title == '' ) {
-                $label = $sp_label;
+        $stmt = $db->conn->query("SELECT sp_id,sp_title,sp_label FROM `{$_TABLES['staticpage']}` WHERE sp_status = 1 ORDER BY sp_title");
+        while ($spRecord = $stmt->fetch(Database::ASSOCIATIVE)) {
+            if ( $spRecord['sp_title'] == '' ) {
+                $label = $spRecord['sp_label'];
             } else {
-                $label = $sp_title;
+                $label = $spRecord['sp_title'];
             }
-            $sp_select .= '<option value="' . $sp_id . '">' . $label . '</option>' . LB;
+            $sp_select .= '<option value="' . $spRecord['sp_id'] . '">' . $label . '</option>' . LB;
             $spCount++;
         }
     }
@@ -540,10 +649,10 @@ function MB_createElement ( $menu_id ) {
 
     $topicCount = 0;
     $topic_select = '<select id="topicname" name="topicname">' . LB;
-    $sql = "SELECT tid,topic FROM {$_TABLES['topics']} ORDER BY topic";
-    $result = DB_query($sql);
-    while (list ($tid, $topic) = DB_fetchArray($result)) {
-        $topic_select .= '<option value="' . $tid . '">' . $topic . '</option>' . LB;
+
+    $stmt = $db->conn->query("SELECT tid,topic FROM `{$_TABLES['topics']}` ORDER BY topic");
+    while ($tpRecord = $stmt->fetch(Database::ASSOCIATIVE)) {
+        $topic_select .= '<option value="' . $tpRecord['tid'] . '">' . $tpRecord['topic'] . '</option>' . LB;
         $topicCount++;
     }
     $topic_select .= '</select>' . LB;
@@ -599,8 +708,13 @@ function MB_createElement ( $menu_id ) {
     } else {
         $parent_select = '<select name="pid" id="pid">' . LB;
         $parent_select .= '<option value="0">' . $LANG_MB01['top_level'] . '</option>' . LB;
-        $result = DB_query("SELECT id,element_label FROM {$_TABLES['menu_elements']} WHERE menu_id='" . (int) $menu_id . "' AND element_type=1");
-        while ($row = DB_fetchArray($result)) {
+
+        $stmt = $db->conn->executeQuery(
+                    "SELECT id,element_label FROM `{$_TABLES['menu_elements']}` WHERE menu_id=? AND element_type=1",
+                    array($menu_id),
+                    array(Database::INTEGER)
+        );
+        while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
             $parent_select .= '<option value="' . $row['id'] . '">' . $row['element_label'] . '</option>' . LB;
         }
         $parent_select .= '</select>' . LB;
@@ -609,8 +723,13 @@ function MB_createElement ( $menu_id ) {
     $order_select = '<select id="menuorder" name="menuorder">' . LB;
     $order_select .= '<option value="0">' . $LANG_MB01['first_position'] . '</option>' . LB;
 
-    $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=0 ORDER BY element_order ASC");
-    while ($row = DB_fetchArray($result)) {
+    $stmt = $db->conn->executeQuery(
+                "SELECT id,element_label,element_order FROM `{$_TABLES['menu_elements']}` WHERE menu_id=? AND pid=0 ORDER BY element_order ASC",
+                array($menu_id),
+                array(Database::INTEGER)
+    );
+
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         $label = strip_tags($row['element_label']);
         if ( trim($label) == "") {
             $label = htmlspecialchars($row['element_label']);
@@ -626,7 +745,7 @@ function MB_createElement ( $menu_id ) {
 
     // build group select
 
-    $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
+    $rootUser = $db->getItem($_TABLES['group_assignments'],'ug_uid',array('ug_main_grp_id' => 1),array(Database::INTEGER));
 
     $usergroups = SEC_getUserGroups($rootUser);
     uksort($usergroups, "strnatcasecmp");
@@ -675,8 +794,11 @@ function MB_createElement ( $menu_id ) {
  * Saves a new menu element
  */
 
-function MB_saveNewMenuElement ( ) {
+function MB_saveNewMenuElement ()
+{
     global $_CONF, $_TABLES, $_GROUPS, $MenuElementAllowedHTML;
+
+    $db = Database::getInstance();
 
     $filter = sanitizer::getInstance();
     $allowedElements = $filter->makeAllowedElements($MenuElementAllowedHTML);
@@ -698,19 +820,19 @@ function MB_saveNewMenuElement ( ) {
 
     switch($E['element_type']) {
         case 2 :
-            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['glfunction']));
+            $E['element_subtype'] = COM_applyFilter($_POST['glfunction']);
             break;
         case 3 :
             $E['element_subtype'] = COM_applyFilter($_POST['gltype'],true);
             break;
         case 4 :
-            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['pluginname']));
+            $E['element_subtype'] = COM_applyFilter($_POST['pluginname']);
             break;
         case 5 :
-            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['spname']));
+            $E['element_subtype'] = COM_applyFilter($_POST['spname']);
             break;
         case 6 :
-            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['menuurl']));
+            $E['element_subtype'] = COM_applyFilter($_POST['menuurl']);
             /*
              * check URL if it needs http:// appended...
              */
@@ -721,10 +843,10 @@ function MB_saveNewMenuElement ( ) {
             }
             break;
         case 7 :
-            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['phpfunction']));
+            $E['element_subtype'] = COM_applyFilter($_POST['phpfunction']);
             break;
         case 9 :
-            $E['element_subtype'] = DB_escapeString(COM_applyFilter($_POST['topicname']));
+            $E['element_subtype'] = COM_applyFilter($_POST['topicname']);
             break;
         default :
             $E['element_subtype'] = '';
@@ -751,7 +873,7 @@ function MB_saveNewMenuElement ( ) {
     if ( $afterElementID == 0 ) {
         $aorder = 0;
     } else {
-        $aorder = DB_getItem($_TABLES['menu_elements'],'element_order','id=' . $afterElementID);
+        $aorder = $db->getItem($_TABLES['menu_elements'],'element_order',array('id' => $afterElementID),array(Database::INTEGER));
     }
     $E['element_order'] = $aorder + 1;
 
@@ -774,13 +896,16 @@ function MB_saveNewMenuElement ( ) {
  * Edit an existing menu element
  */
 
-function MB_editElement( $menu_id, $mid ) {
+function MB_editElement( $menu_id, $mid )
+{
     global $_CONF, $_TABLES, $_PLUGINS, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION,$LANG_ADMIN;
 
     $retval = '';
 
     $menu = menu::getInstance($menu_id);
+
+    $db = Database::getInstance();
 
     $menu_arr = array(
             array('url'  => $_CONF['site_admin_url'] .'/menu.php',
@@ -855,23 +980,24 @@ function MB_editElement( $menu_id, $mid ) {
     $sp_select = '<select id="spname" name="spname">' . LB;
     if (in_array('staticpages', $_PLUGINS)) {
         $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} WHERE sp_status = 1 ORDER BY sp_title";
-        $result = DB_query($sql);
-        while (list ($sp_id, $sp_title,$sp_label) = DB_fetchArray($result)) {
-            if (trim($sp_label) == '') {
-                $label = $sp_title;
+
+        $stmt = $db->conn->query("SELECT sp_id,sp_title,sp_label FROM `{$_TABLES['staticpage']}` WHERE sp_status = 1 ORDER BY sp_title");
+        while ($spRecord = $stmt->fetch(Database::ASSOCIATIVE)) {
+            if (trim($spRecord['sp_label']) == '') {
+                $label = $spRecord['sp_title'];
             } else {
-                $label = $sp_label;
+                $label = $spRecord['sp_label'];
             }
-            $sp_select .= '<option value="' . $sp_id . '"' . ($menu->menu_elements[$mid]->subtype == $sp_id ? ' selected="selected"' : '') . '>' . $label . '</option>' . LB;
+            $sp_select .= '<option value="' . $spRecord['sp_id'] . '"' . ($menu->menu_elements[$mid]->subtype == $spRecord['sp_id'] ? ' selected="selected"' : '') . '>' . $label . '</option>' . LB;
         }
     }
     $sp_select .= '</select>' . LB;
 
     $topic_select = '<select id="topicname" name="topicname">' . LB;
-    $sql = "SELECT tid,topic FROM {$_TABLES['topics']} ORDER BY topic";
-    $result = DB_query($sql);
-    while (list ($tid, $topic) = DB_fetchArray($result)) {
-        $topic_select .= '<option value="' . $tid . '"' . ($menu->menu_elements[$mid]->subtype == $tid ? ' selected="selected"' : '') . '>' . $topic . '</option>' . LB;
+
+    $stmt = $db->conn->query("SELECT tid,topic FROM `{$_TABLES['topics']}` ORDER BY topic");
+    while ($tpRecord = $stmt->fetch(Database::ASSOCIATIVE)) {
+        $topic_select .= '<option value="' . $tpRecord['tid'] . '"' . ($menu->menu_elements[$mid]->subtype == $tpRecord['tid'] ? ' selected="selected"' : '') . '>' . $tpRecord['topic'] . '</option>' . LB;
     }
     $topic_select .= '</select>' . LB;
 
@@ -880,8 +1006,13 @@ function MB_editElement( $menu_id, $mid ) {
     } else {
         $parent_select = '<select id="pid" name="pid">' . LB;
         $parent_select .= '<option value="0">' . $LANG_MB01['top_level'] . '</option>' . LB;
-        $result = DB_query("SELECT id,element_label FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND element_type=1");
-        while ($row = DB_fetchArray($result)) {
+
+        $stmt = $db->conn->executeQuery(
+                    "SELECT id,element_label FROM `{$_TABLES['menu_elements']}` WHERE menu_id=? AND element_type=1",
+                    array($menu_id),
+                    array(Database::INTEGER)
+        );
+        while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
             if ($row['id'] != $mid ) {
                 $parent_select .= '<option value="' . $row['id'] . '" ' . ($menu->menu_elements[$mid]->pid==$row['id'] ? 'selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
             }
@@ -891,7 +1022,7 @@ function MB_editElement( $menu_id, $mid ) {
 
     // build group select
 
-    $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
+    $rootUser = $db->getItem($_TABLES['group_assignments'],'ug_uid',array('ug_main_grp_id' => 1),array(Database::INTEGER));
 
     $usergroups = SEC_getUserGroups($rootUser);
 
@@ -921,10 +1052,17 @@ function MB_editElement( $menu_id, $mid ) {
 
     $order_select = '<select id="menuorder" name="menuorder">' . LB;
     $order_select .= '<option value="0">' . $LANG_MB01['first_position'] . '</option>' . LB;
-    $result = DB_query("SELECT id,element_label,element_order FROM {$_TABLES['menu_elements']} WHERE menu_id='" . $menu_id . "' AND pid=".(int) $menu->menu_elements[$mid]->pid." ORDER BY element_order ASC");
+
+    $stmt = $db->conn->executeQuery(
+                "SELECT id,element_label,element_order FROM `{$_TABLES['menu_elements']}`
+                 WHERE menu_id=? AND pid=? ORDER BY element_order ASC",
+                array($menu_id,$menu->menu_elements[$mid]->pid),
+                array(Database::INTEGER,Database::INTEGER)
+    );
+
     $order = 10;
 
-    while ($row = DB_fetchArray($result)) {
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ( $menu->menu_elements[$mid]->order != $order ) {
             $label = strip_tags($row['element_label']);
             if ( trim($label) == "") {
@@ -973,8 +1111,11 @@ function MB_editElement( $menu_id, $mid ) {
  * Saves an edited menu element
  */
 
-function MB_saveEditMenuElement ( ) {
+function MB_saveEditMenuElement ( )
+{
     global $_CONF, $_TABLES, $MenuElementAllowedHTML;
+
+    $db = Database::getInstance();
 
     $filter = sanitizer::getInstance();
     $allowedElements = $filter->makeAllowedElements($MenuElementAllowedHTML);
@@ -984,7 +1125,7 @@ function MB_saveEditMenuElement ( ) {
     $id            = COM_applyFilter($_POST['id'],true);
     $menu_id       = COM_applyFilter($_POST['menu']);
     $pid           = COM_applyFilter($_POST['pid'],true);
-    $label         = DB_escapeString($filter->filterHTML($_POST['menulabel']));
+    $label         = $filter->filterHTML($_POST['menulabel']);
     $type          = COM_applyFilter($_POST['menutype'],true);
     $target        = COM_applyFilter($_POST['urltarget']);
 
@@ -1025,7 +1166,7 @@ function MB_saveEditMenuElement ( ) {
     $active     = isset($_POST['menuactive']) ? COM_applyFilter($_POST['menuactive'],true) : 0;
     $url = '';
     if ( isset($_POST['menuurl']) && $_POST['menuurl'] != '' ) {
-        $url        = trim(DB_escapeString(COM_applyFilter($_POST['menuurl'])));
+        $url        = trim(COM_applyFilter($_POST['menuurl']));
         if ( strpos($url,"http") !== 0 && strpos($url,"%site") === false && $url[0] != '#' && rtrim($url) != '') {
             $url = 'http://' . $url;
         }
@@ -1033,45 +1174,61 @@ function MB_saveEditMenuElement ( ) {
     $group_id   = COM_applyFilter($_POST['group'],true);
 
     $aid                = COM_applyFilter($_POST['menuorder'],true);
-    $aorder             = DB_getItem($_TABLES['menu_elements'],'element_order','id=' . $aid);
+    $aorder             = $db->getItem($_TABLES['menu_elements'],'element_order',array('id' => $aid),array(Database::INTEGER));
     $neworder = $aorder + 1;
 
-    $sql        = "UPDATE {$_TABLES['menu_elements']} SET pid=".(int) $pid.", element_order=".(int) $neworder.", element_label='$label', element_type='$type', element_subtype='$subtype', element_active=$active, element_url='$url', element_target='".DB_escapeString($target)."', group_id=".(int) $group_id." WHERE id=".(int) $id;
-
-    DB_query($sql);
+    $db->conn->executeUpdate(
+            "UPDATE `{$_TABLES['menu_elements']}`
+             SET pid=?, element_order=?, element_label=?, element_type=?, element_subtype=?, element_active=?, element_url=?, element_target=?, group_id=?
+             WHERE id=?",
+            array(
+                $pid,
+                $neworder,
+                $label,
+                $type,
+                $subtype,
+                $active,
+                $url,
+                $target,
+                $group_id,
+                $id
+            ),
+            array(
+                Database::INTEGER,
+                Database::INTEGER,
+                Database::STRING,
+                Database::INTEGER,
+                Database::STRING,
+                Database::INTEGER,
+                Database::STRING,
+                Database::STRING,
+                Database::INTEGER,
+                Database::INTEGER
+            )
+    );
     $menu->reorderMenu($pid);
 }
 
-/**
-* Enable and Disable Menu
-*/
-function MB_changeActiveStatusMenuXX ($menu_arr)
+
+function MB_deleteMenu($menu_id)
 {
-    global $_CONF, $_TABLES;
-    // disable all menus
-    $sql = "UPDATE {$_TABLES['menu']} SET menu_active = '0'";
-    DB_query($sql);
-    if (isset($menu_arr)) {
-        foreach ($menu_arr AS $menu => $side) {
-            $menu = COM_applyFilter($menu, true);
-            // the enable those in the array
-            $sql = "UPDATE {$_TABLES['menu']} SET menu_active = '1' WHERE id=".(int) $menu;
-            DB_query($sql);
-        }
-    }
-    $c = Cache::getInstance();
-    $c->deleteItemsByTag('menu');
-
-    return;
-}
-
-function MB_deleteMenu($menu_id) {
     global $_CONF, $_TABLES, $_USER;
+
+    $db = Database::getInstance();
 
     MB_deleteChildElements(0,$menu_id);
 
-    DB_query("DELETE FROM {$_TABLES['menu']} WHERE id=".(int) $menu_id);
-    DB_query("DELETE FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $menu_id);
+    $db->conn->delete(
+        $_TABLES['menu'],
+        array('id' => $menu_id),
+        array(Database::INTEGER)
+    );
+    $db->conn->delete(
+        $_TABLES['menu_elements'],
+        array('menu_id' => $menu_id),
+        array(Database::INTEGER)
+    );
+
     $c = Cache::getInstance();
     $c->deleteItemsByTags(array('menu'));
     CACHE_clearCSS();
@@ -1082,25 +1239,36 @@ function MB_deleteMenu($menu_id) {
 * Recursivly deletes all elements and child elements
 *
 */
-function MB_deleteChildElements( $id, $menu_id ){
+function MB_deleteChildElements( $id, $menu_id )
+{
     global $_CONF, $_TABLES, $_USER;
 
-    $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE pid=" . (int) $id . " AND menu_id=" . (int) $menu_id;
-    $aResult = DB_query( $sql );
-    $rowCount = DB_numRows($aResult);
-    for ( $z=0; $z < $rowCount; $z++ ) {
-        $row = DB_fetchArray( $aResult );
+    $db = Database::getInstance();
+
+    $stmt = $db->conn->executeQuery(
+                "SELECT * FROM `{$_TABLES['menu_elements']}`
+                 WHERE pid=? AND menu_id=?",
+                array($id, $menu_id),
+                array(Database::INTEGER,Database::INTEGER)
+    );
+
+    while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         MB_deleteChildElements( $row['id'],$menu_id );
     }
-    $sql = "DELETE FROM " . $_TABLES['menu_elements'] . " WHERE id=" . (int) $id;
-    DB_query( $sql );
+
+    $db->conn->delete(
+        $_TABLES['menu_elements'],
+        array('id' => $id),
+        array(Database::INTEGER)
+    );
 
     $c = Cache::getInstance();
     $c->deleteItemsByTag('menu');
 }
 
 
-function MB_editMenu( $mid ) {
+function MB_editMenu( $mid )
+{
     global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_MB00, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION,
            $LANG_MB_MENU_TYPES,$LANG_ADMIN;
@@ -1138,7 +1306,7 @@ function MB_editMenu( $mid ) {
 
     // build group select
 
-    $rootUser = DB_getItem($_TABLES['group_assignments'],'ug_uid','ug_main_grp_id=1');
+    $rootUser = $db->getItem($_TABLES['group_assignments'],'ug_uid',array('ug_main_grp_id' => 1),array(Database::INTEGER));
     $usergroups = SEC_getUserGroups($rootUser);
     uksort($usergroups, "strnatcasecmp");
 

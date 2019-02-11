@@ -1,36 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | menu.class.php                                                           |
-// |                                                                          |
-// | Menu elements class / functions                                          |
-// +--------------------------------------------------------------------------+
-// | Copyright (C)  2008-2017 by the following authors:                       |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* glFusion Menu Element class
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
-// this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 class menu {
     var $id;
@@ -65,9 +52,14 @@ class menu {
     {
         global $_TABLES;
 
-        $result = DB_query("SELECT * FROM {$_TABLES['menu']} WHERE id = ". (int)$menu_id,1);
-        if ( $result !== FALSE && DB_numRows($result) > 0 ) {
-            $menu = DB_fetchArray($result);
+        $db = Database::getInstance();
+
+        $menu = $db->conn->fetchAssoc(
+                    "SELECT * FROM `{$_TABLES['menu']}` WHERE id = ?",
+                    array($menu_id),
+                    array(Database::INTEGER)
+        );
+        if ($menu !== false && $menu !== null) {
             $this->id       = $menu['id'];
             $this->name     = $menu['menu_name'];
             $this->type     = $menu['menu_type'];
@@ -84,13 +76,20 @@ class menu {
     {
         global $_TABLES, $_GROUPS;
 
+        $db = Database::getInstance();
+
         $mbadmin = SEC_hasRights('menu.admin');
         $root    = SEC_inGroup('Root');
 
-        $sql = "SELECT * FROM {$_TABLES['menu_elements']} WHERE menu_id=".(int) $this->id." ORDER BY element_order ASC";
-        $elementResult = DB_query( $sql, 1);
+        $stmt = $db->conn->executeQuery(
+                    "SELECT * FROM `{$_TABLES['menu_elements']}`
+                     WHERE menu_id=?
+                     ORDER BY element_order ASC",
+                    array($this->id),
+                    array(Database::INTEGER)
+        );
 
-        while ($A = DB_fetchArray($elementResult) ) {
+        while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
             $element  = new menuElement();
             $element->constructor($A,$mbadmin,$root,$_GROUPS,1);
             if ( $element->access > 0 ) {
@@ -143,18 +142,40 @@ class menu {
         return $returnArray;
     }
 
-    function reorderMenu( $pid ) {
+    function reorderMenu( $pid )
+    {
         global $_TABLES;
+
+        $db = Database::getInstance();
 
         $menu_id = $this->id;
         $orderCount = 10;
 
-        $sql = "SELECT id,`element_order` FROM {$_TABLES['menu_elements']} WHERE menu_id=".$menu_id." AND pid=" . $pid . " ORDER BY `element_order` ASC";
-        $result = DB_query($sql);
-        while ($M = DB_fetchArray($result)) {
+        $stmt = $db->conn->executeQuery(
+                    "SELECT id,`element_order` FROM `{$_TABLES['menu_elements']}`
+                     WHERE menu_id=? AND pid=? ORDER BY `element_order` ASC",
+                    array($menu_id,$pid),
+                    array(Database::INTEGER, Database::INTEGER)
+        );
+        while ($M = $stmt->fetch(Database::ASSOCIATIVE)) {
             $M['element_order'] = $orderCount;
             $orderCount += 10;
-            DB_query("UPDATE {$_TABLES['menu_elements']} SET `element_order`=" . $M['element_order'] . " WHERE menu_id=".$menu_id." AND id=" . (int) $M['id'] );
+
+            $db->conn->update(
+                    $_TABLES['menu_elements'],
+                    array(
+                        'element_order' => $M['element_order']
+                    ),
+                    array(
+                        'menu_id' => $menu_id,
+                        'id' => $M['id']
+                    ),
+                    array(
+                        Database::INTEGER,
+                        Database::INTEGER,
+                        Database::INTEGER
+                    )
+            );
         }
     }
 }
@@ -220,26 +241,61 @@ class menuElement {
     function saveElement( ) {
         global $_TABLES;
 
-        $this->label = DB_escapeString($this->label);
-        $this->url = DB_escapeString($this->url);
+        $db = Database::getInstance();
 
-        $sqlFieldList  = 'id,pid,menu_id,element_label,element_type,element_subtype,element_order,element_active,element_url,element_target,group_id';
-        $sqlDataValues = "$this->id,$this->pid,'".DB_escapeString($this->menu_id)."','$this->label',$this->type,'$this->subtype',$this->order,$this->active,'$this->url','$this->target',$this->group_id";
-        DB_save($_TABLES['menu_elements'], $sqlFieldList, $sqlDataValues);
+        $this->label = $this->label;
+        $this->url = $this->url;
+
+        $db->conn->executeQuery(
+                "REPLACE INTO `{$_TABLES['menu_elements']}`
+                 (id,pid,menu_id,element_label,element_type,element_subtype,element_order,element_active,element_url,element_target,group_id)
+                 VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                array(
+                    $this->id,
+                    $this->pid,
+                    $this->menu_id,
+                    $this->label,
+                    $this->type,
+                    $this->subtype,
+                    $this->order,
+                    $this->active,
+                    $this->url,
+                    $this->target,
+                    $this->group_id
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER
+                )
+        );
     }
 
-    function createElementID( $menu_id ) {
+    function createElementID( $menu_id )
+    {
         global $_TABLES;
 
-        $sql = "SELECT MAX(id) + 1 AS next_id FROM " . $_TABLES['menu_elements'];
-        $result = DB_query( $sql );
-        $row = DB_fetchArray( $result );
-        $id = $row['next_id'];
+        $db = Database::getInstance();
+
+        $id = (int) $db->conn->fetchColumn(
+                    "SELECT MAX(id) + 1 AS next_id FROM `{$_TABLES['menu_elements']}`",
+                    array(),
+                    0,
+                    array()
+        );
         if ( $id < 1 ) {
             $id = 1;
         }
         if ( $id == 0 ) {
-            COM_errorLog("MenuBuilder: Error - Returned 0 as element id");
+            Log::write('system',Log::ERROR,"MenuBuilder: Error - Returned 0 as element id");
             $id = 1;
         }
         return $id;
@@ -374,7 +430,7 @@ class menuElement {
     }
 
 
-    function _parseElement(  )
+    function _parseElement()
     {
         global $_SP_CONF,$_USER, $_TABLES, $_PLUGINS, $LANG01, $_CONF,$_GROUPS;
 
@@ -388,10 +444,14 @@ class menuElement {
             return NULL;
         }
 
-        if ( $nonloggedinusergroup == -1 )
-            $nonloggedinusergroup = DB_getItem($_TABLES['groups'],'grp_id','grp_name="Non-Logged-in Users"');
+        $db = Database::getInstance();
 
-        if ( $this->group_id == $nonloggedinusergroup && !COM_isAnonUser()) return NULL;
+        if ( $nonloggedinusergroup == -1 )
+            $nonloggedinusergroup = $db->getItem($_TABLES['groups'],'grp_id',array('grp_name' => "Non-Logged-in Users"));
+
+        if ( $this->group_id == $nonloggedinusergroup && !COM_isAnonUser()) {
+            return NULL;
+        }
 
         if (isset($_REQUEST['topic']) ){
             $topic = COM_applyFilter($_REQUEST['topic']);
@@ -502,7 +562,9 @@ class menuElement {
                         break;
 
                     case STATICPAGE_MENU :
-                        if ( !in_array('staticpages',$_PLUGINS)) break;
+                        if ( !in_array('staticpages',$_PLUGINS)) {
+                            break;
+                        }
                         $item_array = array();
                         $order = '';
                         if (!empty ($_SP_CONF['sort_menu_by'])) {
@@ -517,11 +579,15 @@ class menuElement {
                                 $order .= 'sp_id';
                             }
                         }
-                        $result = DB_query ('SELECT sp_id, sp_label FROM ' . $_TABLES['staticpage'] . ' WHERE sp_onmenu = 1 AND sp_status = 1' . COM_getPermSql ('AND') . $order);
-                        $nrows = DB_numRows ($result);
+
+                        $stmt = $db->conn->executeQuery(
+                            "SELECT sp_id, sp_label FROM `{$_TABLES['staticpage']}`
+                             WHERE sp_onmenu = 1 AND sp_status = 1" . $db->getPermSql('AND') . $order,
+                            array(),
+                            array()
+                        );
                         $menuitems = array ();
-                        for ($i = 0; $i < $nrows; $i++) {
-                            $A = DB_fetchArray ($result);
+                        while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
                             $url = COM_buildURL ($_CONF['site_url'] . '/page.php?page=' . $A['sp_id']);
                             $label = $A['sp_label'];
                             $item_array[] = array('label' => $label, 'url' => $url);

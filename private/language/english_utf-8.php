@@ -2349,6 +2349,9 @@ $LANG_ADM_ACTIONS = array(
     'article_delete'        => 'Deleted article: %s',
     'article_global'        => 'Article Global Change: %s',
     'article_approved'      => 'Article %s has been approved',
+    'clone_menu'            => 'Cloned menu %s to %s',
+    'create_menu'           => 'Created new menu: %s',
+    'edit_menu'             => 'Edited menu: %s',
 );
 
 
