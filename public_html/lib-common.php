@@ -6188,9 +6188,18 @@ function COM_404()
     }
 	$url = COM_sanitizeUrl($url);
 
-    if (strpos($url,'custom_config.js') === true) {
+    if (strpos($url,'custom_config.js') !== false) {
         return;
     }
+/*
+$counter = (int) SESS_getVar('404counter');
+$counter++;
+if ($counter > 12) {
+    Log::write('system',Log::WARNING,'Detected high number of 404\'s - performing a temporyary ban');
+    bb2_ban($_SERVER['REAL_ADDR'],4,'High number of 404 Errors');
+}
+SESS_setVar('404counter',$counter);
+*/
 
     if ( isset($_CONF['enable_404_logging']) || $_CONF['enable_404_logging'] == true ) {
         if (!isset($_USER['uid']) || !isset($_USER['username'])) {
