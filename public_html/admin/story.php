@@ -57,6 +57,8 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     $db = Database::getInstance();
 
+    $filter = new \sanitizer();
+
     switch($fieldname) {
 
         case "access":
@@ -113,7 +115,7 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case "title":
-            $A['title'] = str_replace('$', '&#36;', $A['title']);
+            $A['title'] = $filter->htmlspecialchars(str_replace('$', '&#36;', $A['title']));
             if ($A['draft_flag'] == 0 && $A['date'] < $_CONF['_now']->toMySQL(false)) {
                 $article_url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story='.urlencode($A['sid']));
                 $retval = COM_createLink($A['title'], $article_url);

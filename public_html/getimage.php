@@ -8,8 +8,8 @@
 *     http://www.opensource.org/licenses/gpl-license.php
 *
 *  Based on prior work Copyright (C) 2004-2009 by the following authors:
-*  Tony Bibbs        tony@tonybibbs.com
-*  Dirk Haun         dirk@haun-online.de
+*   Tony Bibbs        tony@tonybibbs.com
+*   Dirk Haun         dirk@haun-online.de
 *
 */
 

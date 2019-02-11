@@ -11,12 +11,12 @@
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
-*  Tony Bibbs        tony AT tonybibbs DOT com
-*  Mark Limburg      mlimburg AT users.sourceforge DOT net
-*  Jason Whittenburg jwhitten AT securitygeeks DOT com
-*  Dirk Haun         dirk AT haun-online DOT de
-*  Vincent Furia     vinny01 AT users.sourceforge DOT net
-*  Jared Wenerd      wenerd87 AT gmail DOT com
+*   Tony Bibbs        tony AT tonybibbs DOT com
+*   Mark Limburg      mlimburg AT users.sourceforge DOT net
+*   Jason Whittenburg jwhitten AT securitygeeks DOT com
+*   Dirk Haun         dirk AT haun-online DOT de
+*   Vincent Furia     vinny01 AT users.sourceforge DOT net
+*   Jared Wenerd      wenerd87 AT gmail DOT com
 *
 */
 
@@ -211,8 +211,11 @@ function handleView($view = true)
  * @author Jared Wenerd <wenerd87 AT gmail DOT com>
  * @return string HTML (possibly a refresh)
  */
-function handleEdit($mod = false, $admin = false) {
+function handleEdit($mod = false, $admin = false)
+{
     global $_TABLES, $LANG03,$_USER,$_CONF, $_PLUGINS;
+
+    $db = Database::getInstance();
 
     if ( isset($_POST['cid']) ) {
         $cid = COM_applyFilter ($_POST['cid'],true);
@@ -249,30 +252,48 @@ function handleEdit($mod = false, $admin = false) {
             echo COM_refresh($_CONF['site_url'] . '/index.php');
             exit;
         }
+
         $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
-        $result = DB_query ("SELECT * FROM {$_TABLES['comments']} "
-            . "WHERE queued=0 AND cid = ".(int) $cid." AND sid = '".DB_escapeString($sid)."' AND type = '".DB_escapeString($type)."'");
-        if ( DB_numRows($result) == 1 ) {
-            $A = DB_fetchArray ($result);
-        } else {
+
+        $A = $db->conn->fetchAssoc(
+                "SELECT * FROM `{$_TABLES['comments']}`
+                 WHERE queued=0 AND cid = ? AND sid = ? AND type = ?",
+                array(
+                    $cid,
+                    $sid,
+                    $type
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::STRING
+                )
+        );
+        if ($A === false || $A === null) {
             Log::write('system',Log::WARNING,"handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment that doesn\'t exist as described.');
             return COM_refresh($_CONF['site_url'] . '/index.php');
         }
     } else {
 // moderator or admin edit
-        $result = DB_query("SELECT * FROM {$_TABLES['comments']} WHERE cid=".(int) $cid);
-        if ( DB_numRows($result) == 1 ) {
-            $A = DB_fetchArray ($result);
-            $sid = $A['sid'];
-            $type = $A['type'];
-            $pid = $A['pid'];
-        } else {
+        $A = $db->conn->fetchAssoc(
+                "SELECT * FROM `{$_TABLES['comments']}`
+                 WHERE cid = ?",
+                array(
+                    $cid,
+                ),
+                array(
+                    Database::INTEGER,
+                )
+        );
+        if ($A === false || $A === null) {
             Log::write('system',Log::WARNING,"handleEdit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
                    . 'to edit a comment that doesn\'t exist.');
             return COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
         }
-
+        $sid = $A['sid'];
+        $type = $A['type'];
+        $pid = $A['pid'];
     }
 
     if ( !isset($A['postmode']) || $A['postmode'] == NULL || $A['postmode'] == '') {
@@ -299,7 +320,6 @@ function handleEdit($mod = false, $admin = false) {
         $commenttext = substr($commenttext, 0, $pos);
     }
 
-
     if ( $mod ) {
         $retval = CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'modedit', $postmode);
     } else {
@@ -321,6 +341,8 @@ function handleEditSubmit()
 {
     global $_CONF, $_TABLES, $_USER, $LANG03, $LANG_ADM_ACTIONS, $_PLUGINS;
 
+    $db = Database::getInstance();
+
     $modedit = false;
     $adminedit = false;
 
@@ -331,8 +353,12 @@ function handleEditSubmit()
     $comment    = $_POST['comment_text'];
     $title      = $_POST['title'];
 
-    if ( isset($_POST['modedit'])) $modedit    = COM_applyFilter ($_POST['modedit']);
-    if ( isset($_POST['adminedit'])) $adminedit  = COM_applyFilter ($_POST['adminedit']);
+    if ( isset($_POST['modedit'])) {
+        $modedit    = COM_applyFilter ($_POST['modedit']);
+    }
+    if ( isset($_POST['adminedit'])) {
+        $adminedit  = COM_applyFilter ($_POST['adminedit']);
+    }
 
     $moderatorEdit = false;
     if ( $modedit == 'x' && SEC_hasRights('comment.moderate') ) $moderatorEdit = true;
@@ -343,7 +369,7 @@ function handleEditSubmit()
         }
     }
 
-    $commentuid = DB_getItem ($_TABLES['comments'], 'uid', "cid = ".(int) $cid);
+    $commentuid = (int) $db->getItem ($_TABLES['comments'], 'uid', array('cid' => $cid),array(Database::INTEGER));
     if ( COM_isAnonUser() ) {
         $uid = 1;
     } else {
@@ -366,35 +392,68 @@ function handleEditSubmit()
 
     COM_updateSpeedlimit ('comment');
 
-    $dbTitle   = DB_escapeString ($title);
-    $dbComment = DB_escapeString ($comment);
     if (isset($_POST['username'])) {
         $username = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt());
-        $dbUsername = DB_escapeString($username);
     } else {
         $username = '';
-        $dbUsername = DB_escapeString($username);
     }
-    $dbCid = (int) $cid;
-    $dbSid = DB_escapeString($sid);
-    $dbPostmode = DB_escapeString($postmode);
 
     if ( $commentuid == 1 ) {
         $filter = sanitizer::getInstance();
-        $sql = "UPDATE {$_TABLES['comments']} SET comment = '$dbComment', title = '$dbTitle', name='".$dbUsername."',postmode='".$dbPostmode."'"
-                . " WHERE cid=".$dbCid." AND sid='".$dbSid."'";
-    } else {
-    // save the comment into the comment table
-        $sql = "UPDATE {$_TABLES['comments']} SET comment = '$dbComment', title = '$dbTitle', postmode='".$dbPostmode."'"
-                . " WHERE cid=".$dbCid." AND sid='".$dbSid."'";
-    }
-//@SAVE
-    DB_query($sql);
 
-    if (DB_error($sql) ) { //saving to non-existent comment or comment in wrong article
-        Log::write('system',Log::WARNING,"handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
-        . 'to edit to a non-existent comment or the cid/sid did not match');
-        return COM_refresh($_CONF['site_url'] . '/index.php');
+        try {
+            $db->conn->update(
+                    $_TABLES['comments'],
+                    array(
+                        'comment'   => $comment,
+                        'title'     => $title,
+                        'name'      => $username,
+                        'postmode'  => $postmode
+                    ),
+                    array(
+                        'cid' => $cid,
+                        'sid' => $sid
+                    ),
+                    array(
+                        Database::STRING,
+                        Database::STRING,
+                        Database::STRING,
+                        Database::STRING,
+                        Database::INTEGER,
+                        Database::STRING
+                    )
+            );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            Log::write('system',Log::WARNING,"handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+            . 'to edit to a non-existent comment or the cid/sid did not match');
+            return COM_refresh($_CONF['site_url'] . '/index.php');
+        }
+    } else {
+        try {
+            $db->conn->update(
+                    $_TABLES['comments'],
+                    array(
+                        'comment'   => $comment,
+                        'title'     => $title,
+                        'postmode'  => $postmode
+                    ),
+                    array(
+                        'cid' => $cid,
+                        'sid' => $sid
+                    ),
+                    array(
+                        Database::STRING,
+                        Database::STRING,
+                        Database::STRING,
+                        Database::INTEGER,
+                        Database::STRING
+                    )
+            );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            Log::write('system',Log::WARNING,"handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+            . 'to edit to a non-existent comment or the cid/sid did not match');
+            return COM_refresh($_CONF['site_url'] . '/index.php');
+        }
     }
 
     if ($moderatorEdit || $adminedit) {
@@ -410,8 +469,21 @@ function handleEditSubmit()
         PLG_itemSaved((int) $cid,'comment');
         $safecid = (int) $cid;
         $safeuid = (int) $uid;
-//@SAVE
-        DB_save($_TABLES['commentedits'],'cid,uid,time',"$safecid,$safeuid,'".$_CONF['_now']->toMySQL(true)."'");
+
+        $db->conn->executeUpdate(
+                "REPLACE INTO `{$_TABLES['commentedits']}`
+                    (cid,uid,time) VALUES (?,?,?)",
+                array(
+                    $cid,
+                    $uid,
+                    $_CONF['_now']->toMySQL(true)
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING
+                )
+        );
     }
 
     if ( !$moderatorEdit) PLG_commentEditSave($type,$cid,$sid);
@@ -512,6 +584,8 @@ function handleunSubscribe($sid,$type)
 
 // MAIN
 CMT_updateCommentcodes();
+
+$db = Database::getInstance();
 
 $display = '';
 $pageBody = '';
@@ -773,10 +847,18 @@ if ( isset($_POST['cancel'] ) ) {
                 if (!empty ($sid) && !empty ($type)) {
                     if (empty ($title)) {
                         if ($type == 'article') {
-                            $title = DB_getItem($_TABLES['stories'], 'title',
-                                                "sid = '".DB_escapeString($sid)."'"
-                                                . COM_getPermSQL('AND')
-                                                . COM_getTopicSQL('AND'));
+
+                            $title = $db->conn->fetchColumn(
+                                        "SELECT sid FROM `{$_TABLES['stories']}`
+                                         WHERE sid=? " . $db->getPermSQL('AND') . $db->getTopicSQL('AND'),
+                                        array(
+                                            $sid
+                                        ),
+                                        0,
+                                        array(
+                                            Database::STRING
+                                        )
+                            );
                         }
                         // CMT_commentForm expects non-htmlspecial chars for title...
 // fixes and escaped html chars

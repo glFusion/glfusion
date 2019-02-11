@@ -1,41 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | directory.php                                                            |
-// |                                                                          |
-// | Directory of all the stories on a glFusion site.                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004-2009 by the following authors:                        |
-// |                                                                          |
-// | Authors: Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* Directory list of all articles
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004-2009 by the following authors:
+*   Dirk Haun         dirk AT haun-online DOT de
+*/
 
 require_once 'lib-common.php';
 
-// configuration option:
-// List stories for the current month on top of the overview page
-// (if set = true)
+use \glFusion\Database\Database;
+
 $conf_list_current_month = false;
 
 $display = '';
@@ -119,6 +101,8 @@ function DIR_navBar($dir_topic, $year, $month = 0)
 
     $retval = '';
 
+    $db = Database::getInstance();
+
     if ($month == 0) {
         $prevyear = $year - 1;
         $nextyear = $year + 1;
@@ -137,9 +121,13 @@ function DIR_navBar($dir_topic, $year, $month = 0)
         }
     }
 
-    $result = DB_query("SELECT MIN(EXTRACT(Year from date)) AS year FROM {$_TABLES['stories']}");
-    $A = DB_fetchArray($result);
-    if ($prevyear < $A['year']) {
+    $minYear = (int) $db->conn->fetchColumn(
+        "SELECT MIN(EXTRACT(Year from date)) AS year FROM `{$_TABLES['stories']}`",
+        array(),
+        0,
+        array()
+    );
+    if ($prevyear < $minYear) {
         $prevyear = 0;
     }
 
@@ -207,52 +195,63 @@ function DIR_displayMonth(&$template, $dir_topic, $year, $month)
 
     $retval = '';
 
+    $db = Database::getInstance();
+    $filter = new \sanitizer();
+
     $dt = new Date('now',$_USER['tzid']);
 
     $start = sprintf ('%04d-%02d-01 00:00:00', $year, $month);
     $lastday = DIR_lastDayOfMonth ($month, $year);
     $end   = sprintf ('%04d-%02d-%02d 23:59:59', $year, $month, $lastday);
 
-    $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS day,DATE_FORMAT(date, '%e') AS mday FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')";
+    $params = array();
+    $types  = array();
+
+    $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS day,DATE_FORMAT(date, '%e') AS mday
+            FROM `{$_TABLES['stories']}`
+            WHERE (date >= ?) AND (date <= ?) AND (draft_flag = 0) AND (date <= ?)";
+
+    $params[] = $start; $types[] = Database::STRING;
+    $params[] = $end;   $types[] = Database::STRING;
+    $params[] = $_CONF['_now']->toMySQL(false); $types[] = Database::STRING;
+
     if ($dir_topic != 'all') {
-        $sql .= " AND ((tid = '".DB_escapeString($dir_topic)."') || alternate_tid= '".DB_escapeString($dir_topic)."')";
+        $sql .= " AND (tid = ? || alternate_tid = ?)";
+        $params[] = $dir_topic; $types[] = Database::STRING;
+        $params[] = $dir_topic; $types[] = Database::STRING;
     }
-    $sql .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
-         . COM_getLangSQL ('sid', 'AND') . " ORDER BY date ASC";
+    $sql .= $db->getTopicSql ('AND') . $db->getPermSql ('AND')
+         .  $db->getLangSQL ('sid', 'AND') . " ORDER BY date ASC";
 
-    $result = DB_query($sql);
-    $numrows = DB_numRows($result);
-
-    if ($numrows > 0) {
-        $entries = array();
-        $mday = 0;
-
-        for ($i = 0; $i < $numrows; $i++) {
-            $A = DB_fetchArray($result);
-
-            if ($mday != $A['mday']) {
-                if (count($entries) > 0) {
-                    $retval .= COM_makeList($entries);
-                    $entries = array();
-                }
-                $dt->setTimestamp($A['day']);
-                $day = $dt->format($_CONF['shortdate'],true);
-
-                $template->set_var('section_title', $day);
-                $retval .= $template->parse('title', 'section-title') . LB;
-
-                $mday = $A['mday'];
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                $params,
+                $types
+    );
+    $entries = array();
+    $mday = 0;
+    while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+        if ($mday != $A['mday']) {
+            if (count($entries) > 0) {
+                $retval .= COM_makeList($entries);
+                $entries = array();
             }
+            $dt->setTimestamp($A['day']);
+            $day = $dt->format($_CONF['shortdate'],true);
 
-            $url = COM_buildUrl($_CONF['site_url'] . '/article.php?story='
-                                . $A['sid']);
-            $entries[] = COM_createLink($A['title'], $url);
+            $template->set_var('section_title', $day);
+            $retval .= $template->parse('title', 'section-title') . LB;
+
+            $mday = $A['mday'];
+
+            $A['title'] = $filter->htmlspecialchars($A['title']);
         }
 
-        if (count($entries) > 0) {
-            $retval .= COM_makeList($entries);
-        }
-
+        $url = COM_buildUrl($_CONF['site_url'].'/article.php?story='.urlencode($A['sid']));
+        $entries[] = COM_createLink($A['title'], $url);
+    }
+    if (count($entries) > 0) {
+        $retval .= COM_makeList($entries);
     } else {
         $retval .= $template->parse('message', 'no-articles') . LB;
     }
@@ -277,33 +276,42 @@ function DIR_displayYear(&$template,$topic, $year, $main = false)
 
     $retval = '';
 
+    $db = Database::getInstance();
+
     $currentyear = date ('Y', time ());
     $currentmonth = date ('m', time ());
 
     $start = sprintf ('%04d-01-01 00:00:00', $year);
     $end   = sprintf ('%04d-12-31 23:59:59', $year);
 
-    $monthsql = array();
-    $monthsql['mysql'] = "SELECT DISTINCT MONTH(date) AS month,COUNT(*) AS count FROM {$_TABLES['stories']} WHERE (date >= '$start') AND (date <= '$end') AND (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')";
+    $params = array();
+    $types  = array();
+    $sql = "SELECT DISTINCT MONTH(date) AS month,COUNT(*) AS count
+            FROM `{$_TABLES['stories']}` WHERE (date >= ?) AND (date <= ?) AND (draft_flag = 0) AND (date <= ?)";
+    $params[] = $start; $types[] = Database::STRING;
+    $params[] = $end;   $types[] = Database::STRING;
+    $params[] = $_CONF['_now']->toMySQL(false); $types[] = Database::STRING;
 
     if ($topic != 'all') {
-        $monthsql['mysql'] .= " AND ((tid = '".DB_escapeString($topic)."') || alternate_tid = '".DB_escapeString($topic). "' )";
+        $sql .= " AND ((tid = ?) || alternate_tid = ?)";
+        $params[] = $topic; $types[] = Database::STRING;
+        $params[] = $topic; $types[] = Database::STRING;
     }
-    $monthsql['mysql'] .= COM_getTopicSql ('AND') . COM_getPermSql ('AND')
-              . COM_getLangSQL ('sid', 'AND');
+    $sql .= $db->getTopicSql ('AND') . $db->getPermSql ('AND')
+              . $db->getLangSQL ('sid', 'AND');
 
-    $msql = array();
-    $msql['mysql'] = $monthsql['mysql'] . " GROUP BY MONTH(date) ORDER BY date ASC";
+    $sql .= " GROUP BY MONTH(date) ORDER BY date ASC";
 
-    $mresult = DB_query($msql);
-    $nummonths = DB_numRows($mresult);
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                $params,
+                $types
+    );
 
-    if ($nummonths > 0) {
+    if ($stmt !== false && $stmt !== null) {
         $items = array();
         $lastm = 1;
-        for ($j = 0; $j < $nummonths; $j++) {
-            $M = DB_fetchArray($mresult);
-
+        while ($M = $stmt->fetch(Database::ASSOCIATIVE)) {
             for (; $lastm < $M['month']; $lastm++) {
                 $items[] = DIR_monthLink($topic, $year, $lastm, 0);
             }
@@ -351,23 +359,29 @@ function DIR_displayAll(&$template, $dir_topic)
 
     $retval = '';
 
-    $yearsql = array();
-    $yearsql['mysql'] = "SELECT DISTINCT YEAR(date) AS year,date FROM {$_TABLES['stories']} WHERE (draft_flag = 0) AND (date <= '".$_CONF['_now']->toMySQL(true)."')" . COM_getTopicSql ('AND') . COM_getPermSql ('AND')  . COM_getLangSQL ('sid', 'AND');
-    $ysql = array();
-    $ysql['mysql'] = $yearsql['mysql'] . " GROUP BY YEAR(date) ORDER BY date DESC";
+    $db = Database::getInstance();
 
-    $yresult = DB_query($ysql);
-    $numyears = DB_numRows($yresult);
-    if ($numyears > 0) {
-        for ($i = 0; $i < $numyears; $i++) {
-            $Y = DB_fetchArray($yresult);
+    $sql = "SELECT DISTINCT YEAR(date) AS year,date
+            FROM `{$_TABLES['stories']}`
+            WHERE (draft_flag = 0) AND (date <= ?)"
+         . $db->getTopicSql ('AND')
+         . $db->getPermSql ('AND')
+         . $db->getLangSQL ('sid', 'AND')
+         . " GROUP BY YEAR(date) ORDER BY date DESC";
 
-            $template->set_var('section_title', $Y['year']);
-            $retval .= $template->parse('title', 'section-title') . LB;
-
-            $retval .= DIR_displayYear($template, $dir_topic, $Y['year']);
-        }
-    } else {
+    $stmt = $db->conn->executeQuery(
+                $sql,
+                array($_CONF['_now']->toMySQL(false)),
+                array(Database::STRING)
+    );
+    $counter = 0;
+    while ($Y = $stmt->fetch(Database::ASSOCIATIVE)) {
+        $template->set_var('section_title', $Y['year']);
+        $retval .= $template->parse('title', 'section-title') . LB;
+        $retval .= DIR_displayYear($template, $dir_topic, $Y['year']);
+        $counter++;
+    }
+    if ($counter === 0) {
         $retval .= $template->parse('message', 'no-articles') . LB;
     }
 
@@ -403,6 +417,7 @@ function DIR_canonicalLink($dir_topic, $year = 0, $month = 0)
     return '<link rel="canonical" href="' . $url . '">' . LB;
 }
 
+$db = Database::getInstance();
 
 if (isset($_POST['topic']) && isset($_POST['year']) && isset($_POST['month'])) {
     $dir_topic = $_POST['topic'];
@@ -428,13 +443,12 @@ if ($dir_topic == 'all') {
 }
 // See if user has access to view topic.
 if ($topic != '') {
-    $test_topic = DB_getItem($_TABLES['topics'], 'tid', "tid = '$topic' " . COM_getPermSQL('AND'));
-    if (strtolower($topic) != strtolower($test_topic)) {
+
+    if (\Topic::Access($topic) > 0) {
+        $dir_topic = $topic;
+    } else {
         $topic = '';
         $dir_topic = 'all';
-    } else {
-        $topic = $test_topic;
-        $dir_topic = $test_topic;
     }
 }
 
@@ -449,8 +463,8 @@ if (($month < 1) || ($month > 12)) {
 
 $dir_topicName = '';
 if ($dir_topic != 'all') {
-    $dir_topicName = DB_getItem($_TABLES['topics'], 'topic',
-                            "tid = '" . DB_escapeString($dir_topic) . "'");
+
+    $dir_topicName = \Topic::Get($dir_topic, 'topic');
 }
 
 $template = new Template($_CONF['path_layout']);
@@ -469,6 +483,9 @@ if (($year != 0) && ($month != 0)) {
     $directory = DIR_displayMonth($template, $dir_topic, $year, $month);
     $page_navigation = DIR_navBar($dir_topic, $year, $month);
     $block_title = $LANG_MONTH[$month] . ' ' . $year;
+    if ($dir_topic != 'all') {
+        $block_title .= ' :: ' .$dir_topicName;
+    }
     $val_year = $year;
     $val_month = $month;
 } else if ($year != 0) {
@@ -480,6 +497,9 @@ if (($year != 0) && ($month != 0)) {
     $directory = DIR_displayYear($template, $dir_topic, $year);
     $page_navigation = DIR_navBar($dir_topic, $year);
     $block_title = $year;
+    if ($dir_topic != 'all') {
+        $block_title .= ' :: ' .$dir_topicName;
+    }
     $val_year = $year;
     $val_month = 0;
 
@@ -492,6 +512,9 @@ if (($year != 0) && ($month != 0)) {
     $directory = DIR_displayAll($template, $dir_topic);
     $page_navigation = '';
     $block_title = $LANG_DIR['title'];
+    if ($dir_topic != 'all') {
+        $block_title .= ' :: ' .$dir_topicName;
+    }
     $val_year = 0;
     $val_month = 0;
 
