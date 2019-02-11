@@ -19,8 +19,10 @@ if (!defined ('GVERSION')) {
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\Article\Article;
 
-function glfusion_UpgradeCheck() {
+function glfusion_UpgradeCheck()
+{
     global $_CONF,$_SYSTEM,$_VARS,$_TABLES,$LANG01;
 
     if (!SEC_inGroup ('Root')) {
@@ -49,7 +51,8 @@ function glfusion_UpgradeCheck() {
     return $retval;
 }
 
-function glfusion_SecurityCheck() {
+function glfusion_SecurityCheck()
+{
     global $_CONF,$_SYSTEM,$LANG01;
 
     if (!SEC_inGroup ('Root') OR (isset($_SYSTEM['development_mode']) AND $_SYSTEM['development_mode'])) {
@@ -92,7 +95,8 @@ function glfusion_SecurityCheck() {
  *  Issues:
  *      Does not handle stories that may have expired.
  */
-function phpblock_storypicker() {
+function phpblock_storypicker(&$B)
+{
     global $_TABLES, $_CONF, $topic;
 
     $LANG_STORYPICKER = array('choose' => 'Choose a story');
@@ -124,6 +128,8 @@ function phpblock_storypicker() {
         }
     }
     if (!empty($topic)) {
+        $topicName = \Topic::Get($topic, 'topic');
+        $B['title'] ='Recent Stories in ' . $topicName;
         $dataArray[] = $topic;
         $typeArray[] = Database::STRING;
         $topicsql = " AND tid = ?";
@@ -139,10 +145,11 @@ function phpblock_storypicker() {
             $topicsql = " AND tid <> ?";
         }
     }
-    $sql = 'SELECT sid, title FROM ' .$_TABLES['stories']
-         . ' WHERE draft_flag = 0 AND date <= now()'
-         . COM_getPermSQL(' AND')
-         . COM_getTopicSQL(' AND')
+//@TODO - Fix date select - no unixtime format
+    $sql = 'SELECT * FROM `' .$_TABLES['stories']
+         . '` WHERE draft_flag = 0 AND date <= now()'
+         . $db->getPermSQL(' AND')
+         . $db->getTopicSQL(' AND')
          . $topicsql
          . ' ORDER BY date DESC LIMIT ' . (int) $max_stories;
 
@@ -150,9 +157,12 @@ function phpblock_storypicker() {
 
     $list = '';
     while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
-        $url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story=' . $A['sid']);
-        $list .= '<li><a href=' . $url .'>'
-                . COM_truncate($A['title'],41,'...') . "</a></li>\n";
+        $article = new Article();
+        $article->retrieveArticleFromVars($A);
+        $url = COM_buildUrl ($_CONF['site_url'] . '/article.php?story=' . urlencode($A['sid']));
+        $list .= '<li class="uk-text-truncate"><a href=' . $url .'>'
+                . $article->getDisplayItem('title') . "</a></li>\n";
+        unset($article);
     }
     return $list;
 }
