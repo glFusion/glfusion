@@ -236,8 +236,6 @@ function GROUP_edit($grp_id = '')
     $group_templates->set_var('lang_securitygroupmsg',$LANG_ACCESS['groupmsg']);
     $group_templates->set_var('hide_adminoption', '');
 
-    Log::write('system',Log::DVLP_DEBUG,"SELECTED: ".$selected);
-
     if (empty($groupoptions)) {
         // make sure to list only those groups of which the Group Admin
         // is a member
@@ -405,7 +403,6 @@ function GROUP_displayRights($grp_id = '', $core = 0)
         if ($VERBOSE) {
             // this is for debugging purposes
             for ($i = 1; $i < count($grpftarray); $i++) {
-                Log::write('system',Log::DEBUG,"element $i is feature " . key($grpftarray) . " and is " . current($grpftarray));
                 next($grpftarray);
             }
         }
@@ -727,8 +724,6 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
                 }
             }
         }
-        Log::write('system',Log::DVLP_DEBUG,'GROUP SAVE: groups = ' . implode(',',$groups));
-        Log::write('system',Log::DVLP_DEBUG,"GROUP SAVE: deleting all group_assignments for group $grp_id/$grp_name");
 
         $db->conn->delete(
             $_TABLES['group_assignments'],
@@ -739,8 +734,6 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         if (! empty($groups)) {
             foreach ($groups as $g) {
                 if (in_array($g, $GroupAdminGroups)) {
-                    Log::write('system',Log::DVLP_DEBUG,"adding group_assignment $g for $grp_name");
-
                     $db->conn->insert(
                         $_TABLES['group_assignments'],
                         array(
