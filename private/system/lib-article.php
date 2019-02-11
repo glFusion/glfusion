@@ -1071,7 +1071,7 @@ function plugin_user_move_article($origUID, $destUID)
 {
     global $_TABLES;
 
-    $sql = "UPDATE {$_TABLS['stories']} SET uid=".(int)$destUID." WHERE uid=".(int)$origUID;
+    $sql = "UPDATE {$_TABLES['stories']} SET uid=".(int)$destUID." WHERE uid=".(int)$origUID;
     DB_query($sql,1);
     $sql = "UPDATE {$_TABLES['stories']} SET owner_id=".(int) $destUID." WHERE owner_id=".(int) $origUID;
     DB_query($sql,1);
