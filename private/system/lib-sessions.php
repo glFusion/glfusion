@@ -546,7 +546,8 @@ function SESS_getUserDataFromId($userid)
         $stmt = $db->conn->executeQuery($sql,
             array('userid'=>$userid),
             array(Database::INTEGER),
-            new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $cacheKey));
+            new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $cacheKey)
+            );
     } catch(\Doctrine\DBAL\DBALException $e) {
         $db->dbError($e->getMessage(),$sql);
     }
