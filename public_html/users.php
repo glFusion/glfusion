@@ -41,10 +41,7 @@ if ( !isset($_SYSTEM['verification_token_ttl']) ) {
 function userprofile()
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG04, $LANG09, $LANG28, $LANG_LOGIN;
-
-// @param    int     $user   User ID of profile to get
-// @param    int     $msg    Message to display (if != 0)
-// @param    string  $plugin optional plugin name for message
+    global $LANG_ADMIN;
 
     $db = Database::getInstance();
 
@@ -156,10 +153,8 @@ function userprofile()
     $user_templates->set_var ('user_fullname', $fullname);
 
     if (SEC_hasRights('user.edit') || (isset($_USER['uid']) && $_USER['uid'] == $A['uid'])) {
-        global $_IMAGE_TYPE, $LANG_ADMIN;
-
-        $edit_icon = '<img src="' . $_CONF['layout_url'] . '/images/edit.'
-                   . $_IMAGE_TYPE . '" alt="' . $LANG_ADMIN['edit']
+        $edit_icon = '<img src="' . $_CONF['layout_url'] . '/images/edit.png'
+                   . '" alt="' . $LANG_ADMIN['edit']
                    . '" title="' . $LANG_ADMIN['edit'] . '" />';
         if ($_USER['uid'] == $A['uid']) {
             $edit_url = "{$_CONF['site_url']}/usersettings.php";
@@ -354,9 +349,6 @@ function userprofile()
     $user_templates->set_var ('number_stories', COM_numberFormat($storyCount));
     if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
         $user_templates->set_var ('lang_number_comments', $LANG04[85]);
-
-        $sql = "SELECT COUNT(*) AS count FROM `{$_TABLES['comments']}`
-                WHERE (queued = 0 AND uid = ?)";
 
         $commentCount = (int) $db->conn->fetchColumn(
                     "SELECT COUNT(*) AS count FROM `{$_TABLES['comments']}`
