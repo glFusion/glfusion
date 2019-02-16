@@ -963,13 +963,19 @@ function USER_uniqueUsername($username)
 {
     global $_TABLES;
 
+    $db = Database::getInstance();
+
     if (function_exists('CUSTOM_uniqueUsername')) {
         return CUSTOM_uniqueUsername($username);
     }
 
+    if (empty($username)) {
+        $username = 'User';
+    }
+
     $try = $username;
     do {
-        $uid = $db->getItem($_TABLES['users'],array('username'=> $try));
+        $uid = $db->getItem($_TABLES['users'],'uid',array('username'=> $try));
         if (!empty($uid) && $uid !== false) {
             $r = rand(2, 9999);
             if (strlen($username) > 12) {
