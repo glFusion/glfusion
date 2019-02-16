@@ -226,13 +226,16 @@ class OAuthConsumer
             $this->_DBupdate_userinfo($uid, $userinfo);
         } else {
             // new user
+            if (!isset($users['loginname']) || empty($users['loginname'])) {
+                $users['loginname'] = 'RemoteUser';
+            }
             $loginname = $users['loginname'];
-            $checkName = $db->getItem($_TABLES['users'], 'username', array('username' => $loginname));
+            $checkName = $db->getItem($_TABLES['users'], 'username', array('username' => $loginname),array(Database::STRING));
             if (!empty($checkName)) {
                 if (function_exists('CUSTOM_uniqueRemoteUsername')) {
                     $loginname = CUSTOM_uniqueRemoteUsername(loginname, $remoteservice);
                 }
-                if (strcasecmp($checkName,$loginname) == 0) {
+                if (strcasecmp($checkName,$loginname) === 0) {
                     $loginname = USER_uniqueUsername($loginname);
                 }
             }
