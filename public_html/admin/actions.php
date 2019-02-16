@@ -107,7 +107,9 @@ function Actions_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token = "
 
     $retval = '';
 
-    return $fieldvalue;
+    $filter = \sanitizer::getInstance();
+
+    return $filter->htmlspecialchars($fieldvalue);
 }
 
 function actions_admin_menu($action = '')
