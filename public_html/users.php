@@ -1345,7 +1345,7 @@ function _userNewpwd()
     $db = Database::getInstance();
 
     $uid    = (int) filter_input(INPUT_GET,'uid',FILTER_SANITIZE_NUMBER_INT);
-    $requid = COM_sanitizeID(filter_input(INPUT_GET,'rid',FILTER_SANITIZE_STRING));
+    $reqid  = COM_sanitizeID(filter_input(INPUT_GET,'rid',FILTER_SANITIZE_STRING));
 
     if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($reqid) && (strlen ($reqid) == 16)) {
         $valid = $db->getCount ($_TABLES['users'], array ('uid', 'pwrequestid'),
