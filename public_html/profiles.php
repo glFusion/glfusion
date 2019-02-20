@@ -1,41 +1,26 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | profiles.php                                                             |
-// |                                                                          |
-// | This pages lets glFusion users communicate with each other without       |
-// | exposing email addresses.                                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans      - mark AT glfusion DOT org                            |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* Allows glFusion users to communicate / share stories
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2011-2019 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Authors: Tony Bibbs         - tony AT tonybibbs DOT com
+*            Mark Limburg       - mlimburg AT users DOT sourceforge DOT net
+*            Jason Whittenburg  - jwhitten AT securitygeeks DOT com
+*            Dirk Haun          - dirk AT haun-online DOT de
+*
+*/
 
 require_once 'lib-common.php';
+
+use \glFusion\Article\Article;
 
 /**
 * Mails the contents of the contact form to that user
@@ -355,27 +340,17 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     $filter->setReplaceTags(true);
     $filter->setNamespace('glfusion','mail_story');
 
-    $story = new Story();
-    $args = array ( 'sid' => $sid, 'mode' => 'view' );
-    $output = STORY_LOADED_OK;
-    $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
-    if ( $result == PLG_RET_OK ) {
-        foreach ( $story->_dbFields AS $fieldname => $save ) {
-            $varname = '_' . $fieldname;
-            if (array_key_exists($fieldname, $output)) {
-                $story->{$varname} = $output[$fieldname];
-            }
-        }
-        $story->_username = $output['username'];
-        $story->_fullname = $output['fullname'];
-    } else {
-        return COM_refresh($_CONF['site_url'] . '/index.php');
+    $story = new Article();
+
+    if ($story->retrieveArticleFromDB($sid) !== Article::STORY_LOADED_OK) {
+        COM_404();
     }
-    $A['title'] = $story->DisplayElements('title');
-    $A['introtext'] = $story->DisplayElements('introtext');
-    $A['uid'] = $story->displayElements('uid');
-    $A['story_image'] = $story->DisplayElements('story_image');
-    $A['day'] = $story->DisplayElements('date');
+
+    $A['title'] = $story->getDisplayItem('title');
+    $A['introtext'] = $story->getDisplayItem('introtext');
+    $A['uid'] = $story->getDisplayItem('uid');
+    $A['story_image'] = $story->getDisplayItem('story_image');
+    $A['day'] = $story->getDisplayItem('date');
 
     $spamData = array(
         'username'  => $from,
@@ -513,109 +488,87 @@ function mailstory ($sid, $to, $toemail, $from, $fromemail, $shortmsg,$html=0)
     exit;
 }
 
-
+/*
+ * DOES NOT APPEAR THIS IS USED ANY LONGER!
+ */
 function _createMailStory( $sid )
 {
     global $_CONF, $_TABLES, $LANG_DIRECTION, $LANG01, $LANG08;
 
-    USES_lib_story();
+    $story = new Article();
 
-    $story = new Story();
-
-    $args = array (
-                    'sid' => $sid,
-                    'mode' => 'view'
-                  );
+    if ($story->retrieveArticleFromDB($sid) !== Article::STORY_LOADED_OK) {
+        COM_404();
+    }
 
     $output = STORY_LOADED_OK;
     $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
 
-    if($result == PLG_RET_OK) {
-        /* loadFromArray cannot be used, since it overwrites the timestamp */
-        foreach ( $story->_dbFields AS $fieldname => $save ) {
-            $varname = '_' . $fieldname;
-
-            if (array_key_exists($fieldname, $output)) {
-                $story->{$varname} = $output[$fieldname];
-            }
-        }
-       $story->_username = $output['username'];
-       $story->_fullname = $output['fullname'];
-    }
-    if ($output == STORY_PERMISSION_DENIED) {
-        $display = COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
-                 . COM_showMessageText($LANG_ACCESS['storydenialmsg'], $LANG_ACCESS['accessdenied'], true,'error')
-                 . COM_siteFooter ();
-        echo $display;
-        exit;
-    } elseif ( $output == STORY_INVALID_SID ) {
-        COM_404();
+    $T = new Template($_CONF['path_layout'] . 'article');
+    $T->set_file('article', 'mailable.thtml');
+    list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
+    $T->set_var('direction', $LANG_DIRECTION);
+    $T->set_var('css_url',$style_cache_url);
+    $T->set_var('page_title',
+            $_CONF['site_name'] . ': ' . $story->getDisplayItem('title'));
+    $T->set_var ( 'story_title', $story->getDisplayItem( 'title' ) );
+    $T->set_var ( 'story_subtitle',$story->getDisplayItem('subtitle'));
+    $story_image = $story->getDisplayItem('story_image');
+    if ( $story_image != '' ) {
+        $T->set_var('story_image',$story_image);
     } else {
-        $T = new Template($_CONF['path_layout'] . 'article');
-        $T->set_file('article', 'mailable.thtml');
-        list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
-        $T->set_var('direction', $LANG_DIRECTION);
-        $T->set_var('css_url',$style_cache_url);
-        $T->set_var('page_title',
-                $_CONF['site_name'] . ': ' . $story->displayElements('title'));
-        $T->set_var ( 'story_title', $story->DisplayElements( 'title' ) );
-        $T->set_var ( 'story_subtitle',$story->DisplayElements('subtitle'));
-        $story_image = $story->DisplayElements('story_image');
-        if ( $story_image != '' ) {
-            $T->set_var('story_image',$story_image);
-        } else {
-            $T->unset_var('story_image');
-        }
-
-         if ( $_CONF['hidestorydate'] != 1 ) {
-            $T->set_var ('story_date', $story->displayElements('date'));
-        }
-
-        if ($_CONF['contributedbyline'] == 1) {
-            $T->set_var ('lang_contributedby', $LANG01[1]);
-            $authorname = COM_getDisplayName ($story->displayElements('uid'));
-            $T->set_var ('author', $authorname);
-            $T->set_var ('story_author', $authorname);
-            $T->set_var ('story_author_username', $story->DisplayElements('username'));
-        }
-
-        $T->set_var ('story_introtext',
-                                    $story->DisplayElements('introtext'));
-        $T->set_var ('story_bodytext',
-                                    $story->DisplayElements('bodytext'));
-
-        $T->set_var ('site_name', $_CONF['site_name']);
-        $T->set_var ('site_slogan', $_CONF['site_slogan']);
-        $T->set_var ('story_id', $story->getSid());
-        $articleUrl = COM_buildUrl ($_CONF['site_url']
-                                    . '/article.php?story=' . $story->getSid());
-        if ($story->DisplayElements('commentcode') >= 0) {
-            $commentsUrl = $articleUrl . '#comments';
-            $comments = $story->DisplayElements('comments');
-            $numComments = COM_numberFormat ($comments);
-            $T->set_var ('story_comments', $numComments);
-            $T->set_var ('comments_url', $commentsUrl);
-            $T->set_var ('comments_text',
-                    $numComments . ' ' . $LANG01[3]);
-            $T->set_var ('comments_count', $numComments);
-            $T->set_var ('lang_comments', $LANG01[3]);
-            $comments_with_count = sprintf ($LANG01[121], $numComments);
-
-            if ($comments > 0) {
-                $comments_with_count = COM_createLink($comments_with_count, $commentsUrl);
-            }
-            $T->set_var ('comments_with_count', $comments_with_count);
-        }
-        $T->set_var ('lang_full_article', $LANG08[33]);
-        $T->set_var ('article_url', $articleUrl);
-
-        COM_setLangIdAndAttribute($T);
-
-        $T->parse('output', 'article');
-        $htmlMsg =  $T->finish($T->get_var('output'));
-
-        return $htmlMsg;
+        $T->unset_var('story_image');
     }
+
+     if ( $_CONF['hidestorydate'] != 1 ) {
+        $T->set_var ('story_date', $story->getDisplayItem('date'));
+    }
+
+    if ($_CONF['contributedbyline'] == 1) {
+        $T->set_var ('lang_contributedby', $LANG01[1]);
+        $authorname = COM_getDisplayName ($story->get('uid'));
+        $T->set_var ('author', $authorname);
+        $T->set_var ('story_author', $authorname);
+        $T->set_var ('story_author_username', $story->getDisplayItem('username'));
+    }
+
+    $T->set_var ('story_introtext',
+                                $story->getDisplayItem('introtext'));
+    $T->set_var ('story_bodytext',
+                                $story->getDisplayItem('bodytext'));
+
+    $T->set_var ('site_name', $_CONF['site_name']);
+    $T->set_var ('site_slogan', $_CONF['site_slogan']);
+    $T->set_var ('story_id', $story->get('sid'));
+    $articleUrl = COM_buildUrl ($_CONF['site_url']
+                                . '/article.php?story=' . $story->get('sid'));
+    if ($story->get('commentcode') >= 0) {
+        $commentsUrl = $articleUrl . '#comments';
+        $comments = $story->get('comments');
+        $numComments = COM_numberFormat ($comments);
+        $T->set_var ('story_comments', $numComments);
+        $T->set_var ('comments_url', $commentsUrl);
+        $T->set_var ('comments_text',
+                $numComments . ' ' . $LANG01[3]);
+        $T->set_var ('comments_count', $numComments);
+        $T->set_var ('lang_comments', $LANG01[3]);
+        $comments_with_count = sprintf ($LANG01[121], $numComments);
+
+        if ($comments > 0) {
+            $comments_with_count = COM_createLink($comments_with_count, $commentsUrl);
+        }
+        $T->set_var ('comments_with_count', $comments_with_count);
+    }
+    $T->set_var ('lang_full_article', $LANG08[33]);
+    $T->set_var ('article_url', $articleUrl);
+
+    COM_setLangIdAndAttribute($T);
+
+    $T->parse('output', 'article');
+    $htmlMsg =  $T->finish($T->get_var('output'));
+
+    return $htmlMsg;
+
 }
 
 /**
@@ -662,24 +615,12 @@ function mailstoryform ($sid, $to = '', $toemail = '', $from = '',
         }
     }
 
-    $story = new Story();
-    $args = array ( 'sid' => $sid, 'mode' => 'view' );
-    $output = STORY_LOADED_OK;
-    $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
-    if ( $result == PLG_RET_OK ) {
-        foreach ( $story->_dbFields AS $fieldname => $save ) {
-            $varname = '_' . $fieldname;
-            if (array_key_exists($fieldname, $output)) {
-                $story->{$varname} = $output[$fieldname];
-            }
-        }
-        $story->_username = $output['username'];
-        $story->_fullname = $output['fullname'];
-    } else {
-        return COM_refresh($_CONF['site_url'] . '/index.php');
+    $story = new Article();
+    if ($story->retrieveArticleFromDB($sid) !== Article::STORY_LOADED_OK) {
+        COM_404();
     }
-    $story_title = $story->DisplayElements('title');
-    $introtext = $story->DisplayElements('introtext');
+    $story_title = $story->getDisplayItem('title');
+    $introtext = $story->getDisplayItem('introtext');
     $story_body = COM_truncateHTML($introtext,512);
 
     $postmode = $_CONF['mailuser_postmode'];
@@ -853,7 +794,6 @@ switch ($what) {
                      . COM_siteFooter ();
         } else {
             COM_404();
-//            $display .= COM_refresh ($_CONF['site_url'] . '/index.php');
         }
         break;
 }
