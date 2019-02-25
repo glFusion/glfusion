@@ -109,7 +109,7 @@
 					<div class="uk-form-row">
 						<label class="uk-form-label" for="pgpkey">{lang_pgpkey}</label>
 						<div class="uk-form-controls">
-							<textarea class="uk-form-width-medium texteditor" rows="7" id="pgpkey" name="pgpkey">{pgp_value}</textarea>
+							<textarea class="uk-form-width-medium texteditor" rows="7" id="pgpkey" name="pgpkey">{pgpkey_value}</textarea>
 						</div>
 					</div>
 
