@@ -305,9 +305,9 @@ class Article
     {
         global $_CONF, $_TABLES, $_USER, $LANG_ADM_ACTIONS;
 
-        if ($system != true) {
+        $db = Database::getInstance();
 
-            $db = Database::getInstance();
+        if ($system != true) {
 
             $sql = "SELECT tid,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon
                      FROM `{$_TABLES['stories']}` WHERE sid = ?";

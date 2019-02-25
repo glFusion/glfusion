@@ -96,9 +96,9 @@ while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
                                                     $row['title'],
                                                     $row['expire'])
         );
-        Article::delete($sid,true,$token);
+        Article::delete($row['sid'],true,$token);
         $c = Cache::getInstance();
-        $c->deleteItemsByTags(array('story_'.$sid,'whatsnew','menu'));
+        $c->deleteItemsByTags(array('story_'.$row['sid'],'whatsnew','menu'));
     }
 }
 
