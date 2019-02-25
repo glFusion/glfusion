@@ -846,7 +846,7 @@ class Topic
         $sql = "SELECT sid,alternate_tid
                FROM {$_TABLES['stories']}
                WHERE tid = '".DB_escapeString($this->tid)."'
-               AND (alternate_tid IS NOT NULL || alternate_tid != '')";
+               AND (alternate_tid IS NOT NULL && alternate_tid != '')";
         $result = DB_query($sql);
         while ($A = DB_fetchArray($result, false)) {
             $sql = "UPDATE {$_TABLES['stories']}
