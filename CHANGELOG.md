@@ -18,6 +18,8 @@
   - Set defaults / values for all datetime fields properly
 
 ### Fixed
+  - When deleting a topic - the stories in that topic were not being properly deleted
+  - Headlines Auto tag used incorrect timezone in pulling new articles causing a delay in displaying new articles
   - Ensure getItemInfo_comment is available
   - Rating check for previous ratings did not return proper value
   - Missing lastedited field in Forum Plugin fresh installation
