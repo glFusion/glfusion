@@ -47,7 +47,7 @@
 			<label class="uk-form-label">{$LANG27[41]}</label>
 			<div class="uk-form-controls">
 				<select id="sortnum" name="sortnum">
-					<option value="0">First</option>
+					<option value="0">{$LANG27[58]}</option>
 					<!-- BEGIN sort_selection -->
 					<option value="{sortnum}" {sortnum_sel}>{sortnum_tid}</option>
 					<!-- END sort_selection -->
