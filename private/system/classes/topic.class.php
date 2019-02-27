@@ -555,8 +555,8 @@ class Topic
             'description' => $this->description,
             'limitnews' => $this->limitnews,
             'default_chk' => $this->is_default ? 'checked="checked"' : '',
-            'archive_chk' => $this->archive_flag? 'checked="checked"' : '',
-            'sort_opt' . $this->sort_by => 'selected="selected"',
+            'archive_chk' => $this->archive_flag ? 'checked="checked"' : '',
+            'sort_by_' . $this->sort_by => 'selected="selected"',
             'sort_dir_' . strtoupper($this->sort_dir) => 'selected="selected"',
             'imageurl'  => $this->imageurl,
             'owner_dropdown' => COM_buildOwnerList('owner_id', $this->owner_id),
@@ -700,10 +700,14 @@ class Topic
         global $_TABLES;
 
         // Make sure this is a topic admin
-        if (!self::isAdmin()) COM_404();
+        if (!self::isAdmin()) {
+            COM_404();
+        }
 
         // Typically this will be $_POST
-        if (!empty($A)) $this->setVars($A);
+        if (!empty($A)) {
+            $this->setVars($A);
+        }
 
         // Check that required fields are not empty
         if (!$this->isValidRecord()) {
