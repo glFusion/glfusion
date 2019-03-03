@@ -241,7 +241,7 @@ function userprofile()
 
     $tids = array ();
     $stmt = $db->conn->query(
-                "SELECT tid FROM `{$_TABLES['topics']}`" . $db->getPermSQL(),
+                "SELECT tid FROM `{$_TABLES['topics']}`" . $db->getPermSQL()
     );
     while ($T = $stmt->fetch(Database::ASSOCIATIVE)) {
         $tids[] = $T['tid'];
