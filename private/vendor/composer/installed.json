@@ -482,17 +482,17 @@
     },
     {
         "name": "james-heinrich/getid3",
-        "version": "v1.9.16",
-        "version_normalized": "1.9.16.0",
+        "version": "v1.9.17",
+        "version_normalized": "1.9.17.0",
         "source": {
             "type": "git",
             "url": "https://github.com/JamesHeinrich/getID3.git",
-            "reference": "7aec0d4f5fc156612f71e415d07996aee6ab8d82"
+            "reference": "d2e45f2c4f75cc7443e158757ad2d678e318685d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/JamesHeinrich/getID3/zipball/7aec0d4f5fc156612f71e415d07996aee6ab8d82",
-            "reference": "7aec0d4f5fc156612f71e415d07996aee6ab8d82",
+            "url": "https://api.github.com/repos/JamesHeinrich/getID3/zipball/d2e45f2c4f75cc7443e158757ad2d678e318685d",
+            "reference": "d2e45f2c4f75cc7443e158757ad2d678e318685d",
             "shasum": ""
         },
         "require": {
@@ -518,7 +518,7 @@
             "ext-xml": "XML extension is required for graphic modules to analyze the XML metadata.",
             "ext-zlib": "Zlib extension is required for archive modules and compressed metadata."
         },
-        "time": "2018-10-17T17:19:36+00:00",
+        "time": "2019-02-07T17:30:03+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -796,17 +796,17 @@
     },
     {
         "name": "phpfastcache/phpfastcache",
-        "version": "7.0.4",
-        "version_normalized": "7.0.4.0",
+        "version": "7.0.5",
+        "version_normalized": "7.0.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/PHPSocialNetwork/phpfastcache.git",
-            "reference": "2bc552d849c846a3741aff57e02c9b23319ae1b1"
+            "reference": "64638b27f473aa26603e84288d91a2b80a4aa388"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/2bc552d849c846a3741aff57e02c9b23319ae1b1",
-            "reference": "2bc552d849c846a3741aff57e02c9b23319ae1b1",
+            "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/64638b27f473aa26603e84288d91a2b80a4aa388",
+            "reference": "64638b27f473aa26603e84288d91a2b80a4aa388",
             "shasum": ""
         },
         "require": {
@@ -837,7 +837,7 @@
             "phpfastcache/riak-client": "~1.4.4",
             "predis/predis": "~1.1.0"
         },
-        "time": "2018-12-21T23:31:09+00:00",
+        "time": "2019-03-03T14:39:16+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1177,17 +1177,17 @@
     },
     {
         "name": "robthree/twofactorauth",
-        "version": "1.6.5",
-        "version_normalized": "1.6.5.0",
+        "version": "1.6.6",
+        "version_normalized": "1.6.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/RobThree/TwoFactorAuth.git",
-            "reference": "f5f58a4c62d0336a0e6175856894a51f3565dad2"
+            "reference": "7477d5d65625b7fe33cb338b98e419d394e9e9fd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/RobThree/TwoFactorAuth/zipball/f5f58a4c62d0336a0e6175856894a51f3565dad2",
-            "reference": "f5f58a4c62d0336a0e6175856894a51f3565dad2",
+            "url": "https://api.github.com/repos/RobThree/TwoFactorAuth/zipball/7477d5d65625b7fe33cb338b98e419d394e9e9fd",
+            "reference": "7477d5d65625b7fe33cb338b98e419d394e9e9fd",
             "shasum": ""
         },
         "require": {
@@ -1196,7 +1196,7 @@
         "require-dev": {
             "phpunit/phpunit": "@stable"
         },
-        "time": "2018-06-09T10:09:59+00:00",
+        "time": "2019-03-19T21:51:19+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
