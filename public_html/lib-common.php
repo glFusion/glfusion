@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Common functions and startup code                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2019 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -2218,6 +2218,11 @@ function COM_userMenu( $help='', $title='', $position='' )
                     $login->set_var('oauth_sign_in_image', $_CONF['site_url'] . '/images/login-with-' . $service . '.png');
                     $login->set_var('oauth_sign_in_image_style', '');
                     $login->set_var('oauth_service_display',ucwords($service));
+                    if ($service === 'facebook') {
+                        $login->set_var('oauth_service-postfix', '-official');
+                    } else {
+                        $login->set_var('oauth_service-postfix', '');
+                    }
                     $login->parse('output', 'oauth_login');
                     $html_oauth .= $login->finish($login->get_var('output'));
                 }

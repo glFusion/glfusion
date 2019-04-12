@@ -216,7 +216,7 @@ $LANG03 = array(
     5 => 'Username',
     6 => 'This site requires you to be logged in to post a comment, please log in.  If you do not have an account you can use the form below to create one.',
     7 => 'Your last comment was ',
-    // lib-comment.php:1189  
+    // lib-comment.php:1189
 	// public_html/comment.php:729
     8 => " seconds ago.  This site requires at least %d seconds between comments",
     9 => 'Comment',
@@ -874,7 +874,7 @@ $LANG21 = array(
     42 => 'You must enter the block title and block order for glFusion default blocks.',
     43 => 'Homepage Only',
     44 => 'All Except Homepage',
-//public_html/admin/block.php:209	
+//public_html/admin/block.php:209
     45 => "You are trying to access a block that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/block.php\">go back to the block administration screen</a>.",
     46 => 'Move',
     47 => '',
@@ -949,7 +949,7 @@ $LANG24 = array(
     38 => 'More from',
     39 => 'Emails',
     40 => '',
-//public_html/admin/story.php:665	
+//public_html/admin/story.php:665
     41 => "You are trying to access a story that you don't have rights to.  This attempt has been logged.  You may view the article in read-only below. Please <a href=\"{$_CONF['site_admin_url']}/story.php\">go back to the story administration screen</a> when you are done.",
     42 => "You are trying to access a story that you don't have rights to.  This attempt has been logged.  Please <a href=\"{$_CONF['site_admin_url']}/story.php\">go back to the story administration screen</a>.",
     43 => '',
@@ -1191,7 +1191,7 @@ $LANG28 = array(
     81 => 'Reminder to verify account for %s',
 //public_html/admin/user.php:2248
     82 => "Your account on {$_CONF['site_name']} has not been accessed since %s and will be disabled if not accessed in the next 30 days.",
-//public_html/admin/user.php:2246: 
+//public_html/admin/user.php:2246:
     83 => "Your account on {$_CONF['site_name']} has not been used since it was created and will be deleted soon if not accessed.",
 //public_html/admin/user.php:2250:
     84 => "Your login name is: %s  for our site: {$_CONF['site_url']}",
@@ -1485,8 +1485,8 @@ $LANG_SOCIAL = array(
     'enabled'               => 'Enabled',
     'share_it_label'        => 'Share It!',
     'state_toggled'         => 'Social Share state has been toggled.',
-    'follow_us'             => 'Follow Us on',
-    'follow_me'             => 'Follow Me on',
+    'follow_us'             => 'Find Us on',
+    'follow_me'             => 'Find Me on',
     'service_name'          => 'Service Name',
     'service_url'           => 'Service URL',
     'site_username'         => 'Site Username',
@@ -1651,7 +1651,7 @@ $LANG_ACCESS = array(
     'grantgrouplabel' => 'Grant Above Group Edit Rights',
     'permmsg' => 'Members = All logged-in members of the site.<br />Anonymous = All users browsing the site that are not logged in.',
     'securitygroups' => 'Security Groups',
-//public_html/admin/user.php:145:	
+//public_html/admin/user.php:145:
     'editrootmsg' => "Even though you are a User Administrator, you can't edit a root user without first being a root user yourself.  You can edit all other users except root users. Please note that all attempts to illegally edit root users are logged.  Please go back to the <a href=\"{$_CONF['site_admin_url']}/user.php\">User Administration page</a>.",
     'securitygroupsmsg' => 'Select the checkboxes for the groups you want the user to belong to.',
     'groupeditor' => 'Group Editor',
@@ -1683,7 +1683,7 @@ $LANG_ACCESS = array(
     'edit' => 'Edit',
     'none' => 'None',
     'accessdenied' => 'Access Denied',
-//depreciated	
+//depreciated
     'storydenialmsg' => "You do not have access to view this story.  This could be because you are not a member of {$_CONF['site_name']}.  Please <a href=\"{$_CONF['site_url']}/users.php?mode=new\" rel=\"nofollow\">become a member</a> of {$_CONF['site_name']} to receive full membership access!",
     'nogroupsforcoregroup' => 'This group doesn\'t belong to any of the other groups',
     'grouphasnorights' => 'This group doesn\'t have access to any of the administrative features of this site',
@@ -1884,7 +1884,7 @@ $LANG_BUTTONS = array(
 $LANG_404 = array(
     1 => '404 - URL not found',
     2 => '<div class="story-body">You may not be able to access this page because of one of the following conditions:<ul><li>an out of date bookmark or favorite</li><li>a search engine that has an out of date listing for this site</li><li>a mistyped address</li></ul></div>',
-//public_html/lib-common.php:6404: 
+//public_html/lib-common.php:6404:
     3 => "<p>Please try one of the following:<ul style=\"margin-left:15px;padding-top:10px;\"><li><a href=\"{$_CONF['site_url']}\">Home Page</a></li><li><a href=\"{$_CONF['site_url']}/search.php\">Search</a></li></ul></p>",
 );
 
@@ -2601,7 +2601,7 @@ $LANG_ENVCHK = array(
     'on'                        => 'On',
     'open_basedir'              => 'If <strong>open_basedir</strong> restrictions are enabled on your site, it may cause permission problems during the install. The File System Check below should point out any issues.',
     'openssl_extension'         => 'OpenSSL Extension',
-//public_html/admin/envcheck.php:111: 	
+//public_html/admin/envcheck.php:111:
     'php_req_version'           => 'glFusion requires PHP version 5.3.3 or newer.',
     'php_settings'              => 'PHP Settings',
     'php_version'               => 'PHP Version',
@@ -2643,7 +2643,7 @@ $LANG_UPGRADE = array(
     'plugin_uptodate' => 'Up To Date',
     'plugin_newer'  => 'You are running a newer version of the plugin.',
     'no_data'       => 'No data available.',
-//public_html/admin/index.php:57: 
+//public_html/admin/index.php:57:
     'updates_available' => 'There are updates available - Please use the <a href="'.$_CONF['site_admin_url'].'/vercheck.php">Version Checker</a> to see available updates.',
     'plugin_title'  => 'Plugin Version Check',
     'plugin'        => 'Plugin',

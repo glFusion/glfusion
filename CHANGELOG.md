@@ -8,10 +8,11 @@
   - Forum plugin - admin can now change the forum category when editing a forum
 
 ### Changed
+  - Modified the Facebook login button to meet Facebook's current interface standards
   - Modified the download method used by FileMgmt to ensure local buffers are properly flushed
-  - Change Google+ icon on Oauth button to just the Google icon
+  - Modified Google+ icon on Oauth button to the Google icon
   - Updated Polish translations for the installer, by glFusion Poland
-  - Updated CKEditor v4.11.1 (fixes a Cross Site Scripting security hole in the editor)
+  - Updated CKEditor v4.11.4 (fixes a Cross Site Scripting security hole in the editor)
   - Template and data caching has been reworked to be much more efficient and faster. IT IS IMPORTANT TO CLEAR THE CACHE WHEN UPGRADING as the file formats used by the caching algorithms have changed.
   - newimage: auto tag no longer requires the album to have the Include in Random Block attribute set.
   - Templates can now escape { and } by using {{ and }} - for example {{x}} will render {x} in the template.

@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <a href="{site_url}/users.php?oauth_login={oauth_service}" class="uk-button login-social login-{oauth_service}" rel="nofollow">
-  <i class="uk-icon-{oauth_service}"></i>
+  <i class="uk-icon-{oauth_service}{oauth_service-postfix}"></i>
   {$LANG04[194]}{oauth_service_display}
 </a>
 {# end {templatelocation} #}

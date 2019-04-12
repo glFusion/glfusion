@@ -96,6 +96,11 @@ function SOC_getShareIcons( $title = '', $summary = '', $itemUrl = '', $image = 
         $T->set_var('service_id',$id);
         $T->set_var('service_display_name',$display_name);
         $T->set_var('icon',$icon);
+        if ($icon === 'facebook') {
+            $T->set_var('service-postfix', '-official');
+        } else {
+            $T->set_var('service-postfix', '');
+        }
         $T->parse('sb','social_buttons',true);
     }
     $T->set_var('lang_share_it', $LANG_SOCIAL['share_it_label']);
@@ -149,6 +154,12 @@ function SOC_getFollowMeIcons( $uid = 0, $templateFile = 'follow_user.thtml' )
                 'service_display_name' => $row['display_name'],
                 'social_url'   => $social_url,
             ));
+            if ($row['icon'] === 'facebook') {
+                $T->set_var('service-postfix', '-official');
+            } else {
+                $T->set_var('service-postfix', '');
+            }
+
             $T->set_var('lang_follow_me', $LANG_SOCIAL['follow_me']);
             $T->set_var('lang_follow_us', $LANG_SOCIAL['follow_us']);
             $T->parse('sb','social_buttons',true);
@@ -203,10 +214,16 @@ function SOC_followMeProfile( $uid )
         } else {
             $socialServicesArray[$id]['ss_username'] = '';
         }
+        if ($socialServicesArray[$id]['service_name'] === 'facebook') {
+            $postfix = '-official';
+        } else {
+            $postfix = '';
+        }
         $userFollowMe[] = array(
                     'service_id'           => $id,
                     'service_display_name' => $socialServicesArray[$id]['display_name'],
                     'service'              => $socialServicesArray[$id]['service_name'],
+                    'service_postfix'      => $postfix,
                     'service_username'     => $socialServicesArray[$id]['ss_username'],
                     'service_url'          => substr($socialServicesArray[$id]['url'],0,strpos($socialServicesArray[$id]['url'],"%%u")),
         );

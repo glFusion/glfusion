@@ -508,6 +508,7 @@ p.tm-article-meta {
 	background: #3b5998;
 	border-color: rgba(0, 0, 0, 0.2);
 }
+
 .login-facebook:hover,
 .login-facebook:focus,
 .login-facebook:active,
@@ -754,6 +755,9 @@ p.tm-article-meta {
 	color:#00AFF2 !important;
 }
 
+.tm-follow.uk-icon-facebook-official {
+	color: #3b5998 !important;
+}
 
 /* CMS theme uses SmartMenus for horizontal cascading menus */
 

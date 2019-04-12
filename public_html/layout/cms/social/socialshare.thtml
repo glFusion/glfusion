@@ -5,7 +5,7 @@
 <!-- BEGIN social_buttons -->
 		<li>
 			<button class="uk-button uk-margin-small-bottom uk-button-{service_name}" data-action="share" data-type="{service_id}" data-uk-tooltip title="{service_display_name}">
-			<i class="uk-icon-justify uk-icon-{icon}"></i>
+			<i class="uk-icon-justify uk-icon-{icon}{service-postfix}"></i>
 			</button>
 		</li>
 <!-- END social_buttons -->
