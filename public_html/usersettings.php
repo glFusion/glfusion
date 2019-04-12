@@ -39,8 +39,18 @@ function edituser()
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG_MYACCOUNT, $LANG04, $LANG_ADMIN, $LANG_TFA;
 
-    $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo,remoteservice,account_type FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']} AND {$_TABLES['userinfo']}.uid=".(int)$_USER['uid']);
-    $A = DB_fetchArray ($result);
+    $db = Database::getInstance();
+
+    $A = $db->conn->fetchAssoc(
+            "SELECT *
+             FROM `{$_TABLES['users']}` AS u,`{$_TABLES['userprefs']}` AS up,`{$_TABLES['userinfo']}` AS ui
+             WHERE u.uid = ? AND up.uid = ? AND ui.uid=?",
+            array($_USER['uid'],$_USER['uid'],$_USER['uid']),
+            array(Database::INTEGER,Database::INTEGER,Database::INTEGER)
+    );
+
+//    $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo,remoteservice,account_type FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']} AND {$_TABLES['userinfo']}.uid=".(int)$_USER['uid']);
+//    $A = DB_fetchArray ($result);
 
     $preferences = new Template ($_CONF['path_layout'] . 'preferences');
     $preferences->set_file (array ('profile'            => 'profile.thtml',
@@ -188,10 +198,14 @@ function edituser()
             } else {
                 $preferences->unset_var('unlink_accounts');
                 $preferences->set_var ('resynch_checked', '');
-                $sql = "SELECT * FROM {$_TABLES['users']} WHERE email='".DB_escapeString($A['email'])."' AND account_type = " . LOCAL_USER;
-                $mergeResult = DB_query($sql);
-                if ( DB_numRows($mergeResult) == 1 ) {
-                    $localAccountData = DB_fetchArray($mergeResult);
+
+                $localAccountData = $db->conn->fetchAssoc(
+                    "SELECT * FROM `{$_TABLES['users']}`
+                     WHERE email=? AND account_type = ?",
+                    array($A['email'],LOCAL_USER),
+                    array(Database::STRING,Database::INTEGER)
+                );
+                if ($localAccountData !== false && $localAccountData !== null) {
                     $preferences->set_var('merge_account',true);
                     $preferences->set_var('localuid',$localAccountData['uid']);
                     $preferences->set_var('local_username',$localAccountData['username']);
@@ -292,11 +306,14 @@ function edituser()
 
     $preferences->parse ('twofactor', 'twofactor', false);
 
-    $result = DB_query("SELECT about,pgpkey FROM {$_TABLES['userinfo']} WHERE uid=".(int)$_USER['uid']);
-    $A = DB_fetchArray($result);
-
     $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
-    DB_change ($_TABLES['users'], 'pwrequestid', DB_escapeString($reqid), 'uid', (int) $_USER['uid']);
+
+    $db->conn->update(
+            $_TABLES['users'],
+            array('pwrequestid' => $reqid),
+            array('uid' => $_USER['uid']),
+            array(Database::STRING,Database::INTEGER)
+    );
 
     $preferences->set_var ('about_value', htmlspecialchars ($A['about']));
     $preferences->set_var ('pgpkey_value', htmlspecialchars ($A['pgpkey']));
@@ -343,6 +360,7 @@ function edituser()
         foreach ( $follow_me AS $service ) {
             $preferences->set_var('service_display_name', $service['service_display_name']);
             $preferences->set_var('service',$service['service']);
+            $preferences->set_var('service-postfix',$service['service_postfix']);
             $preferences->set_var('service_username',$service['service_username']);
             $preferences->set_var('service_url',$service['service_url']);
             $preferences->parse('sl','social_links',true);
@@ -368,7 +386,16 @@ function confirmAccountDelete ($form_reqid)
 {
     global $_CONF, $_TABLES, $_USER, $LANG04, $MESSAGE;
 
-    if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'), array (DB_escapeString($form_reqid), (int) $_USER['uid'])) != 1) {
+    $db = Database::getInstance();
+
+    $ct = $db->getCount(
+                $_TABLES['users'],
+                array ('pwrequestid', 'uid'),
+                array ($form_reqid, $_USER['uid']),
+                array(Database::STRING,Database::INTEGER)
+          );
+
+    if ($ct != 1) {
         // not found - abort
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
@@ -384,8 +411,16 @@ function confirmAccountDelete ($form_reqid)
     }
     $token = SEC_createToken();
 
-    $reqid = DB_escapeString(substr (md5 (uniqid (rand (), 1)), 1, 16));
-    DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', (int)$_USER['uid']);
+    $reqid = substr (md5 (uniqid (rand (), 1)), 1, 16);
+
+    $db->conn->update(
+            $_TABLES['users'],
+            array('pwrequestid' => $reqid),
+            array('uid' => $_USER['uid']),
+            array(Database::STRING,Database::INTEGER)
+    );
+
+//    DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', (int)$_USER['uid']);
 
     $retval = '';
 
@@ -417,8 +452,16 @@ function deleteUserAccount ($form_reqid)
 {
     global $_CONF, $_TABLES, $_USER, $MESSAGE;
 
-    if (DB_count ($_TABLES['users'], array ('pwrequestid', 'uid'),
-                  array (DB_escapeString($form_reqid), $_USER['uid'])) != 1) {
+    $db = Database::getInstance();
+
+    $ct = $db->getCount(
+                $_TABLES['users'],
+                array ('pwrequestid', 'uid'),
+                array ($form_reqid, $_USER['uid']),
+                array(Database::STRING,Database::INTEGER)
+          );
+
+    if ($ct != 1) {
         // not found - abort
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
@@ -439,9 +482,20 @@ function editpreferences()
     global $_TABLES, $_CONF, $_SYSTEM, $LANG04, $_USER, $_GROUPS,
            $LANG_confignames, $LANG_configselects, $LANG_configSelect;
 
-    $result = DB_query("SELECT noicons,willing,dfid,tzid,noboxes,maxstories,tids,aids,boxes,emailfromadmin,emailfromuser,showonline,search_result_format FROM {$_TABLES['userprefs']},{$_TABLES['userindex']} WHERE {$_TABLES['userindex']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']}");
+    $db = Database::getInstance();
 
-    $A = DB_fetchArray($result);
+    $sql = "SELECT *
+            FROM `{$_TABLES['userprefs']}` AS up,`{$_TABLES['userindex']}` AS ui
+            WHERE ui.uid = ? AND up.uid = ?";
+
+    $A = $db->conn->fetchAssoc(
+            $sql,
+            array($_USER['uid'],$_USER['uid']),
+            array(Database::INTEGER,Database::INTEGER)
+    );
+//    $result = DB_query("SELECT noicons,willing,dfid,tzid,noboxes,maxstories,tids,aids,boxes,emailfromadmin,emailfromuser,showonline,search_result_format FROM {$_TABLES['userprefs']},{$_TABLES['userindex']} WHERE {$_TABLES['userindex']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']}");
+
+//    $A = DB_fetchArray($result);
 
     if ( $A['tzid'] == '' ) {
         $A['tzid'] = $_CONF['timezone'];
@@ -701,9 +755,16 @@ function editpreferences()
 
     // subscription block
     $csscounter = 1;
-    $res = DB_query("SELECT * FROM {$_TABLES['subscriptions']} WHERE uid=".(int)$_USER['uid'] . " ORDER BY type,category ASC");
     $preferences->set_block('subscriptions', 'subrows', 'srow');
-    while ( ($S = DB_fetchArray($res) ) != NULL ) {
+
+    $stmt = $db->conn->executeQuery(
+                "SELECT * FROM `{$_TABLES['subscriptions']}`
+                WHERE uid=? ORDER BY type,category ASC",
+                array($_USER['uid']),
+                array(Database::INTEGER)
+    );
+
+    while ($S = $stmt->fetch(Database::ASSOCIATIVE)) {
         $cssstyle = ($csscounter % 2) + 1;
         $preferences->set_var('subid',$S['sub_id']);
         $preferences->set_var('sub_type',$S['type']);
@@ -723,25 +784,33 @@ function editpreferences()
     // excluded items block
     $permissions = '';
     if ( $_CONF['hide_exclude_content'] != 1 ) {
-        $permissions = COM_getPermSQL ('');
+        $permissions = $db->getPermSQL ('');
         $preferences->set_var ('exclude_topic_checklist',
                 COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $A['tids'], 'topics'));
 
         if (($_CONF['contributedbyline'] == 1) && ($_CONF['hide_author_exclusion'] == 0)) {
             $preferences->set_var ('lang_authors', $LANG04[56]);
-            $sql = "SELECT DISTINCT story.uid, users.username,users.fullname FROM {$_TABLES['stories']} story, {$_TABLES['users']} users WHERE story.uid = users.uid";
+
+$sql = "SELECT DISTINCT story.uid, users.username,users.fullname
+        FROM `{$_TABLES['stories']}` story, `{$_TABLES['users']}` users
+        WHERE story.uid = users.uid";
+
             if ($_CONF['show_fullname'] == 1) {
                 $sql .= ' ORDER BY users.fullname';
             } else {
                 $sql .= ' ORDER BY users.username';
             }
-            $query = DB_query ($sql);
-            $nrows = DB_numRows ($query );
+
+$stmt = $db->conn->query($sql);
+
+//            $query = DB_query ($sql);
+//            $nrows = DB_numRows ($query );
             $authors = explode (' ', $A['aids']);
 
             $selauthors = '';
-            for( $i = 0; $i < $nrows; $i++ ) {
-                $B = DB_fetchArray ($query);
+            while ($B = $stmt->fetch(Database::ASSOCIATIVE)) {
+//            for( $i = 0; $i < $nrows; $i++ ) {
+//                $B = DB_fetchArray ($query);
                 $selauthors .= '<option value="' . $B['uid'] . '"';
                 if (in_array (sprintf ('%d', $B['uid']), $authors)) {
                    $selauthors .= ' selected';
@@ -750,7 +819,7 @@ function editpreferences()
                             . '</option>' . LB;
             }
 
-            if (DB_count($_TABLES['topics']) > 10) {
+            if ($db->getCount($_TABLES['topics']) > 10) {
                 $Selboxsize = intval (DB_count ($_TABLES['topics']) * 1.5);
             } else {
                 $Selboxsize = 15;
@@ -768,7 +837,7 @@ function editpreferences()
 
     // daily digest block
     if ($_CONF['emailstories'] == 1) {
-        $user_etids = DB_getItem ($_TABLES['userindex'], 'etids',"uid=".(int) $_USER['uid']);
+        $user_etids = $db->getItem ($_TABLES['userindex'], 'etids',array('uid' => $_USER['uid']),array(Database::INTEGER));
         if (empty ($user_etids)) { // an empty string now means "all topics"
             $user_etids = USER_buildTopicList ();
         } elseif ($user_etids == '-') { // this means "no topics"

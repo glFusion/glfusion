@@ -4,7 +4,7 @@
 <!-- BEGIN social_buttons -->
 		<li>
 			<a href="{social_url}" target="_blank" class="uk-icon-button uk-margin-small-bottom uk-button-{service_icon} tm-follow-icon" title="{lang_follow_me} {service_display_name}">
-				<i class="uk-icon-justify uk-icon-{service_icon} tm-icon-hover"></i>
+				<i class="uk-icon-justify uk-icon-{service_icon}{service-postfix} tm-icon-hover"></i>
 			</a>
 		</li>
 <!-- END social_buttons -->
