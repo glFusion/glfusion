@@ -1,6 +1,6 @@
 # glFusion CMS Long Term Support ChangeLog
 
-## v1.7.7 (Unreleased)
+## v1.7.7 (April 14, 2019)
 
 ### Added
   - Add timestamp to CSS and JS files to facilitate cache refresh when updated
