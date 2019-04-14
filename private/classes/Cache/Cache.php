@@ -94,8 +94,12 @@ final class Cache
 
             case 'memcache' :
 
+                $servers['saslUser'] ='';
+                $servers['saslPassword'] = '';
+
                 if ($_CONF['cache_memcached_username'] != '') {
                     $servers['saslUsername'] = $_CONF['cache_memcached_username'];
+                    $servers['saslUser'] = $_CONF['cache_memcached_username'];
                 }
                 if ($_CONF['cache_memcached_password'] != '') {
                     $servers['saslPassword'] = $_CONF['cache_memcached_password'];
@@ -117,6 +121,8 @@ final class Cache
 
             case 'memcached' :
                 $servers = array();
+                $servers['saslUser'] ='';
+                $servers['saslPassword'] = '';                
                 if ($_CONF['cache_memcached_socket'] != '') {
                     $servers['path'] = $_CONF['cache_memcached_socket'];
                 } else {
@@ -126,6 +132,7 @@ final class Cache
 
                 if ($_CONF['cache_memcached_username'] != '') {
                     $servers['saslUsername'] = $_CONF['cache_memcached_username'];
+                    $servers['saslUser'] = $_CONF['cache_memcached_username'];
                 }
                 if ($_CONF['cache_memcached_password'] != '') {
                     $servers['saslPassword'] = $_CONF['cache_memcached_password'];

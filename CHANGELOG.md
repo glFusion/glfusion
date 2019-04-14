@@ -53,7 +53,7 @@
 
   - Utilize PDO prepared SQL statements to decrease SQL injection opportunities
 
-## v1.7.7 (Unreleased)
+## v1.7.7 (April 14, 2019)
 
 ### Added
   - Add timestamp to CSS and JS files to facilitate cache refresh when updated
@@ -61,16 +61,20 @@
   - Forum plugin - admin can now change the forum category when editing a forum
 
 ### Changed
+  - Modified the Facebook login button to meet Facebook's current interface standards
   - Modified the download method used by FileMgmt to ensure local buffers are properly flushed
-  - Change Google+ icon on Oauth button to just the Google icon
+  - Modified Google+ icon on Oauth button to the Google icon
   - Updated Polish translations for the installer, by glFusion Poland
-  - Updated CKEditor v4.11.1 (fixes a Cross Site Scripting security hole in the editor)
+  - Updated CKEditor v4.11.4 (fixes a Cross Site Scripting security hole in the editor)
   - Template and data caching has been reworked to be much more efficient and faster. IT IS IMPORTANT TO CLEAR THE CACHE WHEN UPGRADING as the file formats used by the caching algorithms have changed.
   - newimage: auto tag no longer requires the album to have the Include in Random Block attribute set.
   - Templates can now escape { and } by using {{ and }} - for example {{x}} will render {x} in the template.
   - Set defaults / values for all datetime fields properly
 
 ### Fixed
+  - When editing a topic - the sort order defaults to Date regardless of previous setting
+  - When deleting a topic - the stories in that topic were not being properly deleted
+  - Headlines Auto tag used incorrect timezone in pulling new articles causing a delay in displaying new articles
   - Ensure getItemInfo_comment is available
   - Rating check for previous ratings did not return proper value
   - Missing lastedited field in Forum Plugin fresh installation
