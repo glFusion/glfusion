@@ -75,24 +75,24 @@ function spamx_upgrade()
             $c->add('akismet_enabled', 0, 'select',0, 3, 1, 10, true, 'spamx');
             $c->add('akismet_api_key', '', 'text',0, 3, NULL, 20, true, 'spamx');
 
-        case '1.3.0' :
+//        case '1.3.0' :
             $_SQL = array();
 
             $_SQL[] = "ALTER TABLE {$_TABLES['spamx']} ADD COLUMN id INT(10) NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (id)";
 
             $_SQL[] = "
-            CREATE TABLE {$_TABLES['spamx_stats']} (
-              `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `module` VARCHAR(128) NOT NULL DEFAULT '',
-              `type` VARCHAR(50) NOT NULL DEFAULT '',
-              `blockdate` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00.000000',
-              `ip` VARCHAR(50) NOT NULL DEFAULT '',
-              `email` VARCHAR(50) NOT NULL DEFAULT '',
-              `username` VARCHAR(50) NOT NULL DEFAULT '',
-              PRIMARY KEY (`id`),
-              INDEX `type` (`type`),
-              INDEX `blockdate` (`blockdate`)
-            ) ENGINE=MyISAM
+                CREATE TABLE {$_TABLES['spamx_stats']} (
+                  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                  `module` VARCHAR(128) NOT NULL DEFAULT '',
+                  `type` VARCHAR(50) NOT NULL DEFAULT '',
+                  `blockdate` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
+                  `ip` VARCHAR(50) NOT NULL DEFAULT '',
+                  `email` VARCHAR(50) NOT NULL DEFAULT '',
+                  `username` VARCHAR(50) NOT NULL DEFAULT '',
+                  PRIMARY KEY (`id`),
+                  INDEX `type` (`type`),
+                  INDEX `blockdate` (`blockdate`)
+                ) ENGINE=MyISAM
             ";
             $_SQL[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('spamx.counter','0') ";
 
@@ -110,8 +110,35 @@ function spamx_upgrade()
             }
 
         case '2.0.0' :
-            DB_query("UPDATE `{$_TABLES['spamx_stats']}` SET `blockdate` = '1970-01-01 00:00:00' WHERE CAST(`blockdate` AS CHAR(20)) = '0000-00-00 00:00:00';");
-            DB_query("UPDATE `{$_TABLES['spamx_stats']}` SET `blockdate` = '1970-01-01 00:00:00' WHERE CAST(`blockdate` AS CHAR(20)) = '1000-00-00 01:01:00';");
+
+            $_SQL = array();
+            $_SQL[] = "
+                CREATE TABLE {$_TABLES['spamx_stats']} (
+                  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+                  `module` VARCHAR(128) NOT NULL DEFAULT '',
+                  `type` VARCHAR(50) NOT NULL DEFAULT '',
+                  `blockdate` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
+                  `ip` VARCHAR(50) NOT NULL DEFAULT '',
+                  `email` VARCHAR(50) NOT NULL DEFAULT '',
+                  `username` VARCHAR(50) NOT NULL DEFAULT '',
+                  PRIMARY KEY (`id`),
+                  INDEX `type` (`type`),
+                  INDEX `blockdate` (`blockdate`)
+                ) ENGINE=MyISAM
+            ";
+            if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
+                $use_innodb = true;
+            } else {
+                $use_innodb = false;
+            }
+            foreach ($_SQL AS $sql) {
+                if ($use_innodb) {
+                    $sql = str_replace('MyISAM', 'InnoDB', $sql);
+                }
+                DB_query($sql,1);
+            }
+            DB_query("UPDATE `{$_TABLES['spamx_stats']}` SET `blockdate` = '1970-01-01 00:00:00' WHERE CAST(`blockdate` AS CHAR(20)) = '0000-00-00 00:00:00';",1);
+            DB_query("UPDATE `{$_TABLES['spamx_stats']}` SET `blockdate` = '1970-01-01 00:00:00' WHERE CAST(`blockdate` AS CHAR(20)) = '1000-00-00 01:01:00';",1);
             DB_query("ALTER TABLE `{$_TABLES['spamx_stats']}` CHANGE COLUMN `blockdate` `blockdate` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00';",1);
 
         default :
