@@ -1,5 +1,8 @@
 # glFusion CMS Long Term Support ChangeLog
 
+## Next Release
+  - Fixed logic error that prevented user profile pictures from showing in the Forum plugin
+
 ## v1.7.7 (April 14, 2019)
 
 ### Added
