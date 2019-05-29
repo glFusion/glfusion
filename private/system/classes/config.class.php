@@ -297,24 +297,27 @@ class config
         $value = $info['value'];
         $default_value = $info['default_value'];
 
-        $sql = "UPDATE `{$_TABLES['conf_values']}` ";
+        $sql = "UPDATE `{$_TABLES['conf_values']}`
+            SET value = ?, default_value = ?
+            WHERE name = ? AND group_name = ?";
         if ($value == 'unset') {
-            $sql .= " SET value = ?, default_value = ?";
             $params[] = $default_value;
-            $params[] = $default_value;
+            $params[] = 'unset:' . $default_value;
             $types[] = Database::STRING;
             $types[] = Database::STRING;
         } else {
-            $sql .= " SET value = ?";
+            if (substr($default_value, 0, 6) == 'unset:') {
+                $default_value = substr($default_value, 6);
+            }
+            $params[] = $default_value;
             $params[] = $default_value;
             $types[] = Database::STRING;
+            $types[] = Database::STRING;
         }
-        $sql .= " WHERE name = ? AND group_name = ?";
         $params[] = $name;
         $params[] = $group;
         $types[] = Database::STRING;
         $types[] = Database::STRING;
-
 
         try {
             $stmt = $db->conn->executeQuery(
