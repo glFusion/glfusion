@@ -64,7 +64,7 @@ class Client
      * NNB: you can set it to any non-empty array for HTTP11 and HTTPS, since
      * in those cases it will be up to CURL to decide the compression methods
      * it supports. You might check for the presence of 'zlib' in the output of
-     * curl_version() to determine wheter compression is supported or not
+     * curl_version() to determine whether compression is supported or not
      */
     public $accepted_compression = array();
 
@@ -567,6 +567,8 @@ class Client
         $authType = 1, $proxyHost = '', $proxyPort = 0, $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1,
         $method='http')
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         return $this->sendPayloadSocket($req, $server, $port, $timeout, $username, $password, $authType, null, null,
             null, null, $proxyHost, $proxyPort, $proxyUsername, $proxyPassword, $proxyAuthType, $method);
     }
@@ -600,6 +602,8 @@ class Client
         $proxyUsername = '', $proxyPassword = '', $proxyAuthType = 1, $keepAlive = false, $key = '', $keyPass = '',
         $sslVersion = 0)
     {
+        //trigger_error('Method ' . __METHOD__ . ' is deprecated', E_USER_DEPRECATED);
+
         return $this->sendPayloadCURL($req, $server, $port, $timeout, $username,
             $password, $authType, $cert, $certPass, $caCert, $caCertDir, $proxyHost, $proxyPort,
             $proxyUsername, $proxyPassword, $proxyAuthType, 'https', $keepAlive, $key, $keyPass, $sslVersion);

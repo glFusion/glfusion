@@ -380,17 +380,17 @@
     },
     {
         "name": "filp/whoops",
-        "version": "2.3.1",
-        "version_normalized": "2.3.1.0",
+        "version": "2.4.0",
+        "version_normalized": "2.4.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/filp/whoops.git",
-            "reference": "bc0fd11bc455cc20ee4b5edabc63ebbf859324c7"
+            "reference": "1a1a1044ad00e285bd2825fac4c3a0443d90ad33"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/filp/whoops/zipball/bc0fd11bc455cc20ee4b5edabc63ebbf859324c7",
-            "reference": "bc0fd11bc455cc20ee4b5edabc63ebbf859324c7",
+            "url": "https://api.github.com/repos/filp/whoops/zipball/1a1a1044ad00e285bd2825fac4c3a0443d90ad33",
+            "reference": "1a1a1044ad00e285bd2825fac4c3a0443d90ad33",
             "shasum": ""
         },
         "require": {
@@ -406,7 +406,7 @@
             "symfony/var-dumper": "Pretty print complex values better with var-dumper available",
             "whoops/soap": "Formats errors as SOAP responses"
         },
-        "time": "2018-10-23T09:00:00+00:00",
+        "time": "2019-06-23T09:00:00+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -977,17 +977,17 @@
     },
     {
         "name": "phpxmlrpc/phpxmlrpc",
-        "version": "4.3.1",
-        "version_normalized": "4.3.1.0",
+        "version": "4.3.2",
+        "version_normalized": "4.3.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/gggeek/phpxmlrpc.git",
-            "reference": "95f8828db62a6cb0e7a725136e75f12536892082"
+            "reference": "7fbd194478e080d624bab075d189bf3ba215325d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/gggeek/phpxmlrpc/zipball/95f8828db62a6cb0e7a725136e75f12536892082",
-            "reference": "95f8828db62a6cb0e7a725136e75f12536892082",
+            "url": "https://api.github.com/repos/gggeek/phpxmlrpc/zipball/7fbd194478e080d624bab075d189bf3ba215325d",
+            "reference": "7fbd194478e080d624bab075d189bf3ba215325d",
             "shasum": ""
         },
         "require": {
@@ -1009,7 +1009,7 @@
             "ext-mbstring": "Needed to allow reception of requests/responses in character sets other than ASCII,LATIN-1,UTF-8",
             "ext-zlib": "Needed for sending compressed requests and receiving compressed responses, if cURL is not available"
         },
-        "time": "2018-01-20T15:17:09+00:00",
+        "time": "2019-05-27T08:04:00+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1177,17 +1177,17 @@
     },
     {
         "name": "robthree/twofactorauth",
-        "version": "1.6.6",
-        "version_normalized": "1.6.6.0",
+        "version": "1.6.7",
+        "version_normalized": "1.6.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/RobThree/TwoFactorAuth.git",
-            "reference": "7477d5d65625b7fe33cb338b98e419d394e9e9fd"
+            "reference": "3407c33775391fa8c36f7d766f26c5e59a736374"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/RobThree/TwoFactorAuth/zipball/7477d5d65625b7fe33cb338b98e419d394e9e9fd",
-            "reference": "7477d5d65625b7fe33cb338b98e419d394e9e9fd",
+            "url": "https://api.github.com/repos/RobThree/TwoFactorAuth/zipball/3407c33775391fa8c36f7d766f26c5e59a736374",
+            "reference": "3407c33775391fa8c36f7d766f26c5e59a736374",
             "shasum": ""
         },
         "require": {
@@ -1196,7 +1196,7 @@
         "require-dev": {
             "phpunit/phpunit": "@stable"
         },
-        "time": "2019-03-19T21:51:19+00:00",
+        "time": "2019-06-21T08:51:04+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
