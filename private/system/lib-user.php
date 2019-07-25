@@ -278,7 +278,9 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
         $template->set_var ('password', $passwd);
         $template->set_var ('name', COM_getDisplayName ($uid));
         $template->parse ('output', 'mail');
-        $mailtext = $template->get_var ('output');
+        $mailhtml = $template->get_var ('output');  // actually text
+        $mailtext = '';         // not used
+        $isHTML = false;
     } else {
         $T = new Template($_CONF['path_layout'].'email/');
         $T->set_file(array(
@@ -326,6 +328,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
 
         $T->parse ('output', 'text_msg');
         $mailtext = $T->finish($T->get_var('output'));
+        $isHTML = true;
     }
     $msgData['htmlmessage'] = $mailhtml;
     $msgData['textmessage'] = $mailtext;
@@ -336,7 +339,7 @@ function USER_createAndSendPassword ($username, $useremail, $uid, $passwd = '')
     $from = COM_formatEmailAddress( $_CONF['site_name'], $_CONF['noreply_mail'] );
     $to = COM_formatEmailAddress('',$useremail);
 
-    return COM_mail( $to, $msgData['subject'], $msgData['htmlmessage'], $from, true, 0,'', $msgData['textmessage'] );
+    return COM_mail( $to, $msgData['subject'], $msgData['htmlmessage'], $from, $isHTML, 0,'', $msgData['textmessage'] );
 
 }
 
