@@ -50,6 +50,11 @@ if (is_ajax()) {
             case 'articlepreview' :
                 articlePreview();
                 break;
+
+            case 'pagepreview' :
+                pagePreview();
+                break;
+
         }
     } else {
         die();
@@ -61,6 +66,34 @@ if (is_ajax()) {
  */
 function is_ajax() {
     return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+}
+
+function pagePreview()
+{
+    $page = '';
+
+        $sp_php = isset($_POST['sp_php']) ? $_POST['sp_php'] : '';
+        $editor_content = isset($_POST['sp_content']) ? $_POST['sp_content'] : '';
+
+        if ( isset($_POST['sp_php']) && (int) $_POST['sp_php'] > 0 && defined('DEMO_MODE') ) {
+            $preview_content = 'StaticPage Preview is disabled in Demo Mode';
+        } else {
+            $preview_content = SP_render_content ($editor_content, $sp_php);
+        }
+
+
+$outputHandle = outputHandler::getInstance();
+$page .= $outputHandle->renderHeader('style');
+$page .= $outputHandle->renderHeader('script');
+$page .= $outputHandle->renderHeader('raw');
+$page .= $preview_content;
+COM_errorLog(print_r($preview_content,true));
+    $retval['preview'] = $page;
+    $retval['errorCode'] = 0;
+
+    $return["json"] = json_encode($retval);
+    echo json_encode($return);
+
 }
 
 function articlePreview()
