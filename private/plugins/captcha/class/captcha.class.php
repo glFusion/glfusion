@@ -222,7 +222,7 @@ class captcha {
                             mt_rand(30, 70),
                             $stringcolor,
                             $this->getRandFont(),
-                            $this->CaptchaString{$i});
+                            $this->CaptchaString[$i]);
                 }
 
                 switch ($this->gfxformat ) {
@@ -271,7 +271,7 @@ class captcha {
                             45,
                             $stringcolor,
                             $font,
-                            $output{$i});
+                            $output[$i]);
                 }
                 switch ($this->gfxformat ) {
                     case 'png' :
