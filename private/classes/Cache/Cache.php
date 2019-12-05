@@ -87,7 +87,7 @@ final class Cache
         if ($_CONF['cache_driver'] == 'files') {
             $this->namespace = '';
         } else {
-            $this->namespace = base_convert(md5($_CONF['site_name']), 10, 36);
+            $this->namespace = @base_convert(md5($_CONF['site_name']), 10, 36);
         }
 
         switch ($_CONF['cache_driver']) {
@@ -122,7 +122,7 @@ final class Cache
             case 'memcached' :
                 $servers = array();
                 $servers['saslUser'] ='';
-                $servers['saslPassword'] = '';                
+                $servers['saslPassword'] = '';
                 if ($_CONF['cache_memcached_socket'] != '') {
                     $servers['path'] = $_CONF['cache_memcached_socket'];
                 } else {
