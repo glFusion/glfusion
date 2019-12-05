@@ -204,6 +204,8 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
     exit;
 }
 
+require_once $_CONF['path_language'] . COM_getLanguage() . '.php';
+
 @date_default_timezone_set($_CONF['timezone']);
 if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
@@ -213,7 +215,6 @@ if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] ) {
     if (!function_exists('hash_hmac')) $_CONF['enable_twofactor'] = false;
 }
 
-require_once $_CONF['path_language'] . COM_getLanguage() . '.php';
 // reconcile configs
 if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
 if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
@@ -6191,7 +6192,7 @@ function COM_404()
     } else {
         $url = COM_getCurrentURL();
     }
-	$url = COM_sanitizeUrl($url);
+    $url = COM_sanitizeUrl($url);
 
     if (strpos($url,'custom_config.js') !== false) {
         return;
@@ -6453,7 +6454,7 @@ function COM_stripslashes($text)
  */
 
 function COM_isAjax() {
-	return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 }
 
 function CMT_updateCommentcodes()
@@ -6575,7 +6576,7 @@ function _css_out()
                 $pHeader = $function();
                 if ( is_array($pHeader) ) {
                     foreach($pHeader AS $item => $file) {
-						$outputHandle->addCSSFile($file,HEADER_PRIO_NORMAL);
+                        $outputHandle->addCSSFile($file,HEADER_PRIO_NORMAL);
                     }
                 }
             }

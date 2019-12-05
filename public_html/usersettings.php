@@ -668,9 +668,9 @@ function editpreferences()
             $words = explode ('_', $theme);
             $bwords = array ();
             foreach ($words as $th) {
-                if ((strtolower ($th{0}) == $th{0}) &&
-                    (strtolower ($th{1}) == $th{1})) {
-                    $bwords[] = strtoupper ($th{0}) . substr ($th, 1);
+                if ((strtolower ($th[0]) == $th[0]) &&
+                    (strtolower ($th[1]) == $th[1])) {
+                    $bwords[] = strtoupper ($th[0]) . substr ($th, 1);
                 } else {
                     $bwords[] = $th;
                 }

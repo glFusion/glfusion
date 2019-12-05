@@ -6,7 +6,7 @@
 // |                                                                          |
 // | This is the main page for the glFusion Static Pages Plugin               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
+// | Copyright (C) 2008-2019 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |

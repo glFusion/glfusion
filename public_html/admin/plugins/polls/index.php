@@ -231,6 +231,12 @@ function POLLS_edit($pid = '')
             true
         );
         $Q = DB_fetchArray ($questions);
+if (!is_array($Q)) {
+    $Q = array();
+$Q['question'] = '';
+$Q['answer'] = '';
+
+}
         $poll_templates->set_var('question_text', $Q['question']);
         $poll_templates->set_var('question_id', $j);
         $poll_templates->set_var('lang_question', $LANG25[31] . " $display_id");
@@ -251,6 +257,12 @@ function POLLS_edit($pid = '')
         for ($i=0; $i<$_PO_CONF['maxanswers']; $i++) {
             if (isset ($answers)) {
                 $A = DB_fetchArray ($answers);
+if (!is_array($A)) {
+    $A = array();
+    $A['answer'] = '';
+    $A['remark'] = '';
+    $A['votes'] = 0;
+}                
                 $poll_templates->set_var ('answer_text',
                                           htmlspecialchars ($A['answer']));
                 $poll_templates->set_var ('answer_votes', $A['votes']);
