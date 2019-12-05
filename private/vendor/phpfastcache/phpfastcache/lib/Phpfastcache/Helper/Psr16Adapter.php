@@ -69,7 +69,7 @@ class Psr16Adapter implements CacheInterface
 
             return $default;
         } catch (PhpfastcacheInvalidArgumentException $e) {
-            throw new PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
+            throw new PhpfastcacheSimpleCacheException($e->getMessage(), 0, $e);
         }
     }
 
@@ -93,7 +93,7 @@ class Psr16Adapter implements CacheInterface
             }
             return $this->internalCacheInstance->save($cacheItem);
         } catch (PhpfastcacheInvalidArgumentException $e) {
-            throw new PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
+            throw new PhpfastcacheSimpleCacheException($e->getMessage(), 0, $e);
         }
     }
 
@@ -107,7 +107,7 @@ class Psr16Adapter implements CacheInterface
         try {
             return $this->internalCacheInstance->deleteItem($key);
         } catch (PhpfastcacheInvalidArgumentException $e) {
-            throw new PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
+            throw new PhpfastcacheSimpleCacheException($e->getMessage(), 0, $e);
         }
     }
 
@@ -120,7 +120,7 @@ class Psr16Adapter implements CacheInterface
         try {
             return $this->internalCacheInstance->clear();
         } catch (PhpfastcacheRootException $e) {
-            throw new PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
+            throw new PhpfastcacheSimpleCacheException($e->getMessage(), 0, $e);
         }
     }
 
@@ -132,12 +132,15 @@ class Psr16Adapter implements CacheInterface
      */
     public function getMultiple($keys, $default = null)
     {
+        if ($keys instanceof \Traversable) {
+            $keys = \iterator_to_array($keys);
+        }
         try {
             return array_map(function (ExtendedCacheItemInterface $item) {
                 return $item->get();
             }, $this->internalCacheInstance->getItems($keys));
         } catch (PhpfastcacheInvalidArgumentException $e) {
-            throw new PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
+            throw new PhpfastcacheSimpleCacheException($e->getMessage(), 0, $e);
         }
     }
 
@@ -163,7 +166,7 @@ class Psr16Adapter implements CacheInterface
             }
             return $this->internalCacheInstance->commit();
         } catch (PhpfastcacheInvalidArgumentException $e) {
-            throw new PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
+            throw new PhpfastcacheSimpleCacheException($e->getMessage(), 0, $e);
         }
     }
 
@@ -175,9 +178,15 @@ class Psr16Adapter implements CacheInterface
     public function deleteMultiple($keys): bool
     {
         try {
-            return $this->internalCacheInstance->deleteItems($keys);
+            if ($keys instanceof \Traversable) {
+                return $this->internalCacheInstance->deleteItems(\iterator_to_array($keys));
+            } elseif (is_array($keys)) {
+                return $this->internalCacheInstance->deleteItems($keys);
+            } else {
+                throw new phpFastCacheInvalidArgumentException('$keys must be an array/Traversable instance.');
+            }
         } catch (PhpfastcacheInvalidArgumentException $e) {
-            throw new PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
+            throw new PhpfastcacheSimpleCacheException($e->getMessage(), 0, $e);
         }
     }
 
@@ -192,7 +201,7 @@ class Psr16Adapter implements CacheInterface
             $cacheItem = $this->internalCacheInstance->getItem($key);
             return $cacheItem->isHit() && !$cacheItem->isExpired();
         } catch (PhpfastcacheInvalidArgumentException $e) {
-            throw new PhpfastcacheSimpleCacheException($e->getMessage(), null, $e);
+            throw new PhpfastcacheSimpleCacheException($e->getMessage(), 0, $e);
         }
     }
 

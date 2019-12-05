@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     '2cffec82183ee1cea088009cef9a6fc3' => $vendorDir . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+    'fdc0e9724ddc47859c8bf0c1ea0a623a' => $vendorDir . '/openpsa/universalfeedcreator/lib/constants.php',
 );
