@@ -283,10 +283,10 @@ function LINK_save($lid, $old_lid, $cid, $categorydd, $url, $description, $title
     }
 
     // clean 'em up
-    $description = DB_escapeString (COM_checkHTML (COM_checkWords ($description)));
-    $title = DB_escapeString (COM_checkHTML (COM_checkWords ($title)));
-    $cid = DB_escapeString ($cid);
-    $url = DB_escapeString($url);
+    $description = DB_escapeString (COM_checkHTML (COM_checkWords (trim($description))));
+    $title = DB_escapeString (COM_checkHTML (COM_checkWords (trim($title))));
+    $cid = DB_escapeString (trim($cid));
+    $url = DB_escapeString(trim($url));
 
     if (empty ($owner_id)) {
         // this is new link from admin, set default values
