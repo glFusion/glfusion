@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2018 by the following authors:
+*  Copyright (C) 2017-2019 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -33,7 +33,7 @@ use \Monolog\Formatter\LineFormatter;
  */
 class Log
 {
-    public const DVLP_DEBUG = 50;
+    public const DVLP_DEBUG = 525;  // special mode to ONLY log development messages
     public const DEBUG = 100;
     public const INFO = 200;
     public const NOTICE = 250;
@@ -143,7 +143,6 @@ class Log
         if (!isset(self::$scopes[$scope])) {
             throw new LogException('Log::Uninitialized scope: '. $scope);
         }
-
         if ($logLevel < self::$scopes[$scope]->level) {
             return;
         }
@@ -152,7 +151,6 @@ class Log
 
         switch ($logLevel) {
             case self::DEBUG :
-            case self::DVLP_DEBUG :
                 self::$scopes[$scope]->log->debug($logEntry,$context,$extra);
                 break;
 
@@ -180,11 +178,14 @@ class Log
                 self::$scopes[$scope]->log->emergency($logEntry,$context,$extra);
                 break;
 
+            case self::DVLP_DEBUG :
+                self::$scopes[$scope]->log->alert($logEntry,$context,$extra);
+                break;
+
             default :
             case self::INFO :
                 self::$scopes[$scope]->log->info($logEntry,$context,$extra);
                 break;
-
         }
     }
 
@@ -193,10 +194,12 @@ class Log
         self::write('system',Log::ERROR, "User attempted to access area without proper permissions", array('Type' => $type,'IP' => $_SERVER['REAL_ADDR']));
     }
 
-    public static function debug($msg)
+    public static function debug($msg = '')
     {
-        self::write('system',Log::DEBUG,$msg);
+        if (Log::DVLP_DEBUG < self::$scopes['system']->level) {
+            return;
+        }
+        self::$scopes['system']->log->alert($msg,array(),array());
     }
-
 }
 
