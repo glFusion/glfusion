@@ -110,8 +110,8 @@ function spamx_upgrade()
             }
 
         case '2.0.0' :
-            DB_query("UPDATE `{$_TABLES['spamx_stats']}` SET `blockdate` = '1970-01-01 00:00:00' WHERE CAST(`blockdate` AS CHAR(20)) = '0000-00-00 00:00:00';");
-            DB_query("UPDATE `{$_TABLES['spamx_stats']}` SET `blockdate` = '1970-01-01 00:00:00' WHERE CAST(`blockdate` AS CHAR(20)) = '1000-00-00 01:01:00';");
+            DB_query("UPDATE `{$_TABLES['spamx_stats']}` SET `blockdate` = '1970-01-01 00:00:00' WHERE CAST(`blockdate` AS CHAR(20)) = '0000-00-00 00:00:00';",1);
+            DB_query("UPDATE `{$_TABLES['spamx_stats']}` SET `blockdate` = '1970-01-01 00:00:00' WHERE CAST(`blockdate` AS CHAR(20)) = '1000-00-00 01:01:00';",1);
             DB_query("ALTER TABLE `{$_TABLES['spamx_stats']}` CHANGE COLUMN `blockdate` `blockdate` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00';",1);
 
         default :
