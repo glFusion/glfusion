@@ -2,6 +2,22 @@
 
 ## v2.0.0 (Unreleased)
 
+### Internal development changes
+  - PHP v7.4 Fixes
+  - Updated CKEditor to v4.13.0
+  - Updating openpsa/universalfeedcreator (v1.8.3.1 => v1.8.3.2)
+  - Updating james-heinrich/getid3 (v1.9.17 => v1.9.18)
+  - Updating ezyang/htmlpurifier (v4.10.0 => v4.12.0)
+  - Updating simplepie/simplepie (1.5.2 => 1.5.3)
+  - Updating phpxmlrpc/phpxmlrpc (4.3.2 => 4.4.1)
+  - Updating phpfastcache/phpfastcache (7.0.5 => 7.1.0)
+  - Updating psr/log (1.1.0 => 1.1.2)
+  - Updating filp/whoops (2.4.0 => 2.5.0)
+  - Updating doctrine/event-manager (v1.0.0 => 1.1.0)
+  - Updating doctrine/cache (v1.8.0 => 1.10.0)
+  - Updating doctrine/dbal (v2.9.2 => v2.10.0)
+  - Updating monolog/monolog (1.24.0 => 1.25.2)
+
 ### Added
   - Admin / Moderator actions are now logged and available for viewing in Command & Control
      - Configuration option to enable / disable - Config -> Miscellaneous -> Debug -> Enable Admin Actions
