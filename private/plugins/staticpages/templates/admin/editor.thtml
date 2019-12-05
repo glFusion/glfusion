@@ -56,12 +56,12 @@
 		<input type="hidden" name="sp_old_id" value="{sp_old_id}">
 		<input type="hidden" id="sectoken" name="{gltoken_name}" value="{gltoken}">
 
-		<ul class="uk-tab" data-uk-tab="{connect:'#sp-form'}">
-			<li><a href="#">{lang_editor}</a></li>
-			<li><a href="#">{lang_attributes}</a></li>
-			<li><a href="#">{lang_centerblock}</a></li>
-			<li><a href="#">{lang_accessrights}</a></li>
-			<li {!if show_preview} class="uk-active" {!endif}><a href="#">{lang_preview}</a></li>
+		<ul id="tabs" class="uk-tab" data-uk-tab="{connect:'#sp-form'}">
+			<li id="tab-editor"><a href="#">{lang_editor}</a></li>
+			<li id="tab-attributes"><a href="#">{lang_attributes}</a></li>
+			<li id="tab-centerblock"><a href="#">{lang_centerblock}</a></li>
+			<li id="tab-perms"><a href="#">{lang_accessrights}</a></li>
+			<li id="tab-preview" {!if show_preview} class="uk-active" {!endif}><a href="#">{lang_preview}</a></li>
 		</ul>
 
 		{# this shows on all screens #}
@@ -238,7 +238,7 @@
 					{$LANG_STATIC[preview_help]}
 				</div>
 
-				<div class="uk-panel uk-panel-box">
+				<div id="previewcontent" class="uk-panel uk-panel-box">
 					{#					<div class="uk-panel-title">{sp_preview_title}</div> #}
 					{sp_preview_content}
 				</div>
@@ -280,6 +280,54 @@
 	</form>
 </div>
 <script>
+// ajax preview
+$(function () {
+  $('#tabs').on('change.uk.tab', function(e, active, previous) {
+  	if (active.context.id == 'tab-preview') {
+  		buildPreview();
+  	} else {
+  		$("#story_id").show();
+  	}
+  });
+});
+
+var buildPreview = function() {
+//	$("#story_id").hide();
+//	$("#previewwarning").hide();
+	$("#previewcontent").html('<div class="uk-text-center"><i class="uk-icon uk-icon-circle-o-notch uk-icon-spin uk-icon-large"></i></div>');
+
+	if ( typeof sp_content != 'undefined') {
+    var content = sp_content.getData();
+  } else {
+  	var content = $('#sp_content').val();
+  }
+  var dataS = {
+      "action" : "pagepreview",
+      "sp_content" : content,
+  };
+  data = $("form").serialize() + "&" + $.param(dataS);
+  $.ajax({
+      type: "POST",
+      dataType: "json",
+      url: site_admin_url + "/ajax_controller.php",
+      data: data,
+      success: function(data) {
+          var result = $.parseJSON(data["json"]);
+          try {
+              $("#previewcontent").html(result.preview);
+          } catch(err) {
+              alert(result.statusMessage);
+          }
+      }
+  });
+  return false;
+};
+// end ajax preview
+
+
+
+
+
 	$(document).ready(function() {
 		activityCheck('textarea');
 	});
