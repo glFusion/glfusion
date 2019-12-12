@@ -97,23 +97,23 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.10.0",
+            "version": "v4.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "d85d39da4576a6934b72480be6978fb10c860021"
+                "reference": "a617e55bc62a87eec73bd456d146d134ad716f03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d85d39da4576a6934b72480be6978fb10c860021",
-                "reference": "d85d39da4576a6934b72480be6978fb10c860021",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/a617e55bc62a87eec73bd456d146d134ad716f03",
+                "reference": "a617e55bc62a87eec73bd456d146d134ad716f03",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
             },
             "require-dev": {
-                "simpletest/simpletest": "^1.1"
+                "simpletest/simpletest": "dev-master#72de02a7b80c6bb8864ef9bf66d41d2f58f826bd"
             },
             "type": "library",
             "autoload": {
@@ -126,7 +126,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL"
+                "LGPL-2.1-or-later"
             ],
             "authors": [
                 {
@@ -140,24 +140,24 @@
             "keywords": [
                 "html"
             ],
-            "time": "2018-02-23T01:58:20+00:00"
+            "time": "2019-10-28T03:44:26+00:00"
         },
         {
             "name": "geshi/geshi",
-            "version": "v1.0.9.0",
+            "version": "v1.0.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GeSHi/geshi-1.0.git",
-                "reference": "5a7b461338d322d941986a656d4d1651452e73dd"
+                "reference": "fd22ab78481bf90337862b590e6f7517863926b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GeSHi/geshi-1.0/zipball/5a7b461338d322d941986a656d4d1651452e73dd",
-                "reference": "5a7b461338d322d941986a656d4d1651452e73dd",
+                "url": "https://api.github.com/repos/GeSHi/geshi-1.0/zipball/fd22ab78481bf90337862b590e6f7517863926b8",
+                "reference": "fd22ab78481bf90337862b590e6f7517863926b8",
                 "shasum": ""
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7"
+                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.2"
             },
             "type": "library",
             "autoload": {
@@ -180,20 +180,20 @@
             ],
             "description": "Generic Syntax Highlighter",
             "homepage": "http://qbnz.com/highlighter/",
-            "time": "2017-05-05T05:51:25+00:00"
+            "time": "2019-10-20T20:54:46+00:00"
         },
         {
             "name": "html2text/html2text",
-            "version": "4.1.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mtibben/html2text.git",
-                "reference": "bf613dc8d3389d70c891cd847954346acab16574"
+                "reference": "f7555eaf271beea4e1098274d3ff37fbb7b21ea7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mtibben/html2text/zipball/bf613dc8d3389d70c891cd847954346acab16574",
-                "reference": "bf613dc8d3389d70c891cd847954346acab16574",
+                "url": "https://api.github.com/repos/mtibben/html2text/zipball/f7555eaf271beea4e1098274d3ff37fbb7b21ea7",
+                "reference": "f7555eaf271beea4e1098274d3ff37fbb7b21ea7",
                 "shasum": ""
             },
             "require-dev": {
@@ -214,29 +214,54 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPLv2"
+                "GPL-2.0-or-later"
             ],
             "description": "Converts HTML to formatted plain text",
-            "time": "2017-05-15T01:50:59+00:00"
+            "time": "2018-08-13T12:05:08+00:00"
         },
         {
             "name": "james-heinrich/getid3",
-            "version": "v1.9.15",
+            "version": "v1.9.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/JamesHeinrich/getID3.git",
-                "reference": "df9b441e547da1018b1be0e239bee095c9962c96"
+                "reference": "0723b77cafe9278618cfb6bc91b75e73705d3de8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/JamesHeinrich/getID3/zipball/df9b441e547da1018b1be0e239bee095c9962c96",
-                "reference": "df9b441e547da1018b1be0e239bee095c9962c96",
+                "url": "https://api.github.com/repos/JamesHeinrich/getID3/zipball/0723b77cafe9278618cfb6bc91b75e73705d3de8",
+                "reference": "0723b77cafe9278618cfb6bc91b75e73705d3de8",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
+            "require-dev": {
+                "jakub-onderka/php-parallel-lint": "^0.9 || ^1.0"
+            },
+            "suggest": {
+                "ext-SimpleXML": "SimpleXML extension is required to analyze RIFF/WAV/BWF audio files (also requires `ext-libxml`).",
+                "ext-com_dotnet": "COM extension is required when loading files larger than 2GB on Windows.",
+                "ext-ctype": "ctype extension is required when loading files larger than 2GB on 32-bit PHP (also on 64-bit PHP on Windows) or executing `getid3_lib::CopyTagsToComments`.",
+                "ext-dba": "DBA extension is required to use the DBA database as a cache storage.",
+                "ext-exif": "EXIF extension is required for graphic modules.",
+                "ext-iconv": "iconv extension is required to work with different character sets (when `ext-mbstring` is not available).",
+                "ext-json": "JSON extension is required to analyze Apple Quicktime videos.",
+                "ext-libxml": "libxml extension is required to analyze RIFF/WAV/BWF audio files.",
+                "ext-mbstring": "mbstring extension is required to work with different character sets.",
+                "ext-mysql": "MySQL extension is required to use the MySQL database as a cache storage (deprecated in PHP 5.5, removed in PHP >= 7.0, use `ext-mysqli` instead).",
+                "ext-mysqli": "MySQLi extension is required to use the MySQL database as a cache storage.",
+                "ext-rar": "RAR extension is required for RAR archive module.",
+                "ext-sqlite3": "SQLite3 extension is required to use the SQLite3 database as a cache storage.",
+                "ext-xml": "XML extension is required for graphic modules to analyze the XML metadata.",
+                "ext-zlib": "Zlib extension is required for archive modules and compressed metadata."
+            },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.9.x-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "getid3/"
@@ -244,16 +269,18 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL"
+                "GPL-1.0-or-later",
+                "LGPL-3.0-only",
+                "MPL-2.0"
             ],
             "description": "PHP script that extracts useful information from popular multimedia file formats",
-            "homepage": "http://www.getid3.org/",
+            "homepage": "https://www.getid3.org/",
             "keywords": [
                 "codecs",
                 "php",
                 "tags"
             ],
-            "time": "2017-10-26T18:34:37+00:00"
+            "time": "2019-09-16T19:08:47+00:00"
         },
         {
             "name": "misd/linkify",
@@ -302,16 +329,16 @@
         },
         {
             "name": "openpsa/universalfeedcreator",
-            "version": "v1.8.3",
+            "version": "v1.8.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/flack/UniversalFeedCreator.git",
-                "reference": "6261e130446d8f787bbfd229a602fb11e6816a4e"
+                "reference": "906745196469b13ceefa6523ef04851a78ad10f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/flack/UniversalFeedCreator/zipball/6261e130446d8f787bbfd229a602fb11e6816a4e",
-                "reference": "6261e130446d8f787bbfd229a602fb11e6816a4e",
+                "url": "https://api.github.com/repos/flack/UniversalFeedCreator/zipball/906745196469b13ceefa6523ef04851a78ad10f4",
+                "reference": "906745196469b13ceefa6523ef04851a78ad10f4",
                 "shasum": ""
             },
             "require": {
@@ -324,11 +351,14 @@
             "autoload": {
                 "classmap": [
                     "lib"
+                ],
+                "files": [
+                    "lib/constants.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL"
+                "LGPL-2.1-or-later"
             ],
             "authors": [
                 {
@@ -346,16 +376,14 @@
                 "pie",
                 "rss"
             ],
-            "time": "2017-05-18T08:28:48+00:00"
+            "time": "2019-09-01T17:49:46+00:00"
         },
         {
             "name": "phpclasses/httpclient",
             "version": "1.0.5",
             "dist": {
                 "type": "zip",
-                "url": "https://www.phpclasses.org/install/package/httpclient.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://www.phpclasses.org/install/package/httpclient.zip"
             },
             "require": {
                 "phpclasses/sasl": ">=1.0.0"
@@ -373,9 +401,7 @@
             "version": "1.0.103",
             "dist": {
                 "type": "zip",
-                "url": "https://www.phpclasses.org/install/package/oauth-api.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://www.phpclasses.org/install/package/oauth-api.zip"
             },
             "require": {
                 "phpclasses/httpclient": "1.0.5"
@@ -397,9 +423,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "zip",
-                "url": "https://www.phpclasses.org/install/package/sasl.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://www.phpclasses.org/install/package/sasl.zip"
             },
             "type": "library",
             "autoload": {
@@ -416,16 +440,16 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v5.2.26",
+            "version": "v5.2.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "70362997bda4376378be7d92d81e2200550923f7"
+                "reference": "dde1db116511aa4956389d75546c5be4c2beb2a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/70362997bda4376378be7d92d81e2200550923f7",
-                "reference": "70362997bda4376378be7d92d81e2200550923f7",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/dde1db116511aa4956389d75546c5be4c2beb2a6",
+                "reference": "dde1db116511aa4956389d75546c5be4c2beb2a6",
                 "shasum": ""
             },
             "require": {
@@ -489,20 +513,20 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2017-11-04T09:26:05+00:00"
+            "time": "2018-11-15T22:32:31+00:00"
         },
         {
             "name": "phpxmlrpc/phpxmlrpc",
-            "version": "4.3.1",
+            "version": "4.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gggeek/phpxmlrpc.git",
-                "reference": "95f8828db62a6cb0e7a725136e75f12536892082"
+                "reference": "3ba5608040e61564cf5e9a1ede98a9b0cf9d060e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gggeek/phpxmlrpc/zipball/95f8828db62a6cb0e7a725136e75f12536892082",
-                "reference": "95f8828db62a6cb0e7a725136e75f12536892082",
+                "url": "https://api.github.com/repos/gggeek/phpxmlrpc/zipball/3ba5608040e61564cf5e9a1ede98a9b0cf9d060e",
+                "reference": "3ba5608040e61564cf5e9a1ede98a9b0cf9d060e",
                 "shasum": ""
             },
             "require": {
@@ -540,20 +564,20 @@
                 "webservices",
                 "xmlrpc"
             ],
-            "time": "2018-01-20T15:17:09+00:00"
+            "time": "2019-07-29T14:20:48+00:00"
         },
         {
             "name": "robthree/twofactorauth",
-            "version": "1.6.1",
+            "version": "1.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RobThree/TwoFactorAuth.git",
-                "reference": "a77e7d822343bb88112baef808839cfae7bc5abb"
+                "reference": "3407c33775391fa8c36f7d766f26c5e59a736374"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RobThree/TwoFactorAuth/zipball/a77e7d822343bb88112baef808839cfae7bc5abb",
-                "reference": "a77e7d822343bb88112baef808839cfae7bc5abb",
+                "url": "https://api.github.com/repos/RobThree/TwoFactorAuth/zipball/3407c33775391fa8c36f7d766f26c5e59a736374",
+                "reference": "3407c33775391fa8c36f7d766f26c5e59a736374",
                 "shasum": ""
             },
             "require": {
@@ -591,29 +615,36 @@
                 "php",
                 "tfa"
             ],
-            "time": "2017-11-06T17:55:56+00:00"
+            "time": "2019-06-21T08:51:04+00:00"
         },
         {
             "name": "simplepie/simplepie",
-            "version": "1.5.1",
+            "version": "1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplepie/simplepie.git",
-                "reference": "db9fff27b6d49eed3d4047cd3211ec8dba2f5d6e"
+                "reference": "173663382a9346acd53df60c7ffb20689c9cf1f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplepie/simplepie/zipball/db9fff27b6d49eed3d4047cd3211ec8dba2f5d6e",
-                "reference": "db9fff27b6d49eed3d4047cd3211ec8dba2f5d6e",
+                "url": "https://api.github.com/repos/simplepie/simplepie/zipball/173663382a9346acd53df60c7ffb20689c9cf1f6",
+                "reference": "173663382a9346acd53df60c7ffb20689c9cf1f6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "ext-pcre": "*",
+                "ext-xml": "*",
+                "ext-xmlreader": "*",
+                "php": ">=5.6.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4 || ~5"
+                "phpunit/phpunit": "~5.4.3 || ~6.5"
             },
             "suggest": {
+                "ext-curl": "",
+                "ext-iconv": "",
+                "ext-intl": "",
+                "ext-mbstring": "",
                 "mf2/mf2": "Microformat module that allows for parsing HTML for microformats"
             },
             "type": "library",
@@ -651,20 +682,20 @@
                 "feeds",
                 "rss"
             ],
-            "time": "2017-11-12T02:03:34+00:00"
+            "time": "2019-09-22T23:21:30+00:00"
         },
         {
             "name": "splitbrain/php-archive",
-            "version": "1.0.10",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/splitbrain/php-archive.git",
-                "reference": "a46f3aaeb9f123fdb7db4e192b0600feebf7f773"
+                "reference": "10d89013572ba1f4d4ad7fcb74860242f4c3860b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/splitbrain/php-archive/zipball/a46f3aaeb9f123fdb7db4e192b0600feebf7f773",
-                "reference": "a46f3aaeb9f123fdb7db4e192b0600feebf7f773",
+                "url": "https://api.github.com/repos/splitbrain/php-archive/zipball/10d89013572ba1f4d4ad7fcb74860242f4c3860b",
+                "reference": "10d89013572ba1f4d4ad7fcb74860242f4c3860b",
                 "shasum": ""
             },
             "require": {
@@ -705,7 +736,7 @@
                 "unzip",
                 "zip"
             ],
-            "time": "2018-05-01T08:03:56+00:00"
+            "time": "2018-09-09T12:13:53+00:00"
         }
     ],
     "packages-dev": [],

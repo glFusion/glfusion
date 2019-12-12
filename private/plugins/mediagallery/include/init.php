@@ -327,7 +327,7 @@ function MG_get_size( $size )
 function MG_return_bytes($val)
 {
     $val = trim($val);
-    $last = strtolower($val{strlen($val)-1});
+    $last = strtolower($val[strlen($val)-1]);
     switch($last) {
         case 'g':
             $val = (int) $val * pow(1024,2);

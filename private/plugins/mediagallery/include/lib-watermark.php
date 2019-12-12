@@ -370,7 +370,7 @@ function MG_watermarkUploadSave() {
                 break;
             default :
                 $statusMsg .= $filename . $LANG_MG02['unsupported_wm_type'];
-                continue;
+                continue 2;
                 break;
         }
 
