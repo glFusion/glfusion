@@ -60,7 +60,7 @@ if (version_compare(PHP_VERSION,'5.3.3','<')) {
 */
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '1.7.7');
+    define('GVERSION', '1.7.8');
 }
 
 define('PATCHLEVEL','.pl0');
@@ -83,7 +83,7 @@ $_COM_VERBOSE = false;
 // process all vars to handle magic_quotes_gpc
 function all_stripslashes($var)
 {
-    if (get_magic_quotes_gpc()) {
+    if (version_compare(PHP_VERSION,'7.0.0','<') && get_magic_quotes_gpc()) {
         if (is_array($var)) {
             return array_map('all_stripslashes', $var);
         } else {
@@ -137,12 +137,14 @@ if ( $_CONF['cookiesecure']) @ini_set('session.cookie_secure','1');
 if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
 }
+
+require_once $_CONF['path_language'] . COM_getLanguage() . '.php';
+
 $_CONF['_now'] = new Date('now',$_CONF['timezone']);
 if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] ) {
     if (!function_exists('hash_hmac')) $_CONF['enable_twofactor'] = false;
 }
 
-require_once $_CONF['path_language'] . COM_getLanguage() . '.php';
 // reconcile configs
 if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
 if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
@@ -6462,7 +6464,7 @@ function COM_decompress($file, $target)
 
 function COM_isWritable($path)
 {
-    if ($path{strlen($path)-1}=='/')
+    if ($path[strlen($path)-1]=='/')
         return COM_isWritable($path.uniqid(mt_rand()).'.tmp');
 
     if (@file_exists($path)) {

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion installation script.                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2019 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -1673,6 +1673,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query($sql,1);
 
             $current_fusion_version = '1.7.7';
+            
+        case '1.7.7' :
+            //no changes
+            $current_fusion_version = '1.7.8';
 
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);

@@ -1,7 +1,25 @@
 # glFusion CMS Long Term Support ChangeLog
 
-## Next Release
+## v1.7.8 (Unreleased)
+
+### Changed
+  - Updated CKEditor to v4.13.1
+  - Updated splitbrain/php-archive (1.0.10 => 1.1.1)
+  - Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.3.2)
+  - Updated geshi/geshi (v1.0.9.0 => v1.0.9.1)
+  - Updated html2text/html2text (4.1.0 => 4.2.1)
+  - Updated james-heinrich/getid3 (v1.9.15 => v1.9.18)
+  - Updated ezyang/htmlpurifier (v4.10.0 => v4.12.0)
+  - Updated phpmailer/phpmailer (v5.2.26 => v5.2.27)
+  - Updated simplepie/simplepie (1.5.1 => 1.5.3)
+  - Updated phpxmlrpc/phpxmlrpc (4.3.1 => 4.4.1)
+  - Updated robthree/twofactorauth (1.6.1 => 1.6.7)
+
+### Fixed
+  - Fixed DB error in database administration screen when non-glFusion tables exist in the database
   - Fixed logic error that prevented user profile pictures from showing in the Forum plugin
+  - Fixed version number of VERSION file
+  - Improved PHP v7.4 compatibility
 
 ## v1.7.7 (April 14, 2019)
 
