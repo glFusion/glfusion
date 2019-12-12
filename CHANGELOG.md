@@ -16,10 +16,11 @@
   - Updated robthree/twofactorauth (1.6.1 => 1.6.7)
 
 ### Fixed
+  - Custom welcome_email.txt not being sent to imported users. Issue #365
+  - Improved PHP v7.4 compatibility
   - Fixed DB error in database administration screen when non-glFusion tables exist in the database
   - Fixed logic error that prevented user profile pictures from showing in the Forum plugin
   - Fixed version number of VERSION file
-  - Improved PHP v7.4 compatibility
 
 ## v1.7.7 (April 14, 2019)
 
