@@ -356,7 +356,7 @@ class Date extends DateTime
     public function monthToString($month, $abbr = false)
     {
         global $LANG_MONTH;
-
+        if (!isset($LANG_MONTH)) return;
         switch ($month) {
             case 1:  return $abbr ? $LANG_MONTH[13] : $LANG_MONTH[1];
             case 2:  return $abbr ? $LANG_MONTH[14] : $LANG_MONTH[2];
