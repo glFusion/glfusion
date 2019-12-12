@@ -8,6 +8,7 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
 {
     public static $files = array (
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        'fdc0e9724ddc47859c8bf0c1ea0a623a' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/constants.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -202,6 +203,7 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         'getid3_write_real' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/write.real.php',
         'getid3_write_vorbiscomment' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/write.vorbiscomment.php',
         'getid3_writetags' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/write.php',
+        'getid3_xz' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.archive.xz.php',
         'getid3_zip' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.archive.zip.php',
         'http_class' => __DIR__ . '/..' . '/phpclasses/httpclient/http.php',
         'login_sasl_client_class' => __DIR__ . '/..' . '/phpclasses/sasl/login_sasl_client.php',

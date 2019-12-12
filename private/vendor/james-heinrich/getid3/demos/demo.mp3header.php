@@ -1,4 +1,15 @@
 <?php
+/////////////////////////////////////////////////////////////////
+/// getID3() by James Heinrich <info@getid3.org>               //
+//  available at https://github.com/JamesHeinrich/getID3       //
+//            or https://www.getid3.org                        //
+//            or http://getid3.sourceforge.net                 //
+//                                                             //
+// /demo/demo.mp3header.php - part of getID3()                 //
+// Sample script for decoding MP3 header bytes                 //
+//  see readme.txt for more details                            //
+//                                                            ///
+/////////////////////////////////////////////////////////////////
 
 if (!function_exists('PrintHexBytes')) {
 	function PrintHexBytes($string) {
@@ -42,7 +53,7 @@ if (!function_exists('table_var_dump')) {
 						require_once(GETID3_INCLUDEPATH.'getid3.getimagesize.php');
 						$imageinfo = array();
 						if ($imagechunkcheck = GetDataImageSize($value, $imageinfo)) {
-							$DumpedImageSRC = (!empty($_REQUEST['filename']) ? $_REQUEST['filename'] : '.getid3').'.'.$variable['dataoffset'].'.'.ImageTypesLookup($imagechunkcheck[2]);
+							$DumpedImageSRC = (!empty($_REQUEST['filename']) ? $_REQUEST['filename'] : '.getid3').'.'.$variable['dataoffset'].'.'.image_type_to_mime_type($imagechunkcheck[2]);
 							if ($tempimagefile = fopen($DumpedImageSRC, 'wb')) {
 								fwrite($tempimagefile, $value);
 								fclose($tempimagefile);
@@ -77,10 +88,10 @@ if (!function_exists('table_var_dump')) {
 				$variable = str_replace(chr(0), ' ', $variable);
 				$varlen = strlen($variable);
 				for ($i = 0; $i < $varlen; $i++) {
-					if (preg_match('#['.chr(0x0A).chr(0x0D).' -;0-9A-Za-z]#', $variable{$i})) {
-						$returnstring .= $variable{$i};
+					if (preg_match('#['.chr(0x0A).chr(0x0D).' -;0-9A-Za-z]#', $variable[$i])) {
+						$returnstring .= $variable[$i];
 					} else {
-						$returnstring .= '&#'.str_pad(ord($variable{$i}), 3, '0', STR_PAD_LEFT).';';
+						$returnstring .= '&#'.str_pad(ord($variable[$i]), 3, '0', STR_PAD_LEFT).';';
 					}
 				}
 				$returnstring = nl2br($returnstring);
@@ -91,7 +102,7 @@ if (!function_exists('table_var_dump')) {
 				$imageinfo = array();
 				if (($imagechunkcheck = GetDataImageSize(substr($variable, 0, 32768), $imageinfo)) && ($imagechunkcheck[2] >= 1) && ($imagechunkcheck[2] <= 3)) {
 					$returnstring .= '<table border="1" cellspacing="0" cellpadding="2">';
-					$returnstring .= '<tr><td><b>type</b></td><td>'.ImageTypesLookup($imagechunkcheck[2]).'</td></tr>';
+					$returnstring .= '<tr><td><b>type</b></td><td>'.image_type_to_mime_type($imagechunkcheck[2]).'</td></tr>';
 					$returnstring .= '<tr><td><b>width</b></td><td>'.number_format($imagechunkcheck[0]).' px</td></tr>';
 					$returnstring .= '<tr><td><b>height</b></td><td>'.number_format($imagechunkcheck[1]).' px</td></tr>';
 					$returnstring .= '<tr><td><b>size</b></td><td>'.number_format(strlen($variable)).' bytes</td></tr></table>';
@@ -231,11 +242,11 @@ if (!function_exists('NormalizeBinaryPoint')) {
 		// http://www.scri.fsu.edu/~jac/MAD3401/Backgrnd/binary.html
 		if (strpos($binarypointnumber, '.') === false) {
 			$binarypointnumber = '0.'.$binarypointnumber;
-		} elseif ($binarypointnumber{0} == '.') {
+		} elseif ($binarypointnumber[0] == '.') {
 			$binarypointnumber = '0'.$binarypointnumber;
 		}
 		$exponent = 0;
-		while (($binarypointnumber{0} != '1') || (substr($binarypointnumber, 1, 1) != '.')) {
+		while (($binarypointnumber[0] != '1') || (substr($binarypointnumber, 1, 1) != '.')) {
 			if (substr($binarypointnumber, 1, 1) == '.') {
 				$exponent--;
 				$binarypointnumber = substr($binarypointnumber, 2, 1).'.'.substr($binarypointnumber, 3);
@@ -243,7 +254,7 @@ if (!function_exists('NormalizeBinaryPoint')) {
 				$pointpos = strpos($binarypointnumber, '.');
 				$exponent += ($pointpos - 1);
 				$binarypointnumber = str_replace('.', '', $binarypointnumber);
-				$binarypointnumber = $binarypointnumber{0}.'.'.substr($binarypointnumber, 1);
+				$binarypointnumber = $binarypointnumber[0].'.'.substr($binarypointnumber, 1);
 			}
 		}
 		$binarypointnumber = str_pad(substr($binarypointnumber, 0, $maxbits + 2), $maxbits + 2, '0', STR_PAD_RIGHT);
@@ -313,7 +324,7 @@ if (!function_exists('BigEndian2Float')) {
 		// http://www.scri.fsu.edu/~jac/MAD3401/Backgrnd/ieee.html
 
 		$bitword = BigEndian2Bin($byteword);
-		$signbit = $bitword{0};
+		$signbit = $bitword[0];
 
 		switch (strlen($byteword) * 8) {
 			case 32:
@@ -386,9 +397,9 @@ if (!function_exists('BigEndian2Int')) {
 		$bytewordlen = strlen($byteword);
 		for ($i = 0; $i < $bytewordlen; $i++) {
 			if ($synchsafe) { // disregard MSB, effectively 7-bit bytes
-				$intvalue = $intvalue | (ord($byteword{$i}) & 0x7F) << (($bytewordlen - 1 - $i) * 7);
+				$intvalue = $intvalue | (ord($byteword[$i]) & 0x7F) << (($bytewordlen - 1 - $i) * 7);
 			} else {
-				$intvalue += ord($byteword{$i}) * pow(256, ($bytewordlen - 1 - $i));
+				$intvalue += ord($byteword[$i]) * pow(256, ($bytewordlen - 1 - $i));
 			}
 		}
 		if ($signed && !$synchsafe) {
@@ -424,7 +435,7 @@ if (!function_exists('BigEndian2Bin')) {
 		$binvalue = '';
 		$bytewordlen = strlen($byteword);
 		for ($i = 0; $i < $bytewordlen; $i++) {
-			$binvalue .= str_pad(decbin(ord($byteword{$i})), 8, '0', STR_PAD_LEFT);
+			$binvalue .= str_pad(decbin(ord($byteword[$i])), 8, '0', STR_PAD_LEFT);
 		}
 		return $binvalue;
 	}
@@ -551,7 +562,7 @@ if (!function_exists('Unsynchronise')) {
 		$data = str_replace(chr(0xFF).chr(0x00), chr(0xFF).chr(0x00).chr(0x00), $data);
 		$unsyncheddata = '';
 		for ($i = 0; $i < strlen($data); $i++) {
-			$thischar = $data{$i};
+			$thischar = $data[$i];
 			$unsyncheddata .= $thischar;
 			if ($thischar == chr(255)) {
 				$nextchar = ord(substr($data, $i + 1, 1));
@@ -666,8 +677,8 @@ if (!function_exists('RoughTranslateUnicodeToASCII')) {
 					$asciidata = substr($asciidata, 0, strlen($asciidata) - 2); // remove terminator, only if present (it should be, but...)
 				}
 				for ($i = 0; $i < strlen($asciidata); $i += 2) {
-					if ((ord($asciidata{$i}) <= 0x7F) || (ord($asciidata{$i}) >= 0xA0)) {
-						$tempstring .= $asciidata{$i};
+					if ((ord($asciidata[$i]) <= 0x7F) || (ord($asciidata[$i]) >= 0xA0)) {
+						$tempstring .= $asciidata[$i];
 					} else {
 						$tempstring .= '?';
 					}
@@ -681,8 +692,8 @@ if (!function_exists('RoughTranslateUnicodeToASCII')) {
 					$asciidata = substr($asciidata, 0, strlen($asciidata) - 2); // remove terminator, only if present (it should be, but...)
 				}
 				for ($i = 0; $i < strlen($asciidata); $i += 2) {
-					if ((ord($asciidata{$i}) <= 0x7F) || (ord($asciidata{$i}) >= 0xA0)) {
-						$tempstring .= $asciidata{$i};
+					if ((ord($asciidata[$i]) <= 0x7F) || (ord($asciidata[$i]) >= 0xA0)) {
+						$tempstring .= $asciidata[$i];
 					} else {
 						$tempstring .= '?';
 					}
@@ -700,8 +711,8 @@ if (!function_exists('RoughTranslateUnicodeToASCII')) {
 					$asciidata = substr($asciidata, 0, strlen($asciidata) - 2); // remove terminator, only if present (it should be, but...)
 				}
 				for ($i = 0; ($i + 1) < strlen($asciidata); $i += 2) {
-					if ((ord($asciidata{($i + 1)}) <= 0x7F) || (ord($asciidata{($i + 1)}) >= 0xA0)) {
-						$tempstring .= $asciidata{($i + 1)};
+					if ((ord($asciidata[($i + 1)]) <= 0x7F) || (ord($asciidata[($i + 1)]) >= 0xA0)) {
+						$tempstring .= $asciidata[($i + 1)];
 					} else {
 						$tempstring .= '?';
 					}
@@ -771,8 +782,8 @@ if (!function_exists('ID3v1matchesID3v2')) {
 		if (trim($id3v1['genre']) != trim($id3v2['genre'])) {
 			return false;
 		}
-		if (isset($id3v1['track'])) {
-			if (!isset($id3v1['track']) || (trim($id3v1['track']) != trim($id3v2['track']))) {
+		if (isset($id3v1['track_number'])) {
+			if (!isset($id3v1['track_number']) || (trim($id3v1['track_number']) != trim($id3v2['track_number']))) {
 				return false;
 			}
 			if (trim($id3v1['comment']) != trim(substr($id3v2['comment'], 0, 28))) {
@@ -839,26 +850,26 @@ if (!function_exists('GUIDtoBytestring')) {
 
 if (!function_exists('BytestringToGUID')) {
 	function BytestringToGUID($Bytestring) {
-		$GUIDstring  = str_pad(dechex(ord($Bytestring{3})),  2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{2})),  2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{1})),  2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{0})),  2, '0', STR_PAD_LEFT);
+		$GUIDstring  = str_pad(dechex(ord($Bytestring[3])),  2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[2])),  2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[1])),  2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[0])),  2, '0', STR_PAD_LEFT);
 		$GUIDstring .= '-';
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{5})),  2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{4})),  2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[5])),  2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[4])),  2, '0', STR_PAD_LEFT);
 		$GUIDstring .= '-';
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{7})),  2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{6})),  2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[7])),  2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[6])),  2, '0', STR_PAD_LEFT);
 		$GUIDstring .= '-';
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{8})),  2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{9})),  2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[8])),  2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[9])),  2, '0', STR_PAD_LEFT);
 		$GUIDstring .= '-';
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{10})), 2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{11})), 2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{12})), 2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{13})), 2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{14})), 2, '0', STR_PAD_LEFT);
-		$GUIDstring .= str_pad(dechex(ord($Bytestring{15})), 2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[10])), 2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[11])), 2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[12])), 2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[13])), 2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[14])), 2, '0', STR_PAD_LEFT);
+		$GUIDstring .= str_pad(dechex(ord($Bytestring[15])), 2, '0', STR_PAD_LEFT);
 
 		return strtoupper($GUIDstring);
 	}
@@ -929,17 +940,17 @@ if (!function_exists('utf8_decode')) {
 		$utf8length = strlen($utf8text);
 		$decodedtext = '';
 		for ($i = 0; $i < $utf8length; $i++) {
-			if ((ord($utf8text{$i}) & 0x80) == 0) {
-				$decodedtext .= $utf8text{$i};
-			} elseif ((ord($utf8text{$i}) & 0xF0) == 0xF0) {
+			if ((ord($utf8text[$i]) & 0x80) == 0) {
+				$decodedtext .= $utf8text[$i];
+			} elseif ((ord($utf8text[$i]) & 0xF0) == 0xF0) {
 				$decodedtext .= '?';
 				$i += 3;
-			} elseif ((ord($utf8text{$i}) & 0xE0) == 0xE0) {
+			} elseif ((ord($utf8text[$i]) & 0xE0) == 0xE0) {
 				$decodedtext .= '?';
 				$i += 2;
-			} elseif ((ord($utf8text{$i}) & 0xC0) == 0xC0) {
+			} elseif ((ord($utf8text[$i]) & 0xC0) == 0xC0) {
 				//   2     11   110bbbbb 10bbbbbb
-				$decodedchar = Bin2Dec(substr(Dec2Bin(ord($utf8text{$i})), 3, 5).substr(Dec2Bin(ord($utf8text{($i + 1)})), 2, 6));
+				$decodedchar = Bin2Dec(substr(Dec2Bin(ord($utf8text[$i])), 3, 5).substr(Dec2Bin(ord($utf8text[($i + 1)])), 2, 6));
 				if ($decodedchar <= 255) {
 					$decodedtext .= chr($decodedchar);
 				} else {
@@ -1057,7 +1068,7 @@ if (!function_exists('CreateDeepArray')) {
 		//   $foo = array('path'=>array('to'=>'array('my'=>array('file.txt'))));
 		// or
 		//   $foo['path']['to']['my'] = 'file.txt';
-		while ($ArrayPath{0} == $Separator) {
+		while ($ArrayPath[0] == $Separator) {
 			$ArrayPath = substr($ArrayPath, 1);
 		}
 		if (($pos = strpos($ArrayPath, $Separator)) !== false) {
@@ -1066,23 +1077,6 @@ if (!function_exists('CreateDeepArray')) {
 			$ReturnedArray["$ArrayPath"] = $Value;
 		}
 		return $ReturnedArray;
-	}
-}
-
-if (!function_exists('md5_file')) {
-	// Allan Hansen <ah@artemis.dk>
-	// md5_file() exists in PHP 4.2.0.
-	// The following works under UNIX only, but dies on windows
-	function md5_file($file) {
-		if (substr(php_uname(), 0, 7) == 'Windows') {
-			die('PHP 4.2.0 or newer required for md5_file()');
-		}
-
-		$file = str_replace('`', '\\`', $file);
-		if (preg_match("#^([0-9a-f]{32})[ \t\n\r]#i", `md5sum "$file"`, $r)) {
-			return $r[1];
-		}
-		return false;
 	}
 }
 
@@ -1352,24 +1346,24 @@ echo '<input type="text" name="HeaderHexBytes" value="'.htmlentities(isset($_POS
 echo '<input type="submit" name="Analyze" value="Analyze"></form>';
 echo '<hr>';
 
-echo '<form action="'.htmlentities($_SERVER['PHP_SELF'], ENT_QUOTES).'" METHOD="get">';
+echo '<form action="'.htmlentities($_SERVER['PHP_SELF'], ENT_QUOTES).'" method="get">';
 echo 'Generate a MPEG-audio 4-byte header from these values:<BR>';
 echo '<table border="0">';
 
 $MPEGgenerateValues = array(
-								'version'=>array('1', '2', '2.5'),
-								'layer'=>array('I', 'II', 'III'),
-								'protection'=>array('Y', 'N'),
-								'bitrate'=>array('free', '8', '16', '24', '32', '40', '48', '56', '64', '80', '96', '112', '128', '144', '160', '176', '192', '224', '256', '288', '320', '352', '384', '416', '448'),
-								'frequency'=>array('8000', '11025', '12000', '16000', '22050', '24000', '32000', '44100', '48000'),
-								'padding'=>array('Y', 'N'),
-								'private'=>array('Y', 'N'),
-								'channelmode'=>array('stereo', 'joint stereo', 'dual channel', 'mono'),
-								'modeextension'=>array('none', 'IS', 'MS', 'IS+MS', '4-31', '8-31', '12-31', '16-31'),
-								'copyright'=>array('Y', 'N'),
-								'original'=>array('Y', 'N'),
-								'emphasis'=>array('none', '50/15ms', 'CCIT J.17')
-							);
+	'version'       => array('1', '2', '2.5'),
+	'layer'         => array('I', 'II', 'III'),
+	'protection'    => array('Y', 'N'),
+	'bitrate'       => array('free', '8', '16', '24', '32', '40', '48', '56', '64', '80', '96', '112', '128', '144', '160', '176', '192', '224', '256', '288', '320', '352', '384', '416', '448'),
+	'frequency'     => array('8000', '11025', '12000', '16000', '22050', '24000', '32000', '44100', '48000'),
+	'padding'       => array('Y', 'N'),
+	'private'       => array('Y', 'N'),
+	'channelmode'   => array('stereo', 'joint stereo', 'dual channel', 'mono'),
+	'modeextension' => array('none', 'IS', 'MS', 'IS+MS', '4-31', '8-31', '12-31', '16-31'),
+	'copyright'     => array('Y', 'N'),
+	'original'      => array('Y', 'N'),
+	'emphasis'      => array('none', '50/15ms', 'CCIT J.17'),
+);
 
 foreach ($MPEGgenerateValues as $name => $dataarray) {
 	echo '<tr><th>'.$name.':</th><td><select name="'.$name.'">';
@@ -1572,7 +1566,7 @@ function MPEGaudioCRCLookup($CRCbit) {
 /////////////////////////////////////////////////////////////////
 /// getID3() by James Heinrich <info@getid3.org>               //
 //  available at http://getid3.sourceforge.net                ///
-//            or http://www.getid3.org                        ///
+//            or https://www.getid3.org                       ///
 /////////////////////////////////////////////////////////////////
 //                                                             //
 // getid3.mp3.php - part of getID3()                           //
@@ -1905,7 +1899,7 @@ function decodeMPEGaudioHeader($fd, $offset, &$ThisFileInfo, $recursivesearch=tr
 			if ($ThisFileInfo['mpeg']['audio']['xing_flags']['toc']) {
 				$LAMEtocData = substr($headerstring, $VBRidOffset + 16, 100);
 				for ($i = 0; $i < 100; $i++) {
-					$ThisFileInfo['mpeg']['audio']['toc'][$i] = ord($LAMEtocData{$i});
+					$ThisFileInfo['mpeg']['audio']['toc'][$i] = ord($LAMEtocData[$i]);
 				}
 			}
 			if ($ThisFileInfo['mpeg']['audio']['xing_flags']['vbr_scale']) {
@@ -2286,9 +2280,9 @@ function FreeFormatFrameLength($fd, $offset, &$ThisFileInfo, $deepscan=false) {
 
 	$SyncPattern1 = substr($MPEGaudioData, 0, 4);
 	// may be different pattern due to padding
-	$SyncPattern2 = $SyncPattern1{0}.$SyncPattern1{1}.chr(ord($SyncPattern1{2}) | 0x02).$SyncPattern1{3};
+	$SyncPattern2 = $SyncPattern1[0].$SyncPattern1[1].chr(ord($SyncPattern1[2]) | 0x02).$SyncPattern1[3];
 	if ($SyncPattern2 === $SyncPattern1) {
-		$SyncPattern2 = $SyncPattern1{0}.$SyncPattern1{1}.chr(ord($SyncPattern1{2}) & 0xFD).$SyncPattern1{3};
+		$SyncPattern2 = $SyncPattern1[0].$SyncPattern1[1].chr(ord($SyncPattern1[2]) & 0xFD).$SyncPattern1[3];
 	}
 
 	$framelength = false;
@@ -2424,7 +2418,7 @@ function getOnlyMPEGaudioInfo($fd, &$ThisFileInfo, $avdataoffset, $BitrateHistog
 			return false;
 		}
 
-		if (($header{$SynchSeekOffset} == CONST_FF) && ($header{($SynchSeekOffset + 1)} > CONST_E0)) { // synch detected
+		if (($header[$SynchSeekOffset] == CONST_FF) && ($header[($SynchSeekOffset + 1)] > CONST_E0)) { // synch detected
 
 			if (!isset($FirstFrameThisfileInfo) && !isset($ThisFileInfo['mpeg']['audio'])) {
 				$FirstFrameThisfileInfo = $ThisFileInfo;
@@ -2753,18 +2747,18 @@ function MPEGaudioHeaderDecode($Header4Bytes) {
 	}
 
 	$MPEGrawHeader['synch']         = (BigEndian2Int(substr($Header4Bytes, 0, 2)) & 0xFFE0) >> 4;
-	$MPEGrawHeader['version']       = (ord($Header4Bytes{1}) & 0x18) >> 3; //    BB
-	$MPEGrawHeader['layer']         = (ord($Header4Bytes{1}) & 0x06) >> 1; //      CC
-	$MPEGrawHeader['protection']    = (ord($Header4Bytes{1}) & 0x01);      //        D
-	$MPEGrawHeader['bitrate']       = (ord($Header4Bytes{2}) & 0xF0) >> 4; // EEEE
-	$MPEGrawHeader['sample_rate']   = (ord($Header4Bytes{2}) & 0x0C) >> 2; //     FF
-	$MPEGrawHeader['padding']       = (ord($Header4Bytes{2}) & 0x02) >> 1; //       G
-	$MPEGrawHeader['private']       = (ord($Header4Bytes{2}) & 0x01);      //        H
-	$MPEGrawHeader['channelmode']   = (ord($Header4Bytes{3}) & 0xC0) >> 6; // II
-	$MPEGrawHeader['modeextension'] = (ord($Header4Bytes{3}) & 0x30) >> 4; //   JJ
-	$MPEGrawHeader['copyright']     = (ord($Header4Bytes{3}) & 0x08) >> 3; //     K
-	$MPEGrawHeader['original']      = (ord($Header4Bytes{3}) & 0x04) >> 2; //      L
-	$MPEGrawHeader['emphasis']      = (ord($Header4Bytes{3}) & 0x03);      //       MM
+	$MPEGrawHeader['version']       = (ord($Header4Bytes[1]) & 0x18) >> 3; //    BB
+	$MPEGrawHeader['layer']         = (ord($Header4Bytes[1]) & 0x06) >> 1; //      CC
+	$MPEGrawHeader['protection']    = (ord($Header4Bytes[1]) & 0x01);      //        D
+	$MPEGrawHeader['bitrate']       = (ord($Header4Bytes[2]) & 0xF0) >> 4; // EEEE
+	$MPEGrawHeader['sample_rate']   = (ord($Header4Bytes[2]) & 0x0C) >> 2; //     FF
+	$MPEGrawHeader['padding']       = (ord($Header4Bytes[2]) & 0x02) >> 1; //       G
+	$MPEGrawHeader['private']       = (ord($Header4Bytes[2]) & 0x01);      //        H
+	$MPEGrawHeader['channelmode']   = (ord($Header4Bytes[3]) & 0xC0) >> 6; // II
+	$MPEGrawHeader['modeextension'] = (ord($Header4Bytes[3]) & 0x30) >> 4; //   JJ
+	$MPEGrawHeader['copyright']     = (ord($Header4Bytes[3]) & 0x08) >> 3; //     K
+	$MPEGrawHeader['original']      = (ord($Header4Bytes[3]) & 0x04) >> 2; //      L
+	$MPEGrawHeader['emphasis']      = (ord($Header4Bytes[3]) & 0x03);      //       MM
 
 	return $MPEGrawHeader;
 }

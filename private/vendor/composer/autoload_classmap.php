@@ -118,6 +118,7 @@ return array(
     'getid3_write_real' => $vendorDir . '/james-heinrich/getid3/getid3/write.real.php',
     'getid3_write_vorbiscomment' => $vendorDir . '/james-heinrich/getid3/getid3/write.vorbiscomment.php',
     'getid3_writetags' => $vendorDir . '/james-heinrich/getid3/getid3/write.php',
+    'getid3_xz' => $vendorDir . '/james-heinrich/getid3/getid3/module.archive.xz.php',
     'getid3_zip' => $vendorDir . '/james-heinrich/getid3/getid3/module.archive.zip.php',
     'http_class' => $vendorDir . '/phpclasses/httpclient/http.php',
     'login_sasl_client_class' => $vendorDir . '/phpclasses/sasl/login_sasl_client.php',
