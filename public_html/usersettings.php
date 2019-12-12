@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion user settings page.                                             |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2019 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Mark A. Howard         mark AT usable-web DOT com                        |
@@ -627,9 +627,9 @@ function editpreferences()
             $words = explode ('_', $theme);
             $bwords = array ();
             foreach ($words as $th) {
-                if ((strtolower ($th{0}) == $th{0}) &&
-                    (strtolower ($th{1}) == $th{1})) {
-                    $bwords[] = strtoupper ($th{0}) . substr ($th, 1);
+                if ((strtolower ($th[0]) == $th[0]) &&
+                    (strtolower ($th[1]) == $th[1])) {
+                    $bwords[] = strtoupper ($th[0]) . substr ($th, 1);
                 } else {
                     $bwords[] = $th;
                 }
