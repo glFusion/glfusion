@@ -725,7 +725,7 @@ function _phpOutOfDate()
 }
 
 function _isWritable($path) {
-    if ($path{strlen($path)-1}=='/')
+    if ($path[strlen($path)-1]=='/')
         return _isWritable($path.uniqid(mt_rand()).'.tmp');
 
     if (@file_exists($path)) {

@@ -464,7 +464,7 @@ function DBADMIN_innodbStatus()
         // need to look at all the tables
         $tableList = DBADMIN_getTableList();
         foreach ( $tableList AS $table ) {
-            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'",1);
             $B = DB_fetchArray($result2);
             if (strcasecmp($B['Engine'], 'InnoDB') != 0) {
                 return false;
@@ -483,7 +483,7 @@ function DBADMIN_myisamStatus()
 
     $tableList = DBADMIN_getTableList();
     foreach ( $tableList AS $table ) {
-        $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+        $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'",1);
         $B = DB_fetchArray($result2);
         if (strcasecmp($B['Engine'], 'MyISAM') != 0) {
             return false;
@@ -645,7 +645,7 @@ function DBADMIN_convert_innodb($startwith = '', $failures = 0)
             }
         }
 
-        $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+        $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'",1);
         $B = DB_fetchArray($result2);
         if (strcasecmp($B['Engine'], 'InnoDB') == 0) {
             continue; // converted - skip
@@ -732,7 +732,7 @@ function DBADMIN_convert_myisam($startwith = '', $failures = 0)
             }
         }
 
-        $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+        $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'",1);
         $B = DB_fetchArray($result2);
         if (strcasecmp($B['Engine'], 'MyISAM') == 0) {
             continue; // converted - skip
@@ -1009,7 +1009,7 @@ function DBADMIN_ajaxGetTableList($engine = 'MyISAM')
         $table = $A[0];
         $tblPrefix = substr($table,0,strlen($_DB_table_prefix));
         if ($tblPrefix == $_DB_table_prefix ) { // in_array($table, $_TABLES)) {
-            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'",1);
             $B = DB_fetchArray($result2);
             if (strcasecmp($B['Engine'], $engine) == 0) {
                 continue;
@@ -1134,7 +1134,7 @@ function DBADMIN_getTableList($engine = '')
         $table = $A[0];
         $tblPrefix = substr($table,0,strlen($_DB_table_prefix));
         if ($tblPrefix == $_DB_table_prefix ) {
-            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'");
+            $result2 = DB_query("SHOW TABLE STATUS FROM $_DB_name LIKE '$table'",1);
             $B = DB_fetchArray($result2);
             if ( $engine != '' ) {
                 if (strcasecmp($B['Engine'], $engine) == 0) {
