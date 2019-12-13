@@ -685,6 +685,7 @@ $LANG12 = array(
     46 => 'City/Town',
     47 => 'State',
     48 => 'Zip Code',
+    50 => 'Edit Event Type',
     51 => 'Location',
     52 => 'Delete',
     53 => 'Create Account',
@@ -2446,6 +2447,7 @@ $LANG_ENVCHK = array(
     'xml_extension'             => 'XML Extension',
     'zlib_extension'            => 'zlib Extension',
     'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> should be off.',
+    'intl_extension'            => 'Intl Extension',
 );
 
 ###############################################################################
