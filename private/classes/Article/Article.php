@@ -240,7 +240,7 @@ class Article
         $this->perm_anon    = $_CONF['default_permissions_story'][3];
         $this->draft_flag   = $_CONF['draft_flag'];
         $this->frontpage    = $_CONF['frontpage'];
-        $this->advanced_editor_mode = $_CONF['default_story_editor'];
+        $this->advanced_editor_mode = isset($_CONF['default_story_editor']) ? $_CONF['default_story_editor'] : 1;
         $this->show_topic_icon = $_CONF['show_topic_icon'];
 
         if (isset($_GROUPS['Story Admin'])) {
@@ -280,6 +280,9 @@ class Article
         $this->filter->setAllowedElements($allowedElements);
         $this->filter->setCensorData(true);
         $this->filter->setNamespace('glfusion','story');
+
+    	USES_lib_comment();
+
     }
 
 
