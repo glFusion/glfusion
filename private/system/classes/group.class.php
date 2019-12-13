@@ -1,17 +1,21 @@
 <?php
 /**
-*   Class to handle glFusion group-related operations
+* glFusion CMS
 *
-*   @author     Lee Garner <lee@leegarner.com>
-*   @copyright  Copyright (c) 2017 Lee Garner <lee@leegarner.com>
-*   @package    glfusion
-*   @version    0.0.1
-*   @license    http://opensource.org/licenses/gpl-2.0.php
-*               GNU Public License v2 or later
+* Class to handle glFusion group-related operations
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2017-2019 by the following authors:
+*   Lee Garner      lee AT leegarner DOT com
+*
 *   @filesource
 */
 
+use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 class Group
 {
@@ -94,6 +98,8 @@ class Group
         global $_TABLES, $_USER, $_SEC_VERBOSE;
         static $runonce = array();
 
+        $db = Database::getInstance();
+
         if (empty($uid)) {
             if (COM_isAnonUser()) {
                 $uid = 1;
@@ -116,18 +122,34 @@ class Group
         }
 
         // Not found in cache? Perform the DB lookup
+
         $groups = array();
+
         $sql = "SELECT ga.ug_main_grp_id, g.grp_name
                 FROM {$_TABLES['group_assignments']} ga
                 LEFT JOIN {$_TABLES['groups']} g
                     ON g.grp_id = ga.ug_main_grp_id
-                WHERE ga.ug_uid = $uid AND g.grp_id IS NOT NULL";
-        $result = DB_query($sql, 1);
-        if ($result) {
-            while ($A = DB_fetchArray($result, false)) {
-                $groups[ucfirst($A['grp_name'])] = $A['ug_main_grp_id'];
-            }
+                WHERE ga.ug_uid = ? AND g.grp_id IS NOT NULL";
+
+       try {
+            $stmt = $db->conn->executeQuery($sql,
+                        array($uid),
+                        array(Database::INTEGER)
+                        );
+
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            // Ignore errors or failed attempts
         }
+
+        $data = $stmt->fetchAll(Database::ASSOCIATIVE);
+        $stmt->closeCursor();
+        if (count($data) < 1) {
+            $data = array();
+        }
+        foreach($data AS $row) {
+            $groups[ucfirst($row['grp_name'])] = $row['ug_main_grp_id'];
+        }
+
         ksort($groups);
         $runonce[$uid] = $groups;
         Cache::getInstance()->set($cache_key, $groups, array('groups', 'user_' . $uid));
@@ -150,6 +172,9 @@ class Group
 
         $cache = false;
         $groups = array();
+        $cTotalGroups = 0;
+
+        $db = Database::getInstance();
 
         if (empty($uid)) {
             if (COM_isAnonUser()) {
@@ -159,7 +184,9 @@ class Group
             }
         }
         $uid = (int)$uid;
-        if ($uid < 0 ) return array();  // Invalid user ID type
+        if ($uid < 0) {
+            return array();  // Invalid user ID type
+        }
 
         // Check the static var in case this is called more than once
         // for a page load
@@ -175,46 +202,50 @@ class Group
         // Not in cache? First get directly-assigned memberships, then
         // all inherited ones.
         $groups = self::getAssigned($uid);
-        $nrows = count($groups);
-        if ($_SEC_VERBOSE) {
-            COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ": got $nrows assigned groups",1);
-        }
+        $cTotalGroups = count($groups);
+        Log::write('system',Log::DEBUG,sprintf("%s::%s got %d assigned groups.",__CLASS__,__FUNCTION__,$cTotalGroups));
 
         $cgroups = array();
         foreach ($groups as $grp_name=>$gid) {
             $cgroups[] = $gid;
         }
-        while ($nrows > 0) {
+        while ($cTotalGroups > 0) {
             if (count($cgroups) > 0) {
-                $glist = join(',', $cgroups);
-                $result = DB_query("SELECT ug_main_grp_id,grp_name
-                        FROM {$_TABLES["group_assignments"]} ga
-                        LEFT JOIN {$_TABLES["groups"]} g
+                $sql = "SELECT ug_main_grp_id,grp_name
+                        FROM {$_TABLES['group_assignments']} ga
+                        LEFT JOIN {$_TABLES['groups']} g
                             ON g.grp_id = ga.ug_main_grp_id
-                        WHERE ga.ug_grp_id IN ($glist) AND g.grp_id IS NOT NULL", 1);
-                $nrows = DB_numRows($result);
+                        WHERE ga.ug_grp_id IN (?) AND g.grp_id IS NOT NULL";
+
+               try {
+                    $stmt = $db->conn->executeQuery($sql,
+                                array($cgroups),
+                                array(Database::PARAM_INT_ARRAY)
+                                );
+
+                } catch(\Doctrine\DBAL\DBALException $e) {
+                    // Ignore errors or failed attempts
+                }
+                $data = $stmt->fetchAll(Database::ASSOCIATIVE);
+                $stmt->closeCursor();
+                $cTotalGroups = count($data);
             } else {
-                // No sub-groups found to query
-                $nrows = 0;
+                $cTotalGroups = 0;
+                $data = array();
             }
 
-            if ($nrows > 0) {
+            if ($cTotalGroups > 0) {
                 $cgroups = array();
-                while ($A = DB_fetchArray($result, false)) {
-                    if ($_SEC_VERBOSE) {
-                        COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ":user inherits group {$A['grp_name']}",1);
-                    }
-                    // If not already in the $groups array, add it and include it
-                    // in the next search iteration.
-                    if (!in_array($A['ug_main_grp_id'], $groups)) {
-                        $cgroups[] = $A['ug_main_grp_id'];
-                        $groups[ucfirst($A['grp_name'])] = $A['ug_main_grp_id'];
+                foreach($data AS $row) {
+                    if (!in_array($row['ug_main_grp_id'], $groups)) {
+                        $cgroups[] = $row['ug_main_grp_id'];
+                        $groups[ucfirst($row['grp_name'])] = $row['ug_main_grp_id'];
                     }
                 }
             }
         }
 
-        if ( count($groups) == 0 ) {
+        if (count($groups) == 0) {
             $groups = array('All Users' => 2);
         }
         ksort($groups);
@@ -276,24 +307,34 @@ class Group
     {
         global $_TABLES;
 
+        $db = Database::getInstance();
+
         static $groups = array();
         if (!isset($groups[$feature])) {
             $groups[$feature] = array();
             $ugroups = self::getAll($uid);
 
-            $ft_id = (int)DB_getItem($_TABLES['features'], 'ft_id',
-                    "ft_name = '".DB_escapeString($feature)."'");
+            $ft_id = (int) $db->getItem($_TABLES['features'],'ft_id',array('ft_name' => $feature));
+
             if ($ft_id > 0 && count($ugroups) > 0) {
-                $grouplist = implode (',', $ugroups);
-                $sql = "SELECT * FROM {$_TABLES['access']}
-                        WHERE acc_ft_id = $ft_id
-                        AND acc_grp_id IN ($grouplist)
+               $sql = "SELECT * FROM {$_TABLES['access']}
+                        WHERE acc_ft_id = ?
+                        AND acc_grp_id IN (?)
                         ORDER BY acc_grp_id";
-                $res = DB_query($sql, 1);
-                if ($res) {
-                    while ($A = DB_fetchArray($res, false)) {
-                        $groups[$feature][] = (int)$A['acc_grp_id'];
-                    }
+
+               try {
+                    $stmt = $db->conn->executeQuery($sql,
+                                array($ft_id,$ugroups),
+                                array(Database::INTEGER,Database::PARAM_INT_ARRAY)
+                                );
+
+                } catch(\Doctrine\DBAL\DBALException $e) {
+                    $groups[$feature][] = 0;
+                }
+                $data = $stmt->fetchAll(Database::ASSOCIATIVE);
+                $stmt->closeCursor();
+                foreach($data AS $row) {
+                    $groups[$feature][] = (int)$row['acc_grp_id'];
                 }
             } else {
                 $groups[$feature][] = 0;
@@ -301,7 +342,6 @@ class Group
         }
         return $groups[$feature];
     }
-
 }
 
 ?>
