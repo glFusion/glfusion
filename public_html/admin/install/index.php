@@ -648,6 +648,7 @@ function INST_checkEnvironment($dbconfig_path='')
         array('extension' => 'gd',      'fail' => 0),
         array('extension' => 'gettext', 'fail' => 0),
         array('extension' => 'hash',    'fail' => 0),
+        array('extension' => 'intl',    'fail' => 0),
         array('extension' => 'json',    'fail' => 1),
         array('extension' => 'mbstring','fail' => 0),
         array('extension' => 'openssl', 'fail' => 0),
