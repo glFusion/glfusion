@@ -273,8 +273,13 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
 
                 if ( $row['media_type'] == 0 ) {
                     $disp_size = @getimagesize($pDisplay);
-                    $dWidth = $disp_size[0] + 15;
-                    $dHeight = $disp_size[1] + 15;
+                    if ($disp_size !== false) {
+                        $dWidth = $disp_size[0] + 15;
+                        $dHeight = $disp_size[1] + 15;
+                    } else {
+                        $dWidth = 200;
+                        $dHeight = 200;
+                    }
                     $T->set_var(array(
                         'media_zoom'    =>      "<a href=\"#\" onclick=\"javascript:jkpopimage('" . $display . "'," . $dWidth . ',' . $dHeight . ",''); return false\">",
                         'media_lightbox' => $display,
