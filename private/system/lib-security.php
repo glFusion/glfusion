@@ -1290,23 +1290,28 @@ function SEC_createToken($ttl = TOKEN_TTL)
     /* Create a token for this user/url combination */
     /* NOTE: TTL mapping for PageURL not yet implemented */
 
-    $db->conn->insert(
-            $_TABLES['tokens'],
-            array(
-                'token' => $token,
-                'created' => $_CONF['_now']->toMySQL(true),
-                'owner_id' => $uid,
-                'urlfor' => $pageURL,
-                'ttl' => $ttl
-            ),
-            array(
-                Database::STRING,
-                Database::STRING,
-                Database::INTEGER,
-                Database::STRING,
-                Database::INTEGER
-            )
-    );
+    try {
+        $db->conn->insert(
+                $_TABLES['tokens'],
+                array(
+                    'token' => $token,
+                    'created' => $_CONF['_now']->toMySQL(true),
+                    'owner_id' => $uid,
+                    'urlfor' => $pageURL,
+                    'ttl' => $ttl
+                ),
+                array(
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER
+                )
+        );
+    } catch(\Doctrine\DBAL\DBALException $e) {
+        Log::write('system',Log::ERROR,'Error inserting token into DB: ' . $e->getMessage());
+    }
+
 
     $tokenKey = $token;
 
@@ -1340,6 +1345,7 @@ function SEC_checkToken()
 
     // determine the destination of this request
     $destination = COM_getCurrentURL();
+
     // validate the destination is not blank and is part of our site...
     if ( $destination == '' ) {
         $destination = $_CONF['site_url'] . '/index.php';
@@ -1406,8 +1412,7 @@ function _sec_checkToken($ajax=0)
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $referCheck  = $_SERVER['REAL_ADDR'];
     } else {
-//        $referCheck = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-        $referCheck = COM_getCurrentURL();
+        $referCheck = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
     }
     /*
      * We cannot use filter_input here because it will pull the orignal
@@ -1574,6 +1579,8 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
     $db = Database::getInstance();
 
     $return = false; // Default to fail.
+
+    if ( !isset($_USER['uid'])) $_USER['uid'] = 1;
 
     if ( $uid == 0 ) {
         $uid = $_USER['uid'];
