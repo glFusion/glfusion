@@ -624,7 +624,7 @@ class StringParser {
 
 			if ($needle === false) {
 				// not found => see if character is allowed
-				if (!in_array ($this->_text{$this->_cpos}, $this->_charactersAllowed)) {
+				if (!in_array ($this->_text[$this->_cpos], $this->_charactersAllowed)) {
 					if ($strict) {
 						return false;
 					}
@@ -632,7 +632,7 @@ class StringParser {
 					continue;
 				}
 				// lot's of FIXMES
-				$res = $this->_appendText ($this->_text{$this->_cpos});
+				$res = $this->_appendText ($this->_text[$this->_cpos]);
 				if (!$res) {
 					return false;
 				}

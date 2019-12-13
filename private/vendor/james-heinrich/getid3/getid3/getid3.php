@@ -296,14 +296,14 @@ class getID3
 
 		// Check for magic_quotes_runtime
 		if (function_exists('get_magic_quotes_runtime')) {
-			if (get_magic_quotes_runtime()) {
+			if (@get_magic_quotes_runtime()) {
 				$this->startup_error .= 'magic_quotes_runtime must be disabled before running getID3(). Surround getid3 block by set_magic_quotes_runtime(0) and set_magic_quotes_runtime(1).'."\n";
 			}
 		}
 
 		// Check for magic_quotes_gpc
 		if (function_exists('magic_quotes_gpc')) {
-			if (get_magic_quotes_gpc()) {
+			if (@get_magic_quotes_gpc()) {
 				$this->startup_error .= 'magic_quotes_gpc must be disabled before running getID3(). Surround getid3 block by set_magic_quotes_gpc(0) and set_magic_quotes_gpc(1).'."\n";
 			}
 		}

@@ -282,7 +282,7 @@ class FileSystem
     */
     public static function isWritable($path)
     {
-        if ($path{strlen($path)-1} == '/') {
+        if ($path[strlen($path)-1] == '/') {
             return self::isWritable($path.uniqid(mt_rand()).'.tmp');
         }
 
