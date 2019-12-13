@@ -3,7 +3,7 @@
     <name>Bad Behavior2</name>
     <description>Stops spambots in their tracks.</description>
     <version>2.0.56</version>
-    <glfusionversion>1.7.7</glfusionversion>
+    <glfusionversion>1.7.8</glfusionversion>
     <phpversion>5.3.3</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>

@@ -3,7 +3,7 @@
     <name>Links</name>
     <description>Links Management</description>
     <version>2.1.7</version>
-    <glfusionversion>1.7.7</glfusionversion>
+    <glfusionversion>1.7.8</glfusionversion>
     <phpversion>5.3.3</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>

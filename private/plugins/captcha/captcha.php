@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2018 by the following authors:                        |
+// | Copyright (C) 2009-2019 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -38,7 +38,7 @@ global $_DB_table_prefix, $_TABLES;
 $_CP_CONF['pi_name']            = 'captcha';
 $_CP_CONF['pi_display_name']    = 'CAPTCHA';
 $_CP_CONF['pi_version']         = '3.6.0';
-$_CP_CONF['gl_version']         = '1.7.7';
+$_CP_CONF['gl_version']         = '1.7.8';
 $_CP_CONF['pi_url']             = 'https://www.glfusion.org/';
 
 // Database table definitions
