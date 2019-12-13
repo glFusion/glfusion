@@ -3,20 +3,22 @@
 ## v2.0.0 (Unreleased)
 
 ### Internal development changes
+  - Added INTL extension to the environment checks - need to update wiki to show used by Agenda plugin
   - PHP v7.4 Fixes
-  - Updated CKEditor to v4.13.0
-  - Updating openpsa/universalfeedcreator (v1.8.3.1 => v1.8.3.2)
-  - Updating james-heinrich/getid3 (v1.9.17 => v1.9.18)
-  - Updating ezyang/htmlpurifier (v4.10.0 => v4.12.0)
-  - Updating simplepie/simplepie (1.5.2 => 1.5.3)
-  - Updating phpxmlrpc/phpxmlrpc (4.3.2 => 4.4.1)
-  - Updating phpfastcache/phpfastcache (7.0.5 => 7.1.0)
-  - Updating psr/log (1.1.0 => 1.1.2)
-  - Updating filp/whoops (2.4.0 => 2.5.0)
-  - Updating doctrine/event-manager (v1.0.0 => 1.1.0)
-  - Updating doctrine/cache (v1.8.0 => 1.10.0)
-  - Updating doctrine/dbal (v2.9.2 => v2.10.0)
-  - Updating monolog/monolog (1.24.0 => 1.25.2)
+  - Cache class updates to support latest phpFastCache
+  - Updated CKEditor to v4.13.1
+  - Updated openpsa/universalfeedcreator (v1.8.3.1 => v1.8.3.2)
+  - Updated james-heinrich/getid3 (v1.9.17 => v1.9.18)
+  - Updated ezyang/htmlpurifier (v4.10.0 => v4.12.0)
+  - Updated simplepie/simplepie (1.5.2 => 1.5.3)
+  - Updated phpxmlrpc/phpxmlrpc (4.3.2 => 4.4.1)
+  - Updated phpfastcache/phpfastcache (7.0.5 => 7.1.0)
+  - Updated psr/log (1.1.0 => 1.1.2)
+  - Updated filp/whoops (2.4.0 => 2.5.0)
+  - Updated doctrine/event-manager (v1.0.0 => 1.1.0)
+  - Updated doctrine/cache (v1.8.0 => 1.10.0)
+  - Updated doctrine/dbal (v2.9.2 => v2.10.0)
+  - Updated monolog/monolog (1.24.0 => 1.25.2)
 
 ### Added
   - Admin / Moderator actions are now logged and available for viewing in Command & Control
@@ -68,6 +70,29 @@
 ### Security
 
   - Utilize PDO prepared SQL statements to decrease SQL injection opportunities
+
+## v1.7.8 (Unreleased)
+
+### Changed
+  - Updated CKEditor to v4.13.1
+  - Updated splitbrain/php-archive (1.0.10 => 1.1.1)
+  - Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.3.2)
+  - Updated geshi/geshi (v1.0.9.0 => v1.0.9.1)
+  - Updated html2text/html2text (4.1.0 => 4.2.1)
+  - Updated james-heinrich/getid3 (v1.9.15 => v1.9.18)
+  - Updated ezyang/htmlpurifier (v4.10.0 => v4.12.0)
+  - Updated phpmailer/phpmailer (v5.2.26 => v5.2.27)
+  - Updated simplepie/simplepie (1.5.1 => 1.5.3)
+  - Updated phpxmlrpc/phpxmlrpc (4.3.1 => 4.4.1)
+  - Updated robthree/twofactorauth (1.6.1 => 1.6.7)
+
+### Fixed
+  - Poll edit could crash under some circumstances
+  - Custom welcome_email.txt not being sent to imported users. Issue #365
+  - Improved PHP v7.4 compatibility
+  - Fixed DB error in database administration screen when non-glFusion tables exist in the database
+  - Fixed logic error that prevented user profile pictures from showing in the Forum plugin
+  - Fixed version number of VERSION file
 
 ## v1.7.7 (April 14, 2019)
 
