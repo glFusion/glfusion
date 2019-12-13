@@ -19,7 +19,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \Phpfastcache\CacheManager;
-use \Phpfastcache\Config\Config;
+//use \Phpfastcache\Config\Config;
 use \Phpfastcache\Config\ConfigurationOption;
 
 use \Phpfastcache\Core\Item\ExtendedCacheItemInterface;
@@ -83,6 +83,8 @@ final class Cache
         if (!in_array($_CONF['cache_driver'],$validArray)) {
             $_CONF['cache_driver'] = 'files';
         }
+
+        $realPath = realpath($_CONF['path'].'data/cache/');
 
         if ($_CONF['cache_driver'] == 'files') {
             $this->namespace = '';
@@ -199,27 +201,29 @@ final class Cache
                 ]));
                 break;
 
-            case 'files' :
-                CacheManager::setDefaultConfig(new Config([
-                  "path" => $_CONF['path'].'data/cache/',
-                  "itemDetailedDate" => true
-                ]));
-                $this->internalCacheInstance = CacheManager::getInstance('files');
-                break;
-
             case 'Devnull' :
-                CacheManager::setDefaultConfig(new Config([
-                  "path" => $_CONF['path'].'data/cache/',
+                CacheManager::setDefaultConfig(new ConfigurationOption([
+                  "path" => $realPath,
                   "itemDetailedDate" => true
                 ]));
                 $this->internalCacheInstance = CacheManager::getInstance('Devnull');
+                break;
+
+            case 'files' :
+            default :
+
+                CacheManager::setDefaultConfig(new ConfigurationOption([
+                  "path" => $realPath,
+                  "itemDetailedDate" => true
+                ]));
+                $this->internalCacheInstance = CacheManager::getInstance('files');
                 break;
         }
 
         if ($success == false) {
             // fallback to files
-            CacheManager::setDefaultConfig(new Config([
-              "path" => $_CONF['path'].'data/cache/',
+            CacheManager::setDefaultConfig(new ConfigurationOption([
+              "path" => $realPath,
               "itemDetailedDate" => true
             ]));
             $this->internalCacheInstance = CacheManager::getInstance('files');
