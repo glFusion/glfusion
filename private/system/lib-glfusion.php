@@ -309,7 +309,7 @@ function _checkVersion()
     $http->debug=0;
     $http->html_debug=0;
     $http->user_agent = 'glFusion/' . GVERSION;
-    $url="https://www.glfusion.org/versions/index.php";
+    $url="http://www.glfusion.org/versions/index.php";
     $error=$http->GetRequestArguments($url,$arguments);
     $arguments["RequestMethod"]="POST";
     $arguments["PostValues"]=array(
