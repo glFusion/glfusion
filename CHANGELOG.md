@@ -2,7 +2,7 @@
 
 ## v1.7.8 (Unreleased)
 
-### Changed
+### Updates
   - Updated CKEditor to v4.13.1
   - Updated splitbrain/php-archive (1.0.10 => 1.1.1)
   - Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.3.2)
@@ -16,6 +16,7 @@
   - Updated robthree/twofactorauth (1.6.1 => 1.6.7)
 
 ### Fixed
+  - Footer did not properly 'stick' to the bottom in Safari
   - Poll edit could crash under some circumstances
   - Custom welcome_email.txt not being sent to imported users. Issue #365
   - Improved PHP v7.4 compatibility
