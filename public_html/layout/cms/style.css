@@ -1,11 +1,22 @@
-/*@ glFusion CMS Theme 1.7.6 | https://www.glfusion.org
-(c) 2018 glFusion | GNU GPLv2 License */
+/*@ glFusion CMS Theme 1.7.8 | https://www.glfusion.org
+(c) 2018-2019 glFusion | GNU GPLv2 License */
 /* ========================================================================
 This should contain site wide styles that augment the UIKIT styles
 
 You can override the uk-* styles or utilize the tm-* styles (theme specific)
 set of styles.
 ========================================================================== */
+body {
+  display: flex;
+  flex-direction: column;
+}
+.tm-content {
+  flex: 1 0 auto;
+}
+.tm-footer {
+  flex-shrink: 0;
+}
+
 /*
 * UIKIT overrride when using a gradient style - remove the text shadow on tabs
 */
