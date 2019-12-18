@@ -34,7 +34,7 @@ class BlackList extends BaseCommand
     // Callback functions for preg_replace_callback()
     protected function callbackDecimal($str)
     {
-        return chr($str);
+        return @chr($str);
     }
 
     protected function callbackHex($str)
