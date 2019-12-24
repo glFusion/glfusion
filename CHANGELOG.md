@@ -1,6 +1,6 @@
 # glFusion CMS Long Term Support ChangeLog
 
-## v1.7.8 (Unreleased)
+## v1.7.8 (December 24, 2019)
 
 ### Updates
   - Updated CKEditor to v4.13.1
