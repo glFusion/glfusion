@@ -1,5 +1,5 @@
-/*! glFusion CMS v1.7.1 | https://www.glfusion.org | (c) 2017 glFusion | GNU GPL v2 License */
-$(window).load(function(){pf()});
+/*! glFusion CMS v2.0.0 | https://www.glfusion.org | (c) 2017-2020 glFusion | GNU GPL v2 License */
+//$(window).load(function(){pf()});
 $('[data-uk-switcher]').on('show.uk.switcher', function(event, area) {pf();});
 $('[data-uk-tab]').on('click', function(event, active_item, previous_item) {pf();});
 $('.uk-alert').on('closed.uk.alert', function(){pf();});
