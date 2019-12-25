@@ -3595,7 +3595,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
 
         $key = 'whatsnew_query_'.MD5($sql);
 
-        $stmt = $db->conn->executeQuery($sql,array($_CONF['newstoriesinterval']),array(Database::INTEGER),new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $key));
+        $stmt = $db->conn->executeCacheQuery($sql,array($_CONF['newstoriesinterval']),array(Database::INTEGER),new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $key));
         $newStoryData = $stmt->fetchAll(Database::ASSOCIATIVE);
         $stmt->closeCursor();
 
