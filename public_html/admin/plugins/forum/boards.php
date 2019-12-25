@@ -138,7 +138,7 @@ function board_admin_list($statusText='')
             $boards->set_var (array(
                     'forumname'     => $F['forum_name'],
                     'forumid'       => $F['forum_id'],
-                    'messagecount'  => $F['post_count'],
+                    'messagecount'  => COM_numberFormat($F['post_count']),
                     'forumorder'    => $F['forum_order'],
             ));
             // Check if this is a private forum

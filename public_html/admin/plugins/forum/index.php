@@ -120,26 +120,26 @@ function forum_admin_list()
     $admin_list->set_var (array(
         'statsmsg'      => $LANG_GF91['statsmsg'],
         'totalcatsmsg'  => $LANG_GF91['totalcats'],
-        'totalcats'     => $totalcats,
+        'totalcats'     => COM_numberFormat($totalcats),
         'totalforumsmsg'=> $LANG_GF91['totalforums'],
-        'totalforums'   => $totalforums,
+        'totalforums'   => COM_numberFormat($totalforums),
         'totaltopicsmsg'=> $LANG_GF91['totaltopics'],
-        'totaltopics'   => $totaltopics,
+        'totaltopics'   => COM_numberFormat($totaltopics),
         'totalpostsmsg' => $LANG_GF91['totalposts'],
-        'totalposts'    => $totalposts,
+        'totalposts'    => COM_numberFormat($totalposts),
         'totalviewsmsg' => $LANG_GF91['totalviews'],
-        'totalviews'    => $totalviews['TOTAL'],
+        'totalviews'    => COM_numberFormat($totalviews['TOTAL']),
         'category'      => $LANG_GF91['category'],
         'forum'         => $LANG_GF91['forum'],
         'topic'         => $LANG_GF91['topic'],
         'avgpmsg'       => $LANG_GF91['avgpmsg'],
-        'avgcposts'     => $avgcposts,
-        'avgfposts'     => $avgfposts,
-        'avgtposts'     => $avgtposts,
+        'avgcposts'     => COM_numberFormat($avgcposts),
+        'avgfposts'     => COM_numberFormat($avgfposts),
+        'avgtposts'     => COM_numberFormat($avgtposts),
         'avgvmsg'       => $LANG_GF91['avgvmsg'],
-        'avgcviews'     => $avgcviews,
-        'avgfviews'     => $avgfviews,
-        'avgtviews'     => $avgtviews));
+        'avgcviews'     => COM_numberFormat($avgcviews),
+        'avgfviews'     => COM_numberFormat($avgfviews),
+        'avgtviews'     => COM_numberFormat($avgtviews)));
 
     $admin_list->set_var('block_end',COM_endBlock());
 
