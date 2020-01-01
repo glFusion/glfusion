@@ -54,6 +54,14 @@ if ( isset($_POST['clearlog']) ) {
         Log::close($log);
         @unlink($_CONF['path_log'] . $availableLogs[$log]);
         clearstatcache();
+        Log::config($log,
+            array(  'type'  => 'file',
+                    'path'  => $_CONF['path_log'],
+                    'file'  => $availableLogs[$log],
+                    'level' => $_CONF['log_level']
+                 )
+        );
+        Log::write($log,Log::INFO, sprintf("Log %s Initialized.", $availableLogs[$log]));
     } else {
         // old school...
         @unlink($_CONF['path_log'] . $availableLogs[$log]);
