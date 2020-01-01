@@ -4,7 +4,7 @@
 // +--------------------------------------------------------------------------+
 // | Common functions and startup code                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2019 by the following authors:                        |
+// | Copyright (C) 2008-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -63,11 +63,11 @@ if (!defined ('GVERSION')) {
     define('GVERSION', '1.7.8');
 }
 
-define('PATCHLEVEL','.pl0');
+define('PATCHLEVEL','.pl1');
 
 //define('DEMO_MODE',true);
 
-//define('DVLP_DEBUG',true);
+// define('DVLP_DEBUG',true);
 
 if (!defined ('OPENSSL_RAW_DATA')) {
     define('OPENSSL_RAW_DATA', 1);

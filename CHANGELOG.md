@@ -1,5 +1,15 @@
 # glFusion CMS Long Term Support ChangeLog
 
+## v1.7.8.pl1 (Unreleased)
+
+### Added
+  - Added SECURITY.md - glFusion Security Policy
+
+### Fixed
+  - Improved error handling of missing media in Media Gallery media manage
+  - Plugin administrator did not accept .tar.gz plugin uploads on some systems
+  - Default content still referenced the old Gitter chat room
+
 ## v1.7.8 (December 24, 2019)
 
 ### Updates
