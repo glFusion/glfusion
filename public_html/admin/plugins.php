@@ -761,6 +761,7 @@ function PLUGINS_processUpload()
         $upload->setMaxFileSize(25165824);
         $upload->setAllowedMimeTypes (array (
                 'application/x-gzip'=> '.gz,.gzip,tgz',
+                'application/gzip'=> '.gz,.gzip,tgz',
                 'application/zip'   => '.zip',
                 'application/octet-stream' => '.gz,.gzip,.tgz,.zip,.tar,.tar.gz',
                 'application/x-tar' => '.tar,.tar.gz,.gz',
