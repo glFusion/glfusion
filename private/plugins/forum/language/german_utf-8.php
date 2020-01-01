@@ -122,7 +122,7 @@ $LANG_GF01 = array(
     'CONTENT' => 'Inhalt',
     'QUOTE_begin' => '[Zitat ',
     'QUOTE_by' => 'von ',
-    'RESYNC' => 'ReSync',
+    'RESYNC' => 'Resync',
     'RESYNCCAT' => 'ReSync Kategorie-Foren',
     'PROFILE' => 'Profil',
     'DELETECONFIRM' => 'Soll dieser Eintrag wirklich GELÖSCHT werden?',
@@ -142,7 +142,7 @@ $LANG_GF01 = array(
     'SUBSCRIPTIONS' => 'Abonnements',
     'TOP' => 'Nach oben',
     'PRINTABLE' => 'Druckfähige Version',
-    'PRINT' => 'Print',
+    'PRINT' => 'Drucken',
     'ForumProfile' => 'Forum-Optionen',
     'USERPREFS' => 'Forum-Einstellungen',
     'SPEEDLIMIT' => '"Dein letzter Kommentar ist %s Sekunden her.<br />Zwischen den Forenbeiträgen müssen aber mindestens %s Sekunden liegen."',
@@ -231,29 +231,29 @@ $LANG_GF01 = array(
     'all_read_success' => 'Alle Themen wurden als gelesen markiert',
     'formatted_code' => 'Formatierter Code',
     'reset' => 'Reset',
-    'q_del_item' => 'Are you sure you want to delete this badge?',
-    'badge_updated' => 'Badge Updated',
-    'badge_save_error' => 'Error saving badge - A record with this Post count may exist already.',
-    'add_badge'         => 'Add Badge',
-    'badge_grp' => 'Badge Group',
-    'site_grp'  => 'Site Group Name',
-    'badge_img' => 'Badge Image',
+    'q_del_item' => 'Möchtest Du dieses Anzeichen wirklich löschen?',
+    'badge_updated' => 'Abzeichen aktualisiert',
+    'badge_save_error' => 'Fehler beim Speichern des Abzeichen - Ein Datensatz mit dieser Beitragsanzahl ist bereits vorhanden.',
+    'add_badge'         => 'Abzeichen hinzufügen',
+    'badge_grp' => 'Abzeichen-Gruppe',
+    'site_grp'  => 'Name Gruppe',
+    'badge_img' => 'Abzeichen-Bild',
     'create_new' => 'Neu anlegen',
-    'badges' => 'Badges',
-    'badge_css' => 'CSS Class',
-    'badge_type' => 'Badge Type',
-    'incl_inherited' => 'Include Inherited Membership?',
-    'add_rank' => 'Add Rank',
-    'err_rank_zero' => 'Post count must be greater than zero.',
-    'err_rank_key_exists' => 'A rank for this post count already exists.',
-    'ranks' => 'Forum Ranks',
-    'rank_updated' => 'Rank Updated',
+    'badges' => 'Abzeichen',
+    'badge_css' => 'CSS-Klasse',
+    'badge_type' => 'Abzeichen-Typ',
+    'incl_inherited' => 'Geerbte Mitgliedschaft einschließen?',
+    'add_rank' => 'Rang hinzufügen',
+    'err_rank_zero' => 'Die Beitragsanzahl muss grösser als Null sein.',
+    'err_rank_key_exists' => 'Ein Rang für diese Beitragsanzahl existiert bereits.',
+    'ranks' => 'Forum Ränge',
+    'rank_updated' => 'Rang aktualisiert',
     /* --- Like system --- */
-    'like' => 'Like',
-    'unlike' => 'Unlike',
+    'like' => 'Gefällt mir',
+    'unlike' => 'Gefällt mir nicht mehr',
     // In tooltips, add "%s" to include the user display name.
-    'like_tooltip' => 'Like this post',
-    'unlike_tooltip' => 'Unlike this post',
+    'like_tooltip' => 'Dieser Beitrag gefällt mir',
+    'unlike_tooltip' => 'Dieser Beitrag gefällt mir nicht mehr',
     // "Liked X Times" in the user profile area.
     // The span is required exactly as below.
     // "%1$d" is replaced with the number of likes.
@@ -264,27 +264,27 @@ $LANG_GF01 = array(
     // %2$d is the total number of likes
     // %3$d is the number of liker names not shown, used with "X others...."
     'likes_formats' => array(
-        0 => '%1$s likes this.',        // single like
-        1 => 'Liked by %1$s.',          // multiple likes, up to threshold
-        2 => '%1$s and %3$d others like this.', // threshold and beyond
+        0 => '%1$s gefällt das.',        // single like
+        1 => 'Gefällt %1$s Personen.',          // multiple likes, up to threshold
+        2 => '%1$s und %3$d anderen gefällt das.', // threshold and beyond
     ),
     'unk_username' => 'unbekannt',
-    'likes_received' => 'Likes Received',
-    'likes_given' => 'Likes Given',
-    'no_likes_received' => 'No Likes Received',
-    'no_likes_given' => 'No Likes Given',
-    'liked' => 'Liked',
-    'liked_thread' => 'post in thread',
-    'likes' => 'Likes',
-    'msg_item_updated' => 'Item has been updated',
-    'msg_item_nochange' => 'Item was not changed',
-    'sample_color' => 'Sample',
+    'likes_received' => 'Erhaltene „Gefällt mir“',
+    'likes_given' => '„Gefällt mir“ gegeben',
+    'no_likes_received' => 'Keine „Gefällt mir“ erhalten',
+    'no_likes_given' => 'Keine „Gefällt mir“ gegeben',
+    'liked' => 'Gefallen',
+    'liked_thread' => 'Im Beitrag schreiben',
+    'likes' => 'Gefällt mir Angaben',
+    'msg_item_updated' => 'Artikel wurde aktualisiert',
+    'msg_item_nochange' => 'Artikel wurde nicht geändert',
+    'sample_color' => 'Beispiel',
     /*--- For the badge color picker --*/
-    'fg_color' => 'Foreground Color',
-    'bg_color' => 'Background Color',
-    'more' => 'More',
-    'less' => 'Less',
-    'choose' => 'Choose',
+    'fg_color' => 'Vordergrundfarbe',
+    'bg_color' => 'Hintergrundfarbe',
+    'more' => 'Mehr',
+    'less' => 'Weniger',
+    'choose' => 'Wähle',
     'display_after' => 'Anzeige nach',
 );
 
@@ -539,8 +539,8 @@ $LANG_GF03 = array(
 $LANG_GF04 = array(
     'label_forum' => 'Forum-Profil',
     'label_location' => 'Ort',
-    'label_aim' => 'AIM Handle',
-    'label_yim' => 'YIM Handle',
+    'label_aim' => 'AIM-Handle',
+    'label_yim' => 'YIM-Handle',
     'label_icq' => 'ICQ Identität',
     'label_msnm' => 'MS Messenger Name',
     'label_interests' => 'Interessen',
@@ -550,7 +550,7 @@ $LANG_GF04 = array(
 $LANG_GF05 = array(
     'aim_link' => '&nbsp;<a href="aim:goim?screenname=',
     'aim_linkend' => '>',
-    'aim_hello' => '&message=Hi.+Are+you+there?',
+    'aim_hello' => '&message=Hi.+Bist+du+da?',
     'aim_alttext' => 'AIM:&nbsp;',
     'icq_link' => '&nbsp;',
     'icq_alttext' => 'ICQ #:&nbsp;',
@@ -573,9 +573,9 @@ $LANG_GF06 = array(
     7 => 'IP-Verwaltung',
     8 => 'Bewertungs-System',
     9 => 'Importieren',
-    10 => 'Forum Administration',
-    11 => 'Badges',
-    12 => 'Ranks',
+    10 => 'Forum-Verwaltung',
+    11 => 'Abzeichen',
+    12 => 'Ränge',
 );
 
 // User Functions Navbar
@@ -690,15 +690,15 @@ $LANG_GF92 = array(
     'regpost' => 'Register - Thema',
     'regpostdscp' => 'Du mußt registriert sein, um Beiträge zu schreiben',
     'imgset' => 'Bild-Set',
-    'lev1' => 'Level 1',
+    'lev1' => 'Rang 1',
     'lev1dscp' => 'Rang 1 - Beschreibung und nötige Beiträge',
-    'lev2' => 'Level 2',
+    'lev2' => 'Rang 2',
     'lev2dscp' => 'Rang 2 - Beschreibung und nötige Beiträge',
-    'lev3' => 'Level 3',
+    'lev3' => 'Rang 3',
     'lev3dscp' => 'Rang 3 - Beschreibung und nötige Beiträge',
-    'lev4' => 'Level 4',
+    'lev4' => 'Rang 4',
     'lev4dscp' => 'Rang 4 - Beschreibung und nötige Beiträge',
-    'lev5' => 'Level 5',
+    'lev5' => 'Rang 5',
     'lev5dscp' => 'Rang 5 - Beschreibung und nötige Beiträge',
     'setsave' => 'Einstellungen gespeichert',
     'defaultmode' => 'Standard-Beitragsmodus',
@@ -877,7 +877,7 @@ $LANG_GF97 = array(
     'msgerror' => 'Deine Nachricht wurde nicht abgesendet. Bitte gehe <a href="javascript:history.back()">zurück</a> und stelle sicher, dass Du alle Felder ausgefüllt hast.',
     'msgdelok' => 'Löschen erfolgreich',
     'msgdelsuccess' => 'Du hast diese Nachricht erfolgreich gelöscht.',
-    'msgdelerr' => 'Diese Nachricht wurde nicht gelöscht. Bitte gehe <a href=\\"javascript:history.back()\\">zurück</a> und wähle eine aus.',
+    'msgdelerr' => 'Diese Nachricht wurde nicht gelöscht. Bitte gehe <a href=\"javascript:history.back()\">zurück</a> und wähle eine aus.',
     'msgpriv' => 'Private Nachrichten',
     'msgprivnote1' => 'Du hast %s private Nachricht.',
     'msgprivnote2' => 'Du hast %s private Nachrichten.',
@@ -990,7 +990,7 @@ $LANG_confignames['forum'] = array(
     'fileperms' => 'Dateiberechtigungen',
     'max_uploadimage_width' => 'Max. Bild-Breite (px)',
     'max_uploadimage_height' => 'Max. Bild-Höhe (px)',
-    'max_uploadimage_size' => 'Max Image Size (bytes)',
+    'max_uploadimage_size' => 'Maximale Bildgröße (Bytes)',
     'inlineimage_width' => 'Inline-Bild-Breite (px)',
     'inlineimage_height' => 'Inline-Bild-Höhe (px)',
     'allowablefiletypes' => 'Erlaubte Dateitypen',
@@ -1000,8 +1000,8 @@ $LANG_confignames['forum'] = array(
     'enable_fm_integration' => 'FileMgmt für Anhänge',
     'max_uploadfile_size' => 'Max. Größe für Anhänge (Bytes)',
     'enable_user_rating_system' => 'Benutzer Bewertungs-System',
-    'enable_likes' => 'Enable Likes System',
-    'enable_likes_profile' => 'Display User\'s likes received and given on User Profile',
+    'enable_likes' => '„Gefällt mir" System aktivieren',
+    'enable_likes_profile' => '„Gefällt mir" - Statistik im Benutzerprofil anzeigen',
     'bbcode_signature' => 'Eigene BBcode-Signatur',
     'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor',
     'bbcode_disabled' => 'Standart für BBCode',
@@ -1012,8 +1012,8 @@ $LANG_confignames['forum'] = array(
     'geshi_line_numbers' => 'GeSHi Zeilennummern verwenden',
     'geshi_overall_style' => 'GeSHi allgemeiner Style',
     'geshi_line_style' => 'GeSHi Zeilennummern Style',
-    'geshi_code_style' => 'GeSHi Code Block Style',
-    'geshi_header_style' => 'GeSHi Header Block Style',
+    'geshi_code_style' => 'GeSHi Code Block Stil',
+    'geshi_header_style' => 'GeSHi Header Block Stil',
 
 );
 
@@ -1033,11 +1033,11 @@ $LANG_fs['forum'] = array(
 $LANG_configSelect['forum'] = array(
     0 => array(1=>'Ja', 0=>'Nein'),
     1 => array(true=>'Ja', false=>'Nein'),
-    2 => array(0=>'Replace Home Page', 1=>'Top of Page', 2=>'Nach Hauptartikel', 3=>'Bottom of Page'),
-    3 => array('noblocks'=>'Keine Blöcke', 'leftblocks'=>'Linke Blöcke', 'rightblocks'=>'Rechte Blöcke', 'allblocks'=>'Right / Left Blocks'),
-    4 => array('blockmenu'=>'Block Menu', 'navbar'=>'Nav Bar', 'none'=>'Aus'),
+    2 => array(0=>'Startseite ersetzen', 1=>'Oben auf der Seite', 2=>'Nach Hauptartikel', 3=>'Unten auf der Seite'),
+    3 => array('noblocks'=>'Keine Blöcke', 'leftblocks'=>'Linke Blöcke', 'rightblocks'=>'Rechte Blöcke', 'allblocks'=>'Rechte / Linke Blöcke'),
+    4 => array('blockmenu'=>'Block-Menü', 'navbar'=>'Navigationsleiste', 'none'=>'Aus'),
     5 => array('DESC'=>'Absteigend', 'ASC'=>'Aufsteigend'),
-    6 => array(1=>'Checked', 0=>'Unchecked')
+    6 => array(1=>'Aktiviert', 0=>'Nicht aktiviert')
 );
 
 ?>

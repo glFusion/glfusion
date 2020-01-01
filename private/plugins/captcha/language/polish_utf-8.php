@@ -61,7 +61,7 @@ $LANG_CP00 = array (
     'characters'        => 'Pozostałe',
     'ayah_error'        => 'Przepraszamy, ale nie byliśmy w stanie zweryfikować cię jako człowieka. Proszę spróbuj ponownie.',
     'captcha_math'      => 'Wpisz odpowiedź',
-    'captcha_prompt'    => 'Czy jesteś człowiekiem?',
+    'captcha_prompt'    => 'Potwierdź ze jesteś człowiekiem ?',
     'recaptcha_entry_error'  => 'Weryfikacja CAPTCHA nie powiodła się. Spróbuj ponownie.',
 );
 

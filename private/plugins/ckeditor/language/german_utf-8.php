@@ -109,8 +109,8 @@ $LANG_fs['ckeditor'] = array(
 $LANG_configSelect['ckeditor'] = array(
     0 => array(1=>'Ja', 0=>'Nein'),
     1 => array(true=>'Ja', false=>'Nein'),
-    2 => array('grid'=>'grid', 'list' => 'anzeigen'),
-    3 => array('default' => 'Standard', 'NAME_ASC'=>'Name (asc)', 'NAME_DESC'=>'Name (desc)', 'TYPE_ASC'=>'Type (asc)', 'TYPE_DESC'=>'Type (desc)', 'MODIFIED_ASC'=>'Modified (asc)', 'MODIFIED_DESC'=>'Modified (desc)'),
+    2 => array('grid'=>'Raster', 'list' => 'anzeigen'),
+    3 => array('default' => 'Standard', 'NAME_ASC'=>'Name (aufsteigend)', 'NAME_DESC'=>'Name (absteigend)', 'TYPE_ASC'=>'Typ (aufsteigend)', 'TYPE_DESC'=>'Typ (absteigend)', 'MODIFIED_ASC'=>'Geändert (aufsteigend)', 'MODIFIED_DESC'=>'Geändert (absteigend)'),
 );
 
 $PLG_ckeditor_MESSAGE1 = 'CKEditor-Plugin Aktualisierung: Aktualisierung erfolgreich abgeschlossen.';

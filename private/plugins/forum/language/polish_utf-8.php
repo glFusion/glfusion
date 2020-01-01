@@ -878,7 +878,7 @@ $LANG_GF97 = array(
     'msgerror' => 'Twoja wiadomość nie została wysłana. Prosimy <a href="javascript:history.back()">wróć</a> i upewnij się, że wszystkie pola są wypełnione.',
     'msgdelok' => 'Usunięto pomyślnie',
     'msgdelsuccess' => 'Pomyślnie usunięto wiadomość.',
-    'msgdelerr' => 'Wiadomość nie została usunięta. Prosimy <a href=\\"javascript:history.back()\\">wróć</a> i wybierz jeden.',
+    'msgdelerr' => 'Wiadomość nie została usunięta. Prosimy <a href=\"javascript:history.back()\">wróć</a> i wybierz jeden.',
     'msgpriv' => 'Prywatne wiadomości',
     'msgprivnote1' => 'Masz %s prywatna wiadomość.',
     'msgprivnote2' => 'Masz %s prywatne wiadomości.',
@@ -1035,7 +1035,7 @@ $LANG_configSelect['forum'] = array(
     0 => array(1=>'Włącz', 0=>'Wyłacz'),
     1 => array(true=>'Włącz', false=>'Wyłącz'),
     2 => array(0=>'Zastąp Stronę główną', 1=>'Na górze strony', 2=>'Po wyróżnionym artykule', 3=>'Dół strony'),
-    3 => array('noblocks'=>'Bez bloków', 'leftblocks'=>'Lewe bloki', 'rightblocks'=>'Prawe Bloki', 'allblocks'=>'Prawe / Lewe Bloki'),
+    3 => array('noblocks'=>'Brak Bloków', 'leftblocks'=>'Lewe Bloki', 'rightblocks'=>'Prawe Bloki', 'allblocks'=>'Prawe / Lewe Bloki'),
     4 => array('blockmenu'=>'Bloki Menu', 'navbar'=>'Belka nawigacyjna', 'none'=>'Brak'),
     5 => array('DESC'=>'Malejąco', 'ASC'=>'Rosnąco'),
     6 => array(1=>'Sprawdź', 0=>'Odznacz')

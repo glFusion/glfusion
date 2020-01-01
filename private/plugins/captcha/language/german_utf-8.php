@@ -82,8 +82,8 @@ $LANG_confignames['captcha'] = array(
     'enable_comment'        => 'Für Kommentare',
     'enable_story'          => 'Für Artikel-Einsendung',
     'enable_registration'   => 'Für Registrierung',
-    'enable_loginform'      => 'Enable Login',
-    'enable_forgotpassword' => 'Enable Forgot Password',
+    'enable_loginform'      => 'Anmeldung aktivieren',
+    'enable_forgotpassword' => 'Passwort vergessen aktivieren',
     'enable_contact'        => 'Für Kontakt-Formulare',
     'enable_emailstory'     => 'Für Artikel-Versand',
     'enable_forum'          => 'Für Forum-Einträge',
@@ -108,7 +108,7 @@ $LANG_fs['captcha'] = array(
 $LANG_configSelect['captcha'] = array(
     0 => array(1=>'Ja', 0=>'Nein'),
     1 => array(true=>'Nein', false=>'Ja'),
-    2 => array(0=>'GD Libs', 3=>'reCAPTCHA', 6=>'Rechnung'),
+    2 => array(0=>'GD-Libs', 3=>'reCAPTCHA', 6=>'Rechnung'),
     4 => array('default'=>'Standard','simple'=>'Einfach'),
     5 => array('jpg'=>'JPG','png'=>'PNG'),
     6 => array('light' => 'Hell','dark' => 'Dunkel'),
@@ -116,5 +116,5 @@ $LANG_configSelect['captcha'] = array(
 
 $PLG_captcha_MESSAGE1 = 'CAPTCHA-Plugin Aktualisierung: Aktualisierung erfolgreich abgeschlossen.';
 $PLG_captcha_MESSAGE2 = 'CAPTCHA Plugin Successfully Installed';
-$PLG_captcha_MESSAGE3 = 'CAPTCHA Plugin Successfully Installed';
+$PLG_captcha_MESSAGE3 = 'Das Plugin wurde erfolgreich installiert';
 ?>

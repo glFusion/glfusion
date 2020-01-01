@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2020 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -396,7 +396,7 @@ $LANG04 = array(
     159 => 'Este e-mail se ha generado automáticamente. No lo respondas.',
     160 => 'En linea',
     161 => 'Fortaleza',
-    162 => 'The username contains invalid characters ( < > " % & * / \\ ) are not allowed',
+    162 => 'The username contains invalid characters ( < > " % & * / \ ) are not allowed',
     163 => 'Usuario Remoto',
     164 => 'Username Remoto',
     165 => 'Servicio Remoto',
@@ -685,6 +685,7 @@ $LANG12 = array(
     46 => 'Ciudad/Localidad',
     47 => 'Dpto/Estado',
     48 => 'Código Postal',
+    50 => 'Edit Event Type',
     51 => 'Lugar',
     52 => 'Borrar',
     53 => 'Crea una cuenta',
@@ -1155,7 +1156,7 @@ $LANG31 = array(
     17 => "<a href=\"%s/mail.php\">Send another message</a>",
     18 => 'Para',
     19 => 'NOTA: si quieres enviar un mensaje a todos los miembros del sitio, selecciona el grupo: <b>Logged-In Users</b> en la lista.',
-    20 => "Se han enviado <successcount> mensajes satisfactoriamente y <failcount> han fallado.  Si quieres, los detalles de cada envío figuran abajo. También puedes <a href=\"%s/mail.php\">enviar otro mensaje</a> o volver a <a href=\"%s/moderation.php\">la página de administración</a>.",
+    20 => "Successfully sent %d messages. You can <a href=\"%s/mail.php\">Send another message</a> or you can <a href=\"%s/index.php\">go back to the administration page</a>.",
     21 => 'Fallidos',
     22 => 'Exitosos',
     23 => 'No ha habido envíos fallidos',
@@ -1351,8 +1352,8 @@ $LANG_SOCIAL = array(
     'enabled'               => 'Habilitado',
     'share_it_label'        => 'Share It!',
     'state_toggled'         => 'Social Share state has been toggled.',
-    'follow_us'             => 'Follow Us on',
-    'follow_me'             => 'Follow Me on',
+    'follow_us'             => 'Find Us on',
+    'follow_me'             => 'Find Me on',
     'service_name'          => 'Service Name',
     'service_url'           => 'Service URL',
     'site_username'         => 'Site User name',
@@ -1472,7 +1473,7 @@ $MESSAGE = array(
     508 => 'Email address does not match the confirmation email address.',
     509 => 'Error creating new user account - please check the error log for details.',
     510 => 'Default settings have been applied to all users.',
-    512 => 'User name contains invalid characters " < > / \\ $ % * are not allowed',
+    512 => 'User name contains invalid characters " < > / \ $ % * are not allowed',
     513 => 'Remote user name cannot be blank.',
     514 => 'Remote service cannot be empty.',
     515 => 'Thank you, your account has now been activated.',
@@ -2312,9 +2313,9 @@ $LANG_AM = array (
     'desc_cipher'               => 'Text: substitution cipher. Usage example is [wikipedia:ROT13]: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]',
     'desc_topic'                => 'Link: to home page to display specified topic: link_text defaults to description. usage: [topic:<i>topic_id</i> {link_text}]',
     'desc_glfwiki'              => 'Link: to the glfusion.or wiki search result for the text specified. usage: [glfwiki:<i>text</i>]',
-    'desc_lang'                 => 'Text: expands \\$LANG global var, eg. [lang:p1 p2] -> value of \\$LANGp1[p2] or \\$LANG_p1[p2]',
-    'desc_conf'                 => 'Text: expands \\$_CONF global var, eg. [conf:p1] -> value of \\$_CONF[p1]',
-    'desc_user'                 => 'Text: expands \\$_USER global var, eg. [user:p1] -> value of \\$_USER[p1]',
+    'desc_lang'                 => 'Text: expands \$LANG global var, eg. [lang:p1 p2] -> value of \$LANGp1[p2] or \$LANG_p1[p2]',
+    'desc_conf'                 => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
+    'desc_user'                 => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
     'desc_wikipedia'            => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
     'desc_youtube'              => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
     'desc_headlines'            => 'HTML: embeds article headslines. usage: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]',
@@ -2343,7 +2344,15 @@ $LANG_ADM_ACTIONS = array(
     'group_updated'         => 'Group %s (%s) saved',
     'comment_edit'          => 'Edited comment id: %s :: %s',
     'comment_delete'        => 'Deleted comment for %s::%s',
-    'delete_user'           => 'User ID %d has been deleted.',
+    'delete_user'           => 'User %s (ID: %d) has been deleted.',
+    'article_save'          => 'Edited / Saved article: %s - %s',
+    'article_delete_sys'    => 'System automatically deleted article: %s',
+    'article_delete'        => 'Deleted article: %s',
+    'article_global'        => 'Article Global Change: %s',
+    'article_approved'      => 'Article %s has been approved',
+    'clone_menu'            => 'Cloned menu %s to %s',
+    'create_menu'           => 'Created new menu: %s',
+    'edit_menu'             => 'Edited menu: %s',
 );
 
 
@@ -2369,6 +2378,7 @@ $LANG_ENVCHK = array(
     'db_header'                 => 'Database Info',
     'db_version'                => 'Database Version',
     'directory_permissions'     => 'Permisos de directorio',
+    'disabled'                  => 'Deshabilitado',
     'enabled'                   => 'Habilitado',
     'extensions'                => 'Required PHP Extensions',
     'file_permissions'          => 'Permisos de archivos',
@@ -2387,6 +2397,7 @@ $LANG_ENVCHK = array(
     'im_not_found'              => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok'                     => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick'               => 'ImageMagick Programs',
+    'instance_cache'            => 'Instance Caching will cache articles to speed up displaying the site index page - recommended to be enabled for production systems.',
     'gm_not_found'              => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
     'gm_ok'                     => 'The <strong>gm</strong> executable appears to be valid.',
     'graphicsmagick'            => 'GraphicsMagick Programs',
@@ -2436,6 +2447,7 @@ $LANG_ENVCHK = array(
     'xml_extension'             => 'Extensión XML',
     'zlib_extension'            => 'Extensión zlib',
     'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> should be off.',
+    'intl_extension'            => 'Intl Extension',
 );
 
 ###############################################################################
@@ -2945,15 +2957,15 @@ $LANG_configSelect['Core'] = array(
     33 => array('date'=>'Fecha', 'title'=>'Título', 'uid'=>'Autor', 'hits'=>'Accesos', 'sid'=>'ID'),
     34 => array(0=>'HTML', 1=>'Visual'),
     35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'Nuevos Usuarios'),
-    36 => array( '50' => 'DVLP_DEBUG',
-                '100' => 'DEBUG',
+    36 => array('100' => 'DEBUG',
                 '200' => 'INFO',
                 '250' => 'NOTICE',
                 '300' => 'WARNING',
                 '400' => 'ERROR',
                 '500' => 'CRITICAL',
                 '550' => 'ALERT',
-                '600' => 'EMERGENCY'
+                '600' => 'EMERGENCY',
+                '525' => 'DVLP_DEBUG',
                ),
 );
 ?>

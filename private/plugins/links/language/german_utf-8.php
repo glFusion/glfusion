@@ -52,11 +52,11 @@ $LANG_LINKS = array(
     124 => 'Los',
     125 => 'Kategorien',
     126 => 'Du bist hier:',
-    'root' => 'Root',
+    'root' => 'Stammverzeichnis',
     'error_header'  => 'Link-Einsendung Fehler',
     'verification_failed' => 'Die angegebene URL scheint keine gültige URL zu sein',
     'category_not_found' => 'Die angegebene Kategorie scheint fehlerhaft zu sein',
-    'no_links'  => 'No links have been entered.',
+    'no_links'  => 'Es wurden keine Links eingegeben.',
 );
 
 ###############################################################################
@@ -172,7 +172,7 @@ $LANG_LINKS_ADMIN = array(
     24 => 'Link nicht gefunden',
     25 => 'Der zu bearbeitende Link konnte nicht gefunden werden.',
     26 => 'Links überprüfen',
-    27 => 'HTML Status',
+    27 => 'HTML-Status',
     28 => 'Kategorie bearbeiten',
     29 => '<ul><li>Hier können Sie Ihre Links bearbeiten oder erstellen.</li><li>Es müssen alle Felder eingegeben werden.</li></ul>',
     30 => 'Kategorie',
@@ -275,7 +275,7 @@ $LANG_confignames['links'] = array(
     'default_permissions' => 'Standardberechtigungen - Links',
     'target_blank' => 'Links in neuen Fenster öffnen',
     'displayblocks' => 'Anzeige glFusion Blöcke',
-    'submission'    => 'Link Submission',
+    'submission'    => 'Link-Einsendungen',
 );
 
 $LANG_configsubgroups['links'] = array(
@@ -294,7 +294,7 @@ $LANG_configSelect['links'] = array(
     9 => array('item'=>'Weiter zur Seite', 'list'=>'Admin Liste anzeigen', 'plugin'=>'Link-Liste anzeigen', 'home'=>'Startseite anzeigen', 'admin'=>'Kommandozentrale'),
     12 => array(0=>'Kein Zugang', 2=>'Nur lesen', 3=>'Lesen-Schreiben'),
     13 => array(0=>'Linke Blöcke', 1=>'Rechte Blöcke', 2=>'Linke & Rechte Blöcke', 3=>'Keine'),
-    14 => array(0=>'Aus', 1=>'Logged-in Only', 2=>'Anyone', 3=>'Aus')
+    14 => array(0=>'Aus', 1=>'Nur eingeloggte', 2=>'Jeder', 3=>'Aus')
 
 );
 

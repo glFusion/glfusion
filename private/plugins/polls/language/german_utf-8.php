@@ -48,7 +48,7 @@ $LANG_POLLS = array(
     'pollhidden'        => 'Die Umfrage-Ergebnisse stehen erst nach dem schließen der Umfrage zur Verfügung.',
     'start_poll'        => 'Umfrage starten',
     'deny_msg' => 'Der Zugang zu dieser Umfrage wird verweigert. Entweder wurde die Umfrage verschoben, entfernt, oder Du verfügst nicht über ausreichende Berechtigungen.',
-    'login_required'    => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Login</a> required to vote',
+    'login_required'    => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Anmelden</a> um abzustimmen',
     'username'          => 'Benutzername',
     'ipaddress'         => 'IP-Adresse',
     'date_voted'        => 'Abgestimmt am',

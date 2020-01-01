@@ -186,7 +186,7 @@ $LANG_SX00 = array (
 
 /* Define Messages that are shown when Spam-X module action is taken */
 $PLG_spamx_MESSAGE128 = 'Commentaire indésirable détecté et Commentaire ou Message supprimé.';
-$PLG_spamx_MESSAGE8   = 'Commentaire indésirable détecté et Commentaire supprimé. Courriel envoyé à l\\Administrateur.';
+$PLG_spamx_MESSAGE8   = 'Commentaire indésirable détecté et Commentaire supprimé. Courriel envoyé à l\Administrateur.';
 
 // Messages for the plugin upgrade
 $PLG_spamx_MESSAGE3001 = 'Plugin Mise à niveau non pris en charge.';

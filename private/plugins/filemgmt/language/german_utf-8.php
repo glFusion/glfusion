@@ -34,7 +34,7 @@ $LANG_FM00 = array (
     'uninstall'         => 'Deinstallieren',
     'editor'            => 'Plugin-Editor',
     'warning'           => 'Warnung! Plugin ist noch akiviert',
-    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
+    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Erweiterung ist installiert und aktiviert.<br>Deaktiviere diese zuerst, wenn du sie deinstallieren möchtest.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Erweiterungs-Editor</a></div',
     'WhatsNewLabel'    => 'Dateien',
     'WhatsNewPeriod'   => ' der letzen %s Tage',
     'new_upload'        => 'Neue Datei eingesendet am ',
@@ -42,7 +42,7 @@ $LANG_FM00 = array (
     'details'           => 'Datei-Details',
     'filename'          => 'Dateiname',
     'uploaded_by'       => 'Hochgeladen von',
-    'not_found'         => 'Download Not Found',
+    'not_found'         => 'Download nicht gefunden',
 );
 
 // Admin Navbar
@@ -130,7 +130,7 @@ $LANG_FILEMGMT_AUTOTAG = array(
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['filemgmt'] = array(
-    'label'                 => 'FileMgmt',
+    'label'                 => 'Datei-Manager',
     'title'                 => 'FileMgmt-Konfiguration'
 );
 $LANG_confignames['filemgmt'] = array(
@@ -176,7 +176,7 @@ $LANG_fs['filemgmt'] = array(
 $LANG_configSelect['filemgmt'] = array(
     0 => array(1=>'Ja', 0=>'Nein'),
     1 => array(true=>'Ja', false=>'Nein'),
-    2 => array(5 => ' 5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
+    2 => array(5 => '5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
     3 => array(0=>'Linke Blöcke', 1=>'Rechte Blöcke', 2=>'Linke & rechte Blöcke', 3=>'Aus')
 );
 
@@ -256,7 +256,7 @@ define("_MD_REQUESTMOD","Download-Änderung anfordern");
 define("_MD_FILE","Datei");
 define("_MD_FILEID","Datei-ID: ");
 define("_MD_FILETITLE","Titel (erforderlich): ");
-define("_MD_DLURL","Download URL: ");
+define("_MD_DLURL","Download-URL: ");
 define("_MD_HOMEPAGEC","Homepage: ");
 define("_MD_VERSIONC","Version: ");
 define("_MD_FILESIZEC","Dateigröße: ");

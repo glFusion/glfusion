@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2020 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -396,7 +396,7 @@ $LANG04 = array(
     159 => 'Tämä sähköposti luotiin automaattisesti. älä vastaa tähän.',
     160 => 'Paikalla',
     161 => 'Salasanan vahvuus',
-    162 => 'Käyttäjänimi sisältää epäkelpoja merkkejä ( < > " % & * / \\ ) eivät ole sallittuja',
+    162 => 'Käyttäjänimi sisältää epäkelpoja merkkejä ( < > " % & * / \ ) eivät ole sallittuja',
     163 => 'Etäkäyttäjä',
     164 => 'Etäkäyttö käyttäjänimi',
     165 => 'Etäkäyttö palvelu',
@@ -685,6 +685,7 @@ $LANG12 = array(
     46 => 'Kaupunki',
     47 => 'Osavaltio',
     48 => 'Postinumero',
+    50 => 'Edit Event Type',
     51 => 'Sijainti',
     52 => 'Poista',
     53 => 'Luo tili',
@@ -1155,7 +1156,7 @@ $LANG31 = array(
     17 => "<a href=\"%s/mail.php\">Send another message</a>",
     18 => 'Vastaanottaja',
     19 => 'HUOMAA: jos haluat lähettää viestin sivuston kaikille jäsenille, valitse kirjautuneet käyttäjät -ryhmä pudotusvalikosta.',
-    20 => "Onnistuneesti lähetetty <successcount> viestiä ja epäonnistuttu <failcount> viestin lähetyksessä. Tarvittaessa kaikkien viestilähetyksien tiedot löytyvät alta. Muuten voit lähettää <a href=\"%s/mail.php\">seuraavan viestin</a> tai <a href=\"%s/moderation.php\">siirtyä takaisin hallinnon sivulle</a>.",
+    20 => "Successfully sent %d messages. You can <a href=\"%s/mail.php\">Send another message</a> or you can <a href=\"%s/index.php\">go back to the administration page</a>.",
     21 => 'epäonnistumisia',
     22 => 'onnistumisia',
     23 => 'Ei epäonnistumisia',
@@ -1351,8 +1352,8 @@ $LANG_SOCIAL = array(
     'enabled'               => 'K&auml;yt&ouml;ss&auml;',
     'share_it_label'        => 'Share It!',
     'state_toggled'         => 'Social Share state has been toggled.',
-    'follow_us'             => 'Follow Us on',
-    'follow_me'             => 'Follow Me on',
+    'follow_us'             => 'Find Us on',
+    'follow_me'             => 'Find Me on',
     'service_name'          => 'Service Name',
     'service_url'           => 'Service URL',
     'site_username'         => 'Site User name',
@@ -1472,7 +1473,7 @@ $MESSAGE = array(
     508 => 'Sähköpostiosoite ei täsmää vahvistus osoitteen kanssa.',
     509 => 'Utta käyttäjätiliä ei voitu luoda - katso erro logi.',
     510 => 'Oletusasetukset asetettu kaikille käyttäjille.',
-    512 => 'Käyttäjänimi sisältää epäkelpoja merkkejä " < > / \\ $ % * ei ole sallittu',
+    512 => 'Käyttäjänimi sisältää epäkelpoja merkkejä " < > / \ $ % * ei ole sallittu',
     513 => 'Etäkäyttö Käyttäjänimi ei voi olla tyhjä.',
     514 => 'Etäkäyttö palvelu ei voi olla tyhjä.',
     515 => 'Kiitos, tilisi on nyt aktivoitu.',
@@ -2312,9 +2313,9 @@ $LANG_AM = array (
     'desc_cipher'               => 'Text: substitution cipher. Usage example is [wikipedia:ROT13]: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]',
     'desc_topic'                => 'Link: to home page to display specified topic: link_text defaults to description. usage: [topic:<i>topic_id</i> {link_text}]',
     'desc_glfwiki'              => 'Link: to the glfusion.or wiki search result for the text specified. usage: [glfwiki:<i>text</i>]',
-    'desc_lang'                 => 'Text: expands \\$LANG global var, eg. [lang:p1 p2] -> value of \\$LANGp1[p2] or \\$LANG_p1[p2]',
-    'desc_conf'                 => 'Text: expands \\$_CONF global var, eg. [conf:p1] -> value of \\$_CONF[p1]',
-    'desc_user'                 => 'Text: expands \\$_USER global var, eg. [user:p1] -> value of \\$_USER[p1]',
+    'desc_lang'                 => 'Text: expands \$LANG global var, eg. [lang:p1 p2] -> value of \$LANGp1[p2] or \$LANG_p1[p2]',
+    'desc_conf'                 => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
+    'desc_user'                 => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
     'desc_wikipedia'            => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
     'desc_youtube'              => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
     'desc_headlines'            => 'HTML: embeds article headlines. usage: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]',
@@ -2343,7 +2344,15 @@ $LANG_ADM_ACTIONS = array(
     'group_updated'         => 'Group %s (%s) saved',
     'comment_edit'          => 'Edited comment id: %s :: %s',
     'comment_delete'        => 'Deleted comment for %s::%s',
-    'delete_user'           => 'User ID %d has been deleted.',
+    'delete_user'           => 'User %s (ID: %d) has been deleted.',
+    'article_save'          => 'Edited / Saved article: %s - %s',
+    'article_delete_sys'    => 'System automatically deleted article: %s',
+    'article_delete'        => 'Deleted article: %s',
+    'article_global'        => 'Article Global Change: %s',
+    'article_approved'      => 'Article %s has been approved',
+    'clone_menu'            => 'Cloned menu %s to %s',
+    'create_menu'           => 'Created new menu: %s',
+    'edit_menu'             => 'Edited menu: %s',
 );
 
 
@@ -2369,6 +2378,7 @@ $LANG_ENVCHK = array(
     'db_header'                 => 'Database Info',
     'db_version'                => 'Database Version',
     'directory_permissions'     => 'Directory Permissions',
+    'disabled'                  => 'Disabled',
     'enabled'                   => 'K&auml;yt&ouml;ss&auml;',
     'extensions'                => 'Required PHP Extensions',
     'file_permissions'          => 'File Permissions',
@@ -2387,6 +2397,7 @@ $LANG_ENVCHK = array(
     'im_not_found'              => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok'                     => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick'               => 'ImageMagick Programs',
+    'instance_cache'            => 'Instance Caching will cache articles to speed up displaying the site index page - recommended to be enabled for production systems.',
     'gm_not_found'              => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
     'gm_ok'                     => 'The <strong>gm</strong> executable appears to be valid.',
     'graphicsmagick'            => 'GraphicsMagick Programs',
@@ -2436,6 +2447,7 @@ $LANG_ENVCHK = array(
     'xml_extension'             => 'XML Extension',
     'zlib_extension'            => 'zlib Extension',
     'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> should be off.',
+    'intl_extension'            => 'Intl Extension',
 );
 
 ###############################################################################
@@ -2945,15 +2957,15 @@ $LANG_configSelect['Core'] = array(
     33 => array('date'=>'Päivämäärä', 'title'=>'Otsikko', 'uid'=>'Lähetti', 'hits'=>'Lukukertoja', 'sid'=>'Jutun ID'),
     34 => array(0=>'HTML', 1=>'Visual'),
     35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'Uudet käyttäjät'),
-    36 => array( '50' => 'DVLP_DEBUG',
-                '100' => 'DEBUG',
+    36 => array('100' => 'DEBUG',
                 '200' => 'INFO',
                 '250' => 'NOTICE',
                 '300' => 'WARNING',
                 '400' => 'ERROR',
                 '500' => 'CRITICAL',
                 '550' => 'ALERT',
-                '600' => 'EMERGENCY'
+                '600' => 'EMERGENCY',
+                '525' => 'DVLP_DEBUG',
                ),
 );
 ?>

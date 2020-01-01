@@ -24,100 +24,100 @@ $LANG_FM00 = array (
     'access_denied'     => 'Brak dostępu',
     'access_denied_msg' => 'Tylko użytkownicy root mają dostęp do strony. Twoja nazwa użytkownika i adres IP zostały zarejestrowane.',
     'admin'             => 'Wtyczka Admin',
-    'install_header'    => 'Zainstaluj / Odinstaluj wtyczkę',
+    'install_header'    => 'Zainstaluj / Odinstaluj Wtyczkę',
     'installed'         => 'Wtyczka i bloki są zainstalowane,<p><i>Enjoy,<br><a href="MAILTO:support@glfusion.org">glFusion Team</a></i>',
     'uninstalled'       => 'Wtyczka nie została zainstalowana',
     'install_success'   => 'Instalacja zakończyła się sukcesem<p><b>Następne kroki</b>:
         <ol><li>Użyj administratora Filemgmt, aby zakończyć konfigurację wtyczki</ol>
-        <p>Przejrzyj <a href="%s">Zainstaluj notatki</a> po więcej informacji.',
-    'install_failed'    => 'Instalacja nie powiodła się - zobacz dziennik błędów, aby dowiedzieć się więcej.',
-    'uninstall_msg'     => 'Plugin został pomyślnie odinstalowany',
-    'install'           => 'Instalacja',
-    'uninstall'         => 'Odinstalowanie',
-    'editor'            => 'Edytor wtyczek',
+        <p>Przejrzyj <a href="%s">Dokumentacja Instalacji</a> po więcej informacji.',
+    'install_failed'    => 'Instalacja nie powiodła się - sprawdź logi błędów, aby dowiedzieć się więcej.',
+    'uninstall_msg'     => 'Wtyczka został pomyślnie odinstalowana',
+    'install'           => 'Zainstaluj',
+    'uninstall'         => 'Odinstaluj',
+    'editor'            => 'Wtyczka Edycja',
     'warning'           => 'Ostrzeżenie o odinstalowaniu',
-    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Wtyczka zainstalowana i włączona.<br>Wyłącz najpierw, jeśli chcesz odinstalować.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Edytor wtyczek</a></div',
-    'WhatsNewLabel'    => 'Download',
+    'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Wtyczka zainstalowana i włączona.<br>Wyłącz najpierw, jeśli chcesz odinstalować.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Wtyczka Edycja</a></div',
+    'WhatsNewLabel'    => 'Pliki',
     'WhatsNewPeriod'   => ' ostatnie %s dni',
-    'new_upload'        => 'Nowy plik przesłany w ',
+    'new_upload'        => 'Nowy plik dodany w',
     'new_upload_body'   => 'Nowy plik został przesłany do kolejki ',
-    'details'           => 'Szczegóły pliku',
+    'details'           => 'Plik szczegóły',
     'filename'          => 'Nazwa pliku',
-    'uploaded_by'       => 'Przesłane przez',
-    'not_found'         => 'Brak pliku',
+    'uploaded_by'       => 'Dodane przez',
+    'not_found'         => 'Nie znaleziono pliku',
 );
 
 // Admin Navbar
 $LANG_FM02 = array(
-    'instructions' => 'Aby zmodyfikować lub usunąć plik, kliknij ikonę edycji pliku poniżej. Aby wyświetlić lub zmodyfikować kategorie, wybierz opcję kategorie powyżej.',
+    'instructions' => 'Aby zmodyfikować lub usunąć plik, kliknij ikonę Edycji Pliku poniżej. Aby wyświetlić lub zmodyfikować kategorie, wybierz opcję kategorie powyżej.',
     'nav1'  => 'Ustawienia',
     'nav2'  => 'Kategorie',
-    'nav3'  => 'Dodaj plik',
-    'nav4'  => 'Downloads (%s)',
-    'nav5'  => 'Uszkodzone pliki (%s)',
-    'edit'  => 'Edytuj',
+    'nav3'  => 'Dodaj Plik',
+    'nav4'  => 'Pobrano (%s)',
+    'nav5'  => 'Uszkodzone Pliki (%s)',
+    'edit'  => 'Edycja',
     'file'  => 'Nazwa pliku',
-    'category' => 'Kategoria',
+    'category' => 'Nazwa Kategorii',
     'version' => 'Wersja',
     'size'  => 'Rozmiar',
     'date' => 'Data',
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "Nowa strona",
+    'newpage' => "Nowa Strona",
     'adminhome' => "Administracja",
-    'plugin_name' => "Download",
-    'searchlabel' => "Lista plików",
-    'searchlabel_results' => "Wyniki listy plików",
-    'downloads' => "Download",
-    'report' => "Najlepsze pliki do pobrania",
-    'usermenu1' => "Download",
+    'plugin_name' => "Zarządzanie Plikami",
+    'searchlabel' => "Lista Plików",
+    'searchlabel_results' => "Pliki Lista Wyników",
+    'downloads' => "Pliki do pobrania",
+    'report' => "Najczęściej pobierane",
+    'usermenu1' => "Pobrano",
     'usermenu2' => "&nbsp;&nbsp;Najwyżej oceniane",
-    'usermenu3' => "Dodaj Plik",
+    'usermenu3' => "Wgraj Plik",
     'admin_menu' => "Filemgmt Admin",
-    'writtenby' => "Napisany przez",
-    'date' => "Ostatnio zaktualizowany",
+    'writtenby' => "Dodany przez",
+    'date' => "Ostatnia Aktualizacja",
     'title' => "Tytuł",
     'content' => "Treść",
-    'hits' => "Odwiedzin",
-    'Filelisting' => "Lista plików",
+    'hits' => "Wyświetleń",
+    'Filelisting' => "Lista Plików",
     'DownloadReport' => "Pobierz historię dla pojedynczego pliku",
     'StatsMsg1' => "Dziesięć najlepszych plików w repozytorium",
     'StatsMsg2' => "Wygląda na to, że nie ma plików zdefiniowanych dla wtyczki filemgmt na tej stronie lub nikt nigdy nie miał do nich dostępu.",
-    'usealtheader' => "Użyj Alt. nagłówek",
-    'url' => "Strona www",
-    'edit' => "Edytuj",
-    'lastupdated' => "Ostatnio aktualizacja",
-    'pageformat' => "Format strony",
-    'leftrightblocks' => "Lewe i Prawe Bloki",
-    'blankpage' => "Pusta strona",
-    'noblocks' => "Bez bloków",
-    'leftblocks' => "Lewe bloki",
-    'addtomenu' => 'Dodaj do menu',
+    'usealtheader' => "Użyj Alt. Nagłówek",
+    'url' => "Adres WWW",
+    'edit' => "Edycja",
+    'lastupdated' => "Ostatnia Aktualizacja",
+    'pageformat' => "Format Strony",
+    'leftrightblocks' => "Lewe & Prawe Bloki",
+    'blankpage' => "Pusta Strona",
+    'noblocks' => "Brak Bloków",
+    'leftblocks' => "Lewe Bloki",
+    'addtomenu' => 'Dodaj do Menu',
     'label' => 'Etykieta',
-    'nofiles' => 'Liczba plików w naszym repozytorium (pliki do pobrania)',
+    'nofiles' => 'Liczba plików w repozytorium (pliki do pobrania)',
     'save' => 'zapisz',
     'preview' => 'podgląd',
     'delete' => 'usuń',
     'cancel' => 'anuluj',
     'access_denied' => 'Brak dostępu',
-    'invalid_install' => 'Ktoś próbował nielegalnie uzyskać dostęp do strony instalowania / odinstalowywania plików. Identyfikator użytkownika: ',
-    'start_install' => 'Próba instalacji wtyczki Filemgmt',
-    'start_dbcreate' => 'Próba utworzenia tabel dla wtyczki Filemgmt',
+    'invalid_install' => 'Ktoś próbował nielegalnie uzyskać dostęp do  instalowania / odinstalowywania plików. Identyfikator użytkownika: ',
+    'start_install' => 'Próba instalacji Wtyczki Filemgmt',
+    'start_dbcreate' => 'Próba utworzenia tabel Wtyczki Filemgmt',
     'install_skip' => '... pomijane zgodnie z filemgmt.cfg',
     'access_denied_msg' => 'Nielegalnie próbujesz uzyskać dostęp do stron administracyjnych File Mgmt. Pamiętaj, że wszystkie próby nielegalnego dostępu do tej strony są rejestrowane',
-    'installation_complete' => 'Instalacja zakończona',
-    'installation_complete_msg' => 'Struktury danych dla wtyczki File Mgmt dla glFusion zostały pomyślnie zainstalowane w bazie danych! Jeśli kiedykolwiek będziesz musiał odinstalować tę wtyczkę, przeczytaj dokument readme dołączony do tej wtyczki.',
+    'installation_complete' => 'Instalacja Zakończona',
+    'installation_complete_msg' => 'Struktury danych dla wtyczki File Mgmt dla glFusion zostały pomyślnie zainstalowane w bazie danych! Jeśli kiedykolwiek będziesz musiał odinstalować wtyczkę, przeczytaj dokument readme dołączony do tej wtyczki.',
     'installation_failed' => 'Instalacja nie powiodła się',
-    'installation_failed_msg' => 'Instalacja wtyczki File Mgmt nie powiodła się. W pliku diagnostycznym glFusion error.log znajdziesz informacje diagnostyczne',
-    'system_locked' => 'System zablokowany',
-    'system_locked_msg' => 'Wtyczka File Mgmt została już zainstalowana i jest zablokowana. Jeśli próbujesz odinstalować tę wtyczkę, przeczytaj dokument readme dostarczone z tą wtyczką',
-    'uninstall_complete' => 'Odinstalowanie zakończone',
+    'installation_failed_msg' => 'Instalacja Wtyczki File Mgmt nie powiodła się. W pliku diagnostycznym glFusion error.log znajdziesz informacje diagnostyczne',
+    'system_locked' => 'System Zablokowany',
+    'system_locked_msg' => 'Wtyczka File Mgmt została już zainstalowana i jest zablokowana. Jeśli próbujesz odinstalować wtyczkę, przeczytaj dokument readme dostarczone ze wtyczką',
+    'uninstall_complete' => 'Odinstalowanie Zakończone',
     'uninstall_complete_msg' => 'Struktury danych dla wtyczki File Mgmt zostały pomyślnie usunięte z bazy danych glFusion<br><br>Będziesz musiał ręcznie usunąć wszystkie pliki z repozytorium plików.',
     'uninstall_failed' => 'Odinstalowanie nie powiodło się.',
     'uninstall_failed_msg' => 'Odinstalowanie wtyczki File Mgmt nie powiodło się. W pliku diagnostycznym glFusion error.log znajdziesz informacje diagnostyczne',
-    'install_noop' => 'Instalacja wtyczki',
-    'install_noop_msg' => 'Instalacja wtyczki filemgmt została wykonana, ale nie było nic do zrobienia.<br><br>Sprawdź plik plugin install.cfg.',
+    'install_noop' => 'Wtyczka Instalacja',
+    'install_noop_msg' => 'Instalacja Wtyczki FileMgmt została wykonana, ale nie było nic do zrobienia.<br><br>Sprawdź plik plugin install.cfg.',
     'all_html_allowed' => 'HTML dozwolony',
     'no_new_files'  => 'Brak nowych plików',
     'no_comments'   => 'Brak nowych komentarzy',
@@ -125,7 +125,7 @@ $LANG_FILEMGMT = array(
 );
 
 $LANG_FILEMGMT_AUTOTAG = array(
-    'desc_file'                 => 'Link: do szczegółów pobierania pliku.  link_text domyślnie do tytułu pliku. użyj: [file:<i>file_id</i> {link_text}]',
+    'desc_file'                 => 'Link: do szczegółów pobierania pliku.  link_text domyślnie tytułu pliku. użyj: [file:<i>file_id</i> {link_text}]',
     'desc_file_download'        => 'Link: do bezpośredniego pobierania plików.  link_text domyślnie do tytułu pliku. użyj: [file_download:<i>file_id</i> {link_text}]',
 );
 
@@ -136,85 +136,85 @@ $LANG_configsections['filemgmt'] = array(
     'title'                 => 'FileMgmt Konfiguracja'
 );
 $LANG_confignames['filemgmt'] = array(
-    'whatsnew'              => 'Włącz WhatsNew Listing',
-    'perpage'               => 'Ilość wyświetlanych plików na stronę',
-    'popular_download'      => 'Odwiedziny do popularności',
-    'newdownloads'          => 'Liczba pobranych na pierwszej stronie',
+    'whatsnew'              => 'Włącz Co nowego ?',
+    'perpage'               => 'Wyświetlane pliki do pobrania na stronę',
+    'popular_download'      => 'Odwiedziny do Popularności',
+    'newdownloads'          => 'Liczba pobran na pierwszej stronie',
     'trimdesc'              => 'Opisy plików trim na liście',
-    'dlreport'              => 'Ogranicz dostęp do raportu pobierania',
-    'selectpriv'            => 'Ogranicz dostęp do grupy \'Zalogowani użytkownicy\' Tylko',
-    'uploadselect'          => 'Zezwalaj zalogowanym na przesyłanie',
-    'uploadpublic'          => 'Zezwalaj na anonimowe przesyłanie',
-    'useshots'              => 'Wyświetl obrazy kategorii',
-    'shotwidth'             => 'Miniaturka szerokość',
+    'dlreport'              => 'Ogranicz dostęp do Raportu Pobierania',
+    'selectpriv'            => 'Ogranicz dostęp grupy \'Zalogowani Użytkownicy\' Tylko',
+    'uploadselect'          => 'Zezwalaj zalogowanym na wgrywanie',
+    'uploadpublic'          => 'Zezwalaj na anonimowe wgrywanie',
+    'useshots'              => 'Wyświetl obrazy w kategoriach',
+    'shotwidth'             => 'Miniaturka Szerokość',
     'Emailoption'           => 'Wyślij e-maila, kiedy plik zostanie zatwierdzony',
     'FileStore'             => 'Katalog do przechowywania plików',
     'SnapStore'             => 'Katalog do przechowywania miniatur plików',
     'SnapCat'               => 'Katalog do przechowywania miniatur kategorii',
-    'FileStoreURL'          => 'Link do plików',
-    'FileSnapURL'           => 'Link do plików Miniatury',
-    'SnapCatURL'            => 'Link do miniatur kategorii',
+    'FileStoreURL'          => 'Adres WWW do Plików',
+    'FileSnapURL'           => 'Adres WWW do plików Miniatury',
+    'SnapCatURL'            => 'Adres WWW do miniatur kategorii',
     'whatsnewperioddays'    => 'Co nowego w dniach',
     'whatsnewtitlelength'   => 'Nowa długość tytułu',
-    'showwhatsnewcomments'  => 'Pokaż komentarze w nowym bloku',
+    'showwhatsnewcomments'  => 'Pokaż komentarze w bloku Co Nowego',
     'numcategoriesperrow'   => 'Kategorie na wiersz',
     'numsubcategories2show' => 'Subkategorie na wiersz',
     'outside_webroot'       => 'Przechowuj pliki poza katalogiem głównym',
-    'enable_rating'         => 'Włącz oceny',
+    'enable_rating'         => 'Włącz ocenianie',
     'displayblocks'         => 'Wyświetl bloki glFusion',
-    'silent_edit_default'   => 'Cichy edycja domyślna',
+    'silent_edit_default'   => 'Cicha edycja domyślnie',
 );
 $LANG_configsubgroups['filemgmt'] = array(
-    'sg_main'               => 'Ustawienia główne'
+    'sg_main'               => 'Ustawienia Główne'
 );
 $LANG_fs['filemgmt'] = array(
     'fs_public'             => 'Publiczne Ustawienia FileMgmt',
     'fs_admin'              => 'Ustawienia Admin FileMgmt',
-    'fs_permissions'        => 'Domyślne uprawnienia',
+    'fs_permissions'        => 'Domyślnie Uprawnienia',
     'fm_access'             => 'FileMgmt Kontrola Dostępu',
-    'fm_general'            => 'FileMgmt Ustawienia Ogólne',
+    'fm_general'            => 'FileMgmt Ustawienia Główne',
 );
 // Note: entries 0, 1 are the same as in $LANG_configselects['Core']
 $LANG_configSelect['filemgmt'] = array(
     0 => array(1=>'Włącz', 0=>'Wyłącz'),
     1 => array(true=>'Włącz', false=>'Wyłacz'),
     2 => array(5 => ' 5', 10 => '10', 15 => '15', 20 => '20', 25 => '25',30 => '30',50 => '50'),
-    3 => array(0=>'Lewe bloki', 1=>'Prawe Bloki', 2=>'Lewe i Prawe Bloki', 3=>'Brak')
+    3 => array(0=>'Lewe Bloki', 1=>'Prawe Bloki', 2=>'Lewe & Prawe Bloki', 3=>'Brak')
 );
 
 $PLG_filemgmt_MESSAGE1 = 'Wtyczka Filemgmt instalacja przerwana<br>Plik: plugins/filemgmt/filemgmt.php nie można zapisać';
-$PLG_filemgmt_MESSAGE3 = 'Ta wtyczka wymaga programu glFusion w wersji 1.0 lub nowszej, aktualizacja została przerwana.';
+$PLG_filemgmt_MESSAGE3 = 'Ta wtyczka wymaga glFusion w wersji 1.0 lub nowszej, aktualizacja została przerwana.';
 $PLG_filemgmt_MESSAGE4 = 'Nie wykryto kodu wtyczki w wersji 1.5 - aktualizacja przerwana.';
 $PLG_filemgmt_MESSAGE5 = 'Wtyczka Filemgmt aktualizacja przerwana<br>Obecna wersja wtyczki to nie 1.3';
 
 // Language variables used by the plugin - general users access code.
 
 define("_MD_THANKSFORINFO","Dziękujemy za informację. Wkrótce sprawdzimy twoją prośbę.");
-define("_MD_BACKTOTOP","Powrót do góry");
-define("_MD_THANKSFORHELP","Dziękujemy za pomoc w utrzymaniu integralności tego katalogu.");
+define("_MD_BACKTOTOP","Powrót do Góry");
+define("_MD_THANKSFORHELP","Dziękujemy za pomoc w utrzymaniu integralności katalogu.");
 define("_MD_FORSECURITY","Ze względów bezpieczeństwa twoja nazwa użytkownika i adres ip również zostaną tymczasowo zarejestrowane.");
 
-define("_MD_SEARCHFOR","Szukaj");
+define("_MD_SEARCHFOR","Szukaj w");
 define("_MD_MATCH","Dopasuj");
-define("_MD_ALL","Wszystkie");
-define("_MD_ANY","Każde");
+define("_MD_ALL","Wszystko");
+define("_MD_ANY","Każdy");
 define("_MD_NAME","Nazwa");
 define("_MD_DESCRIPTION","Opis");
 define("_MD_SEARCH","Szukaj");
 
-define("_MD_MAIN","Główny");
-define("_MD_SUBMITFILE","Prześlij plik");
-define("_MD_POPULAR","Popularne");
-define("_MD_NEW","Nowy");
-define("_MD_TOPRATED","Najwyżej oceniane");
+define("_MD_MAIN","Główna");
+define("_MD_SUBMITFILE","Prześlij Plik");
+define("_MD_POPULAR","Popularna");
+define("_MD_NEW","Nowa");
+define("_MD_TOPRATED","Najwyżej Oceniane");
 
 define("_MD_NEWTHISWEEK","Nowe w tym tygodniu");
-define("_MD_UPTHISWEEK","Zaktualizowane w tym tygodniu");
+define("_MD_UPTHISWEEK","Aktualizowane w tym tygodniu");
 
 define("_MD_POPULARITYLTOM","Popularność (najmniej popularne)");
 define("_MD_POPULARITYMTOL","Popularność (najczęściej do minimum trafień)");
-define("_MD_TITLEATOZ","Title (A do Z)");
-define("_MD_TITLEZTOA","Title (Z do A)");
+define("_MD_TITLEATOZ","Tytuł (A do Z)");
+define("_MD_TITLEZTOA","Tytuł (Z do A)");
 define("_MD_DATEOLD","Data (Stare pliki wymienione najpierw)");
 define("_MD_DATENEW","Data (Nowe pliki wymienione najpierw)");
 define("_MD_RATINGLTOH","Ocena (najniższy wynik do najwyższego wyniku)");

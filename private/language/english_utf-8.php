@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2020 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -2344,7 +2344,7 @@ $LANG_ADM_ACTIONS = array(
     'group_updated'         => 'Group %s (%s) saved',
     'comment_edit'          => 'Edited comment id: %s :: %s',
     'comment_delete'        => 'Deleted comment for %s::%s',
-    'delete_user'           => 'User ID %d has been deleted.',
+    'delete_user'           => 'User %s (ID: %d) has been deleted.',
     'article_save'          => 'Edited / Saved article: %s - %s',
     'article_delete_sys'    => 'System automatically deleted article: %s',
     'article_delete'        => 'Deleted article: %s',

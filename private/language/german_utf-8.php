@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2020 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -34,15 +34,15 @@ $LANG01 = array(
     5 => 'Stimme',					// depreciated
     6 => 'Ergebnisse',					// depreciated
     8 => 'Stimmen',					// depreciated
-    9 => 'Admin Functions:',		// depreciated
+    9 => 'Admin-Funktionen:',		// depreciated
     10 => 'Einsendungen',
     11 => 'Artikel Verwaltung',
     12 => 'Blöcke',
     13 => 'Kategorien',
     17 => 'Benutzer Verwaltung',
-    18 => 'SQL Query',				// depreciated
+    18 => 'SQL-Abfrage',				// depreciated
     19 => 'Abmelden',
-    20 => 'User Information:',		// depreciated
+    20 => 'Benutzerinformation:',		// depreciated
     21 => 'Benutzername',
     22 => 'Benutzer-ID',				// depreciated
     23 => 'Sicherheitsstufe',			// depreciated
@@ -52,7 +52,7 @@ $LANG01 = array(
     27 => 'Neuester Beitrag',
     28 => 'Löschen',
     29 => 'Keine Kommentare.',
-    30 => 'Older Stories',			// depreciated
+    30 => 'Ältere Artikel',			// depreciated
     31 => 'Erlaubte HTML-Tags: ',
     32 => 'Fehler: Ungültiger Benutzername',
     33 => 'Fehler: Konnte nicht ins Logfile schreiben',
@@ -66,17 +66,17 @@ $LANG01 = array(
     42 => 'Verfasst von:',
     43 => 'Antworten',
     44 => 'Übergeordnete Kategorie',					// depreciated
-    45 => 'MySQL Error Number',		// depreciated
-    46 => 'MySQL Error Message',	// depreciated
+    45 => 'MySQL-Fehlernummer',		// depreciated
+    46 => 'MySQL-Fehlermeldung',	// depreciated
     47 => 'Mein Konto',
     48 => 'Konto Einstellungen',
     49 => 'Einstellungen',			// depreciated
-    50 => 'Error with SQL statement',	// depreciated
+    50 => 'Fehler im SQL-Befehl',	// depreciated
     51 => 'Hilfe',
     52 => 'Neu',					// depreciated
     53 => 'Kommandozentrale',				// deprecated
-    54 => 'Could not open the file.',	// depreciated
-    55 => 'Error at',				// depreciated
+    54 => 'Datei konnte nicht geöffnet werden.',	// depreciated
+    55 => 'Fehler bei',				// depreciated
     56 => 'Stimme',					// depreciated
     57 => 'Passwort',
     58 => 'Anmelden',
@@ -84,7 +84,7 @@ $LANG01 = array(
     60 => 'Kommentar schreiben',
     61 => 'Neues Konto anlegen',
     62 => 'Wörter',
-    63 => 'Comment Preferences',	// depreciated
+    63 => 'Kommentar-Einstellungen',	// depreciated
     64 => 'Artikel an einen Freund senden',
     65 => 'Druckfähige Version anzeigen',
     67 => 'Willkommen bei ',
@@ -92,18 +92,18 @@ $LANG01 = array(
     69 => 'Kontakt',				// depreciated
     70 => 'Suchen',					// depreciated
     71 => 'Beitrag',
-    72 => 'Web Resources',			// depreciated
+    72 => 'Web-Ressourcen',			// depreciated
     75 => 'Erweiterte Suche',
     76 => 'Seiten-Statistik',		// depreciated
     77 => 'Plugins',
     79 => 'Was ist Neu',			// depreciated
-    80 => 'stories in last',		// depreciated
-    81 => 'story in last',			// depreciated
+    80 => 'Artikel in den letzten',		// depreciated
+    81 => 'Artikel in den letzten',			// depreciated
     82 => 'Stunden',					// depreciated
     83 => 'Kommentare',
-    85 => 'last 48 hrs',			// depreciated
+    85 => 'letzte 48 Stunden',			// depreciated
     86 => 'Keine neuen Kommentare',		// depreciated
-    87 => 'last 2 wks',				// depreciated
+    87 => 'letzte 2 Wochen',				// depreciated
     90 => 'Startseite',
     91 => 'Seite erzeugt in',
     92 => 'Sekunden',
@@ -111,10 +111,10 @@ $LANG01 = array(
     94 => "<a href=\"{$_CONF['site_url']}/page.php?page=terms-of-use\">Nutzungsbedingungen</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a href=\"{$_CONF['site_url']}/page.php?page=privacy-policy\">Datenschutz-Bestimmungen</a>",
     95 => 'Durch',
     96 => 'Gruppen',
-    97 => 'Word List',				// depreciated
+    97 => 'Wortliste',				// depreciated
     98 => 'Plugins',
     99 => 'Artikel',
-    100 => 'No new stories',		// depreciated
+    100 => 'Keine neuen Artikel',		// depreciated
     101 => 'Alle Marken und Urheberrechte auf dieser Seite befinden sich im Besitz der jeweiligen Eigentümer.',
     103 => 'Datenbank-Verwaltung',
     104 => 'von',
@@ -127,11 +127,11 @@ $LANG01 = array(
     112 => 'Registrierte Benutzer',
     113 => 'Dokumentation',
     114 => 'Trackbacks',
-    115 => 'No new trackbacks',		// depreciated
+    115 => 'Keine neuen Trackbacks',		// depreciated
     116 => 'Trackback',
     117 => 'Verzeichnis',
 	// depreciated
-    118 => 'Please continue reading on the next page:',
+    118 => 'Fortsetzung auf der nächsten Seite:',
     119 => "<a href=\"{$_CONF['site_url']}/users.php?mode=getpassword\" rel=\"nofollow\">Passwort vergessen?</a>",
     120 => 'Dauerhafter Link zu diesem Kommentar',
     121 => 'Kommentare (%d)',
@@ -259,7 +259,7 @@ $LANG04 = array(
     19 => 'Dieser Benutzername oder diese E-Mail Adresse existieren bereits.',
     20 => 'Die angegebene E-Mail Adresse scheint keine gültige E-Mail Adresse zu sein', // ddepriated
     21 => 'Fehler',
-    22 => "Register with %s!",		// depreciated
+    22 => "Registriere mit %s!",		// depreciated
     23 => "Indem Du Dich bei {$_CONF['site_name']} registrierst, kannst Du Artikel und Kommentare unter Deinem eigenen Namen veröffentlichen (andernfalls geht das nur anonym).<br />Übrigens wird Deine E-Mail Adresse <b>niemals</b> auf dieser Webseite angezeigt werden.",
     24 => 'Dein Passwort wird Dir an die angegebene E-Mail Adresse gesendet.',
     25 => 'Passwort vergessen?',
@@ -301,16 +301,16 @@ $LANG04 = array(
     61 => 'Neueste oder älteste zuerst?',
     62 => 'Standardwert: 100',
 	// depreciated
-    63 => "Your password has been emailed to you and should arrive momentarily. Please follow the directions in the message and we thank-you for using %s",
+    63 => "Dein Passwort sollte in Kürze per E-Mail eintreffen. Bitte beachte die Hinweise in der E-Mail und Danke für Dein Interesse an %s",
     64 => 'Kommentar-Einstellungen für',
     65 => "Anmeldung bei {$_CONF['site_name']}",
     66 => 'Bitte gib Deinen Benutzernamen und Dein Passwort ein.',
     67 => 'Mitglied seit',
     68 => 'Angemeldet für',
     69 => 'Wie lange soll das System Dich nach dem Anmelden erkennen?',
-    70 => "Customize the layout and content of %s",		// depreciated
+    70 => "Layout und Inhalt von %s anpassen",		// depreciated
 	// depreciated
-    71 => "One of the great features of %s is you can customize the content you get and you can change the overall layout of this site.  In order to take advantage of these great features you must first <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">register</a> with %s.  Are you already a member?  Then use the login form to the left to log in!",
+    71 => "Zu den großartigen Eigenschaften von %s gehört, das Du selbst festlegen kannst, welche Artikel Du angezeigt bekommst. Darüber hinaus kannst Du auch das Aussehen der Webseite verändern. Um in den Genuss dieser Features zu kommen, musst Du Dich jedoch zuerst bei %s <a href=\"%s/users.php?mode=new\" rel=\"nofollow\">Registrieren</a>. Falls Du schon registriert bist, dann melde Dich bitte an.",
     72 => 'Erscheinungsbild',
     73 => 'Sprache',
     74 => 'Das Aussehen dieser Seite ändern',
@@ -394,9 +394,9 @@ $LANG04 = array(
     157 => 'Löschen',
     158 => 'Zeitzone',
     159 => 'Diese E-Mail wurde automatisch generiert. Bitte nicht auf diese E-Mail antworten.',
-    160 => 'On-line',
+    160 => 'Online',
     161 => 'Passwortstärke',
-    162 => 'Der Benutzername muss aus  Zeichen bestehen. Nicht erlaubt sind: ( < > " % & * / \\ ) ',
+    162 => 'Der Benutzername muss aus  Zeichen bestehen. Nicht erlaubt sind: ( < > " % & * / \ ) ',
     163 => 'Remote Benutzer',
     164 => 'Remote Benutzername',
     165 => 'Remote Service',
@@ -441,11 +441,11 @@ $LANG04 = array(
     204 => 'Remote-Konto entfernen',
     205 => 'Bist Du sicher, dass Du Dein Remote-Konto entfernen möchtest?<br>Du benötigen dazu Dein aktuelles Passwort Deines Lokalen-Kontos, um den Vorgang abzuschließen.',
     206 => "Your {$_CONF['site_name']} account has now been activated by an administrator. You may now login to the site at the url below.",
-    207 => 'Go To Site',
-    208 => 'You are almost done!',
-    209 => 'Please provide and confirm the information below to finalize your account.',
-    210 => 'You are about to create a new account on <em>%s</em> using a login from <strong>%s</strong>',
-    211 => 'Create your personal account',
+    207 => 'Gehe zur Site',
+    208 => 'Du bist fast fertig!',
+    209 => 'Bitte geben Sie die untenstehenden Informationen an und bestätigen Sie diese, um Ihr Konto zu erstellen.',
+    210 => 'Sie sind dabei, ein neues Konto bei <em>%s</em> mit dem Login von <strong>%s</strong> zu erstellen',
+    211 => 'Erstellen Sie Ihr persönliches Konto',
     'facebook'  => 'Facebook',
     'github'    => 'GitHub',
     'google'    => 'Google',
@@ -685,6 +685,7 @@ $LANG12 = array(
     46 => 'Stadt',
     47 => 'Bundesland',
     48 => 'Postleitzahl',
+    50 => 'Edit Event Type',
     51 => 'Ort',
     52 => 'Löschen',
     53 => 'Konto anlegen',
@@ -789,7 +790,7 @@ $LANG21 = array(
     63 => 'Block-Titel nicht erlaubt',
     64 => 'Der Titel kann nicht leer sein und darf kein HTML enthalten!',
     65 => 'Reihenfolge',
-    66 => 'Auto tags',
+    66 => 'Auto-Tags',
     67 => 'Ankreuzen, um Autotags zu erlauben',
     68 => 'Der News-Feed für diesen Block ist zu lang, um angezeigt werden zu können. Bitte im Block-Editor eine maximale Anzahl Artikel zum Import vorgeben, oder ein übergeordnetes Maximum im der Konfiguration.',
     69 => 'Diesen Block wirklich löschen?',
@@ -916,7 +917,7 @@ $LANG24 = array(
     123 => 'Es wurden <b>keine Kategorien</b> verschoben, da ALLE Kategorien ausgewählt wurden.',
     124 => 'Bist du sicher, dass Du abbrechen möchtest? Sämtliche Änderungen werden nicht gespeichert.',
     125 => 'Story Video',
-    126 => 'Auto Play',
+    126 => 'Auto-Play',
 );
 
 ###############################################################################
@@ -976,7 +977,7 @@ $LANG27 = array(
     52 => 'Admin Artikel',
     53 => 'Einsendungen',
     54 => 'Admin Blöcke',
-    55 => 'Syndication Admin',
+    55 => 'Syndication-Admin',
     56 => 'Klicke auf "Abbrechen" und anschließend auf "Bearbeiten", um Details anzuzeigen, einschließlich der Gesamtzahl der Objekte in der Datenbank, die diesem Thema zugeordnet sind',
     57 => '<ul><li>Hier kannst Du eine Kategorie erstellen oder bearbeiten.</li><li>Kategorie-IDs dürfen keine Leerzeichen enthalten.</li></ul>',
     58 => 'Erste Position',
@@ -1152,10 +1153,10 @@ $LANG31 = array(
     15 => 'Fehler beim Senden an: ',
     16 => 'E-Mail erfolgreich gesendet an: ',
 	// depreciated
-    17 => "<a href=\"%s/mail.php\">Send another message</a>",
+    17 => "<a href=\"%s/mail.php\">Eine andere Nachricht senden</a>",
     18 => 'An',
     19 => '<ul><li>Hier kannst Du eine E-Mail an eine bestimmte Gruppe dieser Seite senden.</li><li>Wenn Du eine E-Mail an alle eingetragenen Benutzer senden willst, musst Du die Gruppe Logged-in Benutzer auswählen.</li><li>Wenn Du eine E-Mail an einen bestimmten Benutzer senden willst, kannst Du dies über die <a href="{$_CONF[\'site_admin_url\']}/user.php">Benutzer-Verwaltung</a> erledigen.</li></ul>',
-    20 => "<successcount> Nachricht(en) erfolgreich versendet, bei <failcount> Nachricht(en) traten Fehler auf. Details können der folgenden Liste entnommen werden. Du kannst jetzt <a href=\"{$_CONF['site_admin_url']}/mail.php\">noch eine Nachricht senden</a> oder <a href=\"{$_CONF['site_admin_url']}/moderation.php\">zurück zum Admin-Menü gehen</a>.",
+    20 => "Successfully sent %d messages. You can <a href=\"%s/mail.php\">Send another message</a> or you can <a href=\"%s/index.php\">go back to the administration page</a>.",
     21 => 'Fehler',
     22 => 'Erfolgreich',
     23 => 'Keine Fehler',
@@ -1258,7 +1259,7 @@ $LANG32 = array(
     84 => 'Kern-Plugin',
     85 => 'Autotag Hochladen',
     86 => 'Fehler im automatischen Autotag Installer',
-    87 => 'Auto tag Installer',
+    87 => 'Auto-Tag-Installer',
     88 => 'Bist Du sicher, dass Du dieses Plugin entfernen willst?',
     89 => 'Bist Du absolut sicher, dass Du dieses Plugin entfernen möchtest? Dies führt zum Löschen aller Dateien und Verzeichnisse, die sich auf dieses Plugin beziehen, und um dieses Plugin erneut zu installieren, müsst Du eine weitere Kopie hochladen.',
     90 => 'Version <b>%s</b> des <b>%s</b> Plugin wird benötigt, aber Version <b>%s</b> ist installiert. Bitte aktualisiere das %s Plugin.',
@@ -1332,7 +1333,7 @@ $LANG_LOGVIEW = array(
     'view' => 'Protokoll anzeigen',
     'clear' => 'Protokoll löschen',
     'log_file' => 'Protokolldatei',
-    'too_large' => 'Log File is too large to display! File size is %2.2f %s. Showing only the last 256kb of the log.',
+    'too_large' => 'Protokolldatei ist zu groß, um sie anzuzeigen! Die Dateigröße beträgt %2.2f %s. Nur die letzten 256kb des Logs werden angezeigt.',
 );
 
 ###############################################################################
@@ -1351,8 +1352,8 @@ $LANG_SOCIAL = array(
     'enabled'               => 'Aktiv',
     'share_it_label'        => 'Teile diesen Beitrag!',
     'state_toggled'         => 'Status wurde geändert.',
-    'follow_us'             => 'Folge uns auf',
-    'follow_me'             => 'Folge mir auf',
+    'follow_us'             => 'Find Us on',
+    'follow_me'             => 'Find Me on',
     'service_name'          => 'Netzwerk Name',
     'service_url'           => 'Netzwerk URL',
     'site_username'         => 'Netzwerk Benutzername',
@@ -1472,7 +1473,7 @@ $MESSAGE = array(
     508 => 'E-Mail Adresse stimmt nicht mit der Bestätigungs-E-Mail Adresse überein.',
     509 => 'Fehler beim Erstellen des neuen Benutzerkontos - bitte das Fehlerprotokoll für weitere Details überprüfen.',
     510 => 'Die Standardeinstellungen sind für alle Benutzer übernommen worden.',
-    512 => 'Benutzername enthält ungültige Zeichen " < > / \\ $ % * sind nicht erlaubt',
+    512 => 'Benutzername enthält ungültige Zeichen " < > / \ $ % * sind nicht erlaubt',
     513 => 'Remote Benutzername darf nicht leer sein.',
     514 => 'Remote Service darf nicht leer sein.',
     515 => 'Vielen Dank, das Konto wurde nun aktiviert.',
@@ -1483,7 +1484,7 @@ $MESSAGE = array(
     520 => 'Du hast diese Benachrichtigung abonniert.',
     521 => 'Du wurdest für diese Benachrichtigung erfolgreich abgemeldet.',
     522 => 'Remote-Konto wurde erfolgreich mit dem vorhandenen lokalen Konto zusammengeführt',
-    523 => 'Security Token has expired - please try again.',
+    523 => 'Security Token ist abgelaufen - bitte versuchen Sie es erneut.',
     600 => 'Das Entwicklungs-Update wurde abgeschlossen - Bitte überprüfe, ob Plugins aktualisiert werden müssen',
 );
 
@@ -1514,7 +1515,7 @@ $LANG_ACCESS = array(
     'yes' => 'Ja',
     'no' => 'Nein',
 // not used
-    'corerightsdescr' => "This group is a core Group.  Please ensure you understand any changes you are making.  Below is a list of the rights this group has access to.",
+    'corerightsdescr' => "Diese Gruppe ist eine Kerngruppe. Bitte stellen Sie sicher, dass Sie alle Änderungen verstehen, die Sie vornehmen. Unten ist eine Liste der Rechte, auf die diese Gruppe Zugriff hat.",
 //
     'groupmsg' => '<ul><li>Wenn Du DIESE-GRUPPE zu einer der folgenden Sicheren-Gruppen hinzufügst, bekommt DIESE-GRUPPE die gleichen Rechte wie die unten ausgewählte(n).</li><li>Wenn möglich, sollten Gruppenrechte durch Auswahl von Gruppen aus dieser Liste vergeben werden.</li><li>Werden nur einzelne Rechte benötigt, können diese auch aus der Liste der Rechte weiter unten ausgewählt werden.</li><li>Um DIESE-GRUPPE zu einer der folgenden Gruppen hinzuzufügen, brauchst Du nur unten die gewünschte(n) Gruppe(n) auswählen.</li></ul>',
     'groupeditmsg' => '<ul><li>Hier kannst Du eine neue Gruppe erstellen oder eine bestehende Gruppe bearbeiten.</li><li>Beachte, dass Du den Namen einer bereits existierenden Gruppe nicht ändern kannst.</li><li>Wenn Du eine neue Gruppe erstellst, musst Du mindestens den Gruppen-Namen und die Gruppen-Beschreibung eingeben.</li></ul>',
@@ -2051,9 +2052,9 @@ $LANG_BBCODE = array(
     'listitem_help'     => 'List item: [*]text[/*]',
     'img_help'          => 'Insert image: [img]http://image_url[/img]',
     'url_help'          => 'Link einfügen: [url]http://url[/url] oder [url=http://url]URL text[/url]',
-    'smiley_help'       => 'Open Smiley Window',
-    'size_help'         => 'Font size: [size=9]small text[/size]',
-    'color_help'        => 'Text Color: [color=red]red text[/color]',
+    'smiley_help'       => 'Smiley-Fenster öffnen',
+    'size_help'         => 'Schriftgröße: [size=9]kleiner Text[/size]',
+    'color_help'        => 'Textfarbe: [color=red]Roter Text[/color]',
     'size_tiny'         => 'Winzig',
     'size_small'        => 'Klein',
     'size_normal'       => 'Normal',
@@ -2126,14 +2127,14 @@ $LANG_MB01 = array (
     'gl_plugin_menu'    => 'Plugin-Menu',
     'gl_header_menu'    => 'Header-Menu',
     'plugins'           => 'Plugin',
-    'static_pages'      => 'Static Pages',
+    'static_pages'      => 'Statische Seiten',
     'glfusion_function' => 'glFusion Funktion',
     'cancel'            => 'Abbrechen',
     'action'            => 'Aktion',
     'first_position'    => 'Erste Position',
     'info'              => 'Grund',
     'non-logged-in'     => 'Gäste',
-    'target'            => 'URL Window',
+    'target'            => 'URL-Fenster',
     'same_window'       => 'Gleiches Fenster',
     'new_window'        => 'Neues Fenster',
     'menu_builder'          => 'Menü Manager',
@@ -2154,7 +2155,7 @@ $LANG_MB01 = array (
     'alignment_question'    => 'Menü ausrichten nach',
     'align_left'            => 'Links',
     'align_right'           => 'Rechts',
-    'blocks'                => 'Block Styles',
+    'blocks'                => 'Block-Arten',
     'reset'                 => 'Zurücksetzen',
     'defaults'              => 'Auf Standardwerte zurücksetzen',
     'confirm_reset'         => 'Dadurch werden die Farben und Grafiken auf Standartwerte zurückgesetzt und der Template-Cache automatisch gelöscht. Bist Du sicher, dass Du weitermachen willst? (Nach Änderungen am Design, nicht vergessen, den Browser-Cache zu leeren/löschen).',
@@ -2188,7 +2189,7 @@ $LANG_MB_TYPES = array(
     2                   => 'glFusion-Aktion',
     3                   => 'glFusion-Menü',
     4                   => 'Plugin',
-    5                   => 'Static Page',
+    5                   => 'Statische Seite',
     6                   => 'Externe URL',
     7                   => 'PHP Funktion',
     8                   => 'Beschriftung',
@@ -2265,8 +2266,8 @@ $LANG_LOGO = array(
 # admin/autotag.php - autotag administration
 $LANG_AM = array (
     'plugin'                    => 'Autotag',
-    'title'                     => 'Auto tag Manager',
-    'menulabel'                 => 'Auto tags',
+    'title'                     => 'Auto-Tag-Manager',
+    'menulabel'                 => 'Auto-Tags',
     'public_title'              => 'Autotag Übersicht',
     'tag'                       => 'Tag-Name',
     'type'                      => 'Typ',
@@ -2298,11 +2299,11 @@ $LANG_AM = array (
     'html_allowed'              => '(HTML:erlaubt)',
     'instructions'              => '<ul><li>Um einen Autotag zu ändern oder zu löschen, klicke auf das entsprechende Symbol.</li><li>Um einen neuen Autotag zu erstellen, klicke oben auf "Neu Anlegen".</li><li>Wenn es PHP-basierte Autotags gibt, die nicht bearbeitet oder aktiviert werden können, liegt es daran, dass Du entweder keinen Zugriff auf die Funktion autotag.PHP hast und/oder PHP Autotags sind in der Konfiguration deaktiviert.</li></ul>',
     'public_instructions'       => '<ul><li>Die vollständige Liste der derzeit verfügbaren und aktivierten Autotags werden hier angezeigt.</li><li>Für jeden Autotag wird das dazugehörige glFusion-Modul sowie Typ und Beschreibung angezeigt.</li><li>Anwendungsbeispiele werden mit den <i>erforderlichen</i> und {optionalen} Parametern bereitgestellt.</li><li>Wenn mehrere Optionen verfügbar sind, wird ein Link zur glFusion.org-Wiki-Dokumentation bereitgestellt.</li></ul>',
-    'replace_explain'           => 'Auto tags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.'
-                                .'<p>Auto tags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p>'
-                                .'<p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain white space which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and %site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
+    'replace_explain'           => 'Auto Tags werden in Form <b>[tag:{p1} {p2}]</b>. Im Feld <b>Ersetzen</b> können Sie jedes gültige HTML verwenden. Sie können {p1} und/oder {p2} Parameter in Ihre Ersatzzeichenkette einbinden, indem Sie die Ersatzmakros %1% bzw. %2% verwenden.'
+                                .'<p>Auto-Tags werden häufig verwendet, um Links zu erstellen. Ein <b>Ersetzen</b> Feld von <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> in Kombination mit diesem Tag: <b>[tag:foo Dies ist ein Link]</b> wird in der Zeichenkette <b>&lt;a href="http://path.to.somewhere/foo"&gt;&lt;/a&gt;</b></p> resultieren.'
+                                .'<p>Du kannst auch %0% verwenden, um die gesamte Zeichenkette nach dem ersten Doppelpunkt zu repräsentieren dies ist praktisch, wenn Sie nur einen einzigen Parameter verwenden möchten, und der Wert Leerzeichen enthält, die ansonsten als Trennzeichen zwischen mehreren Parametern interpretiert würden. Die Makros %site_url% und %site_admin_url% können auch verwendet werden und wird durch die Basis-URL bzw. die Admin-URL ersetzt.</p>',
     'autotagpermmsg'            => 'Wähle aus, welche Funktionen (Operationen) für den Autotag verwendet werden sollen.',
-    'autotag'                   => 'Auto tag',
+    'autotag'                   => 'Auto-Tag',
     'desc_showblock'            => 'HTML: erzeugt einen beliebigen Block. Anwendung: [show_block:<i>block_id</i>]',
     'desc_story'                => 'Link: zu einem Artiekl der Seite. (Voreinstellung link_text = Artikel Titel) Anwendung: [story:<i>story_id</i> {link_text}]',
     'desc_story_introtext'      => 'HTML: zeigt die Einleitung eine Artikels. Anwendung: [story_introtext:<i>story_id</i>]',
@@ -2312,9 +2313,9 @@ $LANG_AM = array (
     'desc_cipher'               => 'Text: verschlüsselt einen beliebigen Text. Anwendung: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]',
     'desc_topic'                => 'Link: zur eine Kategorie der Seite. (Voreinstellung link_text = Kategorie Beschreibung) Anwendung: [topic:<i>topic_id</i> {link_text}]',
     'desc_glfwiki'              => 'Link: zu den Suchergebnissen für den angegebenen Text auf www.glfusion.org/wiki. Anwendung: [glfwiki:<i>text</i>]',
-    'desc_lang'                 => 'Text: expands \\$LANG global var, eg. [lang:p1 p2] -> value of \\$LANGp1[p2] or \\$LANG_p1[p2]',
-    'desc_conf'                 => 'Text: expands \\$_CONF global var, eg. [conf:p1] -> value of \\$_CONF[p1]',
-    'desc_user'                 => 'Text: expands \\$_USER global var, eg. [user:p1] -> value of \\$_USER[p1]',
+    'desc_lang'                 => 'Text: expands \$LANG global var, eg. [lang:p1 p2] -> value of \$LANGp1[p2] or \$LANG_p1[p2]',
+    'desc_conf'                 => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
+    'desc_user'                 => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
     'desc_wikipedia'            => 'Link: zu den Suchergebnissen für den angegebenen Text auf Wikipedia. Anwendung: [wikipedia:<i>text</i>]',
     'desc_youtube'              => 'HTML: Fügt ein youtube Video ein. Anwendung: [youtube:<i>video_id</i>]',
     'desc_headlines'            => 'HTML: erstellt eine Liste der Artikel-Titel. Anwendung: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]',
@@ -2336,14 +2337,22 @@ $LANG_AM = array (
 $LANG_ADM_ACTIONS = array(
     'enabled'               => 'Eingeschaltet',
     'disabled'              => 'Deaktiviert',
-    'plugin_state'          => 'Toggled Plugin State for %s to %s',
-    'plugin_uninstall'      => 'Uninstalled Plugin %s',
-    'config_change'         => 'Changed config setting: %s::%s from: %s to %s',
-    'manual_ban'            => 'Manual Ban of IP: %s',
-    'group_updated'         => 'Group %s (%s) saved',
-    'comment_edit'          => 'Edited comment id: %s :: %s',
-    'comment_delete'        => 'Deleted comment for %s::%s',
-    'delete_user'           => 'User ID %d has been deleted.',
+    'plugin_state'          => 'Plugin Status für %s auf %s umgeschaltet',
+    'plugin_uninstall'      => 'Deinstalliertes Plugin %s',
+    'config_change'         => 'Einstellungen geändert: %s::%s von: %s zu %s',
+    'manual_ban'            => 'Manuelles sperren der IP: %s',
+    'group_updated'         => 'Gruppe %s (%s) gespeichert',
+    'comment_edit'          => 'Bearbeite Kommentar-Id: %s :: %s',
+    'comment_delete'        => 'gelöschter Kommentar  für %s :: %s',
+    'delete_user'           => 'User %s (ID: %d) has been deleted.',
+    'article_save'          => 'Bearbeitet / Gespeicherter Artikel: %s - %s',
+    'article_delete_sys'    => 'Automatisch gelöschte Artikel: %s',
+    'article_delete'        => 'Gelöschte Artikel: %s',
+    'article_global'        => 'Globale Änderung des Beitrags: %s',
+    'article_approved'      => 'Artikel %s wurde genehmigt',
+    'clone_menu'            => 'Cloned menu %s to %s',
+    'create_menu'           => 'Created new menu: %s',
+    'edit_menu'             => 'Edited menu: %s',
 );
 
 
@@ -2351,10 +2360,10 @@ $LANG_ADM_ACTIONS = array(
 # admin/envcheck.php - environment check
 $LANG_ENVCHK = array(
     'bypass_note'               => 'Da entweder <b>safe_mode</b> oder <b>open_basedir</b> Einschränkungen erkannt wurden, wurde die Überprüfung auf Grafik-Bibliotheken übersprungen.',
-    'cache_disabled'            => 'Caching is disabled',
-    'cache_driver'              => 'Cache Driver',
-    'cache_driver_error'        => 'Using files drivers as fallback due to error with configured driver: ',
-    'cache_driver_ok'           => 'Caching Backend is up and operational',
+    'cache_disabled'            => 'Caching ist deaktiviert',
+    'cache_driver'              => 'Cache-Treiber',
+    'cache_driver_error'        => 'Benutze Dateitreiber als Fallback aufgrund eines Fehlers mit dem konfigurierten Treiber: ',
+    'cache_driver_ok'           => 'Caching Backend ist in Betrieb',
     'correct_perms'             => 'Bitte behebe die unten angegebenen Probleme und überprüfe danach deine Hosting-Umgebung erneut.',
     'ctype_extension'           => 'Ctype-Erweiterung',
     'curl_extension'            => 'Curl-Erweiterung',
@@ -2369,6 +2378,7 @@ $LANG_ENVCHK = array(
     'db_header'                 => 'Datenbank-Info',
     'db_version'                => 'Datenbank-Version',
     'directory_permissions'     => 'Verzeichnis-Rechte',
+    'disabled'                  => 'Deaktiviert',
     'enabled'                   => 'Aktiviert',
     'extensions'                => 'Erforderliche PHP-Erweiterungen',
     'file_permissions'          => 'Datei-Rechte',
@@ -2387,6 +2397,7 @@ $LANG_ENVCHK = array(
     'im_not_found'              => 'Die Datei <b>convert</b> für ImageMagick kann nicht gefunden werden.',
     'im_ok'                     => 'Die Datei <b>convert</b> scheint vorhanden zu sein.',
     'imagemagick'               => 'ImageMagick-Erweiterung',
+    'instance_cache'            => 'Instance Caching wird Artikel zwischenspeichern, um die Anzeige der Indexseite zu beschleunigen - empfohlen für Produktionssysteme.',
     'gm_not_found'              => 'Die Datei <b>gm</b> für GraphicsMagick kann nicht gefunden werden.',
     'gm_ok'                     => 'Die Datei <b>gm</b> scheint vorhanden zu sein.',
     'graphicsmagick'            => 'GraphicsMagick-Erweiterung',
@@ -2415,7 +2426,7 @@ $LANG_ENVCHK = array(
     'on'                        => 'EIN',
     'open_basedir'              => 'Wenn <b>open_basedir</b>-Beschränkungen aktiviert sind, kann dies zu Rechteproblemen während der Installation führen. Das Dateiprüfsystem unten sollte mögliche Probleme aufzeigen.',
     'openssl_extension'         => 'OpenSSL-Erweiterung',
-    'php_req_version'           => 'glFusion requires PHP version %s or newer.',
+    'php_req_version'           => 'glFusion benötigt PHP Version %s oder höher.',
     'php_settings'              => 'PHP-Einstellungen',
     'php_version'               => 'PHP-Version',
     'php_warning'               => 'Wenn einer der unten angeführten Einträge <span class="no">rot</span> markiert ist, kann dies zu Problemen mit Deinem glFusion-Auftritt führen.<br />Bei Problemen halte bitte Rücksprache mit Deinem Hoster um gegebenenfalls die PHP-Einstellungen zu ändern.',
@@ -2436,6 +2447,7 @@ $LANG_ENVCHK = array(
     'xml_extension'             => 'XML-Erweiterung',
     'zlib_extension'            => 'Zlib-Erweiterung',
     'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> sollte ausgeschalten sein.',
+    'intl_extension'            => 'Intl Extension',
 );
 
 ###############################################################################
@@ -2478,7 +2490,7 @@ $LANG_SFS = array(
     'username'          => 'Benutzer Name',
     'remote_ip'         => 'Benutzer IP',
     'email'             => 'Benutzer E-Mail',
-    'sfs_status'        => 'SFS Status',
+    'sfs_status'        => 'SFS-Status',
     'confirm_one'       => 'Bist Du sicher, dass Du alle ausgewählten Benutzer sperren möchtest?',
     'confirm_two'       => 'Bist Du WIRKLICH sicher, dass Du ALLE ausgewählten Benutzer SPERREN möchtest?',
     'action_text'       => 'Benutzer sperren',
@@ -2506,7 +2518,7 @@ $LANG_CONFIG = array(
     'disable' => 'Deaktivieren',
     'enable' => 'Aktivieren',
     'search' => 'Konfiguration durchsuchen',
-    'hash_ext_missing' => 'Missing Hash Message Digest Extension - Two Factor Authentication cannot be enabled.',
+    'hash_ext_missing' => 'Hash Message Digest Extension fehlt - Zwei-Faktor-Authentifizierung kann nicht aktiviert werden.',
 );
 
 ###############################################################################
@@ -2519,8 +2531,8 @@ $LANG_ACTIONS = array(
     'action'    => 'Aktion',
     'description' => 'Beschreibung',
     'user'      => 'Benutzer',
-    'no_data'   => 'No actions have been logged',
-    'help_text' => 'Admin actions lists all administrative / moderator actions performed on your site.',
+    'no_data'   => 'Keine Aktionen wurden protokolliert',
+    'help_text' => 'Admin-Aktionen listet alle administrativen / Moderator-Aktionen auf, die auf Ihrer Seite ausgeführt werden.',
 );
 
 
@@ -2560,20 +2572,20 @@ $LANG_confignames['Core'] = array(
     'custom_registration' => '"Custom Registration" aktivieren',
     'user_login_method' => 'Anmeldemethode ',
     'facebook_login' => "Facebook Login Aktivieren",
-    'facebook_consumer_key' => "Facebook OAuth Application ID",
-    'facebook_consumer_secret' => "Facebook OAuth Application Secret",
+    'facebook_consumer_key' => "Facebook OAuth-Application-ID",
+    'facebook_consumer_secret' => "Facebook OAuth-Application-Secret",
     'linkedin_login' => "LinkedIn Login Aktivieren",
-    'linkedin_consumer_key' => "LinkedIn OAuth API Key",
-    'linkedin_consumer_secret' => "LinkedIn OAuth Secret Key",
+    'linkedin_consumer_key' => "LinkedIn OAuth-API-Key",
+    'linkedin_consumer_secret' => "LinkedIn OAuth-Secret-Key",
     'twitter_login' => "Twitter Login Aktivieren",
-    'twitter_consumer_key' => "Twitter OAuth Consumer Key",
-    'twitter_consumer_secret' => "Twitter OAuth Consumer Secret",
+    'twitter_consumer_key' => "Twitter OAuth-Consumer-Key",
+    'twitter_consumer_secret' => "Twitter OAuth-Consumer-Secret",
     'google_login' => "Google Login Aktivieren",
-    'google_consumer_key' => "Google OAuth Consumer Key",
-    'google_consumer_secret' => "Google OAuth Consumer Secret",
+    'google_consumer_key' => "Google OAuth-Consumer-Key",
+    'google_consumer_secret' => "Google OAuth-Consumer-Secret",
     'microsoft_login' => "Microsoft Login Aktivieren",
-    'microsoft_consumer_key' => "Microsoft OAuth Consumer Key",
-    'microsoft_consumer_secret' => "Microsoft OAuth Consumer Secret",
+    'microsoft_consumer_key' => "Microsoft OAuth-Consumer-Key",
+    'microsoft_consumer_secret' => "Microsoft OAuth-Consumer-Secret",
     'github_login' => "Github Login Aktivieren",
     'github_consumer_key' => "Github OAuth Client ID",
     'github_consumer_secret' => "Github OAuth Client Secret",
@@ -2595,19 +2607,19 @@ $LANG_confignames['Core'] = array(
     'languages' => 'Sprachen',
     'timezone' => 'Zeitzone',
     'site_disabled_msg' => 'Text oder URL bei Wartungsmodus',
-    'rootdebug' => 'Root Debugging',
+    'rootdebug' => 'Root-Debugging',
     'cookie_session' => 'Sitzung Cookie Name',
-    'cookie_name' => 'Permanent Cookie Name',
+    'cookie_name' => 'Permanenter Cookie-Name',
     'cookie_password' => 'Passwort Cookie Name',
     'cookie_theme' => 'Design Cookie Name',
     'cookie_language' => 'Sprache Cookie Name',
     'cookie_tzid' => 'Zeitzone Cookie Name',
-    'cookie_ip' => 'Cookies embed IP',
-    'default_perm_cookie_timeout' => 'Permanent Timeout',
+    'cookie_ip' => 'Cookies integrieren IP',
+    'default_perm_cookie_timeout' => 'Dauerhafter Timeout',
     'session_cookie_timeout' => 'Sitzung Zeitlimit',
     'cookie_path' => 'Cookie Pfad',
-    'cookiedomain' => 'Cookie Domain',
-    'cookiesecure' => 'Cookie Secure',
+    'cookiedomain' => 'Cookie-Domain',
+    'cookiesecure' => 'Cookie-Secure',
     'lastlogin' => 'Letzte Anmeldung aufzeichnen',
     'num_search_results' => 'Anzahl Suchergebnisse',
     'loginrequired' => 'Anmelden generell nötig',
@@ -2724,9 +2736,9 @@ $LANG_confignames['Core'] = array(
     'censormode' => 'Zensur-Modus',
     'censorreplace' => 'Zensurwort ersetzen mit',
     'censorlist' => 'Liste zensierter Wörter',
-    'ip_lookup' => 'IP Lookup',
+    'ip_lookup' => 'IP-Lookup',
     'url_rewrite' => 'URL-Rewrite einschalten',
-    'fb_appid' => 'Facebook App ID',
+    'fb_appid' => 'Facebook App-ID',
     'default_permissions_block' => 'Standard-Blockrechte',
     'default_permissions_story' => 'Standard-Artikelrechte',
     'default_permissions_topic' => 'Standard-Kategorierechte',
@@ -2750,11 +2762,11 @@ $LANG_confignames['Core'] = array(
     'search_no_data' => 'Anzeige bei null Treffer',
     'search_separator' => 'Gruppen-Trenner',
     'search_def_keytype' => 'Standard-Suchmethode',
-    'mail_backend' => 'Mail Backend',
+    'mail_backend' => 'E-Mail-Backend',
     'mail_sendmail_path' => 'Pfad zu Sendmail',
     'mail_sendmail_args' => 'Sendmail-Parameter',
-    'mail_smtp_host' => 'SMTP Hostname',
-    'mail_smtp_port' => 'SMTP Port',
+    'mail_smtp_host' => 'SMTP-Hostname',
+    'mail_smtp_port' => 'SMTP-Port',
     'mail_smtp_auth' => 'SMTP Auth erforderlich',
     'mail_smtp_username' => 'SMTP Auth Benutzername',
     'mail_smtp_password' => 'SMTP Auth Passwort',
@@ -2794,19 +2806,19 @@ $LANG_confignames['Core'] = array(
     'bb2_strict' => 'Strenge Prüfung',
     'bb2_verbose' => 'Ausführliches Protokoll',
     'bb2_logging' => 'Protokollierung aktiviert',
-    'bb2_httpbl_key' => 'http:BL Key',
-    'bb2_httpbl_threat' => 'http:BL Threat Threshold',
-    'bb2_httpbl_maxage' => 'http:BL Max Age',
+    'bb2_httpbl_key' => 'http:BL-Key',
+    'bb2_httpbl_threat' => 'http:BL-Threat-Threshold',
+    'bb2_httpbl_maxage' => 'http:BL-Max-Age',
     'bb2_offsite_forms' => 'Fremde Formulare erlauben',
-    'bb2_eu_cookie' => 'EU Cookie',
+    'bb2_eu_cookie' => 'EU-Cookie',
     'bb2_ban_timeout' => 'Stunden für IP-Sperre',
-    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
-    'bb2_reverse_proxy_header'  => 'Proxy Header',
-    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
+    'bb2_reverse_proxy' => 'Reverse Proxy Unterstützung (d.h. CloudFlare)',
+    'bb2_reverse_proxy_header'  => 'Proxy-Header',
+    'bb2_reverse_proxy_addresses' => 'Proxy-Adressen',
     'infinite_scroll' => 'Endloses scrollen',
     'comment_engine'    => 'Kommentar-System',
     'comment_disqus_shortname' => 'Disqus Kurzname',
-    'comment_fb_appid' => 'Facebook App ID',
+    'comment_fb_appid' => 'Facebook App-ID',
     'open_ext_url_new_window' => 'Externe Links in neuem Fenster',
     'enable_404_logging' => '404-Fehler aufzeichnen',
     'debug_oauth' => 'Oauth Fehler aufzeichnen',
@@ -2821,27 +2833,27 @@ $LANG_confignames['Core'] = array(
     'pwd_req_cap' => 'Großbuchstaben erforderlch',
     'pwd_req_lower' => 'Kleinbuchstaben erforderlich',
     'pwd_req_symbol' => 'Sonderzeichen erforderlich',
-    'story_sort_by' => 'Story List Sort Field',
-    'story_sort_dir' => 'Story List Sort Direction',
-    'cache_driver' => 'Cache Driver',
-    'cache_host' => 'Cache Server',
-    'cache_port' => 'Cache Server Port',
-    'cache_timeout' => 'Connection Timeout',
-    'cache_redis_socket' => 'Path / Filename to Redis Socket',
-    'cache_redis_password' => 'Redis Password',
-    'cache_redis_database' => 'Redis Database Index',
-    'cache_memcached_username' => 'SASL Username for Memcached',
-    'cache_memcached_password' => 'SASL Password for Memcached',
-    'cache_memcached_socket' => 'Path / Filename to Memcache(d) Socket',
-    'cache_redis_info' => 'Redis Driver Attributes',
-    'cache_memcached_info' => 'Memcached Driver Attributes',
-    'default_story_editor' => 'Default Story Editor',
-    'syntax_highlight' => 'Enable Syntax Highlighting / Code Formatting',
+    'story_sort_by' => 'Artikel-Liste Sortierfeld',
+    'story_sort_dir' => 'Artikel-Liste Sortierrichtung',
+    'cache_driver' => 'Cache-Treiber',
+    'cache_host' => 'Cache-Server',
+    'cache_port' => 'Cache-Server-Port',
+    'cache_timeout' => 'Verbindungs-Timeout',
+    'cache_redis_socket' => 'Pfad / Dateiname zu Redis Socket',
+    'cache_redis_password' => 'Redis-Passwort',
+    'cache_redis_database' => 'Redis-Datenbank-Index',
+    'cache_memcached_username' => 'SASL Benutzername für Memcached',
+    'cache_memcached_password' => 'SASL-Passwort für Memcached',
+    'cache_memcached_socket' => 'Pfad / Dateiname zu Memcache(d) Socket',
+    'cache_redis_info' => 'Redis Treiber-Attribute',
+    'cache_memcached_info' => 'Memcached Treiber-Attribute',
+    'default_story_editor' => 'Standard Artikel-Editor',
+    'syntax_highlight' => 'Syntaxhervorhebung / Code-Formatierung aktivieren',
 // embedded field sets
-    'fset_story_display' => 'Story Display',
+    'fset_story_display' => 'Artikel-Anzeige',
     'fset_story_administration' => 'Artikel-Verwaltung',
-    'log_level' => 'Log Level',
-    'enable_admin_actions' => 'Enable Admin Logging',
+    'log_level' => 'Log-Level',
+    'enable_admin_actions' => 'Admin-Logging aktivieren',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2853,7 +2865,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_images' => 'Bilder &amp; Icon &amp; Logo',
     'sg_locale' => 'Sprache &amp; Lokalisierung',
     'sg_misc' => 'Vermischtes &amp; Rechte',
-    'sg_spam' => 'Spam / Bot Protection',
+    'sg_spam' => 'Spam / Bot Schutz',
     'sg_cache' => 'Caching',
 );
 
@@ -2892,7 +2904,7 @@ $LANG_fs['Core'] = array(
     'fs_comments' => 'Kommentare',
     'fs_htmlfilter' => 'HTML Filterung',
     'fs_censoring' => 'Zensieren',
-    'fs_iplookup' => 'IP Lookup',
+    'fs_iplookup' => 'IP-Lookup',
     'fs_perm_story' => 'Standard-Artikelrechte',
     'fs_perm_topic' => 'Standard-Kategorierechte',
     'fs_perm_block' => 'Standard-Blockrechte',
@@ -2904,8 +2916,8 @@ $LANG_fs['Core'] = array(
     'fs_spam_config' => 'Konfiguration',
     'fs_authentication' => 'Anmeldung',
     'fs_pwd_complexity' => 'Passwort Anforderungen',
-    'fs_cache_template' => 'Templates',
-    'fs_cache_backend' => 'Cache Options',
+    'fs_cache_template' => 'Vorlagen',
+    'fs_cache_backend' => 'Cache-Optionen',
 );
 
 $LANG_configSelect['Core'] = array(
@@ -2919,7 +2931,7 @@ $LANG_configSelect['Core'] = array(
     7 => array('last' => 'Letzte Seite', 'first' => 'Erste Seite', 'all' => 'Jede Seite'),
     8 => array('right'=>'Rechts', 'left'=>'Links'),
     9 => array('item'=>'Auf Seite weiterleiten', 'list'=>'Liste anzeigen', 'home'=>'Startseite anzeigen', 'admin'=>'Admin anzeigen'),
-    10 => array('netpbm'=>'Netpbm', 'graphicsmagick'=>'GraphicsMagick', 'imagemagick'=>'ImageMagick', 'gdlib'=>'gdLib'),
+    10 => array('netpbm'=>'Netpbm', 'graphicsmagick'=>'GraphicsMagick', 'imagemagick'=>'ImageMagick', 'gdlib'=>'gdlib'),
     11 => array('flat'=>'Der Reihe nach', 'nested'=>'Verschachtelt', 'nocomment'=>'Keine Kommentare'),
     12 => array(0=>'Kein Zugang', 2=>'Nur Lesen', 3=>'Lesen & Schreiben'),
     13 => array(0=>'Uberspringen', 1=>'Erlauben mit Speed-Limit', 2=>'Erlauben ohne Speed-Limit'),
@@ -2937,23 +2949,23 @@ $LANG_configSelect['Core'] = array(
     25 => array(0=>'Nein', 1=>'Optional', 2=>'Benötigt'),
     26 => array(0=>'Keine', 1=>'A.B', 2=>'A.B.C', 3=>'Alle'),
     27 => array(0=>'Zufälliges Passwort', 1=>'Benutzer Passwort'),
-    28 => array(0=>'Text Box', 1=>'WYSIWYG Editor'),
+    28 => array(0=>'Textfeld', 1=>'WYSIWYG-Editor'),
     29 => array(86400=>'Täglich', 604800=>'Wöchentlich', 3600=>'Stündlich', 0=>'Immer'),
     30 => array('internal'=>'Intern', 'disqus'=>'Disqus', 'facebook'=>'Facebook'),
-    31 => array(0=>'Deaktiviert', 1=>'Anonymous Users Only', 2=>'Alle Benutzer'),
+    31 => array(0=>'Deaktiviert', 1=>'Nur für Gäste', 2=>'Alle Benutzer'),
     32 => array('DESC'=>'Absteigend', 'ASC'=>'Aufsteigend'),
     33 => array('date'=>'Datum', 'title'=>'Titel', 'uid'=>'Autor', 'hits'=>'Angezeigt', 'sid'=>'Artikel-ID'),
     34 => array(0=>'HTML', 1=>'Visuell'),
-    35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'Neue Benutzer'),
-    36 => array( '50' => 'DVLP_DEBUG',
-                '100' => 'DEBUG',
+    35 => array('story'=>'Neue Artikel', 'comment'=>'Neue Kommentare', 'trackback'=>'Neue Trackbacks', 'pingback'=>'Neue Pingbacks', 'user'=>'Neue Benutzer'),
+    36 => array('100' => 'DEBUG',
                 '200' => 'INFO',
-                '250' => 'NOTICE',
-                '300' => 'WARNING',
-                '400' => 'ERROR',
-                '500' => 'CRITICAL',
-                '550' => 'ALERT',
-                '600' => 'EMERGENCY'
+                '250' => 'HINWEISE',
+                '300' => 'WARNUNG',
+                '400' => 'FEHLER',
+                '500' => 'KRITISCH',
+                '550' => 'ACHTUNG',
+                '600' => 'NOTFALL',
+                '525' => 'DVLP_DEBUG',
                ),
 );
 ?>

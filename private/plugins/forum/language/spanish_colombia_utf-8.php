@@ -890,7 +890,7 @@ $LANG_GF97 = array(
     'msgerror' => 'Tu mensaje no ha sido borrado. Por favor ir <a href="javascript:history.back()">aquí</a> y cerciórate de rellenar todos los campos.',
     'msgdelok' => 'Borrado',
     'msgdelsuccess' => 'Has borrado el mensaje.',
-    'msgdelerr' => 'El mensaje no ha sido borrado. Por favor ir <a href=\\"javascript:history.back()\\">aquí</a> y elegir uno.',
+    'msgdelerr' => 'El mensaje no ha sido borrado. Por favor ir <a href=\"javascript:history.back()\">aquí</a> y elegir uno.',
     'msgpriv' => 'Mensajes privados',
     'msgprivnote1' => 'Tienes %s mensajes privados.',
     'msgprivnote2' => 'Tienes %s mensajes privados.',

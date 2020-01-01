@@ -877,7 +877,7 @@ $LANG_GF97 = array(
     'msgerror' => 'Votre message n`a pas été envoyé. S`il vous plaît aller <a href="javascript:history.back()">back</a> et assurez-vous que vous avez tous les champs remplis.',
     'msgdelok' => 'Supprimer Réussie',
     'msgdelsuccess' => 'Vous avez avec succès supprimé ce message.',
-    'msgdelerr' => 'Le message n`a pas été supprimé. S`il vous plaît aller <a href=\\"javascript:history.back()\\">back</a> et en choisir une.',
+    'msgdelerr' => 'Le message n`a pas été supprimé. S`il vous plaît aller <a href=\"javascript:history.back()\">back</a> et en choisir une.',
     'msgpriv' => 'Messages Privés',
     'msgprivnote1' => 'Vous avez %s un message privé.',
     'msgprivnote2' => 'Vous avez %s des messages privés.',

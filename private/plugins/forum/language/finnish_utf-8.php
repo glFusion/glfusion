@@ -877,7 +877,7 @@ $LANG_GF97 = array(
     'msgerror' => 'Viestiä ei lähetetty. Mene <a href="javascript:history.back()">takaisin</a> ja täytä kaikki kentät.',
     'msgdelok' => 'Poistettu',
     'msgdelsuccess' => 'Viesti poistettu.',
-    'msgdelerr' => 'Viestiä ei poistettu. Mene <a href=\\"javascript:history.back()\\">takaisin</a> ja valitse yksi.',
+    'msgdelerr' => 'Viestiä ei poistettu. Mene <a href=\"javascript:history.back()\">takaisin</a> ja valitse yksi.',
     'msgpriv' => 'Yksityisviestit',
     'msgprivnote1' => 'Sinulla on %s yksityisviesti.',
     'msgprivnote2' => 'Sinulla on %s yksityisviestiä.',

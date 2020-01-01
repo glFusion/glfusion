@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2020 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -396,7 +396,7 @@ $LANG04 = array(
     159 => 'Ce courriel a été généré automatiquement. S`il vous plaît ne pas répondre à cet email.',
     160 => 'En Ligne',
     161 => 'Mot de passe Force',
-    162 => 'Le nom d`utilisateur contient des caractères non valides (<> "% & * / \\) ne sont pas autorisés',
+    162 => 'Le nom d`utilisateur contient des caractères non valides (<> "% & * / \) ne sont pas autorisés',
     163 => 'Utilisateur Distant',
     164 => 'Nom d`Utilisateur à distance',
     165 => 'Remote Service',
@@ -685,6 +685,7 @@ $LANG12 = array(
     46 => 'Ville / Localité',
     47 => 'Etat / Province',
     48 => 'Zip / Postal  Code',
+    50 => 'Edit Event Type',
     51 => 'Emplacement',
     52 => 'Effacer',
     53 => 'Créer un Compte',
@@ -763,7 +764,7 @@ $LANG21 = array(
     35 => 'Vous devez entrer le titre et le contenu de blocs normaux',
     36 => 'Vous devez entrer le contenu des blocs de mise en',
     37 => 'Bad bloc PHP nom de la fonction',
-    38 => 'Fonctions pour PHP blocs doivent avoir le préfixe \'phpblock_\' (par exemple phpblock_getweather). \'phpblock_\'préfixe Le \\ est nécessaire pour des raisons de sécurité pour empêcher l`exécution de code arbitraire.',
+    38 => 'Fonctions pour PHP blocs doivent avoir le préfixe \'phpblock_\' (par exemple phpblock_getweather). \'phpblock_\'préfixe Le \ est nécessaire pour des raisons de sécurité pour empêcher l`exécution de code arbitraire.',
     39 => 'Côté',
     40 => 'Gauche',
     41 => 'Droit',
@@ -793,7 +794,7 @@ $LANG21 = array(
     67 => 'Vérifiez pour permettre autotags',
     68 => 'L`alimentation de ce bloc portail est trop long pour être affiché. S`il vous plaît fixer un nombre maximal d`articles à importer pour le bloc dans l`écran de configuration du bloc, ou un maximum global dans la configuration glFusion.',
     69 => 'Etes-vous sûr de vouloir supprimer ce bloc?',
-    70 => 'Nom du bloc ne peut pas être vide et ne peut pas contenir d`espaces ou les caractères suivants: <> \\ "% & * / ou barre oblique inverse',
+    70 => 'Nom du bloc ne peut pas être vide et ne peut pas contenir d`espaces ou les caractères suivants: <> \ "% & * / ou barre oblique inverse',
     71 => 'Cet écran vous permet de créer un nouveau bloc ou de modifier un bloc existant qui sera affiché sur la barre de navigation de droite à gauche ou.',
     72 => 'Cet écran vous permet d`éditer un bloc de base glFusion.',
 );
@@ -1155,7 +1156,7 @@ $LANG31 = array(
     17 => "<a href=\"%s/mail.php\">Send another message</a>",
     18 => 'À:',
     19 => 'Utilisez ce panneau pour envoyer un courriel à un groupe d`utilisateurs sur ce site. Si vous souhaitez envoyer un message à tous les utilisateurs, sélectionnez le groupe Utilisateurs enregistré à partir de la liste déroulante Groupe champ. Pour envoyer un message à un utilisateur spécifique, sélectionnez l`utilisateur dans le panneau Liste de l`utilisateur, le lien est ci-dessus.',
-    20 => "Envoyé avec succès <successcount> messages et en vain envoyé <failcount> messages. Si vous en avez besoin, les détails de chaque message tentatives est ci-dessous. Sinon, vous pouvez <a href=\"%s/mail.php\">Envoyer un autre message </a> ou vous pouvez <a href=\"%s/index.php\">revenir à la page d`administration</a>.",
+    20 => "Successfully sent %d messages. You can <a href=\"%s/mail.php\">Send another message</a> or you can <a href=\"%s/index.php\">go back to the administration page</a>.",
     21 => 'Échecs',
     22 => 'Succès',
     23 => 'Pas de Défaillances',
@@ -1211,7 +1212,7 @@ $LANG32 = array(
     37 => 'Données',
     38 => 'Mettre à Jour',
     39 => 'Impossible d`ouvrir le répertoire temporaire de téléchargement.',
-    40 => 'Impossible de localiser le fichier plugin.xml nécessaire dans l`archive du plugin. Cela peut être un plugin plus qui n`a pas été mis à jour pour fonctionner avec l `glFusion \\ installation automatisée. Vous devrez installer manuellement ce plugin.',
+    40 => 'Impossible de localiser le fichier plugin.xml nécessaire dans l`archive du plugin. Cela peut être un plugin plus qui n`a pas été mis à jour pour fonctionner avec l `glFusion \ installation automatisée. Vous devrez installer manuellement ce plugin.',
     41 => 'Erreur de permission sur le fichier: %s<br />',
     42 => 'Erreurs Fichier / Répertoire Autorisations',
     43 => 'glFusion ne peut copier tous les fichiers dans les répertoires appropriés en raison d`erreurs d`autorisation. L`installation du plugin a été abandonnée. <br /> Voici une liste de toutes les erreurs de permission rencontré.<br /><br />',
@@ -1239,7 +1240,7 @@ $LANG32 = array(
     65 => 'Vous avez déjà ce plugin installé.',
     66 => 'La version installée est',
     67 => 'Si la version que vous avez téléchargé n`est pas plus récente que la version installée, sélectionnez <b> Annuler </b> pour annuler la mise à niveau.',
-    68 => 'Ce plugin semble être un plugin ancien qui ne prend pas en charge l `glFusion \\ programme d`installation automatique. Voulez-vous continuer la copie automatique des fichiers et effectuer une installation manuelle à partir de l`écran d`administration Plugin?',
+    68 => 'Ce plugin semble être un plugin ancien qui ne prend pas en charge l `glFusion \ programme d`installation automatique. Voulez-vous continuer la copie automatique des fichiers et effectuer une installation manuelle à partir de l`écran d`administration Plugin?',
     69 => 'IMPORTANT',
     70 => 'Le programme d`installation automatique n`est pas en mesure de vérifier que ce plugin fonctionne avec votre version actuelle de glFusion. Si vous choisissez d`avoir les fichiers copiés automatiquement, vous devrez exécuter l`installation manuelle de l`écran Gestion Plugin.',
     71 => 'Continuer',
@@ -1351,8 +1352,8 @@ $LANG_SOCIAL = array(
     'enabled'               => 'Enabled',
     'share_it_label'        => 'Share It!',
     'state_toggled'         => 'Social Share state has been toggled.',
-    'follow_us'             => 'Follow Us on',
-    'follow_me'             => 'Follow Me on',
+    'follow_us'             => 'Find Us on',
+    'follow_me'             => 'Find Me on',
     'service_name'          => 'Service Name',
     'service_url'           => 'Service URL',
     'site_username'         => 'Site User name',
@@ -1472,7 +1473,7 @@ $MESSAGE = array(
     508 => 'adresse e-mail ne correspond pas à l`adresse e-mail de confirmation.',
     509 => 'Erreur de création de nouveau compte utilisateur - s`il vous plaît vérifier le journal des erreurs pour plus de détails.',
     510 => 'Les paramètres par défaut ont été appliqués à tous les utilisateurs.',
-    512 => 'Nom d`utilisateur contient des caractères non valides "<> / \\ $% * ne sont pas autorisés',
+    512 => 'Nom d`utilisateur contient des caractères non valides "<> / \ $% * ne sont pas autorisés',
     513 => 'Nom d`utilisateur distant ne peut pas être vide.',
     514 => 'Service à distance ne peut pas être vide.',
     515 => 'Merci, votre compte a été activé.',
@@ -1508,7 +1509,7 @@ $LANG_ACCESS = array(
     'missingfields' => 'Les Champs Manquants',
     'missingfieldsmsg' => 'Vous devez fournir le nom et la description d`un groupe',
     'groupmanager' => 'Administration du Groupe',
-    'newgroupmsg' => 'Pour modifier ou supprimer un groupe, cliquez sur ce groupe d \\ `éditer icône ci-dessous. Pour créer un nouveau groupe, cliquez sur "Créer un nouveau" ci-dessus. S`il vous plaît noter que les groupes de base ne peuvent pas être supprimés car ils sont utilisés par le système.',
+    'newgroupmsg' => 'Pour modifier ou supprimer un groupe, cliquez sur ce groupe d \ `éditer icône ci-dessous. Pour créer un nouveau groupe, cliquez sur "Créer un nouveau" ci-dessus. S`il vous plaît noter que les groupes de base ne peuvent pas être supprimés car ils sont utilisés par le système.',
     'groupname' => 'Nom du Groupe',
     'coregroup' => 'Noyau',
     'yes' => 'Oui',
@@ -2232,7 +2233,7 @@ $LANG_MB_GLTYPES = array(
 # menu.php
 
 $LANG_MB_ADMIN = array(
-    1                   => 'Menu Builder vous permet de créer et modifier des menus pour votre site. Pour ajouter un nouveau menu, cliquez sur le lien Nouveau Menu Créer ci-dessus. Pour modifier les articles de s \\ un menu, cliquez sur l`icône dans la colonne Eléments. Pour modifier les couleurs du menu, cliquez sur l`icône dans la colonne Options.',
+    1                   => 'Menu Builder vous permet de créer et modifier des menus pour votre site. Pour ajouter un nouveau menu, cliquez sur le lien Nouveau Menu Créer ci-dessus. Pour modifier les articles de s \ un menu, cliquez sur l`icône dans la colonne Eléments. Pour modifier les couleurs du menu, cliquez sur l`icône dans la colonne Options.',
     2                   => 'Pour créer un nouveau menu, spécifier un nom de menu et le type de menu ci-dessous. Vous pouvez également définir l`état actif, et ce groupe d`utilisateurs serez en mesure de voir le menu, avec l`active et visible pour les champs.',
     3                   => 'Cliquez sur l`icône dans la colonne Modifier pour modifier les propriétés d`un élément de menu. Disposez les articles en les déplaçant vers le haut ou vers le bas avec les flèches sous la colonne Ordre.',
     4                   => 'Pour créer un nouvel élément de menu, spécifiez les détails et les autorisations ci-dessous.',
@@ -2312,9 +2313,9 @@ $LANG_AM = array (
     'desc_cipher'               => 'Text: substitution cipher. Usage example is [wikipedia:ROT13]: [cipher:<i>nopqrstuvwxyzabcdefghijklm</i> <i>text_to_encode</i>]',
     'desc_topic'                => 'Link: to home page to display specified topic: link_text defaults to description. usage: [topic:<i>topic_id</i> {link_text}]',
     'desc_glfwiki'              => 'Link: to the glfusion.or wiki search result for the text specified. usage: [glfwiki:<i>text</i>]',
-    'desc_lang'                 => 'Text: expands \\$LANG global var, eg. [lang:p1 p2] -> value of \\$LANGp1[p2] or \\$LANG_p1[p2]',
-    'desc_conf'                 => 'Text: expands \\$_CONF global var, eg. [conf:p1] -> value of \\$_CONF[p1]',
-    'desc_user'                 => 'Text: expands \\$_USER global var, eg. [user:p1] -> value of \\$_USER[p1]',
+    'desc_lang'                 => 'Text: expands \$LANG global var, eg. [lang:p1 p2] -> value of \$LANGp1[p2] or \$LANG_p1[p2]',
+    'desc_conf'                 => 'Text: expands \$_CONF global var, eg. [conf:p1] -> value of \$_CONF[p1]',
+    'desc_user'                 => 'Text: expands \$_USER global var, eg. [user:p1] -> value of \$_USER[p1]',
     'desc_wikipedia'            => 'Link: to the wikipedia search result for the text specified. usage: [wikipedia:<i>text</i>]',
     'desc_youtube'              => 'HTML: embeds a youtube.com video object. usage: [youtube:<i>video_id</i>]',
     'desc_headlines'            => 'HTML: embeds article headslines. usage: [headlines:<i>topic_name or all</i> display:## meta:0/1 titlelink:0/1 featured:0/1 frontpage:0/1 cols:# template:template_name]',
@@ -2343,7 +2344,15 @@ $LANG_ADM_ACTIONS = array(
     'group_updated'         => 'Group %s (%s) saved',
     'comment_edit'          => 'Edited comment id: %s :: %s',
     'comment_delete'        => 'Deleted comment for %s::%s',
-    'delete_user'           => 'User ID %d has been deleted.',
+    'delete_user'           => 'User %s (ID: %d) has been deleted.',
+    'article_save'          => 'Edited / Saved article: %s - %s',
+    'article_delete_sys'    => 'System automatically deleted article: %s',
+    'article_delete'        => 'Deleted article: %s',
+    'article_global'        => 'Article Global Change: %s',
+    'article_approved'      => 'Article %s has been approved',
+    'clone_menu'            => 'Cloned menu %s to %s',
+    'create_menu'           => 'Created new menu: %s',
+    'edit_menu'             => 'Edited menu: %s',
 );
 
 
@@ -2369,6 +2378,7 @@ $LANG_ENVCHK = array(
     'db_header'                 => 'Database Info',
     'db_version'                => 'Database Version',
     'directory_permissions'     => 'Directory Permissions',
+    'disabled'                  => 'Inactif',
     'enabled'                   => 'Enabled',
     'extensions'                => 'Required PHP Extensions',
     'file_permissions'          => 'File Permissions',
@@ -2387,6 +2397,7 @@ $LANG_ENVCHK = array(
     'im_not_found'              => 'Unable to locate the <strong>convert</strong> executable for ImageMagick.',
     'im_ok'                     => 'The <strong>convert</strong> executable appears to be valid.',
     'imagemagick'               => 'ImageMagick Programs',
+    'instance_cache'            => 'Instance Caching will cache articles to speed up displaying the site index page - recommended to be enabled for production systems.',
     'gm_not_found'              => 'Unable to locate the <strong>gm</strong> executable for GraphicsMagick.',
     'gm_ok'                     => 'The <strong>gm</strong> executable appears to be valid.',
     'graphicsmagick'            => 'GraphicsMagick Programs',
@@ -2436,6 +2447,7 @@ $LANG_ENVCHK = array(
     'xml_extension'             => 'XML Extension',
     'zlib_extension'            => 'zlib Extension',
     'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> should be off.',
+    'intl_extension'            => 'Intl Extension',
 );
 
 ###############################################################################
@@ -2945,15 +2957,15 @@ $LANG_configSelect['Core'] = array(
     33 => array('date'=>'Date', 'title'=>'Titre', 'uid'=>'Auteur', 'hits'=>'Hits', 'sid'=>'Histoire ID'),
     34 => array(0=>'HTML', 1=>'Visuel'),
     35 => array('story'=>'New Stories', 'comment'=>'New Comments', 'trackback'=>'New Trackbacks', 'pingback'=>'New Pingbacks', 'user'=>'Nouveaux Utilisateurs'),
-    36 => array( '50' => 'DVLP_DEBUG',
-                '100' => 'DEBUG',
+    36 => array('100' => 'DEBUG',
                 '200' => 'INFO',
                 '250' => 'NOTICE',
                 '300' => 'WARNING',
                 '400' => 'ERROR',
                 '500' => 'CRITICAL',
                 '550' => 'ALERT',
-                '600' => 'EMERGENCY'
+                '600' => 'EMERGENCY',
+                '525' => 'DVLP_DEBUG',
                ),
 );
 ?>
