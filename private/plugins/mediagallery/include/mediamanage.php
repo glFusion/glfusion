@@ -598,6 +598,13 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
             }
             $thumbnail      = $_MG_CONF['mediaobjects_url'] . '/tn/' . $pThumbnail;
             $size           = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $pThumbnail);
+
+            if ($size === false) {
+                $size = array();
+                $size[0] = 0;
+                $size[1] = 0;
+            }
+
             if ( $_CONF['image_lib'] == 'gdlib' && !function_exists("imagerotate") ) {
 	            $rotate_right = '';
 	            $rotate_left  = '';
