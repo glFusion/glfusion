@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2019 by the following authors:
+*  Copyright (C) 2017-2020 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *
@@ -76,6 +76,7 @@ class AdminAction
                                 'ip'        => $_SERVER['REAL_ADDR']
                             )
                 );
+//                Log::write('system',Log::ERROR,sprintf("Admin Action: %s - %s - %s - %s",$module,$action,$desc,$_SERVER['REAL_ADDR']));
             } catch(\Doctrine\DBAL\DBALException $e) {
                 Log::write('system',Log::ERROR,'10001 :: Failure writing administrative action to the admin_action database table.');
                 Log::write('system',Log::ERROR,sprintf("Admin Action: %s - %s - %s - %s",$module,$action,$desc,$_SERVER['REAL_ADDR']));
