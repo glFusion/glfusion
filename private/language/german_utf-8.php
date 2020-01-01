@@ -137,7 +137,7 @@ $LANG01 = array(
     97 => 'Word List',
     98 => 'Plugins',
     99 => 'Artikel',
-    100 => 'No new stories',
+    100 => 'Keine neuen Artikel',		// depreciated
     101 => 'Alle Marken und Urheberrechte auf dieser Seite befinden sich im Besitz der jeweiligen Eigentümer.',
     102 => '',
     103 => 'Datenbank-Verwaltung',
@@ -151,10 +151,10 @@ $LANG01 = array(
     112 => 'Registrierte Benutzer',
     113 => 'Dokumentation',
     114 => 'Trackbacks',
-    115 => 'No new trackbacks',
+    115 => 'Keine neuen Trackbacks',		// depreciated
     116 => 'Trackback',
     117 => 'Verzeichnis',
-    118 => 'Please continue reading on the next page:',
+    118 => 'Fortsetzung auf der nächsten Seite:',
     119 => "<a href=\"{$_CONF['site_url']}/users.php?mode=getpassword\" rel=\"nofollow\">Passwort vergessen?</a>",
     120 => 'Dauerhafter Link zu diesem Kommentar',
     121 => 'Kommentare (%d)',
@@ -415,7 +415,7 @@ $LANG04 = array(
     157 => 'Löschen',
     158 => 'Zeitzone',
     159 => 'Diese E-Mail wurde automatisch generiert. Bitte nicht auf diese E-Mail antworten.',
-    160 => 'On-line',
+    160 => 'Online',
     161 => 'Passwortstärke',
     162 => 'Der Benutzername muss aus  Zeichen bestehen. Nicht erlaubt sind: ( < > " % & * / \ ) ',
     163 => 'Remote Benutzer',
@@ -462,11 +462,11 @@ $LANG04 = array(
     204 => 'Remote-Konto entfernen',
     205 => 'Bist Du sicher, dass Du Dein Remote-Konto entfernen möchtest?<br>Du benötigen dazu Dein aktuelles Passwort Deines Lokalen-Kontos, um den Vorgang abzuschließen.',
     206 => "Your {$_CONF['site_name']} account has now been activated by an administrator. You may now login to the site at the url below.",
-    207 => 'Go To Site',
-    208 => 'You are almost done!',
-    209 => 'Please provide and confirm the information below to finalize your account.',
-    210 => 'You are about to create a new account on <em>%s</em> using a login from <strong>%s</strong>',
-    211 => 'Create your personal account',
+    207 => 'Gehe zur Site',
+    208 => 'Du bist fast fertig!',
+    209 => 'Bitte geben Sie die untenstehenden Informationen an und bestätigen Sie diese, um Ihr Konto zu erstellen.',
+    210 => 'Sie sind dabei, ein neues Konto bei <em>%s</em> mit dem Login von <strong>%s</strong> zu erstellen',
+    211 => 'Erstellen Sie Ihr persönliches Konto',
     'facebook' => 'Facebook',
     'github' => 'GitHub',
     'google' => 'Google',
@@ -852,7 +852,7 @@ $LANG21 = array(
     63 => 'Block-Titel nicht erlaubt',
     64 => 'Der Titel kann nicht leer sein und darf kein HTML enthalten!',
     65 => 'Reihenfolge',
-    66 => 'Auto tags',
+    66 => 'Auto-Tags',
     67 => 'Ankreuzen, um Autotags zu erlauben',
     68 => 'Der News-Feed für diesen Block ist zu lang, um angezeigt werden zu können. Bitte im Block-Editor eine maximale Anzahl Artikel zum Import vorgeben, oder ein übergeordnetes Maximum im der Konfiguration.',
     69 => 'Diesen Block wirklich löschen?',
@@ -990,7 +990,7 @@ $LANG24 = array(
     123 => 'Es wurden <b>keine Kategorien</b> verschoben, da ALLE Kategorien ausgewählt wurden.',
     124 => 'Bist du sicher, dass Du abbrechen möchtest? Sämtliche Änderungen werden nicht gespeichert.',
     125 => 'Story Video',
-    126 => 'Auto Play'
+    126 => 'Auto-Play',
 );
 
 ###############################################################################
@@ -1337,7 +1337,7 @@ $LANG32 = array(
     84 => 'Kern-Plugin',
     85 => 'Autotag Hochladen',
     86 => 'Fehler im automatischen Autotag Installer',
-    87 => 'Auto tag Installer',
+    87 => 'Auto-Tag-Installer',
     88 => 'Bist Du sicher, dass Du dieses Plugin entfernen willst?',
     89 => 'Bist Du absolut sicher, dass Du dieses Plugin entfernen möchtest? Dies führt zum Löschen aller Dateien und Verzeichnisse, die sich auf dieses Plugin beziehen, und um dieses Plugin erneut zu installieren, müsst Du eine weitere Kopie hochladen.',
     90 => 'Version <b>%s</b> des <b>%s</b> Plugin wird benötigt, aber Version <b>%s</b> ist installiert. Bitte aktualisiere das %s Plugin.',
@@ -1413,7 +1413,7 @@ $LANG_LOGVIEW = array(
     'view' => 'Protokoll anzeigen',
     'clear' => 'Protokoll löschen',
     'log_file' => 'Protokolldatei',
-    'too_large' => 'Log File is too large to display! File size is %2.2f %s. Showing only the last 256kb of the log.'
+    'too_large' => 'Protokolldatei ist zu groß, um sie anzuzeigen! Die Dateigröße beträgt %2.2f %s. Nur die letzten 256kb des Logs werden angezeigt.',
 );
 
 ###############################################################################
@@ -1579,7 +1579,7 @@ $MESSAGE = array(
     520 => 'Du hast diese Benachrichtigung abonniert.',
     521 => 'Du wurdest für diese Benachrichtigung erfolgreich abgemeldet.',
     522 => 'Remote-Konto wurde erfolgreich mit dem vorhandenen lokalen Konto zusammengeführt',
-    523 => 'Security Token has expired - please try again.',
+    523 => 'Security Token ist abgelaufen - bitte versuchen Sie es erneut.',
     600 => 'Das Entwicklungs-Update wurde abgeschlossen - Bitte überprüfe, ob Plugins aktualisiert werden müssen'
 );
 
@@ -1609,7 +1609,7 @@ $LANG_ACCESS = array(
     'coregroup' => 'Kern-Gruppe',
     'yes' => 'Ja',
     'no' => 'Nein',
-    'corerightsdescr' => 'This group is a core Group.  Please ensure you understand any changes you are making.  Below is a list of the rights this group has access to.',
+    'corerightsdescr' => "Diese Gruppe ist eine Kerngruppe. Bitte stellen Sie sicher, dass Sie alle Änderungen verstehen, die Sie vornehmen. Unten ist eine Liste der Rechte, auf die diese Gruppe Zugriff hat.",
     'groupmsg' => '<ul><li>Wenn Du DIESE-GRUPPE zu einer der folgenden Sicheren-Gruppen hinzufügst, bekommt DIESE-GRUPPE die gleichen Rechte wie die unten ausgewählte(n).</li><li>Wenn möglich, sollten Gruppenrechte durch Auswahl von Gruppen aus dieser Liste vergeben werden.</li><li>Werden nur einzelne Rechte benötigt, können diese auch aus der Liste der Rechte weiter unten ausgewählt werden.</li><li>Um DIESE-GRUPPE zu einer der folgenden Gruppen hinzuzufügen, brauchst Du nur unten die gewünschte(n) Gruppe(n) auswählen.</li></ul>',
     'groupeditmsg' => '<ul><li>Hier kannst Du eine neue Gruppe erstellen oder eine bestehende Gruppe bearbeiten.</li><li>Beachte, dass Du den Namen einer bereits existierenden Gruppe nicht ändern kannst.</li><li>Wenn Du eine neue Gruppe erstellst, musst Du mindestens den Gruppen-Namen und die Gruppen-Beschreibung eingeben.</li></ul>',
     'coregroupmsg' => "Diese Gruppe ist eine Kern-Gruppe von {$_CONF['site_name']}. Bitte sei vorsichtig mit dem Ändern der Kern-Gruppen. Das Folgende ist eine Liste der Gruppen, zu denen diese Gruppe gehört.",
@@ -1935,7 +1935,7 @@ $LANG_DIR = array(
 
 ###############################################################################
 # "What's New" Time Strings
-# 
+#
 # For the first two strings, you can use the following placeholders.
 # Order them so it makes sense in your language:
 # %i    item, "Stories"
@@ -2010,7 +2010,7 @@ $LANG_WEEK = array(
 
 ###############################################################################
 # Admin - Strings
-# 
+#
 # These are some standard strings used by core functions as well as plugins to
 # display administration lists and edit pages
 
@@ -2064,7 +2064,7 @@ $LANG_ADMIN = array(
 
 ###############################################################################
 # Widgets - Strings
-# 
+#
 # These are some standard strings used by the widget static pages
 
 $LANG_WIDGETS = array(
@@ -2160,9 +2160,9 @@ $LANG_BBCODE = array(
     'listitem_help' => 'List item: [*]text[/*]',
     'img_help' => 'Insert image: [img]http://image_url[/img]',
     'url_help' => 'Link einfügen: [url]http://url[/url] oder [url=http://url]URL text[/url]',
-    'smiley_help' => 'Open Smiley Window',
-    'size_help' => 'Font size: [size=9]small text[/size]',
-    'color_help' => 'Text Color: [color=red]red text[/color]',
+    'smiley_help'       => 'Smiley-Fenster öffnen',
+    'size_help'         => 'Schriftgröße: [size=9]kleiner Text[/size]',
+    'color_help'        => 'Textfarbe: [color=red]Roter Text[/color]',
     'size_tiny' => 'Winzig',
     'size_small' => 'Klein',
     'size_normal' => 'Normal',
@@ -2264,14 +2264,14 @@ $LANG_MB01 = array(
     'gl_plugin_menu' => 'Plugin-Menu',
     'gl_header_menu' => 'Header-Menu',
     'plugins' => 'Plugin',
-    'static_pages' => 'Static Pages',
+    'static_pages'      => 'Statische Seiten',
     'glfusion_function' => 'glFusion Funktion',
     'cancel' => 'Abbrechen',
     'action' => 'Aktion',
     'first_position' => 'Erste Position',
     'info' => 'Grund',
     'non-logged-in' => 'Gäste',
-    'target' => 'URL Window',
+    'target'            => 'URL-Fenster',
     'same_window' => 'Gleiches Fenster',
     'new_window' => 'Neues Fenster',
     'menu_builder' => 'Menü Manager',
@@ -2292,7 +2292,7 @@ $LANG_MB01 = array(
     'alignment_question' => 'Menü ausrichten nach',
     'align_left' => 'Links',
     'align_right' => 'Rechts',
-    'blocks' => 'Block Styles',
+    'blocks'                => 'Block-Arten',
     'reset' => 'Zurücksetzen',
     'defaults' => 'Auf Standardwerte zurücksetzen',
     'confirm_reset' => 'Dadurch werden die Farben und Grafiken auf Standartwerte zurückgesetzt und der Template-Cache automatisch gelöscht. Bist Du sicher, dass Du weitermachen willst? (Nach Änderungen am Design, nicht vergessen, den Browser-Cache zu leeren/löschen).',
@@ -2326,7 +2326,7 @@ $LANG_MB_TYPES = array(
     2 => 'glFusion-Aktion',
     3 => 'glFusion-Menü',
     4 => 'Plugin',
-    5 => 'Static Page',
+    5                   => 'Statische Seite',
     6 => 'Externe URL',
     7 => 'PHP Funktion',
     8 => 'Beschriftung',
@@ -2404,8 +2404,8 @@ $LANG_LOGO = array(
 
 $LANG_AM = array(
     'plugin' => 'Autotag',
-    'title' => 'Auto tag Manager',
-    'menulabel' => 'Auto tags',
+    'title'                     => 'Auto-Tag-Manager',
+    'menulabel'                 => 'Auto-Tags',
     'public_title' => 'Autotag Übersicht',
     'tag' => 'Tag-Name',
     'type' => 'Typ',
@@ -2437,9 +2437,11 @@ $LANG_AM = array(
     'html_allowed' => '(HTML:erlaubt)',
     'instructions' => '<ul><li>Um einen Autotag zu ändern oder zu löschen, klicke auf das entsprechende Symbol.</li><li>Um einen neuen Autotag zu erstellen, klicke oben auf "Neu Anlegen".</li><li>Wenn es PHP-basierte Autotags gibt, die nicht bearbeitet oder aktiviert werden können, liegt es daran, dass Du entweder keinen Zugriff auf die Funktion autotag.PHP hast und/oder PHP Autotags sind in der Konfiguration deaktiviert.</li></ul>',
     'public_instructions' => '<ul><li>Die vollständige Liste der derzeit verfügbaren und aktivierten Autotags werden hier angezeigt.</li><li>Für jeden Autotag wird das dazugehörige glFusion-Modul sowie Typ und Beschreibung angezeigt.</li><li>Anwendungsbeispiele werden mit den <i>erforderlichen</i> und {optionalen} Parametern bereitgestellt.</li><li>Wenn mehrere Optionen verfügbar sind, wird ein Link zur glFusion.org-Wiki-Dokumentation bereitgestellt.</li></ul>',
-    'replace_explain' => 'Auto tags take the form <b>[tag:{p1} {p2}]</b>. In the <b>Replacement</b> field you can use any valid HTML. You can include {p1} and/or {p2} parameters in your replacement string by using the replacement macros %1% and %2% respectively.<p>Auto tags are commonly used to create links. A <b>Replacement</b> field of <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> when combined with this tag: <b>[tag:foo This is a link]</b> will result in the string <b>&lt;a href="http://path.to.somewhere/foo"&gt;This is a link&lt;/a&gt;</b></p><p>You may also use %0% to represent the entire string after the first colon, this is handy when you want to use only a single parameter, and the value will contain white space which would otherwise be interpreted as a delimiter between multiple parameters.  The %site_url% and %site_admin_url% macros can also be used, and will be replaced by the base url and admin url respectively.</p>',
+    'replace_explain'           => 'Auto Tags werden in Form <b>[tag:{p1} {p2}]</b>. Im Feld <b>Ersetzen</b> können Sie jedes gültige HTML verwenden. Sie können {p1} und/oder {p2} Parameter in Ihre Ersatzzeichenkette einbinden, indem Sie die Ersatzmakros %1% bzw. %2% verwenden.'
+                                .'<p>Auto-Tags werden häufig verwendet, um Links zu erstellen. Ein <b>Ersetzen</b> Feld von <b>&lt;a href="http://path.to.somewhere/%1%"&gt;%2%&lt;/a&gt;</b> in Kombination mit diesem Tag: <b>[tag:foo Dies ist ein Link]</b> wird in der Zeichenkette <b>&lt;a href="http://path.to.somewhere/foo"&gt;&lt;/a&gt;</b></p> resultieren.'
+                                .'<p>Du kannst auch %0% verwenden, um die gesamte Zeichenkette nach dem ersten Doppelpunkt zu repräsentieren dies ist praktisch, wenn Sie nur einen einzigen Parameter verwenden möchten, und der Wert Leerzeichen enthält, die ansonsten als Trennzeichen zwischen mehreren Parametern interpretiert würden. Die Makros %site_url% und %site_admin_url% können auch verwendet werden und wird durch die Basis-URL bzw. die Admin-URL ersetzt.</p>',
     'autotagpermmsg' => 'Wähle aus, welche Funktionen (Operationen) für den Autotag verwendet werden sollen.',
-    'autotag' => 'Auto tag',
+    'autotag'                   => 'Auto-Tag',
     'desc_showblock' => 'HTML: erzeugt einen beliebigen Block. Anwendung: [show_block:<i>block_id</i>]',
     'desc_story' => 'Link: zu einem Artiekl der Seite. (Voreinstellung link_text = Artikel Titel) Anwendung: [story:<i>story_id</i> {link_text}]',
     'desc_story_introtext' => 'HTML: zeigt die Einleitung eine Artikels. Anwendung: [story_introtext:<i>story_id</i>]',
@@ -2533,7 +2535,7 @@ $LANG_ENVCHK = array(
     'on' => 'EIN',
     'open_basedir' => 'Wenn <b>open_basedir</b>-Beschränkungen aktiviert sind, kann dies zu Rechteproblemen während der Installation führen. Das Dateiprüfsystem unten sollte mögliche Probleme aufzeigen.',
     'openssl_extension' => 'OpenSSL-Erweiterung',
-    'php_req_version' => 'glFusion requires PHP version %s or newer.',
+    'php_req_version'           => 'glFusion benötigt PHP Version %s oder höher.',
     'php_settings' => 'PHP-Einstellungen',
     'php_version' => 'PHP-Version',
     'php_warning' => 'Wenn einer der unten angeführten Einträge <span class="no">rot</span> markiert ist, kann dies zu Problemen mit Deinem glFusion-Auftritt führen.<br />Bei Problemen halte bitte Rücksprache mit Deinem Hoster um gegebenenfalls die PHP-Einstellungen zu ändern.',
@@ -2598,7 +2600,7 @@ $LANG_SFS = array(
     'username' => 'Benutzer Name',
     'remote_ip' => 'Benutzer IP',
     'email' => 'Benutzer E-Mail',
-    'sfs_status' => 'SFS Status',
+    'sfs_status'        => 'SFS-Status',
     'confirm_one' => 'Bist Du sicher, dass Du alle ausgewählten Benutzer sperren möchtest?',
     'confirm_two' => 'Bist Du WIRKLICH sicher, dass Du ALLE ausgewählten Benutzer SPERREN möchtest?',
     'action_text' => 'Benutzer sperren',
@@ -2627,7 +2629,7 @@ $LANG_CONFIG = array(
     'disable' => 'Deaktivieren',
     'enable' => 'Aktivieren',
     'search' => 'Konfiguration durchsuchen',
-    'hash_ext_missing' => 'Missing Hash Message Digest Extension - Two Factor Authentication cannot be enabled.'
+    'hash_ext_missing' => 'Hash Message Digest Extension fehlt - Zwei-Faktor-Authentifizierung kann nicht aktiviert werden.',
 );
 
 $LANG_configsections['Core'] = array(
@@ -2702,13 +2704,13 @@ $LANG_confignames['Core'] = array(
     'site_disabled_msg' => 'Text oder URL bei Wartungsmodus',
     'rootdebug' => 'Root Debugging',
     'cookie_session' => 'Sitzung Cookie Name',
-    'cookie_name' => 'Permanent Cookie Name',
+    'cookie_name' => 'Permanenter Cookie-Name',
     'cookie_password' => 'Passwort Cookie Name',
     'cookie_theme' => 'Design Cookie Name',
     'cookie_language' => 'Sprache Cookie Name',
     'cookie_tzid' => 'Zeitzone Cookie Name',
-    'cookie_ip' => 'Cookies embed IP',
-    'default_perm_cookie_timeout' => 'Permanent Timeout',
+    'cookie_ip' => 'Cookies integrieren IP',
+    'default_perm_cookie_timeout' => 'Dauerhafter Timeout',
     'session_cookie_timeout' => 'Sitzung Zeitlimit',
     'cookie_path' => 'Cookie Pfad',
     'cookiedomain' => 'Cookie Domain',
@@ -2905,9 +2907,9 @@ $LANG_confignames['Core'] = array(
     'bb2_offsite_forms' => 'Fremde Formulare erlauben',
     'bb2_eu_cookie' => 'EU Cookie',
     'bb2_ban_timeout' => 'Stunden für IP-Sperre',
-    'bb2_reverse_proxy' => 'Reverse Proxy Support (i.e.; CloudFlare)',
+    'bb2_reverse_proxy' => 'Reverse Proxy Unterstützung (d.h. CloudFlare)',
     'bb2_reverse_proxy_header' => 'Proxy Header',
-    'bb2_reverse_proxy_addresses' => 'Proxy Addresses',
+    'bb2_reverse_proxy_addresses' => 'Proxy-Adressen',
     'infinite_scroll' => 'Endloses scrollen',
     'comment_engine' => 'Kommentar-System',
     'comment_disqus_shortname' => 'Disqus Kurzname',
@@ -2939,7 +2941,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_images' => 'Bilder &amp; Icon &amp; Logo',
     'sg_locale' => 'Sprache &amp; Lokalisierung',
     'sg_misc' => 'Vermischtes &amp; Rechte',
-    'sg_spam' => 'Spam / Bot Protection'
+    'sg_spam' => 'Spam / Bot Schutz',
 );
 
 $LANG_fs['Core'] = array(
@@ -2992,42 +2994,42 @@ $LANG_fs['Core'] = array(
 );
 
 $LANG_configselects['Core'] = array(
-    0 => array('True' => 1, 'False' => 0),
-    1 => array('True' => true, 'False' => false),
-    2 => array('Reject' => 0, 'Only Keep Latest' => 1, 'Allow Multiple Posts' => 2),
-    3 => array('Trackback Enabled' => 0, 'Trackback Disabled' => -1),
-    4 => array('Don\'t Check Anything' => 0, 'Check against Site URL' => 1, 'Check full URL' => 2, 'Check against Site URL and full URL' => 3, 'Check IP against Site IP' => 4, 'Check IP and Site URL' => 5, 'Check IP and Full URL' => 6, 'Check IP, Full URL, and Site URL' => 7),
-    5 => array('Text' => 'plaintext', 'HTML' => 'html'),
+    0 => array('Ja' => 1, 'Nein' => 0),
+    1 => array('Ja' => true, 'Nein' => false),
+    2 => array('Zurückweisen' => 0, 'Nur letzten behalten' => 1, 'Mehrfache Posts erlauben' => 2),
+    3 => array('Trackbacks erlaubt' => 0, 'Trackbacks deaktiviert' => 1),
+    4 => array('Nichts prüfen' => 0, 'Seiten URL prüfen' => 1, 'Volle URL prüfen' => 2, 'Seiten URL und volle URL prüfen' => 3, 'Trackback IP mit Seiten IP vergleichen' => 4,'IP und Seiten URL prüfen' => 5, 'IP und volle URL prüfen' => 6, 'IP, volle URL, und Seiten URL prüfen' => 7),
+    5 => array('als Text' => 'plaintext', 'in HTML' => 'html'),
     6 => array('12' => 12, '24' => 24),
-    7 => array('Last Page' => 'last', 'First Page' => 'first', 'Every Page' => 'all'),
-    8 => array('Right' => 'right', 'Left' => 'left'),
-    9 => array('Forward to page' => 'item', 'Display List' => 'list', 'Display Home' => 'home', 'Display Admin' => 'admin'),
-    10 => array('Netpbm' => 'netpbm', 'GraphicsMagick' => 'graphicsmagick', 'ImageMagick' => 'imagemagick', 'gdLib' => 'gdlib'),
-    11 => array('Flat' => 'flat', 'Nested' => 'nested', 'No Comments' => 'nocomment'),
-    12 => array('No access' => 0, 'Read-Only' => 2, 'Read-Write' => 3),
-    13 => array('Skip' => 0, 'Allow, with speedlimit' => 1, 'Allow, no speedlimit' => 2),
-    14 => array('Sunday' => 'Sun', 'Monday' => 'Mon'),
-    15 => array('By Number' => 'sortnum', 'Alphabetically' => 'alpha'),
-    16 => array('No Login required' => 0, 'Login Required' => 1),
-    17 => array('Comments Enabled' => 0, 'Comments Disabled' => -1),
-    18 => array('Google' => 'google', 'Table' => 'table'),
-    19 => array('Exact Phrase' => 'phrase', 'All of The Words' => 'all', 'Any of The Words' => 'any'),
+    7 => array('Letzte Seite' => 'last', 'Erste Seite' => 'first', 'Jede Seite' => 'all'),
+    8 => array('Rechts' => 'right', 'Links' => 'left'),
+    9 => array('Auf Seite weiterleiten' => 'item', 'Liste anzeigen' => 'list', 'Startseite anzeigen' => 'home', 'Admin anzeigen' => 'admin'),
+    10 => array('Netpbm'=>'netpbm', 'GraphicsMagick'=>'graphicsmagick', 'ImageMagick'=>'imagemagick', 'gdlib'=>'gdlib'),
+    11 => array('Der Reihe nach'=>'flat', 'Verschachtelt'=>'nested', 'Keine Kommentare'=>'nocomment'),
+    12 => array('Kein Zugang' => 0, 'Nur Lesen' => 2, 'Lesen & Schreiben' => 3),
+    13 => array('Uberspringen' => 0, 'Erlauben mit Speed-Limit' => 1, 'Erlauben ohne Speed-Limit' => 2),
+    14 => array('Sonntag' => 'Sun', 'Montag' => 'Mon'),
+    15 => array('Nummerisch' => 'sortnum', 'Alphabetisch' => 'alpha'),
+    16 => array('Keine Anmeldung benötigt' => 0, 'Nur erweiterte Suche' => 1),
+    17 => array('Kommentare eingeschaltet' => 0, 'Kommentare ausgeschaltet' => -1),
+    18 => array('Google' => 'google', 'Tabelle' => 'table'),
+    19 => array('Exakter Ausdruck' => 'phrase', 'Alle Worte' => 'all', 'Irgendeines der Worte' => 'any'),
     20 => array('Mail' => 'mail', 'Sendmail' => 'sendmail', 'SMTP' => 'smtp'),
-    21 => array('none' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
-    22 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits'),
-    23 => array('Disabled' => 0, 'Enabled (Exact Match)' => 1, 'Enabled (Word Beginning)' => 2, 'Enabled (Word Fragment)' => 3),
-    24 => array('Disabled' => 0, 'Logged-in Users' => 1, 'Everyone' => 2),
-    25 => array('No' => 0, 'Optional' => 1, 'Required' => 2),
-    26 => array('None' => 0, 'A.B' => 1, 'A.B.C' => 2, 'All' => 3),
-    27 => array('Generate Password' => 0, 'User Enters Password' => 1),
-    28 => array('Text Box' => 0, 'WYSIWYG Editor' => 1),
-    29 => array('Daily' => 86400, 'Weekly' => 604800, 'Hourly' => 3600, 'Always' => 0),
-    30 => array('Internal' => 'internal', 'Disqus' => 'disqus', 'Facebook' => 'facebook'),
-    31 => array('Disabled' => 0, 'Anonymous Users Only' => 1, 'All Users' => 2),
-    32 => array('Descending' => 'DESC', 'Ascending' => 'ASC'),
-    33 => array('Date' => 'date', 'Title' => 'title', 'Author' => 'uid', 'Hits' => 'hits', 'Story ID' => 'sid'),
-    34 => array('HTML' => 0, 'Visual' => 1),
-    35 => array('New Stories' => 'story', 'New Comments' => 'comment', 'New Trackbacks' => 'trackback', 'New Pingbacks' => 'pingback', 'New Users' => 'user')
+    21 => array('Nichts' => 'none', 'TLS' => 'tls', 'SSL' => 'ssl'),
+    22 => array('Datum' => 'date', 'Titel' => 'title', 'Autor' => 'uid', 'Treffer' => 'hits'),
+    23 => array('Deaktiviert' => 0, 'Aktiviert (Exakt. Übereinstimmung)' => 1, 'Aktiviert (Wortanfag)'=>2, 'Aktiviert (Wortfragment)'=>3),
+    24 => array('Deaktiviert'=>0, 'Eingeloggte Benutzer'=>1, 'Jeder'=>2),
+    25 => array('Nein'=>0, 'Optional'=>1, 'Benötigt'=>2),
+    26 => array('Keine'=>0, 'A.B'=>1, 'A.B.C'=>2, 'Alle'=>3),
+    27 => array('Zufälliges Passwort'=>0, 'Benutzer Passwort'=>1),
+    28 => array('Textfeld'=>0, 'WYSIWYG-Editor'=>1),
+    29 => array('Täglich'=>86400, 'Wöchentlich'=>604800, 'Stündlich'=>3600, 'Immer'=>0),
+    30 => array('Intern'=>'internal', 'Disqus'=>'disqus', 'Facebook'=>'facebook'),
+    31 => array('Deaktiviert'=>0, 'Nur für Gäste'=>1, 'Alle Benutzer'=>2),
+    32 => array('Absteigend'=>'DESC', 'Aufsteigend'=>'ASC'),
+    33 => array('Datum'=>'date', 'Titel'=>'title', 'Autor'=>'uid', 'Angezeigt'=>'hits', 'Artikel-ID'=>'sid'),
+    34 => array('HTML'=>0, 'Visuell'=>1),
+    35 => array('Neue Artikel'=>'story', 'Neue Kommentare'=>'comment', 'Neue Trackbacks'=>'trackback', 'Neue Pingbacks'=>'pingback', 'Neue Benutzer'=>'user'),
 );
 
 ?>
