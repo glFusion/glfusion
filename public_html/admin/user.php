@@ -2447,7 +2447,21 @@ function USER_import()
 */
 function USER_delete($uid)
 {
-    global $_CONF, $LANG_ADM_ACTIONS;
+    global $_CONF, $_TABLES, $LANG_ADM_ACTIONS;
+
+    // pull in additional user information to add to the log.
+
+    $db = Database::getInstance();
+
+    $row = $db->conn->fetchAssoc(
+        "SELECT * FROM `{$_TABLES['users']}` WHERE uid = ?",
+        array($uid),
+        array(Database::INTEGER)
+    );
+    // if no user is found
+    if ($row === null || $row === false) {
+        echo COM_refresh ($_CONF['site_admin_url'] . '/user.php');
+    }
 
     if (!USER_deleteAccount ($uid)) {
         return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
@@ -2455,7 +2469,7 @@ function USER_delete($uid)
     Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'user_' . $uid));
     COM_setMessage(22);
 
-    AdminAction::write('system','delete_user',sprintf($LANG_ADM_ACTIONS['delete_user'],$uid));
+    AdminAction::write('system','delete_user',sprintf($LANG_ADM_ACTIONS['delete_user'],$row['username'],$uid));
 
     return COM_refresh ($_CONF['site_admin_url'] . '/user.php');
 }
