@@ -6667,7 +6667,7 @@ function COM_stripslashes($text)
  */
 
 function COM_isAjax() {
-	return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 }
 
 function CMT_updateCommentcodes()
@@ -6822,7 +6822,7 @@ function _css_out()
                 $pHeader = $function();
                 if ( is_array($pHeader) ) {
                     foreach($pHeader AS $item => $file) {
-						$outputHandle->addCSSFile($file,HEADER_PRIO_NORMAL);
+                        $outputHandle->addCSSFile($file,HEADER_PRIO_NORMAL);
                     }
                 }
             }
