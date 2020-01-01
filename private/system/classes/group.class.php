@@ -203,7 +203,7 @@ class Group
         // all inherited ones.
         $groups = self::getAssigned($uid);
         $cTotalGroups = count($groups);
-        Log::write('system',Log::DEBUG,sprintf("%s::%s got %d assigned groups.",__CLASS__,__FUNCTION__,$cTotalGroups));
+//        Log::write('system',Log::DEBUG,sprintf("%s::%s got %d assigned groups.",__CLASS__,__FUNCTION__,$cTotalGroups));
 
         $cgroups = array();
         foreach ($groups as $grp_name=>$gid) {
