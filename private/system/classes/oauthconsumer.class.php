@@ -303,6 +303,9 @@ class OAuthConsumer
             case 'microsoft' :
                 break;
             case 'twitter' :
+                if ( isset($info->email ) ) {
+                    $userinfo['email'] = $info->email;
+                }
                 break;
             case 'linkedIn' :
                 if (isset($info->location->name)) {
@@ -338,8 +341,11 @@ class OAuthConsumer
                 );
                 break;
             case 'google' :
-                $homepage = $info->link;
-
+                if (isset($info->link)) {
+                    $homepage = $info->link;
+                } else {
+                    $homepage = '';
+                }
                 $plusPos = strpos($homepage,"+");
                 if ( $plusPos !== false ) {
                     $username = substr($homepage,strlen("https://plus.google.com/+"));
