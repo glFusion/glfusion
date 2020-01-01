@@ -3,8 +3,7 @@
 ## v2.0.0 (Unreleased)
 
 ### Internal development changes
-  - Added INTL extension to the environment checks - need to update wiki to show used by Agenda plugin
-  - PHP v7.4 Fixes
+  - Language File Sync
   - Cache class updates to support latest phpFastCache
   - Updated CKEditor to v4.13.1
   - Updated openpsa/universalfeedcreator (v1.8.3.1 => v1.8.3.2)
@@ -21,6 +20,7 @@
   - Updated monolog/monolog (1.24.0 => 1.25.2)
 
 ### Added
+  - Added INTL extension to the environment checks - need to update wiki to show used by Agenda plugin
   - Admin / Moderator actions are now logged and available for viewing in Command & Control
      - Configuration option to enable / disable - Config -> Miscellaneous -> Debug -> Enable Admin Actions
   - {site_name} is now a default template var
@@ -34,6 +34,8 @@
   - New Caching system utilizing phpFastCache library
 
 ### Changed
+  - Logview now initializes the log with date/time cleared
+  - Admin Actions now displays the IP
   - Story Editor - display thumbnail of attached images
   - Referencing a non-existent topic on the index page now results in a 404 error
   - Completely rewritten story handler - including submission and presentation
@@ -56,6 +58,7 @@
   - Non-UTF-8 language support
 
 ### Removed
+  - All MooTools related widgets
   - Remove the submission related Plugin APIs - except the Moderation Queue APIs
       PLG_showSubmitForm()
   - Configuration Option to show draft stories in moderation queue
@@ -65,34 +68,45 @@
 
 ### Fixed
 
-  - n/a
+  - PHP v7.4 Compatibility Fixes
 
 ### Security
 
   - Utilize PDO prepared SQL statements to decrease SQL injection opportunities
 
-## v1.7.8 (Unreleased)
+## v1.7.8.pl1 (Unreleased)
 
-### Changed
-  - Updated CKEditor to v4.13.1
-  - Updated splitbrain/php-archive (1.0.10 => 1.1.1)
-  - Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.3.2)
-  - Updated geshi/geshi (v1.0.9.0 => v1.0.9.1)
-  - Updated html2text/html2text (4.1.0 => 4.2.1)
-  - Updated james-heinrich/getid3 (v1.9.15 => v1.9.18)
-  - Updated ezyang/htmlpurifier (v4.10.0 => v4.12.0)
-  - Updated phpmailer/phpmailer (v5.2.26 => v5.2.27)
-  - Updated simplepie/simplepie (1.5.1 => 1.5.3)
-  - Updated phpxmlrpc/phpxmlrpc (4.3.1 => 4.4.1)
-  - Updated robthree/twofactorauth (1.6.1 => 1.6.7)
+### Added
+  - Added SECURITY.md - glFusion Security Policy
 
 ### Fixed
-  - Poll edit could crash under some circumstances
-  - Custom welcome_email.txt not being sent to imported users. Issue #365
-  - Improved PHP v7.4 compatibility
-  - Fixed DB error in database administration screen when non-glFusion tables exist in the database
-  - Fixed logic error that prevented user profile pictures from showing in the Forum plugin
-  - Fixed version number of VERSION file
+  - Improved error handling of missing media in Media Gallery media manage
+  - Plugin administrator did not accept .tar.gz plugin uploads on some systems
+  - Default content still referenced the old Gitter chat room
+
+## v1.7.8 (December 24, 2019)
+
+  ### Updates
+    - Updated CKEditor to v4.13.1
+    - Updated splitbrain/php-archive (1.0.10 => 1.1.1)
+    - Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.3.2)
+    - Updated geshi/geshi (v1.0.9.0 => v1.0.9.1)
+    - Updated html2text/html2text (4.1.0 => 4.2.1)
+    - Updated james-heinrich/getid3 (v1.9.15 => v1.9.18)
+    - Updated ezyang/htmlpurifier (v4.10.0 => v4.12.0)
+    - Updated phpmailer/phpmailer (v5.2.26 => v5.2.27)
+    - Updated simplepie/simplepie (1.5.1 => 1.5.3)
+    - Updated phpxmlrpc/phpxmlrpc (4.3.1 => 4.4.1)
+    - Updated robthree/twofactorauth (1.6.1 => 1.6.7)
+
+  ### Fixed
+    - Footer did not properly 'stick' to the bottom in Safari
+    - Poll edit could crash under some circumstances
+    - Custom welcome_email.txt not being sent to imported users. Issue #365
+    - Improved PHP v7.4 compatibility
+    - Fixed DB error in database administration screen when non-glFusion tables exist in the database
+    - Fixed logic error that prevented user profile pictures from showing in the Forum plugin
+    - Fixed version number of VERSION file
 
 ## v1.7.7 (April 14, 2019)
 
