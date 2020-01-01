@@ -9,7 +9,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2019 by the following authors:
+*  Copyright (C) 2019-2020 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -54,6 +54,7 @@ function listActions()
         array('text' => $LANG_ACTIONS['action'], 'field' => 'action',   'sort' => true, 'align' => 'left'),
         array('text' => $LANG_ACTIONS['description'], 'field' => 'description', 'sort' => false, 'align' => 'left'),
         array('text' => $LANG_ACTIONS['user'], 'field' => 'user','sort' => true, 'align' => 'center'),
+        array('text' => 'IP', 'field' => 'ip','sort' => true, 'align' => 'center'),
     );
 
     $defsort_arr = array('field'     => 'datetime',
