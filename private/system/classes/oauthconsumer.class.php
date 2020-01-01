@@ -6,7 +6,7 @@
 // |                                                                          |
 // | OAuth Distributed Authentication Module.                                 |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2011-2018 by the following authors:                        |
+// | Copyright (C) 2011-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark Howard            mark AT usable-web DOT com                        |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
@@ -124,10 +124,10 @@ class OAuthConsumer {
     	if ( ($success = $this->client->Initialize() ) ) {
     		if ( ($success = $this->client->Process() ) ) {
     			if(strlen($this->client->authorization_error)) {
-				    $this->client->error = $this->client->authorization_error;
-				    $this->error = $this->client->authorization_error;
-				    $success = false;
-			    } elseif(strlen($this->client->access_token)) {
+        $this->client->error = $this->client->authorization_error;
+        $this->error = $this->client->authorization_error;
+        $success = false;
+        } elseif(strlen($this->client->access_token)) {
                     $user = $this->get_userinfo();
                 }
     		} else {
@@ -337,11 +337,14 @@ class OAuthConsumer {
                 );
                 break;
             case 'Google' :
-                $homepage = $info->link;
-
+                if (isset($info->link)) {
+                    $homepage = $info->link;
+                } else {
+                    $homepage = '';
+                }
                 $plusPos = strpos($homepage,"+");
                 if ( $plusPos !== false ) {
-                    $username = substr($homepage,strlen("https://plug.google.com/+"));
+                    $username = substr($homepage,strlen("https://plus.google.com/+"));
                 } else {
                     $username = "";
                 }
