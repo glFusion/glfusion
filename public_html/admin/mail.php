@@ -244,6 +244,8 @@ function MAIL_sendMessages($vars)
         );
         if ($record !== false && $record !== null) {
             $toUsers[] = COM_formatEmailAddress ($record['username'],$record['email']);
+            $tmp = COM_formatEmailAddress ($record['username'],$record['email']);
+            $toUsers[] = array('email' => $tmp[0], 'name' => $tmp[1]);
         }
     } else {
         $groupList = implode (',', USER_getChildGroups((int) COM_applyFilter($vars['to_group'],true)));
