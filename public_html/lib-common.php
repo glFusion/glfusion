@@ -7233,7 +7233,8 @@ function COM_decrypt($data,$key = '')
     if ( $key == '' && !isset($_VARS['guid'])) return $data;
     if ( $key == '' ) $key = $_VARS['guid'];
     $iv = substr($key,0,16);
-    return (trim(openssl_decrypt(base64_decode($data), 'AES-128-CBC', $key,OPENSSL_RAW_DATA, $iv)));
+    $decrypted = openssl_decrypt(base64_decode($data), 'AES-128-CBC', $key,OPENSSL_RAW_DATA, $iv);
+    return $decrypted !== false ? trim($decrypted) : $decrypted;
 }
 
 /**
