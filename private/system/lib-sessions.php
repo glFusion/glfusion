@@ -140,11 +140,10 @@ function SESS_sessionCheck()
         if ( $userid == 0 ) {
             $row = $db->conn->fetchAssoc(
                     "SELECT md5_sess_id, start_time FROM `{$_TABLES['sessions']}` WHERE "
-                    . "(remote_ip = ?) AND (start_time > ?) AND (uid = 1)",
-                    array($request_ip,$mintime),
-                    array(Database::STRING,Database::INTEGER)
+                    . "(md5_sess_id = ?) AND (remote_ip = ?) AND (start_time > ?) AND (uid = 1)",
+                    array($sessid, $request_ip,$mintime),
+                    array(Database::STRING,Database::STRING,Database::INTEGER)
             );
-
             if ($row) {
                 $sessid = $row['md5_sess_id'];
                 if ( $row['start_time'] + 60 < time() ) {
