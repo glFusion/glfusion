@@ -74,7 +74,7 @@
 			<div class="uk-form-row">
 				<label class="uk-form-label" for="passwd">{lang_passwd}</label>
 				<div class="uk-form-controls">
-					<input class="required" type="password" id="passwd" name="passwd" value="" onkeyup="runPassword(this.value, 'mypassword');">
+					<input class="required" type="password" id="passwdn" name="passwd" value="" onkeyup="runPassword(this.value, 'mypassword');">
 					<br><label for="passwd" generated="true" class="error"></label>
 				</div>
 			</div>
@@ -155,9 +155,9 @@
 			email_conf: {
 				equalTo: "#email"
 			},
-			passwd: "required",
+			passwdn: "required",
 			passwd_conf: {
-				equalTo: "#passwd"
+				equalTo: "#passwdn"
 			}
 		}
 	});
