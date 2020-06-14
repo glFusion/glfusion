@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Development SQL Updates                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -2095,6 +2095,27 @@ function glfusion_178()
 
 }
 
+function glfusion_179()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    $_SQL = array();
+
+    // No SQL updates in 1.7.8
+
+    foreach ($_SQL as $sql) {
+        DB_query($sql,1);
+    }
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+    $c = config::get_instance();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='1.7.9',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='1.7.9' WHERE name='glfusion'",1);
+
+}
+
 function _spamx_update_config()
 {
     global $_CONF, $_SPX_CONF, $_TABLES;
@@ -2406,7 +2427,7 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br />';
 
-glfusion_178();
+glfusion_179();
 
 // update configuration
 _updateConfig();
