@@ -624,6 +624,8 @@ class Article
                                 Database::STRING
                             )
                     );
+                    $c = Cache::getInstance();
+                    $c->deleteItemsByTag('story_'.$originalSID);
 
                     Cache::getInstance()->deleteItemsByTag('story_'.$originalSID);
                 }
