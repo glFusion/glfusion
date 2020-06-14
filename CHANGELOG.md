@@ -1,6 +1,23 @@
 # glFusion CMS Long Term Support ChangeLog
 
-## v1.7.8.pl1 (Unreleased)
+## v1.7.9 (June XX, 2020)
+
+### Updates
+  - Updated html2text/html2text (4.2.1 => 4.3.1)
+  - Updated james-heinrich/getid3 (v1.9.18 => v1.9.19)
+  - Updated phpmailer/phpmailer (v5.2.27 => v5.2.28)
+  - Updated simplepie/simplepie (1.5.3 => 1.5.5)
+  - Updated phpxmlrpc/phpxmlrpc (4.4.1 => 4.4.2)
+  - Updated robthree/twofactorauth (1.6.7 => 1.7.0)
+
+### Fixed
+  - Story post hour was incorrectly calculated
+  - Post action messages where not being properly displayed. For example, save a group membership and the confirmation message did not display.
+  - Upgrade issues when upgrading very old glFusion sites
+
+### Changed
+
+## v1.7.8.pl1 (January 1, 2020)
 
 ### Added
   - Added SECURITY.md - glFusion Security Policy
