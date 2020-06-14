@@ -2526,7 +2526,7 @@ input.error {
 	display: block;
 	border-bottom: 1px solid #000;
 }
-
+/*
 .slider_checkbox input[type=checkbox]:checked:before,
 .uk-form.slide_checkbox input[type=checkbox]:indeterminate:before {
 	content: "" !important;
@@ -2588,6 +2588,8 @@ input.error {
 	left: 45%;
 	content: "\f00c";
 }
+
+*/
 
 /* this reverses the order for things like draft flag yes / now - but our display is published yes / no */
 
