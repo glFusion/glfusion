@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion installation script.                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2019 by the following authors:                        |
+// | Copyright (C) 2008-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -685,7 +685,7 @@ function INST_personalizeAdminAccount($site_mail, $site_url)
  * @param   array $_SQL   Array of queries
  *
  */
-function INST_updateDB($_SQL,$use_innodb)
+function INST_updateDB($_SQL,$use_innodb = false)
 {
     global $_DB, $_DB_dbms;
 
@@ -998,7 +998,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $c->add('registration_type',0,'select',4,19,27,785,TRUE,'Core');
             DB_query("ALTER TABLE {$_TABLES['users']} ADD act_token VARCHAR(32) NOT NULL DEFAULT '' AFTER pwrequestid",1);
-            DB_query("ALTER TABLE {$_TABLES['users']} ADD act_time DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00.000000' AFTER act_token",1);
+            DB_query("ALTER TABLE {$_TABLES['users']} ADD act_time DATETIME NOT NULL default '1970-01-01 00:00:00' AFTER act_token",1);
 
             $c->del('cookie_ip','Core');
             DB_query("ALTER TABLE {$_TABLES['sessions']} DROP PRIMARY KEY",1);
@@ -1020,7 +1020,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '1.2.2' :
         case '1.2.3' :
             require_once $_CONF['path'] . 'sql/updates/mysql_1.2.2_to_1.3.0.php';
-            list($rc,$errors) = INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL,false);
             if ( $rc === false ) {
                 return array($rc,$errors);
             }
@@ -1496,7 +1496,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `sv_autoplay` TINYINT(3) NOT NULL DEFAULT '0' AFTER `story_video`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['topics']} ADD `description` TEXT AFTER `topic`;";
 
-            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `frontpage_date` DATETIME NULL DEFAULT NULL AFTER `frontpage`;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `frontpage_date` DATETIME NOT NULL default '1970-01-01 00:00:00' AFTER `frontpage`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD INDEX `frontpage_date` (`frontpage_date`);";
 
             // comment submission support
@@ -1625,8 +1625,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '1.7.6' :
             // fix invalid defaults
             $sql = "ALTER TABLE `{$_TABLES['stories']}`
-                CHANGE COLUMN `comment_expire` `comment_expire` DATETIME NULL DEFAULT NULL,
-                CHANGE COLUMN `expire` `expire` DATETIME NULL DEFAULT NULL;";
+                CHANGE COLUMN `comment_expire` `comment_expire` DATETIME NOT NULL default '1970-01-01 00:00:00',
+                CHANGE COLUMN `expire` `expire` DATETIME NOT NULL default '1970-01-01 00:00:00';";
             DB_query($sql,1);
 
             $sql = "UPDATE `{$_TABLES['stories']}` SET `comment_expire` = NULL WHERE CAST(`comment_expire` AS CHAR(20)) = '0000-00-00 00:00:00';";
@@ -1648,8 +1648,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query($sql,1);
 
             $sql = "ALTER TABLE `{$_TABLES['users']}`
-            	CHANGE COLUMN `regdate` `regdate` DATETIME NULL DEFAULT NULL AFTER `sig`,
-            	CHANGE COLUMN `act_time` `act_time` DATETIME NULL DEFAULT NULL AFTER `act_token`;";
+            	CHANGE COLUMN `regdate` `regdate` DATETIME NOT NULL default '1970-01-01 00:00:00' AFTER `sig`,
+            	CHANGE COLUMN `act_time` `act_time` DATETIME NOT NULL default '1970-01-01 00:00:00' AFTER `act_token`;";
             DB_query($sql,1);
 
             $sql = "UPDATE `{$_TABLES['users']}` SET `act_time` = '1970-01-01 00:00:00' WHERE CAST(`act_time` AS CHAR(20)) = '0000-00-00 00:00:00';";
@@ -1673,10 +1673,14 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query($sql,1);
 
             $current_fusion_version = '1.7.7';
-            
+
         case '1.7.7' :
             //no changes
             $current_fusion_version = '1.7.8';
+
+        case '1.7.8' :
+            // no changes
+            $current_fusion_version = '1.7.9';
 
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
@@ -2069,7 +2073,6 @@ function INST_identifyglFusionVersion ()
     //
     // Should always include a test for the current version so that we can
     // warn the user if they try to run the update again.
-
 
     switch ($_DB_dbms) {
 
