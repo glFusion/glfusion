@@ -73,6 +73,7 @@ function SESS_sessionCheck()
 
     unset($_USER);
     $userdata = array();
+    $sessid = false;
 
     $db = Database::getInstance();
 
