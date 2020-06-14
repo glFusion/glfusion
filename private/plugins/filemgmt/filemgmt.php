@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2019 by the following authors:                        |
+// | Copyright (C) 2009-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -42,7 +42,7 @@ global $_DB_table_prefix, $_TABLES;
 $CONF_FM['pi_name']            = 'filemgmt';
 $CONF_FM['pi_display_name']    = 'FileMgmt';
 $CONF_FM['pi_version']         = '1.7.8';
-$CONF_FM['gl_version']         = '1.7.8';
+$CONF_FM['gl_version']         = '1.7.9';
 $CONF_FM['pi_url']             = 'https://www.glfusion.org/';
 
 // Database Tables

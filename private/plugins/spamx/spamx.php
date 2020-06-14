@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin system integration options                                        |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2019 by the following authors:                        |
+// | Copyright (C) 2009-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -41,7 +41,7 @@ if (!defined ('GVERSION')) {
 $_SPX_CONF['pi_name']            = 'spamx';
 $_SPX_CONF['pi_display_name']    = 'SpamX';
 $_SPX_CONF['pi_version']         = '2.0.1';
-$_SPX_CONF['gl_version']         = '1.7.8';
+$_SPX_CONF['gl_version']         = '1.7.9';
 $_SPX_CONF['pi_url']             = 'https://www.glfusion.org/';
 
 $_TABLES['spamx']               = $_DB_table_prefix . 'spamx';
