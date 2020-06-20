@@ -69,6 +69,7 @@
 ### Fixed
 
   - PHP v7.4 Compatibility Fixes
+  - Error changing article SID
 
 ### Security
 
