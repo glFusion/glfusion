@@ -625,7 +625,7 @@ class Article
                             )
                     );
 
-                    $c->deleteItemsByTag('story_'.$originalSID);
+                    Cache::getInstance()->deleteItemsByTag('story_'.$originalSID);
                 }
             }
 
