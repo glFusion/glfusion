@@ -299,8 +299,10 @@ if ( $limituser ) {
 }
 
 if ($newstories) {
-    $sql = "(date >= (date_sub(NOW(), INTERVAL :interval SECOND))) ";
+    $now = new \Date('now',$_USER['tzid']);
+    $sql = "(date >= (date_sub(:now, INTERVAL :interval SECOND))) ";
     $queryBuilder->andWhere($sql);
+    $queryBuilder->setParameter('now',$now);
     $queryBuilder->setParameter('interval',$_CONF['newstoriesinterval'],Database::INTEGER);
 }
 
