@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 207-2019 by the following authors:
+*  Copyright (C) 207-2020 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Caching and logic processing developed by:
