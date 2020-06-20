@@ -85,7 +85,13 @@ class PDOStatement extends \PDOStatement implements Statement
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed    $column
+     * @param mixed    $variable
+     * @param int      $type
+     * @param int|null $length
+     * @param mixed    $driverOptions
+     *
+     * @return bool
      */
     public function bindParam($column, &$variable, $type = ParameterType::STRING, $length = null, $driverOptions = null)
     {
@@ -195,7 +201,7 @@ class PDOStatement extends \PDOStatement implements Statement
         if (! isset(self::PARAM_TYPE_MAP[$type])) {
             // TODO: next major: throw an exception
             @trigger_error(sprintf(
-                'Using a PDO parameter type (%d given) is deprecated and will cause an error in Doctrine 3.0',
+                'Using a PDO parameter type (%d given) is deprecated and will cause an error in Doctrine DBAL 3.0',
                 $type
             ), E_USER_DEPRECATED);
 
@@ -216,7 +222,7 @@ class PDOStatement extends \PDOStatement implements Statement
             // TODO: next major: throw an exception
             @trigger_error(sprintf(
                 'Using a PDO fetch mode or their combination (%d given)' .
-                ' is deprecated and will cause an error in Doctrine 3.0',
+                ' is deprecated and will cause an error in Doctrine DBAL 3.0',
                 $fetchMode
             ), E_USER_DEPRECATED);
 
