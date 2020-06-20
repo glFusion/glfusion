@@ -6,21 +6,22 @@
   </div>
 
   <div class="uk-form-row">
-    <label class="uk-form-label" for="emailfromuser">{lang_emailfromuser}</label>
+    <label class="uk-form-label uk-checkbox" for="emailfromuser">{lang_emailfromuser}
+    </label>
     <div class="uk-form-controls">
-      <input type="checkbox" id="emailfromuser" name="emailfromuser" {emailfromuser_checked} />
+      <input class="uk-checkbox" type="checkbox" id="emailfromuser" name="emailfromuser" {emailfromuser_checked} />
     </div>
   </div>
   <div class="uk-form-row">
-    <label class="uk-form-label" for="emailfromadmin">{lang_emailfromadmin}</label>
+    <label class="uk-form-label uk-checkbox" for="emailfromadmin">{lang_emailfromadmin}</label>
     <div class="uk-form-controls">
-      <input type="checkbox" id="emailfromadmin" name="emailfromadmin" {emailfromadmin_checked} />
+      <input class="uk-checkbox" type="checkbox" id="emailfromadmin" name="emailfromadmin" {emailfromadmin_checked} />
     </div>
   </div>
   <div class="uk-form-row">
-    <label class="uk-form-label" for="showonline">{lang_showonline}</label>
+    <label class="uk-form-label uk-checkbox" for="showonline">{lang_showonline}</label>
     <div class="uk-form-controls">
-      <input type="checkbox" id="showonline" name="showonline" {showonline_checked} />
+      <input class="uk-checkbox" type="checkbox" id="showonline" name="showonline" {showonline_checked} />
     </div>
   </div>
   {plugin_privacy_privacy}
