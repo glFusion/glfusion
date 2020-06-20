@@ -116,9 +116,18 @@ function FF_newPosts($forum = 0)
         $sql = "SELECT * FROM {$_TABLES['ff_topic']} a
                 LEFT JOIN (SELECT topic, time, uid as user FROM {$_TABLES['ff_log']} WHERE uid=".(int)$_USER['uid'].") as l on a.id=l.topic
                 LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id
-                WHERE (pid=0) $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0
+                WHERE (a.pid=0) $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0
                 and (l.topic IS NULL OR a.lastupdated > l.time)
                 ORDER BY $orderby $direction";
+/*
+// working on a better optimized query
+        $sql = "SELECT * FROM {$_TABLES['ff_topic']} a
+                LEFT JOIN {$_TABLES['ff_log']}  as l on a.id=l.topic
+                LEFT JOIN {$_TABLES['ff_forums']} b ON a.forum=b.forum_id
+                WHERE l.uid=".(int)$_USER['uid'] . " AND a.pid=0 $inforum AND b.grp_id IN (".$grouplist.") AND b.no_newposts = 0
+                and (l.topic IS NULL OR a.lastupdated > l.time)
+                ORDER BY $orderby $direction";
+*/
     }
 
     $result = DB_query($sql);
