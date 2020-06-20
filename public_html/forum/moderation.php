@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Moderation routines                                                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -351,13 +351,18 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
         $move_to_topic = $move_to_topic_pid;
     }
 
+// if curpostpid === 0 this means it is the top post
     if ($curpostpid == 0 ) {
         $subject = DB_escapeString(DB_getItem($_TABLES['ff_topic'],'subject','id='.(int) $move_to_topic));
         $pidDate = DB_getItem($_TABLES['ff_topic'],'date','id='.(int) $move_to_topic);
+
         $moveResult = DB_query("SELECT id,date FROM {$_TABLES['ff_topic']} WHERE pid=".(int) $topic_id);
         $postCount = DB_numRows($moveResult)+1;  // Need to account for the parent post
+// loop through all the posts and move them one by one - this does not move the parent topic
         while($movetopic = DB_fetchArray($moveResult)) {
+// set the new forum and pid for the post
             DB_query("UPDATE {$_TABLES['ff_topic']} SET forum=".(int)$move_to_forum.",pid=".(int)$move_to_topic.",subject='".$subject."' WHERE id=".(int) $movetopic['id']);
+
             // check to see if we need to swap pids
             if ( $movetopic['date'] < $pidDate ) {
                 DB_query("UPDATE {$_TABLES['ff_topic']} SET pid=".(int) $movetopic['id']." WHERE id=".(int) $move_to_topic);
@@ -366,6 +371,16 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
                 $move_to_topic = $movetopic['id'];
                 $pidDate = $movetopic['date'];
             }
+            // now call PLG_itemDeleted() for the orignal post
+            // id = (int) $movetopic['id']
+            // type = forum
+
+            // now call PLG_itemSaved() for the new topic
+            // id = (int) movetopic['id']
+            // type = forum
+            PLG_itemDelete($movetopic['id'],'forum');
+            PLG_itemSaves($movetopic['id'],'forum');
+
         }
         // Update any topic subscription records - need to change the forum ID record
         //check if the whole forum is already subscribed to?
@@ -374,6 +389,8 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
         } else {
             DB_query("DELETE FROM {$_TABLES['subscriptions']} WHERE type='forum' AND id=".(int)$topic_id);
         }
+
+
         // this moves the parent record.
         DB_query("UPDATE {$_TABLES['ff_topic']} SET forum=".(int)$move_to_forum.",pid=".(int)$move_to_topic.",subject='".$subject."' WHERE id=".(int)$topic_id);
         $topicDate = DB_getItem($_TABLES['ff_topic'],'date','id='.(int) $topic_id);
@@ -384,6 +401,16 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
             $move_to_topic = $topic_id;
             $pidDate = $topicDate;
         }
+        // need to PLG_itemDeleted() the original post
+        // id = $topic_id
+        // type = forum
+
+        // need to PLG_itemSaved() for the moved post
+        // id = topic-id
+        // type = forum
+        PLG_itemDeleted($topic_id,'forum');
+        PLG_itemSaved($topic_id,'forum');
+
         // new forum
         $postCount = DB_Count($_TABLES['ff_topic'],'forum',(int) $move_to_forum);
         $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=".(int) $move_to_forum." AND pid=0");
@@ -419,13 +446,13 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
         $c = Cache::getInstance()->deleteItemsByTag('forumcb');
         $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topic_id;
         $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
+// this is a child post - it has a parent_id that isn't 0 - so we are moving a single post
     } else {
         $subject = DB_escapeString(DB_getItem($_TABLES['ff_topic'],'subject','id='.(int) $move_to_topic));
 
         $sql  = "UPDATE {$_TABLES['ff_topic']} SET forum=".(int) $move_to_forum.", pid=".(int) $move_to_topic.", subject='".$subject."' WHERE id=".(int)$topic_id;
         DB_query($sql);
         DB_query("UPDATE {$_TABLES['ff_topic']} SET replies=replies-1 WHERE id=".(int)$curpostpid);
-
         $movedDate = DB_getItem($_TABLES['ff_topic'],'date','id='.(int)$topic_id);
         $targetDate = DB_getItem($_TABLES['ff_topic'],'date','id='.(int) $move_to_topic);
         if ( $movedDate < $targetDate ) {
@@ -435,6 +462,12 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
             $move_to_topic = $topic_id;
             $pidDate = $movedDate;
         }
+        // need to PLG_itemDeleted() the original post
+        // id = topic_id
+        // need to PLG_itemSaved() for the moved post
+        // id = topic_id
+        PLG_itemDeleted($topic_id,'forum');
+        PLG_itemSaved($topic_id,'forum');
 
         // Update Topic and Post Count for the effected forums
         // new forum
@@ -471,7 +504,7 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
         $retval .= FF_statusMessage($LANG_GF02['msg163'],$link,$LANG_GF02['msg163'],false,'',true);
     }
 
-\glFusion\Admin\AdminAction::write('forum','merge_post','Merge Topic ID: ' . $topic_id . ' to forum: ' . $move_to_forum . ' topic id ' . $move_to_topic);
+    \glFusion\Admin\AdminAction::write('forum','merge_post','Merge Topic ID: ' . $topic_id . ' to forum: ' . $move_to_forum . ' topic id ' . $move_to_topic);
 
     return $retval;
 }
