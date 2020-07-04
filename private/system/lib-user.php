@@ -870,7 +870,8 @@ function USER_addGroup ($groupid, $uid = '')
                             Database::INTEGER
                         )
         );
-
+        $cache_key = 'user_group_all_' . $uid;
+        Cache::getInstance()->delete($cache_key);
         return true;
     }
 }
@@ -910,6 +911,8 @@ function  USER_delGroup ($groupid, $uid = '')
 
     if (($groupid > 0) && SEC_inGroup ($groupid, $uid)) {
         $db->conn->delete($_TABLES['group_assignments'],array('ug_main_grp_id'=>$groupid,'ug_uid'=>$uid),array(Database::INTEGER,Database::INTEGER));
+        $cache_key = 'user_group_all_' . $uid;
+        Cache::getInstance()->delete($cache_key);
         return true;
     } else {
         return false;
