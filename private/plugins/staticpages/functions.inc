@@ -467,7 +467,9 @@ function SP_printPage ($page, $A)
     $print->set_var ('page_title', $_CONF['site_name'] . ' - ' . $A['sp_title']);
     $sp_url = COM_buildUrl ($_CONF['site_url'].'/page.php?page=' . $page);
     $print->set_var ('sp_url', $sp_url);
-    $print->set_var ('sp_title', $A['sp_title']);
+    if (isset($A['sp_inblock']) && $A['sp_inblock']) {
+        $print->set_var ('sp_title', $A['sp_title']);
+    }
     $print->set_var ('sp_content', SP_render_content ($A['sp_content'], $A['sp_php']));
     $print->set_var ('sp_hits', COM_numberFormat ($A['sp_hits']));
     $printable = COM_buildURL($_CONF['site_url'].'/page.php?page=' . $page . '&amp;mode=print');
