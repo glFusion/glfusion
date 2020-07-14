@@ -893,6 +893,20 @@ function ADMIN_createMenu($menu_arr, $text, $icon = '')
         } else {
             $admin_templates->unset_var('menu_item_active');
         }
+
+        if (isset($menu_arr[$i]['submenu']) && is_array($menu_arr[$i]['submenu'])) {
+            $admin_templates->set_var('haschildren', true);
+            $admin_templates->set_block('top_menu', 'menu_submenu', 'menu_sm');
+            foreach ($menu_arr[$i]['submenu'] as $submenu) {
+                $admin_templates->set_var(array(
+                    'sm_url'   => $submenu['url'],
+                    'sm_text'  => $submenu['text'],
+                ) );
+                $admin_templates->parse('menu_sm', 'menu_submenu', true);
+            }
+        } else {
+            $admin_templates->unset_var('haschildren');
+        }
         $admin_templates->parse('menuvar', 'menu_items',true);
         $admin_templates->parse('alt_menuvar', 'alt_menu_items',true);
 

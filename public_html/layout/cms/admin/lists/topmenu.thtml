@@ -2,7 +2,21 @@
 <nav class="uk-navbar tm-admin-navbar uk-margin">
 	<ul class="uk-navbar-nav uk-hidden-small">
 <!-- BEGIN menu_items -->
-		<li {!if menu_item_active} class="uk-active" {!endif}><a href="{menu_item_url}">{menu_item_text}</a></li>
+{!if haschildren}
+                <li class="{!if menu_item_active}uk-active{!endif}uk-parent" data-uk-dropdown>
+                    <a href="{menu_item_url}">{menu_item_text} <i class="uk-icon uk-icon-caret-down"></i></a>
+                    <div class="uk-dropdown uk-dropdown-navbar">
+                        <ul class="uk-nav uk-nav-navbar">
+<!-- BEGIN menu_submenu -->
+                            <li><a href="{sm_url}">{sm_text}</a></li>
+<!-- END menu_submenu -->
+                        </ul>
+                    </div>
+{!else}
+                <li {!if menu_item_active} class="uk-active" {!endif}>
+                    <a href="{menu_item_url}">{menu_item_text}</a>
+{!endif}
+                </li>
 <!-- END menu_items -->
 	</ul>
 {!if lang_instructions}
