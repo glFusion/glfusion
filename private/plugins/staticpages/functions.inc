@@ -1053,7 +1053,13 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
         }
 
         if (($autotag['tag'] == 'staticpage') || ($autotag['tag'] == 'staticpage_content' )) {
-            $sp_id = COM_applyFilter($autotag['parm1']);
+            $parts = explode('#', $autotag['parm1']);
+            $sp_id = COM_applyFilter($parts[0]);
+            if (isset($parts[1])) {
+                $anchor = '#' . $parts[1];
+            } else {
+                $anchor = '';
+            }
             if ( empty($sp_id) ) {
                 $content = str_replace ($autotag['tagstr'], '',$content);
                 return $content;
@@ -1074,7 +1080,7 @@ function plugin_autotags_staticpages($op, $content = '', $autotag = '')
             $S = DB_fetchArray($result);
             if (($autotag['tag'] == 'staticpage')) {
                 $url = COM_buildUrl($_CONF['site_url']
-                                    . '/page.php?page=' . $sp_id);
+                                    . '/page.php?page=' . $sp_id . $anchor);
                 if (empty($autotag['parm2'])) {
                     $linktext = $S['sp_title'];
                 } else {
