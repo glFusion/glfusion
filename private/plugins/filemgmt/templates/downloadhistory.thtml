@@ -1,0 +1,21 @@
+{# begin {templatelocation} #}
+<h2 style="text-align:center;">{$LANG_FILEMGMT['DownloadReport']}</h2>
+<h4>File: {dtitle}</h4>
+{admin_list}
+{!if 0}
+<table class="uk-table uk-table-hover uk-table-striped plugin">
+    <tr>
+        <th width="20%">Date</td>
+        <th width="20%">User</td>
+        <th width="20%">Remote IP</td>
+    </tr>
+<!-- BEGIN dataRow -->
+    <tr>
+        <td>{date}</td>
+        <td>{username}</td>
+        <td>{remote_ip}</td>
+    </tr>
+<!-- END dataRow -->
+</table>
+{!endif}
+{# end {templatelocation} #}

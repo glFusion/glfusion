@@ -46,46 +46,81 @@ if (!SEC_hasRights("filemgmt.edit")) {
     redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOADMIN);
     exit();
 }
+
+USES_lib_admin();
+
+$display = COM_siteHeader('none');
+
 $lid = COM_applyFilter($_GET['lid'],true);
 
 $result=DB_query("SELECT title FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
-list($dtitle)=DB_fetchARRAY($result);
+list($dtitle)=DB_fetchArray($result);
 
-$result=DB_query("SELECT date,uid,remote_ip FROM {$_TABLES['filemgmt_history']} WHERE lid='".DB_escapeString($lid)."'");
-$display = COM_siteHeader('none');
+$sql = "SELECT fh.date, fh.uid, fh.remote_ip, u.username
+    FROM {$_TABLES['filemgmt_history']} fh
+    LEFT JOIN {$_TABLES['users']} u
+    ON u.uid = fh.uid
+    WHERE fh.lid = $lid";
+$header_arr = array(
+    array(
+        'text'  => 'Date',
+        'field' => 'date',
+        'sort'  => true,
+    ),
+    array(
+        'text'  => 'User',
+        'field' => 'username',
+        'sort'  => false,
+    ),
+    array(
+        'text'  => 'Remote IP',
+        'field' => 'remote_ip',
+        'sort'  => false,
+    ),
+);
+$defsort_arr = array(
+    'field' => 'date',
+    'direction' => 'desc',
+);
 
-$display .= "<table width='100%' border='0' cellspacing='1' cellpadding='4' class='plugin'><tr>";
-$display .= "<td colspan='3'><center><H2>". $LANG_FILEMGMT['DownloadReport'] ."</H2></center></td></tr><tr>";
-$display .= "<td colspan='3'><H4>File: " .$dtitle ."</H4></td></tr><tr>";
-$display .= "<td bgcolor='#000000' width='20%'><b><center><font color='#ffffff' size='3'>Date</font></center></b></td>";
-$display .= "<td bgcolor='#000000' width='20%'><b><center><font color='#ffffff' size='3'>User</font></center></b></td>";
-$display .= "<td bgcolor='#000000' width='20%'><b><center><font color='#ffffff' size='3'>Remote IP</font></center></b></td>";
-$display .= "</tr>";
+$content = '';
+$query_arr = array(
+    'table' => 'shop.products',
+    'sql'   => $sql,
+    'query_fields' => array(),
+    'default_filter' => '',
+);
+$filter = '';
+$options = '';
+$text_arr = array(
+    'has_extras' => false,
+    'form_url' => $_CONF['site_url'] . "/filemgmt/downloadhistory.php?lid=$lid",
+);
 
-$highlight = true;
-while(list($date,$uid,$remote_ip)=DB_fetchARRAY($result)){
-    $result2 = DB_query("SELECT username  FROM {$_TABLES['users']} WHERE uid = $uid");
-    list ($username) = DB_fetchARRAY($result2);
-    $result2 = DB_query("SELECT username  FROM {$_TABLES['users']} WHERE uid = $uid");
-    list ($username) = DB_fetchARRAY($result2);
+$content .= ADMIN_list(
+    'filemgmt_downloadhistory',
+    NULL,
+    $header_arr, $text_arr, $query_arr, $defsort_arr,
+    $filter, '', $options, ''
+);
 
-    if ($highlight) {
-           $highlight=false;
-        $display .= "<td bgcolor='#f5f5f5' width=20%>$date</td>";
-        $display .= "<td bgcolor='#f5f5f5' width=20%>$username</td>";
-        $display .= "<td bgcolor='#f5f5f5' width=20%>$remote_ip</td>";
-        $display .= "</tr>";
-    }else {
-        $highlight=true;
-        $display .= "<td  width=20%>$date</td>";
-        $display .= "<td  width=20%>$username</td>";
-        $display .= "<td  width=20%>$remote_ip</td>";
-        $display .= "</tr>";
-    }
+$T = new Template($_CONF['path'] . 'plugins/filemgmt/templates/');
+$T->set_file('report', 'downloadhistory.thtml');
+$T->set_var('dtitle', $dtitle);
+$T->set_var('admin_list', $content);
 
-}
-$display .= "</table>";
-$display .= "<br>";
+/*$result = DB_query($sql);
+$T->set_block('report', 'dataRow', 'dr');
+while ($A = DB_fetchArray($result, false)) {
+    $T->set_var(array(
+        'date'  => $A['date'],
+        'username' => $A['username'],
+        'remote_ip' => $A['remote_ip'],
+    ) );
+    $T->parse('dr', 'dataRow', true);
+}*/
+$T->parse('output', 'report');
+$display .= $T->finish ($T->get_var('output'));
 $display .= COM_siteFooter();
 echo $display;
 
