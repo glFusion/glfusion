@@ -40,6 +40,8 @@ require_once '../lib-common.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 
+$lid = COM_applyFilter($_GET['lid'],true);
+
 // Comment out the following security check if you want general filemgmt users access to this report
 if (!SEC_hasRights("filemgmt.edit")) {
     COM_errorLOG("Downloadhistory.php => Filemgmt Plugin Access denied. Attempted access for file ID:{$lid}, Remote address is:{$_SERVER['REMOTE_ADDR']}");
@@ -50,8 +52,6 @@ if (!SEC_hasRights("filemgmt.edit")) {
 USES_lib_admin();
 
 $display = COM_siteHeader('none');
-
-$lid = COM_applyFilter($_GET['lid'],true);
 
 $result=DB_query("SELECT title FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
 list($dtitle)=DB_fetchArray($result);
