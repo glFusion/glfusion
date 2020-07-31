@@ -41,56 +41,6 @@ if (!in_array('polls', $_PLUGINS)) {
     exit;
 }
 
-
-/**
-* Shows all polls in system
-*
-* List all the polls on the system if no $pid is provided
-*
-* @return   string          HTML for poll listing
-*
-*/
-function POLLS_pollList()
-{
-    global $_CONF, $_TABLES, $_USER, $_PO_CONF,
-           $LANG25, $LANG_LOGIN, $LANG_POLLS;
-
-    $retval = '';
-
-        if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
-            ($_PO_CONF['pollsloginrequired'] == 1))) {
-        $retval .= SEC_loginRequiredForm();
-    } else {
-        USES_lib_admin();
-
-        $header_arr = array(    // display 'text' and use table field 'field'
-                        array('text' => $LANG25[9], 'field' => 'topic', 'sort' => true),
-                        array('text' => $LANG25[20], 'field' => 'voters', 'sort' => true, 'align' => 'center'),
-                        array('text' => $LANG25[3], 'field' => 'unixdate', 'sort' => true, 'align' => 'center'),
-                        array('text' => $LANG_POLLS['open_poll'], 'field' => 'is_open', 'sort' => true, 'align' => 'center')
-        );
-
-        $defsort_arr = array('field' => 'unixdate', 'direction' => 'desc');
-
-        $text_arr = array('has_menu' =>  false,
-                          'title' => $LANG_POLLS['pollstitle'], 'instructions' => "",
-                          'icon' => '', 'form_url' => '');
-
-        $query_arr = array('table' => 'polltopics',
-                           'sql' => $sql = "SELECT *,UNIX_TIMESTAMP(date) AS unixdate, display "
-                                . "FROM {$_TABLES['polltopics']} WHERE 1=1",
-                           'query_fields' => array('topic'),
-                           'default_filter' => COM_getPermSQL (),
-                           'query' => '',
-                           'query_limit' => 0);
-
-        $retval .= ADMIN_list ('polls', 'POLLS_getListField',
-                   $header_arr, $text_arr, $query_arr, $defsort_arr, '', $token='dummy');
-    }
-
-    return $retval;
-}
-
 // MAIN ========================================================================
 //
 // no pid will load a list of polls
@@ -114,10 +64,25 @@ if ( $type != '' && $type != 'article' ) {
     }
 }
 
-if (isset ($_POST['reply']) && ($_POST['reply'] == $LANG01[25])) {
-    echo COM_refresh ($_CONF['site_url'] . '/comment.php?sid='
-             . $pid . '&pid=' . $pid
-             . '&type=' . $type);
+$expected = array(
+    'reply', 'votebutton', 'results',
+);
+$action = 'listpolls';
+foreach ($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+        $actionval = $_POST[$provided];
+    } elseif (isset($_GET[$provided])) {
+        $action = $provided;
+        $actionval = $_GET[$provided];
+    }
+}
+
+if ($action == 'reply') {
+    // Handle a comment submission
+    echo COM_refresh(
+        $_CONF['site_url'] . '/comment.php?sid=' . $pid . '&pid=' . $pid . '&type=' . $type
+    );
     exit;
 }
 
@@ -135,6 +100,7 @@ if (isset ($_REQUEST['pid'])) {
 } elseif ( isset($_GET['id']) ) {
     $pid = COM_sanitizeID(COM_applyFilter($_GET['id']));
 }
+
 $order = '';
 if (isset ($_REQUEST['order'])) {
     $order = COM_applyFilter ($_REQUEST['order']);
@@ -149,62 +115,63 @@ if (isset($_REQUEST['msg'])) {
 }
 
 if ($pid != '') {
-    $questions_sql = "SELECT question,qid FROM {$_TABLES['pollquestions']} "
-    . "WHERE pid='".DB_escapeString($pid)."' ORDER BY qid";
-    $questions = DB_query($questions_sql);
-    $nquestions = DB_numRows($questions);
-
-    if ( $nquestions == 0 ) {
-        COM_setMsg($LANG_POLLS['deny_msg'],'error',true);
-        $page .= POLLS_pollList ();
-    }
+    $Poll = Polls\Poll::getInstance($pid);
 }
-if (empty($pid) || $pid == '') {
-    $title = $LANG_POLLS['pollstitle'];
-    if ($msg > 0) {
-        $page .= COM_showMessage($msg, 'polls');
-    }
-    $page .= POLLS_pollList ();
-} else if ((isset($_POST['aid']) && is_array($_POST['aid']) && (count($_POST['aid']) == $nquestions)) && !isset($_COOKIE['poll-' . $pid])) {
-    setcookie ('poll-'.$pid, 'x', time() + $_PO_CONF['pollcookietime'],
-               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-               $_CONF['cookiesecure']);
 
-    $page .= POLLS_saveVote($pid, $aid);
-
-} else if (isset($pid)) {
-    if ($msg > 0) {
-        $page .= COM_showMessage($msg, 'polls');
+switch ($action) {
+case 'votebutton':
+    // Get the answer array and check that the number is right, and the user hasn't voted
+    $aid = (isset($_POST['aid']) && is_array($_POST['aid'])) ? $_POST['aid'] : array();
+    if ($Poll->alreadyVoted()) {
+        COM_setMsg("Your vote has already been recorded.");
+        COM_refresh($_CONF['site_url'] . '/polls/index.php');
+    } elseif (count($aid) == $Poll->numQuestions()) {
+        setcookie(
+            'poll-' . $pid, 'x',
+            time() + $_PO_CONF['pollcookietime'],
+            $_CONF['cookie_path'],
+            $_CONF['cookiedomain'],
+            $_CONF['cookiesecure']
+        );
+        if ($Poll->saveVote($aid)) {
+            COM_refresh($_CONF['site_url'] . '/polls/index.php?results=x&pid=' . $Poll->getID());
+        } else {
+            COM_refresh($_CONF['site_url'] . '/polls/index.php');
+        }
+    } else {
+        $page .= $Poll->Render();
     }
-    if (isset($_POST['aid'])) {
+    break;
 
-        $tp = DB_getItem ($_TABLES['polltopics'], 'topic', "pid = '".DB_escapeString($pid)."'");
+case 'results':
+    $page .= $Poll->showResults(400, $order, $mode);
+    break;
 
-        $eMsg = $LANG_POLLS['answer_all'] . ' "'
-            . $filter->filterData($tp) . '"';
-        $page .= COM_showMessageText($eMsg,$LANG_POLLS['not_saved'],true,'error');
-    }
-    if (DB_getItem($_TABLES['polltopics'], 'is_open', "pid = '".DB_escapeString($pid)."'") != 1) {
-        $aid = -1; // poll closed - show result
-    }
-    if (!isset ($_COOKIE['poll-'.$pid])
-        && !POLLS_ipAlreadyVoted ($pid)
-        && $aid != -1
+default:
+    if (isset($Poll) && !$Poll->isNew()) {
+        if ($msg > 0) {
+            $page .= COM_showMessage($msg, 'polls');
+        }
+        if (isset($_POST['aid'])) {
+            $eMsg = $LANG_POLLS['answer_all'] . ' "' . $filter->filterData($Poll->getTopic()) . '"';
+            $page .= COM_showMessageText($eMsg,$LANG_POLLS['not_saved'],true,'error');
+        }
+        if (!$Poll->isOpen()) {
+            $aid = -1; // poll closed - show result
+        }
+        if (
+            !$Poll->alreadyVoted()
+            && $aid != -1
         ) {
-        $page .= POLLS_pollVote($pid);
+            $page .= $Poll->Render();
+        } else {
+            $page .= $Poll->showResults(400, $order, $mode);
+        }
     } else {
-        $page .= POLLS_pollResults($pid, 400, $order, $mode);
-    }
-} else {
-    $poll_topic = DB_query ("SELECT topic FROM {$_TABLES['polltopics']} WHERE pid='".DB_escapeString($pid)."'" . COM_getPermSql ('AND'));
-    $Q = DB_fetchArray ($poll_topic);
-    if (empty ($Q['topic'])) {
         $title = $LANG_POLLS['pollstitle'];
-        $page .= POLLS_pollList();
-    } else {
-        $title = $filter->filterData($Q['topic']);
-        $page .= POLLS_pollResults($pid, 400, $order, $mode);
+        $page .= Polls\Poll::listPolls();
     }
+    break;
 }
 
 $display = POLLS_siteHeader($title);

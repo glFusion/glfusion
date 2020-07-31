@@ -31,6 +31,7 @@ $LANG_POLLS = array(
     'pastpolls'         => 'Past Polls',
     'savedvotetitle'    => 'Vote Saved',
     'savedvotemsg'      => 'Your vote was saved for the poll',
+    'alreadyvoted'      => 'Your vote has already been recorded for this poll.',
     'pollstitle'        => 'Polls in System',
     'polltopics'        => 'Other polls',
     'stats_top10'       => 'Top Ten Polls',

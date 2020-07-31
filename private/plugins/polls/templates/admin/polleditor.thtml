@@ -33,7 +33,7 @@
         <div class="uk-form-row">
           <label class="uk-form-label" for="description">{lang_description}</label>
           <div class="uk-form-controls">
-            <textarea id="description" name="description" class="uk-form-width-large" rows="5" columns="100">{poll_description}</textarea>
+            <textarea id="description" name="description" class="uk-form-width-large" rows="5" columns="100">{description}</textarea>
           </div>
         </div>
         <div class="uk-form-row">
@@ -47,25 +47,25 @@
         <div class="uk-form-row">
           <label class="uk-form-label" for="mainpage">{lang_appearsonhomepage}</label>
           <div class="uk-form-controls">
-            <input type="checkbox" id="mainpage" name="mainpage" {poll_display}>
+            <input type="checkbox" id="mainpage" name="display" value="1" {poll_display}>
           </div>
         </div>
         <div class="uk-form-row slider_checkbox">
           <label class="uk-form-label" for="open">{lang_openforvoting}</label>
           <div class="uk-form-controls">
-            <input type="checkbox" id="open" name="open" {poll_open}>
+            <input type="checkbox" id="open" value="1" name="is_open" {poll_open}>
           </div>
         </div>
         <div class="uk-form-row">
           <label class="uk-form-label" for="login_required">{lang_login_required}</label>
           <div class="uk-form-controls">
-            <input type="checkbox" id="login_required" name="login_required" {poll_login_required}>
+            <input type="checkbox" id="login_required" name="login_required" value="1" {login_req_chk}>
           </div>
         </div>
         <div class="uk-form-row">
           <label class="uk-form-label" for="hideresults">{lang_hideresults}</label>
           <div class="uk-form-controls">
-            <input type="checkbox" id="hideresults" name="hideresults" {poll_hideresults}> <span class="uk-text-small">{poll_hideresults_explain}</span>
+            <input type="checkbox" id="hideresults" name="hideresults" value="1" {poll_hideresults}> <span class="uk-text-small">{poll_hideresults_explain}</span>
           </div>
         </div>
       </li>
