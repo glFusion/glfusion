@@ -648,74 +648,127 @@ function modDownload() {
     echo $display;
 }
 
-function listBrokenDownloads() {
+function listBrokenDownloads()
+{
     global $_CONF,$_TABLES,$_TABLES,$LANG_FM02,$myts,$eh;
 
-    $result = DB_query("SELECT * FROM {$_TABLES['filemgmt_brokenlinks']} ORDER BY reportid");
-    $totalbrokendownloads = DB_numRows($result);
+    USES_lib_admin();
+    $retval = '';
 
+    $header_arr = array(
+        array(
+            'text' => _MD_FILETITLE,
+            'field' => 'title',
+            'sort' => true,
+        ),
+        array(
+            'text' => _MD_REPORTER,
+            'field' => 'reporter',
+        ),
+        array(
+            'text' => _MD_FILESUBMITTER,
+            'field' => 'submitter',
+        ),
+        array(
+            'text' => _MD_IGNORE,
+            'field' => 'ignore',
+            'align' => 'center',
+        ),
+        array(
+            'text' => _MD_DELETE,
+            'field' => 'delete',
+            'align' => 'center',
+        ),
+    );
+    $defsort_arr = array(
+        'field' => 'reportid',
+        'direction' => 'ASC',
+    );
+    $text_arr = array();
+    $options = array();
+    $query_arr = array(
+        'table' => 'filemgmt_brokenlinks',
+        'sql' => "SELECT bl.*, fd.title, fd.url,
+            sub.username AS submitter, sub.email as owneremail,
+            send.username AS reporter, send.email as senderemail
+            FROM {$_TABLES['filemgmt_brokenlinks']} bl
+            LEFT JOIN {$_TABLES['filemgmt_filedetail']} fd ON fd.lid = bl.lid
+            LEFT JOIN {$_TABLES['users']} send ON send.uid = bl.sender
+            LEFT JOIN {$_TABLES['users']} sub ON sub.uid = fd.submitter",
+        'query_fields' => array(),
+        'default_filter' => ''
+    );
+    $form_arr = array();
+    $listing.= ADMIN_list(
+        '_FM_brokenlinklist',
+        '_FM_getBrokenLinkField',
+        $header_arr,
+        $text_arr, $query_arr, $defsort_arr, '', '', $options, $form_arr
+    );
     $display = COM_siteHeader('menu');
     $display .= filemgmt_navbar('listbroken');
-
-    if ($totalbrokendownloads==0) {
-        $display .= '<div style="padding:20px">' . _MD_NOBROKEN . '</div>';
-    } else {
-        $display .= '<form class="uk-form" method="post" action="index.php">';
-        $display .= '<input type="hidden" name="op" value="">';
-        $display .= '<input type="hidden" name="lid" value="">';
-        $display .= '<table class="uk-table uk-width-1-1" border="0" class="plugin">';
-        $display .= '<tr><td colspan="5" class="pluginHeader" style="padding:5px;">' . _MD_BROKENREPORTS. "&nbsp;($totalbrokendownloads)</td></tr>";
-        $display .= '<tr><td colspan="5">' . _MD_IGNOREDESC . "<br" . XHTML . ">"._MD_DELETEDESC."</td></tr>";
-        $display .= '<tr class="pluginHeader"><th>'._MD_FILETITLE.'</th><th>'._MD_REPORTER.'</th>';
-        $display .= '<th>'._MD_FILESUBMITTER.'</th><th>'._MD_IGNORE.'</th><th>'._MD_DELETE.'</th></tr>';
-
-        $cssid = 1;
-        while(list($reportid, $lid, $sender, $ip) = DB_fetchArray($result)) {
-           $result2 = DB_query("SELECT title, url, submitter FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='$lid'");
-           if ($sender != 0) {
-               $result3 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".DB_escapeString($sender)."'");
-               list($sendername, $email) = DB_fetchArray($result3);
-            }
-            list($title, $url, $owner) = DB_fetchArray($result2);
-            $result4 = DB_query("SELECT username, email FROM {$_TABLES['users']} WHERE uid='".DB_escapeString($owner)."'");
-            list($ownername, $owneremail) = DB_fetchArray($result4);
-            $display .= '<tr class="pluginRow'.$cssid.'"><td><a href="'.$_CONF['site_url'].'/filemgmt/visit.php?lid='.$lid.'">'.$title.'</a></td>';
-
-            if ($email == '') {
-                $display .= "<td>$sendername ($ip)";
-            } else {
-               $display .= "<td><a href=mailto:$email>$sendername</a> ($ip)";
-            }
-            $display .= "</td>";
-            if ($owneremail == '') {
-                $display .= "<td>$ownername";
-            } else {
-                $display .= "<td><a href=mailto:$owneremail>$ownername</a>";
-            }
-            $display .= "</td><td style='text-align:center'>";
-            $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.png" ';
-            $display .= 'onClick=\'if (confirm("Delete this broken file report?")) {this.form.op.value="ignoreBrokenDownloads";';
-            $display .= 'this.form.lid.value="'.$lid.'";return true};return false;\'">';
-            $display .= "</td>";
-            $display .= "<td style='text-align:center'>";
-            $display .= '<input type="image" src="'.$_CONF['site_url'].'/filemgmt/images/delete.png" ';
-            $display .= 'onClick=\'if (confirm("Delete the file from your repository?")) {this.form.op.value="delBrokenDownloads";';
-            $display .= 'this.form.lid.value="'.$lid.'";return true};return false;\'">';
-            $display .= "</td></tr>\n";
-            $cssid = ($cssid == 1) ? 2 : 1;
-        }
-        $display .= "</table>";
-    }
-
-    $display .= COM_endBlock();
+    $display .= '<div>' .  _MD_BROKENREPORTS . '</div>' . LB;
+    $display .= '<div>' . _MD_IGNOREDESC . '<br />' . _MD_DELETEDESC . '</div>' . LB;
+    $display .= $listing;
     $display .= COM_siteFooter();
     echo $display;
 }
 
+function _FM_getBrokenLinkField($fieldname, $fieldvalue, $A, $icon_arr)
+{
+    global $_CONF;
+
+    $retval = '';
+    switch ($fieldname) {
+    case 'title':
+        $retval = '<a href="'.$_CONF['site_url'].'/filemgmt/visit.php?lid='.$A['lid'].'">' .
+            $fieldvalue . '</a>';
+        break;
+    case 'sender':
+        if (!empty($A['senderemail'])) {
+            $retval ='<a href="mailto:' . $A['senderemail'] . '">' . $fieldvalue . '</a>';
+        } else {
+            $retval = $fieldvalue;
+        }
+        break;
+    case 'submitter':
+        if (!empty($A['owneremail'])) {
+            $retval ='<a href="mailto:' . $A['owneremail'] . '">' . $fieldvalue . '</a>';
+        } else {
+            $retval = $fieldvalue;
+        }
+        $retval .= ' (' . $A['ip'] . ')';
+        break;
+    case 'ignore':
+        $retval = COM_createLink(
+            '<i class="uk-icon-remove uk-text-danger"></i>',
+            $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?op=ignoreBrokenDownloads&lid=' . $A['lid'],
+            array(
+                'onclick' => "return confirm('Delete this broken file report?')",
+            )
+        );
+        break;
+    case 'delete':
+        $retval = COM_createLink(
+            '<i class="uk-icon-remove uk-text-danger"></i>',
+            $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?op=delBrokenDownloads&lid=' . $A['lid'],
+            array(
+                'onclick' => "return confirm('Delete the file from your repository?')",
+            )
+        );
+        break;
+    default:
+        $retval = $fieldvalue;
+        break;
+    }
+    return $retval;
+}
+
+
 function delBrokenDownloads() {
     global $_TABLES,$eh;
 
-    $lid = $_POST['lid'];
+    $lid = $_REQUEST['lid'];
     DB_query("DELETE FROM {$_TABLES['filemgmt_brokenlinks']} WHERE lid='".DB_escapeString($lid)."'");
     DB_query("DELETE FROM {$_TABLES['filemgmt_filedetail']}  WHERE lid='".DB_escapeString($lid)."'");
     redirect_header("index.php?op=listBrokenDownloads",1,_MD_FILEDELETED);
@@ -725,7 +778,7 @@ function delBrokenDownloads() {
 function ignoreBrokenDownloads() {
     global $_TABLES,$eh;
 
-    $lid = intval($_POST['lid']);
+    $lid = intval($_REQUEST['lid']);
     DB_query("DELETE FROM {$_TABLES['filemgmt_brokenlinks']} WHERE lid='".DB_escapeString($lid)."'");
     redirect_header("index.php?op=listBrokenDownloads",1,_MD_BROKENDELETED);
     exit();
