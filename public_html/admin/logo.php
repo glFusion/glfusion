@@ -23,14 +23,15 @@ USES_lib_admin();
 $display = '';
 
 // Only let admin users access this page
-if (!SEC_hasRights('logo.admin')) {
+/*if (!SEC_hasRights('logo.admin')) {
     Log::logAccessViolation('Logo Administration');
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
     echo $display;
     exit;
-}
+}*/
+
 
 function _logoEdit() {
     global $_CONF, $_LOGO, $_TABLES, $LANG_ADMIN, $LANG_LOGO, $_IMAGE_TYPE;
@@ -166,9 +167,36 @@ if ( isset($_GET['mode']) ) {
     $mode = '';
 }
 
-if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
+if (isset($_POST['action']) && $_POST['action'] == 'ajaxtoggle') {
+    $Logo = new Logo($_POST['theme']);
+    if (!$Logo->Exists()) {
+        // If the logo record doesn't exist yet, create it.
+        $Logo->createRecord();
+    }
+    switch ($_POST['type']) {
+    case 'display_site_slogan':
+    case 'use_graphic_logo':
+        $oldval = (int)$_POST['oldval'];
+        $newval = $Logo->toggle($_POST['type'], $oldval);
+        if ($newval != $oldval) {   // successfully changed
+            $msg = _('Field has been updated');
+        } else {
+            $msg = _('There was an error updating the database');
+        }
+        $retval = array(
+            'newval' => $newval,
+            'statusMessage' => $msg,
+        );
+        echo json_encode($retval);
+        exit;
+        break;
+    }
+    exit;
+}
+
+/*if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
     switch ( $mode ) {
-        case 'logo' :
+    case 'logo' :
             $content    = _logoEdit ( );
             $currentSelect = $LANG_LOGO['logo'];
             break;
@@ -198,9 +226,10 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             $content    = _logoEdit ( );
             break;
     }
-} else {
-    $content    = _logoEdit ( );
-}
+} else {*/
+    $content = Logo::adminList();
+    //$content    = _logoEdit ( );
+//}
 
 $display = COM_siteHeader();
 $display .= $content;
