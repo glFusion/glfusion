@@ -75,6 +75,11 @@ class Logo
     }
 
 
+    /**
+     * Get all the themes that have DB records.
+     *
+     * @return  array       Array of DB record arrays
+     */
     private static function getThemes()
     {
         static $themes = array();
@@ -84,7 +89,7 @@ class Logo
 
         try {
             // @todo: need table name
-            $sql = "SELECT * FROM gl_logo_new";
+            $sql = "SELECT * FROM gl_themes";
             $stmt = Database::getInstance()
                 ->conn->executeQuery(
                     $sql
@@ -283,7 +288,7 @@ class Logo
         global $_TABLES;
 
         // TODO: Fix table name
-        $sql = "INSERT INTO gl_logo_new SET
+        $sql = "INSERT INTO gl_themes SET
             theme = ?,
             use_graphic_logo = 0,
             display_site_slogan = 0,
@@ -314,8 +319,9 @@ class Logo
         // Determing the new value (opposite the old)
         $oldvalue = $oldvalue == 1 ? 1 : 0;
         $newvalue = $oldvalue == 1 ? 0 : 1;
+        COM_errorLog("toggling $field from $oldvalue to $newvalue for {$this->theme}");
 
-        $sql = "UPDATE gl_logo_new
+        $sql = "UPDATE gl_themes
                 SET $field  = ?
                 WHERE theme = ?";
         try {
@@ -327,10 +333,29 @@ class Logo
                 );
             $retval = $newvalue;
         } catch(\Doctrine\DBAL\DBALException $e) {
-            var_Dump($e);die;
+            COM_errorLog(print_r($e,true));
             $retval = $oldvalue;
         }
         return $retval;
+    }
+
+
+    public function updateFile($filename)
+    {
+        $sql = "UPDATE gl_themes
+                SET logo_file  = ?
+                WHERE theme = ?";
+        try {
+            $stmt = Database::getInstance()
+                ->conn->executeQuery(
+                    $sql,
+                    array($filename, $this->theme),
+                    array(Database::STRING, Database::STRING)
+                );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            // Do nothing
+        }
+        return $this;
     }
 
 
@@ -344,17 +369,18 @@ class Logo
         global $_CONF, $_TABLES, $LANG_ADMIN;
 
         // @todo: need table name
-        $_TABLES['logo_new'] = 'gl_logo_new';
+        $_TABLES['themes'] = 'gl_themes';
 
         $dbThemes = self::getThemes();
         $data_arr = array(
             array(
                 'theme' => self::$default,
                 'use_graphic_logo' => (int)$dbThemes[self::$default]['use_graphic_logo'],
-                'display_site_slogan ' => (int)$dbThemes[self::$default]['display_site_slogan'],
+                'display_site_slogan' => (int)$dbThemes[self::$default]['display_site_slogan'],
                 'logo_file' => $dbThemes[self::$default]['logo_file'],
             )
         );
+
         $tmp = array_diff(scandir($_CONF['path_themes']), array('.', '..'));
         if ($tmp !== false) {
             foreach ($tmp as $dirname) {
@@ -385,7 +411,7 @@ class Logo
             var LogoToggle = function(cbox, id, type) {
             oldval = cbox.checked ? 0 : 1;
             var dataS = {
-                "action" : "ajaxtoggle",
+                "ajaxtoggle": "true",
                 "theme": id,
                 "oldval": oldval,
                 "type": type,
@@ -437,18 +463,27 @@ class Logo
                 'align' => 'left',
             ),
         );
-        $text_arr = array();
+        $text_arr = array(
+            //'form_url' => $_CONF['site_admin_url'] . '/logo.php',
+        );
         $defsort_arr = array(
             'field' => 'theme',
             'direction' => 'ASC',
         );
         $filter = '';
         $options = '';
+        $form_arr = array();
+
+        $display .= '<form action="' . $_CONF['site_url'] . '/admin/logo.php"
+            method="post" enctype="multipart/form-data"><div>';
+
         $display .= ADMIN_simpleList(
             array(__CLASS__,  'getAdminField'),
-            $header_arr, $text_arr, $data_arr, $defsort_arr,
-            $filter, '', $options, ''
+            $header_arr, $text_arr, $data_arr, $options, $form_arr
         );
+        $display .= '<div><button type="submit" class="uk-button uk-button-success" name="savelogos">' . $LANG_ADMIN['submit'] . '</button></div>';
+        $display .= '</form>';
+
         return $display;
     }
 
@@ -499,9 +534,93 @@ class Logo
             $retval .= '</span>';
             break;
 
+        case 'upload':
+            $retval = '<input type="file" name="newlogo[' . $A['theme'] . ']" />';
+            break;
         default:
             $retval = $fieldvalue;
             break;
+        }
+        return $retval;
+    }
+
+
+    /**
+     * Save all images uploaded for logos.
+     *
+     * @return  array   Array of file information, possibly for future ajax
+     */
+    public static function saveLogos()
+    {
+        global $_CONF;
+
+        $retval = array();
+        $files = $_FILES['newlogo'];
+        foreach ($files['name'] as $theme=>$filename) {
+            if (
+                !isset($files['tmp_name'][$theme]) ||
+                $files['tmp_name'][$theme] == ''
+            ) {
+                continue;
+            }
+
+            switch ($files['type'][$theme]) {
+            case 'image/png' :
+            case 'image/x-png' :
+                $ext = '.png';
+                break;
+            case 'image/gif' :
+                $ext = '.gif';
+                break;
+            case 'image/jpg' :
+            case 'image/jpeg' :
+            case 'image/pjpeg' :
+                $ext = '.jpg';
+                break;
+            default :
+                $ext = 'unknown';
+                break;
+            }
+            $thisinfo = array(
+                'theme' => $theme,
+            );
+            if ($ext != 'unknown') {
+                $imgInfo = @getimagesize($files['tmp_name'][$theme]);
+                if (
+                    $imgInfo[0] > $_CONF['max_logo_width'] ||
+                    $imgInfo[1] > $_CONF['max_logo_height']
+                ) {
+                    $thisinfo['message'] = _('The logo is larger than the allowed dimensions');
+                } else {
+                    $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;
+                    $rc = move_uploaded_file(
+                        $files['tmp_name'][$theme],
+                        $_CONF['path_html'] . 'images/' . $newlogoname
+                    );
+                    @chmod($_CONF['path_html'] . 'images/' . $newlogoname,0644);
+                    if ($rc) {
+                        $logo_name = $newlogoname;
+                        $thisinfo['logo_file'] = $logo_name;
+
+                        // Now update the themes table
+                        $Logo = new self($theme);
+                        if (!$Logo->Exists()) {
+                            $Logo->createRecord();
+                        }
+                        $Logo->updateFile($logo_name);
+                    }
+                }
+            } else {
+                $thisinfo['message'] = _('Unknown file type uploaded');
+                $thisinfo['url'] =  COM_createImage(
+                    $_CONF['site_url'] . '/images/' . $logo_name,
+                    _('Logo Image'),
+                    array(
+                        'style' => 'width:auto;height:100px',
+                    )
+                );
+            }
+            $retval[] = $thisinfo;
         }
         return $retval;
     }

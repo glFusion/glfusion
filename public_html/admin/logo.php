@@ -167,7 +167,17 @@ if ( isset($_GET['mode']) ) {
     $mode = '';
 }
 
-if (isset($_POST['action']) && $_POST['action'] == 'ajaxtoggle') {
+$content = '';
+$expected = array('ajaxtoggle', 'savelogos');
+$action = 'listlogos';
+foreach ($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $action = $provided;
+    }
+}
+
+switch ($action) {
+case 'ajaxtoggle':
     $Logo = new Logo($_POST['theme']);
     if (!$Logo->Exists()) {
         // If the logo record doesn't exist yet, create it.
@@ -188,48 +198,19 @@ if (isset($_POST['action']) && $_POST['action'] == 'ajaxtoggle') {
             'statusMessage' => $msg,
         );
         echo json_encode($retval);
-        exit;
         break;
     }
     exit;
-}
-
-/*if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
-    switch ( $mode ) {
-    case 'logo' :
-            $content    = _logoEdit ( );
-            $currentSelect = $LANG_LOGO['logo'];
-            break;
-        case 'savelogo' :
-            $mtype = 'info';
-            $rc = _saveLogo();
-            switch ( $rc ) {
-                case 2:
-                    $message = $LANG_LOGO['invalid_type'];
-                    $mtype = 'error';
-                    break;
-                case 4 :
-                    $message = $LANG_LOGO['invalid_size'].$_CONF['max_logo_height'].'x'.$_CONF['max_logo_width'].'px';
-                    $mtype = 'error';
-                    break;
-                default :
-                    $message = $LANG_LOGO['logo_saved'];
-                    $mtype = 'info';
-                    break;
-            }
-
-            $content = COM_setMsg($message,$mtype);
-            $content .= _logoEdit( );
-            $currentSelect = $LANG_LOGO['logo_admin'];
-            break;
-        default :
-            $content    = _logoEdit ( );
-            break;
-    }
-} else {*/
+    break;
+case 'savelogos':
+    Logo::saveLogos();
+    COM_refresh($_CONF['site_url'] . '/admin/logo.php');
+    break;
+case 'listlogos':
+default:
     $content = Logo::adminList();
-    //$content    = _logoEdit ( );
-//}
+    break;
+}
 
 $display = COM_siteHeader();
 $display .= $content;
