@@ -28,7 +28,11 @@ if (!defined ('GVERSION')) {
 * @author       Tony Bibbs <tony@tonybibbs.com>
 *
 */
-class Logo {
+class Logo
+{
+    const LOGO_GRAPHIC = 1;
+    const LOGO_TEXT = 0;
+    const LOGO_NONE = -1;
 
     /** Default theme name.
      * @var string */
@@ -97,6 +101,16 @@ class Logo {
         return $themes;
     }
 
+
+    /**
+     * Get the logo information for the theme.
+     * Sets the default values and then overrides with the specific theme
+     * values if found in the DB.
+     * If the requested theme has a record in the DB the "exists" flag is set.
+     *
+     * @param   string  $theme  Theme name
+     * @return  object  $this
+     */
     private function Load($theme)
     {
         global $_TABLES;
@@ -114,6 +128,12 @@ class Logo {
     }
 
 
+    /**
+     * Set the override values from the DB record.
+     *
+     * @param   array   $A      Array of fields from the DB
+     * @return  object  $this
+     */
     private function _override($A)
     {
         $this->use_graphic_logo = (int)$A['use_graphic_logo'];
@@ -125,23 +145,41 @@ class Logo {
     }
 
 
+    /**
+     * Check if this theme was found in the database.
+     *
+     * @return  boolean     1 if found, 0 if not
+     */
     public function Exists()
     {
         return $this->exists ? 1 : 0;
     }
 
 
+    /**
+     * Get the display_site_slogan flag value.
+     *
+     * @return  boolean     1 if set, 0 if not
+     */
     public function displaySlogan()
     {
         return $this->display_site_slogan ? 1 : 0;
     }
 
 
+    /**
+     * Check if a graphic logo should be displayed.
+     * Checks the flag setting and whether the logo file exists.
+     *
+     * @return  boolean     1 to use graphic, 0 to not
+     */
     public function useGraphic()
     {
         global $_CONF;
 
-        if ($this->use_graphic_logo && file_exists($this->getImagePath())) {
+        if ($this->use_graphic_logo == self::LOGO_GRAPHIC &&
+            file_exists($this->getImagePath())
+        ) {
             return 1;
         } else {
             return 0;
@@ -149,12 +187,33 @@ class Logo {
     }
 
 
+    /**
+     * Check if a text logo should be displayed.
+     *
+     * @return  boolean     1 to use text, 0 to not
+     */
+    public function useText()
+    {
+        return $this->use_graphic_logo == self::LOGO_TEXT;
+    }
+
+
+    /**
+     * Get the logo file name, no path.
+     *
+     * @return  string      Logo filename
+     */
     public function getImageName()
     {
         return $this->logo_file;
     }
 
 
+    /**
+     * Get the full path to the logo image.
+     *
+     * @return  string      Filesystem path to logo image
+     */
     public function getImagePath()
     {
         global $_CONF;
@@ -162,12 +221,11 @@ class Logo {
     }
 
 
-    public function getImageUrl()
-    {
-        global $_CONF;
-    }
-
-
+    /**
+     * Get the logo HTML to set in the header template.
+     *
+     * @return  string      HTML for logo
+     */
     public function getTemplate()
     {
         global $_CONF;
@@ -198,7 +256,7 @@ class Logo {
             }
             $L->parse('output','logo');
             $retval = $L->finish($L->get_var('output'));
-        } else {
+        } elseif ($this->useText()) {
             $L = new Template( $_CONF['path_layout'] );
             $L->set_file( array(
                 'logo'          => 'logo-text.thtml',
@@ -214,6 +272,12 @@ class Logo {
     }
 
 
+    /**
+     * Create a new record in the logo table.
+     * Called when toggling or uploading images.
+     *
+     * @return  object  $this
+     */
     public function createRecord()
     {
         global $_TABLES;
@@ -230,6 +294,7 @@ class Logo {
                 array($this->theme),
                 array(Database::STRING)
             );
+        return $this;
     }
 
 
@@ -441,191 +506,6 @@ class Logo {
         return $retval;
     }
 
-
-
-
-    /**
-    * Grabs any variables from the query string
-    *
-    * @access   private
-    */
-    function _getArguments()
-    {
-        if (isset ($_SERVER['PATH_INFO'])) {
-            if ($_SERVER['PATH_INFO'] == '') {
-                if (isset ($_ENV['ORIG_PATH_INFO'])) {
-                    $this->_arguments = explode('/', $_ENV['ORIG_PATH_INFO']);
-                } else {
-                    $this->_arguments = array();
-                }
-            } else {
-                $this->_arguments = explode ('/', $_SERVER['PATH_INFO']);
-            }
-            array_shift ($this->_arguments);
-            if ( isset($this->_arguments[0]) && $this->_arguments[0] == substr($_SERVER['SCRIPT_NAME'],1) ) {
-                array_shift($this->_arguments);
-            }
-        } else if (isset ($_ENV['ORIG_PATH_INFO'])) {
-            $scriptName = array();
-            $scriptName = explode('/',$_SERVER['SCRIPT_NAME']);
-            array_shift($scriptName);
-            $this->_arguments = explode('/', substr($_ENV['ORIG_PATH_INFO'],1));
-            if ( $this->_arguments[0] == $scriptName[0] ) {
-                $this->_arguments = array();
-            }
-        } elseif (isset($_SERVER['ORIG_PATH_INFO'])) {
-            $this->_arguments = explode('/', substr($_SERVER['ORIG_PATH_INFO'], 1));
-            array_shift ($this->_arguments);
-            $script_name = strrchr($_SERVER['SCRIPT_NAME'],"/");
-            if ( $script_name == '' ) {
-                $script_name = $_SERVER['SCRIPT_NAME'];
-            }
-            $indexArray = 0;
-            $search_script_name = substr($script_name,1);
-            if ( array_search($search_script_name,$this->_arguments) !== FALSE ) {
-                $indexArray = array_search($search_script_name,$this->_arguments);
-            }
-            for ($x=0; $x < $indexArray; $x++) {
-                array_shift($this->_arguments);
-            }
-            if ( isset($this->_arguments[0]) && $this->_arguments[0] == substr($script_name,1) ) {
-                array_shift($this->_arguments);
-            }
-        } else {
-            $this->_arguments = array ();
-        }
-    }
-
-    /**
-    * Enables url rewriting, otherwise URL's are passed back
-    *
-    * @param        boolean     $switch     turns URL rewriting on/off
-    *
-    */
-    function setEnabled($switch)
-    {
-        if ($switch) {
-            $this->_enabled = true;
-        } else {
-            $this->_enabled = false;
-        }
-    }
-
-    /**
-    * Returns whether or not URL rewriting is enabled
-    *
-    * @return   boolean true if URl rewriting is enabled, otherwise false
-    *
-    */
-    function isEnabled()
-    {
-        return $this->_enabled;
-    }
-
-    /**
-    * Returns the number of variables found in query string
-    *
-    * This is particularly useful just before calling setArgNames() method
-    *
-    * @return   int     Number of arguments found in URL
-    *
-    */
-    function numArguments()
-    {
-        return count($this->_arguments);
-    }
-
-    /**
-    * Assigns logical names to query string variables
-    *
-    * @param        array       $names      String array of names to assign to variables pulled from query string
-    * @return       boolean     true on success otherwise false
-    *
-    */
-    function setArgNames($names = array())
-    {
-        if (count($names) < count($this->_arguments)) {
-            print "URL Class: number of names passed to setArgNames must be equal or greater than number of arguments found in URL (" . count($this->_arguments) . ")";
-            exit;
-        }
-        if (is_array($names)) {
-            $newArray = array();
-            for ($i = 1; $i <= count($this->_arguments); $i++) {
-                $newArray[current($names)] = current($this->_arguments);
-                next($names);
-        		next($this->_arguments);
-            }
-            $this->_arguments = $newArray;
-            reset($this->_arguments);
-        } else {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-    * Gets the value for an argument
-    *
-    * @param        string      $name       Name of argument to fetch value for
-    * @return       mixed       returns value for a given argument
-    *
-    */
-    function getArgument($name)
-    {
-        // if in GET VARS array return it
-        if (!empty($_GET[$name])) {
-            return $_GET[$name];
-        }
-
-        // ok, pull from query string
-        if (in_array($name,array_keys($this->_arguments))) {
-            return $this->_arguments[$name];
-        }
-
-        return '';
-    }
-
-    /**
-    * Builds crawler friendly URL if URL rewriting is enabled
-    *
-    * This function will attempt to build a crawler friendly URL.  If this feature is
-    * disabled because of platform issue it just returns original $url value
-    *
-    * @param        string      $url    URL to try and convert
-    * @return       string      rewritten if _isenabled is true otherwise original url
-    *
-    */
-    function buildURL($url)
-    {
-        $retval = '';
-        if (!$this->isEnabled()) {
-            return $url;
-        }
-
-        $pos = strpos($url,'?');
-        $query_string = substr($url,$pos+1);
-        $finalList = array();
-        $paramList = explode('&',$query_string);
-        for ($i = 1; $i <= count($paramList); $i++) {
-            $keyValuePairs = explode('=',current($paramList));
-            if (is_array($keyValuePairs)) {
-                $argName = current($keyValuePairs);
-                next($keyValuePairs);
-                $finalList[$argName] = current($keyValuePairs);
-            }
-            next($paramList);
-        }
-        $newArgs = '/';
-        for ($i = 1; $i <= count($finalList); $i++) {
-            $newArgs .= current($finalList);
-            if ($i <> count($finalList)) {
-                $newArgs .= '/';
-            }
-            next($finalList);
-        }
-        $retval = str_replace('?' . $query_string,$newArgs,$url);
-        return COM_sanitizeURL($retval);
-    }
 }
 
 ?>
