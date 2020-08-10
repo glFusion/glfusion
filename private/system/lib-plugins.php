@@ -720,7 +720,7 @@ function PLG_commentPreSave($uid, &$title, &$comment, $sid, $pid, $type, &$postm
 * @return string empty is no error, error message if error was encountered
 *
 */
-function PLG_itemPreSave($type, $content)
+function PLG_itemPreSave($type, &$content)
 {
     global $_PLUGINS;
 
