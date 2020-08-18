@@ -182,7 +182,8 @@ class Logo
     {
         global $_CONF;
 
-        if ($this->use_graphic_logo == self::LOGO_GRAPHIC &&
+        if (
+            $this->use_graphic_logo == self::LOGO_GRAPHIC &&
             file_exists($this->getImagePath())
         ) {
             return 1;
