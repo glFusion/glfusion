@@ -736,7 +736,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
 
         if (! empty($groups)) {
             foreach ($groups as $g) {
-                if (in_array($g, $GroupAdminGroups)) {
+                if (in_array($g, $GroupAdminGroups) || SEC_inGroup(1)) {
                     $db->conn->insert(
                         $_TABLES['group_assignments'],
                         array(
