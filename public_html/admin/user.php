@@ -1483,6 +1483,7 @@ function USER_list($grp_id)
 function USER_save($uid)
 {
     global $_CONF, $_TABLES, $_USER, $LANG28, $_USER_VERBOSE;
+    echo "here";die;
 
     $retval = '';
     $sql = '';
@@ -1868,7 +1869,7 @@ function USER_save($uid)
             }
 
             foreach ($groups as $userGroup) {
-                if (in_array ($userGroup, $UserAdminGroups)) {
+                if (in_array ($userGroup, $UserAdminGroups) || SEC_inGroup(1)) {
                     if ($_USER_VERBOSE) {
                         Log::write('system',Log::DEBUG,"adding group_assignment " . $userGroup
                                       . " for $username");
