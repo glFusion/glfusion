@@ -239,7 +239,11 @@ function GROUP_edit($grp_id = '')
     if (empty($groupoptions)) {
         // make sure to list only those groups of which the Group Admin
         // is a member
-        $whereGroups = '(grp_id IN (' . implode (',', $thisUsersGroups) . '))';
+        if (!SEC_inGroup(1)) {
+            $whereGroups = '(grp_id IN (' . implode (',', $thisUsersGroups) . '))';
+        } else {
+            $whereGroups = '1=1';
+        }
 
         $header_arr = array(
                     array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false, 'align' => 'center'),
@@ -309,7 +313,6 @@ function GROUP_getIndirectFeatures($grp_id)
 
     $db = Database::getInstance();
 
-print "Inside getIndirectFeatures";
     $checked = array ();
     $tocheck = array ($grp_id);
 
@@ -1499,7 +1502,6 @@ switch ($action) {
         $display .= COM_siteFooter();
         break;
 }
-
 echo $display;
 
 ?>
