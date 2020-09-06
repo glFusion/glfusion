@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2020 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Eric Warren     eric AT glfusion DOT org
 *
@@ -550,7 +550,7 @@ function INST_personalizeAdminAccount($site_mail, $site_url)
  * @param   array $_SQL   Array of queries
  *
  */
-function INST_updateDB($_SQL,$use_innodb=0)
+function INST_updateDB($_SQL,$use_innodb = false)
 {
     global $_DB_dbms;
 
@@ -860,7 +860,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $c->add('registration_type',0,'select',4,19,27,785,TRUE,'Core');
             DB_query("ALTER TABLE {$_TABLES['users']} ADD act_token VARCHAR(32) NOT NULL DEFAULT '' AFTER pwrequestid",1);
-            DB_query("ALTER TABLE {$_TABLES['users']} ADD act_time DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00.000000' AFTER act_token",1);
+            DB_query("ALTER TABLE {$_TABLES['users']} ADD act_time DATETIME NOT NULL default '1970-01-01 00:00:00' AFTER act_token",1);
 
             $c->del('cookie_ip','Core');
             DB_query("ALTER TABLE {$_TABLES['sessions']} DROP PRIMARY KEY",1);
@@ -882,7 +882,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '1.2.2' :
         case '1.2.3' :
             require_once $_CONF['path'] . 'sql/updates/mysql_1.2.2_to_1.3.0.php';
-            list($rc,$errors) = INST_updateDB($_SQL);
+            list($rc,$errors) = INST_updateDB($_SQL,false);
             if ( $rc === false ) {
                 return array($rc,$errors);
             }
@@ -1358,7 +1358,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `sv_autoplay` TINYINT(3) NOT NULL DEFAULT '0' AFTER `story_video`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['topics']} ADD `description` TEXT AFTER `topic`;";
 
-            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `frontpage_date` DATETIME NULL DEFAULT NULL AFTER `frontpage`;";
+            $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD `frontpage_date` DATETIME NOT NULL default '1970-01-01 00:00:00' AFTER `frontpage`;";
             $_SQL[] = "ALTER TABLE {$_TABLES['stories']} ADD INDEX `frontpage_date` (`frontpage_date`);";
 
             // comment submission support
@@ -1488,6 +1488,14 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '1.7.7';
 
         case '1.7.7' :
+
+            $current_fusion_version = '1.7.8';
+
+        case '1.7.8' :
+
+            $current_fusion_version = '1.7.9';
+
+        case '1.7.9' :
 
             $current_fusion_version = '1.8.0';
 
