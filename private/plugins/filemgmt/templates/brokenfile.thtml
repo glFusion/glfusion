@@ -1,0 +1,15 @@
+{# begin {templatelocation} #}
+<form class="uk-form uk-form-horizontal" action="{site_url}/filemgmt/brokenfile.php" method="post">
+    <input type="hidden" name="lid" value="{lid}">
+    <div class="uk-form-row">
+        {lang_thanksforhelp}
+        <br />{lang_forsecurity}
+    </div>
+    <div class="uk-form-row">
+        <div class="uk-form-controls">
+        <button type="submit" class="uk-button uk-button-success" name="submit" value="{lang_reportbroken}">{lang_reportbroken}</button>
+        &nbsp;<button type="cancel" class="uk-button" value="{lang_cancel}" onclick="javascript:history.go(-1)">{lang_cancel}</button>
+        </div>
+    </div>
+</form>
+{# end {templatelocation} #}

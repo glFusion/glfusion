@@ -79,18 +79,18 @@ if ( isset($_POST['submit']) ) {
 
 } else {
     $display = FM_siteHeader();
-    $display .= COM_startBlock("<b>"._MD_ADMINTITLE."</b>");
-    $display .= "<form action=\"brokenfile.php\" method=\"post\">";
-    $display .= '<input type="hidden" name="lid" value="'.$lid.'"' . XHTML . '>';
-    $display .= '<div id="fm-brokenpage-pagewidth" class="plugin">';
-    $display .= '<p class="pluginHeader">'._MD_REPORTBROKEN.'</p>';
-    $display .= '<p style="padding:10px;">';
-    $display .= _MD_THANKSFORHELP;
-    $display .= "<br" . XHTML . ">"._MD_FORSECURITY."<br" . XHTML . "><br" . XHTML . ">";
-    $display .= '<p style="padding:0px 0px 10px 10px;">';
-    $display .= '<input type="submit" name="submit" value="'._MD_REPORTBROKEN.'"' . XHTML . '>';
-    $display .= '&nbsp;<input type="button" value="'._MD_CANCEL.'" onclick="javascript:history.go(-1)"' . XHTML . '>';
-    $display .= "</p></div></form>";
+    $display .= COM_startBlock(_MD_REPORTBROKEN);
+    $T = new Template($_CONF['path'] . '/plugins/filemgmt/templates/');
+    $T->set_file('form', 'brokenfile.thtml');
+    $T->set_var(array(
+        'lid' => $lid,
+        'lang_reportbroken' => _MD_REPORTBROKEN,
+        'lang_thanksforhelp' => _MD_THANKSFORHELP,
+        'lang_forsecurity' => _MD_FORSECURITY,
+        'lang_cancel' => _MD_CANCEL,
+    ) );
+    $T->parse('output', 'form');
+    $display .= $T->finish($T->get_var('output'));
     $display .= COM_endBlock();
     $display .= FM_siteFooter();
     echo $display;
