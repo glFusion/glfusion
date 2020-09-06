@@ -291,9 +291,9 @@ function SP_toggleStatus($enabledstaticpages, $sp_idarray)
                 } else {
                     DB_query ("UPDATE {$_TABLES['staticpage']} SET sp_status = '0' WHERE sp_id = '".DB_escapeString($sp_id)."'");
                 }
+                PLG_itemSaved($sp_id,'staticpages');
             }
         }
-        PLG_itemSaved($sp_id,'staticpages');
         glFusion\Cache::getInstance()->deleteItemsByTag('staticpage');
         $retval['statusMessage'] = 'StaticPage state has been toggled.';
         $retval['errorCode'] = 0;
