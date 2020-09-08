@@ -1479,6 +1479,9 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
             case 'hits' :
                 $fields[] = 'a.views';
                 break;
+            case 'perms' :
+                $fields[] = 'a.uid';
+                break;
             default:
                 break;
         }
@@ -1503,17 +1506,18 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
             // query the record for PID
             // if it is 0 - we are good
             // if it is not 0 - update ID to PID
-            $pid = DB_getItem($_TABLES['ff_topic'],'pid','id='.DB_escapeString($id));
+            $id = DB_escapeString($id);
+            $pid = DB_getItem($_TABLES['ff_topic'],'pid','id=' . $id);
             if ( $pid != 0 && $pid != NULL) {
-                $id = $pid;
+                $id = DB_escapeString($pid);
             }
-            $fields[] = "GROUP_CONCAT(a.comment ORDER BY a.date DESC SEPARATOR ' ') AS summarycomment ";
-            $lastupdated = DB_getItem($_TABLES['ff_topic'],'lastupdated','id='.DB_escapeString($id));
-
-            $where = " WHERE (id = '" . DB_escapeString($id) . "' OR pid = '".DB_escapeString($id)."') ";
+            $where = " WHERE (id = '$id' OR pid = '$id') ";
+            $fields[] = " (SELECT GROUP_CONCAT(comment ORDER BY date DESC SEPARATOR ' ') " .
+                "FROM {$_TABLES['ff_topic']} $where) AS summarycomment ";
+            $lastupdated = DB_getItem($_TABLES['ff_topic'],'lastupdated','id=' . $id);
             DB_query("SET group_concat_max_len = 18196");
         } else {
-            $where = " WHERE id = '" . DB_escapeString($id) . "'";
+            $where = " WHERE id = '$id'";
         }
         $permOp = ' AND ';
     }
