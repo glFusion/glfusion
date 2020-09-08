@@ -529,6 +529,9 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
     }
 
     $sql = $query_arr['sql']; // get sql from array that builds data
+    $groupbysql = (isset($query_arr['group_by']) && !empty($query_arr['group_by'])) ? " GROUP BY {$query_arr['group_by']} " : '';
+    // set the default sql filter (if any)
+    $filtersql = (isset($query_arr['default_filter']) && !empty($query_arr['default_filter'])) ? " {$query_arr['default_filter']}" : '';
 
     if ( isset($_GET['orderby']) || SESS_isSet($component.'_orderby') ) {
         if ( isset($_GET['orderby'] ) ) {
@@ -664,10 +667,6 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
         $admin_templates->set_var ('query_limit', $query_limit);
         # choose proper dropdown field for query limit
         $admin_templates->set_var($limit . '_selected', 'selected="selected"');
-
-        // set the default sql filter (if any)
-        $filtersql = (isset($query_arr['default_filter']) && !empty($query_arr['default_filter'])) ? " {$query_arr['default_filter']}" : '';
-        $groupbysql = (isset($query_arr['group_by']) && !empty($query_arr['group_by'])) ? " GROUP BY {$query_arr['group_by']} " : '';
 
         // now add the query fields
         if (!empty($query)) { # add query fields with search term

@@ -3,6 +3,14 @@
 ## v2.0.0 (Unreleased)
 
 ### Internal development changes
+  - September 2020
+  - Updated james-heinrich/getid3 (v1.9.19 => v1.9.20)
+  - Updated ezyang/htmlpurifier (v4.12.0 => v4.13.0)
+  - Updated doctrine/event-manager (1.1.0 => 1.1.1)
+  - Updated doctrine/cache (1.10.1 => 1.10.2)
+  - Updated doctrine/dbal (2.10.2 => 2.10.3)
+  - Updated monolog/monolog (1.25.4 => 1.25.5)
+
   - Language File Sync
   - Cache class updates to support latest phpFastCache
   - Updated CKEditor to v4.13.1
@@ -75,7 +83,7 @@
 
   - Utilize PDO prepared SQL statements to decrease SQL injection opportunities
 
-## v1.7.8.pl1 (Unreleased)
+## v1.7.8.pl1 (January 1, 2020)
 
 ### Added
   - Added SECURITY.md - glFusion Security Policy

@@ -1444,7 +1444,7 @@ function _userEmailpassword()
         $retval .= getpasswordform();
     } else {
         // Validate captcha
-        $msg = PLG_itemPreSave ('forgotpassword', '');
+        $msg = PLG_itemPreSave ('forgotpassword');
         if (!empty ($msg)) {
             COM_setMsg($msg,'error');
             echo COM_refresh ($_CONF['site_url'].'/users.php?mode=getpassword');
