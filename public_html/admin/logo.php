@@ -187,11 +187,12 @@ case 'ajaxtoggle':
     case 'display_site_slogan':
     case 'use_graphic_logo':
         $oldval = (int)$_POST['oldval'];
-        $newval = $Logo->toggle($_POST['type'], $oldval);
-        if ($newval != $oldval) {   // successfully changed
-            $msg = _('Field has been updated');
+        $newval = (int)$_POST['newval'];
+        $result = $Logo->setval($_POST['type'], $oldval, $newval);
+        if ($newval == $result) {   // successfully changed
+            $msg = _('Field has been updated.');
         } else {
-            $msg = _('There was an error updating the database');
+            $msg = _('Item was not changed.');
         }
         $retval = array(
             'newval' => $newval,

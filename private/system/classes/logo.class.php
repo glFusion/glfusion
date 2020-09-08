@@ -30,13 +30,14 @@ if (!defined ('GVERSION')) {
 */
 class Logo
 {
-    const LOGO_GRAPHIC = 1;
-    const LOGO_TEXT = 0;
-    const LOGO_NONE = -1;
+    const GRAPHIC = 1;
+    const TEXT = 0;
+    const DEFAULT = 2;
+    const NONE = -1;
 
     /** Default theme name.
      * @var string */
-    private static $default = '_default';
+    public static $default = '_default';
 
     /** Theme (layout) name.
      * @var string */
@@ -141,8 +142,12 @@ class Logo
      */
     private function _override($A)
     {
-        $this->use_graphic_logo = (int)$A['use_graphic_logo'];
-        $this->display_site_slogan = (int)$A['display_site_slogan'];
+        if ($A['use_graphic_logo'] != self::DEFAULT) {
+            $this->use_graphic_logo = (int)$A['use_graphic_logo'];
+        }
+        if ($A['display_site_slogan'] != self::DEFAULT) {
+            $this->display_site_slogan = (int)$A['display_site_slogan'];
+        }
         if (!empty($A['logo_file'])) {
             $this->logo_file = $A['logo_file'];
         }
@@ -183,7 +188,7 @@ class Logo
         global $_CONF;
 
         if (
-            $this->use_graphic_logo == self::LOGO_GRAPHIC &&
+            $this->use_graphic_logo == self::GRAPHIC &&
             file_exists($this->getImagePath())
         ) {
             return 1;
@@ -200,7 +205,7 @@ class Logo
      */
     public function useText()
     {
-        return $this->use_graphic_logo == self::LOGO_TEXT;
+        return $this->use_graphic_logo == self::TEXT;
     }
 
 
@@ -235,12 +240,13 @@ class Logo
     public function getTemplate()
     {
         global $_CONF;
+        $_CONF['site_slogan'] = 'Testing site slogan';
 
         $retval = '';
+        $L = new Template( $_CONF['path_layout']);
         if ($this->useGraphic()) {
-            $L = new Template( $_CONF['path_layout'] );
             $L->set_file( array(
-                'logo'          => 'logo-graphic.thtml',
+                'logo' => 'logo-graphic.thtml',
             ));
 
             $imgInfo = @getimagesize($this->getImagePath());
@@ -257,23 +263,17 @@ class Logo
             } else {
                 $L->set_var('delta','');
             }
-            if ($this->display_site_slogan) {
-                $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
-            }
-            $L->parse('output','logo');
-            $retval = $L->finish($L->get_var('output'));
         } elseif ($this->useText()) {
-            $L = new Template( $_CONF['path_layout'] );
             $L->set_file( array(
-                'logo'          => 'logo-text.thtml',
+                'logo' => 'logo-text.thtml',
             ));
-            $L->set_var( 'site_name', $_CONF['site_name'] );
-            if ($this->display_site_slogan) {
-                $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
-            }
-            $L->parse('output','logo');
-            $retval = $L->finish($L->get_var('output'));
+            $L->set_var('site_name', $_CONF['site_name']);
         }
+        if ($this->display_site_slogan) {
+            $L->set_var('site_slogan', $_CONF['site_slogan']);
+        }
+        $L->parse('output','logo');
+        $retval = $L->finish($L->get_var('output'));
         return $retval;
     }
 
@@ -313,14 +313,14 @@ class Logo
      * @param   integer $oldvalue   Old (current) value
      * @return  integer     New value, or old value upon failure
      */
-    public function toggle($field, $oldvalue)
+    public function setval($field, $oldvalue, $newvalue)
     {
         global $_TABLES;
 
         // Determing the new value (opposite the old)
-        $oldvalue = $oldvalue == 1 ? 1 : 0;
-        $newvalue = $oldvalue == 1 ? 0 : 1;
-        COM_errorLog("toggling $field from $oldvalue to $newvalue for {$this->theme}");
+        $oldvalue = (int)$oldvalue;
+        $newvalue = (int)$newvalue;
+        COM_errorLog("changing $field from $oldvalue to $newvalue for {$this->theme}");
 
         $sql = "UPDATE gl_themes
                 SET $field  = ?
@@ -337,6 +337,8 @@ class Logo
             COM_errorLog(print_r($e,true));
             $retval = $oldvalue;
         }
+        COM_errorLog($sql);
+        COM_errorLog("new value: " . print_r($retval,true));
         return $retval;
     }
 
@@ -409,12 +411,18 @@ class Logo
 
         $display = ''; 
         $display .= '<script>
-            var LogoToggle = function(cbox, id, type) {
-            oldval = cbox.checked ? 0 : 1;
+            var LogoToggle = function(cbox, id, type, oldval) {
+            if (cbox.type == "select-one") {
+                newval = cbox.value;
+            } else {
+                newval = cbox.checked ? 1 : 0;
+            }
+console.log("changing from " + oldval + " to " + newval);
             var dataS = {
                 "ajaxtoggle": "true",
                 "theme": id,
                 "oldval": oldval,
+                "newval": newval,
                 "type": type,
             };
             data = $.param(dataS);
@@ -424,7 +432,11 @@ class Logo
                 url: site_admin_url + "/logo.php",
                 data: data,
                 success: function(result) {
-                    cbox.checked = result.newval == 1 ? true : false;
+                    if (cbox.type == "checkbox") {
+                        cbox.checked = result.newval == 1 ? true : false;
+                    } else {
+                        cbox.value = result.newval;
+                    }
                     try {
                         $.UIkit.notify("<i class=\'uk-icon-check\'></i>&nbsp;" + result.statusMessage, {timeout: 1000,pos:\'top-center\'});
                     }
@@ -475,7 +487,7 @@ class Logo
         $options = '';
         $form_arr = array();
 
-        $display .= '<form action="' . $_CONF['site_url'] . '/admin/logo.php"
+        $display .= '<form class="uk-form" action="' . $_CONF['site_url'] . '/admin/logo.php"
             method="post" enctype="multipart/form-data"><div>';
 
         $display .= ADMIN_simpleList(
@@ -502,18 +514,56 @@ class Logo
     {
         global $_CONF;
 
-        if ($A['theme'] != self::$default && !is_dir($_CONF['path_themes'] . $A['theme'])) {
+        // Somehow got a theme that isn't default and doesn't exist.
+        if (
+            $A['theme'] != self::$default &&
+            !is_dir($_CONF['path_themes'] . $A['theme'])
+        ) {
             return '----';
         }
+
         $retval = '';
         switch($fieldname) {
         case 'use_graphic_logo':
-        case 'display_site_slogan':
-            $checked = $fieldvalue == 1 ? 'checked="checked"' : '';
-            $retval .= "<input type=\"checkbox\" id=\"{$fieldname}_{$A['theme']}\"
-                        name=\"{$fieldname}_{$A['theme']}\" $checked
-                        onclick='LogoToggle(this, \"{$A['theme']}\", \"$fieldname\", \"{$_CONF['site_url']}\");'>";
+            $fieldvalue = (int)$fieldvalue;
+            $keyname = $fieldname . '_' . $A['theme'];
+            $retval .= "<select name=\"$keyname\" id=\"$keyname\"
+                onchange='LogoToggle(this, \"{$A['theme']}\", \"$fieldname\", \"$fieldvalue\");'>" . LB;
+            if ($A['theme'] != self::$default) {
+                $sel = $fieldvalue == $A[$fieldname] ? 'selected="selected"' : '';
+                $retval .= '<option value="' . self::DEFAULT . '" ' . $sel . ">Default</option>" . LB;
+            }
+            foreach (
+                array(
+                    self::GRAPHIC   => 'Graphic',
+                    self::TEXT      => 'Text',
+                    self::NONE      => 'None',
+                ) as $val=>$text
+            ) {
+                $sel = $val == $A[$fieldname] ? 'selected="selected"' : '';
+                $retval .= "<option value=\"$val\" $sel>$text</option>" . LB;
+            }
+            $retval .= '</select>' . LB;
             break;
+        case 'display_site_slogan':
+            $fieldvalue = (int)$fieldvalue;
+            $keyname = $fieldname . '_' . $A['theme'];
+            $retval .= "<select name=\"$keyname\" id=\"$keyname\"
+                onchange='LogoToggle(this, \"{$A['theme']}\", \"$fieldname\", \"$fieldvalue\");'>" . LB;
+            if ($A['theme'] != self::$default) {
+                $sel = $fieldvalue == $A[$fieldname] ? 'selected="selected"' : '';
+                $retval .= '<option value="' . self::DEFAULT . '" ' . $sel . ">Default</option>" . LB;
+            }
+            foreach (
+                array(
+                    1 => 'Yes',
+                    0 => 'No',
+                ) as $val=>$text
+            ) {
+                $sel = $val == $A[$fieldname] ? 'selected="selected"' : '';
+                $retval .= "<option value=\"$val\" $sel>$text</option>" . LB;
+            }
+            $retval .= '</select>' . LB;
             break;
         case 'logo_file':
             $retval = '<span id="logo_file_' . $A['theme'] . '">';
@@ -628,4 +678,3 @@ class Logo
 
 }
 
-?>
