@@ -1,10 +1,13 @@
 # glFusion CMS Long Term Support ChangeLog
 
-## v1.7.9 (June XX, 2020)
+## v1.7.9 (Unreleased)
 
 ### Updates
+  - CKeditor to v4.1.5.0
+
+  - Updated james-heinrich/getid3 (v1.9.19 => v1.9.20)
+  - Updated ezyang/htmlpurifier (v4.12.0 => v4.13.0)
   - Updated html2text/html2text (4.2.1 => 4.3.1)
-  - Updated james-heinrich/getid3 (v1.9.18 => v1.9.19)
   - Updated phpmailer/phpmailer (v5.2.27 => v5.2.28)
   - Updated simplepie/simplepie (1.5.3 => 1.5.5)
   - Updated phpxmlrpc/phpxmlrpc (4.4.1 => 4.4.2)
