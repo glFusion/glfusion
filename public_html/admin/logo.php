@@ -168,7 +168,7 @@ if ( isset($_GET['mode']) ) {
 }
 
 $content = '';
-$expected = array('ajaxtoggle', 'savelogos');
+$expected = array('ajaxtoggle', 'savelogos', 'del_logo_img');
 $action = 'listlogos';
 foreach ($expected as $provided) {
     if (isset($_POST[$provided])) {
@@ -203,6 +203,23 @@ case 'ajaxtoggle':
     }
     exit;
     break;
+case 'del_logo_img':
+    $Logo = new Logo($_POST['theme']);
+    if ($Logo->delImage()) {
+        $retval = array(
+            'status' => true,
+            'statusMessage' => 'Got it done',
+        );
+    } else {
+        $retval = array(
+            'status' => false,
+            'statusMessage' => 'No change made',
+        );
+    }
+    echo json_encode($retval);
+    exit;
+    break;
+
 case 'savelogos':
     Logo::saveLogos();
     COM_refresh($_CONF['site_url'] . '/admin/logo.php');

@@ -30,10 +30,10 @@ if (!defined ('GVERSION')) {
 */
 class Logo
 {
+    const DEFAULT = -1;
+    const NONE = 0;
     const GRAPHIC = 1;
-    const TEXT = 0;
-    const DEFAULT = 2;
-    const NONE = -1;
+    const TEXT = 2;
 
     /** Default theme name.
      * @var string */
@@ -233,6 +233,24 @@ class Logo
 
 
     /**
+     * Delete the logo image.
+     *
+     * @return  boolean     True on success, False on failure
+     */
+    public function delImage()
+    {
+        if (is_file($this->getImagePath())) {
+            $this->updateFile('');
+            if ($this->logo_file == '') {
+                @unlink($this->getImagePath());
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
      * Get the logo HTML to set in the header template.
      *
      * @return  string      HTML for logo
@@ -337,8 +355,6 @@ class Logo
             COM_errorLog(print_r($e,true));
             $retval = $oldvalue;
         }
-        COM_errorLog($sql);
-        COM_errorLog("new value: " . print_r($retval,true));
         return $retval;
     }
 
@@ -355,6 +371,7 @@ class Logo
                     array($filename, $this->theme),
                     array(Database::STRING, Database::STRING)
                 );
+            $this->logo_file = $filename;
         } catch(\Doctrine\DBAL\DBALException $e) {
             // Do nothing
         }
@@ -417,7 +434,6 @@ class Logo
             } else {
                 newval = cbox.checked ? 1 : 0;
             }
-console.log("changing from " + oldval + " to " + newval);
             var dataS = {
                 "ajaxtoggle": "true",
                 "theme": id,
@@ -447,7 +463,56 @@ console.log("changing from " + oldval + " to " + newval);
                 }
             });
             return false;
-        };</script>';
+        };' . LB;
+        $display .= 'function LOGO_delImage(theme_name)
+        {
+            if (!confirm("' . _('Are you sure you want to delete this image?') . '")) {
+                return false;
+            }
+
+            var dataS = {
+                "del_logo_img": "true",
+                "theme": theme_name,
+            };
+            data = $.param(dataS);
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: site_admin_url + "/logo.php",
+                data: data,
+                success: function(result) {
+                    elem = $("#logo_file_" + theme_name);
+                    elem.html("");
+                    $.UIkit.notify("<i class=\'uk-icon-check\'></i>&nbsp;" + result.statusMessage, {timeout: 1000,pos:\'top-center\'});
+                },
+                error: function(e, x, r) {
+                    console.log(e);
+                    console.log(x);
+                    console.log(r);
+                }
+            } );
+            /*// Add the image ID to the imgdelete form var for deletion
+            var deleted = $("#imgdelete").val();
+            if (deleted == "") {
+                deleted = img_id;
+            } else {
+                deleted = deleted + "," + img_id;
+            }
+            $("#imgdelete").val(deleted);
+            elem = document.getElementById("img_blk_" + img_id);
+            elem.style.display = "none";
+
+            // Update the image order to exclude the deleted image
+            var ordered = $("#imgorder").val().split(",");
+            var index = ordered.indexOf(img_id.toString());
+            if (index > -1) {
+               ordered.splice(index, 1);
+            }
+            $("#imgorder").val(ordered.join(","));
+*/
+            return false;
+        }' . LB;
+        $display .= '</script>';
 
         $header_arr = array(
             array(
@@ -512,7 +577,7 @@ console.log("changing from " + oldval + " to " + newval);
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_CONF;
+        global $_CONF, $LANG_ADMIN;
 
         // Somehow got a theme that isn't default and doesn't exist.
         if (
@@ -566,7 +631,32 @@ console.log("changing from " + oldval + " to " + newval);
             $retval .= '</select>' . LB;
             break;
         case 'logo_file':
-            $retval = '<span id="logo_file_' . $A['theme'] . '">';
+            $retval .= '<figure class="uk-overlay uk-overlay-hover">
+                <span id="logo_file_' . $A['theme'] . '">';
+            if (!empty($fieldvalue)) {
+            $retval .= COM_createLink(
+                COM_createImage(
+                    $_CONF['site_url'] . '/images/' . $fieldvalue,
+                    _('Logo Image'),
+                    array(
+                        'style' => 'width:auto;height:100px',
+                    )
+                ),
+                $_CONF['site_url'] . '/images/' . $fieldvalue,
+                array(
+                    'data-uk-lightbox' => '',
+                )
+            );
+            $retval .= '<br />
+              <figcaption class="uk-overlay-panel uk-overlay-background uk-overlay-bottom uk-overlay-slide-bottom">
+                <button class="uk-button uk-button-mini uk-button-danger" onclick="return LOGO_delImage(\'' .
+                    $A['theme'] . '\');">' . $LANG_ADMIN['delete'] . '</button>';
+            $retval .= '</figcaption>';
+            }
+            $retval .= '</span>';
+            $retval .= '</figure>';
+
+            /*$retval = '<span id="logo_file_' . $A['theme'] . '">';
             if (!empty($fieldvalue)) {
                 $retval .= COM_createLink(
                     COM_createImage(
@@ -582,7 +672,7 @@ console.log("changing from " + oldval + " to " + newval);
                     )
                 );
             }
-            $retval .= '</span>';
+            $retval .= '</span>';*/
             break;
 
         case 'upload':
