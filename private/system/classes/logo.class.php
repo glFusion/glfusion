@@ -45,11 +45,11 @@ class Logo
 
     /** Use a graphic logo?
      * @var boolean */
-    private $use_graphic_logo = 0;
+    private $logo_type = -1;
 
     /** Display the site slogan?
      * @var boolean */
-    private $display_site_slogan = 0;
+    private $display_site_slogan = -1;
 
     /** Graphic logo filename.
      * @var string */
@@ -123,7 +123,7 @@ class Logo
 
         $themes = self::getThemes();
         $this->theme = $theme;
-        $this->use_graphic_logo = (int)$themes[self::$default]['use_graphic_logo'];
+        $this->logo_type = (int)$themes[self::$default]['logo_type'];
         $this->display_site_slogan = (int)$themes[self::$default]['display_site_slogan'];
         $this->logo_file = $themes[self::$default]['logo_file'];
         if (isset($themes[$theme])) {
@@ -142,8 +142,8 @@ class Logo
      */
     private function _override($A)
     {
-        if ($A['use_graphic_logo'] != self::DEFAULT) {
-            $this->use_graphic_logo = (int)$A['use_graphic_logo'];
+        if ($A['logo_type'] != self::DEFAULT) {
+            $this->logo_type = (int)$A['logo_type'];
         }
         if ($A['display_site_slogan'] != self::DEFAULT) {
             $this->display_site_slogan = (int)$A['display_site_slogan'];
@@ -188,7 +188,7 @@ class Logo
         global $_CONF;
 
         if (
-            $this->use_graphic_logo == self::GRAPHIC &&
+            $this->logo_type == self::GRAPHIC &&
             file_exists($this->getImagePath())
         ) {
             return 1;
@@ -205,7 +205,7 @@ class Logo
      */
     public function useText()
     {
-        return $this->use_graphic_logo == self::TEXT;
+        return $this->logo_type == self::TEXT;
     }
 
 
@@ -309,8 +309,8 @@ class Logo
         // TODO: Fix table name
         $sql = "INSERT INTO gl_themes SET
             theme = ?,
-            use_graphic_logo = 0,
-            display_site_slogan = 0,
+            logo_type = -1,
+            display_site_slogan = -1,
             logo_file = ''";
         $stmt = Database::getInstance()
             ->conn->executeQuery(
@@ -395,7 +395,7 @@ class Logo
         $data_arr = array(
             array(
                 'theme' => self::$default,
-                'use_graphic_logo' => (int)$dbThemes[self::$default]['use_graphic_logo'],
+                'logo_type' => (int)$dbThemes[self::$default]['logo_type'],
                 'display_site_slogan' => (int)$dbThemes[self::$default]['display_site_slogan'],
                 'logo_file' => $dbThemes[self::$default]['logo_file'],
             )
@@ -406,17 +406,17 @@ class Logo
             foreach ($tmp as $dirname) {
                 if (is_dir($_CONF['path_themes'] . $dirname)) {
                     if (isset($dbThemes[$dirname])) {
-                        $use_graphic = (int)$dbThemes[$dirname]['use_graphic_logo'];
+                        $logo_type = (int)$dbThemes[$dirname]['logo_type'];
                         $show_slogan = (int)$dbThemes[$dirname]['display_site_slogan'];
                         $logo_file = $dbThemes[$dirname]['logo_file'];
                     } else {
-                        $use_graphic = 0;
+                        $logo_type = 0;
                         $show_slogan = 0;
                         $logo_file = '';
                     }
                     $data_arr[] = array(
                         'theme' => $dirname,
-                        'use_graphic_logo' => $use_graphic,
+                        'logo_type' => $logo_type,
                         'display_site_slogan' => $show_slogan,
                         'logo_file' => $logo_file,
                     );
@@ -521,8 +521,8 @@ class Logo
                 'sort'  => true,
             ),
             array(
-                'text'  => _('Use Graphic?'),
-                'field' => 'use_graphic_logo',
+                'text'  => _('Logo Type?'),
+                'field' => 'logo_type',
                 'align' => 'center',
             ),
             array(
@@ -589,7 +589,7 @@ class Logo
 
         $retval = '';
         switch($fieldname) {
-        case 'use_graphic_logo':
+        case 'logo_type':
             $fieldvalue = (int)$fieldvalue;
             $keyname = $fieldname . '_' . $A['theme'];
             $retval .= "<select name=\"$keyname\" id=\"$keyname\"

@@ -185,7 +185,7 @@ case 'ajaxtoggle':
     }
     switch ($_POST['type']) {
     case 'display_site_slogan':
-    case 'use_graphic_logo':
+    case 'logo_type':
         $oldval = (int)$_POST['oldval'];
         $newval = (int)$_POST['newval'];
         $result = $Logo->setval($_POST['type'], $oldval, $newval);
