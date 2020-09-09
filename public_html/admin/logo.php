@@ -176,6 +176,7 @@ foreach ($expected as $provided) {
     }
 }
 
+    COM_errorLog(print_r($_POST,true));
 switch ($action) {
 case 'ajaxtoggle':
     $Logo = new Logo($_POST['theme']);

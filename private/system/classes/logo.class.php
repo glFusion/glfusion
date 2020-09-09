@@ -386,7 +386,7 @@ class Logo
      */
     public static function adminList($cat_id=0)
     {
-        global $_CONF, $_TABLES, $LANG_ADMIN;
+        global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_LOGO, $_IMAGE_TYPE;
 
         // @todo: need table name
         $_TABLES['themes'] = 'gl_themes';
@@ -425,144 +425,62 @@ class Logo
         }
 
         USES_lib_admin();
+    
+        $menu_arr = array(
+            array(
+                'url'  => $_CONF['site_admin_url'],
+                'text' => $LANG_ADMIN['admin_home'],
+            ),
+        );
 
-        $display = ''; 
-        $display .= '<script>
-            var LogoToggle = function(cbox, id, type, oldval) {
-            if (cbox.type == "select-one") {
-                newval = cbox.value;
+        $retval = '';
+        $retval .= COM_startBlock($LANG_LOGO['logo_options'],'', COM_getBlockTemplate('_admin_block', 'header'));
+        $retval .= ADMIN_createMenu(
+            $menu_arr,
+            $LANG_LOGO['instructions'],
+            $_CONF['layout_url'] . '/images/icons/logo.' . $_IMAGE_TYPE
+        );
+        $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
+
+        $T = new \Template($_CONF['path_layout'] . '/admin/logo');
+        $T->set_file('form', 'themes.thtml');
+        $T->set_block('form', 'dataRow', 'DR');
+        foreach ($data_arr as $A){
+            $img_path = $_CONF['path_html'] . '/images/' . $A['logo_file'];
+            if (!is_file($img_path)) {
+                $img_path = '';
+                $img_url = '';
             } else {
-                newval = cbox.checked ? 1 : 0;
-            }
-            var dataS = {
-                "ajaxtoggle": "true",
-                "theme": id,
-                "oldval": oldval,
-                "newval": newval,
-                "type": type,
-            };
-            data = $.param(dataS);
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: site_admin_url + "/logo.php",
-                data: data,
-                success: function(result) {
-                    if (cbox.type == "checkbox") {
-                        cbox.checked = result.newval == 1 ? true : false;
-                    } else {
-                        cbox.value = result.newval;
-                    }
-                    try {
-                        $.UIkit.notify("<i class=\'uk-icon-check\'></i>&nbsp;" + result.statusMessage, {timeout: 1000,pos:\'top-center\'});
-                    }
-                    catch(err) {
-                        // Form is already updated, annoying popup message not needed
-                        // alert(result.statusMessage);
-                    }
-                }
-            });
-            return false;
-        };' . LB;
-        $display .= 'function LOGO_delImage(theme_name)
-        {
-            if (!confirm("' . _('Are you sure you want to delete this image?') . '")) {
-                return false;
+                $img_url = COM_createLink(
+                    COM_createImage(
+                        $_CONF['site_url'] . '/images/' . $A['logo_file'],
+                        _('Logo Image'),
+                        array(
+                            'style' => 'width:auto;height:100px',
+                        )
+                    ),
+                    $_CONF['site_url'] . '/images/' . $A['logo_file'],
+                    array(
+                        'data-uk-lightbox' => '',
+                    )
+                );
             }
 
-            var dataS = {
-                "del_logo_img": "true",
-                "theme": theme_name,
-            };
-            data = $.param(dataS);
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: site_admin_url + "/logo.php",
-                data: data,
-                success: function(result) {
-                    elem = $("#logo_file_" + theme_name);
-                    elem.html("");
-                    $.UIkit.notify("<i class=\'uk-icon-check\'></i>&nbsp;" + result.statusMessage, {timeout: 1000,pos:\'top-center\'});
-                },
-                error: function(e, x, r) {
-                    console.log(e);
-                    console.log(x);
-                    console.log(r);
-                }
-            } );
-            /*// Add the image ID to the imgdelete form var for deletion
-            var deleted = $("#imgdelete").val();
-            if (deleted == "") {
-                deleted = img_id;
-            } else {
-                deleted = deleted + "," + img_id;
-            }
-            $("#imgdelete").val(deleted);
-            elem = document.getElementById("img_blk_" + img_id);
-            elem.style.display = "none";
-
-            // Update the image order to exclude the deleted image
-            var ordered = $("#imgorder").val().split(",");
-            var index = ordered.indexOf(img_id.toString());
-            if (index > -1) {
-               ordered.splice(index, 1);
-            }
-            $("#imgorder").val(ordered.join(","));
-*/
-            return false;
-        }' . LB;
-        $display .= '</script>';
-
-        $header_arr = array(
-            array(
-                'text'  => _('Theme'),
-                'field' => 'theme',
-                'sort'  => true,
-            ),
-            array(
-                'text'  => _('Logo Type?'),
-                'field' => 'logo_type',
-                'align' => 'center',
-            ),
-            array(
-                'text'  => _('Show Site slogan?'),
-                'field' => 'display_site_slogan',
-                'align' => 'center',
-            ),
-            array(
-                'text'  => _('Logo File'),
-                'field' => 'logo_file',
-                'align' => 'left',
-            ),
-            array(
-                'text' => _('Upload New'),
-                'field' => 'upload',
-                'align' => 'left',
-            ),
-        );
-        $text_arr = array(
-            //'form_url' => $_CONF['site_admin_url'] . '/logo.php',
-        );
-        $defsort_arr = array(
-            'field' => 'theme',
-            'direction' => 'ASC',
-        );
-        $filter = '';
-        $options = '';
-        $form_arr = array();
-
-        $display .= '<form class="uk-form" action="' . $_CONF['site_url'] . '/admin/logo.php"
-            method="post" enctype="multipart/form-data"><div>';
-
-        $display .= ADMIN_simpleList(
-            array(__CLASS__,  'getAdminField'),
-            $header_arr, $text_arr, $data_arr, $options, $form_arr
-        );
-        $display .= '<div><button type="submit" class="uk-button uk-button-success" name="savelogos">' . $LANG_ADMIN['submit'] . '</button></div>';
-        $display .= '</form>';
-
-        return $display;
+            $T->set_var(array(
+                'theme_name'    => $A['theme'],
+                'not_default'   => $A['theme'] != self::$default,
+                'type_sel_' . $A['logo_type'] => 'selected="selected"',
+                'slogan_sel_' . $A['display_site_slogan'] => 'selected="selected"',
+                'img_path'      => $img_path,
+                'img_url'       => $img_url,
+                'type_sel'      => $A['logo_type'],
+                'slogan_sel'    => $A['display_site_slogan'],
+            ) );
+            $T->parse('DR', 'dataRow', true);
+        }
+        $T->parse('output', 'form');
+        $retval .= $T->finish($T->get_var('output'));
+        return $retval;
     }
 
 
