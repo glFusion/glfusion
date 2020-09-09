@@ -3857,8 +3857,8 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'cache_host',
-    	'default_value' => '127.0.0.1',
+    	'name' => 'cache_timeout',
+    	'default_value' => '5',
     	'type' => 'text',
     	'subgroup' => 9,
     	'fieldset' => 2,
@@ -3867,10 +3867,11 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+// redis info
     array(
-    	'name' => 'cache_port',
-    	'default_value' => '11211',
-    	'type' => 'text',
+    	'name' => 'cache_redis_info',
+    	'default_value' => '',
+    	'type' => 'fset',
     	'subgroup' => 9,
     	'fieldset' => 2,
     	'selection_array' => NULL,
@@ -3879,8 +3880,8 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'cache_timeout',
-    	'default_value' => '5',
+    	'name' => 'cache_redis_host',
+    	'default_value' => '127.0.0.1',
     	'type' => 'text',
     	'subgroup' => 9,
     	'fieldset' => 2,
@@ -3889,11 +3890,10 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-// redis info
     array(
-    	'name' => 'cache_redis_info',
-    	'default_value' => '',
-    	'type' => 'fset',
+    	'name' => 'cache_redis_port',
+    	'default_value' => '6379',
+    	'type' => 'text',
     	'subgroup' => 9,
     	'fieldset' => 2,
     	'selection_array' => NULL,
@@ -3947,6 +3947,30 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
+    array(
+    	'name' => 'cache_memcached_host',
+    	'default_value' => '127.0.0.1',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 100,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'cache_memcached_port',
+    	'default_value' => '11211',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 2,
+    	'selection_array' => NULL,
+    	'sort' => 110,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+
     array(
     	'name' => 'cache_memcached_socket',
     	'default_value' => '',
@@ -3954,7 +3978,7 @@ $coreConfigData = array(
     	'subgroup' => 9,
     	'fieldset' => 2,
     	'selection_array' => NULL,
-    	'sort' => 100,
+    	'sort' => 120,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3965,7 +3989,7 @@ $coreConfigData = array(
     	'subgroup' => 9,
     	'fieldset' => 2,
     	'selection_array' => NULL,
-    	'sort' => 110,
+    	'sort' => 130,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3977,7 +4001,7 @@ $coreConfigData = array(
     	'subgroup' => 9,
     	'fieldset' => 2,
     	'selection_array' => NULL,
-    	'sort' => 120,
+    	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     ),

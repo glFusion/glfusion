@@ -73,8 +73,16 @@ final class Cache
 
         // validations
         if (!isset($_CONF['cache_driver'])) $_CONF['cache_driver'] = 'files';
+
         if (!isset($_CONF['cache_host'])) $_CONF['cache_host'] = '127.0.0.1';
+if (!isset($_CONF['cache_redis_host'])) $_CONF['cache_redis_host'] = '127.0.0.1';
+if (!isset($_CONF['cache_memcached_host'])) $_CONF['cache_memcached_host'] = '127.0.0.1';
+
+
         if (!isset($_CONF['cache_port'])) $_CONF['cache_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
+if (!isset($_CONF['cache_redis_port'])) $_CONF['cache_redis_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
+if (!isset($_CONF['cache_memcached_port'])) $_CONF['cache_memcached_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
+
         if (!isset($_CONF['cache_password'])) $_CONF['cache_password'] = '';
         if (!isset($_CONF['cache_database'])) $_CONF['cache_database'] = '0';
         if (!isset($_CONF['cache_timeout'])) $_CONF['cache_timeout'] = 10;
@@ -106,13 +114,13 @@ final class Cache
                 if ($_CONF['cache_memcached_password'] != '') {
                     $servers['saslPassword'] = $_CONF['cache_memcached_password'];
                 }
-                $servers['host'] = $_CONF['cache_host'];
-                $servers['port'] = (int) $_CONF['cache_port'];
+                $servers['host'] = $_CONF['cache_memcached_host'];
+                $servers['port'] = (int) $_CONF['cache_memcached_port'];
 
                 try {
                     $this->internalCacheInstance = CacheManager::getInstance('memcache',new \Phpfastcache\Drivers\Memcache\Config([
-                        'host' =>$_CONF['cache_host'],
-                        'port' => (int) $_CONF['cache_port'],
+                        'host' =>$_CONF['cache_memcached_host'],
+                        'port' => (int) $_CONF['cache_memcached_port'],
                         'servers' => array($servers),
                         'itemDetailedDate' => true
                     ]));
@@ -128,8 +136,8 @@ final class Cache
                 if ($_CONF['cache_memcached_socket'] != '') {
                     $servers['path'] = $_CONF['cache_memcached_socket'];
                 } else {
-                    $servers['host'] = $_CONF['cache_host'];
-                    $servers['port'] = (int) $_CONF['cache_port'];
+                    $servers['host'] = $_CONF['cache_memcached_host'];
+                    $servers['port'] = (int) $_CONF['cache_memcached_port'];
                 }
 
                 if ($_CONF['cache_memcached_username'] != '') {
@@ -149,8 +157,8 @@ final class Cache
                         ]));
                     } else {
                         $this->internalCacheInstance = CacheManager::getInstance('memcached',new \Phpfastcache\Drivers\Memcached\Config([
-                            'host' =>$_CONF['cache_host'],
-                            'port' => (int) $_CONF['cache_port'],
+                            'host' =>$_CONF['cache_memcached_host'],
+                            'port' => (int) $_CONF['cache_memcached_port'],
                             'servers' => array($servers),
                             'itemDetailedDate' => true
                         ]));
@@ -164,8 +172,8 @@ final class Cache
                 if ($_CONF['cache_redis_socket'] != '') {
                     $configInfo['path'] = $_CONF['cache_redis_socket'];
                 } else {
-                    $configInfo['host'] = $_CONF['cache_host'];
-                    $configInfo['port'] = (int) $_CONF['cache_port'];
+                    $configInfo['host'] = $_CONF['cache_redis_host'];
+                    $configInfo['port'] = (int) $_CONF['cache_redis_port'];
                 }
                 $configInfo['database'] = (int) $_CONF['cache_redis_database'];
                 if ($_CONF['cache_redis_password'] != '') {
@@ -182,7 +190,7 @@ final class Cache
                     if ($_CONF['cache_redis_socket'] != '') {
                         $redis->connect($_CONF['cache_redis_socket']);
                     } else {
-                        $redis->connect($_CONF['cache_host'], $_CONF['cache_port']);
+                        $redis->connect($_CONF['cache_host'], $_CONF['cache_redis_port']);
                     }
                 } catch(\RedisException $e) {
                     $success = false;
