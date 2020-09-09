@@ -172,7 +172,7 @@ $LANG_configSelect['staticpages'] = array(
     3 => array('date'=>'Data', 'id'=>'Strona ID', 'title'=>'Tytuł', 'label'=>'Etykieta'),
     9 => array('item'=>'Wróć do strony', 'list'=>'Wyświetl listę administracyjną', 'plugin'=>'Wyświetl listę publiczną', 'home'=>'Wyświetl stronę główną', 'admin'=>'Wyświetl administratora'),
     12 => array(0=>'Brak dostępu', 2=>'Tylko do odczytu', 3=>'Odczyt & Zapis'),
-    13 => array(1=>'Włączone', 0=>'Wyłączony'),
+    13 => array(1=>'Włącz', 0=>'Wyłączony'),
     17 => array(0=>'Komentarze włączone', 1=>'Komentarze wyłączone'),
 );
 

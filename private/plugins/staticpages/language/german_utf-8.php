@@ -168,9 +168,9 @@ $LANG_fs['staticpages'] = array(
 $LANG_configSelect['staticpages'] = array(
     0 => array(1=>'Ja', 0=>'Nein'),
     1 => array(true=>'Ja', false=>'Nein'),
-    2 => array('date'=>'Datum', 'id'=>'Page ID', 'title'=>'Titel'),
-    3 => array('date'=>'Datum', 'id'=>'Page ID', 'title'=>'Titel', 'label'=>'Beschriftung'),
-    9 => array('item'=>'Forward to Page', 'list'=>'Admin Liste anzeigen', 'plugin'=>'Link-Liste anzeigen', 'home'=>'Startseite anzeigen', 'admin'=>'Admin anzeigen'),
+    2 => array('date'=>'Datum', 'id'=>'Seiten-ID', 'title'=>'Titel'),
+    3 => array('date'=>'Datum', 'id'=>'Seiten-ID', 'title'=>'Titel', 'label'=>'Beschriftung'),
+    9 => array('item'=>'Weiterleiten an...', 'list'=>'Admin Liste anzeigen', 'plugin'=>'Link-Liste anzeigen', 'home'=>'Startseite anzeigen', 'admin'=>'Admin anzeigen'),
     12 => array(0=>'Kein Zugang', 2=>'Nur Lesen', 3=>'Lesen & Schreiben'),
     13 => array(1=>'Eingeschaltet', 0=>'Deaktiviert'),
     17 => array(0=>'Kommentare erlaubt', 1=>'Kommentare deaktiviert'),
