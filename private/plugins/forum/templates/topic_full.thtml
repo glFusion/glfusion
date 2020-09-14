@@ -340,7 +340,8 @@
 						<div class="uk-grid">
 							<div class="uk-width-medium-5-10 uk-width-small-1-1 uk-text-left">
 {!if likes_enabled}
-								<span id="likes_text_{topic_id}" class="uk-text-primary uk-clearfix" style="overflow:hidden;font-style:italic;">
+                                <div class="uk-clearfix"></div>
+								<span id="likes_text_{topic_id}" class="uk-text-primary" style="overflow:hidden;font-style:italic;">
 									{likes_text}
 								</span>
 {!endif}
