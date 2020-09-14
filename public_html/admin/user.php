@@ -1483,7 +1483,6 @@ function USER_list($grp_id)
 function USER_save($uid)
 {
     global $_CONF, $_TABLES, $_USER, $LANG28, $_USER_VERBOSE;
-    echo "here";die;
 
     $retval = '';
     $sql = '';
