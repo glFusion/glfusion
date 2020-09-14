@@ -90,6 +90,18 @@ $forumConfigData = array(
     ),
 
     array(
+        'name' => 'likes_threshold',
+        'default_value' => 3,
+        'type' => 'text',
+        'subgroup' => 0,
+        'fieldset' => 0,
+        'selection_array' => 0,
+        'sort' => 45,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
         'name' => 'enable_likes_profile',
         'default_value' => true,
         'type' => 'select',
