@@ -40,6 +40,7 @@
   - SpamX Tester - allows admin to submit test content to see which service blocks
   - New Formatter class - consolidates all display formatting into a single location
   - New Caching system utilizing phpFastCache library
+  - Forum Likes - number of likes to display is now a configurable item
 
 ### Changed
   - Logview now initializes the log with date/time cleared
