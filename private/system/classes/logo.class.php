@@ -35,6 +35,10 @@ class Logo
     const GRAPHIC = 1;
     const TEXT = 2;
 
+    /** Table name, until included in glFusion core.
+     * @var string */
+    public static $table = 'gl_themes';
+
     /** Default theme name.
      * @var string */
     public static $default = '_default';
@@ -90,7 +94,7 @@ class Logo
 
         try {
             // @todo: need table name
-            $sql = "SELECT * FROM gl_themes";
+            $sql = "SELECT * FROM " . self::$table;
             $stmt = Database::getInstance()
                 ->conn->executeQuery(
                     $sql
@@ -307,7 +311,7 @@ class Logo
         global $_TABLES;
 
         // TODO: Fix table name
-        $sql = "INSERT INTO gl_themes SET
+        $sql = "INSERT INTO " . self::$table . "SET
             theme = ?,
             logo_type = -1,
             display_site_slogan = -1,
@@ -340,8 +344,8 @@ class Logo
         $newvalue = (int)$newvalue;
         COM_errorLog("changing $field from $oldvalue to $newvalue for {$this->theme}");
 
-        $sql = "UPDATE gl_themes
-                SET $field  = ?
+        $sql = "UPDATE " . self::$table .
+                 "SET $field  = ?
                 WHERE theme = ?";
         try {
             $stmt = Database::getInstance()
@@ -361,8 +365,8 @@ class Logo
 
     public function updateFile($filename)
     {
-        $sql = "UPDATE gl_themes
-                SET logo_file  = ?
+        $sql = "UPDATE " . self::$table .
+                " SET logo_file  = ?
                 WHERE theme = ?";
         try {
             $stmt = Database::getInstance()
@@ -387,9 +391,6 @@ class Logo
     public static function adminList($cat_id=0)
     {
         global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_LOGO, $_IMAGE_TYPE;
-
-        // @todo: need table name
-        $_TABLES['themes'] = 'gl_themes';
 
         $dbThemes = self::getThemes();
         $data_arr = array(
@@ -451,17 +452,11 @@ class Logo
                 $img_path = '';
                 $img_url = '';
             } else {
-                $img_url = COM_createLink(
-                    COM_createImage(
-                        $_CONF['site_url'] . '/images/' . $A['logo_file'],
-                        _('Logo Image'),
-                        array(
-                            'style' => 'width:auto;height:100px',
-                        )
-                    ),
+                $img_url = COM_createImage(
                     $_CONF['site_url'] . '/images/' . $A['logo_file'],
+                    _('Logo Image'),
                     array(
-                        'data-uk-lightbox' => '',
+                        'style' => 'width:auto;height:100px',
                     )
                 );
             }
@@ -480,126 +475,6 @@ class Logo
         }
         $T->parse('output', 'form');
         $retval .= $T->finish($T->get_var('output'));
-        return $retval;
-    }
-
-
-    /**
-     * Get an individual field for the admin list.
-     *
-     * @param   string  $fieldname  Name of field (from the array, not the db)
-     * @param   mixed   $fieldvalue Value of the field
-     * @param   array   $A          Array of all fields from the database
-     * @param   array   $icon_arr   System icon array (not used)
-     * @return  string              HTML for field display in the table
-     */
-    public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
-    {
-        global $_CONF, $LANG_ADMIN;
-
-        // Somehow got a theme that isn't default and doesn't exist.
-        if (
-            $A['theme'] != self::$default &&
-            !is_dir($_CONF['path_themes'] . $A['theme'])
-        ) {
-            return '----';
-        }
-
-        $retval = '';
-        switch($fieldname) {
-        case 'logo_type':
-            $fieldvalue = (int)$fieldvalue;
-            $keyname = $fieldname . '_' . $A['theme'];
-            $retval .= "<select name=\"$keyname\" id=\"$keyname\"
-                onchange='LogoToggle(this, \"{$A['theme']}\", \"$fieldname\", \"$fieldvalue\");'>" . LB;
-            if ($A['theme'] != self::$default) {
-                $sel = $fieldvalue == $A[$fieldname] ? 'selected="selected"' : '';
-                $retval .= '<option value="' . self::DEFAULT . '" ' . $sel . ">Default</option>" . LB;
-            }
-            foreach (
-                array(
-                    self::GRAPHIC   => 'Graphic',
-                    self::TEXT      => 'Text',
-                    self::NONE      => 'None',
-                ) as $val=>$text
-            ) {
-                $sel = $val == $A[$fieldname] ? 'selected="selected"' : '';
-                $retval .= "<option value=\"$val\" $sel>$text</option>" . LB;
-            }
-            $retval .= '</select>' . LB;
-            break;
-        case 'display_site_slogan':
-            $fieldvalue = (int)$fieldvalue;
-            $keyname = $fieldname . '_' . $A['theme'];
-            $retval .= "<select name=\"$keyname\" id=\"$keyname\"
-                onchange='LogoToggle(this, \"{$A['theme']}\", \"$fieldname\", \"$fieldvalue\");'>" . LB;
-            if ($A['theme'] != self::$default) {
-                $sel = $fieldvalue == $A[$fieldname] ? 'selected="selected"' : '';
-                $retval .= '<option value="' . self::DEFAULT . '" ' . $sel . ">Default</option>" . LB;
-            }
-            foreach (
-                array(
-                    1 => 'Yes',
-                    0 => 'No',
-                ) as $val=>$text
-            ) {
-                $sel = $val == $A[$fieldname] ? 'selected="selected"' : '';
-                $retval .= "<option value=\"$val\" $sel>$text</option>" . LB;
-            }
-            $retval .= '</select>' . LB;
-            break;
-        case 'logo_file':
-            $retval .= '<figure class="uk-overlay uk-overlay-hover">
-                <span id="logo_file_' . $A['theme'] . '">';
-            if (!empty($fieldvalue)) {
-            $retval .= COM_createLink(
-                COM_createImage(
-                    $_CONF['site_url'] . '/images/' . $fieldvalue,
-                    _('Logo Image'),
-                    array(
-                        'style' => 'width:auto;height:100px',
-                    )
-                ),
-                $_CONF['site_url'] . '/images/' . $fieldvalue,
-                array(
-                    'data-uk-lightbox' => '',
-                )
-            );
-            $retval .= '<br />
-              <figcaption class="uk-overlay-panel uk-overlay-background uk-overlay-bottom uk-overlay-slide-bottom">
-                <button class="uk-button uk-button-mini uk-button-danger" onclick="return LOGO_delImage(\'' .
-                    $A['theme'] . '\');">' . $LANG_ADMIN['delete'] . '</button>';
-            $retval .= '</figcaption>';
-            }
-            $retval .= '</span>';
-            $retval .= '</figure>';
-
-            /*$retval = '<span id="logo_file_' . $A['theme'] . '">';
-            if (!empty($fieldvalue)) {
-                $retval .= COM_createLink(
-                    COM_createImage(
-                        $_CONF['site_url'] . '/images/' . $fieldvalue,
-                        _('Logo Image'),
-                        array(
-                            'style' => 'width:auto;height:100px',
-                        )
-                    ),
-                    $_CONF['site_url'] . '/images/' . $fieldvalue,
-                    array(
-                        'data-uk-lightbox' => '',
-                    )
-                );
-            }
-            $retval .= '</span>';*/
-            break;
-
-        case 'upload':
-            $retval = '<input type="file" name="newlogo[' . $A['theme'] . ']" />';
-            break;
-        default:
-            $retval = $fieldvalue;
-            break;
-        }
         return $retval;
     }
 
