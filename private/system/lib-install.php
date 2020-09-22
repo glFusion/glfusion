@@ -378,7 +378,11 @@ function INSTALLER_install_block($step, &$vars)
     $content        = isset($step['content']) ? $step['content'] : '';
     $blockorder     = isset($step['blockorder']) ? intval($step['blockorder']) : 9999;
     $owner_id       = isset($_USER['uid']) ? $_USER['uid'] : 2;
-    $group_id       = isset($vars[$step['group_id']]) ? $vars[$step['group_id']] : 1;
+    if (isset($step['group_id'])) {
+        $group_id       = isset($vars[$step['group_id']]) ? $vars[$step['group_id']] : 1;
+    } else {
+        $group_id = 1;
+    }
     list($perm_owner,$perm_group,$perm_members,$perm_anon) = $_CONF['default_permissions_block'];
 
     try {
