@@ -3,8 +3,8 @@
 ## v1.7.9 (Unreleased)
 
 ### Updates
-  - CKeditor to v4.1.5.0
-
+  - Updated PHP version checks to support current EOL state
+  - Updated CKeditor (4.13.1 => v4.1.5.0)
   - Updated james-heinrich/getid3 (v1.9.19 => v1.9.20)
   - Updated ezyang/htmlpurifier (v4.12.0 => v4.13.0)
   - Updated html2text/html2text (4.2.1 => 4.3.1)
@@ -17,6 +17,7 @@
   - Story post hour was incorrectly calculated
   - Post action messages where not being properly displayed. For example, save a group membership and the confirmation message did not display.
   - Upgrade issues when upgrading very old glFusion sites
+  - CAPTCHA Plugin - Fixed Google ReCaptcha
 
 ### Changed
 

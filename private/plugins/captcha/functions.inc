@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion integration functions.                                          |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
+// | Copyright (C) 2002-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -803,7 +803,8 @@ function recaptcha_check_answer()
     $resp = null;
     // The error code from reCAPTCHA, if any
     $error = null;
-    $reCaptcha = new \ReCaptcha\ReCaptcha($_CP_CONF['privatekey'],new \ReCaptcha\RequestMethod\SocketPost());
+//    $reCaptcha = new \ReCaptcha\ReCaptcha($_CP_CONF['privatekey'],new \ReCaptcha\RequestMethod\SocketPost());
+    $reCaptcha = new \ReCaptcha\ReCaptcha($_CP_CONF['privatekey'],new \ReCaptcha\RequestMethod\CurlPost());
     // Was there a reCAPTCHA response?
     if (isset($_POST["g-recaptcha-response"]) && $_POST["g-recaptcha-response"]) {
         $resp = $reCaptcha->verify($_POST["g-recaptcha-response"],$_SERVER["REAL_ADDR"]);
