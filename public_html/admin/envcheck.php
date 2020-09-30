@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Environment Check                                               |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -106,7 +106,7 @@ function _checkEnvironment()
     } else {
         $T->set_var('class','tm-pass');
     }
-    $T->set_var('recommended','7.0.0+');
+    $T->set_var('recommended','7.2.0+');
 
     $phpnotes = $LANG_ENVCHK['php_req_version'];
     if ( !_phpUpToDate() ) {
