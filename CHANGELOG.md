@@ -18,6 +18,7 @@
   - Post action messages where not being properly displayed. For example, save a group membership and the confirmation message did not display.
   - Upgrade issues when upgrading very old glFusion sites
   - CAPTCHA Plugin - Fixed Google ReCaptcha
+  - Fixed SQL error in Polls list
 
 ### Changed
 
