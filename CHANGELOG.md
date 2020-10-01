@@ -19,6 +19,7 @@
   - Upgrade issues when upgrading very old glFusion sites
   - CAPTCHA Plugin - Fixed Google ReCaptcha
   - Fixed SQL error in Polls list
+  - Fixed back button in group admin
 
 ### Changed
 
