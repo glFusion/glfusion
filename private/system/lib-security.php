@@ -1690,7 +1690,7 @@ function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $se
         'secure' => $secure ? true : false,
         'httponly' => $httponly ? true : false,
         'expires' => $expire,
-        'samesite' => 'Lax',
+        'samesite' => $samesite,
     );
     $retval = @setcookie($name, $value, $options);
     return $retval;
