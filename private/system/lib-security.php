@@ -1678,7 +1678,7 @@ function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $se
     if (!in_array($samesite, array('Lax', 'Strict', 'None'))) {
         $samesite = 'Lax';
     }
-    if ($samesite = 'None') {
+    if ($samesite == 'None') {
         $secure = true;
     } elseif ($secure == '') {
         $secure = $_CONF['cookiesecure'];
