@@ -1684,15 +1684,19 @@ function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $se
         $secure = $_CONF['cookiesecure'];
     }
 
-    $options = array(
-        'path' => $path,
-        'domain' => $domain,
-        'secure' => $secure ? true : false,
-        'httponly' => $httponly ? true : false,
-        'expires' => $expire,
-        'samesite' => $samesite,
-    );
-    $retval = @setcookie($name, $value, $options);
+    if (version_compare(PHP_VERSION, '7.3.0') >= 0 ) {
+        $options = array(
+            'path' => $path,
+            'domain' => $domain,
+            'secure' => $secure ? true : false,
+            'httponly' => $httponly ? true : false,
+            'expires' => $expire,
+            'samesite' => $samesite,
+        );
+        $retval = @setcookie($name, $value, $options);
+    } else {
+        $retval = @setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+    }
     return $retval;
 }
 
