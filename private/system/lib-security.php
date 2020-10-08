@@ -1653,10 +1653,11 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
 * @param string $path   the path on the server in which the cookie will be available - defaults to $_CONF['cookie_path']
 * @param string $domain the domain that the cookie is available - defaults to $_CONF['cookiedomain']
 * @param bool   $secure indicates that the cookie shoul only be transmitted over secure HTTPS connection - defaults to $_CONF['cookiesecure']
+* @param string $samesite the samesite flag setting. Allows 'Lax', 'Strict' or 'None'
 * @param bool   $httponly when true the cookie will be made accessible only through the HTTP protocol
 *
 */
-function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = false)
+function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $secure = false, $httponly = false, $samesite='Lax')
 {
     global $_CONF, $_SYSTEM;
 
@@ -1674,16 +1675,24 @@ function SEC_setCookie($name, $value, $expire = 0, $path = '', $domain = '', $se
         $domain = $_CONF['cookiedomain'];
     }
 
-    if ($secure == '') {
+    if (!in_array($samesite, array('Lax', 'Strict', 'None'))) {
+        $samesite = 'Lax';
+    }
+    if ($samesite == 'None') {
+        $secure = true;
+    } elseif ($secure == '') {
         $secure = $_CONF['cookiesecure'];
     }
 
-    if ( $httponly ) {
-        $retval = @setcookie($name, $value, $expire, $path, $domain, $secure, true);
-    } else {
-        $retval = @setcookie($name, $value, $expire, $path, $domain, $secure);
-    }
-
+    $options = array(
+        'path' => $path,
+        'domain' => $domain,
+        'secure' => $secure ? true : false,
+        'httponly' => $httponly ? true : false,
+        'expires' => $expire,
+        'samesite' => $samesite,
+    );
+    $retval = @setcookie($name, $value, $options);
     return $retval;
 }
 

@@ -39,7 +39,14 @@ if (empty ($_CONF['cookiedomain'])) {
     }
 }
 
-session_set_cookie_params ( 0, $_CONF['cookie_path'], $_CONF['cookiedomain'], $_CONF['cookiesecure'],true);
+session_set_cookie_params(array(
+    'lifetime' => 0,
+    'path' => $_CONF['cookie_path'],
+    'domain' => $_CONF['cookiedomain'],
+    'secure' => $_CONF['cookiesecure'],
+    'httponly' => true,
+    'samesite' => 'Lax',
+));
 
 // Need to destroy any existing sessions started with session.auto_start
 if (session_id()) {
@@ -229,10 +236,10 @@ function SESS_checkRememberMe()
                 // Invalid remember settings - clear all the cookies
                 $userid = 0;
 
-                SEC_setcookie ($_CONF['cookie_name'], '', time() - 3600,
+                SEC_setCookie ($_CONF['cookie_name'], '', time() - 3600,
                                $_CONF['cookie_path'], $_CONF['cookiedomain'],
                                $_CONF['cookiesecure'],true);
-                SEC_setcookie ($_CONF['cookie_password'], '', time() - 3600,
+                SEC_setCookie ($_CONF['cookie_password'], '', time() - 3600,
                                $_CONF['cookie_path'], $_CONF['cookiedomain'],
                                $_CONF['cookiesecure'],true);
             }
@@ -285,8 +292,8 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
     		if (session_id()) {
     			session_unset();
     			session_destroy();
-    		}
-            SEC_setcookie ($_CONF['cookie_session'], '', time() - 3600,
+                }
+            SEC_setCookie ($_CONF['cookie_session'], '', time() - 3600,
                            $_CONF['cookie_path'], $_CONF['cookiedomain'],
                            $_CONF['cookiesecure'],true);
         }
@@ -604,8 +611,9 @@ function SESS_completeLogin($uid, $authenticated = 1)
 
 	if (isset($_COOKIE[$_CONF['cookie_session']])) {
 		$cookie_domain = $_CONF['cookiedomain'];
-		$cookie_path   = $_CONF['cookie_path'];
-		setcookie($_COOKIE[$_CONF['cookie_session']],'', time()-42000, $cookie_path, $cookie_domain,$_CONF['cookiesecure'],true);
+                $cookie_path   = $_CONF['cookie_path'];
+                SEC_setCookie($_CONF['cookie_session'],'', time()-42000);
+                //$cookie_path, $cookie_domain,$_CONF['cookiesecure'],true);
 	}
 
     session_id($sessid);
@@ -655,7 +663,7 @@ function SESS_completeLogin($uid, $authenticated = 1)
 
     if ( $_CONF['allow_user_themes'] ) {
         // set theme cookie (or update it )
-        SEC_setcookie ($_CONF['cookie_theme'], $_USER['theme'], time() + 31536000,
+        SEC_setCookie ($_CONF['cookie_theme'], $_USER['theme'], time() + 31536000,
                        $_CONF['cookie_path'], $_CONF['cookiedomain'],
                        $_CONF['cookiesecure'],true);
     }
