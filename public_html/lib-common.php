@@ -3554,8 +3554,8 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
     }
 
     $c = Cache::getInstance();
-    $key = 'whatsnew__'.$c->securityHash(true,true);
-    $final = $c->get($key);
+    $cache_key = 'whatsnew__'.$c->securityHash(true,true);
+    $final = $c->get($cache_key);
     if ( $final !== null ) {
         return $final;
     }
@@ -3593,9 +3593,8 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
                 AND (draft_flag = 0)" . $archsql . $db->getPermSQL( 'AND' ) . $topicsql . $db->getLangSQL( 'sid', 'AND' )
                 . " ORDER BY date DESC";
 
-        $key = 'whatsnew_query_'.MD5($sql);
-
-        $stmt = $db->conn->executeCacheQuery($sql,array($_CONF['newstoriesinterval']),array(Database::INTEGER),new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $key));
+        $db_key = 'whatsnew_query_'.MD5($sql);
+        $stmt = $db->conn->executeCacheQuery($sql,array($_CONF['newstoriesinterval']),array(Database::INTEGER),new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $db_key));
         $newStoryData = $stmt->fetchAll(Database::ASSOCIATIVE);
         $stmt->closeCursor();
 
@@ -3788,7 +3787,7 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         $final = '';
     }
 
-    $c->set($key,$final,'whatsnew',$_CONF['whatsnew_cache_time']);
+    $c->set($cache_key,$final,'whatsnew',$_CONF['whatsnew_cache_time']);
 
     return $final;
 }
