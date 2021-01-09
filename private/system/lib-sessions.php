@@ -39,14 +39,24 @@ if (empty ($_CONF['cookiedomain'])) {
     }
 }
 
-session_set_cookie_params(array(
-    'lifetime' => 0,
-    'path' => $_CONF['cookie_path'],
-    'domain' => $_CONF['cookiedomain'],
-    'secure' => $_CONF['cookiesecure'],
-    'httponly' => true,
-    'samesite' => 'Lax',
-));
+if (version_compare(PHP_VERSION, '7.3.0') >= 0 ) {
+    session_set_cookie_params(array(
+        'lifetime' => 0,
+        'path' => $_CONF['cookie_path'],
+        'domain' => $_CONF['cookiedomain'],
+        'secure' => $_CONF['cookiesecure'],
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ));
+} else {
+    session_set_cookie_params(
+        0,
+        $_CONF['cookie_path'],
+        $_CONF['cookiedomain'],
+        $_CONF['cookiesecure'],
+        true
+    );
+}
 
 // Need to destroy any existing sessions started with session.auto_start
 if (session_id()) {
