@@ -345,7 +345,7 @@ class Logo
         COM_errorLog("changing $field from $oldvalue to $newvalue for {$this->theme}");
 
         $sql = "UPDATE " . self::$table .
-                 "SET $field  = ?
+                 " SET $field  = ?
                 WHERE theme = ?";
         try {
             $stmt = Database::getInstance()
