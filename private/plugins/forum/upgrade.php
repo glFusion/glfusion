@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Plugin upgrade                                                           |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
+// | Copyright (C) 2008-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -289,6 +289,9 @@ function forum_upgrade() {
 
         case '3.4.1' :
             DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;",1);
+
+        case '3.4.2' :
+            // no changes to db schema
 
         default :
             forum_update_config();

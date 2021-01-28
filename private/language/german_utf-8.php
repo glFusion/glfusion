@@ -31,7 +31,7 @@ $LANG01 = array(
     2 => 'Mehr lesen',
     3 => 'Kommentar(e)',
     4 => 'Bearbeiten',
-    5 => 'Stimme',					// depreciated
+    5 => 'Abstimmen',					// depreciated
     6 => 'Ergebnisse',					// depreciated
     8 => 'Stimmen',					// depreciated
     9 => 'Admin-Funktionen:',		// depreciated
@@ -685,7 +685,7 @@ $LANG12 = array(
     46 => 'Stadt',
     47 => 'Bundesland',
     48 => 'Postleitzahl',
-    50 => 'Edit Event Type',
+    50 => 'Ereignistyp bearbeiten',
     51 => 'Ort',
     52 => 'Löschen',
     53 => 'Konto anlegen',
@@ -1156,7 +1156,7 @@ $LANG31 = array(
     17 => "<a href=\"%s/mail.php\">Eine andere Nachricht senden</a>",
     18 => 'An',
     19 => '<ul><li>Hier kannst Du eine E-Mail an eine bestimmte Gruppe dieser Seite senden.</li><li>Wenn Du eine E-Mail an alle eingetragenen Benutzer senden willst, musst Du die Gruppe Logged-in Benutzer auswählen.</li><li>Wenn Du eine E-Mail an einen bestimmten Benutzer senden willst, kannst Du dies über die <a href="{$_CONF[\'site_admin_url\']}/user.php">Benutzer-Verwaltung</a> erledigen.</li></ul>',
-    20 => "Successfully sent %d messages. You can <a href=\"%s/mail.php\">Send another message</a> or you can <a href=\"%s/index.php\">go back to the administration page</a>.",
+    20 => "%d Nachrichten erfolgreich gesendet. Sie können <a href=\"%s/mail.php\">eine weitere Nachricht senden</a> oder Sie können <a href=\"%s/index.php\">zur Administrationsseite</a> zurückkehren.",
     21 => 'Fehler',
     22 => 'Erfolgreich',
     23 => 'Keine Fehler',
@@ -1352,8 +1352,8 @@ $LANG_SOCIAL = array(
     'enabled'               => 'Aktiv',
     'share_it_label'        => 'Teile diesen Beitrag!',
     'state_toggled'         => 'Status wurde geändert.',
-    'follow_us'             => 'Find Us on',
-    'follow_me'             => 'Find Me on',
+    'follow_us'             => 'Finde uns auf',
+    'follow_me'             => 'Finde mich auf',
     'service_name'          => 'Netzwerk Name',
     'service_url'           => 'Netzwerk URL',
     'site_username'         => 'Netzwerk Benutzername',
@@ -2344,15 +2344,15 @@ $LANG_ADM_ACTIONS = array(
     'group_updated'         => 'Gruppe %s (%s) gespeichert',
     'comment_edit'          => 'Bearbeite Kommentar-Id: %s :: %s',
     'comment_delete'        => 'gelöschter Kommentar  für %s :: %s',
-    'delete_user'           => 'User %s (ID: %d) has been deleted.',
+    'delete_user'           => 'Der Benutzer %s (ID: %d) wurde gelöscht.',
     'article_save'          => 'Bearbeitet / Gespeicherter Artikel: %s - %s',
     'article_delete_sys'    => 'Automatisch gelöschte Artikel: %s',
     'article_delete'        => 'Gelöschte Artikel: %s',
     'article_global'        => 'Globale Änderung des Beitrags: %s',
     'article_approved'      => 'Artikel %s wurde genehmigt',
-    'clone_menu'            => 'Cloned menu %s to %s',
-    'create_menu'           => 'Created new menu: %s',
-    'edit_menu'             => 'Edited menu: %s',
+    'clone_menu'            => 'Menü %s bis %s wurde kopiert',
+    'create_menu'           => 'Menü %s wurde erstellt',
+    'edit_menu'             => 'Menü %s wurde bearbeitet',
 );
 
 
@@ -2447,7 +2447,7 @@ $LANG_ENVCHK = array(
     'xml_extension'             => 'XML-Erweiterung',
     'zlib_extension'            => 'Zlib-Erweiterung',
     'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> sollte ausgeschalten sein.',
-    'intl_extension'            => 'Intl Extension',
+    'intl_extension'            => 'Intl-Erweiterung',
 );
 
 ###############################################################################
@@ -2836,8 +2836,10 @@ $LANG_confignames['Core'] = array(
     'story_sort_by' => 'Artikel-Liste Sortierfeld',
     'story_sort_dir' => 'Artikel-Liste Sortierrichtung',
     'cache_driver' => 'Cache-Treiber',
-    'cache_host' => 'Cache-Server',
-    'cache_port' => 'Cache-Server-Port',
+    'cache_redis_host' => 'Redis Cache Server',
+    'cache_redis_port' => 'Redis Cache Server Port',
+    'cache_memcached_host' => 'Memcache(d) Cache Server',
+    'cache_memcached_port' => 'Memcached(d) Cache Server Port',
     'cache_timeout' => 'Verbindungs-Timeout',
     'cache_redis_socket' => 'Pfad / Dateiname zu Redis Socket',
     'cache_redis_password' => 'Redis-Passwort',

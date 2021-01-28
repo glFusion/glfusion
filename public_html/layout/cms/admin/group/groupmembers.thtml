@@ -38,7 +38,7 @@
 		</fieldset>
 		<div class="uk-form-row uk-align-center uk-text-center">
 			<button class="uk-button uk-button-success uk-form-width-small " type="submit" value="{lang_save}" name="save" onclick="return setUsers(this.form)">{lang_save}</button>
-			<button class="uk-button uk-button-danger uk-form-width-small" type="submit" value="{lang_cancel}" name="cancel" onclick="javascript:history.go(-1)">{lang_cancel}</button>
+			<button class="uk-button uk-button-danger uk-form-width-small" type="button" value="{lang_cancel}" name="cancel" onclick="javascript:history.go(-1)">{lang_cancel}</button>
 		</div>
 	</form>
 </div>

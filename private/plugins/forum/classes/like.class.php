@@ -3,7 +3,7 @@
 *   Class to handle Forum post Likes
 *
 *   @author     Lee Garner <lee@leegarner.com>
-*   @copyright  Copyright (c) 2018 Lee Garner <lee@leegarner.com>
+*   @copyright  Copyright (c) 2018-2020 Lee Garner <lee@leegarner.com>
 *   @package    glfusion
 *   @version    0.0.1
 *   @license    http://opensource.org/licenses/gpl-2.0.php
@@ -432,11 +432,16 @@ class Like
     */
     public static function getLikesText($post_id)
     {
-        global $LANG_GF01;
+        global $_FF_CONF, $LANG_GF01;
 
         $likers = self::LikerNames($post_id);
         $total_likes = count($likers);
-        $threshold = 3;
+
+        if (!isset($_FF_CONF['likes_threshold'])) {
+            $threshold = 3;
+        } else {
+            $threshold = $_FF_CONF['likes_threshold'];
+        }
 
         if ($total_likes == 0) {
             return '';      // No likes, no text
