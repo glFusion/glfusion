@@ -405,7 +405,7 @@ function _checkVersion()
     $pluginsUpToDate = 1;
     $done = 0;
 
-    if ( isset($response['response']) && is_array($response['response']['plugin'] ) ) {
+    if ( isset($response['response']) && isset($response['response']['plugin']) && is_array($response['response']['plugin'] ) ) {
         foreach ($_PLUGIN_INFO AS $iPlugin ) {
             if ( $iPlugin['pi_enabled'] ) {
                 $upToDate = 0;
@@ -436,7 +436,7 @@ function _checkVersion()
     $pluginData['glfusioncms']['release_date'] = $releaseDate;
     $pluginData['glfusioncms']['url'] = '';
 
-    if ( is_array($response['response']['plugin'] ) ) {
+    if ( isset($response['response']['plugin']) && is_array($response['response']['plugin'] ) ) {
         foreach ($_PLUGIN_INFO AS $iPlugin ) {
             if ( $iPlugin['pi_enabled'] ) {
                 $upToDate = 0;
@@ -471,22 +471,25 @@ function _checkVersion()
  */
 function _phpUpToDate()
 {
-    // supported version is 5.6 or greater
+    // supported version is 7.2 or greater until Nov 30, 2020
 
     $uptodate = false;
 
     $phpv = explode('.', phpversion());
 
     switch ( $phpv[0] ) {
+        case 4 :
         case 5 :
-            if ( $phpv[1] >= 6 ) {
+            $uptodate = false;
+            break;
+        case '7' :
+            if ( $phpv[1] >= 2 ) {
                 $uptodate = true;
             }
             break;
-        case '7' :
+        case '8' :
             $uptodate = true;
             break;
-
         default :
             $uptodate = false;
             break;
