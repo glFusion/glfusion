@@ -47,9 +47,10 @@ class DateUtil
 
         // Only convert the DateTime to UTC if there is a time present. For date-only the
         // timezone is meaningless and converting it might shift it to the wrong date.
-        if (!$noTime && $useUtc) {
+        // Do not convert DateTime to UTC if a timezone it specified, as it should be local time.
+        if (!$noTime && $useUtc && !$useTimezone) {
             $dateTime = clone $dateTime;
-            $dateTime->setTimezone(new \DateTimeZone('UTC'));
+            $dateTime = $dateTime->setTimezone(new \DateTimeZone('UTC'));
         }
 
         return $dateTime->format(self::getDateFormat($noTime, $useTimezone, $useUtc));

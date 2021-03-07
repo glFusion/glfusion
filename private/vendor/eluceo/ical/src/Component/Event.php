@@ -15,6 +15,7 @@ use Eluceo\iCal\Component;
 use Eluceo\iCal\Property;
 use Eluceo\iCal\Property\DateTimeProperty;
 use Eluceo\iCal\Property\DateTimesProperty;
+use Eluceo\iCal\Property\Event\Attachment;
 use Eluceo\iCal\Property\Event\Attendees;
 use Eluceo\iCal\Property\Event\Geo;
 use Eluceo\iCal\Property\Event\Organizer;
@@ -34,6 +35,11 @@ class Event extends Component
     const STATUS_TENTATIVE = 'TENTATIVE';
     const STATUS_CONFIRMED = 'CONFIRMED';
     const STATUS_CANCELLED = 'CANCELLED';
+
+    const MS_BUSYSTATUS_FREE = 'FREE';
+    const MS_BUSYSTATUS_TENTATIVE = 'TENTATIVE';
+    const MS_BUSYSTATUS_BUSY = 'BUSY';
+    const MS_BUSYSTATUS_OOF = 'OOF';
 
     /**
      * @var string
@@ -71,6 +77,11 @@ class Event extends Component
      * @var bool
      */
     protected $noTime = false;
+
+    /**
+     * @var string
+     */
+    protected $msBusyStatus = null;
 
     /**
      * @var string
@@ -117,7 +128,7 @@ class Event extends Component
     protected $useTimezone = false;
 
     /**
-     * If set will we used as the timezone identifier.
+     * If set will be used as the timezone identifier.
      *
      * @var string
      */
@@ -219,6 +230,11 @@ class Event extends Component
      * @var RecurrenceId
      */
     protected $recurrenceId;
+
+    /**
+     * @var Attachment[]
+     */
+    protected $attachments = [];
 
     public function __construct(string $uniqueId = null)
     {
@@ -350,6 +366,11 @@ class Event extends Component
             $propertyBag->set('X-MICROSOFT-CDO-ALLDAYEVENT', 'TRUE');
         }
 
+        if (null != $this->msBusyStatus) {
+            $propertyBag->set('X-MICROSOFT-CDO-BUSYSTATUS', $this->msBusyStatus);
+            $propertyBag->set('X-MICROSOFT-CDO-INTENDEDSTATUS', $this->msBusyStatus);
+        }
+
         if (null != $this->categories) {
             $propertyBag->set('CATEGORIES', $this->categories);
         }
@@ -364,6 +385,10 @@ class Event extends Component
 
         if ($this->modified) {
             $propertyBag->add(new DateTimeProperty('LAST-MODIFIED', $this->modified, false, false, true));
+        }
+
+        foreach ($this->attachments as $attachment) {
+            $propertyBag->add($attachment);
         }
 
         return $propertyBag;
@@ -435,10 +460,7 @@ class Event extends Component
             $geo = Geo::fromString($geo);
         } elseif (!is_null($geo) && !$geo instanceof Geo) {
             $className = get_class($geo);
-            throw new \InvalidArgumentException(
-                "The parameter 'geo' must be a string or an instance of " . Geo::class
-                . " but an instance of {$className} was given."
-            );
+            throw new \InvalidArgumentException("The parameter 'geo' must be a string or an instance of " . Geo::class . " but an instance of {$className} was given.");
         }
 
         $this->location = $location;
@@ -449,8 +471,6 @@ class Event extends Component
     }
 
     /**
-     * @param Geo $geoProperty
-     *
      * @return $this
      */
     public function setGeoLocation(Geo $geoProperty)
@@ -470,6 +490,37 @@ class Event extends Component
         $this->noTime = $noTime;
 
         return $this;
+    }
+
+    /**
+     * @param $msBusyStatus
+     *
+     * @return $this
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function setMsBusyStatus($msBusyStatus)
+    {
+        $msBusyStatus = strtoupper($msBusyStatus);
+        if ($msBusyStatus == self::MS_BUSYSTATUS_FREE
+            || $msBusyStatus == self::MS_BUSYSTATUS_TENTATIVE
+            || $msBusyStatus == self::MS_BUSYSTATUS_BUSY
+            || $msBusyStatus == self::MS_BUSYSTATUS_OOF
+        ) {
+            $this->msBusyStatus = $msBusyStatus;
+        } else {
+            throw new \InvalidArgumentException('Invalid value for status');
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMsBusyStatus()
+    {
+        return $this->msBusyStatus;
     }
 
     /**
@@ -493,8 +544,6 @@ class Event extends Component
     }
 
     /**
-     * @param Organizer $organizer
-     *
      * @return $this
      */
     public function setOrganizer(Organizer $organizer)
@@ -589,8 +638,6 @@ class Event extends Component
     }
 
     /**
-     * @param Attendees $attendees
-     *
      * @return $this
      */
     public function setAttendees(Attendees $attendees)
@@ -613,9 +660,6 @@ class Event extends Component
         return $this;
     }
 
-    /**
-     * @return Attendees
-     */
     public function getAttendees(): Attendees
     {
         return $this->attendees;
@@ -731,8 +775,6 @@ class Event extends Component
     /**
      * @deprecated Deprecated since version 0.11.0, to be removed in 1.0. Use addRecurrenceRule instead.
      *
-     * @param RecurrenceRule $recurrenceRule
-     *
      * @return $this
      */
     public function setRecurrenceRule(RecurrenceRule $recurrenceRule)
@@ -757,8 +799,6 @@ class Event extends Component
     }
 
     /**
-     * @param RecurrenceRule $recurrenceRule
-     *
      * @return $this
      */
     public function addRecurrenceRule(RecurrenceRule $recurrenceRule)
@@ -827,8 +867,6 @@ class Event extends Component
     }
 
     /**
-     * @param \DateTimeInterface $dateTime
-     *
      * @return \Eluceo\iCal\Component\Event
      */
     public function addExDate(\DateTimeInterface $dateTime)
@@ -867,8 +905,6 @@ class Event extends Component
     }
 
     /**
-     * @param RecurrenceId $recurrenceId
-     *
      * @return \Eluceo\iCal\Component\Event
      */
     public function setRecurrenceId(RecurrenceId $recurrenceId)
@@ -876,5 +912,30 @@ class Event extends Component
         $this->recurrenceId = $recurrenceId;
 
         return $this;
+    }
+
+    /**
+     * @param array $attachment
+     *
+     * @return $this
+     */
+    public function addAttachment(Attachment $attachment)
+    {
+        $this->attachments[] = $attachment;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    public function addUrlAttachment(string $url)
+    {
+        $this->addAttachment(new Attachment($url));
     }
 }

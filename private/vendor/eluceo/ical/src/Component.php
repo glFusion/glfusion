@@ -70,6 +70,19 @@ abstract class Component
     }
 
     /**
+     * Set all Components.
+     *
+     * @param Component[] $components The array of Component that will be set
+     * @param null        $key        The key of the Component
+     */
+    public function setComponents(array $components)
+    {
+        $this->components = $components;
+
+        return $this;
+    }
+
+    /**
      * Renders an array containing the lines of the iCal file.
      *
      * @return array
@@ -160,7 +173,6 @@ abstract class Component
     }
 
     /**
-     * @param array     $lines
      * @param Component $component
      */
     private function addComponentLines(array &$lines, self $component)
