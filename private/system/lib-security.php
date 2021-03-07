@@ -1412,8 +1412,9 @@ function _sec_checkToken($ajax=0)
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $referCheck  = $_SERVER['REAL_ADDR'];
     } else {
-        $referCheck = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+        $referCheck = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SERVER['REAL_ADDR'];
     }
+    $_SERVER['HTTP_REFERER'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SERVER['REAL_ADDR'];
     /*
      * We cannot use filter_input here because it will pull the orignal
      * $_GET vars passed by the server, not a modified version value that
