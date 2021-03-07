@@ -1308,7 +1308,7 @@ class Connection implements DriverConnection
             // is the real key part of this row pointers map or is the cache only pointing to other cache keys?
             if (isset($data[$realKey])) {
                 $stmt = new ArrayStatement($data[$realKey]);
-            } elseif (array_key_exists($realKey, $data)) {
+            } elseif (@array_key_exists($realKey, $data)) {
                 $stmt = new ArrayStatement([]);
             }
         }
