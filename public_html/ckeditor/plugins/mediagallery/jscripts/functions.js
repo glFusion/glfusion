@@ -1,12 +1,15 @@
 /*
  * Media Gallery Autotag Plugin
  *
- * @license Copyright (c) 2003-2016, Mark R. Evans. All rights reserved.
+ * @license Copyright (c) 2003-2020, Mark R. Evans. All rights reserved.
  * Licensed under the terms of the GNU General Public License
  * 		http://www.opensource.org/licenses/gpl-license.php
  *
- * @version 1.8.0
+ * @version 1.8.1
  */
+
+var errorMessage = '';
+
 function insertImage(obj) {
     imagehtml = makeHtmlForInsertion(obj);
     if (imagehtml == false) {
@@ -17,6 +20,7 @@ function insertImage(obj) {
 }
 
 function makeHtmlForInsertion(obj) {
+
     var tag = '';
     var autotag = '';
     var width = '';
@@ -42,7 +46,7 @@ function makeHtmlForInsertion(obj) {
         }
     }
     if (autotag == '') {
-        alert(lang.no_autotag);
+        alert('You must select an autotag');
         return false
     }
     width = obj.width.value;
@@ -84,7 +88,8 @@ function makeHtmlForInsertion(obj) {
     switch (autotag) {
         case 'album':
             if (aid == '') {
-                alert(lang.no_album);
+                alert(instance.lang.mediagallery.no_album);
+//                alert('You must select an album');
                 return false
             }
             tag = "[" + autotag + ":" + aid;
@@ -118,7 +123,7 @@ function makeHtmlForInsertion(obj) {
             break;
         case 'playall':
             if (aid == '') {
-                alert(lang.no_album);
+                alert('You must select an album');
                 return false
             }
             tag = "[" + autotag + ":" + aid;
@@ -134,7 +139,7 @@ function makeHtmlForInsertion(obj) {
         case 'slideshow':
         case 'fslideshow':
             if (aid == '') {
-                alert(lang.no_album);
+                alert('You must select an album');
                 return false
             }
             tag = "[" + autotag + ":" + aid;
@@ -186,7 +191,7 @@ function makeHtmlForInsertion(obj) {
                 }
             }
             if (mid == '') {
-                alert(lang.no_media);
+                alert('You must select a media item');
                 return false
             }
             tag = "[" + autotag + ":" + mid;
@@ -234,7 +239,7 @@ function makeHtmlForInsertion(obj) {
                 }
             }
             if (mid == '') {
-                alert(lang.no_media);
+                alert('You must select a media item');
                 return false
             }
             tag = "[" + autotag + ":" + mid;
@@ -278,7 +283,7 @@ function makeHtmlForInsertion(obj) {
                 }
             }
             if (mid == '') {
-                alert(lang.no_media);
+                alert('You must select a media item');
                 return false
             }
             tag = "[" + autotag + ":" + mid;
@@ -323,7 +328,7 @@ function makeHtmlForInsertion(obj) {
                 }
             }
             if (mid == '') {
-                alert(lang.no_media);
+                alert('You must select a media item');
                 return false
             }
             tag = "[" + autotag + ":" + mid;
@@ -357,7 +362,7 @@ function makeHtmlForInsertion(obj) {
             break;
         case 'playall':
             if (aid == '') {
-                alert(lang.no_album);
+                alert('You must select an album');
                 return false
             }
             tag = "[" + autotag + ":" + aid;
