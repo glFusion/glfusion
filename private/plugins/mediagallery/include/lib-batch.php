@@ -375,7 +375,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                         $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                         DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
-                        continue;
+                        continue 2;
                     }
 
                     //This will set the Content-Type to the appropriate setting for the file
@@ -421,7 +421,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                     $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
-                    continue;
+                    continue 2;
                 }
                 //This will set the Content-Type to the appropriate setting for the file
                 switch( $file_extension ) {
@@ -501,7 +501,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                     $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('$session_id','$statusMsg')");
-                    continue;
+                    continue 2;
                 }
                 //This will set the Content-Type to the appropriate setting for the file
                 switch( $file_extension ) {
@@ -585,7 +585,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                     $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('$session_id','$statusMsg')");
-                    continue;
+                    continue 2;
                 }
                 //This will set the Content-Type to the appropriate setting for the file
                 switch( $file_extension ) {
@@ -632,7 +632,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                     $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
-                    continue;
+                    continue 2;
                 }
                 //This will set the Content-Type to the appropriate setting for the file
                 switch( $file_extension ) {
@@ -688,7 +688,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                         $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                         DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
-                        continue;
+                        continue 2;
                     }
                     //This will set the Content-Type to the appropriate setting for the file
                     switch( $file_extension ) {
@@ -768,7 +768,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                         COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                         $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                         DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
-                        continue;
+                        continue 2;
                     }
                     //This will set the Content-Type to the appropriate setting for the file
                     switch( $file_extension ) {
@@ -818,7 +818,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                     $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
-                    continue;
+                    continue 2;
                 }
                 //This will set the Content-Type to the appropriate setting for the file
                 switch( $file_extension ) {
