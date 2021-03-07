@@ -58,7 +58,7 @@ use \glFusion\Log\Log;
 // process all vars to handle magic_quotes_gpc
 function all_stripslashes($var)
 {
-    if (get_magic_quotes_gpc()) {
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
         if (is_array($var)) {
             return array_map('all_stripslashes', $var);
         } else {
@@ -134,7 +134,7 @@ try {
         array()
     );
 } catch(\Doctrine\DBAL\DBALException $e) {
-    $db->dbError($e->getMessage(),$sql);
+    $db->dbError($e->getMessage());
 }
 $data = $stmt->fetchAll(Database::ASSOCIATIVE);
 $stmt->closeCursor();
@@ -339,6 +339,14 @@ foreach($data AS $A) {
 }
 
 /**
+* Multibyte functions
+*
+*/
+require_once $_CONF['path'].'lib/utf8/utf8.php';
+// backward compatibility
+require_once $_CONF['path_system'].'lib-mbyte.php';
+
+/**
 * This is the security library used for application security
 *
 */
@@ -378,13 +386,6 @@ require_once $_CONF['path_system'].'lib-article.php';
 */
 require_once $_CONF['path_system'].'lib-plugins.php';
 
-/**
-* Multibyte functions
-*
-*/
-require_once $_CONF['path'].'lib/utf8/utf8.php';
-// backward compatibility
-require_once $_CONF['path_system'].'lib-mbyte.php';
 
 /**
 * Image processing library
