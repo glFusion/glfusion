@@ -66,6 +66,13 @@ use \glFusion\Log\Log;
 function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $units='', $static='',$size='',$wrapper = 1) {
     global $_USER, $_TABLES, $_CONF, $LANG13;
 
+    return \glFusion\Rater::create($type, $id)
+        ->withSize($size)
+        ->withStatic($static)
+        ->withUnits($units)
+        ->withWrapper($wrapper)
+        ->Render();
+
     if ( $size == 'sm') {
         $rating_unitwidth = 15;
     } else {
@@ -169,6 +176,11 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
 function RATING_getVoteData( $type, $item_id='', $sort='ratingdate', $sortdir = 'desc', $filterArray = '' )
 {
     global $_TABLES;
+
+    return \glFusion\Rater::create($type, $item_id)
+        ->voteSortBy($sort)
+        ->voteSortDir($sortdir)
+        ->getVoteData($filterArray);
 
     $whereClause = '';
     $retval = array();
@@ -299,6 +311,9 @@ function RATING_resetRating( $type, $item_id )
 function RATING_deleteVote( $voteID )
 {
     global $_TABLES;
+
+    return \glFusion\Rater::create($type, $id)
+        ->deleteVote($voteID);
 
     $retval = false;
 
