@@ -1401,7 +1401,7 @@ class config
                 }
                 $coreUrl = $descUrl;
             } else {
-                $descUrl = 'http://www.glfusion.org/docs/english/config.html';
+                $descUrl = 'https://www.glfusion.org/docs/english/config.html';
             }
             $retval = $descUrl;
         } else {
@@ -1569,7 +1569,7 @@ class config
             }
             $data = $stmt->fetchAll(Database::ASSOCIATIVE);
             foreach($data AS $row) {
-                $groupname = $LANG_configsections[$group]['label'];
+                $groupname = isset($LANG_configsections[$group]['label']) ? $LANG_configsections[$group]['label'] : 'unknown';
 
                 if ( $row['type'] == 'subgroup' ) {
                     if ( !isset($LANG_configsubgroups[$group][$row['name']])) continue;

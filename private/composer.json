@@ -1,21 +1,35 @@
 {
     "require": {
-        "splitbrain/php-archive": "^1.0",
+        "splitbrain/php-archive": "^1.2",
         "openpsa/universalfeedcreator": "^1.8",
-        "html2text/html2text": "^4.1",
+        "html2text/html2text": "^4.3",
         "james-heinrich/getid3": "^1.9",
-        "ezyang/htmlpurifier": "^4.9",
-        "phpclasses/oauth-api": "^1.0",
-        "phpmailer/phpmailer": "~5.2",
+        "ezyang/htmlpurifier": "^4.13",
+        "phpmailer/phpmailer": "^5",
         "simplepie/simplepie": "^1.5",
-        "aziraphale/email-address-validator": "2",
+        "aziraphale/email-address-validator": "^2.0",
         "misd/linkify": "^1.1",
-        "phpxmlrpc/phpxmlrpc": "^4.2",
-        "robthree/twofactorauth": "^1.6",
-        "phpfastcache/phpfastcache": "^7.0",
-        "filp/whoops": "^2.2",
-        "doctrine/dbal": "^2.8",
-        "eluceo/ical": "^0.14.0",
-        "monolog/monolog": "^1.24"
-    }
+        "phpxmlrpc/phpxmlrpc": "^4.5",
+        "robthree/twofactorauth": "^1.7",
+        "phpfastcache/phpfastcache": "^8.0",
+        "filp/whoops": "^2.9",
+        "eluceo/ical": "^0.16.1",
+        "monolog/monolog": "^2.2",
+        "doctrine/dbal": "^2.12",
+        "phpclasses/oauth-api": "^1.0"
+    },
+    "repositories": [
+        {
+          "type": "composer",
+          "url": "https:\/\/www.phpclasses.org\/"
+        },
+        {
+          "type": "composer",
+          "url": "https:\/\/packagist.org\/"
+        },
+        {
+          "packagist": false
+        }
+
+      ]
 }

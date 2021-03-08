@@ -35,9 +35,7 @@ class PropertyBag implements \IteratorAggregate
     }
 
     /**
-     * @param string $name
-     *
-     * @return null|Property
+     * @return Property|null
      */
     public function get(string $name)
     {
@@ -50,8 +48,6 @@ class PropertyBag implements \IteratorAggregate
 
     /**
      * Adds a Property. If Property already exists an Exception will be thrown.
-     *
-     * @param Property $property
      *
      * @return $this
      *

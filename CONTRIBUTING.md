@@ -41,14 +41,14 @@ Please keep the change in a single PR **as small as possible**. If you want to c
 ## Contribution acceptance criteria
 
 1. The change is as small as possible (see the above paragraph for details)
-1. Has been properly tested
-2. Documentation updates are provided if necessary
-1. Can merge without problems (if not please use: `git rebase develop`)
-1. Does not break any existing functionality
-1. Fixes one specific issue or implements one specific feature (do not combine things, send separate pull requests if needed)
-1. Keeps the glFusion code base clean and well structured
-1. Contains functionality we think other users will benefit from too
-1. Contains a single commit (please use `git rebase -i` to squash commits)
+2. Has been properly tested
+3. Documentation updates are provided if necessary
+4. Can merge without problems (if not please use: `git rebase develop`)
+5. Does not break any existing functionality
+6. Fixes one specific issue or implements one specific feature (do not combine things, send separate pull requests if needed)
+7. Keeps the glFusion code base clean and well structured
+8. Contains functionality we think other users will benefit from too
+9. Contains a single commit (please use `git rebase -i` to squash commits)
 
 ## Resources
 

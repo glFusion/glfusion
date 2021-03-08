@@ -303,8 +303,6 @@ class Calendar extends Component
      *
      * @see        Eluceo\iCal::addComponent
      * @deprecated Please, use public method addComponent() from abstract Component class
-     *
-     * @param Event $event
      */
     public function addEvent(Event $event)
     {
@@ -312,7 +310,7 @@ class Calendar extends Component
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getProdId()
     {

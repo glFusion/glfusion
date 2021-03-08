@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
+class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
 {
     public static $files = array (
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
@@ -147,6 +147,7 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         'AVCSequenceParameterSetReader' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio-video.flv.php',
         'AtomCreator03' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator03.php',
         'AtomCreator10' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator10.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'EasyPeasyICS' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
         'FeedCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/FeedCreator.php',
         'FeedDate' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedDate.php',
@@ -276,10 +277,10 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc386980c286ff2b2668a199a73d9e63b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc386980c286ff2b2668a199a73d9e63b::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitc386980c286ff2b2668a199a73d9e63b::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitc386980c286ff2b2668a199a73d9e63b::$classMap;
 
         }, null, ClassLoader::class);
     }

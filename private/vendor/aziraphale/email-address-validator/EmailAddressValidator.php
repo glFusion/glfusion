@@ -15,9 +15,10 @@ class EmailAddressValidator
     /**
      * Check email address validity
      * @param string $emailAddress Email address to be checked
+     * @param bool $allowLocal allow local domains
      * @return bool Whether email is valid
      */
-    public static function checkEmailAddress($emailAddress)
+    public static function checkEmailAddress($emailAddress, $allowLocal = false)
     {
         // If magic quotes is "on", email addresses with quote marks will
         // fail validation because of added escape characters. Uncommenting
@@ -66,7 +67,7 @@ class EmailAddressValidator
         }
 
         // Check domain portion
-        if (!self::checkDomainPortion($emailAddressParts[1])) {
+        if (!self::checkDomainPortion($emailAddressParts[1], $allowLocal)) {
             return false;
         }
 
@@ -109,25 +110,42 @@ class EmailAddressValidator
     /**
      * Checks email section after "@" symbol for validity
      * @param string $domainPortion Text to be checked
+     * @param bool $allowLocal allow local domains?
      * @return bool Whether domain portion is valid
      */
-    public static function checkDomainPortion($domainPortion)
+    public static function checkDomainPortion($domainPortion, $allowLocal = false)
     {
         // Total domain can only be from 1 to 255 characters, inclusive
         if (!self::checkTextLength($domainPortion, 1, 255)) {
             return false;
         }
-        // Check if domain is IP, possibly enclosed in square brackets.
-        if (preg_match('/^(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])'
-           .'(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])){3}$/',
-                $domainPortion) ||
-            preg_match('/^\[(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])'
-           .'(\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])){3}\]$/',
-                $domainPortion)) {
+
+        // some IPv4/v6 regexps borrowed from Feyd
+        // see: http://forums.devnetwork.net/viewtopic.php?f=38&t=53479
+        $dec_octet = '(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|[0-9])';
+        $hex_digit = '[A-Fa-f0-9]';
+        $h16 = "{$hex_digit}{1,4}";
+        $IPv4Address = "$dec_octet\\.$dec_octet\\.$dec_octet\\.$dec_octet";
+        $ls32 = "(?:$h16:$h16|$IPv4Address)";
+        $IPv6Address =
+            "(?:(?:{$IPv4Address})|(?:" .
+            "(?:$h16:){6}$ls32" .
+            "|::(?:$h16:){5}$ls32" .
+            "|(?:$h16)?::(?:$h16:){4}$ls32" .
+            "|(?:(?:$h16:){0,1}$h16)?::(?:$h16:){3}$ls32" .
+            "|(?:(?:$h16:){0,2}$h16)?::(?:$h16:){2}$ls32" .
+            "|(?:(?:$h16:){0,3}$h16)?::(?:$h16:){1}$ls32" .
+            "|(?:(?:$h16:){0,4}$h16)?::$ls32" .
+            "|(?:(?:$h16:){0,5}$h16)?::$h16" .
+            "|(?:(?:$h16:){0,6}$h16)?::" .
+            ")(?:\\/(?:12[0-8]|1[0-1][0-9]|[1-9][0-9]|[0-9]))?)";
+
+        if (preg_match("/^($IPv4Address|\\[$IPv4Address\\]|\\[$IPv6Address\\])$/",
+                            $domainPortion)){
             return true;
         } else {
             $domainPortionParts = explode('.', $domainPortion);
-            if (sizeof($domainPortionParts) < 2) {
+            if (!$allowLocal && sizeof($domainPortionParts) < 2) {
                 return false; // Not enough parts to domain
             }
             for ($i = 0, $max = sizeof($domainPortionParts); $i < $max; $i++) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * This file is part of phpFastCache.
@@ -15,31 +16,31 @@ declare(strict_types=1);
 
 namespace Phpfastcache\Drivers\Files;
 
-use Phpfastcache\Core\Pool\{
-    DriverBaseTrait, ExtendedCacheItemPoolInterface, IO\IOHelperTrait
-};
-use Phpfastcache\Exceptions\{
-    PhpfastcacheInvalidArgumentException
-};
+use Exception;
+use FilesystemIterator;
+use Phpfastcache\Cluster\AggregatablePoolInterface;
+use Phpfastcache\Core\Pool\{DriverBaseTrait, ExtendedCacheItemPoolInterface, IO\IOHelperTrait};
+use Phpfastcache\Exceptions\{PhpfastcacheInvalidArgumentException};
 use Phpfastcache\Util\Directory;
 use Psr\Cache\CacheItemInterface;
+
 
 /**
  * Class Driver
  * @package phpFastCache\Drivers
  * @property Config $config Config object
  * @method Config getConfig() Return the config object
+ *
+ * Important NOTE:
+ * We are using getKey instead of getEncodedKey since this backend create filename that are
+ * managed by defaultFileNameHashFunction and not defaultKeyHashFunction
  */
-class Driver implements ExtendedCacheItemPoolInterface
+class Driver implements ExtendedCacheItemPoolInterface, AggregatablePoolInterface
 {
     use IOHelperTrait;
     use DriverBaseTrait {
         DriverBaseTrait::__construct as private __parentConstruct;
     }
-    /**
-     *
-     */
-    const FILE_DIR = 'files';
 
     /**
      * Driver constructor.
@@ -56,7 +57,7 @@ class Driver implements ExtendedCacheItemPoolInterface
      */
     public function driverCheck(): bool
     {
-        return \is_writable($this->getPath()) || @\mkdir($this->getPath(), $this->getDefaultChmod(), true);
+        return is_writable($this->getPath()) || mkdir($concurrentDirectory = $this->getPath(), $this->getDefaultChmod(), true) || is_dir($concurrentDirectory);
     }
 
     /**
@@ -68,7 +69,7 @@ class Driver implements ExtendedCacheItemPoolInterface
     }
 
     /**
-     * @param \Psr\Cache\CacheItemInterface $item
+     * @param CacheItemInterface $item
      * @return null|array
      */
     protected function driverRead(CacheItemInterface $item)
@@ -81,14 +82,13 @@ class Driver implements ExtendedCacheItemPoolInterface
             return null;
         }
 
-        $content = $this->readfile($file_path);
+        $content = $this->readFile($file_path);
 
         return $this->decode($content);
-
     }
 
     /**
-     * @param \Psr\Cache\CacheItemInterface $item
+     * @param CacheItemInterface $item
      * @return bool
      * @throws PhpfastcacheInvalidArgumentException
      */
@@ -106,7 +106,7 @@ class Driver implements ExtendedCacheItemPoolInterface
              */
             try {
                 return $this->writefile($file_path, $data, $this->getConfig()->isSecureFileManipulation());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return false;
             }
         }
@@ -115,7 +115,7 @@ class Driver implements ExtendedCacheItemPoolInterface
     }
 
     /**
-     * @param \Psr\Cache\CacheItemInterface $item
+     * @param CacheItemInterface $item
      * @return bool
      * @throws PhpfastcacheInvalidArgumentException
      */
@@ -129,7 +129,7 @@ class Driver implements ExtendedCacheItemPoolInterface
             if (\file_exists($file_path) && @\unlink($file_path)) {
                 \clearstatcache(true, $file_path);
                 $dir = \dirname($file_path);
-                if (!(new \FilesystemIterator($dir))->valid()) {
+                if (!(new FilesystemIterator($dir))->valid()) {
                     \rmdir($dir);
                 }
                 return true;
@@ -143,6 +143,7 @@ class Driver implements ExtendedCacheItemPoolInterface
 
     /**
      * @return bool
+     * @throws \Phpfastcache\Exceptions\PhpfastcacheIOException
      */
     protected function driverClear(): bool
     {

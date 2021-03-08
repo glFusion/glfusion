@@ -396,7 +396,7 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
         $votes = 0;
     }
 
-    $new_rating = sprintf("%2.02f",$new_rating);
+    $new_rating = RATING_floatvalue(sprintf("%2.02f",$new_rating));
 
     if ( $rating_id != 0 ) {
         $sql = "UPDATE {$_TABLES['rating']} SET votes=".$votes.", rating='".DB_escapeString($new_rating)."' WHERE id = ".$rating_id;
@@ -449,5 +449,11 @@ function RATING_getRatedIds($type)
         $ratedIds[] = $row['item_id'];
     }
     return $ratedIds;
+}
+
+function RATING_floatvalue($val){
+    $val = str_replace(",",".",$val);
+    $val = preg_replace('/\.(?=.*\.)/', '', $val);
+    return $val;
 }
 ?>
