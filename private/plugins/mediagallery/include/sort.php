@@ -80,7 +80,7 @@ function MG_reorderAlbum( $parent = 0)
 * @return   string  HTML for list of albums
 *
 */
-function MG_sortAlbums( $parent=0, $actionURL ) {
+function MG_sortAlbums( $parent=0, $actionURL = '' ) {
     global $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG01;
 
     $retval = '';
