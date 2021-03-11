@@ -40,7 +40,7 @@ class autotag_youtube extends BaseAutotag {
         $this->description = $_AUTOTAGS['youtube']['description'];
     }
 
-    public function parse($p1, $p2='', $fulltag)
+    public function parse($p1, $p2='', $fulltag = '')
     {
         global $_CONF;
 

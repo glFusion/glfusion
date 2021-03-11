@@ -21,7 +21,7 @@ class autotag_uikitlogin extends BaseAutotag {
         $this->description = $_AUTOTAGS['uikitlogin']['description'];
     }
 
-    public function parse($p1, $p2='', $fulltag)
+    public function parse($p1, $p2='', $fulltag = '')
     {
         global $_CONF, $LANG01, $LANG04;
 
