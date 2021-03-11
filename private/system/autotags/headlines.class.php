@@ -28,7 +28,7 @@ class autotag_headlines extends BaseAutotag {
         $this->description = $_AUTOTAGS['headlines']['description'];
     }
 
-    public function parse($p1, $p2='', $fulltag)
+    public function parse($p1, $p2='', $fulltag='')
     {
         global $_CONF, $_TABLES, $_USER, $LANG01;
 
