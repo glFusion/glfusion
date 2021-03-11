@@ -4,29 +4,7 @@
 
 ### Internal development changes
 
-- September 2020
-- Updated james-heinrich/getid3 (v1.9.19 => v1.9.20)
-- Updated ezyang/htmlpurifier (v4.12.0 => v4.13.0)
-- Updated doctrine/event-manager (1.1.0 => 1.1.1)
-- Updated doctrine/cache (1.10.1 => 1.10.2)
-- Updated doctrine/dbal (2.10.2 => 2.10.3)
-- Updated monolog/monolog (1.25.4 => 1.25.5)
-
-- Language File Sync
-- Cache class updates to support latest phpFastCache
-- Updated CKEditor to v4.13.1
-- Updated openpsa/universalfeedcreator (v1.8.3.1 => v1.8.3.2)
-- Updated james-heinrich/getid3 (v1.9.17 => v1.9.18)
-- Updated ezyang/htmlpurifier (v4.10.0 => v4.12.0)
-- Updated simplepie/simplepie (1.5.2 => 1.5.3)
-- Updated phpxmlrpc/phpxmlrpc (4.3.2 => 4.4.1)
-- Updated phpfastcache/phpfastcache (7.0.5 => 7.1.0)
-- Updated psr/log (1.1.0 => 1.1.2)
-- Updated filp/whoops (2.4.0 => 2.5.0)
-- Updated doctrine/event-manager (v1.0.0 => 1.1.0)
-- Updated doctrine/cache (v1.8.0 => 1.10.0)
-- Updated doctrine/dbal (v2.9.2 => v2.10.0)
-- Updated monolog/monolog (1.24.0 => 1.25.2)
+- glFusion v2 requires PHP v7.3 or later
 
 ### Added
 
@@ -99,14 +77,15 @@
 - Improved error handling of missing media in Media Gallery media manage
 - Plugin administrator did not accept .tar.gz plugin uploads on some systems
 - Default content still referenced the old Gitter chat room
+- Fixed rating error for non US locales (using a comma instead of decimal in DB update)
 
 ## v1.7.8 (December 24, 2019)
 
 ### Updates
 
 - Updated CKEditor to v4.13.1
-- Updated splitbrain/php-archive (1.0.10 => 1.1.1)
-- Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.3.2)
+- Updated splitbrain/php-archive (1.0.10 => 1.2.1)
+- Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.4)
 - Updated geshi/geshi (v1.0.9.0 => v1.0.9.1)
 - Updated html2text/html2text (4.1.0 => 4.2.1)
 - Updated james-heinrich/getid3 (v1.9.15 => v1.9.18)

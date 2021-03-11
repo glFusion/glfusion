@@ -1,4 +1,4 @@
-## glFusion CMS
+# glFusion CMS
 
 glFusion CMS is a content management and publishing system. It can be utilized
 as a content publishing system, a collaboration system, and even an application
@@ -35,17 +35,17 @@ high volume community discussion sites, and almost everything in between.
 
 ## Requirements
 
-**Web Server supporting PHP**
+### Web Server supporting PHP
 
 glFusion will run on any web server that supports PHP. Modern web servers such
 as Apache, Nginx, Caddy, LiteSpeed, IIS, Lighttpd,and Abyss are known to work.
 
-**PHP version 7.1.0 or later**
+### PHP version 7.3.0 or later
 
-PHP needs to be at least version 7.1.0, the latest PHP release is highly
+PHP needs to be at least version 7.3.0, the latest PHP release is highly
 recommended and well supported by glFusion.
 
-**MySQL v5.0.15 or later**
+### MySQL v5.0.15 or later
 
 MySQL needs to be at least v5.0.15. It is highly recommended that you run a newer
 version of MySQL, v5.7 or higher (including MySQL v8). The MySQL Group continues
@@ -57,7 +57,7 @@ The MariaDB Foundation ensures continuity and open collaboration in the MariaDB
 ecosystem. The foundation guarantees that there is a global contact point for
 collaboration and that the community can always rely upon MariaDB Server.
 
-**Ability to write to the web space**
+### Ability to write to the web space
 
 glFusion does require that certain directories in the public web space be
 writable. For example, the backend/ directory is where the RSS files are
@@ -66,7 +66,7 @@ installation, the installer will automatically create the siteconfig.php
 file in the root of your web space, so the installer will need to have
 write access.
 
-**A Modern Web Browser**
+### A Modern Web Browser
 
 glFusion supports modern web browsers, including IE 9+, Microsoft Edge, Chrome,
 Firefox and Opera. **Older browsers are not well supported.**
@@ -104,6 +104,6 @@ glFusion.
 [glFusion Demo Site](https://demo.glfusion.org)
 
 ## License
+
 glFusion is licensed under the terms of the GNU General Public License
 Version 2.
-
