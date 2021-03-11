@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2019 by the following authors:
+*  Copyright (C) 2017-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -28,6 +28,7 @@ use \Phpfastcache\Exceptions\{
     PhpfastcacheDriverCheckException, PhpfastcacheInvalidArgumentException, PhpfastcacheLogicException, PhpfastcacheRootException, PhpfastcacheSimpleCacheException
 };
 use \Phpfastcache\Helper\Psr\SimpleCache\CacheInterface;
+use \Phpfastcache\Core\Pool\TaggableCacheItemPoolInterface;
 use \glFusion\Log\Log;
 
 /**
@@ -534,7 +535,8 @@ if (!isset($_CONF['cache_memcached_port'])) $_CONF['cache_memcached_port'] = ($_
                 return $tag;
             },$tags);
 
-        $this->internalCacheInstance->deleteItemsByTagsAll($nsTags);
+//        $this->internalCacheInstance->deleteItemsByTagsAll($nsTags);
+        $this->internalCacheInstance->deleteItemsByTags($nsTags, TaggableCacheItemPoolInterface::TAG_STRATEGY_ALL);
     }
 
     /**
