@@ -186,6 +186,16 @@ function SESS_sessionCheck()
     SESS_setVar('session.counter',$count);
     $gc_check = $count % 10;
 
+    // set new current url and previous url session vars here
+    $currentURL = COM_getCurrentURL();
+    $previousURL = SESS_getVar('session.currenturl');
+
+    SESS_setVar('session.currenturl',$currentURL);
+    SESS_setVar('session.previousurl',$previousURL);
+    if (!isset($_SERVER['HTTP_REFERER'])) {
+        $_SERVER['HTTP_REFERER'] = $_CONF['site_url'];
+    }
+
     // failsafe
     if ( $_CONF['allow_user_themes'] == 0 ) {
         $_USER['theme'] = $_CONF['theme'];
