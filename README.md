@@ -68,7 +68,7 @@ write access.
 
 ### A Modern Web Browser
 
-glFusion supports modern web browsers, including IE 9+, Microsoft Edge, Chrome,
+glFusion supports modern web browsers, including Safari, Microsoft Edge, Chrome,
 Firefox and Opera. **Older browsers are not well supported.**
 
 ## Documentation
