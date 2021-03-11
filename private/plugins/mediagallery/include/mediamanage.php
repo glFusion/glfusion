@@ -1016,6 +1016,11 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         $T->parse('playback_options','mov_options');
     }
 
+    if ($size === false) {
+        $size = array(0,0);
+        $thumbnail = $_MG_CONF['mediaobjects_url'] . '/missing.png';
+    }
+
     $T->set_var(array(
         'original_filename' =>  $row['media_original_filename'],
         'attach_tn'         =>  $row['media_tn_attached'],
