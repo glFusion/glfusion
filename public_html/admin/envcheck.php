@@ -98,7 +98,7 @@ function _checkEnvironment()
     } else {
         $T->set_var('class','tm-pass');
     }
-    $T->set_var('recommended','7.2.0+');
+    $T->set_var('recommended','7.3.0+');
 
     $phpnotes = sprintf($LANG_ENVCHK['php_req_version'],'7.1.0');
     if ( !_phpUpToDate() ) {
