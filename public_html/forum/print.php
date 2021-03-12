@@ -77,7 +77,7 @@ if ($id == 0 OR DB_count($_TABLES['ff_topic'],"id",(int) $id) == 0) {
 }
 
 $forum = DB_getItem($_TABLES['ff_topic'],"forum","id=".(int)$id);
-$query = DB_query("SELECT grp_name from {$_TABLES['groups']} groups, {$_TABLES['ff_forums']} forum WHERE forum.forum_id=".(int) $forum." AND forum.grp_id=groups.grp_id");
+$query = DB_query("SELECT grp_name from {$_TABLES['groups']} grps, {$_TABLES['ff_forums']} forum WHERE forum.forum_id=".(int) $forum." AND forum.grp_id=grps.grp_id");
 list ($groupname) = DB_fetchArray($query);
 if (!SEC_inGroup($groupname) AND $grp_id != 2) {
     echo COM_siteHeader();
@@ -107,7 +107,7 @@ $A["name"] = @htmlspecialchars($A["name"],ENT_QUOTES,COM_getEncodingt());
 $A["subject"] = COM_checkWords($A["subject"]);
 $A["subject"] = stripslashes(@htmlspecialchars($A["subject"],ENT_QUOTES,COM_getEncodingt()));
 
-$A['comment'] = ff_FormatForPrint( $A['comment'], $A['postmode'],'',$A['status'] );
+$A['comment'] = ff_FormatForPrint( $A['comment'], $A['postmode'],$A['status'] );
 list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
 $date = strftime('%B %d %Y @ %I:%M %p', $A['date']);
 echo"

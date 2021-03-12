@@ -144,15 +144,15 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
     $format->setAllowedHTML($_FF_CONF['allowed_html']);
     $format->setType($postmode);
 
-    if ( ! ( $status & DISABLE_BBCODE ) ) {
+    if ( ! ( intval($status) & DISABLE_BBCODE ) ) {
         $format->setProcessBBCode(true);
     }
 
-    if ( ! ($status & DISABLE_URLPARSE ) ) {
+    if ( ! (intval($status) & DISABLE_URLPARSE ) ) {
         $format->setParseURLs(true);
     }
 
-    if ( ! ($status & DISABLE_SMILIES ) ) {
+    if ( ! (intval($status) & DISABLE_SMILIES ) ) {
         $format->setProcessSmilies(true);
     }
     if ($_FF_CONF['use_censor']) { // and $mode == 'preview') {
