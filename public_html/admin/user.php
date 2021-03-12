@@ -1763,13 +1763,30 @@ function USER_save($uid)
         DB_query($sql);
 
         // userindex table
+        $TIDS = array();
+        $AIDS = array();
+        $BOXES = array();
+        $ETIDS = array();
+        $AETIDS = array();
+        $allowed_etids = array();
 
-        $TIDS  = @array_values($_POST['topics']);
-        $AIDS  = @array_values($_POST['selauthors']);
-        $BOXES = @array_values($_POST['blocks']);
-        $ETIDS = @array_values($_POST['dgtopics']);
+        if (isset($_POST['topics']) && is_array($_POST['topics'])) {
+            $TIDS  = @array_values($_POST['topics']);
+        }
+//        $TIDS  = @array_values($_POST['topics']);
+        if (isset($_POST['selauthors']) && is_array($_POST['selauthors'])) {
+            $AIDS  = @array_values($_POST['selauthors']);
+        }
+        if (isset($_POST['blocks']) && is_array($_POST['blocks'])) {
+            $BOXES = @array_values($_POST['blocks']);
+        }
+        if (isset($_POST['dgtopics']) && is_array($_POST['dgtopics'])) {
+            $ETIDS = @array_values($_POST['dgtopics']);
+        }
         $allowed_etids = USER_buildTopicList ();
-        $AETIDS = explode (' ', $allowed_etids);
+        if (is_array($allowed_etids)) {
+            $AETIDS = explode (' ', $allowed_etids);
+        }
 
         $tids = '';
         if (is_array($TIDS) && sizeof ($TIDS) > 0) {
@@ -1881,7 +1898,10 @@ function USER_save($uid)
         }
 
         // subscriptions
-        $subscription_deletes  = @array_values($_POST['subdelete']);
+        $subscription_deletes = array();
+        if (isset($_POST['subdelete']) && is_array($_POST['subdelete'])) {
+            $subscription_deletes  = @array_values($_POST['subdelete']);
+        }
         if ( is_array($subscription_deletes) ) {
             foreach ( $subscription_deletes AS $subid ) {
                 DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);

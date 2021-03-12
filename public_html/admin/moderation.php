@@ -388,7 +388,7 @@ function MODERATE_selectedItems($action = '', $type='')
 * @type     string      Type of object to build list for
 *
 */
-function MODERATE_itemList($type='', $token)
+function MODERATE_itemList($type='', $token = '')
 {
     global $_CONF, $_TABLES, $LANG01, $LANG24, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
 

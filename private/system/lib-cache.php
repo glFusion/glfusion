@@ -107,7 +107,10 @@ function cache_clean_directories($path, $needle = '', $since = 0)
             if ($entry == '.' || $entry == '..' || $entry == '.svn' || is_link($entry)) {
             } elseif (is_dir($path . '/' . $entry)) {
                 cache_clean_directories($path . '/' . $entry, $needle);
+                $current_state = error_reporting();
+                error_reporting(0);
                 @rmdir($path . '/' . $entry);
+                error_reporting($current_state);
             } elseif (empty($needle) || strpos($entry, $needle) !== false) {
                 if (!$since || @filectime($path . '/' . $entry) <= $since) {
                     @unlink($path . '/' . $entry);

@@ -200,6 +200,10 @@ function _rebuild_data()
     $_SERVER['REQUEST_METHOD'] = $method;
     $_POST = unserialize($postdata);
     $_GET =  unserialize($getdata);
+
+    if (!is_array($_POST)) $_POST = array();
+    if (!is_array($_GET)) $_GET = array();
+
     // refresh the token (easier to create new one than try to fake referer)
     if ( @array_key_exists(CSRF_TOKEN, $_POST) || @array_key_exists(CSRF_TOKEN,$_GET) ) {
         $newToken = SEC_createToken();

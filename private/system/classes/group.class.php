@@ -215,6 +215,8 @@ class Group
     {
         global $_USER, $_GROUPS;
 
+        if (empty($grp_to_verify)) return true;        
+
         if (empty ($uid)) {
             if (COM_isAnonUser()) {
                 $uid = 1;

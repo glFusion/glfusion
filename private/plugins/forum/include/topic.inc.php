@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Main functions to show - format topics in the forum                      |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2020 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -41,7 +41,7 @@ if (!defined ('GVERSION')) {
 
 USES_lib_user();
 
-function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate,$query='') {
+function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate = '',$query='') {
     global $_FF_CONF,$_CONF,$_TABLES,$_USER,$LANG_GF01,$LANG_GF02,$_SYSTEM;
     global $forumfiles;
     global $canPost;

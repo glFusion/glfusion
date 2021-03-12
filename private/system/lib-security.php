@@ -738,7 +738,7 @@ function SEC_authenticate($username, $password, &$uid)
         $nrows  = DB_numRows($result);
     }
 
-    if (($tmp == 0) && ($nrows == 1)) {
+    if (($tmp === '') && ($nrows == 1)) {
         $U = DB_fetchArray($result);
         $uid = $U['uid'];
         if ($U['status'] == USER_ACCOUNT_DISABLED) {

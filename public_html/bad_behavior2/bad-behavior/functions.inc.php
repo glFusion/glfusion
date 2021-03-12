@@ -37,6 +37,10 @@ function uc_all($string) {
 function match_cidr($addr, $cidr) {
 	$output = false;
 
+	if (filter_var($addr, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+		return $output;
+	}
+
 	if (is_array($cidr)) {
 		foreach ($cidr as $cidrlet) {
 			if (match_cidr($addr, $cidrlet)) {
@@ -45,7 +49,12 @@ function match_cidr($addr, $cidr) {
 			}
 		}
 	} else {
-		@list($ip, $mask) = explode('/', $cidr);
+		if (strstr($cidr,'/') !== false) {
+			@list($ip, $mask) = explode('/', $cidr);
+		} else {
+			$ip = $cidr;
+			$mask = 32;
+		}
 		if (!$mask) $mask = 32;
 		$mask = pow(2,32) - pow(2, (32 - $mask));
 		$output = ((ip2long($addr) & $mask) == (ip2long($ip) & $mask));
