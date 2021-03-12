@@ -311,7 +311,7 @@
 						</div>
 					</div>
 					<div class="uk-form-row">
-						<button class="uk-button uk-button-primary" type="submit" name="preview" id="preview" value="{LANG_PREVIEW}" tabindex="7">{LANG_PREVIEW}</button>
+						<button class="uk-button uk-button-primary cancel" type="submit" name="preview" id="preview" value="{LANG_PREVIEW}" tabindex="7">{LANG_PREVIEW}</button>
 						<button class="uk-button uk-button-success" type="submit" name="{save_button}" id="{save_button}" value="{LANG_SUBMIT}" tabindex="8">{LANG_SUBMIT}</button>
 						<button class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9" onclick="return confirm('{$LANG_GF01[cancel_confirm]}');">{$LANG_GF01[CANCEL]}</button>
 					</div>

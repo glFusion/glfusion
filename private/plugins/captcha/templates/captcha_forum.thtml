@@ -45,7 +45,7 @@
 		<label class="uk-form-label" for="captcha">{lang_are_you_human}</label>
 		<div class="uk-form-controls">
 			<img id="captcha_image_{counter}" src="{captcha_image}" alt="{lang_alt}" style="padding:5px;"><br/>
-			<input style="border:1px solid #ccc;" type="text" id="captcha" name="captcha" size="20" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';" />
+			<input class="required" style="border:1px solid #ccc;" type="text" id="captcha" name="captcha" size="20" maxlength="6" value="{lang_captcha_help}" title="{lang_captcha_help}" onfocus="if (this.value=='{lang_captcha_help}')this.value='';" onblur="if(this.value=='')this.value='{lang_captcha_help}';" />
 			<a href="javascript:new_captcha_{counter}();" style="text-decoration:none;">
 				<img style="vertical-align:middle; width:22px; height:22px;" src="{site_url}/captcha/reload.png" alt="{lang_reload}" title="{lang_reload}" />
 			</a>
