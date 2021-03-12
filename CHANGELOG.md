@@ -3,1129 +3,1174 @@
 ## v1.7.9 (Unreleased)
 
 ### Updates
-  - Updated PHP version checks to support current EOL state
-  - Updated CKeditor (4.13.1 => v4.1.5.0)
-  - Updated james-heinrich/getid3 (v1.9.19 => v1.9.20)
-  - Updated ezyang/htmlpurifier (v4.12.0 => v4.13.0)
-  - Updated html2text/html2text (4.2.1 => 4.3.1)
-  - Updated phpmailer/phpmailer (v5.2.27 => v5.2.28)
-  - Updated simplepie/simplepie (1.5.3 => 1.5.5)
-  - Updated phpxmlrpc/phpxmlrpc (4.4.1 => 4.4.2)
-  - Updated robthree/twofactorauth (1.6.7 => 1.7.0)
+
+- Updated PHP version checks to support current EOL state
+- Updated CKeditor (4.13.1 => v4.16.0)
+- Updated james-heinrich/getid3 (v1.9.19 => v1.9.20)
+- Updated ezyang/htmlpurifier (v4.12.0 => v4.13.0)
+- Updated html2text/html2text (4.2.1 => 4.3.1)
+- Updated phpmailer/phpmailer (v5.2.27 => v5.2.28)
+- Updated simplepie/simplepie (1.5.3 => 1.5.6)
+- Updated phpxmlrpc/phpxmlrpc (4.4.1 => 4.4.2)
+- Updated robthree/twofactorauth (1.6.7 => 1.8.0)
+- Updated openpsa/universalfeedcreator (v1.8.3.2 => v1.8.4)
+- Updated phpclasses/httpclient (1.0.5 => 1.0.7)
+- Updated phpclasses/oauth-api (1.0.103 => 1.0.110)
+- Updated splitbrain/php-archive (1.1.1 => 1.2.1)
 
 ### Fixed
-  - Story post hour was incorrectly calculated
-  - Post action messages where not being properly displayed. For example, save a group membership and the confirmation message did not display.
-  - Upgrade issues when upgrading very old glFusion sites
-  - CAPTCHA Plugin - Fixed Google ReCaptcha
-  - Fixed SQL error in Polls list
-  - Fixed Cancel button when editing group membership.
-  - Fixed JavaScript error in Forum preview iFrame
+
+- PHP v8 Compatibility Updates
+- Story post hour was incorrectly calculated
+- Post action messages where not being properly displayed. For example, save a group membership and the confirmation message did not display.
+- Upgrade issues when upgrading very old glFusion sites
+- CAPTCHA Plugin - Fixed Google ReCaptcha
+- Fixed SQL error in Polls list
+- Fixed Cancel button when editing group membership.
+- Fixed JavaScript error in Forum preview iFrame
+- Media Gallery CKEditor browser did not display error messages correctly when no selection or invalid selection was made.
 
 ### Changed
+
+- PHP v5.4 is now the required minimum version
 
 ## v1.7.8.pl1 (January 1, 2020)
 
 ### Added
-  - Added SECURITY.md - glFusion Security Policy
+
+- Added SECURITY.md - glFusion Security Policy
 
 ### Fixed
-  - Improved error handling of missing media in Media Gallery media manage
-  - Plugin administrator did not accept .tar.gz plugin uploads on some systems
-  - Default content still referenced the old Gitter chat room
-  - Fixed typo in Google URL reference (OAuth)
+
+- Improved error handling of missing media in Media Gallery media manage
+- Plugin administrator did not accept .tar.gz plugin uploads on some systems
+- Default content still referenced the old Gitter chat room
+- Fixed typo in Google URL reference (OAuth)
 
 ## v1.7.8 (December 24, 2019)
 
 ### Updates
-  - Updated CKEditor to v4.13.1
-  - Updated splitbrain/php-archive (1.0.10 => 1.1.1)
-  - Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.3.2)
-  - Updated geshi/geshi (v1.0.9.0 => v1.0.9.1)
-  - Updated html2text/html2text (4.1.0 => 4.2.1)
-  - Updated james-heinrich/getid3 (v1.9.15 => v1.9.18)
-  - Updated ezyang/htmlpurifier (v4.10.0 => v4.12.0)
-  - Updated phpmailer/phpmailer (v5.2.26 => v5.2.27)
-  - Updated simplepie/simplepie (1.5.1 => 1.5.3)
-  - Updated phpxmlrpc/phpxmlrpc (4.3.1 => 4.4.1)
-  - Updated robthree/twofactorauth (1.6.1 => 1.6.7)
+
+- Updated CKEditor to v4.13.1
+- Updated splitbrain/php-archive (1.0.10 => 1.1.1)
+- Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.3.2)
+- Updated geshi/geshi (v1.0.9.0 => v1.0.9.1)
+- Updated html2text/html2text (4.1.0 => 4.2.1)
+- Updated james-heinrich/getid3 (v1.9.15 => v1.9.18)
+- Updated ezyang/htmlpurifier (v4.10.0 => v4.12.0)
+- Updated phpmailer/phpmailer (v5.2.26 => v5.2.27)
+- Updated simplepie/simplepie (1.5.1 => 1.5.3)
+- Updated phpxmlrpc/phpxmlrpc (4.3.1 => 4.4.1)
+- Updated robthree/twofactorauth (1.6.1 => 1.6.7)
 
 ### Fixed
-  - Footer did not properly 'stick' to the bottom in Safari
-  - Poll edit could crash under some circumstances
-  - Custom welcome_email.txt not being sent to imported users. Issue #365
-  - Improved PHP v7.4 compatibility
-  - Fixed DB error in database administration screen when non-glFusion tables exist in the database
-  - Fixed logic error that prevented user profile pictures from showing in the Forum plugin
-  - Fixed version number of VERSION file
+
+- Footer did not properly 'stick' to the bottom in Safari
+- Poll edit could crash under some circumstances
+- Custom welcome_email.txt not being sent to imported users. Issue #365
+- Improved PHP v7.4 compatibility
+- Fixed DB error in database administration screen when non-glFusion tables exist in the database
+- Fixed logic error that prevented user profile pictures from showing in the Forum plugin
+- Fixed version number of VERSION file
 
 ## v1.7.7 (April 14, 2019)
 
 ### Added
-  - Add timestamp to CSS and JS files to facilitate cache refresh when updated
-  - headlines auto tag incl_alt: now accepts 2 as an option to search only the alternate topic.
-  - Forum plugin - admin can now change the forum category when editing a forum
+
+- Add timestamp to CSS and JS files to facilitate cache refresh when updated
+- headlines auto tag incl_alt: now accepts 2 as an option to search only the alternate topic.
+- Forum plugin - admin can now change the forum category when editing a forum
 
 ### Changed
-  - Modified the Facebook login button to meet Facebook's current interface standards
-  - Modified the download method used by FileMgmt to ensure local buffers are properly flushed
-  - Modified Google+ icon on Oauth button to the Google icon
-  - Updated Polish translations for the installer, by glFusion Poland
-  - Updated CKEditor v4.11.4 (fixes a Cross Site Scripting security hole in the editor)
-  - Template and data caching has been reworked to be much more efficient and faster. IT IS IMPORTANT TO CLEAR THE CACHE WHEN UPGRADING as the file formats used by the caching algorithms have changed.
-  - newimage: auto tag no longer requires the album to have the Include in Random Block attribute set.
-  - Templates can now escape { and } by using {{ and }} - for example {{x}} will render {x} in the template.
-  - Set defaults / values for all datetime fields properly
+
+- Modified the Facebook login button to meet Facebook's current interface standards
+- Modified the download method used by FileMgmt to ensure local buffers are properly flushed
+- Modified Google+ icon on Oauth button to the Google icon
+- Updated Polish translations for the installer, by glFusion Poland
+- Updated CKEditor v4.11.4 (fixes a Cross Site Scripting security hole in the editor)
+- Template and data caching has been reworked to be much more efficient and faster. IT IS IMPORTANT TO CLEAR THE CACHE WHEN UPGRADING as the file formats used by the caching algorithms have changed.
+- newimage: auto tag no longer requires the album to have the Include in Random Block attribute set.
+- Templates can now escape { and } by using {{ and }} - for example {{x}} will render {x} in the template.
+- Set defaults / values for all datetime fields properly
 
 ### Fixed
-  - When editing a topic - the sort order defaults to Date regardless of previous setting
-  - When deleting a topic - the stories in that topic were not being properly deleted
-  - Headlines Auto tag used incorrect timezone in pulling new articles causing a delay in displaying new articles
-  - Ensure getItemInfo_comment is available
-  - Rating check for previous ratings did not return proper value
-  - Missing lastedited field in Forum Plugin fresh installation
-  - Invalid topic reference on index.php now return 404 error
-  - Set proper HTTP header when BB2 plugin rejects request
-  - Forum did not properly pull the user's photo
-  - BB2 Plugin's proxy setting did not work properly
-  - Non-smiley formatting were sometimes replaced during the smiley parsing resulting in incorrect formatting
-  - Forum boards admin - apostrophe's were double escaped causing the backslash to be stored as part of the forum name
-  - Custom Autotag editor would remove custom replacement text due to a JavaScript error
-  - Calendar upcoming event block would use the previous date as header in some instances
+
+- When editing a topic - the sort order defaults to Date regardless of previous setting
+- When deleting a topic - the stories in that topic were not being properly deleted
+- Headlines Auto tag used incorrect timezone in pulling new articles causing a delay in displaying new articles
+- Ensure getItemInfo_comment is available
+- Rating check for previous ratings did not return proper value
+- Missing lastedited field in Forum Plugin fresh installation
+- Invalid topic reference on index.php now return 404 error
+- Set proper HTTP header when BB2 plugin rejects request
+- Forum did not properly pull the user's photo
+- BB2 Plugin's proxy setting did not work properly
+- Non-smiley formatting were sometimes replaced during the smiley parsing resulting in incorrect formatting
+- Forum boards admin - apostrophe's were double escaped causing the backslash to be stored as part of the forum name
+- Custom Autotag editor would remove custom replacement text due to a JavaScript error
+- Calendar upcoming event block would use the previous date as header in some instances
 
 ## v1.7.6 (October 31, 2018)
 
 ### Added
-  - Forum Plugin: Now supports 'summary' mode in getItemInfo() which returns a single topic record, by parent_id, with child topic posts concatenated together
-  - headlines auto tag now supports incl_alt: setting to allow searching for alternate topic ids that match the topic being displayed
+
+- Forum Plugin: Now supports 'summary' mode in getItemInfo() which returns a single topic record, by parent_id, with child topic posts concatenated together
+- headlines auto tag now supports incl_alt: setting to allow searching for alternate topic ids that match the topic being displayed
 
 ### Changed
-  - Story Admin topic filter will now include matches against the alternate topic id
-  - Media Gallery Image view now uses overlays for next / previous image navigation
-  - Upgraded CKEditor to v4.10.1
-  - Forum Plugin: Now returns 404 page if user does not have permissions to acces forum category or topic
-  - Forum Plugin: Forum search feature has been rewritten to use relevance searches to return better results
-  - Polish Translation Update provided by Damian Kucaj (glFusion Polish Support)
-  - Content Syndication dropdown list is now sorted
-  - Auto tag permission editor - content area drop down now sorted
+
+- Story Admin topic filter will now include matches against the alternate topic id
+- Media Gallery Image view now uses overlays for next / previous image navigation
+- Upgraded CKEditor to v4.10.1
+- Forum Plugin: Now returns 404 page if user does not have permissions to acces forum category or topic
+- Forum Plugin: Forum search feature has been rewritten to use relevance searches to return better results
+- Polish Translation Update provided by Damian Kucaj (glFusion Polish Support)
+- Content Syndication dropdown list is now sorted
+- Auto tag permission editor - content area drop down now sorted
 
 ### Fixed
-  - ICS Feed support for calendar was broken and produced RSS feeds instead
-  - Rating IP validation to determine if user had already rated an item was broken
-  - Story instance caching did not properly cache custom templates by topic
-  - UTF8MB4 detection did not work properly with MySQL PDO driver
-  - StopForumSpam SpamX check referenced incorrect variable when checking email SFS score
-  - Block location language did not properly reflect block locations supported by themes
+
+- ICS Feed support for calendar was broken and produced RSS feeds instead
+- Rating IP validation to determine if user had already rated an item was broken
+- Story instance caching did not properly cache custom templates by topic
+- UTF8MB4 detection did not work properly with MySQL PDO driver
+- StopForumSpam SpamX check referenced incorrect variable when checking email SFS score
+- Block location language did not properly reflect block locations supported by themes
 
 ## v1.7.5 (August 8, 2018)
-  - Fixed XSS error in FileMan plugin for CKEditor - reported by zlay
-  - Fixed response comparison in SFS SpamX module
-  - Changed texteditor style to use Consolas font
-  - Implement caching stub for compatbility with glFusion v2 cache APIs
-  - Improved UTF8 handling in context snippits
-  - Improved filtering of search results (HTML / censor, etc.)
-  - Fullname in user registration did not show required attribute if required
-  - Modified how profile images are stored to ensure a unique filename is used when new profile images are uploaded - resolves an issue with the old image being cached for services such as CloudFlare.
-  - Do not log custom_config.js missing in 404 log
-  - Media Gallery - User profile 'Last 5 Images' thumbnails did not use proper aspect ratio for square thumbnails
-  - Media Gallery - Uploads can now be auto rotated based on the EXIF orientation field
-  - Media Gallery - fixed bug where random filename creator wasn't so random causing duplication names
-  - Improved environment validation for required extensions
-  - Logview will now only display the last 256kb of very large log files.
-  - Display Poll List / error when poll id is invalid
-  - Fixed error where FileMgmt did not always remove associated comments when download was deleted
-  - Improved handling of date/time for system functions to ensure alignment with site's configured timezone - resolves issues where the web server's timezone may be different than the site's configured timezone.
-  - Add Conf value for story sort on index page #256
-  - Update CKEditor to v4.10.0
-  - fusionrescue can now disable two-factor authentication
-  - Screening code which used cookies and JavaScript, and had poor performance, has been removed from BB2.
-  - New $_SYSTEM option to disable IP anonymization
-  - Links Plugin can now configure if link submissions are allowed (None, Logged-In Only or Anyone)
-  - Fixed new comment notifications (subscriptions) used htmlentities for quotes
-  - Minor rearrangement of activitytimer files - removed from admin area
-  - Several HTML5 validation updates
-  - Optimized template processing to improve performance
-  - Clean up the Facebook remote login to only require public data
-  - Fixed error when updating from older versions of glFusion
-  - Fixed display issue when admin poll edit fails validation checks.
+
+- Fixed XSS error in FileMan plugin for CKEditor - reported by zlay
+- Fixed response comparison in SFS SpamX module
+- Changed texteditor style to use Consolas font
+- Implement caching stub for compatbility with glFusion v2 cache APIs
+- Improved UTF8 handling in context snippits
+- Improved filtering of search results (HTML / censor, etc.)
+- Fullname in user registration did not show required attribute if required
+- Modified how profile images are stored to ensure a unique filename is used when new profile images are uploaded - resolves an issue with the old image being cached for services such as CloudFlare.
+- Do not log custom_config.js missing in 404 log
+- Media Gallery - User profile 'Last 5 Images' thumbnails did not use proper aspect ratio for square thumbnails
+- Media Gallery - Uploads can now be auto rotated based on the EXIF orientation field
+- Media Gallery - fixed bug where random filename creator wasn't so random causing duplication names
+- Improved environment validation for required extensions
+- Logview will now only display the last 256kb of very large log files.
+- Display Poll List / error when poll id is invalid
+- Fixed error where FileMgmt did not always remove associated comments when download was deleted
+- Improved handling of date/time for system functions to ensure alignment with site's configured timezone - resolves issues where the web server's timezone may be different than the site's configured timezone.
+- Add Conf value for story sort on index page #256
+- Update CKEditor to v4.10.0
+- fusionrescue can now disable two-factor authentication
+- Screening code which used cookies and JavaScript, and had poor performance, has been removed from BB2.
+- New $_SYSTEM option to disable IP anonymization
+- Links Plugin can now configure if link submissions are allowed (None, Logged-In Only or Anyone)
+- Fixed new comment notifications (subscriptions) used htmlentities for quotes
+- Minor rearrangement of activitytimer files - removed from admin area
+- Several HTML5 validation updates
+- Optimized template processing to improve performance
+- Clean up the Facebook remote login to only require public data
+- Fixed error when updating from older versions of glFusion
+- Fixed display issue when admin poll edit fails validation checks.
 
 ## v1.7.4.pl1 (May 23, 2018)
-  - Do not send notification email for new user when created by admin
-  - Fixed error in email duplicate check on new registrations
-  - Fixed error in Links plugin when deleting a user
-  - MySQL PDO Driver updates / fixes
-  - Updated PHP Archive class
+
+- Do not send notification email for new user when created by admin
+- Fixed error in email duplicate check on new registrations
+- Fixed error in Links plugin when deleting a user
+- MySQL PDO Driver updates / fixes
+- Updated PHP Archive class
 
 ## v1.7.4 (May 15, 2018)
-  - Delete account now removes or anonymizes all of the users info from the glFusion database tables
-  - Truncate the media item title to prevent overflow in the Media Gallery random image block
-  - Modified the CSS for FileMgmt download rating to left justify the rating stars
-  - Fixed issue where remote login users could not delete their account
-  - Fixed password rule text to better describe the length requirement
-  - Fixed issue on installation / upgrade screen where the enter key would select the Back button
-  - Updated the default download on a new install to a glFusion Overview PDF
-  - Fixed issue where site admin could not save a user record if the name did not meet length requirement
-  - Anonymize IP addresses prior to storing in database
-  - Oauth new user creation to now follow same workflow as local user creation
-  - Increase homepage table var (users table) to 255 bytes in size
-  - Spam check when creating oauth user
-  - Comment signatures are now dynamic (backported for glFusion NG code base)
-  - DB backup now writes several values per insert, improves efficiency of restores / imports
-  - Fixed issue where watermark admin would not redirect properly after deleting watermark
-  - Fixed issue where watermarking did not work with GraphicsMagick
-  - Added Cross-Frame Scripting Protection
-  - MySQL v8.0 support
-  - Fixed issue where Forum story migration did not properly check if destination forum was selected
-  - Fixed error in linkify code on older versions of PHP
-  - Do not display the UTF8MB4 upgrade option if DB does not support UTF8MB4 collation
-  - Fixed MySQL error in Forum plugin for older MySQL versions
-  - MySQL driver updates - new support for PDO driver (backported from glFusion v1.8 development)
-  - Fixed issue where CSS compression did not work with non UTF8 encoding
-  - Fixed bug where a plugin's block may not always be removed when the plugin is deleted
-  - Fixed type in upload class where maxImageHeight was not used properly
-  - Updated external libaries - oauth, getid3, htmlpurifier, phpmailer, simplepie, phpxmlrpc
-  - Fixed approval email for Oauth users who were queued and approved.
-  - Updated CKEditor v4.9.2
-  - Updated Subscription API to allow plugins to send subject
-  - Fixed issue where default topic settings (permission, owner) were not used for new topics
-  - Fixed issue where Remember Me setting could not be changed without changing the password too
-  - Fixed issue where SpamX plugin would not install (new installations) on older MySQL versions
-  - Honor open links in new window setting for user profile homepage links
-  - Fixed redirect after login
-  - Fixed issue editing Static Page titles / labels with quotes
-  - Removed dependency on Media Gallery plugin from the core image processing library
+
+- Delete account now removes or anonymizes all of the users info from the glFusion database tables
+- Truncate the media item title to prevent overflow in the Media Gallery random image block
+- Modified the CSS for FileMgmt download rating to left justify the rating stars
+- Fixed issue where remote login users could not delete their account
+- Fixed password rule text to better describe the length requirement
+- Fixed issue on installation / upgrade screen where the enter key would select the Back button
+- Updated the default download on a new install to a glFusion Overview PDF
+- Fixed issue where site admin could not save a user record if the name did not meet length requirement
+- Anonymize IP addresses prior to storing in database
+- Oauth new user creation to now follow same workflow as local user creation
+- Increase homepage table var (users table) to 255 bytes in size
+- Spam check when creating oauth user
+- Comment signatures are now dynamic (backported for glFusion NG code base)
+- DB backup now writes several values per insert, improves efficiency of restores / imports
+- Fixed issue where watermark admin would not redirect properly after deleting watermark
+- Fixed issue where watermarking did not work with GraphicsMagick
+- Added Cross-Frame Scripting Protection
+- MySQL v8.0 support
+- Fixed issue where Forum story migration did not properly check if destination forum was selected
+- Fixed error in linkify code on older versions of PHP
+- Do not display the UTF8MB4 upgrade option if DB does not support UTF8MB4 collation
+- Fixed MySQL error in Forum plugin for older MySQL versions
+- MySQL driver updates - new support for PDO driver (backported from glFusion v1.8 development)
+- Fixed issue where CSS compression did not work with non UTF8 encoding
+- Fixed bug where a plugin's block may not always be removed when the plugin is deleted
+- Fixed type in upload class where maxImageHeight was not used properly
+- Updated external libaries - oauth, getid3, htmlpurifier, phpmailer, simplepie, phpxmlrpc
+- Fixed approval email for Oauth users who were queued and approved.
+- Updated CKEditor v4.9.2
+- Updated Subscription API to allow plugins to send subject
+- Fixed issue where default topic settings (permission, owner) were not used for new topics
+- Fixed issue where Remember Me setting could not be changed without changing the password too
+- Fixed issue where SpamX plugin would not install (new installations) on older MySQL versions
+- Honor open links in new window setting for user profile homepage links
+- Fixed redirect after login
+- Fixed issue editing Static Page titles / labels with quotes
+- Removed dependency on Media Gallery plugin from the core image processing library
 
 ## v1.7.3 (February 9, 2018)
-  - Fixed error in Menu Builder where error text was blank
-  - Fixed Forum ranks save error on duplicate number of posts
-  - Fixed creating a new topic automatically assigned it as the alternate topic to all stories without an alternate topic
-  - Headlines auto tag - updated headlines.thtml to clean up the HTML
-  - Forum: Badges can now be any color
-  - Forum: Badge group can now be configured to inherit or not inherit other group memberships
-  - Indonesian Translation update by fahmipulo
-  - Minor code optimizations
+
+- Fixed error in Menu Builder where error text was blank
+- Fixed Forum ranks save error on duplicate number of posts
+- Fixed creating a new topic automatically assigned it as the alternate topic to all stories without an alternate topic
+- Headlines auto tag - updated headlines.thtml to clean up the HTML
+- Forum: Badges can now be any color
+- Forum: Badge group can now be configured to inherit or not inherit other group memberships
+- Indonesian Translation update by fahmipulo
+- Minor code optimizations
 
 ## v1.7.2 (January 27, 2018)
-  - Added support for "Open External Links in new Window" config setting in the RSS ticker widget
-  - Forum: Fixed issue where signature preview would not work consistently
-  - Forum: Admin message management did not page properly - lost selections on pagination
-  - Expanded PLG_itemDeleted() API to include $children parameter - a comma separated list of all child items to delete
-  - Polls: Comment link did not correctly display when showing poll results in Polls block
-  - Open print window in new window when printing static pages
-  - Fixed incorrect variable reference in referer ban list
-  - Forum: Removed the after action (i.e.; post) screen - now display message and directly go to refresh page
-  - Forum: Moderator functions now in dropdown button
-  - Forum: New Likes Feature by Lee Garner
-  - Configuration option to enable / disable BB2 auto ban logging
-  - Standardized the date/time format across all log files
-  - Added token timeout protection to comment form
-  - Display Alternate Topic (if any) in the story admin list
-  - Spam-X stats collection
-  - Implemented password complexity rules
-  - Reworked My Account account deletion - moved to its own tab with improved confirmation
-  - Forum: New badge manager by Lee Garner
-  - Forum: New ranks manager by Lee Garner
-  - Implement Two Factor Authentication
-  - Set proper cookie attributes on session cookie
-  - CAPTCHA Updates to support CAPTCHA for login and lost password screens
-  - CAPTCHA - fixed static image refresh
-  - New API to support adding JavaScript to footer of page
-  - Updated CKEditor to v4.8.0
-  - New topic.class.php to streamline backend topic administration (Lee)
-  - Several performance tweaks to SQL queries - removed several duplicate calls
-  - If topic description is set - display the description below the breadcrumbs
-  - New class .tm-topic-desc which can be used to style the topic description display
-  - Consistency updates in how meta data was being populated
-  - Add topic description (if exists) as the og:description meta data when viewing index page by topic (Lee)
-  - Make album name in view media nav bar a link back to the album
-  - Do not allow emojis in usernames
-  - Improved error checking when retrieving group list for user
-  - Added missing comment_indent configuration option
-  - If 'Allow User Photo' was set to false, comments display had a broken image
-  - Added siteconfig.php $_SYSTEM option to skip automatic upgrade check in Command & Control
-  - Auto upgrade check in Command & Control could crash if invalid XML received from glFusion server
-  - mailto: links in user administration list were incorrect.
-  - New theme style class - .tm-list to allow more control over lists such as What's New or upcoming events
+
+- Added support for "Open External Links in new Window" config setting in the RSS ticker widget
+- Forum: Fixed issue where signature preview would not work consistently
+- Forum: Admin message management did not page properly - lost selections on pagination
+- Expanded PLG_itemDeleted() API to include $children parameter - a comma separated list of all child items to delete
+- Polls: Comment link did not correctly display when showing poll results in Polls block
+- Open print window in new window when printing static pages
+- Fixed incorrect variable reference in referer ban list
+- Forum: Removed the after action (i.e.; post) screen - now display message and directly go to refresh page
+- Forum: Moderator functions now in dropdown button
+- Forum: New Likes Feature by Lee Garner
+- Configuration option to enable / disable BB2 auto ban logging
+- Standardized the date/time format across all log files
+- Added token timeout protection to comment form
+- Display Alternate Topic (if any) in the story admin list
+- Spam-X stats collection
+- Implemented password complexity rules
+- Reworked My Account account deletion - moved to its own tab with improved confirmation
+- Forum: New badge manager by Lee Garner
+- Forum: New ranks manager by Lee Garner
+- Implement Two Factor Authentication
+- Set proper cookie attributes on session cookie
+- CAPTCHA Updates to support CAPTCHA for login and lost password screens
+- CAPTCHA - fixed static image refresh
+- New API to support adding JavaScript to footer of page
+- Updated CKEditor to v4.8.0
+- New topic.class.php to streamline backend topic administration (Lee)
+- Several performance tweaks to SQL queries - removed several duplicate calls
+- If topic description is set - display the description below the breadcrumbs
+- New class .tm-topic-desc which can be used to style the topic description display
+- Consistency updates in how meta data was being populated
+- Add topic description (if exists) as the og:description meta data when viewing index page by topic (Lee)
+- Make album name in view media nav bar a link back to the album
+- Do not allow emojis in usernames
+- Improved error checking when retrieving group list for user
+- Added missing comment_indent configuration option
+- If 'Allow User Photo' was set to false, comments display had a broken image
+- Added siteconfig.php $_SYSTEM option to skip automatic upgrade check in Command & Control
+- Auto upgrade check in Command & Control could crash if invalid XML received from glFusion server
+- mailto: links in user administration list were incorrect.
+- New theme style class - .tm-list to allow more control over lists such as What's New or upcoming events
 
 ## v1.7.1 (October 22, 2017)
-  - Don't override the label for User Menu in menu builder (Lee)
-  - German Language updates from Matrox66
-  - Bundled documentation formatting updates
-  - PM link was missing from Forum topic view
-  - Disable SP preview in Demo Mode (only when execute PHP enabled)
-  - Handle missing files gracefully in FileMgmt
-  - Delete story on expire did not call proper PLG hook to alert plugins of story removal
-  - Filter queued comments from user profile list
-  - Fixed redirect error after entering comments for filemgmt
-  - Fixed issue where media gallery would include queued comments in the comment count
-  - Increased story text size from ~64kb to ~16mb
-  - Media Gallery - improved handling of missing thumbnails in pop-up video player
-  - Forum - Anonymous user names were not displayed in topic view
-  - [url] bbcode has html entities in link text
-  - Sort topic lists by topic sortnum (story admin, block admin, etc.)
-  - Fixed error when deleting a topic, only the first story in the topic would be deleted and then redirect to story admin screen
-  - Fixed incorrect column name on ban removal call
-  - Force theme to CMS and set allow_user_themes to false when upgrading from very old glFusion versions (prior to 1.5.0)
-  - Slider widget did not use links if no caption given for a slide
-  - Fixed error where story title / url were not set in the template prior to calling PLG_templateSetVars() which caused issues with some plugins (specifically SocialShare)
+
+- Don't override the label for User Menu in menu builder (Lee)
+- German Language updates from Matrox66
+- Bundled documentation formatting updates
+- PM link was missing from Forum topic view
+- Disable SP preview in Demo Mode (only when execute PHP enabled)
+- Handle missing files gracefully in FileMgmt
+- Delete story on expire did not call proper PLG hook to alert plugins of story removal
+- Filter queued comments from user profile list
+- Fixed redirect error after entering comments for filemgmt
+- Fixed issue where media gallery would include queued comments in the comment count
+- Increased story text size from ~64kb to ~16mb
+- Media Gallery - improved handling of missing thumbnails in pop-up video player
+- Forum - Anonymous user names were not displayed in topic view
+- [url] bbcode has html entities in link text
+- Sort topic lists by topic sortnum (story admin, block admin, etc.)
+- Fixed error when deleting a topic, only the first story in the topic would be deleted and then redirect to story admin screen
+- Fixed incorrect column name on ban removal call
+- Force theme to CMS and set allow_user_themes to false when upgrading from very old glFusion versions (prior to 1.5.0)
+- Slider widget did not use links if no caption given for a slide
+- Fixed error where story title / url were not set in the template prior to calling PLG_templateSetVars() which caused issues with some plugins (specifically SocialShare)
 
 ## v1.7.0 (October 6, 2017)
-  - FileMgmt - Use file's mime type when downloading
-  - New adBlock plugin api to allow plugins to integrate ads into glFusion's content - initial support for:
-     - header
-     - footer
-     - stories
-     - forum (both category list and topic lists)
-     - media gallery (both index page album list and media item album list)
-  - Forum - Lock / Unlock moderation options now included in moderator dropdown
-  - Forum - New tm-forum-table-centerblock style to apply rounded corners to forum centerblock
-  - Implemented PLG_outputFilter() API for stories and staticpages
-  - Media Gallery - Improved styling on sub-album dropdown on index page
-  - New [iteminfo:] auto tag
-  - CAPTCHA - increase the number pool for the math captcha
-  - Updated comment syndication feed to pull all comments instead of just articles
-  - Allow non-logged-in users to specify a 'username' when submitting a comment
-  - Allow silent edit for comment moderators / admins when editing a copy - prevents the 'Edited by' line from displaying
-  - Forum Plugin - Improvements on how anonymous (non-logged-in) info displays in topics
-  - New story attribute - on front page until - YYYY.MM.DD
-  - New pop-up date / time picker for date / time fields
-  - Block header templates - all updated to include block id if present
-  - Block title is now optional
-  - Calendar Plugin - fixed issue where personal events did not show properly in event block
-  - Navigation breadcrumbs in topic / story view
-  - BB2 implement improved search features in admin list
-  - Plugin administration now only processes the Plugin selected when enabling / disabling
-  - FileMgmt Plugin - Thumbnail upload would fail when adding new file
-  - Forum Plugin - Wrap breadcrumbs on small devices
-  - What's Related links now honor open external links setting
-  - Removed Vintage theme from core distribution
-  - Visual editor buttons would display on text input for comments
-  - Implemented comment moderation queue
-  - Add badge to moderation / submission queue icon on C&C to show items in queue
-  - Improved forum formatting for lists, code, quotes
-  - Reverse proxy (i.e.; CloudFlare) support for BB2
-  - Removed all dependencies on PEAR modules
-  - Basic support for structure data for articles
-  - Improved error handling of embedded PHP in static pages
-  - Upgrade check now uses alert classes (green, yellow, red) to highlight upgrade check results
-  - Forum Plugin - fixed display issue with unbanning IPs
-  - Installation - Generate random password on new installs - no longer default password to 'password'
-  - Installation / Upgrade - Option to automatically remove installation files
-  - Topic deletion now uses standard glFusion APIs to remove a story
-  - Topic Deletion now 'promotes' stories with an alternate topic. For example, if you delete a topic, generally all stories with that topic ID are also deleted. If a story that has the primary topic id of the topic being deleted and has an alternate topic, the story will be updated so the alternate topic becomes the primary topic and the story is not deleted.
-  - Forum Plugin - Allow GeSHi Code block to be styled through configuration
-  - Forum Plugin - Preview did not properly parse code blocks by language
-  - Forum Plugin - Updated GeShi code formatting to use syntax highlights
-  - Updated Linkify to work properly with later versions of PHP
-  - Updated user profile preview screen to match standard user profile display
-  - Update CKEditor to v4.7.3
-  - Media Gallery: Add Enable HTML in title / description field to global album attribute editor
-  - Encrypt smtp passwords in DB
-  - Moved most external libs to Composer / auto load
-  - Environment check now ignores depreciated PHP settings based on PHP version installed
-  - Fixed issue where very large downloads could fail due to out of memory error
-  - Update UIKIT library to v2.27.4
-  - Several plugin updates to support new capabilities in PLG_getItemInfo()
-    - Supports returning permissions on content items
-    - Updates to support new Searcher Plugin
-  - Updated htmLawed to v1.2.3
-  - Update GeSHi Library to v1.0.9.0
-  - Additional security protections for external links
-  - Properly sort plugin menu in alphabetical order by label
-  - FileMgmt - Fixed error where server side compression / caching could cause network failure error
-  - General code optimizations
-  - Update HTMLPurifier to v4.9.3
-  - Updated gravatar link to be ssl / non-ssl agnostic
-  - Links Plugin - link auto tag did not honor Open External URL in New Window configuration setting
-  - Media Gallery - Removed HTML from hover caption on lightbox theme
-  - Fixed search string highlighting in stories, forum and static pages
-  - story rendering optimizations
-  - Allow topics to have descriptions
-  - Story Video support
-  - Allow for alternate admin/ directory
-  - Updated upgrade file removal to use proper paths if different from defaults
-  - Static Pages - Fixed error where comments were not displayed when selecting a comment link from the user profile page
-  - Forum - Now use configuration setting for remote IP lookup instead of nettools plugin (if it was available)
-  - Themes - Added missing UI icons
-  - Polls - Fixed issue where the bar width was not properly formatted if locale used a comma separator for decimals
-  - Calendar - Fixed error where calendar submissions did not show in moderation queue
-  - CKeditor - Set default font name / size in menu bar
-  - Links - Make Validate Now link more prominent
-  - StaticPages - Increased max size of page content from ~64kb to ~16MB
-  - Bad Behavior - New whitelist / blacklist management via online interface
-  - Bad Behavior - Performance improvements
-  - Directory listing did not include alternate topics
-  - What's New for stories did not display correct timeframe
-  - Reorganized caching / template code into two separate files
-  - Removed Published Slider in story editor - it did not degrade well on non-supported browsers
-  - Forum - Improved formatting on non-digest email notifications
-  - Forum - Add copy to clipboard for post permalink
-  - Forum - Added tooltip (hover) for bookmark / remove bookmark
-  - Media Gallery - new copy to clipboard for media id
-  - CKeditor - Add SCAYT (Spell Check As You Type) to menu bar on all entry types
-  - CKeditor - auto enable (start) SCAYT (Spell Check As You Type)
-  - Added support for GraphicsMagick Image processing library
-  - Updated auto tag editor to remove informational text when de-selecting PHP function option
-  - Display appropriate error if upgrade checks cannot communicate with glFusion.org website
-  - Additional checks to ensure environment check functions are available prior to calling
-  - Polls - Fixed issue where vote count was not properly saved when editing existing poll
-  - Comment formatting updates
-  - Security Updates - Implemented several additional XSS protections identified through our on-going security scans
-  - Fixed incorrect help text for Hide Story Date
-  - Improved error logging for invalid / missing tokens
-  - Add new error message that triggers when local (standard) login is disabled and user passes username / password only
-  - Media Gallery: Update swfobject (used for legacy flash player / slideshow) to latest version (v2.3)
-  - Media Gallery: Updated flash media items to play using MediaElementJS
-  - Media Gallery: Replacing an image set exif flag to false, resulting in no meta data for the new image
-  - Improved SQL error reporting
-  - Fixed SQL error in calendar moderation view
-  - Fixed old references to stmenu
-  - Media Gallery: EXIF media date was not converted to user's timezone
-  - Media Gallery: EXIF parser would crash on some Canon images due to invalid exif tag
+
+- FileMgmt - Use file's mime type when downloading
+- New adBlock plugin api to allow plugins to integrate ads into glFusion's content - initial support for:
+  - header
+  - footer
+  - stories
+  - forum (both category list and topic lists)
+  - media gallery (both index page album list and media item album list)
+- Forum - Lock / Unlock moderation options now included in moderator dropdown
+- Forum - New tm-forum-table-centerblock style to apply rounded corners to forum centerblock
+- Implemented PLG_outputFilter() API for stories and staticpages
+- Media Gallery - Improved styling on sub-album dropdown on index page
+- New [iteminfo:] auto tag
+- CAPTCHA - increase the number pool for the math captcha
+- Updated comment syndication feed to pull all comments instead of just articles
+- Allow non-logged-in users to specify a 'username' when submitting a comment
+- Allow silent edit for comment moderators / admins when editing a copy - prevents the 'Edited by' line from displaying
+- Forum Plugin - Improvements on how anonymous (non-logged-in) info displays in topics
+- New story attribute - on front page until - YYYY.MM.DD
+- New pop-up date / time picker for date / time fields
+- Block header templates - all updated to include block id if present
+- Block title is now optional
+- Calendar Plugin - fixed issue where personal events did not show properly in event block
+- Navigation breadcrumbs in topic / story view
+- BB2 implement improved search features in admin list
+- Plugin administration now only processes the Plugin selected when enabling / disabling
+- FileMgmt Plugin - Thumbnail upload would fail when adding new file
+- Forum Plugin - Wrap breadcrumbs on small devices
+- What's Related links now honor open external links setting
+- Removed Vintage theme from core distribution
+- Visual editor buttons would display on text input for comments
+- Implemented comment moderation queue
+- Add badge to moderation / submission queue icon on C&C to show items in queue
+- Improved forum formatting for lists, code, quotes
+- Reverse proxy (i.e.; CloudFlare) support for BB2
+- Removed all dependencies on PEAR modules
+- Basic support for structure data for articles
+- Improved error handling of embedded PHP in static pages
+- Upgrade check now uses alert classes (green, yellow, red) to highlight upgrade check results
+- Forum Plugin - fixed display issue with unbanning IPs
+- Installation - Generate random password on new installs - no longer default password to 'password'
+- Installation / Upgrade - Option to automatically remove installation files
+- Topic deletion now uses standard glFusion APIs to remove a story
+- Topic Deletion now 'promotes' stories with an alternate topic. For example, if you delete a topic, generally all stories with that topic ID are also deleted. If a story that has the primary topic id of the topic being deleted and has an alternate topic, the story will be updated so the alternate topic becomes the primary topic and the story is not deleted.
+- Forum Plugin - Allow GeSHi Code block to be styled through configuration
+- Forum Plugin - Preview did not properly parse code blocks by language
+- Forum Plugin - Updated GeShi code formatting to use syntax highlights
+- Updated Linkify to work properly with later versions of PHP
+- Updated user profile preview screen to match standard user profile display
+- Update CKEditor to v4.7.3
+- Media Gallery: Add Enable HTML in title / description field to global album attribute editor
+- Encrypt smtp passwords in DB
+- Moved most external libs to Composer / auto load
+- Environment check now ignores depreciated PHP settings based on PHP version installed
+- Fixed issue where very large downloads could fail due to out of memory error
+- Update UIKIT library to v2.27.4
+- Several plugin updates to support new capabilities in PLG_getItemInfo()
+  - Supports returning permissions on content items
+  - Updates to support new Searcher Plugin
+- Updated htmLawed to v1.2.3
+- Update GeSHi Library to v1.0.9.0
+- Additional security protections for external links
+- Properly sort plugin menu in alphabetical order by label
+- FileMgmt - Fixed error where server side compression / caching could cause network failure error
+- General code optimizations
+- Update HTMLPurifier to v4.9.3
+- Updated gravatar link to be ssl / non-ssl agnostic
+- Links Plugin - link auto tag did not honor Open External URL in New Window configuration setting
+- Media Gallery - Removed HTML from hover caption on lightbox theme
+- Fixed search string highlighting in stories, forum and static pages
+- story rendering optimizations
+- Allow topics to have descriptions
+- Story Video support
+- Allow for alternate admin/ directory
+- Updated upgrade file removal to use proper paths if different from defaults
+- Static Pages - Fixed error where comments were not displayed when selecting a comment link from the user profile page
+- Forum - Now use configuration setting for remote IP lookup instead of nettools plugin (if it was available)
+- Themes - Added missing UI icons
+- Polls - Fixed issue where the bar width was not properly formatted if locale used a comma separator for decimals
+- Calendar - Fixed error where calendar submissions did not show in moderation queue
+- CKeditor - Set default font name / size in menu bar
+- Links - Make Validate Now link more prominent
+- StaticPages - Increased max size of page content from ~64kb to ~16MB
+- Bad Behavior - New whitelist / blacklist management via online interface
+- Bad Behavior - Performance improvements
+- Directory listing did not include alternate topics
+- What's New for stories did not display correct timeframe
+- Reorganized caching / template code into two separate files
+- Removed Published Slider in story editor - it did not degrade well on non-supported browsers
+- Forum - Improved formatting on non-digest email notifications
+- Forum - Add copy to clipboard for post permalink
+- Forum - Added tooltip (hover) for bookmark / remove bookmark
+- Media Gallery - new copy to clipboard for media id
+- CKeditor - Add SCAYT (Spell Check As You Type) to menu bar on all entry types
+- CKeditor - auto enable (start) SCAYT (Spell Check As You Type)
+- Added support for GraphicsMagick Image processing library
+- Updated auto tag editor to remove informational text when de-selecting PHP function option
+- Display appropriate error if upgrade checks cannot communicate with glFusion.org website
+- Additional checks to ensure environment check functions are available prior to calling
+- Polls - Fixed issue where vote count was not properly saved when editing existing poll
+- Comment formatting updates
+- Security Updates - Implemented several additional XSS protections identified through our on-going security scans
+- Fixed incorrect help text for Hide Story Date
+- Improved error logging for invalid / missing tokens
+- Add new error message that triggers when local (standard) login is disabled and user passes username / password only
+- Media Gallery: Update swfobject (used for legacy flash player / slideshow) to latest version (v2.3)
+- Media Gallery: Updated flash media items to play using MediaElementJS
+- Media Gallery: Replacing an image set exif flag to false, resulting in no meta data for the new image
+- Improved SQL error reporting
+- Fixed SQL error in calendar moderation view
+- Fixed old references to stmenu
+- Media Gallery: EXIF media date was not converted to user's timezone
+- Media Gallery: EXIF parser would crash on some Canon images due to invalid exif tag
 
 ## v1.6.6 (April 12, 2017)
-  - Media Gallery - Replaced old flash based audio jukebox with JavaScript player
-  - New Plugin APIs to social integrations - allow plugins to override default share buttons
-  - New Plugin API to infinite scroll - allow plugins to hook into new item load JS
-  - Media Gallery: Improved integrations to social share - pass meta data to social engine
-  - Forum: Enforce "Allow IMG bbcode" in signatures as well as forum posts
-  - Updated URLs in Media Gallery that reference external sites to use http/https agnostic views - resolves non-secure warning on SSL sites.
-  - Fixed issue where CAPTCHA reload did not work properly for languages other than english
-  - Add Justify Block to the CKeditor toolbar
-  - Forum: Significant optimization on the New Post query - builds the list with a single query
-  - Forum: Added missing forum rankings to the topic view
-  - Forum: Removed all hard coded date formats - now use glFusion data formats
-  - Fixed issue where Media Gallery search results did not link to the media item if the media item does not have a title
-  - New 'Be the first to comment' message when no comments exist
-  - Update OAuth library to v1.163
-  - Add prerequisite check to plugin installs (prerequisite checks were only done on uploads)
-  - Added sort: and order: options to headlines auto tag
-  - Fixed custom language file overwriting LANG_MYACCOUNT which removed plugins from the user preference page
-  - Twitter links did not honor open external links in new window setting
-  - Media Gallery - disable add media if no albums exist
-  - Improved error handling on user profile (improved error reporting)
-  - Added new option to unlink a remote account from a merged local account
-  - Fixed issue where remote account merge would display on already merged accounts
-  - Media Gallery: media auto tag did not honor hidden album permission (created link)
-  - Media Gallery: Do not allow access to hidden albums by non-owners
-  - CAPTCHA - Updated reCAPTCHA library to v1.1.3
-  - CAPTCHA - Updated invalid entry for reCAPTCHA to be more appropriate (no longer reference invalid string entry)
-  - Forum - Use proper views / reply counts on search results
-  - Media Gallery: Random block did not link to media item
-  - Media Gallery: slideshow auto tag did not honor link: option
-  - Media Gallery: Fixed URL link to glFuison on postcards
-  - Media Gallery: Fixed hard coded strings in media edit template
-  - Allow users with existing accounts to log in via Oauth accounts using same email address - patch by Lee Garner
-  - Headlines auto tag now shows Read More prompt when introtext is truncated
-  - Improved HTML truncation - no longer orphans some opening HTML tags
-  - Updated the video id detection in vimeo ckeditor plugin - resolves issue detecting id in embed code
-  - Fixed corrupted HTML in link editor
-  - Media Gallery search did not display thumbnails
-  - Forum - disable text mode checkbox when using WYSIWYG editor
-  - Forum - WYSIWYG tweaks - added spell check, maximize buttons - increased editor window to match height of non-WYSIWYG window
-  - Implemented custom style filter for htmLawed to handle the 'style' attribute
-  - Updated htmLawed to v1.2
-  - Force htmlawed HTML filter for non-utf-8 sites
-  - Media Gallery - Improved album page head layout
-  - Removed hard coded date formats from calendar plugin
-  - Forum - improved handling of the edit post window and validation checks
-  - Improved startup environment check to ensure required extensions exist and provide proper feedback if missing
-  - Updated online help documents to include missing configuration items
-  - Added rel="nofollow" to what's new items
-  - Removed duplicated comment link in Lightbox Media Gallery album theme
-  - Improved responsiveness of lightbox and clean Media Gallery themes
-  - Fixed incorrect pop-up message for forum attachments - images in lightbox stated click to download instead of view
-  - Display story summary at the top of the email story form
-  - Added configuration option to set display order for 3rd party authentication modules
-  - Fixed issue where help text did not display in configuration screen for items that were arrays
-  - Ensure links in emailed stories are absolute
-  - Allow Bad Behavior 2 functionality to be disabled in fusionrescue
-  - Polls Enhancements
-    - Ability to view vote data per poll
-    - Description field added to each poll
-    - Admin interface improvements
-    - Allow configuration setting so no anonymous voter id data is removed
-  - Forum - Sort mood dropdown in alphabetical order
-  - Forum - Rounded corners on topic list headers
-  - Forum - Moderators were not displayed when configured to display
-  - Wrap mail story / contact user forms in a panel
-  - Static Pages - Fixed error where hits were not shown if show last updated date was disabled
-  - Removed invalid BOM marker from install english utf8 language file
-  - Improved consistency on status / warning / error messages
-  - Forum - Improved handling of RE: prefix on forum subjects
-  - Cleaned up interface for rebuilding / resizing images and thumbnails in Media Gallery
-  - Demo Mode updates
-  - Cancel button did not cancel on forms with empty required fields
-  - Forum - Formatting improvements to Latest Post block
-  - Additional environment checks (required PHP extensions) added to Environment Check
-  - Additional environment validations (required PHP extensions) performed during install / upgrade
-  - Forum - Fix on smiley replacement to properly escape text
-  - Additional checks in Media Gallery view templates to ensure prompts are not shown without data
-  - Updated German Translations - Matrox66
-  - Fixed invalid button classes - modified type="cancel" to type="submit" - Matrox66
+
+- Media Gallery - Replaced old flash based audio jukebox with JavaScript player
+- New Plugin APIs to social integrations - allow plugins to override default share buttons
+- New Plugin API to infinite scroll - allow plugins to hook into new item load JS
+- Media Gallery: Improved integrations to social share - pass meta data to social engine
+- Forum: Enforce "Allow IMG bbcode" in signatures as well as forum posts
+- Updated URLs in Media Gallery that reference external sites to use http/https agnostic views - resolves non-secure warning on SSL sites.
+- Fixed issue where CAPTCHA reload did not work properly for languages other than english
+- Add Justify Block to the CKeditor toolbar
+- Forum: Significant optimization on the New Post query - builds the list with a single query
+- Forum: Added missing forum rankings to the topic view
+- Forum: Removed all hard coded date formats - now use glFusion data formats
+- Fixed issue where Media Gallery search results did not link to the media item if the media item does not have a title
+- New 'Be the first to comment' message when no comments exist
+- Update OAuth library to v1.163
+- Add prerequisite check to plugin installs (prerequisite checks were only done on uploads)
+- Added sort: and order: options to headlines auto tag
+- Fixed custom language file overwriting LANG_MYACCOUNT which removed plugins from the user preference page
+- Twitter links did not honor open external links in new window setting
+- Media Gallery - disable add media if no albums exist
+- Improved error handling on user profile (improved error reporting)
+- Added new option to unlink a remote account from a merged local account
+- Fixed issue where remote account merge would display on already merged accounts
+- Media Gallery: media auto tag did not honor hidden album permission (created link)
+- Media Gallery: Do not allow access to hidden albums by non-owners
+- CAPTCHA - Updated reCAPTCHA library to v1.1.3
+- CAPTCHA - Updated invalid entry for reCAPTCHA to be more appropriate (no longer reference invalid string entry)
+- Forum - Use proper views / reply counts on search results
+- Media Gallery: Random block did not link to media item
+- Media Gallery: slideshow auto tag did not honor link: option
+- Media Gallery: Fixed URL link to glFuison on postcards
+- Media Gallery: Fixed hard coded strings in media edit template
+- Allow users with existing accounts to log in via Oauth accounts using same email address - patch by Lee Garner
+- Headlines auto tag now shows Read More prompt when introtext is truncated
+- Improved HTML truncation - no longer orphans some opening HTML tags
+- Updated the video id detection in vimeo ckeditor plugin - resolves issue detecting id in embed code
+- Fixed corrupted HTML in link editor
+- Media Gallery search did not display thumbnails
+- Forum - disable text mode checkbox when using WYSIWYG editor
+- Forum - WYSIWYG tweaks - added spell check, maximize buttons - increased editor window to match height of non-WYSIWYG window
+- Implemented custom style filter for htmLawed to handle the 'style' attribute
+- Updated htmLawed to v1.2
+- Force htmlawed HTML filter for non-utf-8 sites
+- Media Gallery - Improved album page head layout
+- Removed hard coded date formats from calendar plugin
+- Forum - improved handling of the edit post window and validation checks
+- Improved startup environment check to ensure required extensions exist and provide proper feedback if missing
+- Updated online help documents to include missing configuration items
+- Added rel="nofollow" to what's new items
+- Removed duplicated comment link in Lightbox Media Gallery album theme
+- Improved responsiveness of lightbox and clean Media Gallery themes
+- Fixed incorrect pop-up message for forum attachments - images in lightbox stated click to download instead of view
+- Display story summary at the top of the email story form
+- Added configuration option to set display order for 3rd party authentication modules
+- Fixed issue where help text did not display in configuration screen for items that were arrays
+- Ensure links in emailed stories are absolute
+- Allow Bad Behavior 2 functionality to be disabled in fusionrescue
+- Polls Enhancements
+  - Ability to view vote data per poll
+  - Description field added to each poll
+  - Admin interface improvements
+  - Allow configuration setting so no anonymous voter id data is removed
+- Forum - Sort mood dropdown in alphabetical order
+- Forum - Rounded corners on topic list headers
+- Forum - Moderators were not displayed when configured to display
+- Wrap mail story / contact user forms in a panel
+- Static Pages - Fixed error where hits were not shown if show last updated date was disabled
+- Removed invalid BOM marker from install english utf8 language file
+- Improved consistency on status / warning / error messages
+- Forum - Improved handling of RE: prefix on forum subjects
+- Cleaned up interface for rebuilding / resizing images and thumbnails in Media Gallery
+- Demo Mode updates
+- Cancel button did not cancel on forms with empty required fields
+- Forum - Formatting improvements to Latest Post block
+- Additional environment checks (required PHP extensions) added to Environment Check
+- Additional environment validations (required PHP extensions) performed during install / upgrade
+- Forum - Fix on smiley replacement to properly escape text
+- Additional checks in Media Gallery view templates to ensure prompts are not shown without data
+- Updated German Translations - Matrox66
+- Fixed invalid button classes - modified type="cancel" to type="submit" - Matrox66
 
 ## v1.6.5 (January 22, 2017)
-  - Updated German Translations from Matrox66
-  - Media Gallery - removed references to depreciated online print option
-  - Media Gallery - styled the postcard screens using uikit styles
-  - Media Gallery - removed hard coded language string from summary index page
-  - Media Gallery - allow summary index page template to control whether owner name is used when no copyright name is available
-  - Media Gallery - do not display language prompts when no corresponding data is available (i.e.; View or Media ID)
-  - Forum - If a post is edited (and silent edit is not checked), display a Last Edited msg in the post.
-  - Forum - Do not display Silent Edit checkbox for new posts or replies
-  - Tweaked sort order for style sheets - Order is: UIKIT Styles, Theme Styles, Plugin Styles, custom.css
-  - Ensure admin lists display at 100% width of the available viewport
-  - Improved error handling on db admin actions
-  - Added red border around required field in forms to help highlight required fields
-  - Calendar - Implemented a more better mobile / responsive style for the calendar month view
-  - Calendar - Adjusted the event entry screen to place all required fields at the top of the form
-  - Forum - Add no bookmarks / no new posts to empty lists
-  - Forum - Display success message after marking all topics read
-  - New Forum feature - ability to replace the home page with the forum index page
-  - Updated CKEditor to v4.6.2
-  - PHP Info in environment check did not display well with older versions of PHP
-  - Enhanced validation / error handling for comment entry
-  - Polls - Display poll above comment entry form
-  - Enhanced security checks when emailing users / stories
-  - Left align remarks on poll results
-  - Minor table structure updates to remove unused fields, properly align lengths on others
-  - Forum - set locale header properly in topic review window
-  - Added missing confirmations to cancel / delete actions in static page editor
-  - Increase font size on smaller viewports
-  - Several layout tweaks in the forum and admin navigation to better support smaller viewports
-  - Set error.log as default log to view on initial load of log viewer
-  - Fixed error where exclude list did not always save properly
-  - Media Gallery - Changed 'default' album theme to use UIKIT responsive layout
-  - Media Gallery - Moved old non-responsive layout to new 'legacy' album theme
-  - Media Gallery - if a replacement image was uploaded with a different extension, the replaced image was not physically deleted
-  - Forum - updated the layout for topic lists on small devices - now display last post information
-  - Forum - updated header area (menu, search, jump) to display cleaner on small screens
-  - Forum - several small tweaks to layout on smaller devices - ensure proper alignment, wrapping, etc.
-  - Media Gallery - Fixed error where pagination did not display when using a 1 column index
-  - Media Gallery - No longer require MG user prefs to be enabled for link to member album to display
-  - Integrated codemirror plugin into CKEditor
-  - Support for auto upgrading plugins with custom directories
-  - Fixed issue where no content to moderate message was not displayed properly
-  - Added "Move to New Topic" feature in Global Story Editor
-  - Improved error handling in Global Story Editor
-  - Forum - Removed footer on view topic - no need to display topic summary icons
-  - Forum - Improved error handling on invalid topics
-  - Forum - Fixed error where locked topic option did not appear on post edit
-  - Forum - Fixed erorr moderating forums with question marks in title
-  - Update Unite Gallery to v1.7.40
-  - Consistent menus in database administration
-  - Improved error logging during authentication
-  - Additional validation on email addresses prior to sending
-  - Update phpmailer to v5.2.22 - SECURITY Critical security update for CVE-2016-10033, CVE-2016-10045,  CVE-2017-5223
-  - Removed BB2 display stats option - no longer used but if enabled it performed some high load DB queries
-  - Moved HTML filter cache directory under private_data
-  - Fixed invalid image reference in errormessage.html
-  - Several code / DB optimizations to improve performance
-  - Improved filtering of user supplied data during login
-  - General code clean up - fixed several references to uninitialized variables
-  - Forum blocks did not use utf-8 safe functions
-  - Update jQuery Validate to v1.15.1
-  - Modified form validation to all dashes on alphanumeric fields
-  - Fixed error where keep unscaled images in stories, which enabled the lightbox view of the image, would cause all links in the story to open in a lightbox - solution provided by Lee Garner
-  - Media Gallery - Fixed error where .png images did not display on postcard preview
-  - Media Gallery - Fixed error in story import - album select list did not properly display
-  - Media Gallery - Do not display Static Sort option in album drop down if album has a specified sorting in album properties
-  - Media Gallery - fixed error in static sort - descending sorts did not work
-  - New character counter for text fields - provided by Buddilla
-  - Moved several debug options from siteconfig.php to the online configuration
-    - rootdebug
-    - debug_oauth
-    - debug_html_filter
-  - Updated fusionrescue.php to allow setting new debug options
-  - Tweaked logview display to remove leading space on first log file line
-  - Improved 404 Not Found handling - ability to use custom static page as 404 page
-  - Fixed typo in topic listing that prevented correct sort order from displaying
-  - Fixed bbcode signature preview to prevent invalid header errors
-  - Forum - fixed formatting issue when previewing posts in HTML mode
-  - Added configuration option to open external links in new window
-  - Forum post edit did not properly show the checkbox status for disable bbcode, disable url parsing and disable smilies
-  - Forum post edit did not set sticky checkbox appropriately
-  - Modified user story submit info panel - allow it to be closed
-  - Fixed E_ALL error in usersettings.php - validate social follow me service is set prior to use
-  - New $_SYSTEM option to enable / disable including static pages marked with 'Include in Menu' the Plugin menu
+
+- Updated German Translations from Matrox66
+- Media Gallery - removed references to depreciated online print option
+- Media Gallery - styled the postcard screens using uikit styles
+- Media Gallery - removed hard coded language string from summary index page
+- Media Gallery - allow summary index page template to control whether owner name is used when no copyright name is available
+- Media Gallery - do not display language prompts when no corresponding data is available (i.e.; View or Media ID)
+- Forum - If a post is edited (and silent edit is not checked), display a Last Edited msg in the post.
+- Forum - Do not display Silent Edit checkbox for new posts or replies
+- Tweaked sort order for style sheets - Order is: UIKIT Styles, Theme Styles, Plugin Styles, custom.css
+- Ensure admin lists display at 100% width of the available viewport
+- Improved error handling on db admin actions
+- Added red border around required field in forms to help highlight required fields
+- Calendar - Implemented a more better mobile / responsive style for the calendar month view
+- Calendar - Adjusted the event entry screen to place all required fields at the top of the form
+- Forum - Add no bookmarks / no new posts to empty lists
+- Forum - Display success message after marking all topics read
+- New Forum feature - ability to replace the home page with the forum index page
+- Updated CKEditor to v4.6.2
+- PHP Info in environment check did not display well with older versions of PHP
+- Enhanced validation / error handling for comment entry
+- Polls - Display poll above comment entry form
+- Enhanced security checks when emailing users / stories
+- Left align remarks on poll results
+- Minor table structure updates to remove unused fields, properly align lengths on others
+- Forum - set locale header properly in topic review window
+- Added missing confirmations to cancel / delete actions in static page editor
+- Increase font size on smaller viewports
+- Several layout tweaks in the forum and admin navigation to better support smaller viewports
+- Set error.log as default log to view on initial load of log viewer
+- Fixed error where exclude list did not always save properly
+- Media Gallery - Changed 'default' album theme to use UIKIT responsive layout
+- Media Gallery - Moved old non-responsive layout to new 'legacy' album theme
+- Media Gallery - if a replacement image was uploaded with a different extension, the replaced image was not physically deleted
+- Forum - updated the layout for topic lists on small devices - now display last post information
+- Forum - updated header area (menu, search, jump) to display cleaner on small screens
+- Forum - several small tweaks to layout on smaller devices - ensure proper alignment, wrapping, etc.
+- Media Gallery - Fixed error where pagination did not display when using a 1 column index
+- Media Gallery - No longer require MG user prefs to be enabled for link to member album to display
+- Integrated codemirror plugin into CKEditor
+- Support for auto upgrading plugins with custom directories
+- Fixed issue where no content to moderate message was not displayed properly
+- Added "Move to New Topic" feature in Global Story Editor
+- Improved error handling in Global Story Editor
+- Forum - Removed footer on view topic - no need to display topic summary icons
+- Forum - Improved error handling on invalid topics
+- Forum - Fixed error where locked topic option did not appear on post edit
+- Forum - Fixed erorr moderating forums with question marks in title
+- Update Unite Gallery to v1.7.40
+- Consistent menus in database administration
+- Improved error logging during authentication
+- Additional validation on email addresses prior to sending
+- Update phpmailer to v5.2.22 - SECURITY Critical security update for CVE-2016-10033, CVE-2016-10045,  CVE-2017-5223
+- Removed BB2 display stats option - no longer used but if enabled it performed some high load DB queries
+- Moved HTML filter cache directory under private_data
+- Fixed invalid image reference in errormessage.html
+- Several code / DB optimizations to improve performance
+- Improved filtering of user supplied data during login
+- General code clean up - fixed several references to uninitialized variables
+- Forum blocks did not use utf-8 safe functions
+- Update jQuery Validate to v1.15.1
+- Modified form validation to all dashes on alphanumeric fields
+- Fixed error where keep unscaled images in stories, which enabled the lightbox view of the image, would cause all links in the story to open in a lightbox - solution provided by Lee Garner
+- Media Gallery - Fixed error where .png images did not display on postcard preview
+- Media Gallery - Fixed error in story import - album select list did not properly display
+- Media Gallery - Do not display Static Sort option in album drop down if album has a specified sorting in album properties
+- Media Gallery - fixed error in static sort - descending sorts did not work
+- New character counter for text fields - provided by Buddilla
+- Moved several debug options from siteconfig.php to the online configuration
+  - rootdebug
+  - debug_oauth
+  - debug_html_filter
+- Updated fusionrescue.php to allow setting new debug options
+- Tweaked logview display to remove leading space on first log file line
+- Improved 404 Not Found handling - ability to use custom static page as 404 page
+- Fixed typo in topic listing that prevented correct sort order from displaying
+- Fixed bbcode signature preview to prevent invalid header errors
+- Forum - fixed formatting issue when previewing posts in HTML mode
+- Added configuration option to open external links in new window
+- Forum post edit did not properly show the checkbox status for disable bbcode, disable url parsing and disable smilies
+- Forum post edit did not set sticky checkbox appropriately
+- Modified user story submit info panel - allow it to be closed
+- Fixed E_ALL error in usersettings.php - validate social follow me service is set prior to use
+- New $_SYSTEM option to enable / disable including static pages marked with 'Include in Menu' the Plugin menu
 
 ## v1.6.4 (December 9, 2016)
-  - Updated CKEditor to v4.6.1
-  - Fixed a bug on new installs where the HTML filters were not properly configured
-  - Updated Spanish Columbia Translations from John Toro
-  - Updated German Translations from Matrox66
-  - Modified footer.thtml to use {copyright_msg} tag
-  - Forum hint bubble no longer parses auto tags
-  - Improved error checking on smiley replace in forum
+
+- Updated CKEditor to v4.6.1
+- Fixed a bug on new installs where the HTML filters were not properly configured
+- Updated Spanish Columbia Translations from John Toro
+- Updated German Translations from Matrox66
+- Modified footer.thtml to use {copyright_msg} tag
+- Forum hint bubble no longer parses auto tags
+- Improved error checking on smiley replace in forum
 
 ## v1.6.3.pl1 (December 7, 2016)
-  - mgslider auto tag cleanup
-  - Forum: processing of auto tags, smilies and automatic URL generation were having collisions - urls being created by auto url parsing were then interpreted by smiley code - potentially creating a mess.
-  - Static page editor did not display error messages in proper format (no styling)
-  - Static page 'Add to Menu' option was not visible
-  - Menu builder did not properly create static page menus
+
+- mgslider auto tag cleanup
+- Forum: processing of auto tags, smilies and automatic URL generation were having collisions - urls being created by auto url parsing were then interpreted by smiley code - potentially creating a mess.
+- Static page editor did not display error messages in proper format (no styling)
+- Static page 'Add to Menu' option was not visible
+- Menu builder did not properly create static page menus
 
 ## v1.6.3 (December 4, 2016)
-  - Fixed issue in forum posts where url parsing could cause errors on auto tags
-  - Fixed issue where deleting a story did not properly clear the story cache
-  - Auto tags can now see who is calling them (i.e.; Media Gallery calling the Tag autotag - Tag can now see that Media Gallery is calling)
-  - Updated Oauth library to v1.152
-  - Improved Twitter Oauth login support
-  - Media Gallery media/image auto tags now produce responsive images
-  - Media Gallery - fixed responsive video for video auto tag
-  - Fixed missing translations in story editor and bad behavior menu
-  - Automatic URL parsing now adds nofollow attribute
-  - Moved story options in full article view to the header area - same as short index view
-  - Implemented new plugin API for whatsrelated in stories
-  - Fixed error in lib-admin where no-data string was not used
-  - Fixed issue with admin lists not always 'remembering' the previous selections when navigating away from the list (i.e.; viewin an item on the list)
-  - Fixed issue in Bad Behavior plugin where log ids were not properly created
-  - Resolved issue where plugins updates would upload but not update automatically
-  - Updated tooltip JS to properly parse titles
-  - Styled the tool-tip title
-  - Forum Plugin - improved WYSIWYG editor integration - better support for site styles
-  - New feature to allow cidr blocks with BB2
-  - Added database info to environment check report
-  - Update Unite Gallery to v1.7.37
-  - Update Media Element to v2.23.4
-  - Update CKeditor to v4.6.0
-  - Moderation System - enabled check all capability for submission lists
-  - Media Gallery: Alternate URL support did not function properly on auto tags
-  - Media Gallery: Info icon would not open modal on mobile devices
-  - Media Gallery: jhead support was broken
-  - Plugin upload did not properly validate plugin.xml file was located - assumed to be in first directory found
-  - Media Gallery: EXIF/IPTC admin screen - check all / uncheck all did not function properly
-  - Created master core configuration data file - reference it as a single source for maintenance during upgrades
-  - Updated fusionrescue to allow resetting login methods field
-  - Installation validates database charset
-  - Improved the visual cues when backing up large tables
-  - Fixed typo in Forum posteditor.thtml template which prevented the admin options from showing
-  - Added RSS Ticker widget
-  - RSS feeds did not use attribution author when available
-  - Update UIKIT to v2.27.2
-  - Story view count was not displaying when configured to do so
-  - Fixed error with adding new keyed configuration items in the online configuration manager
-  - Fixed incorrect path in environment check for lck files
-  - Fixed issue where system messages with double quotes would not properly display
-  - Moved off-canvas menu template out of custom/ directory to menu/ directory
-  - Links auto tag did not honor link / category permissions
-  - Media Gallery: Add 'height' parameter to mgslider autotag
-  - Media Gallery: Make slideshow link a button
+
+- Fixed issue in forum posts where url parsing could cause errors on auto tags
+- Fixed issue where deleting a story did not properly clear the story cache
+- Auto tags can now see who is calling them (i.e.; Media Gallery calling the Tag autotag - Tag can now see that Media Gallery is calling)
+- Updated Oauth library to v1.152
+- Improved Twitter Oauth login support
+- Media Gallery media/image auto tags now produce responsive images
+- Media Gallery - fixed responsive video for video auto tag
+- Fixed missing translations in story editor and bad behavior menu
+- Automatic URL parsing now adds nofollow attribute
+- Moved story options in full article view to the header area - same as short index view
+- Implemented new plugin API for whatsrelated in stories
+- Fixed error in lib-admin where no-data string was not used
+- Fixed issue with admin lists not always 'remembering' the previous selections when navigating away from the list (i.e.; viewin an item on the list)
+- Fixed issue in Bad Behavior plugin where log ids were not properly created
+- Resolved issue where plugins updates would upload but not update automatically
+- Updated tooltip JS to properly parse titles
+- Styled the tool-tip title
+- Forum Plugin - improved WYSIWYG editor integration - better support for site styles
+- New feature to allow cidr blocks with BB2
+- Added database info to environment check report
+- Update Unite Gallery to v1.7.37
+- Update Media Element to v2.23.4
+- Update CKeditor to v4.6.0
+- Moderation System - enabled check all capability for submission lists
+- Media Gallery: Alternate URL support did not function properly on auto tags
+- Media Gallery: Info icon would not open modal on mobile devices
+- Media Gallery: jhead support was broken
+- Plugin upload did not properly validate plugin.xml file was located - assumed to be in first directory found
+- Media Gallery: EXIF/IPTC admin screen - check all / uncheck all did not function properly
+- Created master core configuration data file - reference it as a single source for maintenance during upgrades
+- Updated fusionrescue to allow resetting login methods field
+- Installation validates database charset
+- Improved the visual cues when backing up large tables
+- Fixed typo in Forum posteditor.thtml template which prevented the admin options from showing
+- Added RSS Ticker widget
+- RSS feeds did not use attribution author when available
+- Update UIKIT to v2.27.2
+- Story view count was not displaying when configured to do so
+- Fixed error with adding new keyed configuration items in the online configuration manager
+- Fixed incorrect path in environment check for lck files
+- Fixed issue where system messages with double quotes would not properly display
+- Moved off-canvas menu template out of custom/ directory to menu/ directory
+- Links auto tag did not honor link / category permissions
+- Media Gallery: Add 'height' parameter to mgslider autotag
+- Media Gallery: Make slideshow link a button
 
 ## v1.6.2 (October 9, 2016)
-  - Updated Exifer library bundled with Media Gallery
-  - Updated getID3 library to latest upstream release
-  - Modified Admin menu layout to hide instruction block by default - new ? icon to toggle view
-  - Improved DB admin completion notifications
-  - Improved error handling on plugin uploads
-  - Improved auto tag handling in search results
-  - Added check / warning if PHP version past end-of-life for environment check and upgrade check pages
-  - New [url:] auto tag
-  - Improved plugin install / uninstall error tracking
-  - Fixed incorrect variable reference when recursively removing directories
-  - Fixed issue where temp directory would not be removed when plugin upload is cancelled
-  - New auto tag permission editor - allows editing permissions by content area
-  - Added Show Allowed Content to story editor - shows allowed HTML and available auto tags
-  - User about entry - Fixed inconsistent formatting issue where line breaks were removed in some areas and not in others
-  - Added ability to use auto tags in user about
-  - Fixed layout issue in admin user information edit - increased size of about, tag line and pgp entry fields
-  - Upgraded MediaElement to v2.23.1
-  - Fixed issue with infinite scroll where it did not properly process responsive elements in the newly loaded content
-  - Updated tar / zip processing for PHP 7 compatibility
-  - Plugin Upload - now allows for plugin archives directly from Git repositories
-  - Story templates by topic was not checking ?topic in URL
-  - Media Gallery - Improved handling of video / audio playback for lightbox album theme
-  - Set Auto Translation block to disabled on new installs
-  - Removed tab slider example from home page on new installs
-  - Added missing #comments component to URLs in story templates
-  - Fixed incorrect column header in global story attribute editor
-  - Media Gallery themes converted to UIKIT based styles
-  - Media Gallery - minor improvements to album view / media view templates
-  - Added reset password option to fusionrescue.php
-  - Tweaked tm-block-footer style to provide better color combination for copyright
-  - Added Driven by glFusion link in footer template
-  - Media Gallery - did not honor the album configured sort order
-  - Media Gallery - long titles would push the admin menu down off navbar
-  - Forum - fixed issue where quotes in forum post subject where replaced with &quote;
-  - Implemented Non-Logged-in User group support - allows groups to now include non-logged-in users
-  - Media Gallery - Fixed issue in album edit - unable to set group ownership due to wrong template var name being used
-  - Fixed issue with message handling (i.e.; ... saved successfully) interaction with plugins
-  - Media Gallery - MP3 playblack - fallback to flash player would fail
-  - Polls Plugin - Update to v2.2.1
-    - Fixed issue where poll voter data could be overwritten
-    - Fixed issue where poll voter data was being purged incorrectly
-    - Fixed issue where deleting a poll did not delete the corresponding voter data
-  - headlines auto tag - panel template was missing a closing </div>
-  - Story instance - dynamic auto tags would get cached and no longer be dynamic
-  - Fixed issue in version check where it did not properly detect pl versions
+
+- Updated Exifer library bundled with Media Gallery
+- Updated getID3 library to latest upstream release
+- Modified Admin menu layout to hide instruction block by default - new ? icon to toggle view
+- Improved DB admin completion notifications
+- Improved error handling on plugin uploads
+- Improved auto tag handling in search results
+- Added check / warning if PHP version past end-of-life for environment check and upgrade check pages
+- New [url:] auto tag
+- Improved plugin install / uninstall error tracking
+- Fixed incorrect variable reference when recursively removing directories
+- Fixed issue where temp directory would not be removed when plugin upload is cancelled
+- New auto tag permission editor - allows editing permissions by content area
+- Added Show Allowed Content to story editor - shows allowed HTML and available auto tags
+- User about entry - Fixed inconsistent formatting issue where line breaks were removed in some areas and not in others
+- Added ability to use auto tags in user about
+- Fixed layout issue in admin user information edit - increased size of about, tag line and pgp entry fields
+- Upgraded MediaElement to v2.23.1
+- Fixed issue with infinite scroll where it did not properly process responsive elements in the newly loaded content
+- Updated tar / zip processing for PHP 7 compatibility
+- Plugin Upload - now allows for plugin archives directly from Git repositories
+- Story templates by topic was not checking ?topic in URL
+- Media Gallery - Improved handling of video / audio playback for lightbox album theme
+- Set Auto Translation block to disabled on new installs
+- Removed tab slider example from home page on new installs
+- Added missing #comments component to URLs in story templates
+- Fixed incorrect column header in global story attribute editor
+- Media Gallery themes converted to UIKIT based styles
+- Media Gallery - minor improvements to album view / media view templates
+- Added reset password option to fusionrescue.php
+- Tweaked tm-block-footer style to provide better color combination for copyright
+- Added Driven by glFusion link in footer template
+- Media Gallery - did not honor the album configured sort order
+- Media Gallery - long titles would push the admin menu down off navbar
+- Forum - fixed issue where quotes in forum post subject where replaced with &quote;
+- Implemented Non-Logged-in User group support - allows groups to now include non-logged-in users
+- Media Gallery - Fixed issue in album edit - unable to set group ownership due to wrong template var name being used
+- Fixed issue with message handling (i.e.; ... saved successfully) interaction with plugins
+- Media Gallery - MP3 playblack - fallback to flash player would fail
+- Polls Plugin - Update to v2.2.1
+  - Fixed issue where poll voter data could be overwritten
+  - Fixed issue where poll voter data was being purged incorrectly
+  - Fixed issue where deleting a poll did not delete the corresponding voter data
+- headlines auto tag - panel template was missing a closing </div>
+- Story instance - dynamic auto tags would get cached and no longer be dynamic
+- Fixed issue in version check where it did not properly detect pl versions
 
 ## v1.6.1 (September 13, 2016)
-  - Reworked user profile latest comment listing - fixed issue where selection of a comment to view would result in a blank page - Updated to display all comments types, not just stories
-  - Fixed another long standing error in FileMgmt where filenames with spaces in them would not always download properly
-  - Fixed issue with LinkedIn Oauth login
-  - Updated Oauth Library to latest release
-  - Updated headlines: auto tag to include storyimage: parameter - allows to select stories with or without attached story images
-  - Fixed issue where titles that contain quotes would cause a JS parse error with Disqus 3rd party comment engine
-  - Implemented search option for online conifguration
-  - Documentation - several spelling and gramar updates - navigation to main index page
-  - CAPTCHA - Fixed theme selection for reCaptcha
-  - Updated UIKIT to v2.27.1
-  - Fixed URL detection error in Spam-X link counter
-  - HTML 5 Validation updates
-  - Media Gallery: Modified slideshow auto tag to be responsive with UIKIT based themes
-  - Modified the Login / My Account menu handling - Login now shows on the main menu bar
-  - Media Gallery: Fixed issue where the original filename was not always properly captured on upload
-  - Media Gallery: Fixed error where the download option did not work properly if the site was configured to discard original images
-  - Fixed error where the What's New block would always display regardless of the Hide What's New when empty setting
-  - Informational messages will now display as a modal (UIKIT based themes only)
-  - Refactored outbound HTML emails - improvements for displaying across larger array of devices
-  - Fixed issue with new activation form - extra closing div
-  - Fixed issue with Media Gallery duplicating the Comments line
-  - Record user id in poll vote history (to prevent duplicate votes)
-  - Add option for poll to only allow logged in users to vote
-  - Fixed issue with poll_votes auto tag interactive (ajax) voting did not work in forum post
-  - Allow stories to provide attribution to external sources
-  - Fixed error where page URL was not properly set for staticpages when using 3rd party comment engines
-  - Allow some HTML in block titles
-  - Allow some HTML in the menu labels
-  - Modified upgrade wizard's obsolete file removal to remove the confirmation page if there are no errors
-  - Modified off-canvas menu to be completely self-contained in the menu template
-  - Modified auto translations block to use a template
-  - Media Gallery - improved gallery and album index page grid to better support small to xlarge viewports
-  - Implemented activity timer for forum, story and static page editors to automatically refresh security tokens while editing
-  - Allow token time to live to be configured in siteconfig.php
-  - Expanded environment check to validate required PHP extensions are available
-  - Changed article title spacing / better wrapping
-  - Media Gallery: Fixed typo on lang_download tag in view_image, view_audio, and view_video templates
-  - Media Gallery: Improved random image block layout
-  - Media Gallery: Permalink URL was not built correctly
-  - Media Gallery: Ajax driven rebuild thumbnails / resize display images
-  - Media Gallery: removed config.php from distribution - rename .dist on install
-  - Media Gallery: Use HTML5 playback for mp3 files
-  - Media Gallery: Improved the summary index page layout - removed hard coded strings - fixed missing comment text
-  - Improved detection of the Google+ username
-  - Tweak the scroll up widget - improved fade-in / fade-out on initial page load
-  - Enhanced sectest to better detect non-standard named directories
-  - Fixed missing trackback button on story ping / trackback admin page (CMS theme)
-  - Trackback preview failed due to interaction with BB2 plugin
-  - Removed the last use of HTTP and HTTP2 Pear calls
-  - Remote auth users with merged local accounts can now change their local password
-  - Fixed error in SP and Story editor where <i></i> tags could be appended to the output when switching between visual and html mode
-  - Fixed an error in SFS module - invalid break - needed to be return
-  - Implemented the database backup class from lgLib (Lee Garner's Plugin) into the core
-  - Ajax driven database backup
-  - Set alpha preserve for GD image library for all image function
-  - Updated DB administration (convert DB formats) to an interactive Ajax driven interface
-  - Fixed error in Media Gallery admin template - enable Member Album option was missing in the template
-  - Improved FB login to support more recent FB API version (v2.7 at this time)
-  - Fixed error where topic id was not used to filter global story attribute changes
+
+- Reworked user profile latest comment listing - fixed issue where selection of a comment to view would result in a blank page - Updated to display all comments types, not just stories
+- Fixed another long standing error in FileMgmt where filenames with spaces in them would not always download properly
+- Fixed issue with LinkedIn Oauth login
+- Updated Oauth Library to latest release
+- Updated headlines: auto tag to include storyimage: parameter - allows to select stories with or without attached story images
+- Fixed issue where titles that contain quotes would cause a JS parse error with Disqus 3rd party comment engine
+- Implemented search option for online conifguration
+- Documentation - several spelling and gramar updates - navigation to main index page
+- CAPTCHA - Fixed theme selection for reCaptcha
+- Updated UIKIT to v2.27.1
+- Fixed URL detection error in Spam-X link counter
+- HTML 5 Validation updates
+- Media Gallery: Modified slideshow auto tag to be responsive with UIKIT based themes
+- Modified the Login / My Account menu handling - Login now shows on the main menu bar
+- Media Gallery: Fixed issue where the original filename was not always properly captured on upload
+- Media Gallery: Fixed error where the download option did not work properly if the site was configured to discard original images
+- Fixed error where the What's New block would always display regardless of the Hide What's New when empty setting
+- Informational messages will now display as a modal (UIKIT based themes only)
+- Refactored outbound HTML emails - improvements for displaying across larger array of devices
+- Fixed issue with new activation form - extra closing div
+- Fixed issue with Media Gallery duplicating the Comments line
+- Record user id in poll vote history (to prevent duplicate votes)
+- Add option for poll to only allow logged in users to vote
+- Fixed issue with poll_votes auto tag interactive (ajax) voting did not work in forum post
+- Allow stories to provide attribution to external sources
+- Fixed error where page URL was not properly set for staticpages when using 3rd party comment engines
+- Allow some HTML in block titles
+- Allow some HTML in the menu labels
+- Modified upgrade wizard's obsolete file removal to remove the confirmation page if there are no errors
+- Modified off-canvas menu to be completely self-contained in the menu template
+- Modified auto translations block to use a template
+- Media Gallery - improved gallery and album index page grid to better support small to xlarge viewports
+- Implemented activity timer for forum, story and static page editors to automatically refresh security tokens while editing
+- Allow token time to live to be configured in siteconfig.php
+- Expanded environment check to validate required PHP extensions are available
+- Changed article title spacing / better wrapping
+- Media Gallery: Fixed typo on lang_download tag in view_image, view_audio, and view_video templates
+- Media Gallery: Improved random image block layout
+- Media Gallery: Permalink URL was not built correctly
+- Media Gallery: Ajax driven rebuild thumbnails / resize display images
+- Media Gallery: removed config.php from distribution - rename .dist on install
+- Media Gallery: Use HTML5 playback for mp3 files
+- Media Gallery: Improved the summary index page layout - removed hard coded strings - fixed missing comment text
+- Improved detection of the Google+ username
+- Tweak the scroll up widget - improved fade-in / fade-out on initial page load
+- Enhanced sectest to better detect non-standard named directories
+- Fixed missing trackback button on story ping / trackback admin page (CMS theme)
+- Trackback preview failed due to interaction with BB2 plugin
+- Removed the last use of HTTP and HTTP2 Pear calls
+- Remote auth users with merged local accounts can now change their local password
+- Fixed error in SP and Story editor where <i></i> tags could be appended to the output when switching between visual and html mode
+- Fixed an error in SFS module - invalid break - needed to be return
+- Implemented the database backup class from lgLib (Lee Garner's Plugin) into the core
+- Ajax driven database backup
+- Set alpha preserve for GD image library for all image function
+- Updated DB administration (convert DB formats) to an interactive Ajax driven interface
+- Fixed error in Media Gallery admin template - enable Member Album option was missing in the template
+- Improved FB login to support more recent FB API version (v2.7 at this time)
+- Fixed error where topic id was not used to filter global story attribute changes
 
 ## v1.6.0 (July 22, 2016)
-  - Added configuration field for Facebook App ID - used when links from your site are shared on Facebook
-  - Fixed long standing bug in the Open Graph image property (property is now configured "properly")
-  - Experimental feature to allow custom story templates per topic
-  - CKEDITOR: Allow fileperm and dirperm to be configurable items
-  - Added option to remove obsolete files during upgrade
-  - Improved star rating speed limit handling
-  - Added new Spam-X module to reject posts based on number of links in the post
-  - Removed depreciated features (webservices and openid)
-  - Fixed permission error in MG Browser for CKEditor
-  - Global story attribute editor
-  - Fixed download issues in FileMgmt where downloaded size of file was not always accurate
-  - New feature - integrated 3rd party comment engines. glFusion now supports Disqus and Facebook comments
-  - New headlines auto tag
-  - New newimage auto tag
-  - Rewrote fusionrescue to support improved layout and full PHP 7 compatibility
-  - Updated and modernized the installation / upgrade system
-     - Moved UI over to uikit based classes
-     - Added ability to automatically update the siteconfig.php file with new options
-     - Provide more information to allow for smoother install / upgrade process
-  - Fixed error in configuration system that would prevent adding new items to array configuration items
-  - Properly styled auto tag and plugin upload buttons
-  - Modified logview to use templates - allows styling to match site theme
-  - Allow inline (ajax based) voting for polls when embedded in other content via autotag
-  - Added database administration capabilities (optimize tables, convert to/from innodb)
-  - Implemented social sharing features into articles, media gallery and links
-  - Modified the comment layout to ensure the comment text stands out better
-  - Modified how CSS files are loaded to drive a better order
-  - Make Admin Lists sticky - now remember last settings (sort order, filters, page, etc.) to allow admin to return to where they left off
-  - Improved redirection after login - take the user back to where they were when they selected login option
-  - Retired (removed) feature to allow page breaks within articles
-  - Implemented CUSTOM_whatsRelated() support
-  - Enable target window for external URLs in the menu editor
-  - Added infinite scroll to home page (required new template file, index.thtml)
-  - Added story sub title ({story_subtitle}) and story image ({story_image}) to stories / articles
-  - Fixed a reauth error where session data was not properly restored
-  - Implemented an Alert feature when upgrading to communicate key upgrade tasks or actions
-  - Implemented UniteGallery into Media Gallery - provides an incredibly flexible method to display media items
-  - Fixed Lightbox slideshow (Media Gallery) on newer UIKIT based themes
-  - Updated PHPMailer to latest upstream version (5.2.15)
-  - Fixed blockquote issue with the vintage theme
-  - Implemented $_SYSTEM['framework'] variable to identify UI framework (e.g. uikit, legacy, bootstrap, etc.)
-  - Removed MooTools based Nouveau theme (available as download at glfusion.org)
-  - All bundled plugins now use UIKIT based templates
-  - Moved plugin's non-UIKIT based templates to the plugins/ folder in the vintage theme
-  - Media Gallery - moved allow html from global config option to a per album config option
-  - Enhanced auto tag upload to support template files.
-  - Fixed error where advanced editor token was not set when cloning a story
-  - Added FileMan CKEditor plugin to handle uploading / managing media.
-  - Removed FileManager CKEditor plugin
-  - Updated widgets (slider/rotator, tab-slider, spring-menu, and UIKIT slider) to use templates.
-  - Added feature to pass custom template file to widgets.
-  - Updated Media Element to v2.21.2
-  - Implemented About Author feature in full story display (required Contribution Line set to TRUE in config and user must have 'about' section of their user profile populated).
-  - Replaced jQuery rotator widget with Nivo-Slider jQuery plugin
-  - Send PHP version in when checking for upgrades (if send stats enabled)
-  - Added preview option to pages editor
-  - Improved installation error reporting
-  - Updated menu system - implemented SmartMenus which is much more flexible and supports multi level menus
-  - Added editor save options as sticky button on right side of screen
-  - Media Gallery - Added class parameter to auto tags
-  - Media Gallery - Allow height / width auto tag parameters to be -1 which disables including width/height on image (useful when using a class to drive look and feel)
-  - Fixed issue where newly created forums, that have no posts, would display an invalid last update date
-  - Improved error checking on URL parameters in admin lists
-  - Removed Are You a Human CAPTCHA option (service has shutdown)
-  - Security fixes to address potential XSS issue
-  - Media Gallery - add keyword field to fields the site wide search will query
-  - Media Gallery - fixed issue where search results were pointing to wrong URL if media gallery installed in a different directory that default
-  - Media Gallery - fixed display error in search results for CMS theme
-  - Added footer.js to the jQuery based themes
-  - Updated UIKIT to v2.26.4
-  - Several code modernization updates to better support PHP v7.
-  - Significant work on MP4 playback and media handling, including improved player and attached thumbnail features
-  - New Vimeo auto tag
-  - CKEditor - added vimeo embed plugin
-  - Media Gallery - improved header display when viewing media item
-  - Media Gallery remote video improvements - responsive support for embedded video and remote url fixes
-  - Fixed vintage theme chronometer error that caused it to fail when WYSIWYG editor was displayed
-  - Tweaked style for small device logo text to prevent wrapping
-  - Updated CKEditor to v4.5.9
-  - Fixed E_ALL error on default thumbnail for Media Gallery auto tags
-  - Bad Behavior Plugin: Updated IP addresses for MSNbot
-  - Fixed issue that prevented albums from being deleted in CMS theme
-  - Fixed colors on configuration tab labels to be more legible
-  - Added alignleft,alignright,aligncenter styles to CMS theme
-  - Removed !important attribute from forum style sheet in CMS theme
+
+- Added configuration field for Facebook App ID - used when links from your site are shared on Facebook
+- Fixed long standing bug in the Open Graph image property (property is now configured "properly")
+- Experimental feature to allow custom story templates per topic
+- CKEDITOR: Allow fileperm and dirperm to be configurable items
+- Added option to remove obsolete files during upgrade
+- Improved star rating speed limit handling
+- Added new Spam-X module to reject posts based on number of links in the post
+- Removed depreciated features (webservices and openid)
+- Fixed permission error in MG Browser for CKEditor
+- Global story attribute editor
+- Fixed download issues in FileMgmt where downloaded size of file was not always accurate
+- New feature - integrated 3rd party comment engines. glFusion now supports Disqus and Facebook comments
+- New headlines auto tag
+- New newimage auto tag
+- Rewrote fusionrescue to support improved layout and full PHP 7 compatibility
+- Updated and modernized the installation / upgrade system
+  - Moved UI over to uikit based classes
+  - Added ability to automatically update the siteconfig.php file with new options
+  - Provide more information to allow for smoother install / upgrade process
+- Fixed error in configuration system that would prevent adding new items to array configuration items
+- Properly styled auto tag and plugin upload buttons
+- Modified logview to use templates - allows styling to match site theme
+- Allow inline (ajax based) voting for polls when embedded in other content via autotag
+- Added database administration capabilities (optimize tables, convert to/from innodb)
+- Implemented social sharing features into articles, media gallery and links
+- Modified the comment layout to ensure the comment text stands out better
+- Modified how CSS files are loaded to drive a better order
+- Make Admin Lists sticky - now remember last settings (sort order, filters, page, etc.) to allow admin to return to where they left off
+- Improved redirection after login - take the user back to where they were when they selected login option
+- Retired (removed) feature to allow page breaks within articles
+- Implemented CUSTOM_whatsRelated() support
+- Enable target window for external URLs in the menu editor
+- Added infinite scroll to home page (required new template file, index.thtml)
+- Added story sub title ({story_subtitle}) and story image ({story_image}) to stories / articles
+- Fixed a reauth error where session data was not properly restored
+- Implemented an Alert feature when upgrading to communicate key upgrade tasks or actions
+- Implemented UniteGallery into Media Gallery - provides an incredibly flexible method to display media items
+- Fixed Lightbox slideshow (Media Gallery) on newer UIKIT based themes
+- Updated PHPMailer to latest upstream version (5.2.15)
+- Fixed blockquote issue with the vintage theme
+- Implemented $_SYSTEM['framework'] variable to identify UI framework (e.g. uikit, legacy, bootstrap, etc.)
+- Removed MooTools based Nouveau theme (available as download at glfusion.org)
+- All bundled plugins now use UIKIT based templates
+- Moved plugin's non-UIKIT based templates to the plugins/ folder in the vintage theme
+- Media Gallery - moved allow html from global config option to a per album config option
+- Enhanced auto tag upload to support template files.
+- Fixed error where advanced editor token was not set when cloning a story
+- Added FileMan CKEditor plugin to handle uploading / managing media.
+- Removed FileManager CKEditor plugin
+- Updated widgets (slider/rotator, tab-slider, spring-menu, and UIKIT slider) to use templates.
+- Added feature to pass custom template file to widgets.
+- Updated Media Element to v2.21.2
+- Implemented About Author feature in full story display (required Contribution Line set to TRUE in config and user must have 'about' section of their user profile populated).
+- Replaced jQuery rotator widget with Nivo-Slider jQuery plugin
+- Send PHP version in when checking for upgrades (if send stats enabled)
+- Added preview option to pages editor
+- Improved installation error reporting
+- Updated menu system - implemented SmartMenus which is much more flexible and supports multi level menus
+- Added editor save options as sticky button on right side of screen
+- Media Gallery - Added class parameter to auto tags
+- Media Gallery - Allow height / width auto tag parameters to be -1 which disables including width/height on image (useful when using a class to drive look and feel)
+- Fixed issue where newly created forums, that have no posts, would display an invalid last update date
+- Improved error checking on URL parameters in admin lists
+- Removed Are You a Human CAPTCHA option (service has shutdown)
+- Security fixes to address potential XSS issue
+- Media Gallery - add keyword field to fields the site wide search will query
+- Media Gallery - fixed issue where search results were pointing to wrong URL if media gallery installed in a different directory that default
+- Media Gallery - fixed display error in search results for CMS theme
+- Added footer.js to the jQuery based themes
+- Updated UIKIT to v2.26.4
+- Several code modernization updates to better support PHP v7.
+- Significant work on MP4 playback and media handling, including improved player and attached thumbnail features
+- New Vimeo auto tag
+- CKEditor - added vimeo embed plugin
+- Media Gallery - improved header display when viewing media item
+- Media Gallery remote video improvements - responsive support for embedded video and remote url fixes
+- Fixed vintage theme chronometer error that caused it to fail when WYSIWYG editor was displayed
+- Tweaked style for small device logo text to prevent wrapping
+- Updated CKEditor to v4.5.9
+- Fixed E_ALL error on default thumbnail for Media Gallery auto tags
+- Bad Behavior Plugin: Updated IP addresses for MSNbot
+- Fixed issue that prevented albums from being deleted in CMS theme
+- Fixed colors on configuration tab labels to be more legible
+- Added alignleft,alignright,aligncenter styles to CMS theme
+- Removed !important attribute from forum style sheet in CMS theme
 
 ## v1.5.1 (November 8, 2015)
-  - Removed custom.css included in Vintage theme
-  - Fixed typo in menu editor template (CMS) that prevented saving menu settings
-  - Expand story id, link id, staticpage id, and poll id to 128 characters
-  - Removed text shadow from off-canvas menu items
-  - Updated story id input to limit sid to 40 characters
-  - Fixed layout issue on search screen that breaks layout on small devices
-  - Added chronometer.js (gl_moochronometer.js replacement) to vintage theme
-  - Fixed error in CMS theme that prevented Link titles from being entered
-  - Update YouTube autotag to allow responsive videos when using UIKIT themes
-  - Fixed uninitialized variable error in YouTube auto tag
-  - Fixed template issue with story meta data showing leading | in when author line is not displayed
-  - Removed text shadow on tab labels
-  - Fixed spelling error in CKEditor plugin
-  - Fixed polls plugin would error when submitting vote
-  - Fixed bug where stories could not be saved in draft mode
-  - Minimum username setting was being applied to existing users, preventing users with short username from logging in
-  - Added floatleft / floatright styles to CMS theme to support proper wrapping on [imageX] tags in stories
-  - Fixed error where both username and email were required on the forgot password screen. Now only requires one or the other
+
+- Removed custom.css included in Vintage theme
+- Fixed typo in menu editor template (CMS) that prevented saving menu settings
+- Expand story id, link id, staticpage id, and poll id to 128 characters
+- Removed text shadow from off-canvas menu items
+- Updated story id input to limit sid to 40 characters
+- Fixed layout issue on search screen that breaks layout on small devices
+- Added chronometer.js (gl_moochronometer.js replacement) to vintage theme
+- Fixed error in CMS theme that prevented Link titles from being entered
+- Update YouTube autotag to allow responsive videos when using UIKIT themes
+- Fixed uninitialized variable error in YouTube auto tag
+- Fixed template issue with story meta data showing leading | in when author line is not displayed
+- Removed text shadow on tab labels
+- Fixed spelling error in CKEditor plugin
+- Fixed polls plugin would error when submitting vote
+- Fixed bug where stories could not be saved in draft mode
+- Minimum username setting was being applied to existing users, preventing users with short username from logging in
+- Added floatleft / floatright styles to CMS theme to support proper wrapping on [imageX] tags in stories
+- Fixed error where both username and email were required on the forgot password screen. Now only requires one or the other
 
 ## v1.5.0 (October 31, 2015)
-  - Media Gallery: Improved support for MP4 video playback
-  - Fixed incorrect password confirmation field name in CMS theme
-  - Media Gallery: Fixed incorrect rating value on search page
-  - Media Gallery: Clear user cache after enrollment in media album
-  - Increased topic id and topic name to 128 characters
-  - Several security enhancements throughout the code
-  - Static Pages:  Fixed blank page format to no longer include header / footer.
-  - Spanish Colombia translations provided by John Toro
-  - Static Pages: add where:home or nohome to autotag
-  - Add alternate topic support
-  - Media Gallery: Fixed error where pop-up video would not play
-  - Fixed issue where 3rd party authentication fails if username is too short.
-  - Truncate Forum signature at 600px to ensure a signature cannot push out the layout.
-  - Media Gallery: Added support for square thumbnails
-  - CKEditor - Updated to v4.5.4
-  - FileManager (CKEditor) - Updated to v2.2.0
-  - Forum Plugin: Fixed issue where forum name was passed via URL (not needed)
-  - Updated reCAPTCHA to support Google's latest API (v2)
-  - Modified Bad Behavior Plugin to be more efficient - uses less system resources.
-  - Modified Bad Behavior Plugin to support banning IPs both permanently and temporary
-  - Modified CAPTCHA to support automatic banning (for 24 hours) when 4 failed attempts.
-  - Fixed error where Static Pages comments did not show up in search.
-  - Fixed issue where editing a comment on a plugin would cause a 404 error on save.
-  - Fixed a search error that would trigger on certain search words.
-  - Only show allowed HTML tags when postmode is HTML
-  - Implemented plugin version dependency check - Lee
-  - Fixed issue with What's new block duplicating data
-  - Disable exist check on auto tag upload
-  - Implement og:image tag for stories
-  - Implemented the ability to merge remote to local users from the user preference screen.
-  - Implemented PLG_moveUser() to support account merging
-  - Allow remote authenticated users to be moderated (queued)
-  - Rewrote all processes using PEAR HTTP Request2 to use the new http class
-  - Update 3rd party libraries to latest releases:
-     - geshi Library
-     - getID3
-     - htmLawed
-     - HTMLPurifier
-     - http class
-     - oauth class
-  - Static Pages - fixed autotags so they do not override the page title
-  - Implemented HTML filter debug option
-  - Fixed user submitted story form to show allowed items at the bottom of the form
-  - Bumped MySQL requirement to 5.0.1 as the minimum
-  - Bumped PHP requirement to v5.3 as the minimum
-  - New 'default' theme - based on Nouveau but uses jQuery as JS engine
-  - Revamped how scripts are loaded...
-  - Implemented new jQuery widgets
-  - Fixed error in youtube autotag where it would log parse errors
-  - Migrate all Mootools functionality into the Nouveau theme
-  - Reworked how embedded story images are handled
-  - Cleaned up allowed html / allowed auto tag display on story and comment entry
-  - Comment edit now takes you directly to the comment entry area
-  - HTML filter now allows you to specific both element and attributes
-  - Privacy policy and Terms of use now implemented as static pages
-  - Support for PHP v5.3+ unlimited post size
+
+- Media Gallery: Improved support for MP4 video playback
+- Fixed incorrect password confirmation field name in CMS theme
+- Media Gallery: Fixed incorrect rating value on search page
+- Media Gallery: Clear user cache after enrollment in media album
+- Increased topic id and topic name to 128 characters
+- Several security enhancements throughout the code
+- Static Pages:  Fixed blank page format to no longer include header / footer.
+- Spanish Colombia translations provided by John Toro
+- Static Pages: add where:home or nohome to autotag
+- Add alternate topic support
+- Media Gallery: Fixed error where pop-up video would not play
+- Fixed issue where 3rd party authentication fails if username is too short.
+- Truncate Forum signature at 600px to ensure a signature cannot push out the layout.
+- Media Gallery: Added support for square thumbnails
+- CKEditor - Updated to v4.5.4
+- FileManager (CKEditor) - Updated to v2.2.0
+- Forum Plugin: Fixed issue where forum name was passed via URL (not needed)
+- Updated reCAPTCHA to support Google's latest API (v2)
+- Modified Bad Behavior Plugin to be more efficient - uses less system resources.
+- Modified Bad Behavior Plugin to support banning IPs both permanently and temporary
+- Modified CAPTCHA to support automatic banning (for 24 hours) when 4 failed attempts.
+- Fixed error where Static Pages comments did not show up in search.
+- Fixed issue where editing a comment on a plugin would cause a 404 error on save.
+- Fixed a search error that would trigger on certain search words.
+- Only show allowed HTML tags when postmode is HTML
+- Implemented plugin version dependency check - Lee
+- Fixed issue with What's new block duplicating data
+- Disable exist check on auto tag upload
+- Implement og:image tag for stories
+- Implemented the ability to merge remote to local users from the user preference screen.
+- Implemented PLG_moveUser() to support account merging
+- Allow remote authenticated users to be moderated (queued)
+- Rewrote all processes using PEAR HTTP Request2 to use the new http class
+- Update 3rd party libraries to latest releases:
+  - geshi Library
+  - getID3
+  - htmLawed
+  - HTMLPurifier
+  - http class
+  - oauth class
+- Static Pages - fixed autotags so they do not override the page title
+- Implemented HTML filter debug option
+- Fixed user submitted story form to show allowed items at the bottom of the form
+- Bumped MySQL requirement to 5.0.1 as the minimum
+- Bumped PHP requirement to v5.3 as the minimum
+- New 'default' theme - based on Nouveau but uses jQuery as JS engine
+- Revamped how scripts are loaded...
+- Implemented new jQuery widgets
+- Fixed error in youtube autotag where it would log parse errors
+- Migrate all Mootools functionality into the Nouveau theme
+- Reworked how embedded story images are handled
+- Cleaned up allowed html / allowed auto tag display on story and comment entry
+- Comment edit now takes you directly to the comment entry area
+- HTML filter now allows you to specific both element and attributes
+- Privacy policy and Terms of use now implemented as static pages
+- Support for PHP v5.3+ unlimited post size
 
 ## v1.4.3 (Nov 9, 2014)
-  - CAPTCHA Plugin - Added mathematical captcha
-  - Forum - Fixed error where forum ranking did not always display properly.
-  - SpamX - Add Allow TOR IP configuration option
-  - CAPTCHA Plugin - Removed PICATCHA since the service is no longer supporting new sign-ups.
-  - CAPTCHA Plugin - Added Are You Human game support
-  - Media Gallery - Prevent moving images to root album
-  - Added new configuration parameter to set minimum username length
-  - Links Plugin - update root category in database when changed via online configuration
-  - Implemented option to disable instance caching
-  - Added og:image meta data to articles
-  - Fixed error that prevented batch user uploads.
-  - Fixed error in Batch User Admin where short term user option did not work
-  - Updated CKEditor to v4.4.4
-  - Forum - Fixed issue where a required JS files was not loaded when wysiwyg editor was selected
-  - Static Pages - Do not override the page title when static page content is provided via auto tag
-  - Media Gallery - implemented a fix where data was being written to an un-initialized object causing an error on PHP v5.4+ systems.
-  - Cleaned up the style sheet caching logic and implemented improvements to prevent corrupt cache files.
-  - Implemented file locking when creating the style cache file to ensure multiple instances do not cause a file write error
+
+- CAPTCHA Plugin - Added mathematical captcha
+- Forum - Fixed error where forum ranking did not always display properly.
+- SpamX - Add Allow TOR IP configuration option
+- CAPTCHA Plugin - Removed PICATCHA since the service is no longer supporting new sign-ups.
+- CAPTCHA Plugin - Added Are You Human game support
+- Media Gallery - Prevent moving images to root album
+- Added new configuration parameter to set minimum username length
+- Links Plugin - update root category in database when changed via online configuration
+- Implemented option to disable instance caching
+- Added og:image meta data to articles
+- Fixed error that prevented batch user uploads.
+- Fixed error in Batch User Admin where short term user option did not work
+- Updated CKEditor to v4.4.4
+- Forum - Fixed issue where a required JS files was not loaded when wysiwyg editor was selected
+- Static Pages - Do not override the page title when static page content is provided via auto tag
+- Media Gallery - implemented a fix where data was being written to an un-initialized object causing an error on PHP v5.4+ systems.
+- Cleaned up the style sheet caching logic and implemented improvements to prevent corrupt cache files.
+- Implemented file locking when creating the style cache file to ensure multiple instances do not cause a file write error
 
 ## v1.4.2 (Jun 29, 2014)
-  - Ensure CKEditor's Media Gallery browser window has scroll bars and is re-sizable
-  - Improved GD2 image re-sizing to preserve transparency
-  - Fixed issue where Media Gallery would timeout on album admin screens
-  - Fixed error in YouTube autotag where it would log parse errors
-  - Reworked how embedded story images are handled
-  - Comment edit now takes you directly to the comment entry area
-  - Support for PHP v5.3+ unlimited post size
-  - Media Gallery - fixed bug in batch album delete
-  - Forum - fixed bug in HTML postmode detection
-  - Utilize dynamic tooltip style throughout the code
-  - Forum reorganized forum entry page - moved subject above editing toolbar
-  - Media Gallery - fixed HTML5 upload issue
+
+- Ensure CKEditor's Media Gallery browser window has scroll bars and is re-sizable
+- Improved GD2 image re-sizing to preserve transparency
+- Fixed issue where Media Gallery would timeout on album admin screens
+- Fixed error in YouTube autotag where it would log parse errors
+- Reworked how embedded story images are handled
+- Comment edit now takes you directly to the comment entry area
+- Support for PHP v5.3+ unlimited post size
+- Media Gallery - fixed bug in batch album delete
+- Forum - fixed bug in HTML postmode detection
+- Utilize dynamic tooltip style throughout the code
+- Forum reorganized forum entry page - moved subject above editing toolbar
+- Media Gallery - fixed HTML5 upload issue
 
 ## v1.4.1 (Apr 26, 2014)
-  - Several stability improvements
-  - Several code improvements for running a site under SSL
-  - Improved URL filtering
-  - Fixed issue where sub menus with URLs did not use the defined URL
-  - Added Github oauth authentication
-  - Stories under what's new block now display the time interval
-  - Older Stories block did not display the proper date
-  - Fixed error where Comment header did not always display in what's new block
-  - Notification emails did not send properly for newly uploaded files
-  - CKEditor's filemanager plugin now supports per-user directories for images.
-  - Fixed row styling on admin lists
-  - Ratings did not register when 'clicked'
-  - CKEditor FileManager could not locate images/library/ directory
-  - StaticPages: Last update date was incorrect
-  - Added WYSIWYG editor support for blocks
-  - Fixed error when submitting a new article when auto close comments was enabled.
-  - CKEditor now support direct integration with Smiley plugin
-  - Installation / upgrade enhancements to better support PHP v5.5+
-  - Update OAuth library to latest release
+
+- Several stability improvements
+- Several code improvements for running a site under SSL
+- Improved URL filtering
+- Fixed issue where sub menus with URLs did not use the defined URL
+- Added Github oauth authentication
+- Stories under what's new block now display the time interval
+- Older Stories block did not display the proper date
+- Fixed error where Comment header did not always display in what's new block
+- Notification emails did not send properly for newly uploaded files
+- CKEditor's filemanager plugin now supports per-user directories for images.
+- Fixed row styling on admin lists
+- Ratings did not register when 'clicked'
+- CKEditor FileManager could not locate images/library/ directory
+- StaticPages: Last update date was incorrect
+- Added WYSIWYG editor support for blocks
+- Fixed error when submitting a new article when auto close comments was enabled.
+- CKEditor now support direct integration with Smiley plugin
+- Installation / upgrade enhancements to better support PHP v5.5+
+- Update OAuth library to latest release
 
 ## v1.4.0 (Apr 1, 2014)
-  - Improved HTML filtering and variable sanitizing capabilities.
-  - Fixed security flaw in HTML filter.
-  - Removed FCKEditor from code base
-  - Implemented CKEditor as plugin (integrated into glFusion CMS Distribution)
-  - Developed TinyMCE Editor plugin - available as separate download
-  - Implemented plugin API to integrate with WYSIWYG plugins
-  - Forum: Several bug fixes for HTML entry
-  - Media Gallery: Removed SWFUpload
-  - Media Gallery: Added HTML5 Upload option
-  - Updated SimplePie library to latest release
-  - Updated getID3() library to latest release
-  - PHP v5.4 updates (proper class definitions)
-  - New SFS, Versioncheck, and configuration icons for Nouveau theme
-  - Rewrote the internal menu building code. The code is now much more efficient.
+
+- Improved HTML filtering and variable sanitizing capabilities.
+- Fixed security flaw in HTML filter.
+- Removed FCKEditor from code base
+- Implemented CKEditor as plugin (integrated into glFusion CMS Distribution)
+- Developed TinyMCE Editor plugin - available as separate download
+- Implemented plugin API to integrate with WYSIWYG plugins
+- Forum: Several bug fixes for HTML entry
+- Media Gallery: Removed SWFUpload
+- Media Gallery: Added HTML5 Upload option
+- Updated SimplePie library to latest release
+- Updated getID3() library to latest release
+- PHP v5.4 updates (proper class definitions)
+- New SFS, Versioncheck, and configuration icons for Nouveau theme
+- Rewrote the internal menu building code. The code is now much more efficient.
      The following changes / features were added:
-       - Removed depreciated vhmenu and hmenu autotags. Should use menu.
-       - Menu layouts are now template driven. There are 4 base templates located in the layout/themename/menu/ directory:
-       - menu_horizontal_cascading.thtml -
-       - menu_horizontal_simple.thtml
-       - menu_vertical_cascading.thtml
-       - menu_vertical_simple.thtml
-     - You can use a custom template for each menu by creating a copy of the base template (see above) in the layout/themename/menu/custom directory and appending '_menuname' to the end. For example, to have a custom template for the 'navigation' menu, the template would be named:
-       - menu_horizontal_cascading_navigation.thtml
-     - Javascript to animate menus or modify look / feel should be embedded in the template.
-     - Removed on st_ template variable names - now use the following
-       - menu_header
-       - menu_navigation
-       - menu_footer
-  - Removed all legacy menu code (i.e.; menu_elements from config, etc.)
+  - Removed depreciated vhmenu and hmenu autotags. Should use menu.
+  - Menu layouts are now template driven. There are 4 base templates located in the layout/themename/menu/ directory:
+  - menu_horizontal_cascading.thtml -
+  - menu_horizontal_simple.thtml
+  - menu_vertical_cascading.thtml
+  - menu_vertical_simple.thtml
+  - You can use a custom template for each menu by creating a copy of the base template (see above) in the layout/themename/menu/custom directory and appending '_menuname' to the end. For example, to have a custom template for the 'navigation' menu, the template would be named:
+    - menu_horizontal_cascading_navigation.thtml
+  - Javascript to animate menus or modify look / feel should be embedded in the template.
+  - Removed on st_ template variable names - now use the following
+    - menu_header
+    - menu_navigation
+    - menu_footer
+- Removed all legacy menu code (i.e.; menu_elements from config, etc.)
 
 ## v1.3.2.pl1
-  - Updated PHPMailer to latest upstream release (Mark)
-  - Forum Plugin: Fixed new post detection / display (Mark)
-  - Forum Plugin: New / Reply post notification emails used wrong text (Mark)
-  - Forum Plugin: Stop Forum Spam tweak to only urlencode when needed (Mark)
-  - Forum Plugin: Fixed crash when adding group moderators (Mark)
+
+- Updated PHPMailer to latest upstream release (Mark)
+- Forum Plugin: Fixed new post detection / display (Mark)
+- Forum Plugin: New / Reply post notification emails used wrong text (Mark)
+- Forum Plugin: Stop Forum Spam tweak to only urlencode when needed (Mark)
+- Forum Plugin: Fixed crash when adding group moderators (Mark)
 
 ## v1.3.2 (Jan 26, 2014)
-  - Style tweak - quotes in Forum plugin pushed past margin in fixed width layout (Mark)
-  - Media Gallery - Batch Album delete did not properly remove albums (Mark)
-  - Fixed date display issue with Calendar Upcoming Event block (Mark)
-  - Fixed session initialization error - thanks Lee! (Mark)
-  - CAPTCHA Plugin: Added support for PICATCHA - Image based CAPTCHA (Mark)
-  - Added Stop Forum Spam user check feature (Mark)
-  - Updated OAuth library to latest version (Mark)
-  - Fixed logic bug in Media Gallery export script (Mark)
+
+- Style tweak - quotes in Forum plugin pushed past margin in fixed width layout (Mark)
+- Media Gallery - Batch Album delete did not properly remove albums (Mark)
+- Fixed date display issue with Calendar Upcoming Event block (Mark)
+- Fixed session initialization error - thanks Lee! (Mark)
+- CAPTCHA Plugin: Added support for PICATCHA - Image based CAPTCHA (Mark)
+- Added Stop Forum Spam user check feature (Mark)
+- Updated OAuth library to latest version (Mark)
+- Fixed logic bug in Media Gallery export script (Mark)
 
 ## v1.3.1 (Sep 5, 2013)
-  - Fixed potential SQL inject in Media Gallery - Identified by Manituna Security (Mark)
-  - Fixed SpamX SFS email check - no longer urlencode email address (Mark)
-  - Added Clear Cache and Menu Builder entries to the Admins Only block function (Eric)
-  - StaticPages Plugin: Added rightblocks only page option (Eric)
-  - Improved session id generation (Mark)
-  - Improved error handling on display error and abort call. (Mark)
-  - Improved upload security for FileMgmt plugin (Mark)
-  - Fixed error in Media Gallery submission queue approval (Mark)
-  - Fixed SQL error when FileMgmt integration is enabled in Forum Plugin (Mark)
-  - Fixed email notification error - invalid email address (Mark)
-  - Fixed error when saving in Group editor when chk_showall was set to 1 (Mark)
-  - Demo mode security improvements (Mark)
+
+- Fixed potential SQL inject in Media Gallery - Identified by Manituna Security (Mark)
+- Fixed SpamX SFS email check - no longer urlencode email address (Mark)
+- Added Clear Cache and Menu Builder entries to the Admins Only block function (Eric)
+- StaticPages Plugin: Added rightblocks only page option (Eric)
+- Improved session id generation (Mark)
+- Improved error handling on display error and abort call. (Mark)
+- Improved upload security for FileMgmt plugin (Mark)
+- Fixed error in Media Gallery submission queue approval (Mark)
+- Fixed SQL error when FileMgmt integration is enabled in Forum Plugin (Mark)
+- Fixed email notification error - invalid email address (Mark)
+- Fixed error when saving in Group editor when chk_showall was set to 1 (Mark)
+- Demo mode security improvements (Mark)
 
 ## v1.3.0 (Jun 19, 2013)
-  - Added social auth moorotator image to default content (Michael/Eric)
-  - Moved hard-coded styles in public_html/layout/nouveau/users/loginform.thtml to style.css, dynamically set loginbox width if oauth enabled (Michael/Eric)
-  - Moved hard coded rating speed limit to configuration (Mark)
-  - Fixed album re-initialize bug in Media Gallery (Mark)
-  - Fixed bug where large files were copied twice when using Media Gallery FTP upload (Mark)
-  - Display 404 Error if invalid SID passed to article.php (Mark)
-  - Added link to Upgrade Checker on upgrade success page. (Mark)
-  - Several language file fixes and HTML code fixes (Andre)
-  - Copyright year fix - if year is old than current show $copyright_year - current_year (Andre)
-  - Updated config.html documentation to point to correct Wiki URLs and to support new configuration items.
-  - Added configuration 're-sync' to reset configuration items to the current fieldset / sort orders - keeps everything in sync as sites upgrade (Mark)
-  - Removed Digibug support form Media Gallery
-  - Updated OAuth 1.0a and 2.0 support for Facebook, Google, Twitter, LinkedIn, and Microsoft Live logins (Mark)
-  - Implemented XSS fixes from v1.2.2.pl4
-  - Added Terms of Use and Privacy Policy as pages and links in the default install of the footer menu, also added link to RSS feed (Tracker#564) (Eric)
-  - Added optional menu link highlighting when on a given page, see public_html/layout/nouveau/functions.php to activate (Tracker#200) (Eric)
-  - Updated documentation links for default permissions (Tracker#720) (Eric)
-  - Added missing help-icon image to default permissions configs (Tracker#720) (Mark)
-  - Fixed hard-coded language reference in Media Gallery (Tracker#579) (Eric)
-  - Remove duplicate blogroll block from default content install (Eric)
-  - Auto translations block image tags now validate to xhtml 1.0 (Eric)
-  - Keep UTF-8 checkbox on same row in IE9 in the installer (Eric)
-  - Fixed visited documentation link disappearing (white text on white bg) (Eric)
-  - Fixed broken link to webroot install instructions. Note that the other language files do not contain this link. The translators need to update the install language files. (Eric)
-  - Media Gallery: Now redirect to last album that received an upload when using the SWF upload feature (Mark)
-  - Forum Plugin: When user account is renamed - update topic records (Mark)
-  - Integrated Smiley plugin support for comments (Mark)
-  - Menu Builder enhancements - better CSS and control via online editor (Mark)
-  - Added 'author' attribute to plugin_getiteminfo_...() (Mark)
-  - Fixed issue where comment styles were not properly set during preview (Mark)
-  - Replaced {xhtml} tags with " /" as HTML5 validates by ignoring auto-closing tags (ex: <br />) (Eric)
-  - Removed unused templates in private/plugins/filemgmt/templates/ (Eric)
-  - Removed public_html/layout/nouveau/comment/commentform_advanced.thtml (no longer needed per Mark) (Eric)
-  - General BB2 code cleanup, upgrade to core 2.0.48 (Mark)
-  - Fixed hard-coded admin url reference (Eric)
-  - Improved comment entry / viewing (Mark)
-  - Removed 'View Members' option from group editor (Mark)
-  - User admin / profile editor - reworked the password form fields to be more user friendly for password managers (Mark)
-  - PLG_createUser() was called too early in the creation process (Mark)
-  - Forum: Implemented Stop Forum Spam for anonymous posts (Mark)
-  - New update checker (Mark)
-  - Implemented full support for StopForumSpam in Spam-X (Mark)
-  - Error check to ensure Media Gallery plugin is enabled before calling init routines (Mark)
-  - Open Graph Support (Mark)
-  - meta description support for articles (Mark)
-  - Added example phpblock functions to lib-custom (Eric)
-  - Fixed pwd strength meter on My Account/Username & Password panel (Mark H.)
-  - Implemented Facebook account merge (Mark)
-  - Fixed issue with auto tags not expanded in the BB code library (Mark)
-  - Updated Bad Behavior to v2.0.45 (Mark)
-  - Fixed Static Page label field was not being saved (Mark)
-  - Fixed bug in new date class - Unix timestamp coversion did not use proper timezone (Mark)
-  - Media Gallery: When viewing an image by following the What's New comment link, CSS was displayed at the top of the image (Mark)
-  - Fixed quotes handling in Group and Block admin description fields (Mark H.)
-  - Media Gallery: Fixed paging error when paging through albums (Mark)
-  - Forum Plugin: Default topics / posts per page were not properly set for new users (Mark)
-  - Fixed grp_id not passed in pagination links User Admin when group selection filter is applied.  (Mark H.)
-  - Links: Fixed autoinstall code - example data will now be correctly restored when uninstalling and then reinstalling the plugin.  Also fix example data group ownership during site installation.  Tweaked lib-install to allow passage of arrays to raw sql auto-installation options. (Mark H.)
-  - Feature: Uninstalled plugins can now be completely removed from the site by clicking the 'Delete' icon again after uninstalling.  (Mark H.)
-  - Improved error trapping / messages on logo upload (Mark)
-  - Add check to validate timezone in date/time class (Mark)
-  - Add check for MySQL extension in the installation routine (Mark)
-  - Move config helper/validation functions to config class to ensure they are loaded and available to all scripts instantiating the class (Mark H.)
-  - Add global var to test for development mode (Mark H.)
-  - Add max_execution_time to environment check (Mark H.)
-  - Remove deprecated microsummary feature (Mark H.)
-  - StaticPages: Display 404 page if user does not have permission to view static page (Mark)
-  - Allow [img] code in [url][/url] set (Mark)
-  - Improved permission check on story edit - only show when appropriate (Mark)
-  - Forum: Current forum was not available as a select option when spliting a topic (Mark)
-  - FileMgmt: If no category is selected, display error and abort upload (Mark)
-  - Improved UTF-8 handling - works whether mbtye extension is installed in PHP or not (Mark)
-  - Improved user menu caching - ensure no user specific data is cached (Mark)
-  - Media Gallery: include thumbnail image in album RSS feeds (Mark)
-  - Replaced RSS code with SimplePie and feedcreator.class.php (Mark)
-  - Saving a story with invalid data returned to story list instead of the story editor with the appropriate error message (Mark)
-  - No news message did not always display when it should (Mark)
-  - If user changes remember me settings, ensure they are implemented immediately (Mark)
-  - Implemented re-validation when security token has expired (Mark)
-  - New SESS API - SESS_unSet() removes a session variable is set (Mark)
-  - CAPTCHA now displays appropriate feedback when invalid CAPTCHA entered on comment entry form (Mark)
-  - Cache $_GROUP data in session variable to reduce SQL calls (Mark)
-  - E_ALL fix when saving comments (Mark)
-  - Improved COM_refresh() to use header() call when appropriate (Mark)
-  - Support for MySQLi interface (Mark)
-  - Implement new What's New options - no longer display an item if not new items are available.  New config option to hide What's New block if no entries to display (Mark/Lee)
-  - Initialize $_USER for all users (including anonymous) (Mark)
-  - Modified to now check $_USER for user preferences (Mark)
-  - Fixed race condition when creating menu cache files (menu/css/js) (Mark)
-  - Updated phpmailer to latest release (Mark)
-  - Highlight comments in Media Gallery when posted by media owner (Mark)
-  - Added halo skin to Media Gallery (compliments of Walter Rowe) (Mark)
-  - Implemented consistent admin interface for
-     - Bad Behavior2 Plugin
-     - FileMgmt Plugin
-     - Forum Plugin
-     - Media Gallery Plugin
-  - Updated PEAR modules to latest releases (Mark)
-  - Updated getID3() library to latest production release. (Mark)
-  - Integrated Site Tailor plugin (menu editor / logo admin) into the glFusion core code. The Site Tailor plugin has been retired. (Mark)
-  - Forum Plugin: General code clean up / optimizations / template consolidation (Mark)
-  - Removed bundled plugin table definitions from lib-database - now part of each plugin (Mark)
-  - Cleaned up search queries so all now retrieve the same set of vars and no longer retrieve unused variables (Mark)
-  - Implemented new $_PLUGIN_INFO[] array - this contains ['pi_name'] = pi_version. This allows the plugin to check the installed version without having to hit the database. (Mark)
-  - upload.class.php - log error if unable to determine mime type (Mark)
-  - Fixed issue where 'All but Homepage' block setting did not display properly when topic was not empty (Mark)
-  - Calendar Plugin: Fixed admin edit to display appropriate errors and the input form properly (with previously entered data) when submission fails (Mark)
-  - New SESS API - SESS_isSet() checks to see if session variable is set (Mark)
-  - General code cleanup in lib-common.php - removed unused code and unreferenced items in COM_siteHeader / COM_siteFooter (Mark)
-  - Made SEC_inGroup comparison case insensitive (Mark H.)
-  - Implemented subscription / notification system (Mark)
-  - Do not allow remote users to be members of admin groups (Mark)
-  - Fix layout bug when forum signature is present in a fixed width site with rightblocks. (Eric)
-  - Implemented new date / time class / handling (Mark)
-  - Implemented improved session handling (Mark)
-  - Fixed bug in requesting a new verification email (Mark)
-  - MySQL version 4.0.18 or newer required. (Mark)
-  - Detect refering URL on clear cache call and return to calling page (Mark)
-  - Implemented global magic_quotes_gpc() handling that is now automatic. Plugins and other items no longer need to worry about calling any routines to deal with magic quotes. (Mark)
-  - Feature: AutoTag Permission Editor (Mark)
-  - Load userprefs data into $_USER array (Mark)
-  - Feature: OAuth login support for FB, LinkedIn and Twitter (Mark H.); This will allow users to login to your site with their existing FaceBook, LinkedIn or Twitter accounts.  User Submission Queue must be disabled, and the php_openssl PHP extension must be installed on your webserver.
-  - Feature: Allow users displayed in Who's Online block to be displayed as user photo icons (FB-style) rather than their username/fullname.
-  - Removed PHP4 items (Mark)
-  - Removed wiki text formatting (Mark)
-  - Removed storybodytext.thtml / featuredbodytext.thtml templates (Mark)
+
+- Added social auth moorotator image to default content (Michael/Eric)
+- Moved hard-coded styles in public_html/layout/nouveau/users/loginform.thtml to style.css, dynamically set loginbox width if oauth enabled (Michael/Eric)
+- Moved hard coded rating speed limit to configuration (Mark)
+- Fixed album re-initialize bug in Media Gallery (Mark)
+- Fixed bug where large files were copied twice when using Media Gallery FTP upload (Mark)
+- Display 404 Error if invalid SID passed to article.php (Mark)
+- Added link to Upgrade Checker on upgrade success page. (Mark)
+- Several language file fixes and HTML code fixes (Andre)
+- Copyright year fix - if year is old than current show $copyright_year - current_year (Andre)
+- Updated config.html documentation to point to correct Wiki URLs and to support new configuration items.
+- Added configuration 're-sync' to reset configuration items to the current fieldset / sort orders - keeps everything in sync as sites upgrade (Mark)
+- Removed Digibug support form Media Gallery
+- Updated OAuth 1.0a and 2.0 support for Facebook, Google, Twitter, LinkedIn, and Microsoft Live logins (Mark)
+- Implemented XSS fixes from v1.2.2.pl4
+- Added Terms of Use and Privacy Policy as pages and links in the default install of the footer menu, also added link to RSS feed (Tracker#564) (Eric)
+- Added optional menu link highlighting when on a given page, see public_html/layout/nouveau/functions.php to activate (Tracker#200) (Eric)
+- Updated documentation links for default permissions (Tracker#720) (Eric)
+- Added missing help-icon image to default permissions configs (Tracker#720) (Mark)
+- Fixed hard-coded language reference in Media Gallery (Tracker#579) (Eric)
+- Remove duplicate blogroll block from default content install (Eric)
+- Auto translations block image tags now validate to xhtml 1.0 (Eric)
+- Keep UTF-8 checkbox on same row in IE9 in the installer (Eric)
+- Fixed visited documentation link disappearing (white text on white bg) (Eric)
+- Fixed broken link to webroot install instructions. Note that the other language files do not contain this link. The translators need to update the install language files. (Eric)
+- Media Gallery: Now redirect to last album that received an upload when using the SWF upload feature (Mark)
+- Forum Plugin: When user account is renamed - update topic records (Mark)
+- Integrated Smiley plugin support for comments (Mark)
+- Menu Builder enhancements - better CSS and control via online editor (Mark)
+- Added 'author' attribute to plugin_getiteminfo_...() (Mark)
+- Fixed issue where comment styles were not properly set during preview (Mark)
+- Replaced {xhtml} tags with " /" as HTML5 validates by ignoring auto-closing tags (ex: <br />) (Eric)
+- Removed unused templates in private/plugins/filemgmt/templates/ (Eric)
+- Removed public_html/layout/nouveau/comment/commentform_advanced.thtml (no longer needed per Mark) (Eric)
+- General BB2 code cleanup, upgrade to core 2.0.48 (Mark)
+- Fixed hard-coded admin url reference (Eric)
+- Improved comment entry / viewing (Mark)
+- Removed 'View Members' option from group editor (Mark)
+- User admin / profile editor - reworked the password form fields to be more user friendly for password managers (Mark)
+- PLG_createUser() was called too early in the creation process (Mark)
+- Forum: Implemented Stop Forum Spam for anonymous posts (Mark)
+- New update checker (Mark)
+- Implemented full support for StopForumSpam in Spam-X (Mark)
+- Error check to ensure Media Gallery plugin is enabled before calling init routines (Mark)
+- Open Graph Support (Mark)
+- meta description support for articles (Mark)
+- Added example phpblock functions to lib-custom (Eric)
+- Fixed pwd strength meter on My Account/Username & Password panel (Mark H.)
+- Implemented Facebook account merge (Mark)
+- Fixed issue with auto tags not expanded in the BB code library (Mark)
+- Updated Bad Behavior to v2.0.45 (Mark)
+- Fixed Static Page label field was not being saved (Mark)
+- Fixed bug in new date class - Unix timestamp coversion did not use proper timezone (Mark)
+- Media Gallery: When viewing an image by following the What's New comment link, CSS was displayed at the top of the image (Mark)
+- Fixed quotes handling in Group and Block admin description fields (Mark H.)
+- Media Gallery: Fixed paging error when paging through albums (Mark)
+- Forum Plugin: Default topics / posts per page were not properly set for new users (Mark)
+- Fixed grp_id not passed in pagination links User Admin when group selection filter is applied.  (Mark H.)
+- Links: Fixed autoinstall code - example data will now be correctly restored when uninstalling and then reinstalling the plugin.  Also fix example data group ownership during site installation.  Tweaked lib-install to allow passage of arrays to raw sql auto-installation options. (Mark H.)
+- Feature: Uninstalled plugins can now be completely removed from the site by clicking the 'Delete' icon again after uninstalling.  (Mark H.)
+- Improved error trapping / messages on logo upload (Mark)
+- Add check to validate timezone in date/time class (Mark)
+- Add check for MySQL extension in the installation routine (Mark)
+- Move config helper/validation functions to config class to ensure they are loaded and available to all scripts instantiating the class (Mark H.)
+- Add global var to test for development mode (Mark H.)
+- Add max_execution_time to environment check (Mark H.)
+- Remove deprecated microsummary feature (Mark H.)
+- StaticPages: Display 404 page if user does not have permission to view static page (Mark)
+- Allow [img] code in [url][/url] set (Mark)
+- Improved permission check on story edit - only show when appropriate (Mark)
+- Forum: Current forum was not available as a select option when spliting a topic (Mark)
+- FileMgmt: If no category is selected, display error and abort upload (Mark)
+- Improved UTF-8 handling - works whether mbtye extension is installed in PHP or not (Mark)
+- Improved user menu caching - ensure no user specific data is cached (Mark)
+- Media Gallery: include thumbnail image in album RSS feeds (Mark)
+- Replaced RSS code with SimplePie and feedcreator.class.php (Mark)
+- Saving a story with invalid data returned to story list instead of the story editor with the appropriate error message (Mark)
+- No news message did not always display when it should (Mark)
+- If user changes remember me settings, ensure they are implemented immediately (Mark)
+- Implemented re-validation when security token has expired (Mark)
+- New SESS API - SESS_unSet() removes a session variable is set (Mark)
+- CAPTCHA now displays appropriate feedback when invalid CAPTCHA entered on comment entry form (Mark)
+- Cache $_GROUP data in session variable to reduce SQL calls (Mark)
+- E_ALL fix when saving comments (Mark)
+- Improved COM_refresh() to use header() call when appropriate (Mark)
+- Support for MySQLi interface (Mark)
+- Implement new What's New options - no longer display an item if not new items are available.  New config option to hide What's New block if no entries to display (Mark/Lee)
+- Initialize $_USER for all users (including anonymous) (Mark)
+- Modified to now check $_USER for user preferences (Mark)
+- Fixed race condition when creating menu cache files (menu/css/js) (Mark)
+- Updated phpmailer to latest release (Mark)
+- Highlight comments in Media Gallery when posted by media owner (Mark)
+- Added halo skin to Media Gallery (compliments of Walter Rowe) (Mark)
+- Implemented consistent admin interface for
+  - Bad Behavior2 Plugin
+  - FileMgmt Plugin
+  - Forum Plugin
+  - Media Gallery Plugin
+- Updated PEAR modules to latest releases (Mark)
+- Updated getID3() library to latest production release. (Mark)
+- Integrated Site Tailor plugin (menu editor / logo admin) into the glFusion core code. The Site Tailor plugin has been retired. (Mark)
+- Forum Plugin: General code clean up / optimizations / template consolidation (Mark)
+- Removed bundled plugin table definitions from lib-database - now part of each plugin (Mark)
+- Cleaned up search queries so all now retrieve the same set of vars and no longer retrieve unused variables (Mark)
+- Implemented new $_PLUGIN_INFO[] array - this contains ['pi_name'] = pi_version. This allows the plugin to check the installed version without having to hit the database. (Mark)
+- upload.class.php - log error if unable to determine mime type (Mark)
+- Fixed issue where 'All but Homepage' block setting did not display properly when topic was not empty (Mark)
+- Calendar Plugin: Fixed admin edit to display appropriate errors and the input form properly (with previously entered data) when submission fails (Mark)
+- New SESS API - SESS_isSet() checks to see if session variable is set (Mark)
+- General code cleanup in lib-common.php - removed unused code and unreferenced items in COM_siteHeader / COM_siteFooter (Mark)
+- Made SEC_inGroup comparison case insensitive (Mark H.)
+- Implemented subscription / notification system (Mark)
+- Do not allow remote users to be members of admin groups (Mark)
+- Fix layout bug when forum signature is present in a fixed width site with rightblocks. (Eric)
+- Implemented new date / time class / handling (Mark)
+- Implemented improved session handling (Mark)
+- Fixed bug in requesting a new verification email (Mark)
+- MySQL version 4.0.18 or newer required. (Mark)
+- Detect refering URL on clear cache call and return to calling page (Mark)
+- Implemented global magic_quotes_gpc() handling that is now automatic. Plugins and other items no longer need to worry about calling any routines to deal with magic quotes. (Mark)
+- Feature: AutoTag Permission Editor (Mark)
+- Load userprefs data into $_USER array (Mark)
+- Feature: OAuth login support for FB, LinkedIn and Twitter (Mark H.); This will allow users to login to your site with their existing FaceBook, LinkedIn or Twitter accounts.  User Submission Queue must be disabled, and the php_openssl PHP extension must be installed on your webserver.
+- Feature: Allow users displayed in Who's Online block to be displayed as user photo icons (FB-style) rather than their username/fullname.
+- Removed PHP4 items (Mark)
+- Removed wiki text formatting (Mark)
+- Removed storybodytext.thtml / featuredbodytext.thtml templates (Mark)
