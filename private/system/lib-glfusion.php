@@ -471,7 +471,7 @@ function _checkVersion()
  */
 function _phpUpToDate()
 {
-    // supported version is 7.2 or greater until Nov 30, 2020
+    // supported version is 7.3 or greater until 6 Dec 2021
 
     $uptodate = false;
 
@@ -483,7 +483,7 @@ function _phpUpToDate()
             $uptodate = false;
             break;
         case '7' :
-            if ( $phpv[1] >= 2 ) {
+            if ( $phpv[1] >= 3 ) {
                 $uptodate = true;
             }
             break;
