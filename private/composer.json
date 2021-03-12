@@ -14,5 +14,19 @@
         "phpxmlrpc/phpxmlrpc": "^4.2",
         "robthree/twofactorauth": "^1.6",
         "eluceo/ical": "^0.14.0"
-    }
+    },
+    "repositories": [
+        {
+          "type": "composer",
+          "url": "https:\/\/www.phpclasses.org\/"
+        },
+        {
+          "type": "composer",
+          "url": "https:\/\/packagist.org\/"
+        },
+        {
+          "packagist": false
+        }
+
+      ]
 }
