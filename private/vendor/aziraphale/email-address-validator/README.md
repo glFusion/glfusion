@@ -17,19 +17,6 @@ Note that this class is still **un-namespaced** - i.e. it's still declared in th
 file is still set up to correctly load it when required, so this shouldn't be a problem in practice - it's just perhaps
 not best-practice.
 
-## Installation ##
-Use [Composer](https://getcomposer.org/):
-```
-php composer.phar require aziraphale/email-address-validator:^2
-```
-
-If you don't want to use Composer (why not?!), just download the `EmailAddressValidator.php` file, save it with your project, and `require` it where needed.
-
-Note that this updated version is **version 2.0.0**. I have kept the original class tagged as **version 1.0.10** (it was the 10th commit to the Google Code svn repository). If you want to use Composer to install the **old** class, simply specify `^1` as the version constraint (which will allow for backwards-compatible changes to be installed, if any get made, while never jumping to my modified class without your direct action):
-```
-php composer.phar require aziraphale/email-address-validator:^1
-```
-
 ## Usage ##
 Due to the aforementioned changes, the way of using this class has completely changed. However it has such a small and simple interface that these changes shouldn't be problematic.
 

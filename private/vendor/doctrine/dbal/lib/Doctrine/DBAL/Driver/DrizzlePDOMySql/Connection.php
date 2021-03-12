@@ -5,9 +5,6 @@ namespace Doctrine\DBAL\Driver\DrizzlePDOMySql;
 use Doctrine\DBAL\Driver\PDOConnection;
 use Doctrine\DBAL\ParameterType;
 
-/**
- * @deprecated
- */
 class Connection extends PDOConnection
 {
     /**
