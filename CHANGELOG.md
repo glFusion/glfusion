@@ -32,7 +32,7 @@
 
 ### Changed
 
-- PHP v5.4 is now the required minimum version
+- PHP v5.6 is now the required minimum version
 
 ## v1.7.8.pl1 (January 1, 2020)
 
