@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Eric Warren     eric AT glfusion DOT org
 *
@@ -98,9 +98,9 @@ function _checkEnvironment()
     } else {
         $T->set_var('class','tm-pass');
     }
-    $T->set_var('recommended','7.3.0+');
+    $T->set_var('recommended','7.4.0+');
 
-    $phpnotes = sprintf($LANG_ENVCHK['php_req_version'],'7.1.0');
+    $phpnotes = sprintf($LANG_ENVCHK['php_req_version'],'7.3.0');
     if ( !_phpUpToDate() ) {
         $phpnotes .= '<br><span class="tm-fail">'.$LANG_ENVCHK['phpendoflife'].'</span>';
     }
