@@ -5728,7 +5728,7 @@ function COM_truncateHTML ( $html, $maxLength, $end = '&hellip;', $endchars = 0 
             if ($tag[1] == '/') {
                 // This is a closing tag.
                 $openingTag = array_pop($tags);
-                @assert($openingTag == $tagName); // check that tags are properly nested.
+//                @assert($openingTag == $tagName); // check that tags are properly nested.
                 $retval .= $tag;
             } else if ($tag[strlen($tag) - 2] == '/') {
                 // Self-closing tag.
