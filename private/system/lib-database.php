@@ -110,11 +110,15 @@ function DB_query ($sql, $ignore_errors = 0)
 
     try {
         $result = $db->conn->query($sql);
-    } catch (\Doctrine\DBAL\DBALException | PDOException $e) {
+    } catch (Throwable | \Doctrine\DBAL\DBALException | PDOException $e) {
         if ($ignore_errors) {
             $result = false;
             if (defined ('DVLP_DEBUG')) {
-                $db->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
+                $err = $db->conn->errorInfo();
+                if (isset($err[2])) {
+                    $output = preg_replace('!\s+!', ' ', $err[2]);
+                    $db->_errorlog("SQL Error: " . $output . PHP_EOL. $sql);
+                }
             }
         } else {
             trigger_error(DB_error($sql), E_USER_ERROR);

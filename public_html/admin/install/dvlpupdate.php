@@ -955,10 +955,13 @@ function glfusion_200()
     foreach ($_SQL AS $sql) {
         try {
             $db->conn->query($sql);
-        } catch(\Doctrine\DBAL\DBALException $e) {
-            $err = $e->getMessage();
-            $output = preg_replace('!\s+!', ' ', $err);
-            Log::write('system',Log::DEBUG,"SQL failed in dvlpupdate: " . $output);
+        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            $err = $db->conn->errorInfo();
+            if (isset($err[2])) {
+                $output = preg_replace('!\s+!', ' ', $err[2]);
+                Log::write('system',Log::DEBUG,"SQL failed in dvlpupdate: " . $sql);
+                Log::write('system',Log::DEBUG,"SQL Error: " . $output);
+            }
         }
     }
 
@@ -988,10 +991,13 @@ function glfusion_200()
     foreach ($_SQL AS $sql) {
         try {
             $db->conn->query($sql);
-        } catch(\Doctrine\DBAL\DBALException $e) {
-            $err = $e->getMessage();
-            $output = preg_replace('!\s+!', ' ', $err);
-            Log::write('system',Log::DEBUG,"SQL failed in dvlpupdate: " . $output);
+        } catch(Throwable $e) {
+            $err = $db->conn->errorInfo();
+            if (isset($err[2])) {
+                $output = preg_replace('!\s+!', ' ', $err[2]);
+                Log::write('system',Log::DEBUG,"SQL failed in dvlpupdate: " . $sql);
+                Log::write('system',Log::DEBUG,"SQL Error: " . $output);
+            }
         }
     }
 
