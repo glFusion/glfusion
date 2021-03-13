@@ -9,4 +9,5 @@ return array(
     'SimplePie' => array($vendorDir . '/simplepie/simplepie/library'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
     'EmailAddressValidator' => array($vendorDir . '/aziraphale/email-address-validator'),
+    'Eluceo\\iCal' => array($vendorDir . '/eluceo/ical/src'),
 );

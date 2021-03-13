@@ -12,21 +12,16 @@
         "aziraphale/email-address-validator": "2",
         "misd/linkify": "^1.1",
         "phpxmlrpc/phpxmlrpc": "^4.2",
-        "robthree/twofactorauth": "^1.6",
-        "eluceo/ical": "~0.11.6"
+        "robthree/twofactorauth": "^1.6"
     },
-    "repositories": [
-        {
-          "type": "composer",
-          "url": "https:\/\/www.phpclasses.org\/"
-        },
-        {
-          "type": "composer",
-          "url": "https:\/\/packagist.org\/"
-        },
-        {
-          "packagist": false
-        }
-
-      ]
+	"repositories":
+		[
+			{
+				"type": "composer",
+				"url": "https:\/\/www.phpclasses.org\/"
+			},
+			{
+				"packagist": false
+			}
+	]
 }

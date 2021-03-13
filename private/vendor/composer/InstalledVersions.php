@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'a14c684433b149265fd644553811dd0777fe2eaf',
+    'reference' => '204a37f15c122c3e11e34547b17ceb9dec350315',
     'name' => '__root__',
   ),
   'versions' => 
@@ -42,7 +42,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'a14c684433b149265fd644553811dd0777fe2eaf',
+      'reference' => '204a37f15c122c3e11e34547b17ceb9dec350315',
     ),
     'aziraphale/email-address-validator' => 
     array (
@@ -55,12 +55,12 @@ private static $installed = array (
     ),
     'eluceo/ical' => 
     array (
-      'pretty_version' => '0.14.0',
-      'version' => '0.14.0.0',
+      'pretty_version' => '0.11.6',
+      'version' => '0.11.6.0',
       'aliases' => 
       array (
       ),
-      'reference' => '5db245d5521a060129d0f14d154d65f32b804883',
+      'reference' => 'e22ef0fad1a19ad1bbffd819f21fa6a83f96531c',
     ),
     'ezyang/htmlpurifier' => 
     array (
