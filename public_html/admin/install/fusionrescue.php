@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -53,8 +53,10 @@ define('LOCAL_USER',1);
 define('REMOTE_USER',2);
 
 function FR_stripslashes( $text ) {
-    if( get_magic_quotes_gpc() == 1 ) {
-        return( stripslashes( $text ));
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+        if( get_magic_quotes_gpc() == 1 ) {
+            return( stripslashes( $text ));
+        }
     }
     return( $text );
 }
