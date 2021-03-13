@@ -1,6 +1,6 @@
 # glFusion CMS Long Term Support ChangeLog
 
-## v1.7.9 (Unreleased)
+## v1.7.9 (March 13, 2021)
 
 ### Updates
 
