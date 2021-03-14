@@ -66,6 +66,40 @@
 
 - Utilize PDO prepared SQL statements to decrease SQL injection opportunities
 
+## v1.7.9 (March 13, 2021)
+
+### Updates
+
+- Updated PHP version checks to support current EOL state
+- Updated CKeditor (4.13.1 => v4.16.0)
+- Updated james-heinrich/getid3 (v1.9.19 => v1.9.20)
+- Updated ezyang/htmlpurifier (v4.12.0 => v4.13.0)
+- Updated html2text/html2text (4.2.1 => 4.3.1)
+- Updated phpmailer/phpmailer (v5.2.27 => v5.2.28)
+- Updated simplepie/simplepie (1.5.3 => 1.5.6)
+- Updated phpxmlrpc/phpxmlrpc (4.4.1 => 4.4.2)
+- Updated robthree/twofactorauth (1.6.7 => 1.8.0)
+- Updated openpsa/universalfeedcreator (v1.8.3.2 => v1.8.4)
+- Updated phpclasses/httpclient (1.0.5 => 1.0.7)
+- Updated phpclasses/oauth-api (1.0.103 => 1.0.110)
+- Updated splitbrain/php-archive (1.1.1 => 1.2.1)
+
+### Fixed
+
+- PHP v8 Compatibility Updates
+- Story post hour was incorrectly calculated
+- Post action messages where not being properly displayed. For example, save a group membership and the confirmation message did not display.
+- Upgrade issues when upgrading very old glFusion sites
+- CAPTCHA Plugin - Fixed Google ReCaptcha
+- Fixed SQL error in Polls list
+- Fixed Cancel button when editing group membership.
+- Fixed JavaScript error in Forum preview iFrame
+- Media Gallery CKEditor browser did not display error messages correctly when no selection or invalid selection was made.
+
+### Changed
+
+- PHP v5.6 is now the required minimum version
+
 ## v1.7.8.pl1 (January 1, 2020)
 
 ### Added
