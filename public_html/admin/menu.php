@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -80,7 +80,7 @@ function MB_displayMenuList( )
                   'text' => $LANG_MB01['menu_list'],'active'=>true),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=newmenu',
                   'text' => $LANG_MB01['add_newmenu']),
-            array('url'  => $_CONF['site_admin_url'],
+            array('url'  => $_CONF['site_admin_url'].'/index.php',
                   'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'],'', COM_getBlockTemplate('_admin_block', 'header'));
@@ -148,7 +148,7 @@ function MB_cloneMenu( $menu_id )
                   'text' => $LANG_MB01['menu_list']),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=newmenu',
                   'text' => $LANG_MB01['add_newmenu'],'active'=>true),
-            array('url'  => $_CONF['site_admin_url'],
+            array('url'  => $_CONF['site_admin_url'].'/index.php',
                   'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['add_newmenu'],'', COM_getBlockTemplate('_admin_block', 'header'));
@@ -277,7 +277,7 @@ function MB_createMenu( )
                   'text' => $LANG_MB01['menu_list']),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=newmenu',
                   'text' => $LANG_MB01['add_newmenu'],'active'=>true),
-            array('url'  => $_CONF['site_admin_url'],
+            array('url'  => $_CONF['site_admin_url'].'/index.php',
                   'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['add_newmenu'],'', COM_getBlockTemplate('_admin_block', 'header'));
@@ -486,7 +486,7 @@ function MB_displayTree($menu_id)
                   'text' => ucfirst($menu->name) . '->'.$LANG_MB01['elements'],'active'=>true),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=new&amp;menuid='.(int) $menu_id,
                   'text' => $LANG_MB01['create_element']),
-            array('url'  => $_CONF['site_admin_url'],
+            array('url'  => $_CONF['site_admin_url'].'/index.php',
                   'text' => $LANG_ADMIN['admin_home']),
 
     );
@@ -621,7 +621,7 @@ function MB_createElement ($menu_id)
                   'text' => ucfirst($menu->name) . '->'.$LANG_MB01['elements']),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=new&amp;menuid='.(int) $menu_id,
                   'text' => $LANG_MB01['create_element'],'active'=>true),
-            array('url'  => $_CONF['site_admin_url'],
+            array('url'  => $_CONF['site_admin_url'].'/index.php',
                   'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['create_element'] .' for ' . $menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
@@ -914,7 +914,7 @@ function MB_editElement( $menu_id, $mid )
                   'text' => ucfirst($menu->name) . '->'.$LANG_MB01['elements']),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=new&amp;menuid='.(int) $menu_id,
                   'text' => $LANG_MB01['edit_element'],'active'=>true),
-            array('url'  => $_CONF['site_admin_url'],
+            array('url'  => $_CONF['site_admin_url'].'/index.php',
                   'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['edit_element'] .' for ' . $menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));
@@ -1284,7 +1284,7 @@ function MB_editMenu( $mid )
                   'text' => $LANG_MB01['menu_list']),
             array('url'  => $_CONF['site_admin_url'] .'/menu.php?mode=editmenu&menuid='.(int)$menu_id,
                   'text' => $LANG_MB01['edit_menu'],'active'=>true),
-            array('url'  => $_CONF['site_admin_url'],
+            array('url'  => $_CONF['site_admin_url'].'/index.php',
                   'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_MB01['menu_builder'].' :: '.$LANG_MB01['edit_element'] .' for ' . $menu->name,'', COM_getBlockTemplate('_admin_block', 'header'));

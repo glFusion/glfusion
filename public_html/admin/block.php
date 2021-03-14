@@ -95,7 +95,7 @@ function BLOCK_editDefault($A, $access)
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/block.php',
               'text' => $LANG_ADMIN['block_list']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 

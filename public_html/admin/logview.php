@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008
@@ -76,7 +76,7 @@ if ( isset($_POST['clearlog']) ) {
 $pageBody = '';
 
 $menu_arr = array (
-    array('url' => $_CONF['site_admin_url'],
+    array('url' => $_CONF['site_admin_url'].'/index.php',
           'text' => $LANG_ADMIN['admin_home'])
 );
 

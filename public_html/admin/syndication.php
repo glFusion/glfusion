@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2003-2008 by the following authors:
@@ -244,7 +244,7 @@ function FEED_list()
                           'text' => $LANG33[57],'active' =>true),
                     array('url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x',
                           'text' => $LANG_ADMIN['create_new']),
-                    array('url' => $_CONF['site_admin_url'],
+                    array('url' => $_CONF['site_admin_url'].'/index.php',
                           'text' => $LANG_ADMIN['admin_home'])
     );
     $retval .= COM_startBlock($LANG33[10], '',
@@ -344,7 +344,7 @@ function FEED_edit($fid = 0, $type = '')
                           'text' => $LANG33[57]),
                     array('url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x',
                           'text' => $lang_create_edit,'active'=>true),
-                    array('url' => $_CONF['site_admin_url'],
+                    array('url' => $_CONF['site_admin_url'].'/index.php',
                           'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -539,7 +539,7 @@ function FEED_newFeed()
                               'text' => $LANG33[57]),
                     array('url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x',
                           'text' => $LANG_ADMIN['create_new'],'active' => true),
-                        array('url' => $_CONF['site_admin_url'],
+                        array('url' => $_CONF['site_admin_url'].'/index.php',
                               'text' => $LANG_ADMIN['admin_home'])
         );
 

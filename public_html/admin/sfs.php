@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2018 by the following authors:
+*  Copyright (C) 2014-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -150,7 +150,7 @@ function SFS_adminList()
     $retval = COM_startBlock($block_title, '', COM_getBlockTemplate('_admin_block', 'header'));
 
     $menu_arr = array (
-         array('url' => $_CONF['site_admin_url'], 'text' => $LANG_ADMIN['admin_home']),
+         array('url' => $_CONF['site_admin_url'].'/index.php', 'text' => $LANG_ADMIN['admin_home']),
     );
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_SFS['instructions'],

@@ -121,7 +121,7 @@ function actions_admin_menu($action = '')
 
     $menu_arr = array(
         array( 'url' => $_CONF['site_admin_url'].'/actions.php','text' => $LANG_ACTIONS['label'],'active' => true),
-        array( 'url' => $_CONF['site_admin_url'], 'text' => $LANG_ADMIN['admin_home'])
+        array( 'url' => $_CONF['site_admin_url'].'/index.php', 'text' => $LANG_ADMIN['admin_home'])
     );
 
     $retval = '<h2>'.$LANG_ACTIONS['label'].'</h2>';

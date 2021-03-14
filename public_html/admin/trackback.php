@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2015-2018 by the following authors:
+*  Copyright (C) 2015-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2005-2008 by the following authors:
@@ -99,7 +99,7 @@ function TRACKBACK_edit($target = '', $url = '', $title = '', $excerpt = '', $bl
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/trackback.php',
               'text' => $LANG_ADMIN['tb_list']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']));
 
     $retval .= ADMIN_createMenu(
@@ -278,7 +278,7 @@ function TRACKBACK_pingForm($targetUrl = '')
     $menu_arr = array(
         array('url' => $_CONF['site_admin_url'] . '/trackback.php',
               'text' => $LANG_ADMIN['tb_list']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']));
 
     $retval .= ADMIN_createMenu(
@@ -543,7 +543,7 @@ function TRACKBACK_serviceList()
               'text' => $LANG_ADMIN['tb_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/trackback.php?mode=editservice',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']));
 
     $retval .= COM_startBlock($LANG_TRB['services_headline'], '',
@@ -658,7 +658,7 @@ function TRACKBACK_editService($pid, $msg = '', $new_name = '', $new_site_url = 
               'text' => $LANG_ADMIN['tb_list']),
         array('url' => $_CONF['site_admin_url'] . '/trackback.php?mode=editservice',
               'text' => $lang_create_or_edit,'active'=>true),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']));
 
     $retval .= ADMIN_createMenu(

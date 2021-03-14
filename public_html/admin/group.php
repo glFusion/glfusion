@@ -122,7 +122,7 @@ function GROUP_edit($grp_id = '')
               'text' => $lang_create_edit,'active' => true),
         array('url' => $_CONF['site_admin_url'] . '/user.php',
               'text' => $LANG_ADMIN['admin_users']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
     $retval .= ADMIN_createMenu(
@@ -1052,7 +1052,7 @@ function GROUP_list($show_all_groups = false)
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'] . '/user.php',
               'text' => $LANG_ADMIN['admin_users']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -1233,7 +1233,7 @@ function GROUP_editUsers($grp_id)
                           'text' => $LANG28[38]),
                     array('url' => $_CONF['site_admin_url'] . '/user.php',
                           'text' => $LANG_ADMIN['admin_users']),
-                    array('url'  => $_CONF['site_admin_url'],
+                    array('url'  => $_CONF['site_admin_url'].'/index.php',
                           'text' => $LANG_ADMIN['admin_home'])
                 );
 

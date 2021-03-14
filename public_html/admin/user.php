@@ -269,7 +269,7 @@ function USER_edit($uid = '', $msg = '')
               'text' => $LANG28[54]),
         array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
               'text' => $LANG28[95]),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -1412,7 +1412,7 @@ function USER_list($grp_id)
               'text' => $LANG28[54]),
         array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
               'text' => $LANG28[95]),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -2149,7 +2149,7 @@ function USER_batchAdmin()
               'text' => $LANG28[54],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
               'text' => $LANG28[95]),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -2682,7 +2682,7 @@ switch($action) {
                   'text' => $LANG28[54]),
             array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
                   'text' => $LANG28[95]),
-            array('url' => $_CONF['site_admin_url'],
+            array('url' => $_CONF['site_admin_url'].'/index.php',
                   'text' => $LANG_ADMIN['admin_home'])
         );
         $display .= COM_startBlock ($LANG28[24], '',
