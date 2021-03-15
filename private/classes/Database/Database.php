@@ -837,7 +837,7 @@ class Database
 
         try {
             $stmt = $this->conn->query($sql);
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
