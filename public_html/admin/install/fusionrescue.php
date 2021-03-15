@@ -25,6 +25,7 @@ $_SYSTEM['no_fail_sql'] = true;
 if ( !file_exists($_CONF['path'].'db-config.php')) die('Unable to located db-config.php');
 
 use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
 
 require_once $_CONF['path'].'db-config.php';
 $dbpass = $_DB_pass;
@@ -560,7 +561,7 @@ function repairDatabase() {
             }
             try {
                 $stmt = $db->conn->executeQuery("REPAIR TABLE `{$table}`");
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
                 $retval[] = "Repair failed for " . $table;
             }
         }
@@ -701,19 +702,23 @@ function getNewPaths( $group = 'Core') {
                 </div>
             ';
         } elseif ( $configDetail[$option]['type'] == '@select' ) {
+if ($option !== 'user_login_method') {
             $retval .= '
                 <div class="uk-form-row">
                 <label class="uk-form-label">'.$option.'</label>
                 <div class="uk-form-controls">
                 &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
                 <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
-
             ';
             $retval .= '
                 </select>
                 </div>
                 </div>
             ';
+}
+//var_dump($option);
+//var_dump($value);
+
 
         }  else {
             $item = @unserialize($value);
@@ -789,7 +794,7 @@ function saveNewPaths( $group='Core' ) {
                     SET value=? WHERE name=? AND group_name=?";
             try {
                 $stmt = $db->conn->executeUpdate($sql,array($default[$option],$option,$group));
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
                 $retval[] = 'Error Resetting ' . $option;
                 $stmt = false;
             }
@@ -815,7 +820,7 @@ function saveNewPaths( $group='Core' ) {
                                     $group
                                 )
                     );
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
                     $retval[] = 'Error saving ' . $option;
                     $stmt = false;
                 }
@@ -831,8 +836,10 @@ function saveNewPaths( $group='Core' ) {
     } else {
         @unlink($cfgvalue['path_data'] .'$$$config$$$.cache');
         @unlink($config['path_data'] .'$$$config$$$.cache');
-        @unlink($cfgvalue['path_data'] .'layout_cache/$$$config$$$.cache');
-        @unlink($config['path_data'] .'layout_cache/$$$config$$$.cache');
+        @unlink($cfgvalue['path_data'] .'cache/$$$config$$$.cache');
+        @unlink($config['path_data'] .'cache/$$$config$$$.cache');
+        $c = Cache::getInstance();
+        $c->clear();
     }
 
     return $retval;
