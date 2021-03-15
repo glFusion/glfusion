@@ -176,7 +176,7 @@ function LINK_edit($action, $lid = '')
                 'text' => $LANG_LINKS_ADMIN[50]),
         array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
             'text' => $LANG_LINKS_ADMIN[26]),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
                 'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -431,7 +431,7 @@ function LINK_list($validate)
                   'text' => $LANG_LINKS_ADMIN[50]),
             array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
               'text' => $LANG_LINKS_ADMIN[26],'active'=>true),
-           array('url' => $_CONF['site_admin_url'],
+           array('url' => $_CONF['site_admin_url'].'/index.php',
                  'text' => $LANG_ADMIN['admin_home'])
         );
         $dovalidate_url = $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=validate' . '&amp;'.CSRF_TOKEN.'='.$token;
@@ -460,7 +460,7 @@ function LINK_list($validate)
                   'text' => $LANG_LINKS_ADMIN[50]),
             array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
               'text' => $LANG_LINKS_ADMIN[26]),
-            array('url' => $_CONF['site_admin_url'],
+            array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
         );
         $validate_link = '';

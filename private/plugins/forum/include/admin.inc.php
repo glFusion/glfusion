@@ -90,7 +90,7 @@ function FF_adminNav( $selected = '' )
     }
 
     $menu_arr = array_merge($menu_arr,array (
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     ));
 

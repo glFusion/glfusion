@@ -85,7 +85,7 @@ function POLLS_edit($pid = '')
               'text' => $LANG_ADMIN['list_all']),
         array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php?edit=x',
               'text' => $lang_create_or_edit,'active'=>true),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']));
 
     $retval .= COM_startBlock ($LANG25[5], '',
@@ -557,7 +557,7 @@ function POLLS_list()
               'text' => $LANG_ADMIN['list_all'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']));
 
     $retval .= COM_startBlock($LANG25[18], '',
@@ -642,7 +642,7 @@ function POLLS_listVotes($pid)
               'text' => $LANG_ADMIN['list_all']),
         array('url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']));
 
     $retval .= COM_startBlock('Poll Votes for ' . $pid, '',
