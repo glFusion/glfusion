@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -423,7 +423,7 @@ function handleEditSubmit()
                         Database::STRING
                     )
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
             Log::write('system',Log::WARNING,"handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
             . 'to edit to a non-existent comment or the cid/sid did not match');
             return COM_refresh($_CONF['site_url'] . '/index.php');
@@ -449,7 +449,7 @@ function handleEditSubmit()
                         Database::STRING
                     )
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
             Log::write('system',Log::WARNING,"handleEditSubmit(): {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
             . 'to edit to a non-existent comment or the cid/sid did not match');
             return COM_refresh($_CONF['site_url'] . '/index.php');

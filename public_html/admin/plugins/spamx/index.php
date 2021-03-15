@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2016-2019 by the following authors:
+*  Copyright (C) 2016-2021 by the following authors:
 *   Mark R. Evans    mark AT glfusion DOT org
 *
 */
@@ -48,7 +48,7 @@ function spamx_purge_stats()
             array($maxAge),
             array(Database::STRING)
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
         Log::write('system',Log::ERROR,'Error purging older Spam-X statistics');
     }
 
@@ -58,7 +58,7 @@ function spamx_purge_stats()
                 array($now),
                 array(Database::STRING)
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
         Log::write('system',Log::ERROR,'Error updating Spam-X statistics purge date.');
     }
 }

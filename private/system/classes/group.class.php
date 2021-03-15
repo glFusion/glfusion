@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2019 by the following authors:
+*  Copyright (C) 2017-2021 by the following authors:
 *   Lee Garner      lee AT leegarner DOT com
 *
 *   @filesource
@@ -137,7 +137,7 @@ class Group
                         array(Database::INTEGER)
                         );
 
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
             // Ignore errors or failed attempts
         }
 
@@ -223,7 +223,7 @@ class Group
                                 array(Database::PARAM_INT_ARRAY)
                                 );
 
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
                     // Ignore errors or failed attempts
                 }
                 $data = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -330,7 +330,7 @@ class Group
                                 array(Database::INTEGER,Database::PARAM_INT_ARRAY)
                                 );
 
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
                     $groups[$feature][] = 0;
                 }
                 $data = $stmt->fetchAll(Database::ASSOCIATIVE);

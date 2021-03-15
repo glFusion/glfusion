@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2019 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -947,7 +947,7 @@ function USER_createuser($info = array())
                                 Database::STRING
                             )
                     );
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
                     // ignore error
                 }
             }
@@ -1278,7 +1278,7 @@ function userLogout()
                         array('remote_ip' => ''),
                         array('uid' => $_USER['uid'])
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
             // ignore any errors
         }
         SESS_endUserSession ($_USER['uid']);

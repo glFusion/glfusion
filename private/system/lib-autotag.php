@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark Howard     mark AT usable-web DOT com
 *
@@ -106,7 +106,7 @@ function AT_loadTags()
             array(),
             array(),
             new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, 'autotag_list'));
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }

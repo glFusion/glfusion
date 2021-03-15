@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2019 by the following authors:
+*  Copyright (C) 2014-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -280,7 +280,7 @@ class autotag_headlines extends BaseAutotag {
 
         try {
             $stmt = $queryBuilder->execute();
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }

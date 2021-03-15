@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2018-2019 by the following authors:
+*  Copyright (C) 2018-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -744,7 +744,7 @@ class Article
             $this->errors[] = $LANG24[24];
             Log::write('system',Log::ERROR,$e->getMessage());
             $retval = false;
-        } catch (\Doctrine\DBAL\DBALException $e) {
+        } catch (Throwable | \Doctrine\DBAL\DBALException $e) {
             // general error
             $db->conn->rollback();
             $this->errors[] = $LANG24[25];
@@ -864,7 +864,7 @@ class Article
                 $db->conn->rollback();
                 $this->errors[] = $LANG24[24];
                 $retval = false;
-            } catch (\Doctrine\DBAL\DBALException $e) {
+            } catch (Throwable | \Doctrine\DBAL\DBALException $e) {
                 $db->conn->rollback();
                 $this->errors[] = 'There was an error saving the data...';
                 Log::write('system',Log::ERROR,$e->getMessage());

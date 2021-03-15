@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -278,7 +278,7 @@ if (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
             array($story->get('sid'),$_CONF['_now']->toMySQL(true)),
             array(Database::STRING,Database::STRING)
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
         // ignore error
     }
 

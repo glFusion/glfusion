@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2018 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark Howard     mark AT usable-web DOT com
 *
@@ -687,7 +687,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
                 array()
 //                new \Doctrine\DBAL\Cache\QueryCacheProfile(600, $component.'_num')
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
             $db->dbError($e->getMessage(),$num_pagessql);
         }
         $num_rows = $stmt->rowCount();
@@ -728,7 +728,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             array()
 //            new \Doctrine\DBAL\Cache\QueryCacheProfile(600, $component.'_admlist')
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
         $db->dbError($e->getMessage(),$sql);
     }
     $resultSet = $stmt->fetchAll(Database::ASSOCIATIVE);

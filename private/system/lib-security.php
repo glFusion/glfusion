@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2020 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2009 by the following authors:
@@ -1308,7 +1308,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
                     Database::INTEGER
                 )
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
         Log::write('system',Log::ERROR,'Error inserting token into DB: ' . $e->getMessage());
     }
 
@@ -1564,7 +1564,7 @@ function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
                     Database::INTEGER
                 )
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
         Log::write('system',Log::ERROR,'Error inserting token into DB: ' . $e->getMessage());
     }
     /* And return the token to the user */

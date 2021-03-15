@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2009 by the following authors:
@@ -140,7 +140,7 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
                                      array($comments,$id),
                                      array(Database::INTEGER, Database::STRING)
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
             $db->error($e->getMessage());
         }
         COM_olderStuff(); // update comment count in Older Stories block
@@ -544,7 +544,7 @@ function ARTICLE_emailUserTopics()
 
     try {
         $stmt = $db->conn->executeQuery($usersql);
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }

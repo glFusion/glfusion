@@ -447,7 +447,7 @@ function _checkEnvironment()
 
     try {
         $stmt = $db->conn->query("SELECT @@character_set_database, @@collation_database;");
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
         $dbInfo['db_collation'] = $LANG_ENVCHK['unknown'];
         $dbInfo['db_charset']   = $LANG_ENVCHK['unknown'];
     }

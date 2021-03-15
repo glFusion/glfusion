@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -544,7 +544,7 @@ function _doSiteConfigUpgrade() {
     if ( empty($_CONF['db_charset'])) {
         try {
             $stmt = $db->conn->query("SELECT @@character_set_database");
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
             $stmt = false;
         }
         if ($stmt) {
