@@ -411,7 +411,7 @@ function categoryConfigAdmin(){
 }
 
 function newfileConfigAdmin(){
-    global $_CONF,$myts,$eh,$mytree,$LANG_FM02;
+    global $_CONF,$myts,$eh,$mytree,$LANG_FM02,$LANG_FILEMGMT;
 
     if ( defined('DEMO_MODE') ) {
         redirect_header($_CONF['site_admin_url']."/plugins/filemgmt/index.php",10,'Uploads are disabled in demo mode');
@@ -420,6 +420,37 @@ function newfileConfigAdmin(){
 
     $display = COM_siteHeader('menu');
     $display .= filemgmt_navbar('addfile');
+
+    // begin rework
+
+    $T = new Template ($_CONF['path'] . 'plugins/filemgmt/templates/admin');
+    $T->set_file ('form','add_file.thtml');
+
+    $T->set_var(array(
+        'lang_addnewfile' => _MD_ADDNEWFILE,
+        'lang_filetitle' => _MD_FILETITLE,
+        'lang_file' => _MD_FILE,
+        'lang_url'  => $LANG_FILEMGMT['url'],
+        'lang_category' => _MD_CATEGORYC,
+        'lang_homepage' => _MD_HOMEPAGEC,
+        'lang_description' => _MD_DESCRIPTIONC,
+        'lang_version' => _MD_VERSIONC,
+        'lang_screenshot' => _MD_SHOTIMAGE,
+        'lang_yes' => _MD_YES,
+        'lang_no' => _MD_NO,
+    ));
+
+    $T->set_var(array(
+        'upload_max_filesize' => ini_get('upload_max_filesize'),
+        'category_select' => $mytree->makeMySelBox('title', 'title'),
+    ));
+
+    $T->parse('output', 'form');
+    $display .= $T->finish($T->get_var('output'));
+    // end rework
+
+/*
+
     $display .= '<!--begin File Management Administration -->';
     $display .= '<form class="uk-form" method="post" enctype="multipart/form-data" action="index.php" style="margin:0px;">';
     $display .= '<table class="uk-table uk-width-1-1" border="0" class="plugin">';
@@ -458,6 +489,7 @@ function newfileConfigAdmin(){
     $display .= '</td></tr></table>';
     $display .= '</form>';
     $display .= '<!--end File Management Administration -->';
+*/
     $display .= COM_endBlock();
     $display .= COM_siteFooter();
     echo $display;
