@@ -1,35 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// |                                                                          |
-// | Administrative Functions                                                 |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* FileMgmt Plugions - glFusion CMS
+*
+* Administrative interface
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by the following authors:
+*  Consultants4Hire Inc.
+*  Blaine Lang       blaine@portalparts.com
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
@@ -102,7 +89,7 @@ function filemgmt_navbar($selected='') {
               'text' => sprintf($LANG_FM02['nav4'],$totalnewdownloads),'active'=>$selected_listnewdownloads),
         array('url' => $_CONF['site_admin_url'] .'/plugins/filemgmt/index.php?op=listBrokenDownloads',
               'text' => sprintf($LANG_FM02['nav5'],$totalbrokendownloads),'active'=>$selected_listbroken),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -483,7 +470,7 @@ function modDownload() {
     $totalvotes = '';
 
     $lid = $_GET['lid'];
-    $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments,submitter FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
+    $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments,submitter,hits FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
     $nrows = DB_numRows($result);
     if ($nrows == 0) {
         redirect_header("index.php",2,_MD_NOMATCH);
@@ -494,6 +481,84 @@ function modDownload() {
 
     $display .= filemgmt_navbar();
 
+    // begin rework
+
+    list($cid, $title, $url, $homepage, $version, $size, $logourl,$comments,$submitter,$hits) = DB_fetchArray($result);
+
+    $T = new Template ($_CONF['path'] . 'plugins/filemgmt/templates/admin');
+    $T->set_file ('form','mod_file.thtml');
+
+    $T->set_var(array(
+        'lang_file_id' => _MD_FILEID,
+        'lang_filetitle' => _MD_FILETITLE,
+        'lang_dl_filename' => _MD_DLFILENAME,
+        'lang_replace_filename' => _MD_REPLFILENAME,
+        'lang_homepage' => _MD_HOMEPAGEC,
+        'lang_filesize' => _MD_FILESIZEC,
+        'lang_bytes' => _MD_BYTES,
+        'lang_version' => _MD_VERSIONC,
+        'lang_description' => _MD_DESCRIPTIONC,
+        'lang_category' => _MD_CATEGORYC,
+        'lang_screenshot' => _MD_SHOTIMAGE,
+        'lang_comments' => _MD_COMMENTOPTION,
+        'lang_yes' => _MD_YES,
+        'lang_no' => _MD_NO,
+        'lang_owner' => _MD_OWNER,
+        'lang_silent_edit' => _MD_SILENTEDIT,
+        'lang_submit' => _MD_SUBMIT,
+        'lang_delete' => _MD_DELETE,
+        'lang_cancel' => _MD_CANCEL,
+        'lang_hits'     => _MD_HITSC,
+
+    ));
+
+    $result2 = DB_query("SELECT description FROM {$_TABLES['filemgmt_filedesc']} WHERE lid='".DB_escapeString($lid)."'");
+    list($description)=DB_fetchArray($result2);
+
+    $title = $myts->makeTboxData4Edit($title);
+    $pathstring = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php\">"._MD_MAIN."</a>&nbsp;:&nbsp;";
+    $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_CONF['site_url']}/filemgmt/viewcat.php");
+    $pathstring .= $nicepath;
+    $pathstring .= "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id=$lid\">{$title}</a>";
+
+    $T->set_var(array(
+        'lid'   => $lid,
+        'title' => $title,
+        'path' => $pathstring,
+        'url'   => rawurldecode($myts->makeTboxData4Edit($url)),
+        'homepage'  => $myts->makeTboxData4Edit($homepage),
+        'version' => $myts->makeTboxData4Edit($version),
+        'filesize'  => $myts->makeTboxData4Edit($size),
+        'logo_url'  => rawurldecode($myts->makeTboxData4Edit($logourl)),
+        'description' => $myts->makeTareaData4Edit($description),
+        'category'  => $cid,
+        'category_select' => $mytree->makeMySelBox("title", "title", $cid,0,"cid"),
+        'owner_select' =>  COM_buildOwnerList('owner_id',$submitter),
+        'hits' => $myts->makeTboxData4Edit($hits)
+    ));
+
+    if (!empty($logourl) AND file_exists($filemgmt_SnapStore.$logourl)) {
+        $T->set_var('thumbnail', $filemgmt_FileSnapURL.$logourl);
+    } else {
+        $T->unset_var('thumbnail');
+    }
+    if ($comments) {
+        $T->set_var('comments_yes_checked',' checked="checked" ');
+    } else {
+        $T->set_var('comments_no_checked',' checked="checked" ');
+    }
+
+    if ($_FM_CONF['silent_edit_default']) {
+        $T->set_var('silent_edit_checked', ' checked="checked" ');
+    } else {
+        $T->set_var('silent_edit_checked', '');
+    }
+
+    $T->parse('output', 'form');
+    $display .= $T->finish($T->get_var('output'));
+
+    // end rework
+/*
     $display .= '<form class="uk-form" method="post" enctype="multipart/form-data" action="index.php">';
     $display .= '<input type="hidden" name="op" value="modDownloadS" />';
     $display .= '<input type="hidden" name="lid" value="'.$lid.'" />';
@@ -563,6 +628,7 @@ function modDownload() {
     $display .= "</span><input class=\"uk-button\" type=\"submit\" name=\"cancel\" value=\""._MD_CANCEL."\"" . XHTML . ">";
     $display .= '</td></tr></table></form>' .LB;
 
+    */
 
     /* Display File Voting Information */
     $display .= '<form class="uk-form" method="post" action="index.php">';
@@ -654,6 +720,7 @@ function listBrokenDownloads()
 
     USES_lib_admin();
     $retval = '';
+    $listing = '';
 
     $header_arr = array(
         array(
@@ -867,7 +934,8 @@ function modDownloadS() {
         $size = $myts->makeTboxData4Save($size);
         $url = DB_escapeString($fileurl);
         $lid = (int) COM_applyFilter($_POST['lid'],true);
-        DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET url='$url',size=".$size." WHERE lid=".(int) $lid);
+        $hits = (int) COM_applyFilter($_POST['hits'],true);
+        DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET url='$url',size=".$size.",hits=".$hits." WHERE lid=".(int) $lid);
     }
     $currentsnapfile = DB_getITEM($_TABLES['filemgmt_filedetail'], 'logourl', "lid=".intval($_POST['lid']));
     $currentSnapFQN = $filemgmt_SnapStore . $myts->makeTboxData4Save(rawurldecode($currentsnapfile));
@@ -922,11 +990,12 @@ function modDownloadS() {
     $lid            = (int) COM_applyFilter($_POST['lid'],true);
     $cid            = DB_escapeString($cid);
     $commentoption  = DB_escapeString(COM_applyFilter($_POST['commentoption']));
+    $hits           = (int) COM_applyFilter($_POST['hits'],true);
 
     if ( $silentEdit ) {
-    	DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, comments='$commentoption', submitter=$submitter WHERE lid=".$lid);
+    	DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, comments='$commentoption', submitter=$submitter, hits=$hits WHERE lid=".$lid);
 	} else {
-   		DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, date=".time().", comments='$commentoption', submitter=$submitter WHERE lid=".$lid);
+   		DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET cid='$cid', title='$title', url='$url', homepage='$homepage', version='$version', status=1, date=".time().", comments='$commentoption', submitter=$submitter, hits=$hits WHERE lid=".$lid);
 	}
     DB_query("UPDATE {$_TABLES['filemgmt_filedesc']} SET description='$description' WHERE lid=".$lid);
     PLG_itemSaved($lid,'filemgmt');
