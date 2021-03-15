@@ -848,7 +848,8 @@ function STORY_edit($sid = '', $action = '', $errormsg = '', $currenttopic = '')
     if ($_CONF['hour_mode'] == 24) {
         $hour_options = COM_getHourFormOptions ($story->EditElements('publish_hour'), 24);
     } else {
-        $hour_options = COM_getHourFormOptions ($story->EditElements('publish_hour'));
+//        $hour_options = COM_getHourFormOptions ($story->EditElements('publish_hour'));
+        $hour_options = COM_getHourFormOptions ($publish_hour);
     }
     $story_templates->set_var('publish_hour_options', $hour_options);
 
