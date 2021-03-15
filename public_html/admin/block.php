@@ -261,7 +261,7 @@ function BLOCK_edit($bid = '', $B = array())
               'text' => $LANG_ADMIN['block_list']),
         array('url' => $_CONF['site_admin_url'] . '/block.php?edit=x',
               'text' => $lang_menu_edit,'active'=>true),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -520,7 +520,7 @@ function BLOCK_list()
               'text' => $LANG_ADMIN['block_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/block.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
