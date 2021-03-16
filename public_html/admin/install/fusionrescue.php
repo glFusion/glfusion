@@ -702,23 +702,37 @@ function getNewPaths( $group = 'Core') {
                 </div>
             ';
         } elseif ( $configDetail[$option]['type'] == '@select' ) {
-if ($option !== 'user_login_method') {
-            $retval .= '
-                <div class="uk-form-row">
-                <label class="uk-form-label">'.$option.'</label>
-                <div class="uk-form-controls">
-                &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
-                <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
-            ';
-            $retval .= '
-                </select>
-                </div>
-                </div>
-            ';
-}
-//var_dump($option);
-//var_dump($value);
+            if ($option !== 'user_login_method') {
+                $retval .= '
+                    <div class="uk-form-row">
+                    <label class="uk-form-label">'.$option.'</label>
+                    <div class="uk-form-controls">
+                    &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                    <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+                ';
+                $retval .= '
+                    </select>
+                    </div>
+                    </div>
+                ';
+            } else {
+                $ua_array = unserialize($value);
 
+                foreach($ua_array AS $op => $val) {
+                    $retval .= '
+                        <div class="uk-form-row">
+                        <label class="uk-form-label">'.$option.'['.$op.']</label>
+                        <div class="uk-form-controls">
+                        &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                        <select name="cfgvalue[' . $option . ']['.$op.']">
+                        <option ' . ( $val == 0 ? ' selected="selected"' : '') . ' value="0">False</option>
+                        <option ' . ( $val == 1 ? ' selected="selected"' : '') . ' value="1">True</option>
+                        </select>
+                        </div>
+                        </div>
+                    ';
+                }
+            }
 
         }  else {
             $item = @unserialize($value);
@@ -816,6 +830,40 @@ function saveNewPaths( $group='Core' ) {
                                 $sql,
                                 array(
                                     serialize($sVal),
+                                    $option,
+                                    $group
+                                )
+                    );
+                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+                    $retval[] = 'Error saving ' . $option;
+                    $stmt = false;
+                }
+                if ($stmt !== false) {
+                    $retval[] = 'Saving ' . $option;
+                    $changed++;
+                }
+            } else if ($option == 'user_login_method') {
+                $methods = array('standard', '3rdparty', 'oauth');
+                $methods_disabled = 0;
+                foreach ($methods as $m) {
+                    if (isset($value[$m]) && $value[$m] == 0) {
+                        $methods_disabled++;
+                        $value[$m] = (int) 0;
+                    } else {
+                        $value[$m] = (int) 1;
+                    }
+                }
+                if ($methods_disabled == count($methods)) {
+                    // just to make sure people don't lock themselves out of their site
+                    $value['standard'] = true;
+                }
+                $sql = "UPDATE `" . $_DB_table_prefix . "conf_values`
+                        SET value=? WHERE name=? AND group_name=?";
+                try {
+                    $stmt = $db->conn->executeUpdate(
+                                $sql,
+                                array(
+                                    serialize($value),
                                     $option,
                                     $group
                                 )
