@@ -122,7 +122,6 @@ function plugin_initconfig_filemgmt()
 
         $c->add('sg_main', NULL, 'subgroup', 0, 0, NULL, 0, true, 'filemgmt');
         $c->add('fs_public', NULL, 'fieldset', 0, 0, NULL, 0, true, 'filemgmt');
-
         $c->add('perpage', $_FM_DEFAULT['perpage'], 'select',
                 0, 0, 2, 10, true, 'filemgmt');
         $c->add('popular_download', $_FM_DEFAULT['popular_download'], 'text',
@@ -147,20 +146,16 @@ function plugin_initconfig_filemgmt()
                 0, 0, 0, 110, true, 'filemgmt');
         $c->add('displayblocks', $_FM_DEFAULT['displayblocks'],'select',
                 0, 0, 3, 115, true, 'filemgmt');
-
         $c->add('fm_access', NULL, 'fieldset', 0, 1, NULL, 0, true,
                 'filemgmt');
-
         $c->add('selectpriv', $_FM_DEFAULT['selectpriv'],'select',
                 0, 1, 0, 80, true, 'filemgmt');
         $c->add('uploadselect', $_FM_DEFAULT['uploadselect'],'select',
                 0, 1, 0, 90, true, 'filemgmt');
         $c->add('uploadpublic', $_FM_DEFAULT['uploadpublic'],'select',
                 0, 1, 0, 100, true, 'filemgmt');
-
         $c->add('fm_general', NULL, 'fieldset', 0, 2, NULL, 0, true,
                 'filemgmt');
-
         $c->add('useshots', $_FM_DEFAULT['useshots'],'select',
                 0, 2, 0, 10, true, 'filemgmt');
         $c->add('shotwidth', $_FM_DEFAULT['shotwidth'],'text',

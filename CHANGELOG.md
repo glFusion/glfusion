@@ -41,6 +41,7 @@
 - Maintenance / Cron task execution has been optimized to reduce user impact / experience
 - Template class code significantly streamlined - utilizes new caching engine to allow for memory based caching of templates
 - Replaced all old style Cache calls to new Cache class interface
+- FileMgmt Admin screens now adhere to glFusion UI standards
 
 ### Depreciated
 
