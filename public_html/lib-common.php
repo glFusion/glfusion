@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -27,7 +27,7 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
     die('This file can not be used on its own!');
 }
 
-// we must have PHP v5.6 or greater
+// we must have PHP v7.3 or greater
 if (version_compare(PHP_VERSION,'7.3.0','<')) {
     die('glFusion requires PHP version 7.3.0 or greater.');
 }
@@ -220,6 +220,11 @@ if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
 if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
 if ( isset($_CONF['debug_html_filter'])) $_SYSTEM['debug_html_filter'] = $_CONF['debug_html_filter'];
 
+// set database display
+if (isset($_CONF['rootdebug']) && $_CONF['rootdebug']) {
+    $db->setDisplayError(true);
+}
+
 // calculate the admin path
 $adminurl = $_CONF['site_admin_url'];
 if (strrpos ($adminurl, '/') == strlen ($adminurl) - 1) {
@@ -325,8 +330,8 @@ try {
         array(),
         array(),
         new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, 'plugin_active_plugins'));
-} catch(Throwable | \Doctrine\DBAL\DBALException $e) {
-    $db->dbError($e->getMessage(),$sql);
+} catch(Throwable $e) {
+    $db->dbError($e->getMessage());
 }
 $data = $stmt->fetchAll(Database::ASSOCIATIVE);
 $stmt->closeCursor();
