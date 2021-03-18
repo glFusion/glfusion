@@ -2147,7 +2147,7 @@ class Connection implements DriverConnection
      *
      * @psalm-return never-return
      */
-    private function throw(Exception $e): void
+    private function throw(Throwable $e): void
     {
         if ($e instanceof ConnectionLost) {
             $this->close();
