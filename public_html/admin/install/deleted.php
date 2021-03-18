@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2015-2019 by the following authors:
+*  Copyright (C) 2015-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -23,6 +23,13 @@ $obsoletePrivateDir = array(
     'plugins/commentfeeds/',
     'vendor/geshi/',
     'vendor/phpmailer/.github/',
+
+    'vendor/eluceo/ical/src/Eluceo/iCal/Component',
+    'vendor/eluceo/ical/src/Eluceo/iCal/Property',
+    'vendor/eluceo/ical/src/Eluceo/iCal/Util',
+
+    'vendor/geshi/',
+
 // 1.7.0
     'vendor/pear/',
     'system/classes/XML/',
@@ -83,6 +90,20 @@ $obsoletePrivateFiles = array(
     'system/lib-story.php',
     'system/classes/story.class.php',
     'system/lib-social.php',
+
+    'vendor/eluceo/ical/CHANGELOG.md',
+    'vendor/eluceo/ical/phpunit.xml.dist',
+    'vendor/eluceo/ical/README.md',
+    'vendor/eluceo/ical/UPGRADE.md',
+
+    'vendor/robthree/twofactorauth/lib/Providers/Qr/BaconQrCodeProvider.php',
+    'vendor/robthree/twofactorauth/lib/Providers/Qr/EndroidQrCodeProvider.php',
+    'vendor/robthree/twofactorauth/lib/Providers/Qr/EndroidQrCodeWithLogoProvider.php',
+
+    'vendor/README',
+    'composer.json.PHPCLASSES',
+
+
 // 1.7.0
     'system/classes/filter.class.php',
     'system/classes/output.class.php',
@@ -179,6 +200,19 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
+
+// 2.0.0
+
+    'ckeditor/plugins/codemirror/js/beautify-html.js',
+    'ckeditor/plugins/codemirror/theme/ayu-dark.css',
+    'ckeditor/plugins/codemirror/theme/ayu-mirage.css',
+    'ckeditor/plugins/codemirror/theme/material-darker.css',
+    'ckeditor/plugins/codemirror/theme/material-ocean.css',
+    'ckeditor/plugins/codemirror/theme/material-palenight.css',
+    'ckeditor/plugins/codemirror/theme/moxer.css',
+
+    'layout/cms/admin/story/storyeditor.thtml',
+
 // 1.7.5
     'admin/refresh.php',
     'bad_behavior2/bad-behavior/screener.inc.php',
