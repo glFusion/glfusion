@@ -561,7 +561,7 @@ function repairDatabase() {
             }
             try {
                 $stmt = $db->conn->executeQuery("REPAIR TABLE `{$table}`");
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 $retval[] = "Repair failed for " . $table;
             }
         }
@@ -808,7 +808,7 @@ function saveNewPaths( $group='Core' ) {
                     SET value=? WHERE name=? AND group_name=?";
             try {
                 $stmt = $db->conn->executeUpdate($sql,array($default[$option],$option,$group));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 $retval[] = 'Error Resetting ' . $option;
                 $stmt = false;
             }
@@ -834,7 +834,7 @@ function saveNewPaths( $group='Core' ) {
                                     $group
                                 )
                     );
-                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     $retval[] = 'Error saving ' . $option;
                     $stmt = false;
                 }
@@ -868,7 +868,7 @@ function saveNewPaths( $group='Core' ) {
                                     $group
                                 )
                     );
-                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     $retval[] = 'Error saving ' . $option;
                     $stmt = false;
                 }

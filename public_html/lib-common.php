@@ -133,7 +133,7 @@ try {
         array(),
         array()
     );
-} catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+} catch(Throwable $e) {
     $db->dbError($e->getMessage());
 }
 $data = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -2009,7 +2009,7 @@ function COM_showTopics( $topic='' )
     // retrieve all the topic data
     try {
         $stmt = $db->conn->executeQuery($sql);
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if ($db->getIgnore()) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         } else {
@@ -2064,7 +2064,7 @@ function COM_showTopics( $topic='' )
         try {
             $stmt = $db->conn->executeQuery($sql, array(), array(),
                 new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, Cache::getInstance()->createKey('menu_sc')));
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->dbError($e->getMessage(),$sql);
         }
         $storyCountData = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -2081,7 +2081,7 @@ function COM_showTopics( $topic='' )
         try {
             $stmt = $db->conn->executeQuery($sql, array(), array(),
                 new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, Cache::getInstance()->createKey('menu_submissioncount')));
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->dbError($e->getMessage(),$sql);
         }
         $submissionCountData = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -2872,7 +2872,7 @@ function COM_olderStuff()
                   AND (draft_flag = 0)" . $db->getTopicSQL( 'AND', 1 )
                   . " ORDER BY featured DESC, date DESC
                   LIMIT ".(int)$_CONF['limitnews'].", ".(int)$_CONF['limitnews']);
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }
@@ -2916,7 +2916,7 @@ function COM_olderStuff()
         $string .= $daylist;
         try {
             $db->conn->executeUpdate("UPDATE {$_TABLES['blocks']} SET content = ? WHERE name = 'older_stories'",array($string),array(Database::STRING));
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -3512,7 +3512,7 @@ function COM_hit()
 
     try {
         $db = Database::getInstance()->conn->executeUpdate("UPDATE `{$_TABLES['vars']}` SET value = value + 1 WHERE name = 'totalhits'");
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         // ignore the error
     }
 
@@ -6488,7 +6488,7 @@ function CMT_updateCommentcodes()
 
             try {
                 $stmt = $db->conn->executeUpdate($sql);
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore error
                 $stmt = false;
             }
@@ -6504,7 +6504,7 @@ function CMT_updateCommentcodes()
     $sql = "UPDATE `{$_TABLES['stories']}` SET commentcode = 1 WHERE UNIX_TIMESTAMP(comment_expire) < UNIX_TIMESTAMP() AND UNIX_TIMESTAMP(comment_expire) <> 0";
     try {
         $rowCount = $db->conn->executeUpdate($sql);
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $rowCount = 0;
     }
     if ( $cleared == 0 ) {
@@ -6609,7 +6609,7 @@ function _css_out()
             array($cacheID),
             array(Database::INTEGER)
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }

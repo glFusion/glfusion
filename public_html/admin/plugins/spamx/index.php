@@ -48,7 +48,7 @@ function spamx_purge_stats()
             array($maxAge),
             array(Database::STRING)
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error purging older Spam-X statistics');
     }
 
@@ -58,7 +58,7 @@ function spamx_purge_stats()
                 array($now),
                 array(Database::STRING)
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error updating Spam-X statistics purge date.');
     }
 }

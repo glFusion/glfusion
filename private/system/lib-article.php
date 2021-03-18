@@ -140,7 +140,7 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
                                      array($comments,$id),
                                      array(Database::INTEGER, Database::STRING)
             );
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->error($e->getMessage());
         }
         COM_olderStuff(); // update comment count in Older Stories block
@@ -544,7 +544,7 @@ function ARTICLE_emailUserTopics()
 
     try {
         $stmt = $db->conn->executeQuery($usersql);
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }

@@ -265,7 +265,7 @@ function PLG_uninstall ($type)
             Log::write('system',Log::INFO,"Dropping table {$_TABLES[$remvars['tables'][$i]]}");
             try {
                 $db->conn->query("DROP TABLE `{$_TABLES[$remvars['tables'][$i]]}`");
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 Log::write('system',Log::ERROR,"ERROR: Dropping of Table: {$_TABLES[$remvars['tables'][$i]]} failed.");
             }
             Log::write('system',Log::INFO,'...completed');
@@ -276,7 +276,7 @@ function PLG_uninstall ($type)
             Log::write('system',Log::INFO,"Removing variable {$remvars['vars'][$i]}");
             try {
                 $db->conn->delete($_TABLES['vars'], array('name' => $remvars['vars'][$i]));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 Log::write('system',Log::ERROR,"ERROR: Removing variable {$remvars['vars'][$i]} from VARS table failed");
             }
             Log::write('system',Log::INFO,'...completed');
@@ -289,14 +289,14 @@ function PLG_uninstall ($type)
                 Log::write('system',Log::INFO,"Attempting to remove the {$remvars['groups'][$i]} group");
                 try {
                     $db->conn->delete($_TABLES['groups'], array('grp_id' => $grp_id));
-                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     Log::write('system',Log::ERROR,"ERROR: Removing group {$remvars['groups'][$i]} from GROUPS table failed");
                 }
                 Log::write('system',Log::INFO,'...completed');
                 Log::write('system',Log::INFO,"Attempting to remove the {$remvars['groups'][$i]} group from all groups.");
                 try {
                     $db->conn->delete($_TABLES['group_assignments'], array('ug_main_grp_id' => $grp_id));
-                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     Log::write('system',Log::ERROR,"ERROR: Removing group {$remvars['groups'][$i]} from GROUP ASSIGNMENTS table failed");
                 }
                 Log::write('system',Log::INFO,'...completed');
@@ -1446,7 +1446,7 @@ function PLG_moveUser($originalUID, $destinationUID)
                 Database::INTEGER
             )
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error moving user comments: ' . $e->getMessage());
     }
 
@@ -1464,7 +1464,7 @@ function PLG_moveUser($originalUID, $destinationUID)
                 Database::INTEGER
             )
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error moving user rating votes: ' . $e->getMessage());
     }
 

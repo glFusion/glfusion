@@ -77,7 +77,7 @@ class AdminAction
                             )
                 );
 //                Log::write('system',Log::ERROR,sprintf("Admin Action: %s - %s - %s - %s",$module,$action,$desc,$_SERVER['REAL_ADDR']));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 Log::write('system',Log::ERROR,'10001 :: Failure writing administrative action to the admin_action database table.');
                 Log::write('system',Log::ERROR,sprintf("Admin Action: %s - %s - %s - %s",$module,$action,$desc,$_SERVER['REAL_ADDR']));
             }

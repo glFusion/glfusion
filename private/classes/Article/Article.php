@@ -744,7 +744,7 @@ class Article
             $this->errors[] = $LANG24[24];
             Log::write('system',Log::ERROR,$e->getMessage());
             $retval = false;
-        } catch (Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch (Throwable $e) {
             // general error
             $db->conn->rollback();
             $this->errors[] = $LANG24[25];
@@ -864,7 +864,7 @@ class Article
                 $db->conn->rollback();
                 $this->errors[] = $LANG24[24];
                 $retval = false;
-            } catch (Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch (Throwable $e) {
                 $db->conn->rollback();
                 $this->errors[] = 'There was an error saving the data...';
                 Log::write('system',Log::ERROR,$e->getMessage());

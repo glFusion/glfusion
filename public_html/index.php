@@ -101,7 +101,7 @@ $db = Database::getInstance();
 // set archive topic
 try {
     $archivetid = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['topics']}` WHERE archive_flag=1");
-} catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+} catch(Throwable $e) {
     if (defined('DVLP_DEBUG')) {
         throw($e);
     }
@@ -332,7 +332,7 @@ $countQueryBuilder->groupBy('s.sid');
 
 try {
     $cStmt = $countQueryBuilder->execute();
-} catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+} catch(Throwable $e) {
     if (defined('DVLP_DEBUG')) {
         throw($e);
     }
@@ -357,7 +357,7 @@ $queryBuilder
 
 try {
     $stmt = $queryBuilder->execute();
-} catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+} catch(Throwable $e) {
     if (defined('DVLP_DEBUG')) {
         throw($e);
     }

@@ -58,7 +58,7 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
 
     try {
         $commentRecord = $db->conn->fetchAssoc($sql, array($post_id),array(Database::INTEGER));
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }
@@ -1715,7 +1715,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             $db->conn->commit();
             $db->conn->query("UNLOCK TABLES `{$_TABLES['comments']}` WRITE");
             usleep(250000);
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->conn->rollBack();
             $db->conn->query("UNLOCK TABLES");
             throw($e);
@@ -1735,7 +1735,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             if ($rht === null) {
                 $rht = 0;
             }
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $rht = 0;
         }
 
@@ -1770,7 +1770,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             $db->conn->commit();
             $db->conn->query("UNLOCK TABLES");
             usleep(250000);
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->conn->rollBack();
             $db->conn->query("UNLOCK TABLES");
             throw($e);
@@ -2022,7 +2022,7 @@ function CMT_deleteComment ($cid, $sid, $type)
         $db->conn->commit();
         $db->conn->query("UNLOCK TABLES");
         usleep(250000);
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $db->conn->rollBack();
         $db->conn->query("UNLOCK TABLES");
         throw($e);
@@ -2384,7 +2384,7 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
     }
     try {
         $stmt = $db->conn->executeQuery($sql,$sqlParams,$sqlTypes);
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $throw($e);
     }
 
@@ -2648,7 +2648,7 @@ function plugin_moderationapprove_comment($id)
 
     try {
         $stmt = $db->conn->executeUpdate($sql,array($id),array(Database::INTEGER));
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if ($db->getIgnore()) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         } else {
@@ -2658,7 +2658,7 @@ function plugin_moderationapprove_comment($id)
     $sql = "SELECT * FROM `{$_TABLES['comments']}` WHERE cid=?";
     try {
         $row = $db->conn->fetchAssoc($sql,array($id),array(Database::INTEGER));
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if ($db->getIgnore()) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
             return false;
@@ -2709,7 +2709,7 @@ function plugin_moderationdelete_comment($id)
     $sql = "DELETE FROM `{$_TABLES['comments']}` WHERE cid=? AND queued=1";
     try {
         $stmt = $db->conn->executeUpdate($sql,array($id),array(Database::INTEGER));
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if ($db->getIgnore()) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         } else {

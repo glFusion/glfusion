@@ -955,7 +955,7 @@ function glfusion_200()
     foreach ($_SQL AS $sql) {
         try {
             $db->conn->query($sql);
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $err = $db->conn->errorInfo();
             if (isset($err[2])) {
                 $output = preg_replace('!\s+!', ' ', $err[2]);

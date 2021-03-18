@@ -44,7 +44,7 @@ function INSTALLER_install_feature($step, &$vars)
                                 'ft_descr' => $step['desc']
                             )
                 );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,"AutoInstall: Feature creation failed!");
         return 1;
     }
@@ -98,7 +98,7 @@ function INSTALLER_install_group($step, &$vars)
                                 Database::INTEGER
                             )
                  );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,"AutoInstall: Group creation failed!");
         return 1;
     }
@@ -118,7 +118,7 @@ function INSTALLER_install_group($step, &$vars)
                     ),
                 array(Database::INTEGER,Database::INTEGER)
             );
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             Log::write('system',Log::ERROR,"AutoInstall: Error inserting Group Assignment for Root");
         }
 
@@ -183,7 +183,7 @@ function INSTALLER_install_addgroup($step, &$vars)
                 Database::INTEGER
             )
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,"AutoInstall: Failed to assign group!");
         return 1;
     }
@@ -232,7 +232,7 @@ function INSTALLER_install_mapping($step, &$vars)
                 Database::INTEGER
             )
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,"AutoInstall: Mapping failed!");
         return 1;
     }
@@ -276,7 +276,7 @@ function INSTALLER_install_table($step, &$vars)
 
     try {
         $stmt = $db->conn->query($sql);
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,"AutoInstall: Failed to create table {$step['table']}");
         return 1;
     }
@@ -325,7 +325,7 @@ function INSTALLER_install_sql($step, &$vars)
             }
             try {
                 $stmt = $db->conn->query($sql);
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 Log::write('system',Log::ERROR,"AutoInstall: SQL failed!", array($step['sql']));
                 return 1;
             }
@@ -350,7 +350,7 @@ function INSTALLER_fail_sql($step, &$vars)
             }
             try {
                 $stmt = $db->conn->query($sql);
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore error
             }
 
@@ -429,7 +429,7 @@ function INSTALLER_install_block($step, &$vars)
                 Database::INTEGER   // perm_anonymous
             )
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,"AutoInstall: Block creation failed!",array('Plugin::'.$type));
         return 1;
     }
@@ -521,7 +521,7 @@ function INSTALLER_fail($pluginName,$rev)
             Log::write('system',Log::INFO,"Autoinstall: UNDO: ". $action['sql'][0]);
             try {
                 $db->conn->executeUpdate($action['sql'][0],$action['sql'][1],$action['sql'][2]);
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // no action - just ignore the error
             }
         } elseif (!empty($action['type'])) {
@@ -697,12 +697,12 @@ function INSTALLER_uninstall($A)
 
             try {
                 $db->conn->delete($_TABLES['access'],array('acc_ft_id'=>$ft_id),array(Database::INTEGER));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore error
             }
             try {
                 $db->conn->delete($_TABLES['features'],array('ft_id' => $ft_id),array(Database::INTEGER));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore error
             }
         } else if ($step['type'] == 'group') {
@@ -712,22 +712,22 @@ function INSTALLER_uninstall($A)
 
             try {
                 $db->conn->delete($_TABLES['access'],array('acc_grp_id' => $grp_id),array(Database::INTEGER));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore error
             }
             try {
                 $db->conn->delete($_TABLES['group_assignments'],array('ug_main_grp_id' => $grp_id),array(Database::INTEGER));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore error
             }
             try {
                 $db->conn->delete($_TABLES['group_assignments'],array('ug_grp_id' => $grp_id),array(Database::INTEGER));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore error
             }
             try {
                 $db->conn->delete($_TABLES['groups'],array('grp_id' => $grp_id),array(Database::INTEGER));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore error
             }
 ;
@@ -735,14 +735,14 @@ function INSTALLER_uninstall($A)
             Log::write('system',Log::INFO,"AutoInstall: Dropping table {$step['table']}....");
             try {
                 $stmt = $db->conn->executeUpdate("DROP TABLE `{$step['table']}`");
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore the error
             }
         } else if ($step['type'] == 'block') {
             Log::write('system',Log::INFO,"AutoInstall: Removing block {$step['name']}....");
             try {
                 $db->conn->delete($_TABLES['blocks'],array('name' => $step['name']),array(Database::STRING));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore error
             }
         } else if ($step['type'] == 'sql') {
@@ -752,7 +752,7 @@ function INSTALLER_uninstall($A)
             if (isset($step['rev'])) {
                 try {
                     $db->conn->query($step['rev']);
-                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     // ignore error
                 }
             }
@@ -770,7 +770,7 @@ function INSTALLER_uninstall($A)
 
         try {
             $db->conn->delete($_TABLES['plugins'],array('pi_name' => $plugin['name']),array(Database::STRING));
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             // ignore error
         }
     }
@@ -828,7 +828,7 @@ function INSTALLER_applyGroupDefault($grp_id, $add = true)
     } else {
         try {
             $db->conn->executeUpdate("DELETE FROM `{$_TABLES['group_assignments']}` WHERE (ug_main_grp_id = ?) AND (ug_grp_id IS NULL)",array($grp_id),array(Database::INTEGER));
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             Log::write('system',Log::ERROR,"Error removing group assignments");
         }
     }
@@ -1040,7 +1040,7 @@ function _update_config($plugin, $configData)
         if ( ($key = _searchForIdKey($item,$configData)) === NULL ) {
             try {
                 $db->conn->delete($_TABLES['conf_values'],array('name' => $item, 'group_name' => $plugin));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 return;
             }
         } else {
@@ -1139,7 +1139,7 @@ if ( !function_exists('_addConfigItem')) {
                     Database::STRING
                 )
             );
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             Log::write('system',Log::ERROR,"Error updating configuration");
         }
     }

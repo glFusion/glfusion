@@ -687,7 +687,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
                 array()
 //                new \Doctrine\DBAL\Cache\QueryCacheProfile(600, $component.'_num')
             );
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->dbError($e->getMessage(),$num_pagessql);
         }
         $num_rows = $stmt->rowCount();
@@ -728,7 +728,7 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
             array()
 //            new \Doctrine\DBAL\Cache\QueryCacheProfile(600, $component.'_admlist')
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $db->dbError($e->getMessage(),$sql);
     }
     $resultSet = $stmt->fetchAll(Database::ASSOCIATIVE);

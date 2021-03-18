@@ -544,7 +544,7 @@ function _doSiteConfigUpgrade() {
     if ( empty($_CONF['db_charset'])) {
         try {
             $stmt = $db->conn->query("SELECT @@character_set_database");
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $stmt = false;
         }
         if ($stmt) {

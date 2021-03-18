@@ -106,7 +106,7 @@ function AT_loadTags()
             array(),
             array(),
             new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, 'autotag_list'));
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }

@@ -1364,14 +1364,14 @@ function INST_gotSiteInformation()
 
     try {
         $db = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
-    } catch(Throwable | \Doctrine\DBAL\DBALException | PDOException $e) {
+    } catch(Throwable $e) {
         return _displayError(DB_NO_CONNECT,'getsiteinformation',$e->getMessage());
     }
     $db->setFetchMode( \Doctrine\DBAL\FetchMode::MIXED );
 
     try {
         $mysqlVersion = $db->getWrappedConnection()->getServerVersion();
-    } catch(Throwable | \Doctrine\DBAL\DBALException | PDOException $e) {
+    } catch(Throwable $e) {
         return _displayError(DB_NO_CONNECT,'getsiteinformation',$e->getMessage());
     }
 
@@ -1400,7 +1400,7 @@ function INST_gotSiteInformation()
         $foundInnoDB = false;
         try {
             $res = @$db->query("SHOW STORAGE ENGINES");
-        } catch(Throwable | \Doctrine\DBAL\DBALException | PDOException $e) {
+        } catch(Throwable $e) {
 
         }
 
@@ -1420,7 +1420,7 @@ function INST_gotSiteInformation()
     INST_errorLog($log_path,'INSTALL: Checking MySQL Character Set and Collation');
     try {
         $collationResult = $db->query("SELECT @@character_set_database, @@collation_database;");
-    } catch(Throwable | \Doctrine\DBAL\DBALException | PDOException $e) {
+    } catch(Throwable $e) {
         // ignore error
     }
     $collation = @$collationResult->fetch(\Doctrine\DBAL\FetchMode::ASSOCIATIVE);

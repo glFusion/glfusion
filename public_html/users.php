@@ -947,7 +947,7 @@ function USER_createuser($info = array())
                                 Database::STRING
                             )
                     );
-                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     // ignore error
                 }
             }
@@ -1278,7 +1278,7 @@ function userLogout()
                         array('remote_ip' => ''),
                         array('uid' => $_USER['uid'])
             );
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             // ignore any errors
         }
         SESS_endUserSession ($_USER['uid']);

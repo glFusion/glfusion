@@ -280,7 +280,7 @@ class autotag_headlines extends BaseAutotag {
 
         try {
             $stmt = $queryBuilder->execute();
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }

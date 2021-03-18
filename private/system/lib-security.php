@@ -1308,7 +1308,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
                     Database::INTEGER
                 )
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error inserting token into DB: ' . $e->getMessage());
     }
 
@@ -1564,7 +1564,7 @@ function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
                     Database::INTEGER
                 )
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error inserting token into DB: ' . $e->getMessage());
     }
     /* And return the token to the user */

@@ -278,7 +278,7 @@ if (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
             array($story->get('sid'),$_CONF['_now']->toMySQL(true)),
             array(Database::STRING,Database::STRING)
         );
-    } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         // ignore error
     }
 

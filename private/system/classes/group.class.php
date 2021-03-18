@@ -137,7 +137,7 @@ class Group
                         array(Database::INTEGER)
                         );
 
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             // Ignore errors or failed attempts
         }
 
@@ -223,7 +223,7 @@ class Group
                                 array(Database::PARAM_INT_ARRAY)
                                 );
 
-                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     // Ignore errors or failed attempts
                 }
                 $data = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -330,7 +330,7 @@ class Group
                                 array(Database::INTEGER,Database::PARAM_INT_ARRAY)
                                 );
 
-                } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     $groups[$feature][] = 0;
                 }
                 $data = $stmt->fetchAll(Database::ASSOCIATIVE);

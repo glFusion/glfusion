@@ -361,7 +361,7 @@ if ( $_SYSTEM['admin_session'] != 0 ) {
                         Database::STRING
                     )
                 );
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 Log::write('system',Log::WARNING,'Unable to update CSRF token in re-authentication');
             }
         }

@@ -499,7 +499,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
         try {
             $db->conn->insert($_TABLES['users'],$fields,$types);
             $db->conn->commit();
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             Log::write('system',Log::ERROR,"Error inserting user into USERS table :: " . $e->getMessage());
             $db->conn->rollBack();
             return null;
@@ -553,7 +553,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
                               )
             );
             $db->conn->commit();
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->conn->rollBack();
             return null;
         }

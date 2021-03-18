@@ -121,7 +121,7 @@ class config
 
         try {
             $stmt = $db->conn->query($sql);
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -217,7 +217,7 @@ class config
                         array(Database::STRING,Database::STRING,Database::STRING)
                         );
 
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         }
         if ($name != 'theme')  {
@@ -257,7 +257,7 @@ class config
             $db->conn->executeUpdate($sql,
                     array($escaped_val,$escaped_name,$escaped_grp),
                     array(Database::STRING,Database::STRING,Database::STRING));
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         }
 
@@ -281,7 +281,7 @@ class config
 
         try {
             $result = $stmt->execute();
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -325,7 +325,7 @@ class config
                         $params,
                         $types
             );
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -360,7 +360,7 @@ class config
 
         try {
             $stmt->execute();
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -443,7 +443,7 @@ class config
                     Database::STRING
                 )
             );
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -467,7 +467,7 @@ class config
                     Database::STRING,
                 )
             );
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -529,7 +529,7 @@ class config
                     Database::STRING
                 )
             );
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -550,7 +550,7 @@ class config
         try {
             $db->conn->delete($_TABLES['conf_values'],array('name' => $param_name,
                               'group_name' => $group));
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -576,7 +576,7 @@ class config
         $db = Database::getInstance();
         try {
             $db->conn->delete($_TABLES['conf_values'],array('group_name' => $group));
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -615,7 +615,7 @@ class config
                             Database::INTEGER
                         )
             );
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -758,7 +758,7 @@ class config
 
         try {
             $stmt = $db->conn->executeQuery($q_string,array($group));
-        } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -1563,7 +1563,7 @@ class config
 
             try {
                 $stmt = $db->conn->executeQuery($sql,array($item));
-            } catch(Throwable | \Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 $db->_errorlog("SQL Error: " . $e->getMessage());
                 continue;
             }
