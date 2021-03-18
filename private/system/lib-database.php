@@ -21,6 +21,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 /*
 if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
@@ -72,7 +73,7 @@ function DB_setdebug($flag)
 function DB_displayError($flag)
 {
     $db = Database::getInstance();
-    $db->setDisplayError($flat);
+    $db->setDisplayError($flag);
 }
 
 /**
@@ -110,21 +111,16 @@ function DB_query ($sql, $ignore_errors = 0)
 
     try {
         $result = $db->conn->query($sql);
-    } catch (Throwable | \Doctrine\DBAL\DBALException | PDOException $e) {
-        if ($ignore_errors) {
-            $result = false;
-            if (defined ('DVLP_DEBUG')) {
-                $err = $db->conn->errorInfo();
-                if (isset($err[2])) {
-                    $output = preg_replace('!\s+!', ' ', $err[2]);
-                    $db->_errorlog("SQL Error: " . $output . PHP_EOL. $sql);
-                }
-            }
-        } else {
-            trigger_error(DB_error($sql), E_USER_ERROR);
+    } catch (Throwable $e) {
+        if (defined ('DVLP_DEBUG')) {
+            $err = $e->getMessage();
+            Log::write('system',Log::DEBUG, $err . ' :: SQL = ' . $sql);
         }
+        if ($ignore_errors) {
+            return false;
+        }
+        $db->dbError($e->getMessage());
     }
-
     if ($result === false) {
         if ($ignore_errors) {
             return false;
