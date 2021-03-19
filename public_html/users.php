@@ -1671,7 +1671,7 @@ switch ($mode) {
                             strlen($_CONF['site_url'])) == $_CONF['site_url'])) {
                 $indexMsg = $_CONF['site_url'] . '/index.php?msg=';
                 if (substr ($_SERVER['HTTP_REFERER'], 0, strlen ($indexMsg)) == $indexMsg) {
-                    echo COM_refresh ($_CONF['site_url'] . '/index.php');
+                    echo COM_refresh ($_CONF['site_url'] . $_CONF['login_landing']);
                 } else {
                     // If user is trying to login - force redirect to index.php
                     if (strstr ($_SERVER['HTTP_REFERER'], 'mode=login') === false) {

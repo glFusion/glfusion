@@ -155,3 +155,7 @@ public_html/layout/equinox/
 #
 # Put additional local excludes here...
 #
+.settings
+.project
+.gitignore
+private/.buildpath
