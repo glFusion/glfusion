@@ -113,8 +113,16 @@ function DB_query ($sql, $ignore_errors = 0)
         $result = $db->conn->query($sql);
     } catch (Throwable $e) {
         if (defined ('DVLP_DEBUG')) {
+            $err = $db->conn->errorInfo();
+            if (isset($err[2])) {
+                $output = preg_replace('!\s+!', ' ', $err[2]);
+                Log::write('system',Log::DEBUG,"SQL Error: " . $output);
+                Log::write('system',Log::DEBUG,"SQL: " . $sql);
+            }
+/*
             $err = $e->getMessage();
             Log::write('system',Log::DEBUG, $err . ' :: SQL = ' . $sql);
+*/
         }
         if ($ignore_errors) {
             return false;
