@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '8a9d87bad3613743bdbb97b0b88f327ac4f7fc51',
+    'reference' => '2864e88cdc90db94b02ea245368c7fb5b40619e5',
     'name' => '__root__',
   ),
   'versions' => 
@@ -42,7 +42,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '8a9d87bad3613743bdbb97b0b88f327ac4f7fc51',
+      'reference' => '2864e88cdc90db94b02ea245368c7fb5b40619e5',
     ),
     'aziraphale/email-address-validator' => 
     array (
@@ -100,12 +100,12 @@ private static $installed = array (
     ),
     'filp/whoops' => 
     array (
-      'pretty_version' => '2.9.2',
-      'version' => '2.9.2.0',
+      'pretty_version' => '2.11.0',
+      'version' => '2.11.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'df7933820090489623ce0be5e85c7e693638e536',
+      'reference' => 'f6e14679f948d8a5cfb866fa7065a30c66bd64d3',
     ),
     'html2text/html2text' => 
     array (
@@ -242,12 +242,12 @@ private static $installed = array (
     ),
     'robthree/twofactorauth' => 
     array (
-      'pretty_version' => '1.7.0',
-      'version' => '1.7.0.0',
+      'pretty_version' => '1.8.0',
+      'version' => '1.8.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '37983bf675c5baca09d19d6705170489d0df0002',
+      'reference' => '30a38627ae1e7c9399dae67e265063cd6ec5276c',
     ),
     'simplepie/simplepie' => 
     array (
