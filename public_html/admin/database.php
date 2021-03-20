@@ -70,7 +70,6 @@ function DBADMIN_list()
     $retval = '';
 
     if (FileSystem::isWritable($_CONF['backup_path'])) {
-//    if (is_writable($_CONF['backup_path'])) {
         $backups = array();
         $fd = opendir($_CONF['backup_path']);
         $index = 0;
@@ -1220,7 +1219,7 @@ function DBADMIN_supportUtf8mb()
     }
     $serverVersion = DB_getServerVersion();
 
-    if (version_compare($serverVersion,'5.5.3','<')) {
+    if (version_compare($serverVersion,'5.6.0','<')) {
         return false;
     }
     $clientVersion = DB_getClientVersion();
