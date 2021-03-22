@@ -1277,6 +1277,7 @@ function MB_editMenu( $mid )
     $menu_id = $mid;
 
     $menu = menu::getInstance($menu_id);
+    $db = Database::getInstance();
 
     $menu_arr = array(
 
