@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Eric Warren     eric AT glfusion DOT org
 *
@@ -46,7 +46,7 @@ if ($LANG_DIRECTION == 'rtl') {
 // +---------------------------------------------------------------------------+
 
 if (!function_exists('INST_stripslashes') ) {
-    if (get_magic_quotes_gpc() == 1) {
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc() == 1) {
         function INST_stripslashes($text) {
             return stripslashes($text);
         }
@@ -1826,7 +1826,7 @@ function INST_pluginAutoInstall( $plugin )
 
 
 function INST_isWritable($path) {
-    if ($path{strlen($path)-1}=='/') {
+    if ($path[strlen($path)-1]=='/') {
         if ( !is_dir($path)) {
             return false;
         }
@@ -2110,7 +2110,7 @@ function INST_pluginExists($plugin)
 
 function INST_return_bytes($val) {
     $val = trim($val);
-    $last = strtolower($val{strlen($val)-1});
+    $last = strtolower($val[strlen($val)-1]);
     switch($last) {
         // The 'G' modifier is available since PHP 5.1.0
         case 'g':
