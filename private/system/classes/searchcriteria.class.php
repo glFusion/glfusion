@@ -173,7 +173,7 @@ class SearchCriteria {
     }
 
 
-    function getDateRangeSQL( $type = 'WHERE', $column, $datestart, $dateend )
+    function getDateRangeSQL( $type = 'WHERE', $column='', $datestart='', $dateend='' )
     {
         $retval = '';
 
