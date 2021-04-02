@@ -32,7 +32,12 @@ class autotag_uikitlogin extends BaseAutotag {
             $modal = 1;
         }
 
+        $T = new \Template($_CONF['path_layout'] . '/autotags');
+        $T->set_file('at', 'uikitlogin.thtml');
+        $T->set_var('modal', $modal);
+
         if ( COM_isAnonUser() ) {
+            // Anonymous user, show the login button.
             // Options sent to SEC_loginForm()
             $options = array(
                 'hide_forgotpw_link' => false,
@@ -42,16 +47,11 @@ class autotag_uikitlogin extends BaseAutotag {
                 'message' => '', //$LANG04[66]; // please enter your user name and password below
             );
 
-            $T = new \Template($_CONF['path_layout'] . '/autotags');
-            $T->set_file('at', 'uikitlogin.thtml');
             $T->set_var('login_button', true);
             $T->set_var('lang_login', $LANG01[58]);
             $T->set_var('login_form', SEC_loginForm($options));
-            $T->set_var('modal', $modal);
-            $retval .= $T->finish($T->parse('output', 'at'));
         } else {
-            $T = new \Template($_CONF['path_layout'] . '/autotags');
-            $T->set_file('at', 'uikitlogin.thtml');
+            // Already logged in, show the user "My Account" menu.
             $T->set_var('lang_header', $LANG01[47]);
             $T->set_var('lang_login', $LANG01['47']);
             $T->set_block('at', 'MenuItems', 'items');
@@ -61,8 +61,8 @@ class autotag_uikitlogin extends BaseAutotag {
                 $T->set_var('label', $option['label']);
                 $T->parse('items', 'MenuItems', true);
             }
-            $retval .= $T->finish($T->parse('output', 'at'));
         }
+        $retval .= $T->finish($T->parse('output', 'at'));
         return $retval;
     }
 }
