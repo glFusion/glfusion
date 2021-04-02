@@ -1,0 +1,5 @@
+{# begin {templatelocation} #}
+<!-- BEGIN options -->
+    <option value="{opt_value}" {!if selected}selected="selected"{!endif}>{opt_name}</option>
+<!-- END options -->
+{# end {templatelocation} #}

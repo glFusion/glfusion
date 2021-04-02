@@ -1615,7 +1615,7 @@ function COM_endBlock( $template='blockfooter.thtml' )
 
 function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where='' )
 {
-    global $_DB_table_prefix;
+    global $_DB_table_prefix, $_CONF;
 
     $retval = '';
 
@@ -1648,28 +1648,27 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
     $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
 
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file('optionlist', 'optionlist.thtml');
+    $T->set_block('optionlist', 'options', 'opts');
     while ($A = $stmt->fetch()) {
-        $retval .= '<option value="' . $A[0] . '"';
-
-        if ( is_array( $selected ) AND count( $selected ) > 0 ) {
-            foreach( $selected as $selected_item ) {
-                if ( $A[0] == $selected_item ) {
-                    $retval .= ' selected="selected"';
-                }
-            }
-        } elseif ( !is_array( $selected ) AND $A[0] == $selected ) {
-            $retval .= ' selected="selected"';
-        }
-
-        $retval .= '>';
-        if ( empty( $LangTable[$A[0]] )) {
-            $retval .= $A[1];
+        if (
+            (is_array($selected) && in_array($selected, $A[0])) ||
+            (!is_array($selected) && $A[0] == $selected)
+        ) {
+            $selected = true;
         } else {
-            $retval .= $LangTable[$A[0]];
+            $selected = false;
         }
-        $retval .= '</option>' . PHP_EOL;
+        $T->set_var(array(
+            'opt_value' => $A[0],
+            'opt_name' => $A[1],
+            'selected' => $selected,
+        ) );
+        $T->parse('opts', 'options', true);
     }
-
+    $T->parse('output', 'optionlist');
+    $retval = $T->finish($T->get_var('output'));
     return $retval;
 }
 
@@ -1690,23 +1689,28 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
 */
 function COM_topicList( $selection, $selected = '', $sortcol = 1, $ignorelang = false, $access = 2 )
 {
-    global $_TABLES;
+    global $_TABLES, $_CONF;
 
     $retval = '';
 
     $topics = COM_topicArray($selection, $sortcol, $ignorelang, $access);
     if ( is_array($topics) ) {
+        $T = new Template($_CONF['path_layout'] . '/fields');
+        $T->set_file('optionlist', 'optionlist.thtml');
+        $T->set_block('optionlist', 'options', 'opts');
         foreach ($topics as $tid => $topic) {
-            $retval .= '<option value="' . $tid . '"';
-            if ($tid == $selected) {
-                $retval .= ' selected="selected"';
-            }
-            $retval .= '>' . $topic;
             if ( isset($tid) ) {
-                $retval .= ' (' . $tid . ')';
+                $topic .= ' (' . $tid . ')';
             }
-            $retval .=  '</option>' . PHP_EOL;
+            $T->set_var(array(
+                'opt_value' => $tid,
+                'opt_name' => $topic,
+                'selected' => $tid == $selected,
+            ) );
+            $T->parse('opts', 'options', true);
         }
+        $T->parse('output', 'optionlist');
+        $retval .= $T->finish($T->get_var('output'));
     }
 
     return $retval;
@@ -6307,20 +6311,32 @@ function COM_recursiveDelete($path)
 
 function COM_buildOwnerList($fieldName,$owner_id=2)
 {
-    global $_TABLES;
+    global $_TABLES, $_CONF;
 
     $db = Database::getInstance();
 
     $stmt = $db->conn->executeQuery("SELECT * FROM `{$_TABLES['users']}` WHERE status=3 ORDER BY username ASC");
-    $owner_select = '<select name="'.$fieldName.'">';
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file(array(
+        'selection' => 'selection.thtml',
+        'optionlist' => 'optionlist.thtml',
+    ) );
+    $T->set_var('var_name', $fieldName);
+    $T->set_block('optionlist', 'options', 'opts');
     while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ( $row['uid'] == 1 ) {
             continue;
         }
-        $owner_select .= '<option value="' . $row['uid'] . '"' . ($owner_id == $row['uid'] ? 'selected="selected"' : '') . '>' . COM_getDisplayName($row['uid']) . '</option>';
+        $T->set_var(array(
+            'opt_value' => $row['uid'],
+            'opt_name' => COM_getDisplayName($row['uid']),
+            'selected' => $owner_id == $row['uid'],
+        ) );
+        $T->parse('opts', 'options', true);
     }
-    $owner_select .= '</select>';
-
+    $T->parse('option_list', 'optionlist');
+    $T->parse('output', 'selection');
+    $owner_select = $T->finish($T->get_var('output'));
     return $owner_select;
 }
 
