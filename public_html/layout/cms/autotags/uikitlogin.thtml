@@ -1,0 +1,38 @@
+{# begin {templatelocation} #}
+{!if login_button}
+<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">
+
+{!if modal}
+    <a href="{site_url}/users.php" class="uk-button uk-button-success" type="button">{lang_login}</a>
+</div>
+{!else}
+    <button class="uk-button uk-button-success tm-button-login" type="button" data-uk-modal="{target:'#modalOpen'}">{lang_login}</button>
+</div>
+<div id="modalOpen" class="uk-modal">
+    <div class="uk-modal-dialog uk-modal-dialog-medium">
+        <a href="#" class="uk-modal-close uk-close"></a>
+        {login_form}
+    </div>
+</div>
+<script>
+$('#modalOpen').on({ 'show.uk.modal': function(){ $('#loginname').focus(); }, });
+</script>
+{!endif}
+
+{!else}
+
+<ul class="uk-navbar-nav tm-navbar-nav uk-navbar-flip uk-margin-right">
+    <li class="uk-parent uk-hidden-small uk-visible@m" data-uk-dropdown>
+        <a href="#">{lang_login}&nbsp;<i class="uk-icon-caret-down"></i></a>
+        <div class="uk-dropdown tm-dropdown uk-dropdown-navbar">
+            <ul class="uk-nav uk-nav-navbar tm-nav-navbar">
+<!-- BEGIN MenuItems -->
+                <li><a href="{url}">{label}</a></li>
+<!-- END MenuItems -->
+            </ul>
+        </div>
+    </li>
+</ul>
+
+{!endif}
+{# end {templatelocation} #}

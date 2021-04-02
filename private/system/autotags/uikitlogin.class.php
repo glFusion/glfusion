@@ -23,54 +23,46 @@ class autotag_uikitlogin extends BaseAutotag {
 
     public function parse($p1, $p2='', $fulltag = '')
     {
-        global $_CONF, $LANG01, $LANG04;
+        global $_CONF, $LANG01, $LANG04, $_SYSTEM;
 
         $retval = '';
-        $modal = 0;
 
-        if ( $p1 != 0 && $p1 != 1 ) $p1 = 1;
-
-        $modal = (int) $p1;
-        if ( $modal != 0 && $modal != 1) $modal = 0;
+        $modal = (int)$p1;
+        if ($modal != 0) {
+            $modal = 1;
+        }
 
         if ( COM_isAnonUser() ) {
+            // Options sent to SEC_loginForm()
             $options = array(
                 'hide_forgotpw_link' => false,
                 'form_action'        => $_CONF['site_url'].'/users.php',
                 'plugin_vars'        => true,
+                'title'     => sprintf($LANG04[65],$_CONF['site_name']), // log in to {site_name}
+                'message' => '', //$LANG04[66]; // please enter your user name and password below
             );
-            $options['title']   = sprintf($LANG04[65],$_CONF['site_name']); // log in to {site_name}
-            $options['message'] = ''; //$LANG04[66]; // please enter your user name and password below
 
-            $retval .= '<div class="uk-navbar-content uk-navbar-flip uk-hidden-small">';
-
-            if ( $modal == 0 ) {
-                $retval .= '<button class="uk-button uk-button-success tm-button-login" type="button" data-uk-modal="{target:\'#modalOpen\'}">'.$LANG01[58].'</button></div>';
-                $retval .= '<div id="modalOpen" class="uk-modal">';
-                $retval .= '<div class="uk-modal-dialog uk-modal-dialog-medium"><a href="#" class="uk-modal-close uk-close"></a>';
-                $retval .= SEC_loginForm($options);
-                $retval .= '</div></div>';
-                $retval .= "
-                <script>
-                $('#modalOpen').on({ 'show.uk.modal': function(){ $('#loginname').focus(); }, });
-                </script>
-                ";
-            } else {
-                $retval .= '<a href="'.$_CONF['site_url'].'/users.php" class="uk-button uk-button-success" type="button">'.$LANG01[58].'</a></div>';
-            }
+            $T = new \Template($_CONF['path_layout'] . '/autotags');
+            $T->set_file('at', 'uikitlogin.thtml');
+            $T->set_var('login_button', true);
+            $T->set_var('lang_login', $LANG01[58]);
+            $T->set_var('login_form', SEC_loginForm($options));
+            $T->set_var('modal', $modal);
+            $retval .= $T->finish($T->parse('output', 'at'));
         } else {
-            $retval .= '<ul class="uk-navbar-nav tm-navbar-nav uk-navbar-flip uk-margin-right">';
-            $retval .= '<li class="uk-parent uk-hidden-small" data-uk-dropdown>';
-            $retval .= '<a href="#">'.$LANG01[47].'&nbsp;<i class="uk-icon-caret-down"></i></a>';
-            $retval .= '<div class="uk-dropdown tm-dropdown uk-dropdown-navbar">';
-            $retval .= '<ul class="uk-nav uk-nav-navbar tm-nav-navbar">';
+            $T = new \Template($_CONF['path_layout'] . '/autotags');
+            $T->set_file('at', 'uikitlogin.thtml');
+            $T->set_var('lang_header', $LANG01[47]);
+            $T->set_var('lang_login', $LANG01['47']);
+            $T->set_block('at', 'MenuItems', 'items');
             $userMenu = getUserMenu();
             foreach ($userMenu as $option) {
-                $retval .= '<li><a href="'.$option['url'].'">'.$option['label'].'</a></li>';
+                $T->set_var('url', $option['url']);
+                $T->set_var('label', $option['label']);
+                $T->parse('items', 'MenuItems', true);
             }
-            $retval .= '</ul></div></li></ul>';
+            $retval .= $T->finish($T->parse('output', 'at'));
         }
         return $retval;
     }
 }
-?>
