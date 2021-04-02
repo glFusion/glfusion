@@ -1173,38 +1173,46 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
 */
 function SEC_getGroupDropdown ($group_id, $access, $var_name='group_id')
 {
-    global $_TABLES;
-
-    $groupdd = '';
+    global $_TABLES, $_CONF;
 
     $db = Database::getInstance();
 
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file(array(
+        'dropdown' => 'selection.thtml',
+        'optionlist' => 'optionlist.thtml',
+    ) );
+    $T->set_var('var_name', $var_name);
+
     if ($access == 3) {
         $usergroups = SEC_getUserGroups ();
-
         uksort($usergroups, "strnatcasecmp");
 
-        $groupdd .= '<select name="' . $var_name . '">' . LB;
+        $T->set_block('optionlist', 'options', 'opts');
         foreach ($usergroups as $ug_name => $ug_id) {
-            $groupdd .= '<option value="' . $ug_id . '"';
-            if ($group_id == $ug_id) {
-                $groupdd .= ' selected="selected"';
-            }
-            $groupdd .= '>' . ucfirst($ug_name) . '</option>' . LB;
+            $T->set_var(array(
+                'opt_name' => ucfirst($ug_name),
+                'opt_value' => $ug_id,
+                'selected' => ($group_id == $ug_id),
+            ) );
+            $T->parse('opts', 'options', true);
         }
-        $groupdd .= '</select>' . LB;
+        $T->parse('option_list', 'opts');
     } else {
         // They can't set the group then
-        $groupdd .= $db->getItem (
+        $group_name = $db->getItem (
                         $_TABLES['groups'],
                         'grp_name',
                         array('grp_id' => $group_id),
                         array(Database::STRING)
-                    )
-                 . '<input type="hidden" name="' . $var_name . '" value="' . $group_id
-                 . '"/>';
+        );
+        $T->set_var(array(
+            'item_name' => $group_name,
+            'item_id' => $group_id,
+        ) );
     }
-
+    $T->parse('output', 'dropdown');
+    $groupdd = $T->finish($T->get_var('output'));
     return $groupdd;
 }
 
