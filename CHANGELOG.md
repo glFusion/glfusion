@@ -10,6 +10,7 @@
 
 - PHP v8 Compatibility Updates
 - Code error in SpamX logging for SFS checks
+- fusionrescue code cleanup - improved hanlding of configuration items with array values
 
 ## v1.7.9 (March 13, 2021)
 
