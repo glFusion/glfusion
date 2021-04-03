@@ -668,18 +668,21 @@ function getNewPaths( $group = 'Core') {
             ';
         } elseif ( $configDetail[$option]['type'] == '@select' ) {
             if ($option !== 'user_login_method') {
-                $retval .= '
-                    <div class="uk-form-row">
-                    <label class="uk-form-label">'.$option.'</label>
-                    <div class="uk-form-controls">
-                    &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
-                    <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
-                ';
-                $retval .= '
-                    </select>
-                    </div>
-                    </div>
-                ';
+                $unserializedValue = @unserialize($value);
+                if (!is_array($unserializedValue)) {
+                    $retval .= '
+                        <div class="uk-form-row">
+                        <label class="uk-form-label">'.$option.'</label>
+                        <div class="uk-form-controls">
+                        &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                        <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+                    ';
+                    $retval .= '
+                        </select>
+                        </div>
+                        </div>
+                    ';
+                }
             } else {
                 $ua_array = unserialize($value);
 
