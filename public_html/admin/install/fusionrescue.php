@@ -479,7 +479,7 @@ function processPlugins() {
     ';
 
     foreach ($plugins as $row) {
-        if ( $row['pi_name'] != '' ) {
+        if ( isset($row['pi_name']) && $row['pi_name'] != '' ) {
             $retval .= '
                 <tr>
                 <td>'.$row['pi_name'].'</td>
