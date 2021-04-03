@@ -1,5 +1,16 @@
 # glFusion CMS Long Term Support ChangeLog
 
+## v1.7.10 (Unreleased)
+
+### Changed
+
+- Minimum supported PHP version bumped to PHP v5.6.0
+
+### Fixed
+
+- PHP v8 Compatibility Updates
+- Code error in SpamX logging for SFS checks
+
 ## v1.7.9 (March 13, 2021)
 
 ### Updates

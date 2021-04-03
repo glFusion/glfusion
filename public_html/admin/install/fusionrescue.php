@@ -6,7 +6,7 @@
 // |                                                                          |
 // | Safely edit glFusion configuration                                       |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2020 by the following authors:                        |
+// | Copyright (C) 2008-2021 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -30,7 +30,7 @@
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
-define('GVERSION','1.7.9');
+define('GVERSION','1.7.10');
 
 if ( !file_exists('../../siteconfig.php')) die('Unable to locate siteconfig.php');
 
@@ -59,8 +59,10 @@ define('LOCAL_USER',1);
 define('REMOTE_USER',2);
 
 function FR_stripslashes( $text ) {
-    if( get_magic_quotes_gpc() == 1 ) {
-        return( stripslashes( $text ));
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+        if( get_magic_quotes_gpc() == 1 ) {
+            return( stripslashes( $text ));
+        }
     }
     return( $text );
 }
@@ -665,19 +667,37 @@ function getNewPaths( $group = 'Core') {
                 </div>
             ';
         } elseif ( $configDetail[$option]['type'] == '@select' ) {
-            $retval .= '
-                <div class="uk-form-row">
-                <label class="uk-form-label">'.$option.'</label>
-                <div class="uk-form-controls">
-                &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
-                <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+            if ($option !== 'user_login_method') {
+                $retval .= '
+                    <div class="uk-form-row">
+                    <label class="uk-form-label">'.$option.'</label>
+                    <div class="uk-form-controls">
+                    &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                    <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+                ';
+                $retval .= '
+                    </select>
+                    </div>
+                    </div>
+                ';
+            } else {
+                $ua_array = unserialize($value);
 
-            ';
-            $retval .= '
-                </select>
-                </div>
-                </div>
-            ';
+                foreach($ua_array AS $op => $val) {
+                    $retval .= '
+                        <div class="uk-form-row">
+                        <label class="uk-form-label">'.$option.'['.$op.']</label>
+                        <div class="uk-form-controls">
+                        &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                        <select name="cfgvalue[' . $option . ']['.$op.']">
+                        <option ' . ( $val == 0 ? ' selected="selected"' : '') . ' value="0">False</option>
+                        <option ' . ( $val == 1 ? ' selected="selected"' : '') . ' value="1">True</option>
+                        </select>
+                        </div>
+                        </div>
+                    ';
+                }
+            }
 
         }  else {
             $item = @unserialize($value);
