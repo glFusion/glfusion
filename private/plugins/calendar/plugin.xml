@@ -3,8 +3,8 @@
     <name>Calendar</name>
     <description>Online Calendar System</description>
     <version>1.1.2</version>
-    <glfusionversion>1.7.9</glfusionversion>
-    <phpversion>5.3.3</phpversion>
-    <url>http://www.glfusion.org</url>
+    <glfusionversion>1.7.10</glfusionversion>
+    <phpversion>5.6.0</phpversion>
+    <url>https://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>
 </plugin>

@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion Installation                                                    |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2020 by the following authors:                        |
+// | Copyright (C) 2008-2021 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -36,7 +36,7 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 @ini_set('opcache.enable','0');
 if (!defined('GVERSION')) {
-    define('GVERSION', '1.7.9');
+    define('GVERSION', '1.7.10');
 }
 
 define('SESSION_EXPIRED',           1);

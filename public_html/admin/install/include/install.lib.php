@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion installation script.                                            |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2020 by the following authors:                        |
+// | Copyright (C) 2008-2021 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // | Eric Warren            eric AT glfusion DOT org                          |
@@ -40,7 +40,7 @@ if (!defined('LB')) {
     define('LB', "\n");
 }
 if (!defined('SUPPORTED_PHP_VER')) {
-    define('SUPPORTED_PHP_VER', '5.3.3');
+    define('SUPPORTED_PHP_VER', '5.6.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
     define('SUPPORTED_MYSQL_VER', '5.0.15');
@@ -62,7 +62,7 @@ if ($LANG_DIRECTION == 'rtl') {
 // +---------------------------------------------------------------------------+
 
 if (!function_exists('INST_stripslashes') ) {
-    if (get_magic_quotes_gpc() == 1) {
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc() == 1) {
         function INST_stripslashes($text) {
             return stripslashes($text);
         }
@@ -1682,6 +1682,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             // no changes
             $current_fusion_version = '1.7.9';
 
+        case '1.7.9' :
+            // no changes
+            $current_fusion_version = '1.7.10';
+
         default:
             DB_query("INSERT INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
             DB_query("UPDATE {$_TABLES['vars']} SET value='".$current_fusion_version."' WHERE name='glfusion'",1);
@@ -1924,7 +1928,7 @@ function INST_pluginAutoInstall( $plugin )
 
 
 function INST_isWritable($path) {
-    if ($path{strlen($path)-1}=='/') {
+    if ($path[strlen($path)-1]=='/') {
         if ( !is_dir($path)) {
             return false;
         }
@@ -2209,7 +2213,7 @@ function INST_pluginExists($plugin)
 
 function INST_return_bytes($val) {
     $val = trim($val);
-    $last = strtolower($val{strlen($val)-1});
+    $last = strtolower($val[strlen($val)-1]);
     switch($last) {
         // The 'G' modifier is available since PHP 5.1.0
         case 'g':
