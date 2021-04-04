@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2019 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -48,9 +48,6 @@ function edituser()
             array($_USER['uid'],$_USER['uid'],$_USER['uid']),
             array(Database::INTEGER,Database::INTEGER,Database::INTEGER)
     );
-
-//    $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo,remoteservice,account_type FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']} AND {$_TABLES['userinfo']}.uid=".(int)$_USER['uid']);
-//    $A = DB_fetchArray ($result);
 
     $preferences = new Template ($_CONF['path_layout'] . 'preferences');
     $preferences->set_file (array ('profile'            => 'profile.thtml',
@@ -409,8 +406,6 @@ function confirmAccountDelete ($form_reqid)
             array(Database::STRING,Database::INTEGER)
     );
 
-//    DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', (int)$_USER['uid']);
-
     $retval = '';
 
     $retval .= COM_siteHeader ('menu', $LANG04[97]);
@@ -482,9 +477,6 @@ function editpreferences()
             array($_USER['uid'],$_USER['uid']),
             array(Database::INTEGER,Database::INTEGER)
     );
-//    $result = DB_query("SELECT noicons,willing,dfid,tzid,noboxes,maxstories,tids,aids,boxes,emailfromadmin,emailfromuser,showonline,search_result_format FROM {$_TABLES['userprefs']},{$_TABLES['userindex']} WHERE {$_TABLES['userindex']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']}");
-
-//    $A = DB_fetchArray($result);
 
     if ( $A['tzid'] == '' ) {
         $A['tzid'] = $_CONF['timezone'];
@@ -780,9 +772,9 @@ function editpreferences()
         if (($_CONF['contributedbyline'] == 1) && ($_CONF['hide_author_exclusion'] == 0)) {
             $preferences->set_var ('lang_authors', $LANG04[56]);
 
-$sql = "SELECT DISTINCT story.uid, users.username,users.fullname
-        FROM `{$_TABLES['stories']}` story, `{$_TABLES['users']}` users
-        WHERE story.uid = users.uid";
+            $sql = "SELECT DISTINCT story.uid, users.username,users.fullname
+                    FROM `{$_TABLES['stories']}` story, `{$_TABLES['users']}` users
+                    WHERE story.uid = users.uid";
 
             if ($_CONF['show_fullname'] == 1) {
                 $sql .= ' ORDER BY users.fullname';
@@ -790,16 +782,12 @@ $sql = "SELECT DISTINCT story.uid, users.username,users.fullname
                 $sql .= ' ORDER BY users.username';
             }
 
-$stmt = $db->conn->query($sql);
+            $stmt = $db->conn->query($sql);
 
-//            $query = DB_query ($sql);
-//            $nrows = DB_numRows ($query );
             $authors = explode (' ', $A['aids']);
 
             $selauthors = '';
             while ($B = $stmt->fetch(Database::ASSOCIATIVE)) {
-//            for( $i = 0; $i < $nrows; $i++ ) {
-//                $B = DB_fetchArray ($query);
                 $selauthors .= '<option value="' . $B['uid'] . '"';
                 if (in_array (sprintf ('%d', $B['uid']), $authors)) {
                    $selauthors .= ' selected';
@@ -841,7 +829,6 @@ $stmt = $db->conn->query($sql);
     } else {
         $preferences->set_var('digest_block', '');
     }
-
 
     if ( $_CONF['hide_exclude_content'] != 1 ) {
         // boxes block
@@ -1048,7 +1035,7 @@ function saveuser($A)
     $reqid = DB_getItem ($_TABLES['users'], 'pwrequestid',"uid = " . (int) $_USER['uid']);
     if ($reqid != $A['uid']) {
         DB_change ($_TABLES['users'], 'pwrequestid', "NULL", 'uid', (int) $_USER['uid']);
-        COM_accessLog ("An attempt was made to illegally change the account information of user {$_USER['uid']}.");
+        COM_accessLog ("An attempt was made to change the account information without a proper password for user {$_USER['uid']}.");
 
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
@@ -1713,28 +1700,28 @@ function savepreferences($A)
         }
     }
 
+    $TIDS = array();
+    $AIDS = array();
+    $BOXES = array();
+    $ETIDS = array();
+    $AETIDS = array();
+
     if (isset($A['topics']) && is_array($A['topics'])) {
         $TIDS  = @array_values($A['topics']);
-    } else {
-        $TIDS = array();
     }
     if (isset($A['selauthors']) && is_array($A['selauthors'])) {
         $AIDS  = @array_values($A['selauthors']);
-    } else {
-        $AIDS = array();
     }
     if (isset($A['blocks']) && is_array($A['blocks'])) {
         $BOXES = @array_values($A['blocks']);
-    } else {
-        $BOXES = array();
     }
     if (isset($A['dgtopics']) && is_array($A['dgtopics'])) {
-        $ETIDS = @array_values($A['dgtopics']);
-    } else {
-        $ETIDS = array();
+        $ETIDS = @array_values($A['dgtopics']); 
     }
     $allowed_etids = USER_buildTopicList ();
-    $AETIDS = explode (' ', $allowed_etids);
+    if (is_array($allowed_etids)) {
+        $AETIDS = explode (' ', $allowed_etids);
+    }
 
     $tids = '';
     if (is_array($TIDS) && sizeof ($TIDS) > 0) {
@@ -1873,14 +1860,16 @@ $display = '';
 if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     switch ($mode) {
     case 'saveuser':
+        // validate the password is correct.
+        $account_type = DB_getItem ($_TABLES['users'], 'account_type', "uid = {$_USER['uid']}");
+        $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
+        $current_password = DB_getItem($_TABLES['users'], 'passwd',"uid = {$_USER['uid']}");
+        if (empty($_POST['passwd']) || !SEC_check_hash($_POST['passwd'],$current_password)) {
+            COM_setMsg($MESSAGE[83],'error');
+            return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+        }
         savepreferences ($_POST);
         $display .= saveuser($_POST);
-        break;
-
-    case 'savepreferences':
-        savepreferences ($_POST);
-        COM_setMsg( $MESSAGE[6], 'info',false );
-        $display .= COM_refresh ($_CONF['site_url'].'/usersettings.php?mode=preferences');
         break;
 
     case 'confirmdelete':
@@ -1888,7 +1877,6 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
             $accountId = COM_applyFilter ($_POST['account_id']);
 
             $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
-//            if (!empty ($accountId) && !empty($_POST['current_password']) && SEC_check_hash(trim($_POST['current_password']),$current_password)) {
             if (!empty ($accountId)) {
                 $display .= confirmAccountDelete ($accountId);
             } else {
