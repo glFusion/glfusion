@@ -34,13 +34,9 @@
 
 			<fieldset data-uk-margin>
 				<legend>{lang_password_email_legend}</legend>
-				<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
-					<span class="warningsmall"><p>{lang_enter_current_password}</p></span>
-					<p>{lang_password_help}</p>
-				</div>
 
 				<div class="uk-panel uk-panel-box">
-					{current_password_option}
+
 					{password_option}
 					{resynch_option}
 					<div class="uk-form-row">
@@ -153,7 +149,19 @@
 		<input type="hidden" name="uid" value="{uid_value}" />
 		<input type="hidden" name="mode" value="saveuser" />
 		<input type="hidden" name="username" value="{username_value}" />
+
+		
 		<div id="save_button" class="uk-margin">
+
+			<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin uk-alert uk-alert-danger">
+				<span class="warningsmall"><p>{lang_enter_current_password}</p></span>
+			</div>
+
+			<div class="uk-form-row uk-margin-bottom">
+				{current_password_option}
+			</div>
+
+	
 			<button class="uk-button uk-button-primary" type="submit" name="btnsubmit" value="{lang_submit}">{lang_submit}</button>
 			<button class="uk-button uk-button-danger" type="submit" name="btncancel" value="{lang_cancel}">{lang_cancel}</button>
 		</div>
@@ -169,8 +177,9 @@
 </div>
 <!-- end needs fixing -->
 
-{# JS Functions which will execute only if JS enabled will un-hide the special features that enhance the profile editor #}
 <script>
+	$("#profileform").validate();
+
 	/* Initially the navbar is hidden - in case JS is disabled. Enable it now */
 	document.getElementById('pe_navbar').style.display='';
 
@@ -192,8 +201,6 @@
 			profilepanels[divname] = 'hidden';
 		}
 	}
-</script>
-<script>
 	$( document ).ready(function() {
 {!if delete_active}
 		showhideProfileEditorDiv('pe_delete', {delete_idx});
