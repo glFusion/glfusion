@@ -168,7 +168,7 @@ if ( isset($_GET['mode']) ) {
 }
 
 $content = '';
-$expected = array('ajaxtoggle', 'savelogos', 'del_logo_img');
+$expected = array('ajaxupload', 'ajaxtoggle', 'savelogos', 'del_logo_img');
 $action = 'listlogos';
 foreach ($expected as $provided) {
     if (isset($_POST[$provided])) {
@@ -177,6 +177,16 @@ foreach ($expected as $provided) {
 }
 
 switch ($action) {
+case 'ajaxupload':
+    $Logo = new Logo($_POST['theme']);
+    $retval = array(
+        'status' => false,
+    );
+    $retval = $Logo->handleUpload($_FILES['images'], 0);
+    echo json_encode($retval);
+    exit;
+    break;
+
 case 'ajaxtoggle':
     $Logo = new Logo($_POST['theme']);
     if (!$Logo->Exists()) {
@@ -186,6 +196,7 @@ case 'ajaxtoggle':
     switch ($_POST['type']) {
     case 'display_site_slogan':
     case 'logo_type':
+    case 'enabled':
         $oldval = (int)$_POST['oldval'];
         $newval = (int)$_POST['newval'];
         $result = $Logo->setval($_POST['type'], $oldval, $newval);
@@ -221,7 +232,17 @@ case 'del_logo_img':
     break;
 
 case 'savelogos':
-    Logo::saveLogos();
+    $messages = Logo::saveLogos();
+    $msg = '';
+    foreach ($messages as $key=>$info) {
+        if (isset($info['message'])) {
+            $msg .= '<li>' . $info['theme'] . ': ' . $info['message'] . '</li>';
+        }
+    }
+    if (!empty($msg)) {
+        $msg = '<ul>' . $msg . '</ul>';
+        COM_setMsg($msg, 'error');
+    }
     COM_refresh($_CONF['site_url'] . '/admin/logo.php');
     break;
 case 'listlogos':

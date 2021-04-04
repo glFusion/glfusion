@@ -5,7 +5,9 @@ function LogoToggle(cbox, id, type, oldval) {
         newval = cbox.value;
     } else {
         newval = cbox.checked ? 1 : 0;
+        oldval = cbox.checked ? 0 : 1;
     }
+
     var dataS = {
         "ajaxtoggle": "true",
         "theme": id,
@@ -65,12 +67,53 @@ function LOGO_delImage(theme_name)
     });
     return false;
 }
+
+function LOGO_changeFile(fld, theme)
+{
+    //console.log(fld);
+    if (window.FormData) {
+        formdata = new FormData();
+        reader = new FileReader();
+        reader.onloadend = function(e) {
+//            console.log(e);
+        }
+        file = fld.files[0];
+        reader.readAsDataURL(file);
+        formdata.append("images[]", file);
+        formdata.append("ajaxupload", "x");
+        formdata.append("theme", theme);
+        $.ajax({
+            url: "{site_admin_url}/logo.php",
+            type: "POST",
+            data: formdata,
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                if (res.status) {
+                    elem = $("#logo_file_" + theme);
+                    html = 
+                    '<span id="logo_url[' + theme + ']">' + res.url + '</span>' +
+                    '<br />' +
+                    '<figcaption class="uk-overlay-panel uk-overlay-background uk-overlay-bottom uk-overlay-slide-bottom">' +
+                    '<button class="uk-button uk-button-mini uk-button-danger" onclick="return LOGO_delImage(\'' + theme + '\');">Delete</button></figcaption>';
+console.log(html);
+                    elem.html(html);
+                } else {
+                    console.log("invalid logo image uploaded");
+                }
+                //document.getElementById("response").innerHTML = res; 
+            }
+        });
+    }
+}
 </script>
 <form class="uk-form" action="{site_admin_url}/logo.php"
     method="post" enctype="multipart/form-data">
 <table class="uk-table">
     <tr>
         <th>Theme</th>
+        <th>Enabled</th>
         <th>Logo Type</th>
         <th>Show Site Slogan?</th>
         <th>Logo File</th>
@@ -80,10 +123,20 @@ function LOGO_delImage(theme_name)
     <tr>
         <td>{theme_name}</td>
         <td>
-            <select name="logo_type_{theme_name}" id="logo_type_{theme_name}"
+            <input type="checkbox" name="enabled[{theme_name}]" value="1"
+{!if enabled}
+                checked="checked"
+{!endif}
+{!if disabled}
+                disabled="disabled"
+{!endif}
+                onchange="LogoToggle(this, '{theme_name}', 'enabled', this.value);" />
+        </td>
+        <td>
+            <select name="logo_type[{theme_name}]" id="logo_type_{theme_name}"
                 onchange='LogoToggle(this, "{theme_name}", "logo_type", "{type_sel}");'>
 {!if not_default}
-                <option value="-1" {typs_sel_-1}>Default</option>
+                <option value="-1" {type_sel_-1}>Default</option>
 {!endif}
                 <option value="0" {type_sel_0}>None</option>
                 <option value="1" {type_sel_1}>Graphic</option>
@@ -91,7 +144,7 @@ function LOGO_delImage(theme_name)
             </select>
         </td>
         <td>
-            <select name="display_site_slogan_{theme_name}" id="display_site_slogan_{theme_name}"
+            <select name="display_site_slogan[{theme_name}]" id="display_site_slogan_{theme_name}"
                 onchange='LogoToggle(this, "{theme_name}", "display_site_slogan", "{slogan_sel}");'>
 {!if not_default}
                 <option value="-1" {slogan_sel_-1}>Default</option>
@@ -104,7 +157,7 @@ function LOGO_delImage(theme_name)
             <figure class="uk-overlay uk-overlay-hover">
                 <span id="logo_file_{theme_name}">
 {!if img_url}
-                    {img_url}
+                    <span id="logo_url[{theme_name}]">{img_url}</span>
                     <br />
                     <figcaption class="uk-overlay-panel uk-overlay-background uk-overlay-bottom uk-overlay-slide-bottom">
                         <button class="uk-button uk-button-mini uk-button-danger" onclick="return LOGO_delImage('{theme_name}');">Delete</button></figcaption>
@@ -113,13 +166,15 @@ function LOGO_delImage(theme_name)
             </figure>
         </td>
         <td>
-            <input type="file" name="newlogo[{theme_name}]" />
+            <input type="file" name="newlogo[{theme_name}]" id="newlogo[{theme_name}]" onchange="LOGO_changeFile(this, '{theme_name}');"/>
         </td>
     </tr>
 <!-- END dataRow -->
 </table>
+{!if 0}
 <div>
     <button type="submit" class="uk-button uk-button-success" name="savelogos">{$LANG_ADMIN['submit']}</button>
 </div>
+{!endif}
 </form>
 {# end {templatelocation} #}

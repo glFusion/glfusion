@@ -47,6 +47,10 @@ class Logo
      * @var string */
     private $theme = '_default';
 
+    /** Enabled flag.
+     * @var boolean */
+    private $enabled = 0;
+
     /** Use a graphic logo?
      * @var boolean */
     private $logo_type = -1;
@@ -62,6 +66,10 @@ class Logo
     /** Flag indicating the theme record was found.
      * @var boolean */
     private $exists = 0;
+
+    /** Flag to indicate that some change has been made.
+     * @var boolean */
+    private $tainted = false;
 
 
     /**
@@ -83,9 +91,10 @@ class Logo
     /**
      * Get all the themes that have DB records.
      *
+     * @param   boolean $all    True to get both enabled and disabled themes
      * @return  array       Array of DB record arrays
      */
-    private static function getThemes()
+    private static function getThemes($all=false)
     {
         static $themes = array();
         if (!empty($themes)) {
@@ -95,6 +104,9 @@ class Logo
         try {
             // @todo: need table name
             $sql = "SELECT * FROM " . self::$table;
+            if (!$all) {
+                $sql .= " WHERE enabled = 1";
+            }
             $stmt = Database::getInstance()
                 ->conn->executeQuery(
                     $sql
@@ -127,12 +139,73 @@ class Logo
 
         $themes = self::getThemes();
         $this->theme = $theme;
-        $this->logo_type = (int)$themes[self::$default]['logo_type'];
-        $this->display_site_slogan = (int)$themes[self::$default]['display_site_slogan'];
-        $this->logo_file = $themes[self::$default]['logo_file'];
-        if (isset($themes[$theme])) {
-            $this->_override($themes[$theme]);
+        $default = $themes[self::$default];
+
+        // Set vars directly to avoid tainting if already exists.
+        $this->logo_type = (int)$default['logo_type'];
+        $this->display_site_slogan = (int)$default['display_site_slogan'];
+        $this->logo_file = $default['logo_file'];
+
+        if (array_key_exists($theme, $themes)) {
             $this->exists = 1;
+            $this->tainted = false;
+            $this->enabled = $themes[$theme]['enabled'];
+            $this->_override($themes[$theme]);
+        } else {
+            $this->exists = 0;
+            $this->tainted = true;  // doesn't exist in table yet, need to save
+        }
+        if (!$this->exists) {
+            // Create the DB record if it doesn't exist.
+            $this->Save();
+        }
+        return $this;
+    }
+
+
+    /**
+     * Set the logo type - graphic, text or none
+     *
+     * @param   integer $type   Logo type flag
+     * @return  object  $this
+     */
+    public function setLogoType($type)
+    {
+        if ($type != $this->logo_type) {
+            $this->logo_type = (int)$type;
+            $this->tainted = true;
+        }
+        return $this;
+    }
+
+
+    /**
+     * Set the flag to display the site slogan or not.
+     *
+     * @param   integer $type   Display flag
+     * @return  object  $this
+     */
+    public function setDisplaySiteSlogan($flag)
+    {
+        if ($flag != $this->display_site_slogan) {
+            $this->display_site_slogan = $flag ? 1 : 0;
+            $this->tainted = true;
+        }
+        return $this;
+    }
+
+
+    /**
+     * Set the logo image filename.
+     *
+     * @param   string  $name   Image filename
+     * @return  object  $this
+     */
+    public function setImageName($name)
+    {
+        if ($name != $this->logo_file) {
+            $this->logo_file = $name;
+            $this->tainted = true;
         }
         return $this;
     }
@@ -146,13 +219,13 @@ class Logo
      */
     private function _override($A)
     {
-        if ($A['logo_type'] != self::DEFAULT) {
+        if (isset($A['logo_type']) && $A['logo_type'] > -1) {
             $this->logo_type = (int)$A['logo_type'];
         }
-        if ($A['display_site_slogan'] != self::DEFAULT) {
+        if (isset($A['display_site_slogan']) && $A['display_site_slogan'] > -1) {
             $this->display_site_slogan = (int)$A['display_site_slogan'];
         }
-        if (!empty($A['logo_file'])) {
+        if (isset($A['logo_file']) && !empty($A['logo_file'])) {
             $this->logo_file = $A['logo_file'];
         }
         return $this;
@@ -225,7 +298,7 @@ class Logo
 
 
     /**
-     * Get the full path to the logo image.
+     * Get the full path to the logo image, including the filename.
      *
      * @return  string      Filesystem path to logo image
      */
@@ -272,6 +345,9 @@ class Logo
             ));
 
             $imgInfo = @getimagesize($this->getImagePath());
+            if (!is_array($imgInfo)) {
+                return '';
+            }
             $dimension = $imgInfo[3];
 
             $L->set_var( 'site_name', $_CONF['site_name'] );
@@ -306,22 +382,48 @@ class Logo
      *
      * @return  object  $this
      */
-    public function createRecord()
+    public function Save()
     {
         global $_TABLES;
 
-        // TODO: Fix table name
-        $sql = "INSERT INTO " . self::$table . "SET
+        if (!$this->tainted) {
+            // No changes made, act as if successful.
+            return $this;
+        }
+
+        $sql = "INSERT INTO " . self::$table . " SET
             theme = ?,
-            logo_type = -1,
-            display_site_slogan = -1,
-            logo_file = ''";
+            logo_type = ?,
+            display_site_slogan = ?,
+            logo_file = ?
+            ON DUPLICATE KEY UPDATE
+            logo_type = ?,
+            display_site_slogan = ?,
+            logo_file = ?";
         $stmt = Database::getInstance()
             ->conn->executeQuery(
                 $sql,
-                array($this->theme),
-                array(Database::STRING)
+                array(
+                    $this->theme,
+                    $this->logo_type,
+                    $this->display_site_slogan,
+                    $this->logo_file,
+                    $this->logo_type,
+                    $this->display_site_slogan,
+                    $this->logo_file,
+                ),
+                array(
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING,
+                )
             );
+        $this->tainted = false;
+        $this->exists = true;
         return $this;
     }
 
@@ -342,7 +444,6 @@ class Logo
         // Determing the new value (opposite the old)
         $oldvalue = (int)$oldvalue;
         $newvalue = (int)$newvalue;
-        COM_errorLog("changing $field from $oldvalue to $newvalue for {$this->theme}");
 
         $sql = "UPDATE " . self::$table .
                  " SET $field  = ?
@@ -396,9 +497,11 @@ class Logo
         $data_arr = array(
             array(
                 'theme' => self::$default,
+                'enabled' => false,
                 'logo_type' => (int)$dbThemes[self::$default]['logo_type'],
                 'display_site_slogan' => (int)$dbThemes[self::$default]['display_site_slogan'],
                 'logo_file' => $dbThemes[self::$default]['logo_file'],
+                'disabled' => 1,
             )
         );
 
@@ -410,23 +513,27 @@ class Logo
                         $logo_type = (int)$dbThemes[$dirname]['logo_type'];
                         $show_slogan = (int)$dbThemes[$dirname]['display_site_slogan'];
                         $logo_file = $dbThemes[$dirname]['logo_file'];
+                        $enabled = $dbThemes[$dirname]['enabled'];
                     } else {
                         $logo_type = 0;
                         $show_slogan = 0;
                         $logo_file = '';
+                        $enabled = 0;
                     }
                     $data_arr[] = array(
                         'theme' => $dirname,
+                        'enabled' => $enabled,
                         'logo_type' => $logo_type,
                         'display_site_slogan' => $show_slogan,
                         'logo_file' => $logo_file,
+                        'disabled' => 0,
                     );
                 }
             }
         }
 
         USES_lib_admin();
-    
+
         $menu_arr = array(
             array(
                 'url'  => $_CONF['site_admin_url'],
@@ -460,7 +567,13 @@ class Logo
                     )
                 );
             }
-
+            $T->clear_var('type_sel_-1');
+            $T->clear_var('type_sel_0');
+            $T->clear_var('type_sel_1');
+            $T->clear_var('type_sel_2');
+            $T->clear_var('slogan_sel_-1');
+            $T->clear_var('slogan_sel_0');
+            $T->clear_var('slogan_sel_1');
             $T->set_var(array(
                 'theme_name'    => $A['theme'],
                 'not_default'   => $A['theme'] != self::$default,
@@ -470,6 +583,8 @@ class Logo
                 'img_url'       => $img_url,
                 'type_sel'      => $A['logo_type'],
                 'slogan_sel'    => $A['display_site_slogan'],
+                'enabled'       => $A['enabled'],
+                'disabled'      => $A['disabled'],
             ) );
             $T->parse('DR', 'dataRow', true);
         }
@@ -491,35 +606,64 @@ class Logo
         $retval = array();
         $files = $_FILES['newlogo'];
         foreach ($files['name'] as $theme=>$filename) {
-            if (
-                !isset($files['tmp_name'][$theme]) ||
-                $files['tmp_name'][$theme] == ''
-            ) {
-                continue;
-            }
-
-            switch ($files['type'][$theme]) {
-            case 'image/png' :
-            case 'image/x-png' :
-                $ext = '.png';
-                break;
-            case 'image/gif' :
-                $ext = '.gif';
-                break;
-            case 'image/jpg' :
-            case 'image/jpeg' :
-            case 'image/pjpeg' :
-                $ext = '.jpg';
-                break;
-            default :
-                $ext = 'unknown';
-                break;
-            }
+            // Create or update the theme record.
+            $Logo = new self($theme);
             $thisinfo = array(
                 'theme' => $theme,
             );
-            if ($ext != 'unknown') {
-                $imgInfo = @getimagesize($files['tmp_name'][$theme]);
+            if ($theme == 'cms') {
+                var_dump($Logo);
+            }
+
+            if (isset($_POST['logo_type'][$theme])) {
+                $Logo->setLogoType($_POST['logo_type'][$theme]);
+            }
+            if (isset($_POST['display_site_slogan'][$theme])) {
+                $Logo->setDisplaySiteSlogan($_POST['display_site_slogan'][$theme]);
+            }
+            if ($theme == 'cms') {
+//                var_dump($Logo);die;
+            }
+
+            // Handle the file upload, if any
+            if (
+                isset($files['tmp_name'][$theme]) &&
+                $files['tmp_name'][$theme] != ''
+            ) {
+                $Logo->handleUpload($files, $theme);
+            }
+        }
+    }
+
+
+    public function handleUpload($files, $index)
+    {
+        global $_CONF;
+
+        $thisinfo = array(
+            'status' => false,
+        );
+        switch ($files['type'][$index]) {
+        case 'image/png' :
+        case 'image/x-png' :
+            $ext = '.png';
+            break;
+        case 'image/gif' :
+            $ext = '.gif';
+            break;
+        case 'image/jpg' :
+        case 'image/jpeg' :
+        case 'image/pjpeg' :
+            $ext = '.jpg';
+            break;
+        default :
+            $ext = 'unknown';
+            break;
+        }
+        $thisinfo = array();
+        if ($ext != 'unknown') {
+            $imgInfo = @getimagesize($files['tmp_name'][$index]);
+            if ($imgInfo) {
                 if (
                     $imgInfo[0] > $_CONF['max_logo_width'] ||
                     $imgInfo[1] > $_CONF['max_logo_height']
@@ -528,36 +672,29 @@ class Logo
                 } else {
                     $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;
                     $rc = move_uploaded_file(
-                        $files['tmp_name'][$theme],
+                        $files['tmp_name'][$index],
                         $_CONF['path_html'] . 'images/' . $newlogoname
                     );
-                    @chmod($_CONF['path_html'] . 'images/' . $newlogoname,0644);
                     if ($rc) {
-                        $logo_name = $newlogoname;
-                        $thisinfo['logo_file'] = $logo_name;
-
-                        // Now update the themes table
-                        $Logo = new self($theme);
-                        if (!$Logo->Exists()) {
-                            $Logo->createRecord();
-                        }
-                        $Logo->updateFile($logo_name);
+                        @chmod($_CONF['path_html'] . 'images/' . $newlogoname,0644);
+                        $this->setImageName($newlogoname);
+                        $thisinfo['status'] = true;
                     }
                 }
             } else {
                 $thisinfo['message'] = _('Unknown file type uploaded');
-                $thisinfo['url'] =  COM_createImage(
-                    $_CONF['site_url'] . '/images/' . $logo_name,
-                    _('Logo Image'),
-                    array(
-                        'style' => 'width:auto;height:100px',
-                    )
-                );
             }
-            $retval[] = $thisinfo;
         }
-        return $retval;
+        $thisinfo['url'] =  COM_createImage(
+            $_CONF['site_url'] . '/images/' . $this->logo_file,
+            _('Logo Image'),
+            array(
+                'style' => 'width:auto;height:100px',
+            )
+        );
+
+        $this->Save();
+        return $thisinfo;
     }
 
 }
-
