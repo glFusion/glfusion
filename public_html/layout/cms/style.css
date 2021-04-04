@@ -1,5 +1,5 @@
-/*@ glFusion CMS Theme 1.7.1 | https://www.glfusion.org
-(c) 2017 glFusion | GNU GPLv2 License */
+/*@ glFusion CMS Theme 2.0.0 | https://www.glfusion.org
+(c) 2017-2021 glFusion | GNU GPLv2 License */
 /* ========================================================================
 This should contain site wide styles that augment the UIKIT styles
 
@@ -2652,6 +2652,6 @@ pre {
 .cc-grid-item {
     text-align: center;
     margin-top: 20px;
-    width:100px;
-    height:100px;
+    width:85px;
+    height:85px;
 }
