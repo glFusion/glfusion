@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2010-2019 by the following authors:
+*  Copyright (C) 2010-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -52,7 +52,7 @@ function editPreferences()
               'text' => $LANG28[54]),
         array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
                           'text' => $LANG28[95],'active'=>true),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 

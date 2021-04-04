@@ -1,29 +1,26 @@
 <?php
 /**
- * glFusion Database Administraiton
- *
- * dbAdmin class
- *
- * LICENSE: This program is free software; you can redistribute it
- *  and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * @category   glFusion CMS
- * @package    dbAdmin
- * @author     Mark R. Evans  mark AT glFusion DOT org
- * @copyright  2015-2017 - Mark R. Evans
- * @license    http://opensource.org/licenses/gpl-2.0.php - GNU Public License v2 or later
- * @since      File available since Release 1.6.3
- */
+* glFusion CMS
+*
+* dbAdmin Class
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2015-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined('GVERSION')) {
     die('This file can not be used on its own.');
 }
 
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
+
 class dbAdmin
 {
-    protected $dbHandle;
     protected $dbName;
     protected $activeTables = array();
     protected $ajaxHandler;
@@ -33,14 +30,14 @@ class dbAdmin
     protected $returnItem = array();
     protected $prefix = '';
 
-    public function __construct( $database, $dbHandle, $prefix, $activeTables = array(), $isAjax = 0 )
+    public function __construct( $database, $prefix, $activeTables = array(), $isAjax = 0 )
     {
-        $this->dbHandle = $dbHandle;
         $this->dbName = $database;
-        $this->dbHandle->setDisplayError(true);
         $this->activeTables = $activeTables;
         $this->isAjax = $isAjax;
-        if ( $this->isAjax ) $this->ajaxHandler = new AjaxHandler;
+        if ($this->isAjax) {
+            $this->ajaxHandler = new AjaxHandler;
+        }
     }
 
     public function getLastError()
@@ -50,15 +47,15 @@ class dbAdmin
 
     public function returnResult()
     {
+        if ( is_array($this->returnItem) && count($this->returnItem) > 0) {
+            list($name, $value) = $this->returnItem;
+        } else {
+            $name = 'retval';
+            $value = $this->returnItem;
+        }
         if ( $this->isAjax ) {
             $this->ajaxHandler->setErrorCode($this->errorCode);
             $this->ajaxHandler->setMessage($this->lastError);
-            if ( is_array($this->returnItem) && count($this->returnItem) > 0) {
-                list($name, $value) = $this->returnItem;
-            } else {
-                $name = 'retval';
-                $value = $this->returnItem;
-            }
             $this->ajaxHandler->setResponse($name,$value);
             $this->ajaxHandler->sendResponse();
         }
@@ -71,21 +68,28 @@ class dbAdmin
 
     public function getTableList( $engine = '' )
     {
+
+        $db = Database::getInstance();
+
         $this->errorCode = 0;
         $this->lastMessage = '';
 
-        $queryShowTables = $this->dbHandle->dbQuery("SHOW TABLES");
-
-        $numTables = $this->dbHandle->dbNumRows($queryShowTables);
-// debug / dvlp
-//$numTables = 4;
-        for ($i = 0; $i < $numTables; $i++) {
-            $row = $this->dbHandle->dbFetchArray($queryShowTables,true);
+        $sql = "SHOW TABLES";
+        try {
+            $stmt = $db->conn->executeQuery($sql);
+        } catch(Throwable $e) {
+            $this->errorCode = 1;
+            $this->lastError = 'Table list was empty';
+            $this->returnResult();
+        }
+        $queryShowTables = $stmt->fetchAll(Database::NUMERIC);
+        $stmt->closeCursor();
+        foreach($queryShowTables AS $row) {
             $table = $row[0];
             $tblPrefix = substr($table,0,strlen($this->prefix));
             if ( $tblPrefix == $this->prefix ) {
-                $queryTableStatus = $this->dbHandle->dbQuery("SHOW TABLE STATUS FROM {$this->dbName} LIKE '$table'",true);
-                $statusRow = $this->dbHandle->dbFetchArray($queryTableStatus,true);
+                $sql = "SHOW TABLE STATUS FROM {$this->dbName} LIKE '$table'";
+                $statusRow = $db->conn->fetchAssoc($sql);
                 if ( $engine != '' ) {
                     if (strcasecmp($statusRow['Engine'], $engine) == 0) {
                         continue;
@@ -104,21 +108,23 @@ class dbAdmin
 
     public function getColumnList ( $table )
     {
+        $db = Database::getInstance();
+
         $this->errorCode = 0;
         $this->lastError = '';
         $columnList = array();
 
-        $describeResult = $this->dbHandle->dbQuery("DESCRIBE {$table};",true);
-        $numColumns = $this->dbHandle->dbNumRows($describeResult);
-
-        if ( $numColumns > 0 ) {
-            for ($i = 0; $i < $numColumns; $i++ ) {
-                $row = $this->dbHandle->dbFetchArray($describeResult,true);
-                $columnList[] = $row[0];
-            }
-        } else {
+        try {
+            $stmt = $db->conn->executeQuery("DESCRIBE {$table}");
+        } catch(Throwable $e) {
             $this->errorCode = 1;
             $this->lastError = 'Column list for table ' . $table. ' returned no columns';
+            $this->returnResult();
+        }
+
+        $dbColumns = $stmt->fetchAll(Database::NUMERIC);
+        foreach($dbColumns AS $row) {
+                $columnList[] = $row[0];
         }
         $this->returnItem = array('columnlist',$columnList);
         $this->returnResult();
@@ -163,14 +169,12 @@ class dbAdmin
 
     public function logError( $table, $column = '')
     {
-        $this->lastError = $this->dbHandle->dbError();
         $errorMsg = 'SQL error for table "' . $table . '" ';
         if ( $column != '' ) {
             $errorMsg .= 'column "' . $column . '" ';
         }
-        $errorMsg .= '(ignored): ' . $this->lastError;
         $this->errorCode = 1;
-        COM_errorLog($errorMsg);
+        Log::write('system',Log::ERROR,$errorMsg);
     }
 
 }

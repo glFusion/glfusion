@@ -1,3 +1,22 @@
 {# begin {templatelocation} #}
-{cc_rows}
+<h2>
+    glFusion {gversion}{patchlevel} -- {title}
+</h2>
+<div class="uk-grid uk-margin">
+<!-- BEGIN Items -->
+    <div class="cc-grid-item">
+        <div class="uk-margin-remove">
+            <a href="{page_url}">
+                <img src="{page_image}" alt="{option_label}">
+            </a>
+        </div>
+        <div class="uk-margin-remove">
+            <a href="{page_url}">{option_label}</a>
+        </div>
+{!if count}
+        <div class="uk-badge uk-badge-notification uk-badge-danger badge-notify" style="box-sizing:content-box !important;">{count}</div>
+{!endif}
+    </div>
+<!-- END Items -->
+</div>
 {# end {templatelocation} #}

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -39,7 +39,7 @@ function _logoEdit() {
     $retval = '';
 
     $menu_arr = array(
-            array('url'  => $_CONF['site_admin_url'],
+            array('url'  => $_CONF['site_admin_url'].'/index.php',
                   'text' => $LANG_ADMIN['admin_home']),
     );
     $retval  .= COM_startBlock($LANG_LOGO['logo_options'],'', COM_getBlockTemplate('_admin_block', 'header'));

@@ -2050,7 +2050,7 @@ function FF_navbar ($menuitems, $selected='', $parms='') {
     }
 
     $menu_arr = array_merge($menu_arr,array (
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     ));
 
@@ -2223,7 +2223,7 @@ function plugin_profileblocksdisplay_forum( $uid )
                 'liked-user' => COM_getDisplayName($row['poster_id']),
                 'forum-thread' => @htmlspecialchars($row['subject'],ENT_COMPAT,COM_getEncodingt()),
                 'forum-snippit' => @htmlspecialchars($row['comment'],ENT_COMPAT,COM_getEncodingt()),
-                'forum-thread-link' => $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$row['topic_id'] . '#' . $row['topic_id'],
+                'forum-thread-link' => $_CONF['site_url'].'/forum/viewtopic.php?topic='.$row['topic_id'] . '#' . $row['topic_id'],
                 'postinfo' => $postinfo,
             ));
             $T->parse('likesblock','likes',true);
@@ -2272,7 +2272,7 @@ function plugin_profileblocksdisplay_forum( $uid )
                 'liked-user-id' => $row['poster_id'],
                 'forum-thread' => @htmlspecialchars($row['subject'],ENT_COMPAT,COM_getEncodingt()),
                 'forum-snippit' => @htmlspecialchars($row['comment'],ENT_COMPAT,COM_getEncodingt()),
-                'forum-thread-link' => $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$row['topic_id'] . '#' . $row['topic_id'],
+                'forum-thread-link' => $_CONF['site_url'].'/forum/viewtopic.php?topic='.$row['topic_id'] . '#' . $row['topic_id'],
                 'postinfo' => $postinfo,
             ));
             $T->parse('givenlikesblock','givenlikes',true);

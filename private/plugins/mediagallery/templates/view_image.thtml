@@ -52,10 +52,10 @@
 
 <div class="uk-thumbnail uk-slidenav-position">
 {!if media_link_start}
-		{media_link_start}
+		{media_link_start_depreciated}
 {!endif}
 		<img src="{raw_image}">
-{!if media_link_end}
+{!if media_link_end_depreciated}
 		{media_link_end}
 {!endif}
 {!if prev_link}

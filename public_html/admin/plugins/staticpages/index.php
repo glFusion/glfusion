@@ -80,7 +80,7 @@ function PAGE_form($A, $error = false, $editFlag = 0)
               'text' => $LANG_STATIC['page_list']),
         array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?edit=x',
               'text' => $lang_create_or_edit,'active'=>true),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -701,7 +701,7 @@ function PAGE_list()
               'text' => $LANG_STATIC['page_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2011-2019 by the following authors:
+*  Copyright (C) 2011-2021 by the following authors:
 *   Mark Howard     mark AT usable-web DOT com
 *   Mark R. Evans   mark AT glfusion DOT org
 *
@@ -396,7 +396,7 @@ class OAuthConsumer
                     'homepage'       => '',
                     'remoteusername' => $info->id,
                     'remoteservice'  => 'oauth.microsoft',
-                    'remotephoto'    => 'https://apis.live.net/v5.0/me/picture?access_token='.$this->client->access_token,
+                    'remotephoto'    => '', // 'https://apis.live.net/v5.0/me/picture?access_token='.$this->client->access_token,
                 );
                 break;
             case 'linkedin' :

@@ -1,0 +1,9 @@
+{# begin {templatelocation} #}
+{!if item_name}
+{item_name}<input type="hidden" name="{var_name}" value="{item_id}" />
+{!else}
+<select class="uk-select" name="{var_name}">
+    {option_list}
+</select>
+{!endif}
+{# end {templatelocation} #}

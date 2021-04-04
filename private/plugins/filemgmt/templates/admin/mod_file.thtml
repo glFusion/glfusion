@@ -1,0 +1,119 @@
+<!--begin File Management Administration -->
+<div class="uk-panel uk-panel-box uk-margin-top">
+    <div class="uk-panel-title">{path}</div>
+    <form id="filemgmt_mod_file" class="uk-form uk-form-horizontal" method="post" enctype="multipart/form-data" action="{site_admin_url}/plugins/filemgmt/index.php">
+        <input type="hidden" name="op" value="modDownloadS" />
+        <input type="hidden" name="lid" value="{lid}" />
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_file_id}</label>
+			<div class="uk-form-controls">
+				<strong>{lid}</strong>
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_filetitle}</label>
+			<div class="uk-form-controls">
+				<input class="required uk-form-width-large" type="text" name="title" value="{title}">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_dl_filename}</label>
+			<div class="uk-form-controls">
+				<input class="required uk-form-width-large" type="text" name="url" value="{url}">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_replace_filename}</label>
+			<div class="uk-form-controls">
+                <input type="file" name="newfile" size="50" maxlength="200">
+				</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_homepage}</label>
+			<div class="uk-form-controls">
+				<input class="uk-form-width-large" type="text" name="homepage" value="{homepage}">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_version}</label>
+			<div class="uk-form-controls">
+				<input class="required uk-form-width-small" type="text" name="version" value="{version}">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_filesize}</label>
+			<div class="uk-form-controls">
+				<input class="required uk-form-width-small" type="text" name="size" value="{filesize}">&nbsp;{lang_bytes}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_description}</label>
+			<div class="uk-form-controls">
+				<textarea class="uk-form-width-large required" id="description" name="description" rows="10" cols="80">{description}</textarea>
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">Hits</label>
+			<div class="uk-form-controls">
+                <input class="required uk-form-width-small" type="text" name="hits" value="{hits}">
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_category}</label>
+			<div class="uk-form-controls">
+            {category_select}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_screenshot}</label>
+			<div class="uk-form-controls">
+{!if thumbnail}
+                <img class="uk-thumbnail uk-thumbnail-mini" src="{thumbnail}">&nbsp;&nbsp;<input type="checkbox" name="deletesnap">&nbsp;{lang_delete}<br>
+{!endif}
+                <input type="file" size="40" name="newfileshot">
+{!if thumbnail}
+
+{!endif}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_comments}</label>
+			<div class="uk-form-controls">
+                <input type="radio" name="commentoption" value="1" {comments_yes_checked}>&nbsp;{lang_yes}
+                <input type="radio" name="commentoption" value="0" {comments_no_checked}>&nbsp;{lang_no}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_owner}</label>
+			<div class="uk-form-controls">
+                {owner_select}
+			</div>
+		</div>
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_silent_edit}</label>
+			<div class="uk-form-controls">
+                <input type="checkbox" name="silentedit" value="1"  {silent_edit_checked}>
+			</div>
+		</div>
+		<div class="uk-form-row uk-margin-top">
+			<button class="uk-button uk-button-success" type="submit" name="save" value="x">{lang_submit}</button>
+			<button class="uk-button cancel" type="cancel" name="cancel">{lang_cancel}</button>
+            <button class="uk-button uk-button-danger uk-align-right" type="submit" name="delete" value="Delete" onclick='if (confirm("Delete this file ?")) {this.form.op.value="delDownload";return true}; return false'>Delete</button>
+		</div>
+	</form>
+</div>
+<script>
+	$( "#filemgmt_mod_file" ).validate({
+		errorElement: "div",
+		errorClass: "uk-text-danger",
+		rules: {
+			testurl: {
+				url: true
+			},
+			errorPlacement: function(error, element) {
+				error.insertAfter(element);
+			}
+		}
+	});
+</script>
+<!-- End FileMgmt Administration -->

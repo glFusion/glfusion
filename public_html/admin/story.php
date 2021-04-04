@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -223,7 +223,7 @@ function STORY_global($errorMsg = '')
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
                       'text' => $LANG24[111],'active'=>true),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']),
     );
 
@@ -531,7 +531,7 @@ function STORY_list()
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
                       'text' => $LANG24[111]);
         }
-        $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']);
 
     $form->set_var('block_start',COM_startBlock($LANG24[22], '',
@@ -707,7 +707,7 @@ function STORY_adminMenu($action)
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
                       'text' => $LANG24[111]);
         }
-        $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']);
 
     $retval = ADMIN_createMenu($menu_arr, $LANG24[92],$_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE);

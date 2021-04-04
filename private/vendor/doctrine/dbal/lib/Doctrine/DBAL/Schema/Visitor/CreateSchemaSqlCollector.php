@@ -24,7 +24,7 @@ class CreateSchemaSqlCollector extends AbstractVisitor
     private $createFkConstraintQueries = [];
 
     /** @var AbstractPlatform */
-    private $platform = null;
+    private $platform;
 
     public function __construct(AbstractPlatform $platform)
     {
@@ -56,7 +56,7 @@ class CreateSchemaSqlCollector extends AbstractVisitor
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
-        if (! $this->platform->supportsCreateDropForeignKeyConstraints()) {
+        if (! $this->platform->supportsForeignKeyConstraints()) {
             return;
         }
 

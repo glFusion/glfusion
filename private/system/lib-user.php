@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2020 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -499,7 +499,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
         try {
             $db->conn->insert($_TABLES['users'],$fields,$types);
             $db->conn->commit();
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             Log::write('system',Log::ERROR,"Error inserting user into USERS table :: " . $e->getMessage());
             $db->conn->rollBack();
             return null;
@@ -553,7 +553,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
                               )
             );
             $db->conn->commit();
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->conn->rollBack();
             return null;
         }

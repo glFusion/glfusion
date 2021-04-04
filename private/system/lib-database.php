@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on orignal work by the following authors:
@@ -21,6 +21,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 /*
 if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
@@ -72,7 +73,7 @@ function DB_setdebug($flag)
 function DB_displayError($flag)
 {
     $db = Database::getInstance();
-    $db->setDisplayError($flat);
+    $db->setDisplayError($flag);
 }
 
 /**
@@ -110,17 +111,22 @@ function DB_query ($sql, $ignore_errors = 0)
 
     try {
         $result = $db->conn->query($sql);
-    } catch (\Doctrine\DBAL\DBALException | PDOException $e) {
-        if ($ignore_errors) {
-            $result = false;
-            if (defined ('DVLP_DEBUG')) {
-                $db->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
+    } catch (Throwable $e) {
+        if (defined ('DVLP_DEBUG')) {
+            if (class_exists('Log::write')) {
+                $err = $db->conn->errorInfo();
+                if (isset($err[2])) {
+                    $output = preg_replace('!\s+!', ' ', $err[2]);
+                    Log::write('system',Log::DEBUG,"SQL Error: " . $output);
+                    Log::write('system',Log::DEBUG,"SQL: " . $sql);
+                }
             }
-        } else {
-            trigger_error(DB_error($sql), E_USER_ERROR);
         }
+        if ($ignore_errors) {
+            return false;
+        }
+        $db->dbError($e->getMessage());
     }
-
     if ($result === false) {
         if ($ignore_errors) {
             return false;

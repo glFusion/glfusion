@@ -170,6 +170,21 @@ if ( $uid == 1 ) {
 }
 DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int) $uid." AND urlfor='".$urlfor."'",1);
 
+// set default postmode based on user preference
+
+$default['post_htmlmode'] = $_FF_CONF['post_htmlmode'];
+$default['allow_html'] = $_FF_CONF['allow_html'];
+
+if ( !COM_isAnonUser() ) {
+    if ( isset($FF_userprefs['use_wysiwyg_editor'])) {
+        if ( $FF_userprefs['use_wysiwyg_editor'] == 0 ) {
+            $default['post_htmlmode'] = 0;
+            $default['allow_html'] = 0;
+        }
+    }
+}
+
+
 switch ( $mode ) {
     case 'newtopic' :
         $postData = array();
@@ -222,7 +237,7 @@ switch ( $mode ) {
             $postData['sticky'] = 0;
             $postData['locked'] = 0;
             $postData['status'] = 0;
-            $postData['postmode'] = ($_FF_CONF['post_htmlmode'] == 1 && $_FF_CONF['allow_html'] == 1) ? 'html' : 'text';
+            $postData['postmode'] = ($default['post_htmlmode'] == 1 && $default['allow_html'] == 1) ? 'html' : 'text';
         }
         if ( COM_isAnonUser() ) {
             $postData['uid'] = 1;
@@ -399,7 +414,6 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
             }
         }
     }
-
     // check postmode
     if ( isset($postData['postmode']) ) {  // this means we are editing or previewing (or both)
         if ( isset($postData['postmode_switch']) ) { // means they selected a switch

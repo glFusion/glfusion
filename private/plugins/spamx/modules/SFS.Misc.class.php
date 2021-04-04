@@ -118,7 +118,7 @@ class SFSreg extends BaseCommand {
                         $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
                     return 1;
                 } else if (isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
-                    SPAMX_log("SFS: found match on email, but confidence level was only " . $result['email']['confidence'] . " which is below the configured confidence level of " . $_SPX_CONF['sfs_email_confidence']));
+                    SPAMX_log("SFS: found match on email, but confidence level was only " . $result['email']['confidence'] . " which is below the configured confidence level of " . $_SPX_CONF['sfs_email_confidence']);
                 }
             }
             if ( isset($result['username']) && $result['username']['appears'] == 1 ) {
@@ -128,7 +128,7 @@ class SFSreg extends BaseCommand {
                         $LANG_SX00['foundspam3'] . $_SERVER['REAL_ADDR']);
                     return 1;
                 } else if (isset($_SPX_CONF['debug']) && $_SPX_CONF['debug'] == 1 ) {
-                    SPAMX_log("SFS: found match on username, but confidence level was only " . $result['username']['confidence']." which is below the configured confidence level of " . $_SPX_CONF['sfs_username_confidence']));
+                    SPAMX_log("SFS: found match on username, but confidence level was only " . $result['username']['confidence']." which is below the configured confidence level of " . $_SPX_CONF['sfs_username_confidence']);
                 }
             }
             // Passed the checks

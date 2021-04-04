@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2009 by the following authors:
@@ -64,6 +64,7 @@ function PLG_callFunctionForAllPlugins($function_name, $args='')
 {
     global $_PLUGINS;
 
+    $retval = array();
     if (empty ($args)) {
         $args = array ();
     }
@@ -81,39 +82,40 @@ function PLG_callFunctionForAllPlugins($function_name, $args='')
 
             switch (count($args)) {
             case 0:
-                $function();
+                $retval[$pi_name] = $function();
                 break;
             case 1:
-                $function($args[1]);
+                $retval[$pi_name] = $function($args[1]);
                 break;
             case 2:
-                $function($args[1], $args[2]);
+                $retval[$pi_name] = $function($args[1], $args[2]);
                 break;
             case 3:
-                $function($args[1], $args[2], $args[3]);
+                $retval[$pi_name] = $function($args[1], $args[2], $args[3]);
                 break;
             case 4:
-                $function($args[1], $args[2], $args[3], $args[4]);
+                $retval[$pi_name] = $function($args[1], $args[2], $args[3], $args[4]);
                 break;
             case 5:
-                $function($args[1], $args[2], $args[3], $args[4], $args[5]);
+                $retval[$pi_name] = $function($args[1], $args[2], $args[3], $args[4], $args[5]);
                 break;
             case 6:
-                $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6]);
+                $retval[$pi_name] = $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6]);
                 break;
             case 7:
-                $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7]);
+                $retval[$pi_name] = $function($args[1], $args[2], $args[3], $args[4], $args[5], $args[6], $args[7]);
                 break;
             default:
-                $function($args);
+                $retval[$pi_name] = $function($args);
                 break;
             }
         }
     }
     $function = 'CUSTOM_' . $function_name;
     if (function_exists($function)) {
-        $function();
+        $retval['_custom'] = $function();
     }
+    return $retval;
 }
 
 /**
@@ -263,7 +265,7 @@ function PLG_uninstall ($type)
             Log::write('system',Log::INFO,"Dropping table {$_TABLES[$remvars['tables'][$i]]}");
             try {
                 $db->conn->query("DROP TABLE `{$_TABLES[$remvars['tables'][$i]]}`");
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 Log::write('system',Log::ERROR,"ERROR: Dropping of Table: {$_TABLES[$remvars['tables'][$i]]} failed.");
             }
             Log::write('system',Log::INFO,'...completed');
@@ -274,7 +276,7 @@ function PLG_uninstall ($type)
             Log::write('system',Log::INFO,"Removing variable {$remvars['vars'][$i]}");
             try {
                 $db->conn->delete($_TABLES['vars'], array('name' => $remvars['vars'][$i]));
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 Log::write('system',Log::ERROR,"ERROR: Removing variable {$remvars['vars'][$i]} from VARS table failed");
             }
             Log::write('system',Log::INFO,'...completed');
@@ -287,14 +289,14 @@ function PLG_uninstall ($type)
                 Log::write('system',Log::INFO,"Attempting to remove the {$remvars['groups'][$i]} group");
                 try {
                     $db->conn->delete($_TABLES['groups'], array('grp_id' => $grp_id));
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     Log::write('system',Log::ERROR,"ERROR: Removing group {$remvars['groups'][$i]} from GROUPS table failed");
                 }
                 Log::write('system',Log::INFO,'...completed');
                 Log::write('system',Log::INFO,"Attempting to remove the {$remvars['groups'][$i]} group from all groups.");
                 try {
                     $db->conn->delete($_TABLES['group_assignments'], array('ug_main_grp_id' => $grp_id));
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     Log::write('system',Log::ERROR,"ERROR: Removing group {$remvars['groups'][$i]} from GROUP ASSIGNMENTS table failed");
                 }
                 Log::write('system',Log::INFO,'...completed');
@@ -1444,7 +1446,7 @@ function PLG_moveUser($originalUID, $destinationUID)
                 Database::INTEGER
             )
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error moving user comments: ' . $e->getMessage());
     }
 
@@ -1462,7 +1464,7 @@ function PLG_moveUser($originalUID, $destinationUID)
                 Database::INTEGER
             )
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error moving user rating votes: ' . $e->getMessage());
     }
 

@@ -1,0 +1,6 @@
+{# begin {templatelocation} #}
+<p style="width:100%;text-align:center;">
+    <span class="alert pluginAlert" style="text-align:center;font-size:1.5em;">{alert_msg}</span>
+</p>
+
+{# end {templatelocation} #}

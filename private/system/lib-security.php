@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2020 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2009 by the following authors:
@@ -1173,38 +1173,46 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
 */
 function SEC_getGroupDropdown ($group_id, $access, $var_name='group_id')
 {
-    global $_TABLES;
-
-    $groupdd = '';
+    global $_TABLES, $_CONF;
 
     $db = Database::getInstance();
 
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file(array(
+        'dropdown' => 'selection.thtml',
+        'optionlist' => 'optionlist.thtml',
+    ) );
+    $T->set_var('var_name', $var_name);
+
     if ($access == 3) {
         $usergroups = SEC_getUserGroups ();
-
         uksort($usergroups, "strnatcasecmp");
 
-        $groupdd .= '<select name="' . $var_name . '">' . LB;
+        $T->set_block('optionlist', 'options', 'opts');
         foreach ($usergroups as $ug_name => $ug_id) {
-            $groupdd .= '<option value="' . $ug_id . '"';
-            if ($group_id == $ug_id) {
-                $groupdd .= ' selected="selected"';
-            }
-            $groupdd .= '>' . ucfirst($ug_name) . '</option>' . LB;
+            $T->set_var(array(
+                'opt_name' => ucfirst($ug_name),
+                'opt_value' => $ug_id,
+                'selected' => ($group_id == $ug_id),
+            ) );
+            $T->parse('opts', 'options', true);
         }
-        $groupdd .= '</select>' . LB;
+        $T->parse('option_list', 'opts');
     } else {
         // They can't set the group then
-        $groupdd .= $db->getItem (
+        $group_name = $db->getItem (
                         $_TABLES['groups'],
                         'grp_name',
                         array('grp_id' => $group_id),
                         array(Database::STRING)
-                    )
-                 . '<input type="hidden" name="' . $var_name . '" value="' . $group_id
-                 . '"/>';
+        );
+        $T->set_var(array(
+            'item_name' => $group_name,
+            'item_id' => $group_id,
+        ) );
     }
-
+    $T->parse('output', 'dropdown');
+    $groupdd = $T->finish($T->get_var('output'));
     return $groupdd;
 }
 
@@ -1308,7 +1316,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
                     Database::INTEGER
                 )
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error inserting token into DB: ' . $e->getMessage());
     }
 
@@ -1412,8 +1420,9 @@ function _sec_checkToken($ajax=0)
     if ( isset($_SYSTEM['token_ip']) && $_SYSTEM['token_ip'] == true ) {
         $referCheck  = $_SERVER['REAL_ADDR'];
     } else {
-        $referCheck = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+        $referCheck = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SERVER['REAL_ADDR'];
     }
+    $_SERVER['HTTP_REFERER'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $_SERVER['REAL_ADDR'];
     /*
      * We cannot use filter_input here because it will pull the orignal
      * $_GET vars passed by the server, not a modified version value that
@@ -1563,7 +1572,7 @@ function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
                     Database::INTEGER
                 )
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error inserting token into DB: ' . $e->getMessage());
     }
     /* And return the token to the user */

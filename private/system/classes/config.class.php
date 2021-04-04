@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2018-2019 by the following authors:
+*  Copyright (C) 2018-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2007-2008 by the following authors:
@@ -121,7 +121,7 @@ class config
 
         try {
             $stmt = $db->conn->query($sql);
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -217,7 +217,7 @@ class config
                         array(Database::STRING,Database::STRING,Database::STRING)
                         );
 
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         }
         if ($name != 'theme')  {
@@ -257,7 +257,7 @@ class config
             $db->conn->executeUpdate($sql,
                     array($escaped_val,$escaped_name,$escaped_grp),
                     array(Database::STRING,Database::STRING,Database::STRING));
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         }
 
@@ -281,7 +281,7 @@ class config
 
         try {
             $result = $stmt->execute();
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -325,7 +325,7 @@ class config
                         $params,
                         $types
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -360,7 +360,7 @@ class config
 
         try {
             $stmt->execute();
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -443,7 +443,7 @@ class config
                     Database::STRING
                 )
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -467,7 +467,7 @@ class config
                     Database::STRING,
                 )
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -529,7 +529,7 @@ class config
                     Database::STRING
                 )
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -550,7 +550,7 @@ class config
         try {
             $db->conn->delete($_TABLES['conf_values'],array('name' => $param_name,
                               'group_name' => $group));
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -576,7 +576,7 @@ class config
         $db = Database::getInstance();
         try {
             $db->conn->delete($_TABLES['conf_values'],array('group_name' => $group));
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -615,7 +615,7 @@ class config
                             Database::INTEGER
                         )
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -758,7 +758,7 @@ class config
 
         try {
             $stmt = $db->conn->executeQuery($q_string,array($group));
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -1401,7 +1401,7 @@ class config
                 }
                 $coreUrl = $descUrl;
             } else {
-                $descUrl = 'http://www.glfusion.org/docs/english/config.html';
+                $descUrl = 'https://www.glfusion.org/docs/english/config.html';
             }
             $retval = $descUrl;
         } else {
@@ -1563,13 +1563,13 @@ class config
 
             try {
                 $stmt = $db->conn->executeQuery($sql,array($item));
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 $db->_errorlog("SQL Error: " . $e->getMessage());
                 continue;
             }
             $data = $stmt->fetchAll(Database::ASSOCIATIVE);
             foreach($data AS $row) {
-                $groupname = $LANG_configsections[$group]['label'];
+                $groupname = isset($LANG_configsections[$group]['label']) ? $LANG_configsections[$group]['label'] : 'unknown';
 
                 if ( $row['type'] == 'subgroup' ) {
                     if ( !isset($LANG_configsubgroups[$group][$row['name']])) continue;

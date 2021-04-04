@@ -1,25 +1,23 @@
 <?php
 /**
- * glFusion Database Administraiton
- *
- * utf8 to utf8mb4 upgrade
- *
- * LICENSE: This program is free software; you can redistribute it
- *  and/or modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * @category   glFusion CMS
- * @package    dbAdmin
- * @author     Mark R. Evans  mark AT glFusion DOT org
- * @copyright  2015-2017 - Mark R. Evans
- * @license    http://opensource.org/licenses/gpl-2.0.php - GNU Public License v2 or later
- * @since      File available since Release 1.6.3
- */
+* glFusion CMS
+*
+* utf8 to utf8mb4 conversion
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2015-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined('GVERSION')) {
     die('This file can not be used on its own.');
 }
+
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 class dbConvertUTF8 extends dbAdmin
 {
@@ -28,11 +26,20 @@ class dbConvertUTF8 extends dbAdmin
 
     public function processDatabase()
     {
+        $db = Database::getInstance();
+
         $this->errorCode = 0;
-        $rc = $this->dbHandle->dbQuery("ALTER DATABASE ".$this->dbName." CHARACTER SET = ".$this->toCharset." COLLATE = ".$this->toCollation.";",true);
-        if ($rc === false) {
-            $this->logError($this->dbName);
+
+        $sql = "ALTER DATABASE ".$this->dbName." CHARACTER SET = ".$this->toCharset." COLLATE = ".$this->toCollation."";
+
+        try {
+            $stmt = $db->conn->executeQuery($sql);
+        } catch(Throwable $e) {
+            $this->errorCode = 1;
+            $this->lastError = 'Error setting character set and collation on database '.$this->dbName;
+            $this->returnResult();
         }
+        Log::write('system',Log::DEBUG,'dbConvertUTF8 :: Processed Database: '.$this->dbName);
         $this->returnResult();
     }
 
@@ -40,14 +47,34 @@ class dbConvertUTF8 extends dbAdmin
     {
         $this->errorCode = 0;
 
-        $showTableResult = $this->dbHandle->dbQuery("SHOW TABLE STATUS FROM ".$this->dbName." LIKE '$table'");
-        $row = $this->dbHandle->dbFetchArray($showTableResult,true);
+        $db = Database::getInstance();
+
+        $sql = "SHOW TABLE STATUS FROM ".$this->dbName." LIKE '$table'";
+        try {
+            $stmt = $db->conn->executeQuery($sql);
+        } catch(Throwable $e) {
+            $this->errorCode = 1;
+            $this->lastError = 'Error retrieving table status for table ' . $table;
+            $this->returnResult();
+        }
+        try {
+            $row = $stmt->fetch(Database::ASSOCIATIVE);
+        } catch (Throwable $e) {
+            $this->errorCode = 1;
+            $this->lastError = 'Error retrieving table information on table ' . $table;
+            $this->returnResult();
+        }
         $tb_collation = substr($row['Collation'],0,4);
         if ( strcasecmp($tb_collation, 'utf8') === 0 ) {
-            $make_utf8mb4 = $this->dbHandle->dbQuery("ALTER TABLE $table CHARACTER SET = ".$this->toCharset." COLLATE = ".$this->toCollation."", true);
-            $errNo = $this->dbHandle->getErrno();
-            if ($make_utf8mb4 === false  || $errNo != 0 ) {
-                $this->logError($table);
+            if (strcasecmp($row['Collation'],$this->toCollation) !== 0) {
+                Log::write('system',Log::DEBUG,'dbConvertUTF8 :: Updating Table: '.$table . ' Old Collation :: ' . $row['Collation']);
+                try {
+                    $db->conn->executeQuery("ALTER TABLE $table CHARACTER SET = ".$this->toCharset." COLLATE = ".$this->toCollation."");
+                } catch (Throwable $e) {
+                    $this->errorCode = 1;
+                    $this->lastError = 'Error setting character set and collations on table ' . $table;
+                    $this->returnResult();
+                }
             }
         }
         $this->returnResult();
@@ -57,17 +84,30 @@ class dbConvertUTF8 extends dbAdmin
     {
         $this->errorCode = 0;
 
-        $columnResult = $this->dbHandle->dbQuery("SHOW FULL COLUMNS FROM {$table} WHERE field='".$column."'",true);
+        $db = Database::getInstance();
 
-        if ( $columnResult === false || $this->dbHandle->dbNumRows($columnResult) != 1 ) {
-            $this->logError($table);
+        $sql = "SHOW FULL COLUMNS FROM {$table} WHERE field='".$column."'";
+
+        try {
+            $stmt = $db->conn->executeQuery($sql);
+        } catch (Throwable $e) {
+            $this->errorCode = 1;
+            $this->lastError = 'Error retrieving column data for column ' . $column . ' on table ' . $table;
+            $this->returnResult();
         }
-        $row = $this->dbHandle->dbFetchArray($columnResult,true);
+        $row = $stmt->fetch(Database::NUMERIC);
+        if ($row === false) {
+            $this->errorCode = 1;
+            $this->lastError = 'Error retrieving column data for column ' . $column . ' on table ' . $table;
+            $this->returnResult();
+        }
         $name = $row[0];
         $type = $row[1];
         $collation = $row[2];
-        if ( substr($collation,0,7) == 'utf8mb4')
+
+        if ($collation == '' || strcasecmp($collation,$this->toCollation) === 0) {
             $this->returnResult();
+        }
         $null = '';
         if ( $row[3] == "NO" ) {
             $null = " NOT NULL ";
@@ -81,42 +121,72 @@ class dbConvertUTF8 extends dbAdmin
         }
         if (preg_match("/^varchar\((\d+)\)$/i", $type, $mat)) {
             $size = $mat[1];
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` VARCHAR({$size}) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
-            $errNo = $this->dbHandle->getErrno();
-            if ($rc === false || $errNo != 0) {
+            $sql = "ALTER TABLE {$table} MODIFY `{$name}` VARCHAR({$size}) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null;
+            try {
+                $stmt = $db->conn->executeQuery($sql);
+            } catch (Throwable $e) {
+                $this->errorCode = 1;
+                $this->lastError = 'Error setting column collation on column ' . $name . ' on table ' . $table;
                 $this->logError($table,$name);
             }
-        } else if (!strcasecmp($type, "CHAR")) {
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` VARCHAR(1) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
-            $errNo = $this->dbHandle->getErrno();
-            if ($rc === false || $errNo != 0) {
+        } else if (strcasecmp(substr($type,0,4), "CHAR") === 0) {
+            $sql = "ALTER TABLE {$table} MODIFY `{$name}` CHAR({$size}) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null;
+            try {
+                $stmt = $db->conn->executeQuery($sql);
+            } catch (Throwable $e) {
+                $this->errorCode = 1;
+                $this->lastError = 'Error setting column collation on column ' . $name . ' on table ' . $table;
                 $this->logError($table,$name);
             }
-        } else if (!strcasecmp($type, "TINYTEXT")) {
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` TINYTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
-            $errNo = $this->dbHandle->getErrno();
-            if ($rc === false || $errNo != 0) {
+        } else if (strcasecmp(substr($type,0,7), "VARCHAR") === 0) {
+            $sql = "ALTER TABLE {$table} MODIFY `{$name}` VARCHAR({$size}) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null;
+            try {
+                $stmt = $db->conn->executeQuery($sql);
+            } catch (Throwable $e) {
+                $this->errorCode = 1;
+                $this->lastError = 'Error setting column collation on column ' . $name . ' on table ' . $table;
                 $this->logError($table,$name);
             }
-        } else if (!strcasecmp($type, "MEDIUMTEXT")) {
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` MEDIUMTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
-            $errNo = $this->dbHandle->getErrno();
-            if ($rc === false || $errNo != 0) {
+
+       } else if (!strcasecmp($type, "TINYTEXT")) {
+            $sql = "ALTER TABLE {$table} MODIFY `{$name}` TINYTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null;
+            try {
+                $stmt = $db->conn->executeQuery($sql);
+            } catch (Throwable $e) {
+                $this->errorCode = 1;
+                $this->lastError = 'Error setting column collation on column ' . $name . ' on table ' . $table;
+                $this->logError($table,$name);
+            }
+       } else if (!strcasecmp($type, "MEDIUMTEXT")) {
+            $sql = "ALTER TABLE {$table} MODIFY `{$name}` MEDIUMTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null;
+            try {
+                $stmt = $db->conn->executeQuery($sql);
+            } catch (Throwable $e) {
+                $this->errorCode = 1;
+                $this->lastError = 'Error setting column collation on column ' . $name . ' on table ' . $table;
                 $this->logError($table,$name);
             }
         } else if (!strcasecmp($type, "LONGTEXT")) {
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` LONGTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
-            $errNo = $this->dbHandle->getErrno();
-            if ($rc === false || $errNo != 0) {
+            $sql = "ALTER TABLE {$table} MODIFY `{$name}` LONGTEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null;
+            try {
+                $stmt = $db->conn->executeQuery($sql);
+            } catch (Throwable $e) {
+                $this->errorCode = 1;
+                $this->lastError = 'Error setting column collation on column ' . $name . ' on table ' . $table;
                 $this->logError($table,$name);
             }
         } else if (!strcasecmp($type, "TEXT")) {
-            $rc = $this->dbHandle->dbQuery("ALTER TABLE {$table} MODIFY `{$name}` TEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null,true);
-            $errNo = $this->dbHandle->getErrno();
-            if ($rc === false || $errNo != 0) {
+            $sql = "ALTER TABLE {$table} MODIFY `{$name}` TEXT CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null;
+            try {
+                $stmt = $db->conn->executeQuery($sql);
+            } catch (Throwable $e) {
+                $this->errorCode = 1;
+                $this->lastError = 'Error setting column collation on column ' . $name . ' on table ' . $table;
                 $this->logError($table,$name);
             }
+
         }
+        Log::write('system',Log::DEBUG,'dbConvertUTF8 :: Set collation and character set on column: '.$name);
         $this->returnResult();
     }
 
@@ -132,7 +202,7 @@ class dbConvertUTF8 extends dbAdmin
         if ( $rc === false ) {
             $this->errorCode = 1;
             $this->lastError = 'DBadmin: Unable to automatically update siteconfig.php with new db_charset';
-            COM_errorLog($this->lastError);
+            Log::write('system',Log::WARNING,$this->lastError);
         }
         $this->returnResult();
     }

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2015-2018 by the following authors:
+*  Copyright (C) 2015-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2011 by the following authors:
@@ -70,7 +70,6 @@ function DBADMIN_list()
     $retval = '';
 
     if (FileSystem::isWritable($_CONF['backup_path'])) {
-//    if (is_writable($_CONF['backup_path'])) {
         $backups = array();
         $fd = opendir($_CONF['backup_path']);
         $index = 0;
@@ -1220,7 +1219,7 @@ function DBADMIN_supportUtf8mb()
     }
     $serverVersion = DB_getServerVersion();
 
-    if (version_compare($serverVersion,'5.5.3','<')) {
+    if (version_compare($serverVersion,'5.6.0','<')) {
         return false;
     }
     $clientVersion = DB_getClientVersion();
@@ -1281,7 +1280,7 @@ function getAdminHeaderMenu( $activeItem = '' )
                 'text'  => $LANG_DB_ADMIN['configure']
                 ),
         'admin_home'    => array(
-                'url' => $_CONF['site_admin_url'],
+                'url' => $_CONF['site_admin_url'].'/index.php',
                 'text' => $LANG_ADMIN['admin_home']
                 )
     );

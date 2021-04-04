@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2019 by the following authors:
+*  Copyright (C) 2017-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -28,6 +28,7 @@ use \Phpfastcache\Exceptions\{
     PhpfastcacheDriverCheckException, PhpfastcacheInvalidArgumentException, PhpfastcacheLogicException, PhpfastcacheRootException, PhpfastcacheSimpleCacheException
 };
 use \Phpfastcache\Helper\Psr\SimpleCache\CacheInterface;
+use \Phpfastcache\Core\Pool\TaggableCacheItemPoolInterface;
 use \glFusion\Log\Log;
 
 /**
@@ -75,19 +76,19 @@ final class Cache
         if (!isset($_CONF['cache_driver'])) $_CONF['cache_driver'] = 'files';
 
         if (!isset($_CONF['cache_host'])) $_CONF['cache_host'] = '127.0.0.1';
-if (!isset($_CONF['cache_redis_host'])) $_CONF['cache_redis_host'] = '127.0.0.1';
-if (!isset($_CONF['cache_memcached_host'])) $_CONF['cache_memcached_host'] = '127.0.0.1';
+        if (!isset($_CONF['cache_redis_host'])) $_CONF['cache_redis_host'] = '127.0.0.1';
+        if (!isset($_CONF['cache_memcached_host'])) $_CONF['cache_memcached_host'] = '127.0.0.1';
 
 
         if (!isset($_CONF['cache_port'])) $_CONF['cache_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
-if (!isset($_CONF['cache_redis_port'])) $_CONF['cache_redis_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
-if (!isset($_CONF['cache_memcached_port'])) $_CONF['cache_memcached_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
+        if (!isset($_CONF['cache_redis_port'])) $_CONF['cache_redis_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
+        if (!isset($_CONF['cache_memcached_port'])) $_CONF['cache_memcached_port'] = ($_CONF['cache_driver'] == 'redis') ? 6379 : 11211;
 
         if (!isset($_CONF['cache_password'])) $_CONF['cache_password'] = '';
         if (!isset($_CONF['cache_database'])) $_CONF['cache_database'] = '0';
         if (!isset($_CONF['cache_timeout'])) $_CONF['cache_timeout'] = 10;
 
-        $validArray = configmanager_select_cache_driver_helper();
+        $validArray = $this->getCacheDrivers();
         if (!in_array($_CONF['cache_driver'],$validArray)) {
             $_CONF['cache_driver'] = 'files';
         }
@@ -534,7 +535,8 @@ if (!isset($_CONF['cache_memcached_port'])) $_CONF['cache_memcached_port'] = ($_
                 return $tag;
             },$tags);
 
-        $this->internalCacheInstance->deleteItemsByTagsAll($nsTags);
+//        $this->internalCacheInstance->deleteItemsByTagsAll($nsTags);
+        $this->internalCacheInstance->deleteItemsByTags($nsTags, TaggableCacheItemPoolInterface::TAG_STRATEGY_ALL);
     }
 
     /**
@@ -599,6 +601,36 @@ if (!isset($_CONF['cache_memcached_port'])) $_CONF['cache_memcached_port'] = ($_
     {
         $invalid = array('{','}','(',')','/','\\','@',':');
         return str_replace($invalid,'_',$str);
+    }
+
+    /**
+     * @return array
+     */
+    private function getCacheDrivers()
+    {
+        global $_CONF;
+
+        $retval = array();
+
+        $retval = array(
+            'Files'     => 'files'
+        );
+        if (extension_loaded('apcu')) {
+            $retval['APCU'] = 'apcu';
+        }
+        if (extension_loaded('memcache') && PHP_OS == 'WINNT') {
+            $retval['Memcache'] = 'memcache';
+        }
+        if (extension_loaded('memcached')) {
+            $retval['Memcached'] = 'memcached';
+        }
+        if (extension_loaded('redis')) {
+            $retval['Redis'] = 'redis';
+        }
+
+        $retval['Disabled'] = 'Devnull';
+
+        return $retval;
     }
 
 }

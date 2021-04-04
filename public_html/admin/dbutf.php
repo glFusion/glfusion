@@ -7,13 +7,16 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2015-2018 by the following authors:
+*  Copyright (C) 2015-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 if (!SEC_inGroup('Root') ) {
     $display = COM_siteHeader('menu', $LANG_DB_ADMIN['database_admin']);
@@ -54,7 +57,7 @@ if ( isset($_POST['column'])) {
     $column = $filter->prepareForDB($_POST['column']);
 }
 
-$conversion = new dbConvertUTF8($_DB_name, $_DB, $_DB_table_prefix, $_TABLES, true);
+$conversion = new dbConvertUTF8($_DB_name, $_DB_table_prefix, $_TABLES, true);
 
 switch ($action) {
 

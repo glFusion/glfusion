@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -27,9 +27,9 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
     die('This file can not be used on its own!');
 }
 
-// we must have PHP v5.6 or greater
-if (version_compare(PHP_VERSION,'7.1.0','<')) {
-    die('glFusion requires PHP version 7.1.0 or greater.');
+// we must have PHP v7.3 or greater
+if (version_compare(PHP_VERSION,'7.3.0','<')) {
+    die('glFusion requires PHP version 7.3.0 or greater.');
 }
 
 if (!defined ('GVERSION')) {
@@ -58,7 +58,7 @@ use \glFusion\Log\Log;
 // process all vars to handle magic_quotes_gpc
 function all_stripslashes($var)
 {
-    if (get_magic_quotes_gpc()) {
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
         if (is_array($var)) {
             return array_map('all_stripslashes', $var);
         } else {
@@ -133,8 +133,8 @@ try {
         array(),
         array()
     );
-} catch(\Doctrine\DBAL\DBALException $e) {
-    $db->dbError($e->getMessage(),$sql);
+} catch(Throwable $e) {
+    $db->dbError($e->getMessage());
 }
 $data = $stmt->fetchAll(Database::ASSOCIATIVE);
 $stmt->closeCursor();
@@ -219,6 +219,11 @@ if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] ) {
 if ( isset($_CONF['rootdebug'])) $_SYSTEM['rootdebug'] = $_CONF['rootdebug'];
 if ( isset($_CONF['debug_oauth'])) $_SYSTEM['debug_oauth'] = $_CONF['debug_oauth'];
 if ( isset($_CONF['debug_html_filter'])) $_SYSTEM['debug_html_filter'] = $_CONF['debug_html_filter'];
+
+// set database display
+if (isset($_CONF['rootdebug']) && $_CONF['rootdebug']) {
+    $db->setDisplayError(true);
+}
 
 // calculate the admin path
 $adminurl = $_CONF['site_admin_url'];
@@ -319,8 +324,8 @@ try {
         array(),
         array(),
         new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, 'plugin_active_plugins'));
-} catch(\Doctrine\DBAL\DBALException $e) {
-    $db->dbError($e->getMessage(),$sql);
+} catch(Throwable $e) {
+    $db->dbError($e->getMessage());
 }
 $data = $stmt->fetchAll(Database::ASSOCIATIVE);
 $stmt->closeCursor();
@@ -331,6 +336,14 @@ foreach($data AS $A) {
     if ($A['pi_enabled']) $_PLUGINS[] = $A['pi_name'];
     $_PLUGIN_INFO[$A['pi_name']] = $A;
 }
+
+/**
+* Multibyte functions
+*
+*/
+require_once $_CONF['path'].'lib/utf8/utf8.php';
+// backward compatibility
+require_once $_CONF['path_system'].'lib-mbyte.php';
 
 /**
 * This is the security library used for application security
@@ -372,13 +385,6 @@ require_once $_CONF['path_system'].'lib-article.php';
 */
 require_once $_CONF['path_system'].'lib-plugins.php';
 
-/**
-* Multibyte functions
-*
-*/
-require_once $_CONF['path'].'lib/utf8/utf8.php';
-// backward compatibility
-require_once $_CONF['path_system'].'lib-mbyte.php';
 
 /**
 * Image processing library
@@ -1566,7 +1572,7 @@ function COM_endBlock( $template='blockfooter.thtml' )
 
 function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where='' )
 {
-    global $_DB_table_prefix;
+    global $_DB_table_prefix, $_CONF;
 
     $retval = '';
 
@@ -1599,28 +1605,27 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
     $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
 
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file('optionlist', 'optionlist.thtml');
+    $T->set_block('optionlist', 'options', 'opts');
     while ($A = $stmt->fetch()) {
-        $retval .= '<option value="' . $A[0] . '"';
-
-        if ( is_array( $selected ) AND count( $selected ) > 0 ) {
-            foreach( $selected as $selected_item ) {
-                if ( $A[0] == $selected_item ) {
-                    $retval .= ' selected="selected"';
-                }
-            }
-        } elseif ( !is_array( $selected ) AND $A[0] == $selected ) {
-            $retval .= ' selected="selected"';
-        }
-
-        $retval .= '>';
-        if ( empty( $LangTable[$A[0]] )) {
-            $retval .= $A[1];
+        if (
+            (is_array($selected) && in_array($selected, $A[0])) ||
+            (!is_array($selected) && $A[0] == $selected)
+        ) {
+            $selected = true;
         } else {
-            $retval .= $LangTable[$A[0]];
+            $selected = false;
         }
-        $retval .= '</option>' . PHP_EOL;
+        $T->set_var(array(
+            'opt_value' => $A[0],
+            'opt_name' => $A[1],
+            'selected' => $selected,
+        ) );
+        $T->parse('opts', 'options', true);
     }
-
+    $T->parse('output', 'optionlist');
+    $retval = $T->finish($T->get_var('output'));
     return $retval;
 }
 
@@ -1641,23 +1646,28 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
 */
 function COM_topicList( $selection, $selected = '', $sortcol = 1, $ignorelang = false, $access = 2 )
 {
-    global $_TABLES;
+    global $_TABLES, $_CONF;
 
     $retval = '';
 
     $topics = COM_topicArray($selection, $sortcol, $ignorelang, $access);
     if ( is_array($topics) ) {
+        $T = new Template($_CONF['path_layout'] . '/fields');
+        $T->set_file('optionlist', 'optionlist.thtml');
+        $T->set_block('optionlist', 'options', 'opts');
         foreach ($topics as $tid => $topic) {
-            $retval .= '<option value="' . $tid . '"';
-            if ($tid == $selected) {
-                $retval .= ' selected="selected"';
-            }
-            $retval .= '>' . $topic;
             if ( isset($tid) ) {
-                $retval .= ' (' . $tid . ')';
+                $topic .= ' (' . $tid . ')';
             }
-            $retval .=  '</option>' . PHP_EOL;
+            $T->set_var(array(
+                'opt_value' => $tid,
+                'opt_name' => $topic,
+                'selected' => $tid == $selected,
+            ) );
+            $T->parse('opts', 'options', true);
         }
+        $T->parse('output', 'optionlist');
+        $retval .= $T->finish($T->get_var('output'));
     }
 
     return $retval;
@@ -1960,7 +1970,7 @@ function COM_showTopics( $topic='' )
     // retrieve all the topic data
     try {
         $stmt = $db->conn->executeQuery($sql);
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if ($db->getIgnore()) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         } else {
@@ -2015,7 +2025,7 @@ function COM_showTopics( $topic='' )
         try {
             $stmt = $db->conn->executeQuery($sql, array(), array(),
                 new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, Cache::getInstance()->createKey('menu_sc')));
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->dbError($e->getMessage(),$sql);
         }
         $storyCountData = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -2032,7 +2042,7 @@ function COM_showTopics( $topic='' )
         try {
             $stmt = $db->conn->executeQuery($sql, array(), array(),
                 new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, Cache::getInstance()->createKey('menu_submissioncount')));
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->dbError($e->getMessage(),$sql);
         }
         $submissionCountData = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -2823,7 +2833,7 @@ function COM_olderStuff()
                   AND (draft_flag = 0)" . $db->getTopicSQL( 'AND', 1 )
                   . " ORDER BY featured DESC, date DESC
                   LIMIT ".(int)$_CONF['limitnews'].", ".(int)$_CONF['limitnews']);
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }
@@ -2867,7 +2877,7 @@ function COM_olderStuff()
         $string .= $daylist;
         try {
             $db->conn->executeUpdate("UPDATE {$_TABLES['blocks']} SET content = ? WHERE name = 'older_stories'",array($string),array(Database::STRING));
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -3463,7 +3473,7 @@ function COM_hit()
 
     try {
         $db = Database::getInstance()->conn->executeUpdate("UPDATE `{$_TABLES['vars']}` SET value = value + 1 WHERE name = 'totalhits'");
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         // ignore the error
     }
 
@@ -5684,7 +5694,7 @@ function COM_truncateHTML ( $html, $maxLength, $end = '&hellip;', $endchars = 0 
             if ($tag[1] == '/') {
                 // This is a closing tag.
                 $openingTag = array_pop($tags);
-                @assert($openingTag == $tagName); // check that tags are properly nested.
+//                @assert($openingTag == $tagName); // check that tags are properly nested.
                 $retval .= $tag;
             } else if ($tag[strlen($tag) - 2] == '/') {
                 // Self-closing tag.
@@ -6258,20 +6268,32 @@ function COM_recursiveDelete($path)
 
 function COM_buildOwnerList($fieldName,$owner_id=2)
 {
-    global $_TABLES;
+    global $_TABLES, $_CONF;
 
     $db = Database::getInstance();
 
     $stmt = $db->conn->executeQuery("SELECT * FROM `{$_TABLES['users']}` WHERE status=3 ORDER BY username ASC");
-    $owner_select = '<select name="'.$fieldName.'">';
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file(array(
+        'selection' => 'selection.thtml',
+        'optionlist' => 'optionlist.thtml',
+    ) );
+    $T->set_var('var_name', $fieldName);
+    $T->set_block('optionlist', 'options', 'opts');
     while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ( $row['uid'] == 1 ) {
             continue;
         }
-        $owner_select .= '<option value="' . $row['uid'] . '"' . ($owner_id == $row['uid'] ? 'selected="selected"' : '') . '>' . COM_getDisplayName($row['uid']) . '</option>';
+        $T->set_var(array(
+            'opt_value' => $row['uid'],
+            'opt_name' => COM_getDisplayName($row['uid']),
+            'selected' => $owner_id == $row['uid'],
+        ) );
+        $T->parse('opts', 'options', true);
     }
-    $owner_select .= '</select>';
-
+    $T->parse('option_list', 'optionlist');
+    $T->parse('output', 'selection');
+    $owner_select = $T->finish($T->get_var('output'));
     return $owner_select;
 }
 
@@ -6439,7 +6461,7 @@ function CMT_updateCommentcodes()
 
             try {
                 $stmt = $db->conn->executeUpdate($sql);
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 // ignore error
                 $stmt = false;
             }
@@ -6455,7 +6477,7 @@ function CMT_updateCommentcodes()
     $sql = "UPDATE `{$_TABLES['stories']}` SET commentcode = 1 WHERE UNIX_TIMESTAMP(comment_expire) < UNIX_TIMESTAMP() AND UNIX_TIMESTAMP(comment_expire) <> 0";
     try {
         $rowCount = $db->conn->executeUpdate($sql);
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $rowCount = 0;
     }
     if ( $cleared == 0 ) {
@@ -6560,7 +6582,7 @@ function _css_out()
             array($cacheID),
             array(Database::INTEGER)
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }

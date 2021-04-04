@@ -58,6 +58,8 @@ function MG_rotateMedia( $album_id, $media_id, $direction, $actionURL='') {
     $filename = $row['media_filename'];
 
     $media_size = false;
+    $tn = '';
+    $disp = '';
     foreach ($_MG_CONF['validExtensions'] as $ext ) {
         if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/'   . $filename[0] . '/' . $filename . $ext) ) {
             $tn     = $_MG_CONF['path_mediaobjects'] . 'tn/'   . $filename[0] . '/' . $filename . $ext;
@@ -65,6 +67,12 @@ function MG_rotateMedia( $album_id, $media_id, $direction, $actionURL='') {
             break;
         }
     }
+
+    if ($tn === '') {
+        echo COM_refresh( $actionURL . '&t=' . time() );
+        exit;
+    }
+
     $orig   = $_MG_CONF['path_mediaobjects'] . 'orig/' . $filename[0] . '/' . $filename . '.' . $row['media_mime_ext'];
 
     list($rc,$msg) = IMG_rotateImage( $tn, $direction );

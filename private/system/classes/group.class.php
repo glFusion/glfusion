@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2019 by the following authors:
+*  Copyright (C) 2017-2021 by the following authors:
 *   Lee Garner      lee AT leegarner DOT com
 *
 *   @filesource
@@ -137,7 +137,7 @@ class Group
                         array(Database::INTEGER)
                         );
 
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             // Ignore errors or failed attempts
         }
 
@@ -223,7 +223,7 @@ class Group
                                 array(Database::PARAM_INT_ARRAY)
                                 );
 
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     // Ignore errors or failed attempts
                 }
                 $data = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -265,6 +265,8 @@ class Group
     public static function inGroup($grp_to_verify, $uid='')
     {
         global $_USER, $_GROUPS;
+
+        if (empty($grp_to_verify)) return true;        
 
         if (empty ($uid)) {
             if (COM_isAnonUser()) {
@@ -328,7 +330,7 @@ class Group
                                 array(Database::INTEGER,Database::PARAM_INT_ARRAY)
                                 );
 
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     $groups[$feature][] = 0;
                 }
                 $data = $stmt->fetchAll(Database::ASSOCIATIVE);

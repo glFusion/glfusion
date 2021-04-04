@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -904,8 +904,6 @@ function glfusion_200()
     $c = config::get_instance();
     $db = Database::getInstance();
 
-
-
     $_SQL = array();
     $_SQL = array(
         0  => "ALTER TABLE `{$_TABLES['stories']}`
@@ -955,10 +953,13 @@ function glfusion_200()
     foreach ($_SQL AS $sql) {
         try {
             $db->conn->query($sql);
-        } catch(\Doctrine\DBAL\DBALException $e) {
-            $err = $e->getMessage();
-            $output = preg_replace('!\s+!', ' ', $err);
-            Log::write('system',Log::DEBUG,"SQL failed in dvlpupdate: " . $output);
+        } catch(Throwable $e) {
+            $err = $db->conn->errorInfo();
+            if (isset($err[2])) {
+                $output = preg_replace('!\s+!', ' ', $err[2]);
+                Log::write('system',Log::DEBUG,"SQL failed in dvlpupdate: " . $sql);
+                Log::write('system',Log::DEBUG,"SQL Error: " . $output);
+            }
         }
     }
 
@@ -988,76 +989,15 @@ function glfusion_200()
     foreach ($_SQL AS $sql) {
         try {
             $db->conn->query($sql);
-        } catch(\Doctrine\DBAL\DBALException $e) {
-            $err = $e->getMessage();
-            $output = preg_replace('!\s+!', ' ', $err);
-            Log::write('system',Log::DEBUG,"SQL failed in dvlpupdate: " . $output);
+        } catch(Throwable $e) {
+            $err = $db->conn->errorInfo();
+            if (isset($err[2])) {
+                $output = preg_replace('!\s+!', ' ', $err[2]);
+                Log::write('system',Log::DEBUG,"SQL failed in dvlpupdate: " . $sql);
+                Log::write('system',Log::DEBUG,"SQL Error: " . $output);
+            }
         }
     }
-
-/* ---
-    $sql = "ALTER TABLE `{$_TABLES['stories']}`
-        CHANGE COLUMN `comment_expire` `comment_expire` DATETIME NULL DEFAULT NULL,
-        CHANGE COLUMN `expire` `expire` DATETIME NULL DEFAULT NULL;";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['stories']}` SET `comment_expire` = NULL WHERE CAST(`comment_expire` AS CHAR(20)) = '0000-00-00 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['stories']}` SET `comment_expire` = NULL WHERE CAST(`comment_expire` AS CHAR(20)) = '1000-01-01 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['stories']}` SET `comment_expire` = NULL WHERE comment_expire = '1970-01-01 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['stories']}` SET `comment_expire` = NULL WHERE comment_expire = '1999-01-01 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['stories']}` SET `expire` = NULL WHERE CAST(`expire` AS CHAR(20)) = '0000-00-00 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['stories']}` SET `expire` = NULL WHERE CAST(`expire` AS CHAR(20)) = '1000-01-01 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['stories']}` SET `expire` = NULL WHERE `expire`= '1970-01-01 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['stories']}` SET `expire` = NULL WHERE `expire`= '1999-01-01 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['stories']}` SET `frontpage_date` = NULL WHERE `frontpage_date` = '1000-01-01 00:00:00';";
-    DB_query($sql,1);
-
-    $sql = "ALTER TABLE `{$_TABLES['stories']}`
-        CHANGE COLUMN `comment_expire` `comment_expire` DATETIME NULL DEFAULT NULL,
-        CHANGE COLUMN `expire` `expire` DATETIME NULL DEFAULT NULL;";
-    DB_query($sql,1);
-
-
-    $sql ="UPDATE `{$_TABLES['syndication']}` SET `updated` = '1970-01-01 00:00:00' WHERE CAST(`updated` AS CHAR(20)) = '0000-00-00 00:00:00';";
-    DB_query($sql,1);
-    $sql ="UPDATE `{$_TABLES['syndication']}` SET `updated` = '1970-01-01 00:00:00' WHERE CAST(`updated` AS CHAR(20)) = '1000-01-01 00:00:00';";
-    DB_query($sql,1);
-
-    $sql = "ALTER TABLE `{$_TABLES['syndication']}` CHANGE COLUMN `updated` `updated` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00';";
-    DB_query($sql,1);
-
-    $sql = "ALTER TABLE `{$_TABLES['users']}`
-    	CHANGE COLUMN `regdate` `regdate` DATETIME NULL DEFAULT NULL AFTER `sig`,
-    	CHANGE COLUMN `act_time` `act_time` DATETIME NULL DEFAULT NULL AFTER `act_token`;";
-    DB_query($sql,1);
-
-    $sql = "UPDATE `{$_TABLES['users']}` SET `act_time` = '1970-01-01 00:00:00' WHERE CAST(`act_time` AS CHAR(20)) = '0000-00-00 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['users']}` SET `act_time` = '1970-01-01 00:00:00' WHERE CAST(`act_time` AS CHAR(20)) = '1000-01-01 00:00:00';";
-    DB_query($sql,1);
-
-    $sql = "UPDATE `{$_TABLES['users']}` SET `regdate` = '1970-01-01 00:00:00' WHERE CAST(`regdate` AS CHAR(20)) = '0000-00-00 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['users']}` SET `regdate` = '1970-01-01 00:00:00' WHERE CAST(`regdate` AS CHAR(20)) = '1000-01-01 00:00:00';";
-    DB_query($sql,1);
-
-    $sql = "UPDATE `{$_TABLES['blocks']}` SET `rdfupdated` = '1970-01-01 00:00:00' WHERE CAST(`rdfupdated` AS CHAR(20)) = '0000-00-00 00:00:00';";
-    DB_query($sql,1);
-    $sql = "UPDATE `{$_TABLES['blocks']}` SET `rdfupdated` = '1970-01-01 00:00:00' WHERE CAST(`rdfupdated` AS CHAR(20)) = '1000-01-01 00:00:00';";
-    DB_query($sql,1);
-
-    $sql = "UPDATE `{$_TABLES['blocks']}` SET `rdfupdated` = '1970-01-01 00:00:00' WHERE CAST(`rdfupdated` AS CHAR(20)) = '1000-01-01 00:00:00';";
-    DB_query($sql,1);
-    $sql = "ALTER TABLE `{$_TABLES['blocks']}` CHANGE COLUMN `rdfupdated` `rdfupdated` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00';";
-    DB_query($sql,1);
---- */
 
     // only execute if Forum plugin is enabled
     if (in_array('forum',$_PLUGINS)) {
@@ -1447,7 +1387,7 @@ _updateConfig();
 
 $stdPlugins=array('staticpages','spamx','links','polls','calendar','sitetailor','captcha','bad_behavior2','forum','mediagallery','filemgmt','commentfeeds');
 foreach ($stdPlugins AS $pi_name) {
-    DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='".GVERSION."', pi_homepage='http://www.glfusion.org' WHERE pi_name='".$pi_name."'",1);
+    DB_query("UPDATE {$_TABLES['plugins']} SET pi_gl_version='".GVERSION."', pi_homepage='https://www.glfusion.org' WHERE pi_name='".$pi_name."'",1);
 }
 
 // purge all caches...

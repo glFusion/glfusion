@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2019 by the following authors:
+*  Copyright (C) 2017-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *
@@ -20,6 +20,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Cache\GlFusionCache;
+use \Doctrine\DBAL\DBALException;
 
 class Database
 {
@@ -88,7 +89,7 @@ class Database
     /**
     * @var bool
     */
-    public $_display_error = true;
+    public $_display_error = false;
 
     /**
     * @var string|callable
@@ -241,6 +242,9 @@ class Database
                     $this->conn->query("SET sql_mode = '".$updatedMode."'");
                 }
             }
+        }
+        if (isset($_CONF['rootdebug']) && $_CONF['rootdebug']) {
+            $this->setDisplayError(true);
         }
 
         if ($this->_verbose) {
@@ -837,7 +841,7 @@ class Database
 
         try {
             $stmt = $this->conn->query($sql);
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }

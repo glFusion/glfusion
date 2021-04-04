@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2018-2019 by the following authors:
+*  Copyright (C) 2018-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -101,7 +101,7 @@ $db = Database::getInstance();
 // set archive topic
 try {
     $archivetid = $db->conn->fetchColumn("SELECT tid FROM `{$_TABLES['topics']}` WHERE archive_flag=1");
-} catch(\Doctrine\DBAL\DBALException $e) {
+} catch(Throwable $e) {
     if (defined('DVLP_DEBUG')) {
         throw($e);
     }
@@ -332,7 +332,7 @@ $countQueryBuilder->groupBy('s.sid');
 
 try {
     $cStmt = $countQueryBuilder->execute();
-} catch(\Doctrine\DBAL\DBALException $e) {
+} catch(Throwable $e) {
     if (defined('DVLP_DEBUG')) {
         throw($e);
     }
@@ -357,7 +357,7 @@ $queryBuilder
 
 try {
     $stmt = $queryBuilder->execute();
-} catch(\Doctrine\DBAL\DBALException $e) {
+} catch(Throwable $e) {
     if (defined('DVLP_DEBUG')) {
         throw($e);
     }

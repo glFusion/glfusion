@@ -433,7 +433,7 @@ function MG_file_exists( $potential_file ) {
 }
 
 
-function MG_getFile( $filename, $file, $albums, $caption = '', $description = '', $upload = 1, $purgefiles = 0, $filetype, $atttn, $thumbnail, $keywords='',$category=0, $dnc=0, $replace=0 ) {
+function MG_getFile( $filename, $file, $albums, $caption = '', $description = '', $upload = 1, $purgefiles = 0, $filetype = '', $atttn = '', $thumbnail = '', $keywords='',$category=0, $dnc=0, $replace=0 ) {
     global $MG_albums, $_CONF, $_MG_CONF, $_USER, $_TABLES, $LANG_MG00, $LANG_MG01, $LANG_MG02, $new_media_id;
 
 	$artist                     = '';

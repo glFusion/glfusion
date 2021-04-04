@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -25,6 +25,7 @@ $_SYSTEM['no_fail_sql'] = true;
 if ( !file_exists($_CONF['path'].'db-config.php')) die('Unable to located db-config.php');
 
 use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
 
 require_once $_CONF['path'].'db-config.php';
 $dbpass = $_DB_pass;
@@ -53,8 +54,10 @@ define('LOCAL_USER',1);
 define('REMOTE_USER',2);
 
 function FR_stripslashes( $text ) {
-    if( get_magic_quotes_gpc() == 1 ) {
-        return( stripslashes( $text ));
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+        if( get_magic_quotes_gpc() == 1 ) {
+            return( stripslashes( $text ));
+        }
     }
     return( $text );
 }
@@ -558,7 +561,7 @@ function repairDatabase() {
             }
             try {
                 $stmt = $db->conn->executeQuery("REPAIR TABLE `{$table}`");
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 $retval[] = "Repair failed for " . $table;
             }
         }
@@ -699,19 +702,37 @@ function getNewPaths( $group = 'Core') {
                 </div>
             ';
         } elseif ( $configDetail[$option]['type'] == '@select' ) {
-            $retval .= '
-                <div class="uk-form-row">
-                <label class="uk-form-label">'.$option.'</label>
-                <div class="uk-form-controls">
-                &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
-                <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+            if ($option !== 'user_login_method') {
+                $retval .= '
+                    <div class="uk-form-row">
+                    <label class="uk-form-label">'.$option.'</label>
+                    <div class="uk-form-controls">
+                    &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                    <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+                ';
+                $retval .= '
+                    </select>
+                    </div>
+                    </div>
+                ';
+            } else {
+                $ua_array = unserialize($value);
 
-            ';
-            $retval .= '
-                </select>
-                </div>
-                </div>
-            ';
+                foreach($ua_array AS $op => $val) {
+                    $retval .= '
+                        <div class="uk-form-row">
+                        <label class="uk-form-label">'.$option.'['.$op.']</label>
+                        <div class="uk-form-controls">
+                        &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                        <select name="cfgvalue[' . $option . ']['.$op.']">
+                        <option ' . ( $val == 0 ? ' selected="selected"' : '') . ' value="0">False</option>
+                        <option ' . ( $val == 1 ? ' selected="selected"' : '') . ' value="1">True</option>
+                        </select>
+                        </div>
+                        </div>
+                    ';
+                }
+            }
 
         }  else {
             $item = @unserialize($value);
@@ -787,7 +808,7 @@ function saveNewPaths( $group='Core' ) {
                     SET value=? WHERE name=? AND group_name=?";
             try {
                 $stmt = $db->conn->executeUpdate($sql,array($default[$option],$option,$group));
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 $retval[] = 'Error Resetting ' . $option;
                 $stmt = false;
             }
@@ -813,7 +834,41 @@ function saveNewPaths( $group='Core' ) {
                                     $group
                                 )
                     );
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
+                    $retval[] = 'Error saving ' . $option;
+                    $stmt = false;
+                }
+                if ($stmt !== false) {
+                    $retval[] = 'Saving ' . $option;
+                    $changed++;
+                }
+            } else if ($option == 'user_login_method') {
+                $methods = array('standard', '3rdparty', 'oauth');
+                $methods_disabled = 0;
+                foreach ($methods as $m) {
+                    if (isset($value[$m]) && $value[$m] == 0) {
+                        $methods_disabled++;
+                        $value[$m] = (int) 0;
+                    } else {
+                        $value[$m] = (int) 1;
+                    }
+                }
+                if ($methods_disabled == count($methods)) {
+                    // just to make sure people don't lock themselves out of their site
+                    $value['standard'] = true;
+                }
+                $sql = "UPDATE `" . $_DB_table_prefix . "conf_values`
+                        SET value=? WHERE name=? AND group_name=?";
+                try {
+                    $stmt = $db->conn->executeUpdate(
+                                $sql,
+                                array(
+                                    serialize($value),
+                                    $option,
+                                    $group
+                                )
+                    );
+                } catch(Throwable $e) {
                     $retval[] = 'Error saving ' . $option;
                     $stmt = false;
                 }
@@ -829,8 +884,10 @@ function saveNewPaths( $group='Core' ) {
     } else {
         @unlink($cfgvalue['path_data'] .'$$$config$$$.cache');
         @unlink($config['path_data'] .'$$$config$$$.cache');
-        @unlink($cfgvalue['path_data'] .'layout_cache/$$$config$$$.cache');
-        @unlink($config['path_data'] .'layout_cache/$$$config$$$.cache');
+        @unlink($cfgvalue['path_data'] .'cache/$$$config$$$.cache');
+        @unlink($config['path_data'] .'cache/$$$config$$$.cache');
+        $c = Cache::getInstance();
+        $c->clear();
     }
 
     return $retval;

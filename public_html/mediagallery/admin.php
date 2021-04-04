@@ -62,7 +62,7 @@ function MG_invalidRequest( ) {
     return $retval;
 }
 
-function MG_navbar($selected='',$album_id) {
+function MG_navbar($selected='',$album_id = 0) {
     global $_CONF, $_MG_CONF, $LANG_MG01, $LANG_MG03, $glversion;
 
     $T = new Template( MG_getTemplatePath($album_id) );
