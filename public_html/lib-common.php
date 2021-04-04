@@ -1647,7 +1647,6 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
 
     $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
-
     $T = new Template($_CONF['path_layout'] . '/fields');
     $T->set_file('optionlist', 'optionlist.thtml');
     $T->set_block('optionlist', 'options', 'opts');
@@ -1656,14 +1655,14 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
             (is_array($selected) && in_array($selected, $A[0])) ||
             (!is_array($selected) && $A[0] == $selected)
         ) {
-            $selected = true;
+            $sel = true;
         } else {
-            $selected = false;
+            $sel = false;
         }
         $T->set_var(array(
             'opt_value' => $A[0],
             'opt_name' => $A[1],
-            'selected' => $selected,
+            'selected' => $sel,
         ) );
         $T->parse('opts', 'options', true);
     }
