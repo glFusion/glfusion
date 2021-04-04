@@ -4,7 +4,7 @@
 	<div class="uk-form-controls">
 		<input type="file" dir="ltr" id="photo" name="photo" ><br />
 {!if display_photo}
-        X{display_photo}Y
+        {display_photo}
 		<br />{$LANG04[79]}&nbsp;<input type="checkbox" name="delete_photo" />
 {!endif}
 	</div>
