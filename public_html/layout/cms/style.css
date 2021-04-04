@@ -2648,3 +2648,10 @@ pre {
 #whats_new_block .uk-list {
 	line-height:2 !important;
 }
+
+.cc-grid-item {
+    text-align: center;
+    margin-top: 20px;
+    width:100px;
+    height:100px;
+}
