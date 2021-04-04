@@ -1188,18 +1188,14 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     if ( !isset( $_GET['topic'] )) {
         if ( isset( $_GET['story'] )) {
             $sid = filter_input(INPUT_GET, 'story', FILTER_SANITIZE_STRING);
-//            $sid = COM_applyFilter( $_GET['story'] );
         } elseif ( isset( $_GET['sid'] )) {
             $sid = filter_input(INPUT_GET, 'sid', FILTER_SANITIZE_STRING);
-//            $sid = COM_applyFilter( $_GET['sid'] );
         } elseif ( isset( $_POST['story'] )) {
-//            $sid = COM_applyFilter( $_POST['story'] );
             $sid = filter_input(INPUT_POST, 'story', FILTER_SANITIZE_STRING);
         }
         if ( empty( $sid ) && $_CONF['url_rewrite'] &&
                 ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
             COM_setArgNames( array( 'story', 'mode' ));
-//            $sid = COM_applyFilter( COM_getArgument( 'story' ));
             $sid = filter_var(COM_getArgument( 'story' ), FILTER_SANITIZE_STRING);
         } if ( !empty( $sid )) {
             $db = Database::getInstance();
@@ -1210,7 +1206,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         }
     } else {
         $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
-//        $topic = COM_applyFilter( $_GET['topic'] );
     }
     if ( !isset($_GET['ncb'])) {
         $theme->set_var('cb',true);
@@ -5717,7 +5712,7 @@ function COM_truncateHTML ( $html, $maxLength, $end = '&hellip;', $endchars = 0 
         // Print text leading up to the tag.
         $str = substr($html, $position, $tagPosition - $position);
         if ($printedLength + strlen($str) > $maxLength) {
-            $retval .= (substr($str, 0, $maxLength - $printedLength));
+            $retval .= rtrim((substr($str, 0, $maxLength - $printedLength)));
             $printedLength = $maxLength;
             break;
         }
