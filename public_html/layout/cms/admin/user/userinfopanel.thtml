@@ -31,6 +31,9 @@
         <input type="file" dir="ltr" id="photo" name="photo">
         <br>
         {display_photo}
+{!if lang_delete}
+        <br>{lang_delete}&nbsp;<input type="checkbox" name="delete_photo"/>
+{!endif}
       </div>
     </div>
 {!endif}

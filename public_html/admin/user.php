@@ -296,10 +296,7 @@ function USER_edit($uid = '', $msg = '')
     }
 
     if (!empty($uid) && ($uid != $_USER['uid']) && SEC_hasRights('user.delete')) {
-        $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete'] . '" name="delete"%s />';
-        $jsconfirm = ' onclick="return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');"';
-        $userform->set_var('delete_option',sprintf ($delbutton, $jsconfirm));
-        $userform->set_var('delete_option_no_confirmation',sprintf ($delbutton, ''));
+        $userform->set_var('delete_option', true);
     }
 
     $userform->set_var('gltoken_name', CSRF_TOKEN);
@@ -481,18 +478,21 @@ function USER_accountPanel($U,$newuser = 0)
         $statusarray[USER_ACCOUNT_AWAITING_APPROVAL] = $LANG28[44];
     }
     asort($statusarray);
-    $statusselect = '<select name="userstatus" id="userstatus">';
+    $userform->set_block('user', 'userStatusOptions', 'statOpts');
     foreach ($statusarray as $key => $value) {
-        $statusselect .= '<option value="' . $key . '"';
-        if ($key == $U['status']) {
-            $statusselect .= ' selected="selected"';
-        }
-        $statusselect .= '>' . $value . '</option>' . LB;
+        $userform->set_var(array(
+            'opt_name' => $value,
+            'opt_value' => $key,
+            'selected' => ($key == $U['status']),
+        ) );
+        $userform->parse('statOpts', 'userStatusOptions', true);
     }
-    $statusselect .= '</select><input type="hidden" name="oldstatus" value="'.$U['status'] . '"/>';
-    $userform->set_var('user_status', $statusselect);
+    $userform->set_var('user_status', $U['status']);
 
-    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] && isset($U['tfa_enabled']) && $U['tfa_enabled']) {
+    if (
+        isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] &&
+        isset($U['tfa_enabled']) && $U['tfa_enabled']
+    ) {
         $userform->set_var('twofactor',true);
         $userform->set_var(array(
             'lang_two_factor' => $LANG_TFA['two_factor'],
@@ -586,11 +586,6 @@ function USER_groupPanel($U, $newuser = 0)
         $userform->set_var('group_options', $groupoptions);
 
         $userform->parse('group_edit', 'groupedit', true);
-    } else {
-        // user doesn't have the rights to edit a user's groups so set to -1
-        // so we know not to handle the groups array when we save
-        $userform->set_var('group_edit',
-                '<input type="hidden" name="groups" value="-1" />');
     }
     $retval = $userform->finish ($userform->parse ('output', 'user'));
     return $retval;
@@ -649,14 +644,10 @@ function USER_userinfoPanel($U, $newuser = 0)
     if ($_CONF['allow_user_photo'] == 1) {
         if ( !empty($uid) && $uid > 1 ) {
             $photo = USER_getPhoto ($uid, $U['photo'], $U['email'], -1);
-            if (empty ($photo)) {
-                $userform->set_var('display_photo', '');
-            } else {
-                if (empty ($U['photo'])) { // external avatar
-                    $photo = '<br/>' . $photo;
-                } else { // uploaded photo - add delete option
-                    $photo = '<br/>' . $photo . '<br/>' . $LANG04[79]
-                           . '&nbsp;<input type="checkbox" name="delete_photo"/>'.LB;
+            if (!empty($photo)) {
+                $userform->set_var('display_photo', $photo);
+                if (!empty($U['photo'])) {
+                    $userform->set_var('lang_delete', $LANG04[79]);
                 }
                 $userform->set_var('display_photo', $photo);
             }
@@ -1172,7 +1163,8 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
             if (($A['grp_name'] == 'All Users') ||
                 ($A['grp_name'] == 'Logged-in Users') ||
                 ($A['grp_name'] == 'Non-Logged-in Users') ||
-                ($A['grp_name'] == 'Remote Users')) {
+                ($A['grp_name'] == 'Remote Users')
+            ) {
                 $retval = '<input type="checkbox" disabled="disabled"'
                         . $checked . '/>'
                         . '<input type="hidden" name="groups[]" value="'
@@ -2444,18 +2436,15 @@ function USER_import()
 {
     global $_CONF, $LANG28;
 
-    $token = SEC_createToken();
-    $retval = '<form class="uk-form" action="' . $_CONF['site_admin_url']
-            . '/user.php" method="post" enctype="multipart/form-data"><div>'
-            . $LANG28[29]
-            . ': <input type="file" dir="ltr" name="importfile" size="40"'
-            . '/>'
-            . '<input type="hidden" name="importexec" value="x" />'
-            . '<button class="uk-button uk-button-primary" type="submit" name="submit" value="' . $LANG28[30]
-            . '"' . '/>'.$LANG28[30].'</button><input type="hidden" name="' . CSRF_TOKEN
-            . "\" value=\"{$token}\"" . '/></div></form>';
-
-    return $retval;
+    $T = new Template($_CONF['path_layout'] . '/admin/user');
+    $T->set_file('import', 'batchimport.thtml');
+    $T->set_var(array(
+        'token' => SEC_createToken(),
+        'lang_submit' => $LANG28[30],
+        'lang_path' => $LANG28[29],
+        'csrf_token' => CSRF_TOKEN,
+    ) );
+    return $T->finish($T->parse('output', 'import'));
 }
 
 /**
