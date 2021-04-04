@@ -42,6 +42,7 @@
 - Template class code significantly streamlined - utilizes new caching engine to allow for memory based caching of templates
 - Replaced all old style Cache calls to new Cache class interface
 - FileMgmt Admin screens now adhere to glFusion UI standards
+- Password is required to change any user profile fields
 
 ### Depreciated
 
