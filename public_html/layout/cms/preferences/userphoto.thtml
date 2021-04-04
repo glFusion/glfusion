@@ -1,8 +1,12 @@
 {# begin {templatelocation} #}
 <div class="uk-form-row">
-<label class="uk-form-label" for="photo">{lang_userphoto}</label>
-<div class="uk-form-controls">
-<input type="file" dir="ltr" id="photo" name="photo" ><br />{display_photo}
-</div>
+	<label class="uk-form-label" for="photo">{lang_userphoto}</label>
+	<div class="uk-form-controls">
+		<input type="file" dir="ltr" id="photo" name="photo" ><br />
+{!if display_photo}
+        X{display_photo}Y
+		<br />{$LANG04[79]}&nbsp;<input type="checkbox" name="delete_photo" />
+{!endif}
+	</div>
 </div>
 {# end {templatelocation} #}
