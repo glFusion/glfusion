@@ -242,18 +242,7 @@ function edituser()
 
     if ($_CONF['allow_user_photo'] == 1) {
         $photo = USER_getPhoto ($_USER['uid'], $A['photo'], $A['email'], -1);
-        if (empty ($photo)) {
-            $preferences->set_var ('display_photo', '');
-        } else {
-            if (empty ($A['photo'])) { // external avatar
-                $photo = '<br />' . $photo;
-            } else { // uploaded photo - add delete option
-                $photo = '<br />' . $photo . '<br />' . $LANG04[79]
-                       . '&nbsp;<input type="checkbox" name="delete_photo" />'
-                       . LB;
-            }
-            $preferences->set_var ('display_photo', $photo);
-        }
+        $preferences->set_var('display_photo', $photo);
         $preferences->parse ('userphoto_option', 'photo', true);
     } else {
         $preferences->set_var ('userphoto_option', '');
