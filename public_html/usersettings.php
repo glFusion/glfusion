@@ -24,6 +24,7 @@ require_once 'lib-common.php';
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Social\Social;
+use \glFusion\Log\Log;
 
 USES_lib_user();
 
@@ -1003,11 +1004,9 @@ function handlePhotoUpload ($delete_photo = '')
         $upload->uploadFiles ();
 
         if ($upload->areErrors ()) {
-            $display = COM_siteHeader ('menu', $LANG24[30]);
-            $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true,'error');
-            $display .= COM_siteFooter ();
-            echo $display;
-            exit; // don't return
+            COM_setMsg( $upload->printErrors(false), 'error', 1 );
+            Log::write('system',Log::ERROR, "usersettings.php - upload new user image: " . $upload->printErrors(false));
+            return '';
         }
     } else if (!$delete_photo && !empty ($curphoto)) {
         $filename = $curphoto;
