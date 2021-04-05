@@ -677,7 +677,7 @@ function STORY_save()
             array(Database::STRING)
         );
     }
-    Cache::getInstance()->deleteItemsByTag('story_'.$article->get('sid'));
+    Cache::getInstance()->clear();
 
     AdminAction::write('system','article_save',
         sprintf($LANG_ADM_ACTIONS['article_save'],$article->get('sid'),$article->getDisplayItem('title')));
