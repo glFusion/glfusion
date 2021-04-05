@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2016-2018 by the following authors:
+*  Copyright (C) 2016-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -3549,7 +3549,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'ip_lookup',
-    	'default_value' => 'https://www.ultratools.com/tools/ipWhoisLookupResult?ipAddress=*',
+    	'default_value' => 'https://whatismyipaddress.com/ip/*',
     	'type' => 'text',
     	'subgroup' => 7,
     	'fieldset' => 7,
