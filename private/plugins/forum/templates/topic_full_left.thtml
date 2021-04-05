@@ -33,7 +33,8 @@
 							$("#suboption").prop('value', result.subOption);
 							$("#subscribe-icon").prop('class',result.icon);
 							$("#subscribe-text").html(result.label);
-							$.UIkit.notify("<i class='uk-icon-check'></i>&nbsp;" + result.statusMessage, {timeout: 3000,pos:'top-center'});
+							//$.UIkit.notify("<i class='uk-icon-check'></i>&nbsp;" + result.statusMessage, {timeout: 3000,pos:'top-center'});
+							glFusion.notify(result.statusMessage, 'success');
 						}
 					});
 				});

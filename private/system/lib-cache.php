@@ -45,12 +45,23 @@ $TEMPLATE_OPTIONS = array(
 $TEMPLATE_OPTIONS['hook']['set_root'] = '_template_set_root';
 
 function _template_set_root($root) {
-    global $_CONF, $_USER;
+    global $_CONF, $_USER, $_SYSTEM;
 
     $retval = array();
 
     if (!is_array($root)) {
         $root = array($root);
+    }
+
+    $base_theme = '';
+    if (isset($_SYSTEM['base_theme'])) {
+        if (!empty($_SYSTEM['base_theme'])) {
+            $base_theme = $_SYSTEM['base_theme'];
+        } else {
+            $base_theme = $_USER['theme'];  // this is the base theme
+        }
+    } else {
+        $base_theme = 'cms';
     }
 
     foreach ($root as $r) {
@@ -71,8 +82,8 @@ function _template_set_root($root) {
         if ( $r != '' ) {
             $retval[] = $r . '/custom';
             $retval[] = $r;
-            if ( $_USER['theme'] != 'cms' ) {
-                $retval[] = $_CONF['path_themes'] . 'cms/' .substr($r, strlen($_CONF['path_layout']));
+            if ( $_USER['theme'] != $base_theme ) {
+                $retval[] = $_CONF['path_themes'] . $base_theme . '/' .substr($r, strlen($_CONF['path_layout']));
             }
         }
     }
