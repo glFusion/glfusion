@@ -57,7 +57,7 @@ function USER_deleteAccount($uid)
                                 "SELECT COUNT(DISTINCT {$_TABLES['users']}.uid) AS count
                                     FROM `{$_TABLES['users']}`,`{$_TABLES['group_assignments']}`
                                     WHERE {$_TABLES['users']}.uid > 1 AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid
-                                        AND ({$_TABLES['group_assignments']}.ug_main_grp_id = ?",
+                                        AND ({$_TABLES['group_assignments']}.ug_main_grp_id = ?)",
                                 array($rootgrp),
                                 0,
                                 array(Database::STRING)
