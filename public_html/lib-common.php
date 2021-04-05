@@ -6062,6 +6062,7 @@ function COM_checkVersion($have, $need) {
 
     list($major,$minor,$rev,$extra) = explode('.',$have.'....');
     list($requireMajor,$requireMinor,$requireRev,$requireExtra) = explode('.',$need.'....');
+
     if ( !isset($major) )
         $major = 0;
     if ( !isset($minor) )
@@ -6069,7 +6070,7 @@ function COM_checkVersion($have, $need) {
     if ( !isset($rev) )
         $rev = 0;
     if ( !isset($extra) )
-        $extra = '';
+        $extra = 0;
     if ( !isset($requireMajor) )
         $requireMajor = 0;
     if ( !isset($requireMinor) )
@@ -6077,8 +6078,17 @@ function COM_checkVersion($have, $need) {
     if ( !isset($requireRev) )
         $requireRev = 0;
     if ( !isset($requireExtra) )
-        $RequireExtra = '';
+        $requireExtra = 0;
+
+    if (strstr($extra,"pl") !== false) {
+        $extra = (int) substr($extra,2);
+    }
+    if (strstr($requireExtra,"pl") !== false) {
+        $requireExtra = (int) substr($requireExtra,2);
+    }
+
     $passed = 0;
+
     if ( $requireMajor <= $major ) {
         if ( $requireMajor < $major ) {
             $passed = 1;
@@ -6088,12 +6098,8 @@ function COM_checkVersion($have, $need) {
             } else if ( $requireRev <= (int) $rev ) {
                 if ( $requireRev < (int) $rev ) {
                     $passed = 1;
-                } else if ($requireExtra != '' ) {
-                    if ( $requireExtra == 'fusion' ) {
+                } else if ($requireExtra <=  (int) $extra) {
                         $passed = 1;
-                    }
-                } else {
-                    $passed = 1;
                 }
             }
         }
