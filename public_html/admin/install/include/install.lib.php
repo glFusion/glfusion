@@ -1583,6 +1583,22 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             DB_query("DELETE FROM `{$_TABLES['plugins']}` WHERE pi_name='commentfeeds'",1);
 
+            $newCapabilities = array(
+                array('ft_name' => 'system.root', 'ft_group' => 'System Root', 'ft_desc' => 'Allows Root Access')
+            );
+
+            foreach($newCapabilities AS $feature) {
+                $admin_ft_id = 0;
+                $group_id = 0;
+
+                $tmp_admin_ft_id = DB_getItem ($_TABLES['features'], 'ft_id',"ft_name = '{$feature['ft_name']}'");
+                if (empty ($tmp_admin_ft_id)) {
+                    DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('{$feature['ft_name']}','{$feature['ft_desc']}',1)",1);
+                    $admin_ft_id  = DB_insertId();
+                    DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ('{$admin_ft_id}',1)",1);
+                }
+            }
+
             $current_fusion_version = '2.0.0';
 
         default:

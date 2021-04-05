@@ -1053,6 +1053,30 @@ function glfusion_200()
     DB_query("UPDATE {$_TABLES['syndication']} SET type='comment' WHERE type='commentfeeds'",1);
     DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name='commentfeeds'",1);
 
+    // add the new system.root permission
+    $newCapabilities = array(
+        array('ft_name' => 'system.root', 'ft_group' => 'System Root', 'ft_desc' => 'Allows Root Access')
+    );
+
+    foreach($newCapabilities AS $feature) {
+        $admin_ft_id = 0;
+        $group_id = 0;
+        $tmp_admin_ft_id = $db->conn->fetchOne("SELECT ft_id FROM {$_TABLES['features']} WHERE ft_name = ?", array($feature['ft_name']));
+        if ($tmp_admin_ft_id === false) {
+            $db->conn->insert(
+                $_TABLES['features'],
+                array('ft_name' => $feature['ft_name'], 'ft_descr' => $feature['ft_desc'], 'ft_gl_core' => 1)
+            );
+            $admin_ft_id = $db->conn->lastInsertId();
+            // assign new feature to root
+            $db->conn->insert($_TABLES['access'],
+                array('acc_ft_id' => $admin_ft_id, 'acc_grp_id' => 1)
+            );
+        } else {
+            Log::write('system',Log::DEBUG,"Feature Already Exists: " . $feature['ft_name']);
+        }
+    }
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='2.0.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='2.0.0' WHERE name='glfusion'",1);

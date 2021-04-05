@@ -266,7 +266,7 @@ class Group
     {
         global $_USER, $_GROUPS;
 
-        if (empty($grp_to_verify)) return true;        
+        if (empty($grp_to_verify)) return true;
 
         if (empty ($uid)) {
             if (COM_isAnonUser()) {
@@ -285,11 +285,21 @@ class Group
             $groups = self::getAll($uid);
         }
         if (is_numeric($grp_to_verify)) {
+            if ($grp_to_verify == 1) {
+                if (SEC_hasRights('system.root')) {
+                    return true;
+                }
+            }
             return (in_array($grp_to_verify, $groups)) ? true : false;
         } else {
             // perform case-insensitive comparison
             $lgroups = array_change_key_case($groups, CASE_LOWER);
             $grp_to_verify = strtolower($grp_to_verify);
+            if (strcmp($grp_to_verify,'root') === 0) {
+                if (SEC_hasRights('system.root')) {
+                    return true;
+                }
+            }
             return (isset($lgroups[$grp_to_verify])) ? true : false;
         }
     }
