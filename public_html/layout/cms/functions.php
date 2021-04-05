@@ -113,7 +113,6 @@ $outputHandle->addScriptFile($_CONF['path_html'].'javascript/jquery/jquery-ui.mi
 
 $outputHandle->addScriptFile($_CONF['path_html'].'javascript/ps.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/jquery.smartmenus.min.js');
-$outputHandle->addScriptFile($_CONF['path_layout'].'js/glfusion.js');
 
 // Load our CSS specific to this theme
 $validTypes = array('.','.gradient.','.almost-flat.');
