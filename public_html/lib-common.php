@@ -1463,18 +1463,22 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $plugin = '';
         if (isset ($_GET['plugin'])) {
             $plugin = filter_input(INPUT_GET, 'plugin', FILTER_SANITIZE_STRING);
-//            $plugin = COM_applyFilter ($_GET['plugin']);
         }
         $msgTxt = COM_showMessage ($msg, $plugin,'',0,'info');
     }
 
     if ( SESS_isSet('glfusion.infoblock') ) {
-        $msgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
-        if ( !isset($msgArray['msg'] ) ) $msgArray['msg'] = '';
-        if ( !isset($msgArray['persist'] ) ) $msgArray['persist'] = 0;
-        if ( !isset($msgArray['type'] ) ) $msgArray['type'] = 'info';
-        $msgTxt .= COM_showMessageText($msgArray['msg'], '', $msgArray['persist'], $msgArray['type']);
+        $fullMsgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
+        foreach ($fullMsgArray AS $msgArray) {
+            if (is_array($msgArray)) {
+                if ( !isset($msgArray['msg'] ) ) $msgArray['msg'] = '';
+                if ( !isset($msgArray['persist'] ) ) $msgArray['persist'] = 0;
+                if ( !isset($msgArray['type'] ) ) $msgArray['type'] = 'info';
+                $msgTxt .= COM_showMessageText($msgArray['msg'], '', $msgArray['persist'], $msgArray['type']);
+            }
+        }
         SESS_unSet('glfusion.infoblock');
+
     }
     $theme->set_var('info_block',$msgTxt);
 
@@ -3858,13 +3862,20 @@ function COM_setMessage( $msg = 0 )
 
 function COM_setMsg( $msg, $type='info', $persist=0 )
 {
+    $currentMsgArray = array();
+    if ( SESS_isSet('glfusion.infoblock') ) {
+        $currentMsgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
+    }
+
     $msgArray = array(
                         'msg' => $msg,
                         'type' => $type,
                         'persist' => $persist,
                         'title' => '',
                     );
-    SESS_setVar('glfusion.infoblock', serialize($msgArray));
+
+    $currentMsgArray[] = $msgArray;
+    SESS_setVar('glfusion.infoblock', serialize($currentMsgArray));
 }
 
 /**
