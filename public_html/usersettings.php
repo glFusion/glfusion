@@ -1005,7 +1005,7 @@ function handlePhotoUpload ($delete_photo = '')
 
         if ($upload->areErrors ()) {
             COM_setMsg( $upload->printErrors(false), 'error', 1 );
-            Log::write('system',Log::ERROR, "usersettings.php - upload new user image: " . $upload->printErrors(false));
+            Log::write('system',Log::DEBUG, "usersettings.php - upload new user image: " . $upload->printErrors(false));
             return '';
         }
     } else if (!$delete_photo && !empty ($curphoto)) {
