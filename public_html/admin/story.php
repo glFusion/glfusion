@@ -878,6 +878,7 @@ switch ($action) {
         } else if (SEC_checkToken()) {
             $rc = Article::delete($sid);
             if ($rc === true) {
+                Cache::getInstance()->clear();
                 COM_setMsg($MESSAGE[10],'info',false);
             }
         } else {
