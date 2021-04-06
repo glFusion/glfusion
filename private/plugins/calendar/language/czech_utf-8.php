@@ -38,7 +38,7 @@ $LANG_CAL_1 = array(
     5 => 'Popis',
     6 => 'Přidat událost',
     7 => 'Blížící se události',
-    8 => 'By adding this event to your calendar you can quickly view only the events you are interested in by clicking "My Calendar" from the User Functions area.',
+    8 => 'Přidáním této události do kalendáře můžete rychle zobrazit pouze události, o které máte zájem, kliknutím na tlačítko "Můj kalendář" v oblasti Funkce uživatele.',
     9 => 'Přidat do osobního kalendáře.',
     10 => 'Odebrat z mého kalendáře',
     11 => 'Přidat událost do osobního kalendáře uživatele %s',
@@ -83,7 +83,7 @@ $LANG_CAL_1 = array(
     50 => 'Události',
     51 => 'Vymazat',
     52 => 'Přidal(a)',
-    53 => 'Calendar View',
+    53 => 'Zobrazení kalendáře',
 );
 
 $_LANG_CAL_SEARCH = array(
@@ -130,7 +130,7 @@ $LANG_CAL_2 = array(
 $LANG_CAL_ADMIN = array(
     1 => 'Editor událostí',
     2 => 'Chyba',
-    3 => 'Post Mode',
+    3 => 'Režim příspěvku',
     4 => 'URL události',
     5 => 'Datum začátku',
     6 => 'Datum konce',
@@ -148,7 +148,7 @@ $LANG_CAL_ADMIN = array(
     18 => '',
     19 => '',
     20 => 'uložit',
-    21 => 'cancel',
+    21 => 'zrušit',
     22 => 'vymazat',
     23 => 'Chybný datum začátku.',
     24 => 'Chybný datum konce.',
@@ -158,21 +158,21 @@ $LANG_CAL_ADMIN = array(
     28 => ' měsíců. Pokud chceš, změň délku období a pak klikni na Obnov výpis. Pro odstranění z databáze vyber jednu nebo více událostí  a pak klikni na ikonu pro vymazání. Budou vymazány pouze vybrané události ze zobrazených.',
     29 => '',
     30 => 'Obnov výpis',
-    31 => 'Are You sure you want to permanently delete ALL selected users?',
+    31 => 'Jste si jisti, že chcete trvale odstranit VŠECHNY vybrané uživatele?',
     32 => 'Vypsat vše',
     33 => 'Nic nebylo vybráno pro vymazání',
-    34 => 'Event ID',
-    35 => 'could not be deleted',
+    34 => 'ID události',
+    35 => 'nelze odstranit',
     36 => 'Úspěšně vymazáno',
-    37 => 'Moderate Event',
-    38 => 'Batch Event Admin',
-    39 => 'Event Admin',
-    40 => 'Event List',
-    41 => 'This screen allows you to edit / create events. Edit the fields below and save.',
+    37 => 'Moderovat událost',
+    38 => 'Správce hromadných příkazů',
+    39 => 'Administrátor události',
+    40 => 'Seznam událostí',
+    41 => 'Tato obrazovka umožňuje upravovat / vytvářet události. Upravte pole níže a uložte.',
 );
 
 $LANG_CAL_AUTOTAG = array(
-    'desc_calendar' => 'Link: to a Calendar event on this site; link_text defaults to event title: [calendar:<i>event_id</i> {link_text}]',
+    'desc_calendar' => 'Odkaz: na událost kalendáře na tomto webu; link _text výchozí na tuto událost: [kalendář:<i>event_id</i> {link_text}]',
 );
 
 $LANG_CAL_MESSAGE = array(
@@ -193,48 +193,48 @@ $PLG_calendar_MESSAGE24 = 'Událost byla uložena do kalendáře.';
 $PLG_calendar_MESSAGE26 = 'Událost byla vymazána.';
 
 // Messages for the plugin upgrade
-$PLG_calendar_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_calendar_MESSAGE3001 = 'Aktualizace pluginu není podporována.';
 $PLG_calendar_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['calendar'] = array(
     'label' => 'Kalendář',
-    'title' => 'Calendar Configuration'
+    'title' => 'Konfigurace kalendáře'
 );
 
 $LANG_confignames['calendar'] = array(
-    'calendarloginrequired' => 'Calendar Login Required',
-    'hidecalendarmenu' => 'Hide Calendar Menu Entry',
-    'personalcalendars' => 'Enable Personal Calendars',
-    'eventsubmission' => 'Enable Submission Queue',
-    'showupcomingevents' => 'Show Upcoming Events',
-    'upcomingeventsrange' => 'Upcoming Events Range',
-    'event_types' => 'Event Types',
-    'hour_mode' => 'Hour Mode',
-    'notification' => 'Notification Email',
-    'delete_event' => 'Delete Events with Owner',
-    'aftersave' => 'After Saving Event',
-    'default_permissions' => 'Event Default Permissions',
+    'calendarloginrequired' => 'Vyžadováno přihlášení do kalendáře',
+    'hidecalendarmenu' => 'Skrýt položku menu kalendáře',
+    'personalcalendars' => 'Povolit osobní kalendáře',
+    'eventsubmission' => 'Povolit frontu příspěvků',
+    'showupcomingevents' => 'Zobrazit nadcházející události',
+    'upcomingeventsrange' => 'Nastavení období nadcházející událostí',
+    'event_types' => 'Typy událostí',
+    'hour_mode' => 'Hodinový režim',
+    'notification' => 'E-mailová potvrzení',
+    'delete_event' => 'Odstranit události uživatele',
+    'aftersave' => 'Po uložení události',
+    'default_permissions' => 'Výchozí oprávnění události',
     'only_admin_submit' => 'Přidat událost smí jen Admin',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Zobrazit bloky glFusion',
 );
 
 $LANG_configsubgroups['calendar'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Hlavní nastavení'
 );
 
 $LANG_fs['calendar'] = array(
-    'fs_main' => 'General Calendar Settings',
-    'fs_permissions' => 'Default Permissions'
+    'fs_main' => 'Obecné nastavení kalendáře',
+    'fs_permissions' => 'Výchozí oprávnění'
 );
 
 $LANG_configSelect['calendar'] = array(
-    0 => array(1=> 'True', 0 => 'False'),
-    1 => array(true => 'True', false => 'False'),
+    0 => array(1=> 'Ano', 0 => 'Ne'),
+    1 => array(true => 'Ano', false => 'Ne'),
     6 => array(12 => '12', 24 => '24'),
-    9 => array('item'=>'Forward to Event', 'list'=>'Display Admin List', 'plugin'=>'Display Calendar', 'home'=>'Display Home', 'admin'=>'Display Admin'),
-    12 => array(0=>'No access', 2=>'Jen pro čtení', 3=>'Read-Write'),
-    13 => array(0=>'Left Blocks', 1=>'Right Blocks', 2=>'Left & Right Blocks', 3=>'None')
+    9 => array('item'=>'Zvolit událost na', 'list'=>'Zobrazit v administraci', 'plugin'=>'Zobrazit kalendář', 'home'=>'Zobrazit uvítací stránku', 'admin'=>'Zobrazit v administraci'),
+    12 => array(0=>'Nemáš přístup', 2=>'Jen pro čtení', 3=>'Čtení a zápis'),
+    13 => array(0=>'Bloky nalevo', 1=>'Bloky vpravo', 2=>'Bloky nalevo a napravo', 3=>'Žádná')
 );
 
 ?>

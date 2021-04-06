@@ -34,97 +34,97 @@ $LANG_POLLS = array(
     'pollstitle'        => 'Hlasování na webu',
     'polltopics'        => 'Jiné ankety',
     'stats_top10'       => 'Top Ten hlasování',
-    'stats_topics'      => 'Poll Topic',
+    'stats_topics'      => 'Téma ankety',
     'stats_votes'       => 'Hlasy',
     'stats_none'        => 'Vypadá to, že tu nejsou žádná hlasování nebo nikdo nehlasoval.',
     'stats_summary'     => 'Volby (odpovědi) v systému',
     'open_poll'         => 'Otevřeno pro hlasování',
     'answer_all'        => 'Prosím dpovězte na všechny zbývající otázky',
     'not_saved'         => 'Výsledek neuložen',
-    'upgrade1'          => 'You installed a new version of the Polls plugin. Please',
-    'upgrade2'          => 'upgrade',
-    'editinstructions'  => 'Please fill in the Poll ID, at least one question and two answers for it.',
-    'pollclosed'        => 'This poll is closed for voting.',
-    'pollhidden'        => 'Poll results will be available only after the Poll has closed.',
+    'upgrade1'          => 'Nainstalovali jste novou verzi pluginu pro ankety. Prosím',
+    'upgrade2'          => 'aktualizace',
+    'editinstructions'  => 'Vyplňte prosím ID ankety, alespoň jednu otázku a dvě odpovědi na ni.',
+    'pollclosed'        => 'Tato anketa je pro hlasování uzavřena.',
+    'pollhidden'        => 'Výsledky hlasování budou k dispozici až po ukončení ankety.',
     'start_poll'        => 'Zahaj hlasování',
     'deny_msg' => 'Přístup k tomuto hlasování je odepřen. Buď bylo hlasování přesunuto či odstraněno nebo nemáte dostatečná práva.',
     'login_required'    => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Login</a> required to vote',
-    'username'          => 'Username',
-    'ipaddress'         => 'IP Address',
-    'date_voted'        => 'Date Voted',
+    'username'          => 'Přihlašovací jméno',
+    'ipaddress'         => 'IP adresa',
+    'date_voted'        => 'Datum hlasování',
     'description'       => 'Popis',
-    'general'           => 'General',
-    'poll_questions'    => 'Poll Questions',
-    'permissions'       => 'Permissions',
+    'general'           => 'Obecná nastavení',
+    'poll_questions'    => 'Anketní otázka',
+    'permissions'       => 'Oprávnění',
 );
 
 ###############################################################################
 # admin/plugins/polls/index.php
 
 $LANG25 = array(
-    1 => 'Mode',
-    2 => 'Please enter a topic, at least one question and at least one answer for that question.',
-    3 => 'Poll Created',
-    4 => "Poll %s saved",
-    5 => 'Edit Poll',
-    6 => 'Poll ID',
-    7 => '(do not use spaces)',
-    8 => 'Appears on Pollblock',
+    1 => 'Režim',
+    2 => 'Zadejte téma, alespoň jednu otázku a alespoň jednu odpověď na tuto otázku.',
+    3 => 'Anketa vytvořena',
+    4 => "Anketa %s byla uložena",
+    5 => 'Upravit anketu',
+    6 => 'ID ankety',
+    7 => '(nepoužívat mezery)',
+    8 => 'Zobrazí se v bloku ankety',
     9 => 'Námět',
-    10 => 'Answers / Votes / Remark',
-    11 => "There was an error getting poll answer data about the poll %s",
-    12 => "There was an error getting poll question data about the poll %s",
-    13 => 'Create Poll',
+    10 => 'Odpověď / Hlasy / Poznámky',
+    11 => "Došlo k chybě při získávání údajů o odpovědi na anketu %s",
+    12 => "Došlo k chybě při získávání dat ankety o anketě %s",
+    13 => 'Vytvořit anketu',
     14 => 'uložit',
-    15 => 'cancel',
+    15 => 'zrušit',
     16 => 'vymazat',
-    17 => 'Please enter a Poll ID',
-    18 => 'Polls Administration',
-    19 => 'To modify or delete a poll, click on the edit icon of the poll.  To create a new poll, click on "Create New" above.',
-    20 => 'Voters',
+    17 => 'Zadejte ID ankety',
+    18 => 'Správa ankety',
+    19 => 'Pro úpravu nebo smazání ankety klikněte na ikonu úpravy ankety. Pro vytvoření nové ankety klikněte na "Vytvořit nové" výše.',
+    20 => 'Účastníci hlasování',
     21 => 'Přístup odepřen',
-    22 => "You are trying to access a poll that you don't have rights to.  This attempt has been logged. Please <a href=\"{$_CONF['site_admin_url']}/poll.php\">go back to the poll administration screen</a>.",
-    23 => 'New Poll',
-    24 => 'Admin Home',
+    22 => "Pokoušíte se získat přístup k anketě, na kterou nemáte práva. Tento pokus byl zaznamenán. Prosím <a href=\"{$_CONF['site_admin_url']}/poll.php\">vraťte se zpět na administraci ankety</a>.",
+    23 => 'Nová anketa',
+    24 => 'Administrace domů',
     25 => 'Ano',
     26 => 'Ne',
-    27 => 'Edit',
-    28 => 'Submit',
+    27 => 'Editovat',
+    28 => 'Odeslat',
     29 => 'Vyhledat',
     30 => 'Počet výsledků',
-    31 => 'Question',
-    32 => 'To remove this question from the poll, remove its question text',
+    31 => 'Otázka',
+    32 => 'Chcete-li odstranit tuto otázku z ankety, odstraňte její text',
     33 => 'Otevřeno pro hlasování',
-    34 => 'Poll Topic:',
-    35 => 'This poll has',
-    36 => 'more questions.',
-    37 => 'Hide results while poll is open',
-    38 => 'While the poll is open, only the owner &amp; root can see the results',
-    39 => 'The topic will be only displayed if there are more than 1 questions.',
-    40 => 'See all answers to this poll',
-    41 => 'Are you sure you want to delete this Poll?',
-    42 => 'Are you absolutely sure you want to delete this Poll?  All questions, answers and comments that are associated with this Poll will also be permanently deleted from the database.',
-    43 => 'Login Required to Vote',
+    34 => 'Téma ankety:',
+    35 => 'Tato anketa má',
+    36 => 'více otázek.',
+    37 => 'Skrýt výsledky dokud anketa probíhá',
+    38 => 'Když je anketa otevřená, výsledky může vidět pouze zadavatel &amp; root',
+    39 => 'Téma se zobrazí pouze v případě, že existuje více než 1 dotaz.',
+    40 => 'Zobrazit všechny odpovědi na tuto anketu',
+    41 => 'Jste si jisti, že chcete odstranit tuto anketu?',
+    42 => 'Jste si naprosto jisti, že chcete odstranit tuto anketu? Všechny otázky, odpovědi a komentáře, které jsou spojeny s touto anketou, budou také trvale odstraněny z databáze.',
+    43 => 'Pro hlasování je vyžadováno přihlášení',
 );
 
 $LANG_PO_AUTOTAG = array(
-    'desc_poll'                 => 'Link: to a Poll on this site.  link_text defaults to the Poll topic.  usage: [poll:<i>poll_id</i> {link_text}]',
-    'desc_poll_result'          => 'HTML: renders the results of a Poll on this site.  usage: [poll_result:<i>poll_id</i>]',
-    'desc_poll_vote'            => 'HTML: renders a voting block for a Poll on this site.  usage: [poll_vote:<i>poll_id</i>]',
+    'desc_poll'                 => 'Odkaz: na anketu  na této stránce. link_text  link k tématu ankety použijte: [anketa:<i>ank_id</i> {link_text}]',
+    'desc_poll_result'          => 'HTML: zobrazuje výsledky ankety na tomto webu. Použití: [poll_result:<i>poll_id</i>]',
+    'desc_poll_vote'            => 'HTML: zobrazuje hlasovací blok pro anketu na tomto webu. použijte: [poll_vote:<i>poll_id</i>]',
 );
 
-$PLG_polls_MESSAGE19 = 'Your poll has been successfully saved.';
-$PLG_polls_MESSAGE20 = 'Your poll has been successfully deleted.';
+$PLG_polls_MESSAGE19 = 'Vaše anketa byla úspěšně uložena.';
+$PLG_polls_MESSAGE20 = 'Vaše anketa byla úspěšně smazána.';
 
 // Messages for the plugin upgrade
-$PLG_polls_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_polls_MESSAGE3001 = 'Aktualizace pluginu není podporována.';
 $PLG_polls_MESSAGE3002 = $LANG32[9];
 
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['polls'] = array(
     'label' => 'Hlasování',
-    'title' => 'Polls Configuration'
+    'title' => 'Konfigurace anket'
 );
 
 $LANG_confignames['polls'] = array(
@@ -138,25 +138,25 @@ $LANG_confignames['polls'] = array(
     'delete_polls' => 'Delete Polls with Owner',
     'aftersave' => 'After Saving Poll',
     'default_permissions' => 'Poll Default Permissions',
-    'displayblocks' => 'Display glFusion Blocks',
+    'displayblocks' => 'Zobrazit bloky glFusion',
 );
 
 $LANG_configsubgroups['polls'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Hlavní nastavení'
 );
 
 $LANG_fs['polls'] = array(
     'fs_main' => 'General Polls Settings',
-    'fs_permissions' => 'Default Permissions'
+    'fs_permissions' => 'Výchozí oprávnění'
 );
 
 $LANG_configSelect['polls'] = array(
     0 => array(1=>'True', 0=>'False'),
     1 => array(true=>'True', false=>'False'),
     2 => array('submitorder'=>'As Submitted', 'voteorder'=>'By Votes'),
-    9 => array('item'=>'Forward to Poll', 'list'=>'Display Admin List', 'plugin'=>'Display Public List', 'home'=>'Display Home', 'admin'=>'Display Admin'),
+    9 => array('item'=>'Forward to Poll', 'list'=>'Zobrazit v administraci', 'plugin'=>'Zobrazit veřejný seznam', 'home'=>'Display Home', 'admin'=>'Display Admin'),
     12 => array(0=>'No access', 2=>'Jen pro čtení', 3=>'Read-Write'),
-    13 => array(0=>'Left Blocks', 1=>'Right Blocks', 2=>'Left & Right Blocks', 3=>'None')
+    13 => array(0=>'Bloky nalevo', 1=>'Bloky vpravo', 2=>'Bloky nalevo a napravo', 3=>'Žádná')
 );
 
 ?>

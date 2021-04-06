@@ -30,7 +30,7 @@ global $LANG32;
 ###############################################################################
 
 $LANG_STATIC = array(
-    'newpage' => 'Nová stránka',
+    'newpage' => 'Přidat stránku',
     'adminhome' => 'Administrace',
     'staticpages' => 'Statické stránky',
     'staticpageeditor' => 'Editor statických stránek',
@@ -48,7 +48,7 @@ $LANG_STATIC = array(
     'blankpage' => 'Prázdná stránka',
     'noblocks' => 'Bez bloků',
     'leftblocks' => 'Bloky nalevo',
-    'rightblocks' => 'Right Blocks',
+    'rightblocks' => 'Bloky vpravo',
     'addtomenu' => 'Přidat do menu',
     'label' => 'Název položky',
     'nopages' => 'Žádné stránky zde nejsou',
@@ -73,10 +73,10 @@ $LANG_STATIC = array(
     'stats_page_title' => 'Název stránky',
     'stats_hits' => 'Hitů',
     'stats_no_hits' => 'Vypadá to, že zde statické stránky nejsou nebo se na ně nikdo nepodíval.',
-    'id' => 'ID',
+    'id' => 'Číslo [ID]',
     'duplicate_id' => 'Vybrané ID pro tuto statickou stránku již existuje. Prosím, vyberte jiné ID.',
     'instructions' => 'Pro změnu nebo vymazání statické stránky klikni příslušnou ikonku níže. Prohlédnout statickou stránku si můžeš po kliknutí na její název. Pro vytvoření nové statické stránky klikni na "Přidat" výše. Pro vytvoření kopie existující stránky klikni na ikonu "Kopie".',
-    'centerblock' => 'Centerblock: ',
+    'centerblock' => 'Centrální blok: ',
     'centerblock_msg' => 'Pokud je zaškrtnuto, bude statická stránka zobrazena jako střední blok na hlavní straně (sekce).',
     'topic' => 'Sekce: ',
     'position' => 'Posice: ',
@@ -86,14 +86,14 @@ $LANG_STATIC = array(
     'position_feat' => 'Po zdůrazněném článku',
     'position_bottom' => 'Dole',
     'position_entire' => 'Celá stránka',
-    'position_nonews' => 'Only if No Other News',
+    'position_nonews' => 'Pouze v případě, že nejsou k dispozici žádné další zprávy',
     'head_centerblock' => 'Střední blok',
     'centerblock_no' => 'Ne',
     'centerblock_top' => 'Nahoře',
     'centerblock_feat' => 'Zdůrazněný článek',
     'centerblock_bottom' => 'Dole',
     'centerblock_entire' => 'Celá stránka',
-    'centerblock_nonews' => 'If No News',
+    'centerblock_nonews' => 'Pokud žádné novinky',
     'inblock_msg' => 'Do bloku: ',
     'inblock_info' => 'Zarovnej (wrap) statickou stránku do bloku.',
     'title_edit' => 'Editace',
@@ -109,26 +109,26 @@ $LANG_STATIC = array(
     'search' => 'Hledej',
     'submit' => 'Pošli',
     'delete_confirm' => 'Opravdu chceš vymazat tuto stránku?',
-    'allnhp_topics' => 'All Topics (No Homepage)',
+    'allnhp_topics' => 'Všechna témata (bez domovské stránky)',
     'page_list' => 'Výpis statických stránek',
-    'instructions_edit' => 'This screen allows you to create / edit a new static page. Pages can contain PHP code and HTML code.',
+    'instructions_edit' => 'Tato obrazovka umožňuje vytvořit / upravit novou statickou stránku. Stránky mohou obsahovat PHP kód a HTML kód.',
     'attributes' => 'Album Attributes',
-    'preview_help' => 'Select the <b>Preview</b> button to refresh the preview display',
-    'page_saved' => 'Page has been successfully saved.',
-    'page_deleted' => 'Page has been successfully deleted.',
+    'preview_help' => 'Vyberte tlačítko <b>Náhled</b> pro obnovení náhledu',
+    'page_saved' => 'Stránka byla úspěšně uložena.',
+    'page_deleted' => 'Stránka byla úspěšně odstraněna.',
     'searchable' => 'Vyhledat',
 );
 
 $LANG_SP_AUTOTAG = array(
-    'desc_staticpage'           => 'Link: to a staticpage on this site; link_text defaults to staticpage title. usage: [staticpage:<i>page_id</i> {link_text}]',
-    'desc_staticpage_content'   => 'HTML: renders the content of a staticpage.  usage: [staticpage_content:<i>page_id</i>]',
+    'desc_staticpage'           => 'Odkaz: na statickou stránku na této stránce; link_text výchozí na statickou stránku. použijte: [staticpage:<i>page_id</i> {link_text}]',
+    'desc_staticpage_content'   => 'HTML: vykresluje obsah statické stránky. Použití: [staticpage_content:<i>page_id</i>]',
 );
 
 $PLG_staticpages_MESSAGE19 = '';
 $PLG_staticpages_MESSAGE20 = '';
 
 // Messages for the plugin upgrade
-$PLG_staticpages_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_staticpages_MESSAGE3001 = 'Aktualizace pluginu není podporována.';
 $PLG_staticpages_MESSAGE3002 = $LANG32[9];
 
 // Localization of the Admin Configuration UI
@@ -138,41 +138,41 @@ $LANG_configsections['staticpages'] = array(
 );
 
 $LANG_confignames['staticpages'] = array(
-    'allow_php' => 'Allow PHP',
-    'sort_by' => 'Sort Centerblocks By',
-    'sort_menu_by' => 'Sort Menu Entries By',
-    'delete_pages' => 'Delete Pages with Owner',
-    'in_block' => 'Wrap Pages in Block',
-    'show_hits' => 'Show Hits',
-    'show_date' => 'Show Date',
-    'filter_html' => 'Filter HTML',
+    'allow_php' => 'Povolit PHP',
+    'sort_by' => 'Seřadit středové bloky podle',
+    'sort_menu_by' => 'Seřadit položky nabídky podle',
+    'delete_pages' => 'Odstranit stránky s vlastníkem',
+    'in_block' => 'Zarovnej statickou stránku do bloku',
+    'show_hits' => 'Zobrazit počet zobrazení',
+    'show_date' => 'Zobrazit datum',
+    'filter_html' => 'Filtrovat HTML',
     'censor' => 'Censor Content',
-    'default_permissions' => 'Page Default Permissions',
-    'aftersave' => 'After Saving Page',
-    'atom_max_items' => 'Max. Pages in Web Services Feed',
-    'comment_code' => 'Comment Default',
-    'include_search' => 'Site Search Default',
-    'status_flag' => 'Default Page Mode',
+    'default_permissions' => 'Výchozí oprávnění stránky',
+    'aftersave' => 'Po uložení stránky',
+    'atom_max_items' => 'Max. stránek ve webovém kanálu',
+    'comment_code' => 'Výchozí komentář',
+    'include_search' => 'Výchozí hledání webu',
+    'status_flag' => 'Výchozí režim stránky',
 );
 
 $LANG_configsubgroups['staticpages'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Hlavní nastavení'
 );
 
 $LANG_fs['staticpages'] = array(
-    'fs_main' => 'Pages Main Settings',
-    'fs_permissions' => 'Default Permissions'
+    'fs_main' => 'Hlavní nastavení stránek',
+    'fs_permissions' => 'Výchozí oprávnění'
 );
 
 // Note: entries 0, 1, 9, and 12 are the same as in $LANG_configselects['Core']
 $LANG_configSelect['staticpages'] = array(
-    0 => array(1=>'True', 0=>'False'),
-    1 => array(true=>'True', false=>'False'),
-    2 => array('date'=>'Datum', 'id'=>'Page ID', 'title'=>'Titulek'),
-    3 => array('date'=>'Datum', 'id'=>'Page ID', 'title'=>'Titulek', 'label'=>'Label'),
-    9 => array('item'=>'Forward to Page', 'list'=>'Display Admin List', 'plugin'=>'Display Public List', 'home'=>'Display Home', 'admin'=>'Display Admin'),
-    12 => array(0=>'No access', 2=>'Jen pro čtení', 3=>'Read-Write'),
-    13 => array(1=>'Enabled', 0=>'Disabled'),
+    0 => array(1=>'Ano', 0=>'Ne'),
+    1 => array(true=>'Ano', false=>'Ne'),
+    2 => array('date'=>'Datum', 'id'=>'ID stránky', 'title'=>'Titulek'),
+    3 => array('date'=>'Datum', 'id'=>'ID stránky', 'title'=>'Titulek', 'label'=>'Štítek'),
+    9 => array('item'=>'Na stránku', 'list'=>'Zobrazit v administraci', 'plugin'=>'Zobrazit veřejný seznam', 'home'=>'Zobrazit uvítací stránku', 'admin'=>'Zobrazit v administraci'),
+    12 => array(0=>'Nemáš přístup', 2=>'Jen pro čtení', 3=>'Čtení / zápis'),
+    13 => array(1=>'Povoleno', 0=>'Vypnuto'),
     17 => array(0=>'Komentáře možné', 1=>'Komentář zakázané'),
 );
 

@@ -42,21 +42,21 @@ $LANG_LINKS = array(
     88 => 'Žádné nové odkazy',
     114 => 'Odkazy',
     116 => 'Přidat odkaz',
-    117 => 'Report Broken Link',
-    118 => 'Broken Link Report',
-    119 => 'The following link has been reported to be broken: ',
-    120 => 'To edit the link, click here: ',
-    121 => 'The broken Link was reported by: ',
-    122 => 'Thank you for reporting this broken link. The administrator will correct the problem as soon as possible',
-    123 => 'Thank you',
-    124 => 'Go',
+    117 => 'Nahlásit poškozený odkaz',
+    118 => 'Souhrn poškozených odkazů',
+    119 => 'Následující odkaz byl nahlášen, že je porušen: ',
+    120 => 'Pro úpravu odkazu klikněte zde: ',
+    121 => 'Porušený odkaz nahlásil: ',
+    122 => 'Děkujeme, že jste nahlásili tento poškozený odkaz. Správce problém opraví co nejdříve',
+    123 => 'Děkujeme',
+    124 => 'Přejít',
     125 => 'Kategorie',
-    126 => 'You are here:',
+    126 => 'Jste zde:',
     'root' => 'Root',
-    'error_header'  => 'Link Submission Error',
-    'verification_failed' => 'The URL specified does not appear to be a valid URL',
-    'category_not_found' => 'The Category does not appear to be valid',
-    'no_links'  => 'No links have been entered.',
+    'error_header'  => 'Chyba odeslaného odkazu',
+    'verification_failed' => 'Zadaná adresa URL se nezdá být platnou URL',
+    'category_not_found' => 'Kategorie se nezdá být platná',
+    'no_links'  => 'Žádné odkazy nebyly zadány.',
 );
 
 ###############################################################################
@@ -115,7 +115,7 @@ $LANG_LINKS_SUBMIT = array(
 # autotag description
 
 $LANG_LI_AUTOTAG = array(
-    'desc_link'                 => 'Link: to the detail page for a Link on this site; link_text defaults to the link name. usage: [link:<i>link_id</i> {link_text}]',
+    'desc_link'                 => 'Odkaz: na stránku s podrobnostmi odkazu na tomto webu; link _text výchozí na název odkazu. Použijte: [link:<i>link_id</i> {link_text}]',
 );
 
 ###############################################################################
@@ -125,21 +125,21 @@ $PLG_links_MESSAGE1 = "Děkujeme za odeslání odkazu na {$_CONF['site_name']}. 
 $PLG_links_MESSAGE2 = 'Váš odkaz byl úspěšně přidán.';
 $PLG_links_MESSAGE3 = 'Odkaz byl úspěšně vymazán.';
 $PLG_links_MESSAGE4 = "Děkujeme za odeslání odkazu {$_CONF['site_name']}.  Můžete ho nalézt v <a href={$_CONF['site_url']}/links/index.php>odkazech</a>.";
-$PLG_links_MESSAGE5 = "You do not have sufficient access rights to view this category.";
-$PLG_links_MESSAGE6 = 'You do not have sufficient rights to edit this category.';
-$PLG_links_MESSAGE7 = 'Please enter a Category Name and Description.';
+$PLG_links_MESSAGE5 = "Nemáte dostatečná přístupová práva pro zobrazení této kategorie.";
+$PLG_links_MESSAGE6 = 'Nemáte dostatečná práva pro editaci této kategorie.';
+$PLG_links_MESSAGE7 = 'Zadejte název kategorie a popis.';
 
-$PLG_links_MESSAGE10 = 'Your category has been successfully saved.';
-$PLG_links_MESSAGE11 = 'You are not allowed to set the id of a category to "site" or "user" - these are reserved for internal use.';
-$PLG_links_MESSAGE12 = 'You are trying to make a parent category the child of it\'s own subcategory. This would create an orphan category, so please first move the child category or categories up to a higher level.';
-$PLG_links_MESSAGE13 = 'The category has been successfully deleted.';
-$PLG_links_MESSAGE14 = 'Category contains links and/or categories. Please remove these first.';
-$PLG_links_MESSAGE15 = 'You do not have sufficient rights to delete this category.';
-$PLG_links_MESSAGE16 = 'No such category exists.';
-$PLG_links_MESSAGE17 = 'This category id is already in use.';
+$PLG_links_MESSAGE10 = 'Vaše kategorie byla úspěšně uložena.';
+$PLG_links_MESSAGE11 = 'Nejste oprávněni nastavit Id kategorie na "web" nebo "uživatel" - jsou vyhrazeny pro interní použití.';
+$PLG_links_MESSAGE12 = 'Pokoušíte se vytvořit rodičovskou kategorii své vlastní podkategorie. To by vytvořilo osamocenou kategorii, proto prosím nejprve přesuňte podřízené kategorie nebo kategorie na vyšší úroveň.';
+$PLG_links_MESSAGE13 = 'Kategorie byla úspěšně odstraněna.';
+$PLG_links_MESSAGE14 = 'Kategorie obsahuje odkazy a/nebo kategorie. Nejprve je odstraňte.';
+$PLG_links_MESSAGE15 = 'Nemáte dostatečná práva pro odstranění této kategorie.';
+$PLG_links_MESSAGE16 = 'Žádná taková kategorie neexistuje.';
+$PLG_links_MESSAGE17 = 'Toto Id kategorie se již používá.';
 
 // Messages for the plugin upgrade
-$PLG_links_MESSAGE3001 = 'Plugin upgrade not supported.';
+$PLG_links_MESSAGE3001 = 'Aktualizace pluginu není podporována.';
 $PLG_links_MESSAGE3002 = $LANG32[9];
 
 ###############################################################################
@@ -170,21 +170,21 @@ $LANG_LINKS_ADMIN = array(
     22 => 'storno',
     23 => 'vymazat',
     24 => 'Odkaz nenalezen',
-    25 => 'The link you selected for editing could not be found.',
-    26 => 'Validate Links',
-    27 => 'HTML Status',
-    28 => 'Edit category',
-    29 => 'Enter or edit the details below.',
+    25 => 'Odkaz vybraný pro editaci nebyl nalezen.',
+    26 => 'Ověřit odkazy',
+    27 => 'Stav HTML',
+    28 => 'Upravit kategorii',
+    29 => 'Zadejte nebo upravte podrobnosti níže.',
     30 => 'Kategorie',
     31 => 'Popis',
-    32 => 'Category ID',
+    32 => 'ID kategorie',
     33 => 'Námět',
-    34 => 'Parent',
+    34 => 'Nadřazený prvek',
     35 => 'Vše',
     40 => 'Oprav kategorii',
     41 => 'Přidej',
     42 => 'Vymaž kategorii',
-    43 => 'Site categories',
+    43 => 'Webové kategorie',
     44 => 'Přidej podkategorii',
     46 => 'Uživatel %s se pokusil vymazat kategorii, aniž by k tomu měl práva',
     50 => 'Výpis kategorií',
@@ -192,109 +192,109 @@ $LANG_LINKS_ADMIN = array(
     52 => 'Nová kořenová kategorie',
     53 => 'Admin odkazů',
     54 => 'Admin kategorií',
-    55 => 'Edit categories below. Note that you cannot delete a category that contains other categories or links - you should delete these first, or move them to another category.',
-    56 => 'Category Editor',
-    57 => 'Not validated yet',
-    58 => 'Validate now',
-    59 => '<br /><br />To validate all links displayed, please click on the "Validate now" link below. The validation process may take some time depending on the amount of links displayed.',
-    60 => 'User %s tried illegally to edit category %s.',
+    55 => 'Upravit kategorie níže. Všimněte si, že nemůžete odstranit kategorii, která obsahuje jiné kategorie nebo odkazy - měli byste je nejprve odstranit nebo přesunout do jiné kategorie.',
+    56 => 'Editor kategorií',
+    57 => 'Zatím neověřeno',
+    58 => 'Ověřit nyní',
+    59 => '<br /><br />Pro ověření všech zobrazených odkazů klikněte na níže uvedený odkaz "Ověřit nyní". Proces ověřování může v závislosti na počtu zobrazených odkazů nějakou dobu trvat.',
+    60 => 'Uživatel %s se nezákonně pokusil upravit kategorii %s.',
     61 => 'Vlastník',
     62 => 'Naposledy aktualizováno',
-    63 => 'Are you sure you want to delete this link?',
-    64 => 'Are you sure you want to delete this category?',
-    65 => 'Moderate Link',
-    66 => 'This screen allows you to create / edit links.',
-    67 => 'This screen allows you to create / edit a links category.',
+    63 => 'Jste si jisti, že chcete odstranit tento odkaz?',
+    64 => 'Opravdu chcete odstranit tuto kategorii?',
+    65 => 'Moderovat odkaz',
+    66 => 'Tato volba umožňuje vytvářet / upravovat odkazy.',
+    67 => 'Tato obrazovka umožňuje vytvořit / upravit kategorii odkazů.',
 );
 
 $LANG_LINKS_STATUS = array(
-    100 => "Continue",
+    100 => "Pokračovat",
     101 => "Switching Protocols",
     200 => "OK",
-    201 => "Created",
-    202 => "Accepted",
-    203 => "Non-Authoritative Information",
-    204 => "No Content",
-    205 => "Reset Content",
-    206 => "Partial Content",
-    300 => "Multiple Choices",
-    301 => "Moved Permanently",
-    302 => "Found",
-    303 => "See Other",
-    304 => "Not Modified",
-    305 => "Use Proxy",
-    307 => "Temporary Redirect",
-    400 => "Bad Request",
-    401 => "Unauthorized",
-    402 => "Payment Required",
-    403 => "Forbidden",
-    404 => "Not Found",
-    405 => "Method Not Allowed",
-    406 => "Not Acceptable",
-    407 => "Proxy Authentication Required",
-    408 => "Request Timeout",
-    409 => "Conflict",
-    410 => "Gone",
-    411 => "Length Required",
-    412 => "Precondition Failed",
-    413 => "Request Entity Too Large",
-    414 => "Request-URI Too Long",
-    415 => "Unsupported Media Type",
-    416 => "Requested Range Not Satisfiable",
-    417 => "Expectation Failed",
-    500 => "Internal Server Error",
-    501 => "Not Implemented",
-    502 => "Bad Gateway",
-    503 => "Service Unavailable",
-    504 => "Gateway Timeout",
-    505 => "HTTP Version Not Supported",
-    999 => "Connection Timed out"
+    201 => "Vytvořeno",
+    202 => "Přijato",
+    203 => "Neautorizovaná informace",
+    204 => "Žádný obsah",
+    205 => "Resetuj obsah",
+    206 => "Částečný obsah",
+    300 => "Volba s více možnostmi",
+    301 => "Trvale přesunuto",
+    302 => "Nalezeno",
+    303 => "Viz ostatní",
+    304 => "Neupraveno",
+    305 => "Použít proxy",
+    307 => "Dočasné přesměrování",
+    400 => "Chybný požadavek",
+    401 => "Neautorizovaný",
+    402 => "Vyžadována platba",
+    403 => "Zakázáno",
+    404 => "Nenalezeno",
+    405 => "Metoda není povolena",
+    406 => "Nepřijatelný",
+    407 => "Je vyžadováno ověření proxy",
+    408 => "Časový limit požadavku",
+    409 => "Konflikt",
+    410 => "Pryč",
+    411 => "Požadovaná délka",
+    412 => "Chyba vstupních podmínek",
+    413 => "Požadovaná entita je příliš velká",
+    414 => "Požadované URI příliš dlouhé",
+    415 => "Nepodporovaný typ médií",
+    416 => "Požadovaný rozsah není dostatečný",
+    417 => "Očekávání selhalo",
+    500 => "Interní chyba serveru",
+    501 => "Není implementováno",
+    502 => "Špatná brána",
+    503 => "Služba není k dispozici",
+    504 => "Časový limit brány",
+    505 => "HTTP verze není podporována",
+    999 => "Časový limit připojení vypršel"
 );
 
 
 // Localization of the Admin Configuration UI
 $LANG_configsections['links'] = array(
     'label' => 'Odkazy',
-    'title' => 'Links Configuration'
+    'title' => 'Nastavení odkazů'
 );
 
 $LANG_confignames['links'] = array(
-    'linksloginrequired' => 'Links Login Required',
-    'linksubmission' => 'Enable Link Submission Queue',
-    'newlinksinterval' => 'New Links Interval',
-    'hidenewlinks' => 'Hide New Links',
-    'hidelinksmenu' => 'Hide Links Menu Entry',
-    'linkcols' => 'Categories per Column',
-    'linksperpage' => 'Links per Page',
-    'show_top10' => 'Show Top 10 Links',
-    'notification' => 'Notification Email',
-    'delete_links' => 'Delete Links with Owner',
-    'aftersave' => 'After Saving Link',
-    'show_category_descriptions' => 'Show Category Description',
-    'root' => 'ID of Root Category',
-    'default_permissions' => 'Link Default Permissions',
-    'target_blank' => 'Open Links in New Window',
-    'displayblocks' => 'Display glFusion Blocks',
+    'linksloginrequired' => 'Pro odkazy je vyžadováno přihlášení',
+    'linksubmission' => 'Povolit frontu pro odeslání odkazu',
+    'newlinksinterval' => 'Interval pro zadání nových odkazů',
+    'hidenewlinks' => 'Skrýt nové odkazy',
+    'hidelinksmenu' => 'Skrýt položku menu odkazů',
+    'linkcols' => 'Množství kategorií na sloupec',
+    'linksperpage' => 'Odkazů na stránku',
+    'show_top10' => 'Zobrazit 10 nejlepších odkazů',
+    'notification' => 'E-mailová potvrzení',
+    'delete_links' => 'Odstranit odkazy s vlastníkem',
+    'aftersave' => 'Po uložení odkazu',
+    'show_category_descriptions' => 'Zobrazit popis kategorie',
+    'root' => 'ID kořenové kategorie',
+    'default_permissions' => 'Výchozí oprávnění odkazů',
+    'target_blank' => 'Otevřít odkazy v novém okně',
+    'displayblocks' => 'Zobrazit bloky glFusion',
     'submission'    => 'Link Submission',
 );
 
 $LANG_configsubgroups['links'] = array(
-    'sg_main' => 'Main Settings'
+    'sg_main' => 'Hlavní nastavení'
 );
 
 $LANG_fs['links'] = array(
-    'fs_public' => 'Public Links List Settings',
-    'fs_admin' => 'Links Admin Settings',
-    'fs_permissions' => 'Default Permissions'
+    'fs_public' => 'Nastavení seznamu veřejných odkazů',
+    'fs_admin' => 'Nastavení správce odkazů',
+    'fs_permissions' => 'Výchozí oprávnění'
 );
 
 $LANG_configSelect['links'] = array(
-    0 => array(1=>'True', 0=>'False'),
-    1 => array(true=>'True', false=>'False'),
-    9 => array('item'=>'Forward to Linked Site', 'list'=>'Display Admin List', 'plugin'=>'Display Public List', 'home'=>'Display Home', 'admin'=>'Display Admin'),
-    12 => array(0=>'No access', 2=>'Jen pro čtení', 3=>'Read-Write'),
-    13 => array(0=>'Left Blocks', 1=>'Right Blocks', 2=>'Left & Right Blocks', 3=>'None'),
-    14 => array(0=>'None', 1=>'Logged-in Only', 2=>'Anyone', 3=>'None')
+    0 => array(1=>'Ano', 0=>'Ne'),
+    1 => array(true=>'Ano', false=>'Ne'),
+    9 => array('item'=>'Přechod na propojenou stránku', 'list'=>'Zobrazit v administraci', 'plugin'=>'Zobrazit veřejný seznam', 'home'=>'Zobrazit uvítací stránku', 'admin'=>'Zobrazit v administraci'),
+    12 => array(0=>'Nemáš přístup', 2=>'Jen pro čtení', 3=>'Čtení a zápis'),
+    13 => array(0=>'Bloky nalevo', 1=>'Bloky vpravo', 2=>'Bloky nalevo a napravo', 3=>'Žádná'),
+    14 => array(0=>'Žádná', 1=>'Pouze pro přihlášené', 2=>'Kdokoli', 3=>'Žádná')
 
 );
 
