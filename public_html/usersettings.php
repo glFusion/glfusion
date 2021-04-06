@@ -1658,12 +1658,28 @@ function savepreferences($A)
         }
     }
 
-    $TIDS  = @array_values($A['topics']);
-    $AIDS  = @array_values($A['selauthors']);
-    $BOXES = @array_values($A['blocks']);
-    $ETIDS = @array_values($A['dgtopics']);
+    $TIDS = array();
+    $AIDS = array();
+    $BOXES = array();
+    $ETIDS = array();
+    $AETIDS = array();
+
+    if (isset($A['topics']) && is_array($A['topics'])) {
+        $TIDS  = @array_values($A['topics']);
+    }
+    if (isset($A['selauthors']) && is_array($A['selauthors'])) {
+        $AIDS  = @array_values($A['selauthors']);
+    }
+    if (isset($A['blocks']) && is_array($A['blocks'])) {
+        $BOXES = @array_values($A['blocks']);
+    }
+    if (isset($A['dgtopics']) && is_array($A['dgtopics'])) {
+        $ETIDS = @array_values($A['dgtopics']); 
+    }
     $allowed_etids = USER_buildTopicList ();
-    $AETIDS = explode (' ', $allowed_etids);
+    if (is_array($allowed_etids)) {
+        $AETIDS = explode (' ', $allowed_etids);
+    }
 
     $tids = '';
     if (is_array($TIDS) && sizeof ($TIDS) > 0) {
@@ -1771,10 +1787,12 @@ function savepreferences($A)
 
     DB_save($_TABLES['usercomment'],'uid,commentmode,commentorder,commentlimit',"{$_USER['uid']},'{$A['commentmode']}','{$A['commentorder']}',".(int) $A['commentlimit']);
 
-    $subscription_deletes  = @array_values($A['subdelete']);
-    if ( is_array($subscription_deletes) ) {
-        foreach ( $subscription_deletes AS $subid ) {
-            DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
+    if (isset($A['subdelete']) && is_array($A['subdelete'])) {
+        $subscription_deletes  = @array_values($A['subdelete']);
+        if ( is_array($subscription_deletes) ) {
+            foreach ( $subscription_deletes AS $subid ) {
+                DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
+            }
         }
     }
     CACHE_remove_instance('story');
