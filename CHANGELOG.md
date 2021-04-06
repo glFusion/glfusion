@@ -8,6 +8,7 @@
 
 ### Added
 
+- Czech Translations
 - Added INTL extension to the environment checks - need to update wiki to show used by Agenda plugin
 - Admin / Moderator actions are now logged and available for viewing in Command & Control
   - Configuration option to enable / disable - Config -> Miscellaneous -> Debug -> Enable Admin Actions
@@ -61,7 +62,7 @@
 
 ### Fixed
 
-- PHP v7.4 Compatibility Fixes
+- PHP v8 Compatibility Fixes
 - Error changing article SID
 
 ### Security
