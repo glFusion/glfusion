@@ -446,7 +446,7 @@ $LANG04 = array(
     160 => 'Online',
     161 => 'Password Strength',
     // public_html/users.php:710
-    162 => 'The username must by at least ' . $_CONF['min_username_length'] . ' characters, cannot contain invalid characters ( < > " % & * / \ ) or emoji characters',
+    162 => 'The username must by at least ' . $_CONF['min_username_length'] . ' characters, cannot contain invalid characters ( < > " % & * / \\ ) or emoji characters',
     163 => 'Remote User',
     164 => 'Remote Username',
     165 => 'Remote Service',
