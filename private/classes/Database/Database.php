@@ -21,6 +21,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Cache\GlFusionCache;
 use \Doctrine\DBAL\DBALException;
+use \glFusion\Log\Log;
 
 class Database
 {
@@ -133,10 +134,9 @@ class Database
     */
     public function _errorlog($msg)
     {
-        $function = $this->_errorlog_fn;
-        if (function_exists($function)) {
+        if (class_exists('\glFusion\Log\Log',true)) {
             $msgL = preg_replace('!\s+!', ' ', $msg);
-            $function($msg);
+            Log::write('system',Log::ERROR,"SQL Error: " . $msgL);
         }
     }
 
@@ -548,19 +548,19 @@ class Database
         if (empty($fn)) {
             $errorMessage = $msg;
             if ( $sql != '' ) {
-                $errorMessage .= " SQL in question: " . $sql;
+                $errorMessage .= " SQL :: " . $sql;
             }
             $this->_errorlog($errorMessage);
         } else {
             $errorMessage = $fn . ': ' . $msg;
             if ( $sql != '' ) {
-                $errorMessage .= " SQL in question: ".$sql;
+                $errorMessage .= " SQL :: ".$sql;
             }
             $this->_errorlog($errorMessage);
         }
 
         if ($this->_display_error) {
-            $retval =  $this->conn->errorCode() . ': ' . $msg;
+            $retval =  $this->conn->errorCode() . ' :: ' . $msg;
         } else {
             $retval = 'An SQL error has occurred. Please see error.log for details.';
         }
