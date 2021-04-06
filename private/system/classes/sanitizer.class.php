@@ -354,8 +354,20 @@ class sanitizer
         if ($_CONF['debug_html_filter'] == true) {
             $config->set('Core.CollectErrors',true);
         }
-        $purifier = new HTMLPurifier($config);
 
+        $def = $config->getHTMLDefinition(true);
+        if (function_exists('theme_getAttributes')) {
+            $additionalAttributes = theme_getAttributes();
+            foreach($additionalAttributes AS $attr) {
+                if (is_array($attr) && count($attr) == 3) {
+                    $def->addAttribute($attr[0], $attr[1],$attr[2]);
+                }
+            }
+        }
+//        $def->addAttribute('a', 'data-uk-lightbox','Bool');
+//        $def->addAttribute('span', 'data-uk-tooltip','CDATA');
+
+        $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($str);
 
         if ($_CONF['debug_html_filter'] == true) {

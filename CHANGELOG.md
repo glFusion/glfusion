@@ -8,6 +8,7 @@
 
 ### Added
 
+- Ability to include theme specific HTML attributes - such as data-uk-lightbox to the HTML filtering allowed attributes
 - Czech Translations
 - Added INTL extension to the environment checks - need to update wiki to show used by Agenda plugin
 - Admin / Moderator actions are now logged and available for viewing in Command & Control

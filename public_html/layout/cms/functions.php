@@ -195,4 +195,29 @@ function theme_getToolTipStyle()
 {
     return('tooltip');
 }
+
+/*
+ * return array of attributes the theme can use to allow filtering exceptions
+ *
+ *  array( element,  attribute,  data_required )
+ *
+ *  see http://htmlpurifier.org/docs/enduser-customize.html for details on how this is used
+ */
+function theme_getAttributes()
+{
+    $attributes = array(
+        array('a','data-uk-lightbox','Bool'),
+        array('div', 'data-uk-slider','Bool'),
+        array('div', 'data-uk-slideset','CDATA'),
+        array('ul', 'data-uk-slideshow','CDATA'),
+        array('div', 'data-uk-parallax','CDATA'),
+        array('div', 'data-uk-accordion','Bool'),
+        array('ul', 'data-uk-nestable','Bool'),
+        array('ul', 'data-uk-sortable','Bool'),
+        array('div', 'data-uk-sticky','CDATA'),
+        array('span', 'data-uk-tooltip','CDATA')
+    );
+    return $attributes;
+}
+
 ?>
