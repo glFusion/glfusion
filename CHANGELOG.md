@@ -11,6 +11,7 @@
 - PHP v8 Compatibility Updates
 - Code error in SpamX logging for SFS checks
 - fusionrescue code cleanup - improved hanlding of configuration items with array values
+- Fixed HTML issue in logo-graphic.thtml (removed errant quote)
 
 ## v1.7.9 (March 13, 2021)
 
