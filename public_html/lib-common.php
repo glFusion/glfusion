@@ -5196,42 +5196,8 @@ function COM_getCurrentURL()
 
     $thisUrl = '';
 
-    if ( empty( $_SERVER['SCRIPT_URI'] )) {
-        if ( !empty( $_SERVER['DOCUMENT_URI'] )) {
-            $document_uri = $_SERVER['DOCUMENT_URI'];
-            $first_slash = strpos( $_CONF['site_url'], '/' );
-            if ( $first_slash === false ) {
-                // special case - assume it's okay
-                $thisUrl = $_CONF['site_url'] . $document_uri;
-            } else if ( $first_slash + 1 == strrpos( $_CONF['site_url'], '/' )) {
-                // site is in the document root
-                $thisUrl = $_CONF['site_url'] . $document_uri;
-            } else {
-                // extract server name first
-                $pos = strpos( $_CONF['site_url'], '/', $first_slash + 2 );
-                $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $document_uri;
-            }
-        }
-    } else {
-        $thisUrl = $_SERVER['SCRIPT_URI'];
-    }
-    if ( !empty( $thisUrl ) && !empty( $_SERVER['QUERY_STRING'] ) && (strpos($thisUrl,'?') === false)  ) {
-        $thisUrl .= '?' . $_SERVER['QUERY_STRING'];
-    }
-    if ( empty( $thisUrl )) {
+    if (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
         $requestUri = $_SERVER['REQUEST_URI'];
-        if ( empty( $_SERVER['REQUEST_URI'] )) {
-            // on a Zeus webserver, prefer PATH_INFO over SCRIPT_NAME
-            if ( empty( $_SERVER['PATH_INFO'] )) {
-                $requestUri = $_SERVER['SCRIPT_NAME'];
-            } else {
-                $requestUri = $_SERVER['PATH_INFO'];
-            }
-            if ( !empty( $_SERVER['QUERY_STRING'] )) {
-                $requestUri .= '?' . $_SERVER['QUERY_STRING'];
-            }
-        }
-
         $firstslash = strpos( $_CONF['site_url'], '/' );
         if ( $firstslash === false ) {
             // special case - assume it's okay
@@ -5245,6 +5211,56 @@ function COM_getCurrentURL()
             $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $requestUri;
         }
     }
+    if (empty($thisUrl)) {
+        if (empty( $_SERVER['SCRIPT_URI'])) {
+            if ( !empty( $_SERVER['DOCUMENT_URI'] )) {
+                $document_uri = $_SERVER['DOCUMENT_URI'];
+                $first_slash = strpos( $_CONF['site_url'], '/' );
+                if ( $first_slash === false ) {
+                    // special case - assume it's okay
+                    $thisUrl = $_CONF['site_url'] . $document_uri;
+                } else if ( $first_slash + 1 == strrpos( $_CONF['site_url'], '/' )) {
+                    // site is in the document root
+                    $thisUrl = $_CONF['site_url'] . $document_uri;
+                } else {
+                    // extract server name first
+                    $pos = strpos( $_CONF['site_url'], '/', $first_slash + 2 );
+                    $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $document_uri;
+                }
+            }
+        } else {
+            $thisUrl = $_SERVER['SCRIPT_URI'];
+        }
+        if (!empty( $thisUrl ) && !empty( $_SERVER['QUERY_STRING'] ) && (strpos($thisUrl,'?') === false)  ) {
+            $thisUrl .= '?' . $_SERVER['QUERY_STRING'];
+        }
+    }
+    if (empty( $thisUrl)) {
+        if ( !isset($_SERVER['REQUEST_URI']) || empty( $_SERVER['REQUEST_URI'] )) {
+            // on a Zeus webserver, prefer PATH_INFO over SCRIPT_NAME
+            if ( empty( $_SERVER['PATH_INFO'] )) {
+                $requestUri = $_SERVER['SCRIPT_NAME'];
+            } else {
+                $requestUri = $_SERVER['PATH_INFO'];
+            }
+            if ( !empty( $_SERVER['QUERY_STRING'] )) {
+                $requestUri .= '?' . $_SERVER['QUERY_STRING'];
+            }
+        }
+        $firstslash = strpos( $_CONF['site_url'], '/' );
+        if ( $firstslash === false ) {
+            // special case - assume it's okay
+            $thisUrl = $_CONF['site_url'] . $requestUri;
+        } else if ( $firstslash + 1 == strrpos( $_CONF['site_url'], '/' )) {
+            // site is in the document root
+            $thisUrl = $_CONF['site_url'] . $requestUri;
+        } else {
+            // extract server name first
+            $pos = strpos( $_CONF['site_url'], '/', $firstslash + 2 );
+            $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $requestUri;
+        }
+    }
+
     $filter = sanitizer::getInstance();
     $thisUrl = $filter->sanitizeURL($thisUrl);
     return $thisUrl;
