@@ -328,8 +328,7 @@ $queryBuilder->addOrderBy($story_sort,$story_sort_dir);
 
 $countQueryBuilder = clone $queryBuilder;
 $countQueryBuilder->select("COUNT(*) AS count");
-$countQueryBuilder->groupBy('s.sid');
-
+//print $countQueryBuilder->getSQL();exit;
 try {
     $cStmt = $countQueryBuilder->execute();
 } catch(Throwable $e) {
