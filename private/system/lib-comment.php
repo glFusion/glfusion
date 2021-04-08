@@ -1673,8 +1673,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         $rht    = $row['rht'];
         $indent = $row['indent'];
 
-        $db->conn->beginTransaction();
         $db->conn->query("LOCK TABLES `{$_TABLES['comments']}` WRITE");
+        $db->conn->beginTransaction();
         try {
             $db->conn->executeUpdate(
                     "UPDATE `{$_TABLES['comments']}` SET lft = lft + 2 "
@@ -1715,17 +1715,15 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             $db->conn->commit();
             $db->conn->query("UNLOCK TABLES `{$_TABLES['comments']}` WRITE");
             usleep(250000);
-        } catch(Throwable $e) {
+        } catch (\Exception $e) {
             $db->conn->rollBack();
             $db->conn->query("UNLOCK TABLES");
             throw($e);
         }
-
     } else {  // first - parent level comment
 
-        $db->conn->beginTransaction();
         $db->conn->query("LOCK TABLES `{$_TABLES['comments']}` WRITE");
-
+        $db->conn->beginTransaction();
         try {
             $rht = $db->conn->fetchColumn(
                 "SELECT MAX(rht) FROM `{$_TABLES['comments']}` WHERE sid=?",
@@ -1742,7 +1740,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         $indent = 0;
 
         try {
-            $db->conn->executeUpdate(
+            $db->conn->executeQuery(
                 "INSERT INTO `{$_TABLES['comments']}` (sid,uid,name,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress) "
               . " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 array($sid,$uid,$uname,$comment,$_CONF['_now']->toMySQL(true),$title,$pid,$queued,$postmode,$rht+1,$rht+2,0,$type,$IP),
@@ -1770,7 +1768,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             $db->conn->commit();
             $db->conn->query("UNLOCK TABLES");
             usleep(250000);
-        } catch(Throwable $e) {
+        } catch (\Exception $e) {
             $db->conn->rollBack();
             $db->conn->query("UNLOCK TABLES");
             throw($e);
@@ -1972,9 +1970,8 @@ function CMT_deleteComment ($cid, $sid, $type)
     // from happening at the same time. A transaction would work better,
     // but aren't supported with MyISAM tables.
 
-    $db->conn->beginTransaction();
     $db->conn->query("LOCK TABLES `{$_TABLES['comments']}` WRITE");
-
+    $db->conn->beginTransaction();
     try {
         $cmtData = $db->conn->fetchAssoc(
             "SELECT pid, lft, rht FROM `{$_TABLES['comments']}` "
