@@ -21,7 +21,7 @@ class autotag_mgslider extends BaseAutotag {
         $this->description = $_AUTOTAGS['mgslider']['description'];
     }
 
-    function parse($p1, $p2='', $fulltag)
+    function parse($p1, $p2='', $fulltag='')
     {
         global $_CONF, $_TABLES, $_MG_CONF, $MG_albums;
 

@@ -341,15 +341,15 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status = 0, $query =
         $bbcode->addParser(array('block','inline','listitem'), '_ff_replacetags');
     }
 
-    if ( ! ($status & DISABLE_SMILIES ) ) {
+    if ( ! (intval($status) & DISABLE_SMILIES ) ) {
         $bbcode->addParser (array ('block', 'inline', 'listitem'), '_ff_replacesmilie');
     }
 
-    if ( ! ($status & DISABLE_URLPARSE ) ) {
+    if ( ! (intval($status) & DISABLE_URLPARSE ) ) {
         $bbcode->addParser (array('block','inline','listitem'), array (&$filter, 'linkify'));
     }
 
-    if ( ! ( $status & DISABLE_BBCODE ) ) {
+    if ( ! ( intval($status) & DISABLE_BBCODE ) ) {
         $bbcode->addParser ('list', 'bbcode_stripcontents');
         $bbcode->addCode ('code', 'usecontent?', 'do_bbcode_code', array ('usecontent_param' => 'default'),
                           'code', array('listitem', 'block', 'inline', 'quote'), array ('link'));
