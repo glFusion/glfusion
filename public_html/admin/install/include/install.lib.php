@@ -2373,4 +2373,28 @@ function INST_addConfigItem($data = array() )
     DB_query($sql);
 }
 
+/**
+ * Create a directory
+ *
+ * @param    string $target Directory to create
+ * @param    bool           True on success, false on fail
+ */
+function INST_mkDir($target)
+{
+    if (@is_dir($target) || empty($target)) {
+        return true; // already exists
+    }
+
+    if (@file_exists($target) && !@is_dir($target)) {
+        return false;   // file exists - cannot create directory with same name
+    }
+
+    if (INST_mkDir(substr($target,0,strrpos($target,'/')))) {
+        $ret = @mkdir($target,0755);
+        @chmod($target, 0755);
+        return (bool) $ret;
+    }
+    return true;
+}
+
 ?>

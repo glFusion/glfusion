@@ -58,12 +58,13 @@ if( function_exists('set_error_handler') ) {
 
 $_GLFUSION = array();
 
-$glFusionVars = array('language','method','migrate','expire','dbconfig_path','log_path','lang_path','backup_path','data_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8','original_version','securepassword');
+$glFusionVars = array('language','method','migrate','expire','private_path','dbconfig_path','log_path','lang_path','backup_path','data_path','db_type','innodb','db_host','db_name','db_user','db_pass','db_prefix','site_name','site_slogan','site_url','site_admin_url','site_mail','noreply_mail','utf8','original_version','securepassword');
 
 if ( is_array($_POST) ) {
     foreach ($_POST AS $name => $value) {
         if ( in_array($name,$glFusionVars)) {
             switch ($name) {
+                case 'private_path' :
                 case 'dbconfig_path' :
                 case 'log_path' :
                 case 'lang_path':
@@ -384,12 +385,10 @@ function INST_getLanguageTask( )
         'percent_complete'      => '10',
     ));
 
-//    if ( !isset($_GLFUSION['method'] ) ) {
-        if (@file_exists('../../siteconfig.php' ) ) {
-            $T->set_var('upgradeselected',' selected="selected"');
-            $_GLFUSION['method'] = 'upgrade';
-        }
-//    }
+    if (@file_exists('../../data/siteconfig.php' ) || @file_exists('../../siteconfig.php' ) ) {
+        $T->set_var('upgradeselected',' selected="selected"');
+        $_GLFUSION['method'] = 'upgrade';
+    }
 
     $T->parse('output','page');
 
@@ -432,13 +431,13 @@ function INST_getPathSetting()
         $fusion_path .= '/';
     }
 
-    $dbconfig_path = $fusion_path;
+    $private_path = $fusion_path;
 
     // check the session to see if we have already defined the path...
-    if ( isset($_GLFUSION['dbconfig_path']) ) {
-        $dbconfig_path = $_GLFUSION['dbconfig_path'];
+    if ( isset($_GLFUSION['private_path']) ) {
+        $private_path = $_GLFUSION['private_path'];
     }
-    $dbconfig_file  = 'db-config.php';
+    $dbconfig_file  = 'data/db-config.php';
 
     $htmlpath = INST_getHtmlPath();
 
@@ -446,21 +445,21 @@ function INST_getPathSetting()
     $T->set_file('page', 'pathsetting.thtml');
 
     clearstatcache();
-    if (@file_exists($dbconfig_path . $dbconfig_file) || @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file) || @file_exists($dbconfig_path.'private/'.$dbconfig_file)
-    || @file_exists($dbconfig_path . $dbconfig_file.'.dist') || @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file.'.dist') || @file_exists($dbconfig_path.'private/'.$dbconfig_file.'.dist')
+    if (@file_exists($private_path . $dbconfig_file) || @file_exists($private_path . 'public_html/' . $dbconfig_file) || @file_exists($private_path.'private/'.$dbconfig_file)
+    || @file_exists($private_path . 'db-config.php.dist') || @file_exists($private_path . 'public_html/' . 'db-config.php.dist') || @file_exists($private_path.'private/db-config.php.dist')
     ) {
-        if ( @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file)  || @file_exists($dbconfig_path . 'public_html/' . $dbconfig_file.'.dist')) {
-            $dbconfig_path   = $dbconfig_path.'public_html/';
-        } else if ( @file_exists($dbconfig_path.'private/'.$dbconfig_file) || @file_exists($dbconfig_path.'private/'.$dbconfig_file.'.dist')) {
-            $dbconfig_path   = $dbconfig_path.'private/';
+        if ( @file_exists($private_path . 'public_html/' . $dbconfig_file)  || @file_exists($private_path . 'public_html/db-config.php.dist')) {
+            $private_path   = $private_path.'public_html/';
+        } else if ( @file_exists($private_path.'private/'.$dbconfig_file) || @file_exists($private_path.'private/db-config.php.dist')) {
+            $private_path   = $private_path.'private/';
         }
-        if ($dbconfig_path != '' ) {
+        if ($private_path != '' ) {
             // found it, set the session
-            $_GLFUSION['dbconfig_path'] = $dbconfig_path;
+            $_GLFUSION['private_path'] = $private_path;
         }
     }
     $T->set_var(array(
-        'dbconfig_path'     => $dbconfig_path,
+        'dbconfig_path'     => $private_path,
         'log_path'          => isset($_GLFUSION['log_path']) ? $_GLFUSION['log_path'] : '',
         'lang_path'         => isset($_GLFUSION['lang_path']) ? $_GLFUSION['lang_path'] : '',
         'backup_path'       => isset($_GLFUSION['backup_path']) ? $_GLFUSION['backup_path'] : '',
@@ -516,26 +515,30 @@ function INST_gotPathSetting($dbc_path = '')
     $lang_path   = '';
     $backup_path = '';
     $data_path   = '';
+    $dbconfig_path = '';
+    $private_path = '';
 
     // was it passed from the previous step, or via $_POST?
     if ( $dbc_path == '' ) {
-        $dbconfig_path = INST_sanitizePath(INST_stripslashes($_POST['private_path']));
+        $private_path = INST_sanitizePath(INST_stripslashes($_POST['private_path']));
     } else {
-        $dbconfig_path = $dbc_path;
+        $private_path = $dbc_path;
     }
 
     // check to see if the path contains the actual filename?
-    if (!strstr($dbconfig_path, 'db-config.php')) {
+    if (!strstr($private_path, 'db-config.php')) {
         // If the user did not provide a trailing '/' then add one
-        if (!preg_match('/^.*\/$/', $dbconfig_path)) {
-            $dbconfig_path .= '/';
+        if (!preg_match('/^.*\/$/', $private_path)) {
+            $private_path .= '/';
         }
     } else {
-        $dbconfig_path = str_replace('db-config.php', '', $dbconfig_path);
+        $private_path = str_replace('db-config.php', '', $private_path);
     }
+    $_GLFUSION['private_path'] = $private_path;
 
     // store entered path into the session var
-    $_GLFUSION['dbconfig_path'] = $dbconfig_path;
+    $_GLFUSION['dbconfig_path'] = $private_path.'data/';
+    $dbconfig_path = $private_path.'data/';
 
     // check and see if the advanced path settings were entered...
 
@@ -569,15 +572,17 @@ function INST_gotPathSetting($dbc_path = '')
             $data_path .= '/';
         }
         $_GLFUSION['data_path']     = $data_path;
+    } else {
+        $data_path = $_GLFUSION['private_path'] .'data/';
     }
 
     // now, lets see if it exists, if not, try to rename the .dist file...
     clearstatcache();
     if (!@file_exists($dbconfig_path.'db-config.php') ) {
         // see if the .dist is there
-        if ( @file_exists($dbconfig_path.'db-config.php.dist') ) {
+        if ( @file_exists($private_path.'db-config.php.dist') ) {
             // found it, try to rename..
-            $rc = @copy($dbconfig_path.'db-config.php.dist',$dbconfig_path.'db-config.php');
+            $rc = @copy($private_path.'db-config.php.dist',$dbconfig_path.'db-config.php');
             if ( $rc !== true ) {
                 return _displayError(DBCONFIG_NOT_WRITABLE,'pathsetting');
             }
@@ -587,10 +592,14 @@ function INST_gotPathSetting($dbc_path = '')
         }
     }
     clearstatcache();
+
+// validate one more time
     // if it isn't there, ask again...
     if ( !@file_exists($dbconfig_path.'db-config.php') ) {
         return _displayError(DBCONFIG_NOT_FOUND,'pathsetting');
     }
+
+// ensure we can write to it
     // found it, but it is read-only...
     if ( !INST_isWritable($dbconfig_path.'db-config.php') ) {
         return _displayError(DBCONFIG_NOT_WRITABLE,'pathsetting');
@@ -599,18 +608,18 @@ function INST_gotPathSetting($dbc_path = '')
     /* now set the other paths */
 
     if ( $log_path == '' ) {
-        $log_path = $dbconfig_path .'logs/';
+        $log_path = $private_path .'logs/';
     }
 
     if ( $lang_path == '') {
-        $lang_path = $dbconfig_path .'language/';
+        $lang_path = $private_path .'language/';
     }
 
     if ( $backup_path == '' ) {
-        $backup_path = $dbconfig_path .'backups/';
+        $backup_path = $private_path .'backups/';
     }
     if ( $data_path == '' ) {
-        $data_path = $dbconfig_path .'data/';
+        $data_path = $private_path .'data/';
     }
 
     $_GLFUSION['log_path']      = $log_path;
@@ -618,8 +627,15 @@ function INST_gotPathSetting($dbc_path = '')
     $_GLFUSION['backup_path']   = $backup_path;
     $_GLFUSION['data_path']     = $data_path;
 
+// now make all directories under the data path
+
+    INST_mkDir($data_path.'cache');
+    INST_mkDir($data_path.'htmlpurifier');
+    INST_mkDir($data_path.'layout_cache');
+    INST_mkDir($data_path.'temp');
+
     // we have a good path to /private, off to the next step...
-    return INST_checkEnvironment($dbconfig_path);
+    return INST_checkEnvironment($private_path);
 }
 
 /**
@@ -631,7 +647,7 @@ function INST_gotPathSetting($dbc_path = '')
  * @return  string          HTML screen with environment status
  *
  */
-function INST_checkEnvironment($dbconfig_path='')
+function INST_checkEnvironment($private_path='')
 {
     global $_GLFUSION, $LANG_INSTALL, $_DB, $_DB_host, $_DB_name, $_DB_user,
            $_DB_pass,$_DB_table_prefix,$_DB_dbms, $_TABLES, $_SYSTEM;
@@ -639,6 +655,8 @@ function INST_checkEnvironment($dbconfig_path='')
     if ( ($rc = _checkSession() ) !== 0 ) {
         return $rc;
     }
+
+    $dbconfig_path = '';
 
     $required_extensions = array(
         array('extension' => 'ctype',   'fail' => 1),
@@ -662,12 +680,13 @@ function INST_checkEnvironment($dbconfig_path='')
     $previousaction = 'pathsetting';
 
     // was it passed from the previous step
-    if ( $dbconfig_path == '') {
-        if ( !isset($_GLFUSION['dbconfig_path']) ) {
+    if ( $private_path == '') {
+        if ( !isset($_GLFUSION['private_path']) ) {
             return INST_getPathSetting();
         }
-        $dbconfig_path = $_GLFUSION['dbconfig_path'];
+        $private_path = $_GLFUSION['private_path'];
     }
+    $dbconfig_path = $private_path.'data/';
 
     $permError = 0;
     $envError  = 0;
@@ -744,7 +763,7 @@ function INST_checkEnvironment($dbconfig_path='')
     } else {
         $T->set_var('status','<span class="uk-text-success">'.phpversion().'</span>');
     }
-    $T->set_var('recommended','7.1+');
+    $T->set_var('recommended','7.3+');
     $T->set_var('notes',sprintf($LANG_INSTALL['php_req_version'],SUPPORTED_PHP_VER));
     $T->parse('env','envs',true);
 
@@ -807,13 +826,30 @@ function INST_checkEnvironment($dbconfig_path='')
     $T->parse('env','envs',true);
 
     clearstatcache();
-    if ( $_GLFUSION['method'] == 'upgrade' && @file_exists('../../siteconfig.php')) {
-        require '../../siteconfig.php';
-        $_GLFUSION['dbconfig_path'] = $_CONF['path'];
-        if ( !file_exists($_CONF['path'].'db-config.php') ) {
+    if ( $_GLFUSION['method'] == 'upgrade' && (@file_exists('../../siteconfig.php') || (@file_exists('../../data/siteconfig.php')))) {
+        if ( !@file_exists('../../data/siteconfig.php') && @file_exists('../../siteconfig.php' )) {
+            // copy to new location...
+            $rc = @copy('../../siteconfig.php','../../data/siteconfig.php');
+            @chmod('../../data/siteconfig.php',0777);
+        }
+if ( !@file_exists('../../data/siteconfig.php') ) {
+    print "error - could not locate siteconfig.php";
+}
+
+        require '../../data/siteconfig.php';
+
+        $_GLFUSION['private_path'] = $_CONF['path'];
+        // check to see if db-config.php needs to be moved
+        if ( !@file_exists($_CONF['path'].'data/db-config.php') && @file_exists($_CONF['path'].'db-config.php')) {
+            // copy to new location...
+            $rc = @copy($_CONF['path'].'db-config.php',$_CONF['path'].'data/db-config.php');
+            @chmod($_CONF['path'].'data/db-config.php',0777);
+        }
+
+        if ( !file_exists($_CONF['path'].'data/db-config.php') ) {
             return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' . __LINE__);
         }
-        require $_CONF['path'].'db-config.php';
+        require $_CONF['path'].'data/db-config.php';
         if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
             return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' .  __LINE__);
         }
@@ -832,7 +868,7 @@ function INST_checkEnvironment($dbconfig_path='')
         $config->initConfig();
         $_CONF = $config->get_config('Core');
         $_PATH['public_html']   = $_CONF['path_html'];
-        $_PATH['dbconfig_path'] = $_CONF['path'];
+        $_PATH['private_path'] = $_CONF['path'];
         $_PATH['admin_path']    = INST_getAdminPath();
         $_PATH['log_path']      = $_CONF['path_log'];
         $_PATH['lang_path']     = $_CONF['path_language'];
@@ -840,10 +876,10 @@ function INST_checkEnvironment($dbconfig_path='')
         $_PATH['data_path']     = $_CONF['path_data'];
     } else {
         $_PATH['public_html']   = INST_getHtmlPath();
-        if ( $dbconfig_path == '' ) {
-            $_PATH['dbconfig_path'] = INST_sanitizePath(INST_stripslashes($_POST['private_path']));
+        if ( $private_path == '' ) {
+            $_PATH['private_path'] = INST_sanitizePath(INST_stripslashes($_POST['private_path']));
         } else {
-            $_PATH['dbconfig_path']     = $dbconfig_path;
+            $_PATH['private_path']     = $private_path;
         }
         $_PATH['admin_path']        = INST_getAdminPath();
 
@@ -856,15 +892,15 @@ function INST_checkEnvironment($dbconfig_path='')
     if (!preg_match('/^.*\/$/', $_PATH['public_html'])) {
         $_PATH['public_html'] .= '/';
     }
-    if (!preg_match('/^.*\/$/', $_PATH['dbconfig_path'])) {
-        $_PATH['dbconfig_path'] .= '/';
+    if (!preg_match('/^.*\/$/', $_PATH['private_path'])) {
+        $_PATH['private_path'] .= '/';
     }
     if (!preg_match('/^.*\/$/', $_PATH['admin_path'])) {
         $_PATH['admin_path'] .= '/';
     }
 
     $file_list = array( /*$_PATH['dbconfig_path'],*/
-                        $_PATH['dbconfig_path'].'db-config.php',
+                        $_PATH['private_path'].'data/db-config.php',
                         $_PATH['data_path'],
                         $_PATH['data_path'].'glfusion.lck',
                         $_PATH['data_path'].'glfusion_css.lck',
@@ -878,12 +914,12 @@ function INST_checkEnvironment($dbconfig_path='')
                         $_PATH['data_path'].'layout_cache/',
                         $_PATH['data_path'].'temp/',
                         $_PATH['data_path'].'htmlpurifier/',
-                        $_PATH['dbconfig_path'].'plugins/mediagallery/',
-                        $_PATH['dbconfig_path'].'plugins/mediagallery/tmp/',
-                        $_PATH['dbconfig_path'].'system/lib-custom.php',
+                        $_PATH['private_path'].'plugins/mediagallery/',
+                        $_PATH['private_path'].'plugins/mediagallery/tmp/',
+                        $_PATH['private_path'].'system/lib-custom.php',
 
                         $_PATH['public_html'],
-                        $_PATH['public_html'].'siteconfig.php',
+                        $_PATH['public_html'].'data/siteconfig.php',
                         $_PATH['public_html'].'backend/glfusion.rss',
                         $_PATH['public_html'].'images/articles/',
                         $_PATH['public_html'].'images/topics/',
@@ -916,7 +952,7 @@ function INST_checkEnvironment($dbconfig_path='')
 
                       );
 
-    $T->set_var('dbconfig_path',$_PATH['dbconfig_path']);
+    $T->set_var('private_path',$_PATH['private_path']);
 
     $T->set_block('page','perms','perm');
 
@@ -935,18 +971,18 @@ function INST_checkEnvironment($dbconfig_path='')
         }
     }
     // special test to see if we can create a directory under layout_cache...
-    $rc = @mkdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
+    $rc = @mkdir($_PATH['private_path'].'data/layout_cache/test/');
     if (!$rc) {
-        $T->set_var('location',$_PATH['dbconfig_path'].'data/layout_cache/<br /><strong>'.$_GLFUSION['errstr'].'</strong>');
+        $T->set_var('location',$_PATH['private_path'].'data/layout_cache/<br /><strong>'.$_GLFUSION['errstr'].'</strong>');
         $T->set_var('status', '<span class="Unwriteable">'.$LANG_INSTALL['unable_mkdir'].'</span>');
         $T->set_var('rowclass',($classCounter % 2)+1);
         $classCounter++;
         $T->parse('perm','perms',true);
 
         $permError = 1;
-        @rmdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
+        @rmdir($_PATH['private_path'].'data/layout_cache/test/');
     } else {
-        $ok = INST_isWritable($_PATH['dbconfig_path'].'data/layout_cache/test/');
+        $ok = INST_isWritable($_PATH['private_path'].'data/layout_cache/test/');
         if ( !$ok ) {
             $T->set_var('location',$path);
             $T->set_var('status', $ok ? '<span class="uk-text-success">'.$LANG_INSTALL['ok'].'</span>' : '<span class="Unwriteable">'.$LANG_INSTALL['not_writable'].'</span>');
@@ -955,11 +991,11 @@ function INST_checkEnvironment($dbconfig_path='')
             $T->parse('perm','perms',true);
             $permError = 1;
         }
-        @rmdir($_PATH['dbconfig_path'].'data/layout_cache/test/');
+        @rmdir($_PATH['private_path'].'data/layout_cache/test/');
     }
 
     // special test to see if existing cache files exist and are writable...
-    $rc = INST_checkCacheDir($_PATH['dbconfig_path'].'data/layout_cache/',$T,$classCounter);
+    $rc = INST_checkCacheDir($_PATH['private_path'].'data/layout_cache/',$T,$classCounter);
     if ( $rc > 0 ) {
         $permError = 1;
     }
@@ -1045,7 +1081,7 @@ function INST_getSiteInformation()
         return $rc;
     }
 
-    if ( !isset($_GLFUSION['dbconfig_path']) ) {
+    if ( !isset($_GLFUSION['private_path']) ) {
         return INST_getPathSetting();
     }
 
@@ -1062,10 +1098,7 @@ function INST_getSiteInformation()
     $site_mail      = (isset($_GLFUSION['site_mail']) ? $_GLFUSION['site_mail'] : '');
     $noreply_mail   = (isset($_GLFUSION['noreply_mail']) ? $_GLFUSION['noreply_mail'] : '');
     $securePassword = (isset($_GLFUSION['securepassword']) ? $_GLFUSION['securepassword'] : '');
-    $dbconfig_path  = $_GLFUSION['dbconfig_path'];
-
-
-//    $utf8           = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
+    $private_path  = $_GLFUSION['private_path'];
     $utf8           = 1;
 
     if ( $securePassword == '' ) {
@@ -1074,10 +1107,10 @@ function INST_getSiteInformation()
     }
 
     clearstatcache();
-    if ( !file_exists($dbconfig_path.'db-config.php') ) {
+    if ( !file_exists($private_path.'data/db-config.php') ) {
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
-    require $dbconfig_path.'db-config.php';
+    require $private_path.'data/db-config.php';
 
     if ( isset($_GLFUSION['db_type']) ) {
         $_DB_dbms = $_GLFUSION['db_type'];
@@ -1179,14 +1212,14 @@ function INST_gotSiteInformation()
     }
     $_GLFUSION['currentstep'] = 'getsiteinformation';
 
-    require_once $_GLFUSION['dbconfig_path'] . 'classes/Autoload.php';
+    require_once $_GLFUSION['private_path'] . 'classes/Autoload.php';
     glFusion\Autoload::initialize();
 
-    $dbconfig_path = $_GLFUSION['dbconfig_path'];
-    $log_path = $dbconfig_path .'logs/';
+    $private_path = $_GLFUSION['private_path'];
+    $log_path = $private_path .'logs/';
     clearstatcache();
-    if ( !file_exists($dbconfig_path.'vendor/aziraphale/email-address-validator/EmailAddressValidator.php') ) {
-        INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $dbconfig_path.'lib/email-address-validation/EmailAddressValidator.php');
+    if ( !file_exists($private_path.'vendor/aziraphale/email-address-validator/EmailAddressValidator.php') ) {
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $private_path.'lib/email-address-validation/EmailAddressValidator.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
     }
     $validator = new EmailAddressValidator;
@@ -1478,7 +1511,6 @@ function INST_installAndContentPlugins()
         $use_innodb = false;
     }
 
-//    $utf8 = (isset($_GLFUSION['utf8']) ? $_GLFUSION['utf8'] : 1);
     $utf8 = 1;
     if ( $utf8 ) {
         $charset = 'utf-8';
@@ -1492,63 +1524,63 @@ function INST_installAndContentPlugins()
         $language = 'english_utf-8';
     }
 
-    $_PATH['dbconfig_path'] = $_GLFUSION['dbconfig_path'];
+    $_PATH['private_path'] = $_GLFUSION['private_path'];
     $_PATH['public_html']   = INST_getHtmlPath();
     if (!preg_match('/^.*\/$/', $_PATH['public_html'])) {
         $_PATH['public_html'] .= '/';
     }
-    $dbconfig_path = str_replace('db-config.php', '', $_PATH['dbconfig_path']);
-    $gl_path    = $dbconfig_path;
+    $private_path = str_replace('db-config.php', '', $_PATH['private_path']);
+    $gl_path    = $private_path;
     $log_path   = isset($_GLFUSION['log_path'])    ? $_GLFUSION['log_path']    : $gl_path . 'logs/';
 
     INST_errorLog($log_path,'INSTALL: lib-custom installation');
     clearstatcache();
     // check the lib-custom...
-    if (!@file_exists($_PATH['dbconfig_path'].'system/lib-custom.php') ) {
-        if ( @file_exists($_PATH['dbconfig_path'].'system/lib-custom.php.dist') ) {
-            INST_errorLog($log_path,'INSTALL: Creating ' . $_PATH['dbconfig_path'].'system/lib-custom.php');
-            $rc = @copy($_PATH['dbconfig_path'].'system/lib-custom.php.dist',$_PATH['dbconfig_path'].'system/lib-custom.php');
+    if (!@file_exists($_PATH['private_path'].'system/lib-custom.php') ) {
+        if ( @file_exists($_PATH['private_path'].'system/lib-custom.php.dist') ) {
+            INST_errorLog($log_path,'INSTALL: Creating ' . $_PATH['private_path'].'system/lib-custom.php');
+            $rc = @copy($_PATH['private_path'].'system/lib-custom.php.dist',$_PATH['private_path'].'system/lib-custom.php');
             if ( $rc === false ) {
                 INST_errorLog($log_path,'INSTALL: ERROR: Unable to create lib-custom.php - directory not writable?');
                 return _displayError(LIBCUSTOM_NOT_WRITABLE,'getsiteinformation');
             }
         } else {
             // no lib-custom.php.dist found
-            INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['dbconfig_path'].'system/lib-custom.php.dist');
+            INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['private_path'].'system/lib-custom.php.dist');
             return _displayError(LIBCUSTOM_NOT_FOUND,'getsiteinformation');
         }
     }
 
     // check the mg config...
     INST_errorLog($log_path,'INSTALL: Media Gallery config.php installation.');
-    if (!@file_exists($_PATH['dbconfig_path'].'plugins/mediagallery/config.php') ) {
-        if ( @file_exists($_PATH['dbconfig_path'].'plugins/mediagallery/config.php.dist') ) {
-            INST_errorLog($log_path,'INSTALL: Creating ' . $_PATH['dbconfig_path'].'plugins/mediagallery/config.php');
-            $rc = @copy($_PATH['dbconfig_path'].'plugins/mediagallery/config.php.dist',$_PATH['dbconfig_path'].'plugins/mediagallery/config.php');
+    if (!@file_exists($_PATH['private_path'].'plugins/mediagallery/config.php') ) {
+        if ( @file_exists($_PATH['private_path'].'plugins/mediagallery/config.php.dist') ) {
+            INST_errorLog($log_path,'INSTALL: Creating ' . $_PATH['private_path'].'plugins/mediagallery/config.php');
+            $rc = @copy($_PATH['private_path'].'plugins/mediagallery/config.php.dist',$_PATH['private_path'].'plugins/mediagallery/config.php');
             if ( $rc === false ) {
                 INST_errorLog($log_path,'INSTALL: ERROR: Unable to create Media Gallery config.php - directory not writable?');
                 return _displayError(LIBCUSTOM_NOT_WRITABLE,'getsiteinformation');
             }
         } else {
             // no config.php.dist found
-            INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['dbconfig_path'].'plugins/mediagallery/config.php.dist');
+            INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['private_path'].'plugins/mediagallery/config.php.dist');
             return _displayError(LIBCUSTOM_NOT_FOUND,'getsiteinformation');
         }
     }
 
     // check and see if site config really exists...
     INST_errorLog($log_path,'INSTALL: siteconfig.php Installation');
-    if (!@file_exists($_PATH['public_html'].'siteconfig.php') ) {
+    if (!@file_exists($_PATH['public_html'].'data/siteconfig.php') ) {
         if ( @file_exists($_PATH['public_html'].'siteconfig.php.dist') ) {
-            INST_errorLog($log_path,'INSTALL: Creating ' . $_PATH['public_html'].'siteconfig.php');
-            $rc = @copy($_PATH['public_html'].'siteconfig.php.dist',$_PATH['public_html'].'siteconfig.php');
+            INST_errorLog($log_path,'INSTALL: Creating ' . $_PATH['public_html'].'data/siteconfig.php');
+            $rc = @copy($_PATH['public_html'].'siteconfig.php.dist',$_PATH['public_html'].'data/siteconfig.php');
             if ( $rc === false ) {
                 INST_errorLog($log_path,'INSTALL: ERROR: Unable to create siteconfig.php - directory or file not writable?');
                 return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
             }
-            @chmod($_PATH['public_html'].'siteconfig.php',0777);
-            if ( !@file_exists($_PATH['public_html'].'siteconfig.php') ) {
-                INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['public_html'].'siteconfig.php');
+            @chmod($_PATH['public_html'].'data/siteconfig.php',0777);
+            if ( !@file_exists($_PATH['public_html'].'data/siteconfig.php') ) {
+                INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['public_html'].'data/siteconfig.php');
                 return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
             }
         } else {
@@ -1560,10 +1592,10 @@ function INST_installAndContentPlugins()
 
     // Edit siteconfig.php and enter the correct path and system directory path
     INST_errorLog($log_path,'INSTALL: Opening siteconfig.php for writing');
-    $siteconfig_path = $_PATH['public_html'] . 'siteconfig.php';
+    $siteconfig_path = $_PATH['public_html'] . 'data/siteconfig.php';
     $siteconfig_file = fopen($siteconfig_path, 'r');
     if ( $siteconfig_file === false ) {
-        INST_errorLog($log_path,'INSTALL: ERROR: Unable to open ' . $_PATH['public_html'] . 'siteconfig.php for writing');
+        INST_errorLog($log_path,'INSTALL: ERROR: Unable to open ' . $_PATH['public_html'] . 'data/siteconfig.php for writing');
         return _displayError(SITECONFIG_NOT_WRITABLE,'getsiteinformation');
     }
     INST_errorLog($log_path,'INSTALL: Writing configuration data to siteconfig.php');
@@ -1576,7 +1608,7 @@ function INST_installAndContentPlugins()
     }
     require $siteconfig_path;
     $siteconfig_data = str_replace("\$_CONF['path'] = '{$_CONF['path']}';",
-                        "\$_CONF['path'] = '" . str_replace('db-config.php', '', $_PATH['dbconfig_path']) . "';",
+                        "\$_CONF['path'] = '" . str_replace('db-config.php', '', $_PATH['private_path']) . "';",
                         $siteconfig_data);
 
     $siteconfig_data = preg_replace
@@ -1604,7 +1636,7 @@ function INST_installAndContentPlugins()
     fclose ($siteconfig_file);
     require $siteconfig_path;
 
-    $config_file = $_GLFUSION['dbconfig_path'].'db-config.php';
+    $config_file = $_GLFUSION['private_path'].'data/db-config.php';
 
     if ( !file_exists($config_file) ) {
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
@@ -1926,7 +1958,7 @@ function INST_complete()
         'lang_account_password'     => $LANG_SUCCESS[15],
         'password_link'             => $_CONF['site_url'].'/usersettings.php?mode=edit',
         'lang_set_perms'            => $LANG_SUCCESS[16],
-        'db_config_path'            => $_CONF['path'] . 'db-config.php',
+        'db_config_path'            => $_CONF['path'] . 'data/db-config.php',
         'lang_and'                  => $LANG_SUCCESS[17],
         'siteconfig_path'           => $_CONF['path_html'] . 'siteconfig.php',
         'lang_backto'               => $LANG_SUCCESS[18],
@@ -2395,6 +2427,40 @@ function INST_upgradeAlert( )
         'hiddenfields'          => _buildHiddenFields(),
     ));
 
+    if ( (@file_exists('../../siteconfig.php') && !@file_exists('../../data/siteconfig.php') ) ||
+        (@file_exists($_GLFUSION['path_private'].'db-config.php') && !@file_exists($_GLFUSION['path_private'].'data/db-config.php')) ) {
+        // check to see if the required public_html/data/ directory exists
+
+        $install_path = getcwd();
+        $public_path = str_replace('admin/install', '', $install_path);
+        if (!preg_match('/^.*\/$/', $public_path)) {
+            $public_path .= '/';
+        }
+
+        $file_list = array(
+            $public_path.'data/',
+            $_GLFUSION['private_path'].'data/'
+        );
+
+        $msg = '';
+        $perm_errors = false;
+
+        foreach ($file_list AS $path) {
+            $ok = INST_isWritable($path);
+            if ( !$ok ) {
+                $msg .= sprintf($LANG_INSTALL['data_dir_error'].'<br>',$path);
+                $perm_errors = true;
+            }
+        }
+
+        if ($perm_errors === true) {
+            $error_messages = '<div class="uk-alert uk-alert-danger">'.$msg.'</div>';
+            $T->set_var('glfusion_v2_header','<h2 class="uk-text-danger">'.$LANG_INSTALL['glfusion_v2_header'].'</h2>');
+            $T->set_var('glfusion_v2_notes',$LANG_INSTALL['glfusion_v2_notes']);
+            $T->set_var('permission_error',$error_messages);
+        }
+    }
+
     $T->parse('output','page');
 
     $retval =  $T->finish($T->get_var('output'));
@@ -2529,17 +2595,49 @@ switch($mode) {
         break;
 
     case 'startupgrade' :
-        if ( !@file_exists('../../siteconfig.php') ) {
+        if ( !@file_exists('../../data/siteconfig.php') && !@file_exists('../../siteconfig.php') ) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
             $percent_complete = 50;
         } else {
             $percent_complete = 50;
-            require '../../siteconfig.php';
-            if ( !file_exists($_CONF['path'].'db-config.php') ) {
-                return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
+
+            if ( @file_exists('../../data/siteconfig.php')) {
+                require '../../data/siteconfig.php';
+            } else if ( @file_exists('../../siteconfig.php') ) {
+                $rc = @copy('../../siteconfig.php','../../data/siteconfig.php');
+                if ( $rc !== true ) {
+                    return _displayError(DBCONFIG_NOT_WRITABLE,'startupgrade');
+                }
+                @chmod('../../data/siteconfig.php',0666);
+
+                if (!@file_exists('../../data/siteconfig.php')) {
+                    return _displayError(FILE_INCLUDE_ERROR,'startupgrade','Error Code: ' . __LINE__);
+                }
+                require '../../data/siteconfig.php';
+                @unlink('../../siteconfig.php');
+            } else {
+                return _displayError(SITECONFIG_NOT_FOUND,'startupgrade','Error Code: ' . __LINE__);
             }
-            require $_CONF['path'].'db-config.php';
-            $_GLFUSION['dbconfig_path'] = $_CONF['path'];
+
+            if ( file_exists($_CONF['path'].'data/db-config.php') ) {
+                require $_CONF['path'].'data/db-config.php';
+            } else if ( @file_exists($_CONF['path'].'db-config.php') ) {
+                $rc = @copy($_CONF['path'].'db-config.php',$_CONF['path'].'data/db-config.php');
+                if ( $rc !== true ) {
+                    return _displayError(DBCONFIG_NOT_WRITABLE,'startupgrade');
+                }
+                @chmod($_CONF['path'].'data/db-config.php',0666);
+
+                if (!@file_exists($_CONF['path'].'data/db-config.php') ) {
+                    return _displayError(FILE_INCLUDE_ERROR,'startupgrade','Error Code: ' . __LINE__);
+                }
+                require $_CONF['path'].'data/db-config.php';
+                @unlink($_CONF['path'].'db-config.php');
+            } else {
+                return _displayError(FILE_INCLUDE_ERROR,'startupgrade','Error Code: ' . __LINE__);
+            }
+
+            $_GLFUSION['private_path'] = $_CONF['path'];
             if ( !file_exists($_CONF['path_system'].'lib-database.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__ );
             }
@@ -2556,23 +2654,25 @@ switch($mode) {
         break;
 
     case 'doupgrade' :
-        if ( !@file_exists('../../siteconfig.php') ) {
+        if ( !@file_exists('../../data/siteconfig.php') ) {
             $pageBody = _displayError(SITECONFIG_NOT_FOUND,'');
             $percent_complete = 50;
         } else {
             $percent_complete = 80;
-            require '../../siteconfig.php';
-            if ( !file_exists($_CONF['path'].'db-config.php') ) {
+            require '../../data/siteconfig.php';
+            if ( !file_exists($_CONF['path'].'data/db-config.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
             }
-            require $_CONF['path'].'db-config.php';
-            $_GLFUSION['dbconfig_path'] = $_CONF['path'];
+            require $_CONF['path'].'data/db-config.php';
+            $_GLFUSION['private_path'] = $_CONF['path'];
             if ( !file_exists($_CONF['path_system'] . 'lib-database.php') ) {
                 return _displayError(FILE_INCLUDE_ERROR,'pathsetting', 'Error Code: ' . __LINE__);
             }
             require_once $_CONF['path'] . 'classes/Autoload.php';
             glFusion\Autoload::initialize();
             require $_CONF['path_system'] . 'db-init.php';
+
+
 
             $pageBody = INST_doSiteUpgrade();
         }

@@ -82,7 +82,7 @@ $_REQUEST = array_merge($_GET, $_POST);
   * 3) config->get_config('Core') - loads config pairs for group 'core'
   *
   */
-require_once 'siteconfig.php' ;
+require_once 'data/siteconfig.php';
 
 /**
   * Here, we shall establish an error handler. This will mean that whenever a

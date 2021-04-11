@@ -301,7 +301,7 @@ class Database
         static $instance;
 
         if (!isset($instance) ) {
-            include $_CONF['path'].'db-config.php';
+            include $_CONF['path'].'data/db-config.php';
             if ( !isset($_CONF['db_charset'])) $_CONF['db_charset'] = '';
             $instance = new Database($_DB_host, $_DB_name, $_DB_user, $_DB_pass,
                      $_CONF['default_charset'], $_CONF['db_charset']);

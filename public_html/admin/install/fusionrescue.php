@@ -16,18 +16,18 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 define('GVERSION','2.0.0');
 
-if ( !file_exists('../../siteconfig.php')) die('Unable to locate siteconfig.php');
+if ( !file_exists('../../data/siteconfig.php')) die('Unable to locate siteconfig.php');
 
-require_once '../../siteconfig.php';
+require_once '../../data/siteconfig.php';
 
 $_SYSTEM['no_fail_sql'] = true;
 
-if ( !file_exists($_CONF['path'].'db-config.php')) die('Unable to located db-config.php');
+if ( !file_exists($_CONF['path'].'data/db-config.php')) die('Unable to located db-config.php');
 
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 
-require_once $_CONF['path'].'db-config.php';
+require_once $_CONF['path'].'data/db-config.php';
 $dbpass = $_DB_pass;
 
 require_once $_CONF['path'] . 'classes/Autoload.php';

@@ -18,7 +18,7 @@
 *
 */
 
-if (!@file_exists('siteconfig.php') ) {
+if (!@file_exists('data/siteconfig.php') ) {
     header("Location:admin/install/index.php");
     exit;
 }

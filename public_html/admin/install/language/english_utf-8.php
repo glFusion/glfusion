@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -231,6 +231,9 @@ $LANG_INSTALL = array(
     'all_ext_present'           => 'All required and optional PHP extensions are properly installed.',
     'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> should be off.',
     'max_execution_time'        => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
+    'glfusion_v2_header'        => 'glFusion v2 Upgrade Requirements',
+    'glfusion_v2_notes'         => 'glFusion v2.0 has changed the locations of serveral files, as a result, your site must have a private/data/ directory and a public_html/data/ directory that is writeable by the webserver.',
+    'data_dir_error'            => 'The path <strong>%s</strong> does not have the proper permissions to allow the web server to write to this location. Please correct this error before proceeding.',
 );
 
 // +---------------------------------------------------------------------------+

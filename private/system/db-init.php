@@ -16,7 +16,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-require_once $_CONF['path'].'db-config.php';
+require_once $_CONF['path'].'data/db-config.php';
 
 global $_TABLES, $_DB_host, $_DB_name, $_DB_user, $_DB_pass, $_DB_table_prefix, $_DB_dbms;
 

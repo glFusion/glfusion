@@ -120,8 +120,8 @@ function DB_query ($sql, $ignore_errors = 0)
         }
         if (defined ('DVLP_DEBUG')) {
             if (class_exists('\glFusion\Log\Log',true)) {
-                Log::write('system',Log::DEBUG,"SQL Error: " . $dbError);
-                Log::write('system',Log::DEBUG,"SQL: " . $sql);
+//                Log::write('system',Log::DEBUG,"SQL Error: " . $dbError);
+//                Log::write('system',Log::DEBUG,"SQL: " . $sql);
             }
         }
         if ($ignore_errors) {
@@ -524,8 +524,8 @@ function DB_error($sql = '')
                 }
             }
         }
-        Log::write('system',Log::ERROR,"SQL Error: " . $db->getErrno());
-        Log::write('system',Log::ERROR,"SQL: " . $sql);
+//        Log::write('system',Log::ERROR,"SQL Error: " . $db->getErrno());
+//        Log::write('system',Log::ERROR,"SQL: " . $sql);
 
         if ($db->_display_error) {
             return  $db->getErrno() . ': ' . $sql;

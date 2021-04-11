@@ -22,7 +22,7 @@ use \glFusion\Admin\AdminActions;
 // Only let admin users access this page
 
 if (!SEC_inGroup('Root')) {
-    // Someone is trying to illegally access this page
+    // Someone is trying to the page without proper access
     log::logAccessViolation('DvlpUpdate');
     $display  = COM_siteHeader();
     $display .= COM_startBlock($LANG27[12]);
