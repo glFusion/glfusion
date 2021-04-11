@@ -421,8 +421,9 @@ require_once $_CONF['path_system'].'lib-autotag.php';
 * hacks to make upgrading easier.
 *
 */
-
-require_once $_CONF['path_system'].'lib-custom.php';
+if (@file_exists($_CONF['path_system'].'lib-custom.php')) {
+    require_once $_CONF['path_system'].'lib-custom.php';
+}
 
 // Set theme
 
