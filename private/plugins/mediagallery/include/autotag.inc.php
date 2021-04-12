@@ -1,29 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | autotag.inc.php                                                          |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Auto Tag Handling
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -812,7 +799,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 				            // now the player specific items.
 				    		$F = new Template( MG_getTemplatePath(0) );
 				           	$F->set_file(array('player' => 'flvfp.thtml'));
-				           	$playImage = $_MG_CONF['mediaobjects_url'].'/placeholder_video_w.svg';
+				           	$playImage = $_MG_CONF['assets_url'].'/placeholder_video_w.svg';
 				        	if ( $autoplay == 1 ) {  // auto start
 				        		$playButton = '';
 				        	} else {
@@ -1360,14 +1347,14 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             }
                         }
                     } else {
-                        $tnImage = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
-                        $tnFileName = $_MG_CONF['path_mediaobjects'] . 'placeholder.svg';
+                        $tnImage = $_MG_CONF['assets_url'] . '/placeholder.svg';
+                        $tnFileName = $_MG_CONF['path_assets'] . 'placeholder.svg';
                     }
                 }
                 $media_size = @getimagesize($tnFileName);
                 if ( $media_size == false ) {
-                    $tnImage = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
-                    $tnFileName = $_MG_CONF['path_mediaobjects'] . 'placeholder.svg';
+                    $tnImage = $_MG_CONF['assets_url'] . '/placeholder.svg';
+                    $tnFileName = $_MG_CONF['path_assets'] . 'placeholder.svg';
                     $media_size = array(200,200);
                 }
                 if ( $width > 0 && $height == 0 ) {
@@ -1546,12 +1533,17 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                                         }
                                         break;
                                 }
-
+                                $foundImageDefaultThumbnail = false;
                                 foreach ($_MG_CONF['validExtensions'] as $ext ) {
                                     if ( file_exists($_MG_CONF['path_mediaobjects'] . $link_src .'/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext) ) {
                                         $direct_link = $_MG_CONF['mediaobjects_url'] . '/'.$link_src.'/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext;
+                                        $default_thumbnail = $link_src . '/' . $row['media_filename'][0] . '/' . $row['media_filename'] . $ext;
+                                        $foundImageDefaultThumbnail = true;
                                         break;
                                     }
+                                }
+                                if ($foundImageDefaultThumbnail === false) {
+                                    $default_thumbnail = 'placeholder.svg';
                                 }
                             }
                             break;
@@ -1593,10 +1585,14 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                                 break;
                             }
                         }
-                    } else {
+                    } else if ($foundImageDefaultThumbnail === true) {
                         $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
                         $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+                    } else {
+                        $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+                        $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
                     }
+
                     if ( $autotag['tag'] == 'img' ) {
                         if ( $align != '' && $align != 'center' ) {
                             $album_image = '<span class="'.$classes.'" style="float:' . $align . ';padding:5px;"><img src="' . $media_thumbnail . '" ' . $alttag . 'style="border:none;" /></span>';

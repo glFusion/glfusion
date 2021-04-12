@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | lib-media.php                                                            |
-// |                                                                          |
-// | General purpose media display / manipulation interface                   |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* General purpose media display / manipulation interface
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -154,9 +139,9 @@ function MG_displayASF( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -174,9 +159,9 @@ function MG_displayASF( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -233,9 +218,9 @@ function MG_displayASF( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -340,9 +325,9 @@ function MG_displayMOV( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -360,9 +345,9 @@ function MG_displayMOV( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -378,9 +363,9 @@ function MG_displayMOV( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -508,9 +493,9 @@ function MG_displayMP4( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -528,9 +513,9 @@ function MG_displayMP4( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }

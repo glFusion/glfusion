@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | classMedia.php                                                           |
-// |                                                                          |
-// | Media objects class and handling routines                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Media objects class and hanlding
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -157,12 +142,21 @@ class Media {
         $videoid   = '';
         $url_orig  = '';
 
+        $foundImageDefaultThumbnail = false;
+
         switch( $this->type ) {
             case 0 :    // standard image
                 $data_type = 'image';
                 $default_thumbnail = 'tn/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext;
-                if ( !file_exists($_MG_CONF['path_mediaobjects'] . $default_thumbnail) ) {
-                    $default_thumbnail = 'tn/' . $this->filename[0] . '/' . $this->filename . '.jpg';
+                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/'.  $this->filename[0] . '/' . $this->filename . $ext) ) {
+                        $default_thumbnail      = 'tn/'.  $this->filename[0] . '/' . $this->filename . $ext;
+                        $foundImageDefaultThumbnail = true;
+                        break;
+                    }
+                }
+                if ($foundImageDefaultThumbnail === false) {
+                    $default_thumbnail = 'placeholder.svg';
                 }
                 if ( $_MG_CONF['discard_original'] == 1 ) {
                     $orig = 'disp';
@@ -337,8 +331,8 @@ class Media {
         }
 
         if ( $this->tn_attached == 1 ) {
-            $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
-            $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+            $media_thumbnail      = $_MG_CONF['assetss_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
             foreach ($_MG_CONF['validExtensions'] as $ext ) {
                 if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $this->filename[0] .'/tn_' . $this->filename . $ext) ) {
                     $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/tn/'.  $this->filename[0] . '/tn_' . $this->filename . $ext;
@@ -346,9 +340,12 @@ class Media {
                     break;
                 }
             }
-        } else {
+        } else if ($foundImageDefaultThumbnail === true) {
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+        } else {
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
         }
 
         // type == 1 video
@@ -506,8 +503,8 @@ class Media {
             } else {
                 $default_thumbnail    = 'placeholder_missing.svg';
             }
-            $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
-            $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
         	$tn_height = $MG_albums[$this->album_id]->tnHeight;
         	$tn_width  = $MG_albums[$this->album_id]->tnWidth;
 
@@ -876,15 +873,19 @@ class Media {
 
     	$tn_height = $MG_albums[$this->album_id]->tnHeight;
     	$tn_width  = $MG_albums[$this->album_id]->tnWidth;
-
+        $foundImageDefaultThumbnail = false;
         switch( $this->type ) {
             case 0 :    // standard image
                 $default_thumbnail = 'tn/' . $this->filename[0] . '/' . $this->filename . '.jpg';
                 foreach ($_MG_CONF['validExtensions'] as $ext ) {
                     if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/'.  $this->filename[0] . '/' . $this->filename . $ext) ) {
                         $default_thumbnail      = 'tn/'.  $this->filename[0] . '/' . $this->filename . $ext;
+                        $foundImageDefaultThumbnail = true;
                         break;
                     }
+                }
+                if ($foundImageDefaultThumbnail === false) {
+                    $default_thumbnail = 'placeholder.svg';
                 }
                 break;
             case 1 :    // video file
@@ -978,9 +979,12 @@ class Media {
                     break;
                 }
             }
-        } else {
+        } else if ($foundImageDefaultThumbnail === true) {
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+        } else {
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
         }
 
         if ( strstr($media_thumbnail_file,'.svg') ) {
@@ -995,8 +999,8 @@ class Media {
             } else {
                 $default_thumbnail    = 'placeholder_missing.svg';
             }
-            $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
-            $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
             $media_size           = array($tn_width,$tn_height);
         }
 
@@ -1026,9 +1030,21 @@ class Media {
     function displayRaw( $namesOnly=0 ) {
         global $_CONF, $_MG_CONF, $MG_albums, $_MG_USERPREFS, $LANG_MG03;
 
+        $foundImageDefaultThumbnail = false;
+
         switch( $this->type ) {
             case 0 :    // standard image
                 $default_thumbnail = 'tn/' . $this->filename[0] . '/' . $this->filename . '.jpg';
+                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/'.  $this->filename[0] . '/' . $this->filename . $ext) ) {
+                        $default_thumbnail      = 'tn/'.  $this->filename[0] . '/' . $this->filename . $ext;
+                        $foundImageDefaultThumbnail = true;
+                        break;
+                    }
+                }
+                if ($foundImageDefaultThumbnail === false) {
+                    $default_thumbnail = 'placeholder.svg';
+                }
                 break;
             case 1 :    // video file
                 switch ( $this->mime_type ) {
@@ -1122,9 +1138,12 @@ class Media {
                     break;
                 }
             }
-        } else {
+        } else if ($foundImageDefaultThumbnail === true) {
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+        } else {
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
         }
 
         if ( strstr($media_thumbnail_file,'.svg') ) {
@@ -1139,8 +1158,8 @@ class Media {
             } else {
                 $default_thumbnail    = 'placeholder_missing.svg';
             }
-            $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
-            $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
             $media_size           = array($tn_width,$tn_height);
         }
 

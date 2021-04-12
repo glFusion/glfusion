@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | lib-watermark.php                                                        |
-// |                                                                          |
-// | Watermark admin functions                                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Watermark Admin Functions
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -110,8 +95,8 @@ function MG_watermarkManage( $actionURL = '' ) {
                 }
                 $mediaObject[] = $row;
 
-                $thumbnail  = $_MG_CONF['site_url']  . '/watermarks/' . $row['filename'];
-                $pThumbnail = $_MG_CONF['path_html'] . 'watermarks/' . $row['filename'];
+                $thumbnail  = $_MG_CONF['watermarks_url']  . '/' . $row['filename'];
+                $pThumbnail = $_MG_CONF['path_watermarks'] . $row['filename'];
 
                 $img_size = @getimagesize($pThumbnail);
                 $width = $img_size[0];
@@ -217,7 +202,7 @@ function MG_watermarkDelete( $actionURL = '') {
             if ( DB_error() ) {
                 COM_errorLog("MG Admin: Error removing watermark");
             }
-            @unlink($_MG_CONF['path_html'] . 'watermarks/'   . $filename);
+            @unlink($_MG_CONF['path_watermarks'] . $filename);
 
             // now check and see if this is assigned to any albums....
 
@@ -386,7 +371,7 @@ function MG_watermarkUploadSave() {
             $wm_id = 1;
         }
 
-        $wm_filename = $_MG_CONF['path_html'] . 'watermarks/' . $uid . '_' .$filename;
+        $wm_filename = $_MG_CONF['path_watermarks'] .  $uid . '_' .$filename;
 
         if (file_exists($wm_filename) ) {
             $statusMsg .= sprintf($LANG_MG02['wm_already_exists'], $filename);
@@ -436,7 +421,7 @@ function MG_watermark( $origImage, $aid, $runJhead ) {
     if ( $MG_albums[$aid]->wm_id == 0 ) {
         return false;
     }
-    $watermarkImage = $_MG_CONF['path_html'] . 'watermarks/' . DB_getItem($_TABLES['mg_watermarks'],'filename','wm_id="' . $MG_albums[$aid]->wm_id . '"');
+    $watermarkImage = $_MG_CONF['path_watermarks'] . DB_getItem($_TABLES['mg_watermarks'],'filename','wm_id="' . $MG_albums[$aid]->wm_id . '"');
     $opacity = $MG_albums[$aid]->wm_opacity;
     switch( $MG_albums[$aid]->wm_location ) {
         case 1 :

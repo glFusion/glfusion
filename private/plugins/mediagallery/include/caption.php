@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | caption.php                                                              |
-// |                                                                          |
-// | Batch caption editing routines                                           |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Batch caption editing routines
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -156,34 +141,34 @@ function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
                             }
                         }
                         if ( $thumbnail == '' ) {
-                            $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/generic.png';
-                            $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'generic.png';
+                            $thumbnail  = $_MG_CONF['assetss_url'] . '/generic.png';
+                            $pThumbnail  = $_MG_CONF['path_assets'] . 'generic.png';
                         }
                         break;
                     case 1 :
                         switch ( $row['media_mime_ext'] ) {
                             case 'swf' :
-                                $thumbnail = $_MG_CONF['mediaobjects_url'] . '/flash.png';
-                                $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'flash.png';
+                                $thumbnail = $_MG_CONF['assets_url'] . '/flash.png';
+                                $pThumbnail = $_MG_CONF['path_assets'] . 'flash.png';
                                 break;
                             case 'mov' :
                             case 'mp4' :
-                                $thumbnail = $_MG_CONF['mediaobjects_url'] . '/quicktime.png';
-                                $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'quicktime.png';
+                                $thumbnail = $_MG_CONF['assets_url'] . '/quicktime.png';
+                                $pThumbnail = $_MG_CONF['path_assets'] . 'quicktime.png';
                                 break;
                             case 'asf' :
-                                $thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
-                                $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'wmp.png';
+                                $thumbnail = $_MG_CONF['assets_url'] . '/wmp.png';
+                                $pThumbnail = $_MG_CONF['path_assets'] . 'wmp.png';
                                 break;
                             default :
-                                $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/video.png.';
-                                $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'video.png';
+                                $thumbnail  = $_MG_CONF['assets_url'] . '/video.png.';
+                                $pThumbnail = $_MG_CONF['path_assets'] . 'video.png';
                                 break;
                         }
                         break;
                     case 2 :
-                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/audio.png';
-                        $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'audio.png';
+                        $thumbnail  = $_MG_CONF['assets_url'] . '/audio.png';
+                        $pThumbnail = $_MG_CONF['path_assets'] . 'audio.png';
                         break;
                     case 4 :
                         switch ($row['media_mime_ext']) {
@@ -191,22 +176,22 @@ function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
                             case 'arj' :
                             case 'rar' :
                             case 'gz'  :
-                                $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/zip.png';
-                                $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'zip.png';
+                                $thumbnail  = $_MG_CONF['assets_url'] . '/zip.png';
+                                $pThumbnail  = $_MG_CONF['path_assets'] . 'zip.png';
                                 break;
                             case 'pdf' :
-                                $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/pdf.png';
-                                $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'pdf.png';
+                                $thumbnail  = $_MG_CONF['assets_url'] . '/pdf.png';
+                                $pThumbnail  = $_MG_CONF['path_assets'] . 'pdf.png';
                                 break;
                             default :
-                                $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/generic.png';
-                                $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'generic.png';
+                                $thumbnail  = $_MG_CONF['assets_url'] . '/generic.png';
+                                $pThumbnail  = $_MG_CONF['path_assets'] . 'generic.png';
                                 break;
                         }
                         break;
                     case 5 :
-                        $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/remote.png';
-                        $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'remote.png';
+                        $thumbnail  = $_MG_CONF['assets_url'] . '/remote.png';
+                        $pThumbnail  = $_MG_CONF['path_assets'] . 'remote.png';
                         break;
 
                 }

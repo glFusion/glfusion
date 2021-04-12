@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | mediamanage.php                                                          |
-// |                                                                          |
-// | Media Management administration routines                                 |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Media Management Administrative Routines
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -609,14 +594,14 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         case 1 :
             switch ( $row['mime_type'] ) {
 		        case 'video/x-flv' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/flv.png';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flv.png');
+                    $thumbnail = $_MG_CONF['assets_url'] . '/flv.png';
+                    $size      = @getimagesize($_MG_CONF['path_assets'] . 'flv.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
         		case 'application/x-shockwave-flash' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/flash.png';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flash.png');
+                    $thumbnail = $_MG_CONF['assets_url'] . '/flash.png';
+                    $size      = @getimagesize($_MG_CONF['path_assets'] . 'flash.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
@@ -624,8 +609,8 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         		case 'video/x-mpeg' :
         		case 'video/x-mpeq2a' :
         			if ( $_MG_CONF['use_wmp_mpeg'] == 1 ) {
-                    	$thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
-                    	$size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.png');
+                    	$thumbnail = $_MG_CONF['assets_url'] . '/wmp.png';
+                    	$size      = @getimagesize($_MG_CONF['path_assets'] . 'wmp.png');
                     	$preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     	$preview_end = "</a>";
             			break;
@@ -634,8 +619,8 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         		case 'video/quicktime' :
         		case 'video/x-qtc' :
 		        case 'audio/mpeg' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/quicktime.png';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'quicktime.png');
+                    $thumbnail = $_MG_CONF['assets_url'] . '/quicktime.png';
+                    $size      = @getimagesize($_MG_CONF['path_assets'] . 'quicktime.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
@@ -651,22 +636,22 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
 		        case 'application/x-troff-msvideo' :
 		        case 'application/x-ms-wmz' :
 		        case 'application/x-ms-wmd' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.png');
+                    $thumbnail = $_MG_CONF['assets_url'] . '/wmp.png';
+                    $size      = @getimagesize($_MG_CONF['path_assets'] . 'wmp.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
                 default :
-                    $thumbnail      = $_MG_CONF['mediaobjects_url'] . '/video.png';
-                    $size           = @getimagesize($_MG_CONF['path_mediaobjects'] . 'video.png');
+                    $thumbnail      = $_MG_CONF['assets_url'] . '/video.png';
+                    $size           = @getimagesize($_MG_CONF['path_assets'] . 'video.png');
                     break;
             }
             $rotate_right   = '';
             $rotate_left    = '';
             break;
         case 2 :
-            $thumbnail      = $_MG_CONF['mediaobjects_url'] . '/audio.png';
-            $size           = @getimagesize($_MG_CONF['path_mediaobjects'] . 'audio.png');
+            $thumbnail      = $_MG_CONF['assets_url'] . '/audio.png';
+            $size           = @getimagesize($_MG_CONF['path_assets'] . 'audio.png');
             $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',325,330)\">";
             $preview_end = "</a>";
             $rotate_right   = '';
@@ -675,24 +660,24 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         case 4 :
         	switch ( $row['mime_type'] ) {
 		        case 'application/zip' :
-                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/zip.png';
-                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'zip.png');
+                    $thumbnail  = $_MG_CONF['assets_url'] . '/zip.png';
+                    $size       = @getimagesize($_MG_CONF['path_assets'] . 'zip.png');
                     break;
                 case 'application/pdf' :
-                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/pdf.png';
-                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'pdf.png');
+                    $thumbnail  = $_MG_CONF['assets_url'] . '/pdf.png';
+                    $size       = @getimagesize($_MG_CONF['path_assets'] . 'pdf.png');
                     break;
                 default :
-                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/generic.png';
-                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'generic.png');
+                    $thumbnail  = $_MG_CONF['assets_url'] . '/generic.png';
+                    $size       = @getimagesize($_MG_CONF['path_assets'] . 'generic.png');
                     break;
             }
             $rotate_right   = '';
             $rotate_left    = '';
             break;
         case 5 :
-        	$thumbnail = $_MG_CONF['mediaobjects_url'] . '/remote.png';
-        	$size	   = @getimagesize($_MG_CONF['path_mediaobjects'] . 'remote.png');
+        	$thumbnail = $_MG_CONF['assets_url'] . '/remote.png';
+        	$size	   = @getimagesize($_MG_CONF['path_assets'] . 'remote.png');
         	$rotate_left  = '';
         	$rotate_right = '';
         	break;
