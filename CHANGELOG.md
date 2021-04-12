@@ -8,6 +8,7 @@
 
 ### Added
 
+- Implemented direct link from Forum Likes
 - Ability to include theme specific HTML attributes - such as data-uk-lightbox to the HTML filtering allowed attributes
 - Czech Translations
 - Added INTL extension to the environment checks - need to update wiki to show used by Agenda plugin
@@ -26,6 +27,8 @@
 
 ### Changed
 
+- Removed 'most' HTML from the code base and moved to templates
+- Consolidate dynamic data under a single directory (actually two - private/data and public_html/data)
 - Logview now initializes the log with date/time cleared
 - Admin Actions now displays the IP
 - Story Editor - display thumbnail of attached images
@@ -63,6 +66,7 @@
 
 ### Fixed
 
+- Back button on Group Admin would re-submit the form
 - PHP v8 Compatibility Fixes
 - Error changing article SID
 
