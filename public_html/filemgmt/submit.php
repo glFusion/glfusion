@@ -1,40 +1,25 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | submit.php                                                               |
-// |                                                                          |
-// | Allow users to submit new downloads                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// |                                                                          |
-// | Based on:                                                                |
-// | myPHPNUKE Web Portal System - http://myphpnuke.com/                      |
-// | PHP-NUKE Web Portal System - http://phpnuke.org/                         |
-// | Thatware - http://thatware.org/                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - FileMgmt Plugin
+*
+* User File Submission
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by the following authors:
+*   Authors: Blaine Lang            blaine@portalparts.com
+*
+*  Based on:
+*    myPHPNUKE Web Portal System - http://myphpnuke.com/
+*    PHP-NUKE Web Portal System - http://phpnuke.org/
+*    Thatware - http://thatware.org/
+*/
+
+use \glFusion\FileSystem;
 
 require_once '../lib-common.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
@@ -42,7 +27,6 @@ include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
-
 
 function FM_notifyAdmins( $filename,$file_user_id,$description ) {
     global $LANG_DIRECTION, $LANG_CHARSET, $LANG_FM00, $_USER, $_FM_CONF, $_CONF, $_TABLES;
@@ -313,6 +297,10 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             }
             $tmp  = $_FILES["newfile"]['tmp_name'];    // temporary name of file in temporary directory on server
             $returnMove = false;
+
+            FileSystem::mkDir($filemgmt_FileStore);
+            FileSystem::mkDir($filemgmt_FileStore.'tmp/');
+
             if (isset($_FILES["newfile"]['_data_dir']) && file_exists($tmp)) {
                 if ($directUploadAccess) {
                     $returnMove = @copy($tmp, "{$filemgmt_FileStore}{$name}");

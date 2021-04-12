@@ -15,6 +15,7 @@
 *            Dirk Haun   dirk AT haun-online DOT de
 *
 */
+
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
