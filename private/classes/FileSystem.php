@@ -69,12 +69,9 @@ class FileSystem
             return false;   // file exists - cannot create directory with same name
         }
 
-        if (self::mkDir(substr($target,0,strrpos($target,'/')))) {
-            $ret = @mkdir($target,0755);
-            @chmod($target, 0755);
-            return (bool) $ret;
-        }
-        return true;
+        $ret = @mkdir($target,0755,true);
+        @chmod($target, 0755);
+        return (bool) $ret;
     }
 
     /**
