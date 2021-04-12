@@ -415,7 +415,7 @@ $forumConfigData = array(
 
     array(
         'name' => 'uploadpath',
-        'default_value' => $_CONF['path_html'].'forum/media',
+        'default_value' => $_CONF['path_html'].'data/forum/media',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 1,
@@ -427,7 +427,7 @@ $forumConfigData = array(
 
     array(
         'name' => 'downloadURL',
-        'default_value' => $_CONF['site_url'].'/forum/media',
+        'default_value' => $_CONF['site_url'].'/data/forum/media',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 1,

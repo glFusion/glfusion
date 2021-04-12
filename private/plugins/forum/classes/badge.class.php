@@ -157,7 +157,7 @@ class Badge
             }
             switch ($this->fb_type) {
             case 'img':
-                $this->fb_data = $A['fb_image'];
+//                $this->fb_data = $A['fb_image'];
                 break;
             case 'css':
                 $this->fb_fgcolor = isset($A['fb_fgcolor']) ? $A['fb_fgcolor'] : self::$def_fg;
@@ -312,8 +312,8 @@ class Badge
         $paths = array(
             $_CONF['path_layout'] . 'plugins/forum/images/badges/' =>
                     $_CONF['layout_url'] . '/plugins/forum/images/badges/',
-            $_CONF['path_html'] . 'images/forum/badges/' =>
-                    $_CONF['site_url'] . '/images/forum/badges/',
+            $_CONF['path_html'] . 'forum/badges/' =>
+                    $_CONF['site_url'] . '/data/forum/badges/',
         );
 
         foreach ($paths as $path=>$url) {
@@ -439,7 +439,7 @@ class Badge
         global $_CONF;
 
         $retval = '';
-        $path = $_CONF['path_html'] . 'images/forum/badges';
+        $path = $_CONF['path_html'] . 'data/forum/badges';
         if (!is_dir($path) || !is_readable($path)) {
             return '';
         }
@@ -525,7 +525,7 @@ class Badge
     {
         global $_CONF;
 
-        $path = $_CONF['path_html'] . '/images/forum/badges';
+        $path = $_CONF['path_html'] . 'data/forum/badges';
 
         $Upload = new \upload();
         $Upload->setContinueOnError(true);
