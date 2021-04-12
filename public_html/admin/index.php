@@ -119,7 +119,7 @@ function commandcontrol()
     } else {
         $docUrl = $_CONF['site_url'].'/docs/english/index.html';
     }
-
+    $modnum = 0;
     /*if (
         SEC_hasRights( 'story.edit,story.moderate', 'OR' ) ||
         (( $_CONF['usersubmission'] == 1 ) && SEC_hasRights( 'user.edit,user.delete' ))
@@ -127,7 +127,7 @@ function commandcontrol()
         if ( SEC_hasRights( 'story.moderate' )) {
             $modnum = $db->getCount($_TABLES['storysubmission']);
         }
-    $modnum = 0;
+
     if (
         $_CONF['usersubmission'] == 1 &&
         SEC_hasRights('user.edit,user.delete')
