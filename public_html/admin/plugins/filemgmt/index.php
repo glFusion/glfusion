@@ -918,8 +918,8 @@ function modDownloadS() {
 
     if ( $newfile != '' ) {
         $upload = new upload();
-        $upload->setFieldName('newfile');
         $upload->setPath($filemgmt_FileStore);
+        $upload->setFieldName('newfile');
         $upload->setAllowAnyMimeType(true);     // allow any file type
         $upload->setMaxFileSize(100000000);
         $upload->setMaxDimensions(8192,8192);
