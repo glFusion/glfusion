@@ -2288,7 +2288,7 @@ input.error {
 .autotranslations li {
 	float: left;
 	margin: 0 5px 5px 0;
-	background: url(../../images/translations/sprite-flags.png) no-repeat top left;
+	background: url(../../assets/image/sprite-flags.png) no-repeat top left;
 	width: 16px;
 	height: 11px;
 }
@@ -2474,7 +2474,7 @@ input.error {
 /* Batch processing styles
 ========================================================================== */
 .tm-updating {
-	background-image: url('../../images/throbber.gif');
+	background-image: url('../../assets/image/throbber.gif');
 	background-repeat: no-repeat;
 	padding-right:15px;
 }

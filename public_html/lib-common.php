@@ -282,7 +282,7 @@ $uiStyles = array(
   * Make sure some config values are set properly
   */
 if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
-    $_CONF['default_photo'] = $_CONF['site_url'].'/images/userphotos/default.jpg';
+    $_CONF['default_photo'] = $_CONF['site_url'].'/assets/image/default.jpg';
 }
 
 if ( !isset($_SYSTEM['admin_session']) ) {

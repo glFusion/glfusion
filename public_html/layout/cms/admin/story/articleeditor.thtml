@@ -307,7 +307,7 @@
 {!if story_image}
 								<img class="uk-thumbnail" src="{story_image}" id="story_image_img">
 {!else}
-								<img class="uk-thumbnail" src="{site_url}/images/placeholder.png" id="story_image_img">
+								<img class="uk-thumbnail" src="{site_url}/assets/image/placeholder.png" id="story_image_img">
 {!endif}
 							</a>
 							<div class="uk-clearfix"></div>
@@ -339,7 +339,7 @@
 								</div>
 {!else}
 								<div id="story_video_img">
-									<img class="uk-thumbnail" src="{site_url}/images/placeholder_video.jpg">
+									<img class="uk-thumbnail" src="{site_url}/assets/image/placeholder_video.jpg">
 								</div>
 {!endif}
 								<div class="uk-clearfix"></div>
@@ -582,7 +582,7 @@ var buildPreview = function() {
 		$('#storyImage').dialog('close');
 	}
 	function removeStoryImage() {
-		$(document).find('#story_image_img').attr('src', '{site_url}/images/placeholder.png');
+		$(document).find('#story_image_img').attr('src', '{site_url}/assets/image/placeholder.png');
 		$(document).find('#story_image').attr('value', '');
 	}
 	function openStoryVideo(){
@@ -615,7 +615,7 @@ var buildPreview = function() {
 		});
 	}
 	function removeStoryVideo() {
-		$(document).find('#story_video_img').html('<img class="uk-thumbnail" src="{site_url}/images/placeholder_video.jpg">');
+		$(document).find('#story_video_img').html('<img class="uk-thumbnail" src="{site_url}/assets/image/placeholder_video.jpg">');
 		$(document).find('#story_video').attr('value', '');
 	}
 
