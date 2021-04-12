@@ -161,6 +161,9 @@ if (!isset($_CONF['log_level'])) {
     $_CONF['log_level'] = Log::WARNING;
 }
 
+$path_image_url = rtrim(str_replace($_CONF['path_html'],'',$_CONF['path_images']),'/\\');
+$_CONF['path_images_url'] = $_CONF['site_url'].'/'.$path_image_url;
+
 /*
  * Initialize the system log
  */
@@ -1230,17 +1233,17 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'welcome_msg', $msg );
     $theme->set_var( 'datetime', $curtime );
 
-    if ( $_LOGO['use_graphic_logo'] == 1 && file_exists($_CONF['path_html'] . '/images/' . $_LOGO['logo_name']) ) {
+    if ( $_LOGO['use_graphic_logo'] == 1 && file_exists($_CONF['path_images'] . $_LOGO['logo_name']) ) {
         $L = new Template( $_CONF['path_layout'] );
         $L->set_file( array(
             'logo'          => 'logo-graphic.thtml',
         ));
 
-        $imgInfo = @getimagesize($_CONF['path_html'] . '/images/' . $_LOGO['logo_name']);
+        $imgInfo = @getimagesize($_CONF['path_images'] . $_LOGO['logo_name']);
         $dimension = $imgInfo[3];
 
         $L->set_var( 'site_name', $_CONF['site_name'] );
-        $site_logo = $_CONF['site_url'] . '/images/' . $_LOGO['logo_name'];
+        $site_logo = $_CONF['path_images_url'] . '/' . $_LOGO['logo_name'];
         $L->set_var( 'site_logo', $site_logo);
         $L->set_var( 'dimension', $dimension );
         if ( $imgInfo[1] != 100 ) {
@@ -7220,8 +7223,8 @@ function phpblock_whosonline()
 
             if (!empty( $A['photo'] ) AND $_CONF['allow_user_photo'] == 1) {
                 if ($_CONF['whosonline_photo'] == true) {
-                    $usrimg = '<img src="' . $_CONF['site_url']
-                            . '/images/userphotos/' . $A['photo']
+                    $usrimg = '<img src="' . $_CONF['path_images_url']
+                            . '/userphotos/' . $A['photo']
                             . '" alt="" height="30" width="30"/>';
                 } else {
                     $usrimg = '<img src="' . $_CONF['layout_url']

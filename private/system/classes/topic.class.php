@@ -49,7 +49,7 @@ class Topic
     /**
     *   Default base image path/URL.
     *   @var string */
-    private static $def_imageurl = '/images/topics/';
+    private static $def_imageurl = '/data/images/topics/';
 
     /**
     *   Default value for sort_by

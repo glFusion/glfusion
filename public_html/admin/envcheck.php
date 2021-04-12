@@ -502,14 +502,15 @@ function _checkEnvironment()
                         $_CONF['path_html'],
                         $feedPath,
                         $_CONF['rdf_file'],
-                        $_CONF['path_html'].'images/articles/',
-                        $_CONF['path_html'].'images/topics/',
-                        $_CONF['path_html'].'images/userphotos/',
-                        $_CONF['path_html'].'images/library/File/',
-                        $_CONF['path_html'].'images/library/Flash/',
-                        $_CONF['path_html'].'images/library/Image/',
-                        $_CONF['path_html'].'images/library/Media/',
-                        $_CONF['path_html'].'images/library/userfiles/',
+                        $_CONF['path_images'],
+                        $_CONF['path_images'].'articles/',
+                        $_CONF['path_images'].'topics/',
+                        $_CONF['path_images'].'userphotos/',
+                        $_CONF['path_images'].'library/File/',
+                        $_CONF['path_images'].'library/Flash/',
+                        $_CONF['path_images'].'library/Image/',
+                        $_CONF['path_images'].'library/Media/',
+                        $_CONF['path_images'].'library/userfiles/',
                     );
     $mg_file_list = array();
     if (isset($_MG_CONF)) {

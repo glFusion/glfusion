@@ -289,7 +289,7 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
         }
     }
     if (! file_exists($_CONF['path_images'] . 'articles')) {
-        $config->set('path_images', $path_html . 'images/');
+        $config->set('path_images', $path_html . 'data/images/');
     }
     if (substr($_CONF['rdf_file'], strlen($path_html)) != $path_html) {
         // this may not be correct but neither was the old value apparently ...

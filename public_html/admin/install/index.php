@@ -627,12 +627,27 @@ function INST_gotPathSetting($dbc_path = '')
     $_GLFUSION['backup_path']   = $backup_path;
     $_GLFUSION['data_path']     = $data_path;
 
-// now make all directories under the data path
+// now make all directories under the private data path
 
     INST_mkDir($data_path.'cache');
     INST_mkDir($data_path.'htmlpurifier');
     INST_mkDir($data_path.'layout_cache');
     INST_mkDir($data_path.'temp');
+
+    // now make all directories under the public data path
+
+    $public_html_path   = INST_getHtmlPath();
+    $_PATH['admin_path']        = INST_getAdminPath();
+    if (!preg_match('/^.*\/$/', $public_html_path)) {
+        $public_html_path .= '/';
+    }
+    INST_mkDir($public_html_path.'images/articles/');
+    INST_mkDir($public_html_path.'images/library/userfiles/');
+    INST_mkDir($public_html_path.'images/library/File/');
+    INST_mkDir($public_html_path.'images/library/Flash/');
+    INST_mkDir($public_html_path.'images/library/Image/');
+    INST_mkDir($public_html_path.'images/library/Media/');
+    INST_mkDir($public_html_path.'images/topics/');
 
     // we have a good path to /private, off to the next step...
     return INST_checkEnvironment($private_path);
@@ -921,13 +936,13 @@ if ( !@file_exists('../../data/siteconfig.php') ) {
                         $_PATH['public_html'],
                         $_PATH['public_html'].'data/siteconfig.php',
                         $_PATH['public_html'].'backend/glfusion.rss',
-                        $_PATH['public_html'].'images/articles/',
-                        $_PATH['public_html'].'images/topics/',
-                        $_PATH['public_html'].'images/userphotos/',
-                        $_PATH['public_html'].'images/library/File/',
-                        $_PATH['public_html'].'images/library/Flash/',
-                        $_PATH['public_html'].'images/library/Image/',
-                        $_PATH['public_html'].'images/library/Media/',
+                        $_PATH['public_html'].'data/images/articles/',
+                        $_PATH['public_html'].'data/images/topics/',
+                        $_PATH['public_html'].'data/images/userphotos/',
+                        $_PATH['public_html'].'data/images/library/File/',
+                        $_PATH['public_html'].'data/images/library/Flash/',
+                        $_PATH['public_html'].'data/images/library/Image/',
+                        $_PATH['public_html'].'data/images/library/Media/',
 
                         $_PATH['public_html'].'mediagallery/mediaobjects/',
                         $_PATH['public_html'].'mediagallery/mediaobjects/covers/',
@@ -1729,7 +1744,7 @@ function INST_installAndContentPlugins()
     $config->set('path_language', $lang_path);
     $config->set('backup_path', $backup_path);
     $config->set('path_data', $data_path);
-    $config->set('path_images', $html_path . 'images/');
+    $config->set('path_images', $html_path . 'data/images/');
     $config->set('path_themes', $html_path . 'layout/');
     $config->set('rdf_file', $html_path . 'backend/glfusion.rss');
     $config->set('path_pear', $_CONF['path_system'] . 'pear/');
