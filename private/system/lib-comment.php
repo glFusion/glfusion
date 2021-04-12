@@ -2752,6 +2752,7 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     $dt = new Date('now',$_USER['tzid']);
 
     $field = $fieldname;
+    $field = ($fieldname == 0 ) ? 'edit' : $field;
     $field = ($type == 'user' && $fieldname == 1) ? 'user' : $field;
     $field = ($type == 'story' && $fieldname == 2) ? 'day' : $field;
     $field = ($type == 'story' && $fieldname == 3) ? 'tid' : $field;
