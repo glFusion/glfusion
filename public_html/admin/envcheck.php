@@ -568,7 +568,7 @@ function _checkEnvironment()
                             $_MG_CONF['path_mediaobjects'].'orig/f/',
                             $_MG_CONF['path_mediaobjects'].'disp/f/',
                             $_MG_CONF['path_mediaobjects'].'tn/f/',
-                            $_MG_CONF['path_html'].'watermarks/',
+                            $_CONF['path_html'].'data/mediagallery/watermarks/',
                         );
     }
 
