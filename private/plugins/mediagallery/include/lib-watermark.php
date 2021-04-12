@@ -422,6 +422,11 @@ function MG_watermark( $origImage, $aid, $runJhead ) {
         return false;
     }
     $watermarkImage = $_MG_CONF['path_watermarks'] . DB_getItem($_TABLES['mg_watermarks'],'filename','wm_id="' . $MG_albums[$aid]->wm_id . '"');
+
+    if (!file_exists($watermarkImage)) {
+        return false;
+    }
+
     $opacity = $MG_albums[$aid]->wm_opacity;
     switch( $MG_albums[$aid]->wm_location ) {
         case 1 :
