@@ -767,7 +767,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
 
         if (empty($img) || $img == '' ) {
             if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
-                $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
+                $img = $_CONF['site_url'] . '/assets/image/default.jpg';
             } else {
                 $img = $_CONF['default_photo'];
             }
