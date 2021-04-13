@@ -397,7 +397,7 @@ function MG_file_exists( $potential_file ) {
 
     $potential_file_regex = "/".$potential_file."/i";
 
-    if ( $dir = opendir($image_path) !== false)  {
+    if ( $dir = opendir($image_path))  {
         while ($file = readdir($dir)) {
             if (  preg_match($potential_file_regex , $file )  ) {
                 closedir($dir);
@@ -408,7 +408,7 @@ function MG_file_exists( $potential_file ) {
     }
 
     $image_path = $_MG_CONF['path_mediaobjects'] . 'orig/' . $potential_file[0];
-    if ( $dir = opendir($image_path)  !== false)  {
+    if ( $dir = opendir($image_path))  {
         while ($file = readdir($dir)) {
             if (  preg_match($potential_file_regex , $file )  ) {
                 closedir($dir);

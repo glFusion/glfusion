@@ -1,30 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin for glFusion CMS                                    |
-// +--------------------------------------------------------------------------+
-// | Set configuration options for Media Gallery Plugin.                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-//
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Configuration Editor
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
@@ -552,6 +538,14 @@ function MG_editConfig( $msgString = '' ) {
         'lang_tnheight'			    => $LANG_MG01['tn_height'],
         'lang_tnwidth'			    => $LANG_MG01['tn_width'],
         'lang_index_all'            => $LANG_MG01['index_all'],
+        'lang_menulabel'            => $LANG_MG01['menulabel'],
+        'lang_path_mg'              => $LANG_MG01['path_mg'],
+        'lang_path_mediaobjects'    => $LANG_MG01['path_mediaobjects'],
+        'lang_mediaobjects_url'     => $LANG_MG01['mediaobjects_url'],
+        'path_mediaobjects'         => $_MG_CONF['path_mediaobjects'],
+        'mediaobjects_url'          => $_MG_CONF['mediaobjects_url'],
+        'path_mg'                   => $_MG_CONF['path_mg'],
+        'menulabel'                 => $_MG_CONF['menulabel'],
         'gltoken_name'              => CSRF_TOKEN,
         'gltoken'                   => SEC_createToken(),
     ));
@@ -632,6 +626,11 @@ function MG_saveConfig( ) {
     $popup_from_album       = isset($_POST['popupfromalbum']) ? COM_applyFilter($_POST['popupfromalbum'],true) : 0;
     $autotag_caption        = isset($_POST['autotag_caption']) ? COM_applyFilter($_POST['autotag_caption'],true) : 0;
     $indextheme             = COM_applyFilter($_POST['theme']);
+
+    $menulabel              = COM_applyFilter($_POST['menulabel']);
+    $path_mg                = COM_applyFilter($_POST['path_mg']);
+    $path_mediaobjects      = COM_applyFilter($_POST['path_mediaobjects']);
+    $mediaobjects_url       = COM_applyFilter($_POST['mediaobjects_url']);
 
     if (isset($_POST['up_display_rows_enabled'])) {
         $up_display_rows_enabled = 1;
@@ -734,6 +733,15 @@ function MG_saveConfig( ) {
     if ( $refresh_rate < 5 ) {
         $refresh_rate = 5;
     }
+
+    $filter = sanitizer::getInstance();
+    $mediaobjects_url = rtrim($filter->sanitizeUrl( $mediaobjects_url, array('http','https')),'\\/');
+    $path_mediaobjects = (substr($path_mediaobjects,-1)!='/') ? $path_mediaobjects.='/' : $path_mediaobjects;
+
+    DB_save($_TABLES['mg_config'],"config_name, config_value","'path_mg','".DB_escapeString($path_mg)."'");
+    DB_save($_TABLES['mg_config'],"config_name, config_value","'path_mediaobjects','".DB_escapeString($path_mediaobjects)."'");
+    DB_save($_TABLES['mg_config'],"config_name, config_value","'mediaobjects_url','".DB_escapeString($mediaobjects_url)."'");
+    DB_save($_TABLES['mg_config'],"config_name, config_value","'menulabel','".DB_escapeString($menulabel)."'");
 
     DB_save($_TABLES['mg_config'],"config_name, config_value","'loginrequired',         '$loginrequired'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'anonymous_uploads',     '$anonymous_uploads'");

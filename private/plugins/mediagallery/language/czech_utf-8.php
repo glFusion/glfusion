@@ -687,6 +687,10 @@ $LANG_MG01 = array (
     'playback_options'          => 'Možnosti přehrávání',
     'meta_data'                 => 'Meta data',
     'auto_rotate'               => 'Automatické otáčení nahrávání',
+    'menulabel'                 => 'Menu Label',
+    'path_mg'                   => 'MediaGallery Directory',
+    'path_mediaobjects'         => 'Full Path to mediaobjects/ directory',
+    'mediaobjects_url'          => 'Full URL to mediaobjects/',
 );
 
 // error messages

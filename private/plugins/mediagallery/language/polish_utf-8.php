@@ -687,6 +687,10 @@ $LANG_MG01 = array (
     'playback_options'          => 'Opcje odtwarzania',
     'meta_data'                 => 'Dane meta',
     'auto_rotate'               => 'Automatycznie obracanie',
+    'menulabel'                 => 'Menu Label',
+    'path_mg'                   => 'MediaGallery Directory',
+    'path_mediaobjects'         => 'Full Path to mediaobjects/ directory',
+    'mediaobjects_url'          => 'Full URL to mediaobjects/',
 );
 
 // error messages

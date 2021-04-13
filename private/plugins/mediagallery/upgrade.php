@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | upgrade.php                                                              |
-// |                                                                          |
-// | Plugin upgrade routines                                                  |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* MediaGallery Plugin Upgrade
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -210,6 +195,21 @@ function mediagallery_upgrade()
 
         case '2.1.3' :
             DB_query("ALTER TABLE {$_TABLES['mg_albums']} ADD COLUMN `auto_rotate` TINYINT(4) UNSIGNED NOT NULL DEFAULT '0' AFTER `enable_shutterfly`;");
+
+        case '2.1.4' :
+            // need to migrate config.php
+            if (file_exists($_CONF['path'].'plugins/mediagallery/config.php')) {
+                include $_CONF['path'].'plugins/mediagallery/config.php';
+            } else {
+                $_MG_CONF['menulabel'] = isset($LANG_MG00['menulabel']) ? $LANG_MG00['menulabel'] : 'Media Gallery';
+                $_MG_CONF['path_mg']    = 'mediagallery';
+                $_MG_CONF['path_mediaobjects'] = $_CONF['path_html'] . 'data/mediagallery/mediaobjects/';
+                $_MG_CONF['mediaobjects_url']  = $_CONF['site_url']  . '/data/mediagallery/mediaobjects';
+            }
+            DB_save($_TABLES['mg_config'],"config_name, config_value","'path_mg','".DB_escapeString($_MG_CONF['path_mg'])."'");
+            DB_save($_TABLES['mg_config'],"config_name, config_value","'path_mediaobjects','".DB_escapeString($_MG_CONF['path_mediaobjects'])."'");
+            DB_save($_TABLES['mg_config'],"config_name, config_value","'mediaobjects_url','".DB_escapeString($_MG_CONF['mediaobjects_url'])."'");
+            DB_save($_TABLES['mg_config'],"config_name, config_value","'menulabel','".DB_escapeString($_MG_CONF['menulabel'])."'");
 
         default :
 

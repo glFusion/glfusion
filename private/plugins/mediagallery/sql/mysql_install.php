@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | mysql_install.php                                                        |
-// |                                                                          |
-// | MySQL SQL for Media Gallery installation.                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C)  2005-2018 by the following authors:                       |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* MediaGallery Plugin Table Schema / Default data
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -539,6 +524,10 @@ $_SQL['exif_tag_data']="INSERT INTO {$_TABLES['mg_exif_tags']} (`name`, `selecte
 
 
 $_SQL['config_data']="INSERT INTO {$_TABLES['mg_config']} (`config_name`, `config_value`) VALUES
+('path_mediaobjects',".$_CONF['path_html']."'data/mediagallery/mediaobjects/'),
+('mediaobjects_url',".$_CONF['site_url']."'/data/mediagallery/mediaobjects'),
+('path_mg','mediagallery'),
+('menulabel', 'Media Gallery'),
 ('display_rows', '3'),
 ('album_display_columns', '1'),
 ('album_display_rows', '9'),

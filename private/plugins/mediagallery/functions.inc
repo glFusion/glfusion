@@ -63,7 +63,7 @@ USES_lib_image();
 * Include MediaGallery config file
 */
 require_once $_CONF['path'].'plugins/mediagallery/mediagallery.php';
-require_once $_CONF['path'].'plugins/mediagallery/config.php';
+//require_once $_CONF['path'].'plugins/mediagallery/config.php';
 require_once $_CONF['path'].'plugins/mediagallery/include/classAlbum.php';
 
 $mg_installed_version = '0.0.0';
@@ -117,6 +117,192 @@ if ( $_MG_CONF['up_display_rows_enabled'] == 1 ||
      $_MG_CONF['up_thumbnail_size_enabled'] == 1) {
     $LANG_MYACCOUNT['pe_mgprefs'] = "MG Prefs";
 }
+
+// advanced config options
+$_MG_CONF['path_html']  = $_CONF['path_html'] . $_MG_CONF['path_mg'] . '/';
+$_MG_CONF['site_url']   = $_CONF['site_url'] . '/' . $_MG_CONF['path_mg'];
+$_MG_CONF['admin_url']  = $_CONF['site_admin_url'] . '/plugins/mediagallery/';
+$_MG_CONF['path_admin'] = $_CONF['path_html'] . 'admin/plugins/mediagallery/';
+$_MG_CONF['watermark_types'] = array('image/jpeg','image/jpg','image/png','image/bmp');
+$_MG_CONF['link_to_member_album'] = 1;
+
+/*
+ * By default, Media Gallery plays MP4 video files as QuickTime
+ * videos, using the QuickTime player.
+ *
+ * If you prefer to use the Flash Video Player for MP4 files,
+ * set this value to true.
+ *
+ */
+$_MG_CONF['play_mp4_flv'] = false;
+
+/*
+ * Number of seconds to wait between ratings
+ */
+$_MG_CONF['rating_speedlimit'] = 45;
+
+/*
+ * By default, Media Gallery will always size thumbnails at 200x200
+ * To use the specified size instead, set this to 1
+ */
+
+$_MG_CONF['thumbnail_actual_size'] = 1;
+
+/*
+ * By default, Media Gallery references its templates from the plugin
+ * directory.  If you want to have separate templates for each of your
+ * themes, set the path to the template directory here.
+ */
+
+$_MG_CONF['template_path'] = $_CONF['path'] . 'plugins/mediagallery/templates';
+//$_MG_CONF['template_path'] = $_CONF['path_layout'] . 'mediagallery/';
+
+/*
+ * Disable Media Gallery's search integration with glFusion.
+ */
+
+$_MG_CONF['disable_search_integration'] = 0;
+
+
+/*
+ * Disable version check - Media Gallery will check to see if a new version
+ * is available for download each time you enter the administration screen.
+ * To disable this check, set this variable to 1.
+ */
+
+$_MG_CONF['disable_version_check']   = 1;
+
+/*
+ * Set the maximum number of media items to display in the Media Manage Screen
+ */
+
+$_MG_CONF['mediamanage_items']       = 100;
+
+/*
+ * Media Gallery will attempt to automatically locate some of the external
+ * utilities.  If your PHP installation has openbase_dir restrictions enabled
+ * this can cause some issues.  Set this variable to 1 to skip the automatic
+ * searching.
+ */
+
+$_MG_CONF['skip_file_find']          = 0;
+
+/*
+ * If set to 1, MG will not automatically populate the video playback
+ *  resolution, instead it will use the default settings
+ */
+
+$_MG_CONF['use_default_resolution']  = 0;
+
+/*
+ * if set to 1, MG will use the larger stars in the album view for ratings
+ */
+
+$_MG_CONF['use_large_stars'] = 0;
+
+/*
+ * By default, Media Gallery will play MPEG videos with Apple's QuickTime
+ * player. If you wish to use Microsoft's Windows Media Player instead,
+ * set this variable to 1.
+ */
+
+$_MG_CONF['use_wmp_mpeg']			 = 0;
+
+/*
+ * By default, Media Gallery will attempt to extract the actual image capture
+ * date from the meta data included by many digital cameras and graphics
+ * packages.  If you prefer to always use the upload date (the date you added
+ * the image to your Media Gallery album) as the displayed date, set this
+ * variable to 1.
+ */
+
+$_MG_CONF['use_upload_time']		 = 0;
+
+/**
+ * FFMPEG Command line options
+ *
+ * There are lots of versions of ffmpeg out there, some work with one set of
+ * switches and some don't.  You can easily modify the commands used to create
+ * thumbnails from videos by modifying the arguments below.  The first %s is
+ * the source video and the second %s is the destination thumbnail, both %s
+ * need to be in the command.
+ */
+
+$_MG_CONF['ffmpeg_command_args'] = ' -i %s -f mjpeg -t 0.01 -y %s';
+
+// $_MG_CONF['ffmpeg_command_args'] = ' -i %s -f mjpeg -an -r 1 -ss 00:00:03 -vframes 1 -y %s';
+// $_MG_CONF['ffmpeg_command_args'] = ' -i %s -f singlejpeg -an -r 1 -ss 00:00:03 -vframes 1 -y %s';
+// --- RIVA FLV Encoded / converter for Windows command line
+// $_MG_CONF['ffmpeg_command_args'] = ' -an -y  -i "%s" -t 0.001 -s 640x480 -deinterlace   -hq -f image2 "%s"';
+
+/*
+ * SimpleViewer Theme Layout Options
+ *
+ * textColor - Color of title and caption text (hexidecimal color value e.g 0xff00ff).
+ * frameColor - Color of image frame, navigation buttons and thumbnail frame (hexidecimal color value e.g 0xff00ff).
+ * frameWidth - Width of image frame in pixels.
+ * stagePadding - Distance between image and thumbnails and around gallery edge in pixels.
+ * thumbnailColumns - number of thumbnail rows. (To disable thumbnails completely set this value to 0.)
+ * thumbnailRows - number of thumbnail columns. (To disable thumbnails completely set this value to 0.)
+ * navPosition - Position of thumbnails relative to image. Can be "top", "bottom","left" or "right".
+ * enableRightClickOpen - Whether to display a 'Open In new Window...' dialog when right-clicking on an image. Can be "true" or "false"
+ *
+ */
+
+$_MG_CONF['simpleviewer']['textcolor'] = '0x000000';
+$_MG_CONF['simpleviewer']['framecolor'] = '0x000000';
+$_MG_CONF['simpleviewer']['framewidth'] = 5;
+$_MG_CONF['simpleviewer']['stagepadding'] = 50;
+$_MG_CONF['simpleviewer']['thumbnailcolumns'] = 6;
+$_MG_CONF['simpleviewer']['thumbnailrows'] = 1;
+$_MG_CONF['simpleviewer']['navposition'] = 'top';
+$_MG_CONF['simpleviewer']['enablerightclickopen'] = 'false';
+
+/*
+ * Default thumbnails for non-media type files
+ *
+ * This allows you to specify new default thumbnails for non-media file types.
+ * Place the thumbnail image in the mediaobjects/ directory.
+ *
+ */
+
+$_MG_CONF['dt']['pdf'] = 'pdf.png';
+$_MG_CONF['dt']['zip'] = 'zip.png';
+// $_MG_CONF['dt']['doc'] = 'doc.gif';
+// $_MG_CONF['dt']['xls'] = 'xls.png';
+
+/*
+ * The JavaScript used by the lightbox slideshow can cause
+ * conflicts with other JS libraries.  You can set this to true to disable
+ * the lightbox slideshow feature.
+ */
+
+$_MG_CONF['disable_lightbox'] = false;
+
+/*
+ * If you want Media Gallery to update the 'last updated' time for all parent
+ * albums, set this to true.
+ */
+
+$_MG_CONF['update_parent_lastupdated'] = false;
+
+/*
+ * If you want to allow users who 'own' (uploaded) a media item to be able
+ * to also edit the media item, set this value to true.
+ */
+
+$_MG_CONF['allow_user_edit'] = false;
+
+/*
+ * Media Gallery provides limited support for including remotely hosted
+ * images in your albums.  Your web host must support the CURL PHP extension
+ * or allow opening remote URLs to take full advantage of this features.
+ * To enable remote image support, set this value to true.
+ */
+
+$_MG_CONF['enable_remote_images'] = false;
+
+
 
 function plugin_chkVersion_mediagallery() {
     global $_MG_CONF;
