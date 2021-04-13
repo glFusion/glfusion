@@ -847,8 +847,18 @@ function USER_createuser($info = array())
     // is there a custom user check
     if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
         $msg = CUSTOM_userCheck ($username, $email);
+        if (is_array($msg)) {
+            $validationErrors += count($msg);
+            array_merge($errorMessages, $msg);
+        } else {
+            $validationErrors++;
+            array_push($errorMessages, $msg);
+        }
         if (!empty ($msg)) {
-            return CUSTOM_userForm ($msg);
+            if (function_exists('CUSTOM_userForm')) {
+                return CUSTOM_userForm ($msg);
+            }
+            // else, fall through to display the stock registration form
         }
     }
 
