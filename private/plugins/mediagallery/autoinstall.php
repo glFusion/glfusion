@@ -67,7 +67,8 @@ $INSTALL_plugin['mediagallery'] = array(
 
   array('type' => 'sql', 'sql' => $_SQL['mg_watermark_data'] ),
   array('type' => 'sql', 'sql' => $_SQL['exif_tag_data'] ),
-  array('type' => 'sql', 'sql' => $_SQL['config_data'] ),
+  array('type' => 'sql', 'sql' => $_SQL['config_data_1'] ),
+  array('type' => 'sql', 'sql' => $_SQL['config_data_2'] ),
 
   array('type' => 'block', 'name' => 'mgrandom', 'title' => 'Random Image',
           'phpblockfn' => 'phpblock_mg_randommedia', 'block_type' => 'phpblock',

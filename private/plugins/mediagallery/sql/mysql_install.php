@@ -522,12 +522,13 @@ $_SQL['exif_tag_data']="INSERT INTO {$_TABLES['mg_exif_tags']} (`name`, `selecte
 ('IPTC/CopyrightFlag', 0),
 ('IPTC/TimeCreated', 0);";
 
-
-$_SQL['config_data']="INSERT INTO {$_TABLES['mg_config']} (`config_name`, `config_value`) VALUES
-('path_mediaobjects',".$_CONF['path_html']."'data/mediagallery/mediaobjects/'),
-('mediaobjects_url',".$_CONF['site_url']."'/data/mediagallery/mediaobjects'),
+$_SQL['config_data_1']="INSERT INTO {$_TABLES['mg_config']} (`config_name`, `config_value`) VALUES
+('path_mediaobjects','".$_CONF['path_html']."data/mediagallery/mediaobjects/'),
+('mediaobjects_url','".$_CONF['site_url']."/data/mediagallery/mediaobjects'),
 ('path_mg','mediagallery'),
-('menulabel', 'Media Gallery'),
+('menulabel', 'Media Gallery');";
+
+$_SQL['config_data_2']="INSERT INTO {$_TABLES['mg_config']} (`config_name`, `config_value`) VALUES
 ('display_rows', '3'),
 ('album_display_columns', '1'),
 ('album_display_rows', '9'),
