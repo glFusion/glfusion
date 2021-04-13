@@ -539,8 +539,7 @@ function SP_returnStaticpage($page='', $mode='', $comment_order = 'ASC', $commen
         DB_query("UPDATE {$_TABLES['staticpage']} SET sp_hits = sp_hits + 1 WHERE sp_id = '".DB_escapeString($page)."'");
 
     }
-    $output = PLG_outputFilter($retval,'staticpages');
-    return $output;
+    return $retval;
  }
 
 /**
@@ -1432,6 +1431,8 @@ function SP_render_content ($sp_content, $sp_php)
             $retval .= PLG_replacetags ($sp_content,'staticpages','page');
         }
     }
+
+    $retval = PLG_outputFilter($retval,'staticpages');
 
     // check for query here...
     $highlight = isset($_GET['query']) ? trim(COM_applyFilter($_GET['query'])) : '';
