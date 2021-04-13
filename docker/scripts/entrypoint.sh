@@ -70,7 +70,7 @@ EOF
 	rm -f $tfile
 fi
 
-chown -R nginx:nginx /var/www/app
+chown -R apache:apache /var/www/app
 
 # execute any pre-exec scripts
 for i in /scripts/pre-exec.d/*sh
@@ -83,5 +83,4 @@ done
 
 echo "Starting all process"
 exec php-fpm7 &
-exec nginx &
 exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0 $@
