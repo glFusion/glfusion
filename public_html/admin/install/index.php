@@ -1566,23 +1566,6 @@ function INST_installAndContentPlugins()
         }
     }
 
-    // check the mg config...
-    INST_errorLog($log_path,'INSTALL: Media Gallery config.php installation.');
-    if (!@file_exists($_PATH['private_path'].'plugins/mediagallery/config.php') ) {
-        if ( @file_exists($_PATH['private_path'].'plugins/mediagallery/config.php.dist') ) {
-            INST_errorLog($log_path,'INSTALL: Creating ' . $_PATH['private_path'].'plugins/mediagallery/config.php');
-            $rc = @copy($_PATH['private_path'].'plugins/mediagallery/config.php.dist',$_PATH['private_path'].'plugins/mediagallery/config.php');
-            if ( $rc === false ) {
-                INST_errorLog($log_path,'INSTALL: ERROR: Unable to create Media Gallery config.php - directory not writable?');
-                return _displayError(LIBCUSTOM_NOT_WRITABLE,'getsiteinformation');
-            }
-        } else {
-            // no config.php.dist found
-            INST_errorLog($log_path,'INSTALL: ERROR: Unable to locate ' . $_PATH['private_path'].'plugins/mediagallery/config.php.dist');
-            return _displayError(LIBCUSTOM_NOT_FOUND,'getsiteinformation');
-        }
-    }
-
     // check and see if site config really exists...
     INST_errorLog($log_path,'INSTALL: siteconfig.php Installation');
     if (!@file_exists($_PATH['public_html'].'data/siteconfig.php') ) {
