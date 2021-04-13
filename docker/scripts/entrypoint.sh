@@ -83,5 +83,5 @@ done
 
 echo "Starting all process"
 exec php-fpm7 &
-exec /usr/sbin/httpd
+exec /usr/sbin/httpd -T &
 exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0 $@
