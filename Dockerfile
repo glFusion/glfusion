@@ -21,7 +21,7 @@ ARG VERSION
 RUN apk --no-cache --update add \
     tzdata openssl unzip nginx bash mysql ca-certificates s6 curl ssmtp mailx php7 php7-phar php7-curl \
     php7-fpm php7-json php7-zlib php7-xml php7-dom php7-ctype php7-opcache php7-zip php7-iconv \
-    php7-pdo php7-pdo_mysql php7-pdo_sqlite php7-pdo_pgsql php7-mbstring php7-session php7-bcmath \
+    php7-pdo php7-pdo_mysql php7-gettext php7-intl php7-mbstring php7-session php7-bcmath \
     php7-gd php7-mcrypt php7-openssl php7-sockets php7-posix php7-ldap php7-simplexml && \
     rm -rf /var/www/localhost 
 
