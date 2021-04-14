@@ -19,6 +19,7 @@ require_once 'auth.inc.php';
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\FileSystem;
 
 USES_lib_admin();
 
@@ -747,8 +748,10 @@ function _phpOutOfDate()
 }
 
 function _isWritable($path) {
-    if ($path[strlen($path)-1]=='/')
+    if ($path[strlen($path)-1]=='/') {
+        FileSystem::mkDir($path);
         return _isWritable($path.uniqid(mt_rand()).'.tmp');
+    }
 
     if (@file_exists($path)) {
         if (!($f = @fopen($path, 'r+')))
