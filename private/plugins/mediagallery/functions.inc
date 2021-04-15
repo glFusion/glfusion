@@ -703,7 +703,7 @@ function plugin_getmenuitems_mediagallery()
     if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
         return '';
     }
-
+    if (!isset($_MG_CONF['menulabel'])) $_MG_CONF['menulabel'] = 'Media Gallery';
     $menulabel = $_MG_CONF['menulabel'];
     $menurul   = $_MG_CONF['site_url'] . "/index.php";     // Menu url here
 
@@ -1922,6 +1922,32 @@ function plugin_itemdeleted_mediagallery($id, $type, $children = null)
     if ( $type != 'mediagallery' ) return;
     $c = Cache::getInstance();
     $c->deleteItemsByTag('mediagallery');
+}
+
+function plugin_getContentTableInfo_mediagallery()
+{
+    global $_DB_table_prefix;
+
+    $contentItems = array(
+            $_DB_table_prefix.'mg_albums' => array(
+                'plugin' => 'mediagallery',
+                'primary_key' => 'album_id',
+                'columns' => array(
+                    'album_title',
+                    'album_desc'
+                )
+            ),
+            $_DB_table_prefix.'mg_media' => array(
+                'plugin' => 'mediagallery',
+                'primary_key' => 'media_id',
+                'columns' => array(
+                    'media_title',
+                    'media_desc'
+                )
+            )
+    );
+
+    return $contentItems;
 }
 
 function MG_clean_directories($path, $needle = '')

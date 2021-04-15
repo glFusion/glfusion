@@ -972,6 +972,23 @@ function plugin_getiteminfo_polls($id, $what, $uid = 0, $options = array())
     return $retval;
 }
 
+function plugin_getContentTableInfo_polls()
+{
+    global $_DB_table_prefix;
+
+    $contentItems = array(
+            $_DB_table_prefix.'pollquestions' => array(
+                'plugin' => 'polls',
+                'primary_key' => 'pid',
+                'columns' => array(
+                    'question'
+                )
+            ),
+    );
+
+    return $contentItems;
+}
+
 
 function plugin_getconfigelementhelp_polls($type, $option, $doclang = 'english' )
 {

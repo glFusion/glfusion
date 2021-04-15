@@ -1464,6 +1464,24 @@ function plugin_getiteminfo_links($lid, $what, $uid = 0, $options = array())
     return $retval;
 }
 
+function plugin_getContentTableInfo_links()
+{
+    global $_DB_table_prefix;
+
+    $contentItems = array(
+            $_DB_table_prefix.'links' => array(
+                'plugin' => 'links',
+                'primary_key' => 'lid',
+                'columns' => array(
+                    'description',
+                    'title'
+                )
+            )
+    );
+
+    return $contentItems;
+}
+
 
 // +--------------------------------------------------------------------------+
 // | Category HTML functions                                                  |

@@ -1135,6 +1135,22 @@ function plugin_upgrade_staticpages()
     }
 }
 
+function plugin_getContentTableInfo_staticpages()
+{
+    global $_DB_table_prefix;
+
+    $contentItems = array(
+            $_DB_table_prefix.'staticpage' => array(
+                'plugin' => 'staticpages',
+                'primary_key' => 'sp_id',
+                'columns' => array(
+                    'sp_content'
+                )
+            )
+    );
+
+    return $contentItems;
+}
 
 /**
 * Get path for the template files.
