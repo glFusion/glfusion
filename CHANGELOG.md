@@ -8,6 +8,7 @@
 
 ### Added
 
+- Simple DB search / replace capabilities
 - Implemented direct link from Forum Likes
 - Ability to include theme specific HTML attributes - such as data-uk-lightbox to the HTML filtering allowed attributes
 - Czech Translations

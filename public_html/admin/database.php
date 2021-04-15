@@ -20,6 +20,7 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+require_once $_CONF['path'].'system/classes/Diff.class.php';
 
 use \glFusion\Database\Database;
 use \glFusion\FileSystem;
