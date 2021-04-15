@@ -1651,6 +1651,21 @@ $LANG_DB_ADMIN = array(
     'overall_progress'    => 'Overall Progress',
     'no_backups_found'    => 'No Backup Files Found',
     'error_msg'           => 'The following errors were encountered',
+    'missing_required'    => 'Please Fill Out All Required Fields',
+    'time'                => 'Time',
+    'table'               => 'Table',
+    'changes_found'       => 'Changes Found',
+    'rows_updated'        => 'Rows Updated',
+    'sr_title'            => 'Search and Replace',
+    'search_for'          => 'Search for',
+    'replace_with'        => 'Replace With',
+    'tables_to_search'    => 'Tables to search',
+    'search'              => 'Search',
+    'remove'              => 'Remove',
+    'case'                => 'Case-Insensitive',
+    'dry_run'             => 'Run as dry run?',
+    'available_tables'    => 'Available Tables',
+    'execute'             => 'Execute',
 );
 
 ###############################################################################

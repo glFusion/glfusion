@@ -3820,6 +3820,48 @@ function PLG_privacyExport($uid=0,$email='',$username='',$ip='')
     return $output;
 }
 
+
+/**
+* Get Plugin Content Info
+*
+*   plugins should return an array of the following:
+*
+* array(
+*   array(
+*       'table_name' => 'gl_stories',
+*       'primary_key' => 'id',
+*       'columns'    => array(
+*           'title',
+*           'subtitle',
+*           'introtext',
+*           'bodytext'
+*       )
+*   )
+* );
+*
+*
+* @return   array()
+*
+*/
+function PLG_getContentTableInfo()
+{
+    global $_PLUGINS;
+
+    $itemList = array();
+    $totalItemList = array();
+
+    foreach ($_PLUGINS AS $plugin) {
+        $function = 'plugin_getContentTableInfo_'.$plugin;
+        if (function_exists($function)) {
+            $itemList = $function();
+            if (is_array($itemList) && count($itemList) > 0) {
+                $totalItemList = array_merge($itemList,$totalItemList);
+            }
+        }
+    }
+    return $totalItemList;
+}
+
 /*
  * Plugin APIs Stubs
  */
