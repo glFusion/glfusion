@@ -1423,7 +1423,7 @@ function DBADMIN_searchAndreplace($err = '')
 
 function DBADMIN_srExecute()
 {
-    global $_CONF, $LANG_DB_ADMIN;
+    global $_CONF, $LANG_DB_ADMIN, $_IMAGE_TYPE;
 
     $retval = '';
 
@@ -1534,17 +1534,18 @@ function DBADMIN_srExecute()
             }
         }
         $T->parse('RRow','ReportRow',true);
-
-        foreach($tableRun['table_report']['diffs'] AS $diff) {
-            $T->set_var(array(
-                'table' => $table,
-                'diff'  => \Diff::toTable(\Diff::compare($diff[0],$diff[1])),
-                'column' => $diff[2],
-            ));
-            $T->parse('DTRow','DiffTableRow',true);
+        if ( isset($tableRun['table_report']['diffs'])) {
+            foreach($tableRun['table_report']['diffs'] AS $diff) {
+                $T->set_var(array(
+                    'table' => $table,
+                    'diff'  => \Diff::toTable(\Diff::compare($diff[0],$diff[1])),
+                    'column' => $diff[2],
+                ));
+                $T->parse('DTRow','DiffTableRow',true);
+            }
+            $T->parse('DRow','DiffRow',true);
+            $T->set_var('DTRow','');
         }
-        $T->parse('DRow','DiffRow',true);
-        $T->set_var('DTRow','');
         $T->unset_var('showerrors');
         $T->unset_var('showdiffs');
     }
