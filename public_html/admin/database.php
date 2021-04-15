@@ -1372,7 +1372,9 @@ function DBADMIN_searchAndreplace($err = '')
                 'title',
                 'subtitle',
                 'introtext',
-                'bodytext'
+                'bodytext',
+                'story_image',
+                'story_video',
             )
         ),
         'gl_comments' => array(
@@ -1460,7 +1462,9 @@ function DBADMIN_srExecute()
                 'title',
                 'subtitle',
                 'introtext',
-                'bodytext'
+                'bodytext',
+                'story_image',
+                'story_video',
             )
         ),
         'gl_comments' => array(
