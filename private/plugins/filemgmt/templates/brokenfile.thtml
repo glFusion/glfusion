@@ -8,7 +8,7 @@
     <div class="uk-form-row">
         <div class="uk-form-controls">
         <button type="submit" class="uk-button uk-button-success" name="submit" value="{lang_reportbroken}">{lang_reportbroken}</button>
-        &nbsp;<button type="cancel" class="uk-button" value="{lang_cancel}" onclick="javascript:history.go(-1)">{lang_cancel}</button>
+        &nbsp;<button type="cancel" class="uk-button" value="{lang_cancel}" onclick="javascript:history.go(-1);return false;">{lang_cancel}</button>
         </div>
     </div>
 </form>
