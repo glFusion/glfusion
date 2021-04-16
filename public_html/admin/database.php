@@ -26,6 +26,7 @@ use \glFusion\Database\Database;
 use \glFusion\FileSystem;
 use \glFusion\Log\Log;
 use \glFusion\Cache\Cache;
+use \glFusion\Admin\AdminAction;
 
 $display = '';
 $page    = '';
@@ -1505,6 +1506,10 @@ function DBADMIN_srExecute()
     $args['dry_run']            = isset($_POST['dryrun']) ? $_POST['dryrun'] : '';
     $args['case_insensitive']   = isset($_POST['caseinsensitive']) ? $_POST['caseinsensitive'] : '';
 
+    if ($args['dry_run'] !== 'on' ) {
+        $aaMessage = 'Replaced ' . $args['search_for'] . ' with ' . $args['replace_with'] . ' on ' . $_POST['groupmembers'];
+        AdminAction::write('system','replace',$aaMessage);
+    }
     $dbsr = new dbsr();
 
     $tablesToProcess = $dbsr->getTableList($tables);
