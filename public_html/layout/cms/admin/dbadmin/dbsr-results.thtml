@@ -12,12 +12,12 @@
 }
 
 .diffInserted {
-    background: green;
-    color: white;
+    background: #acf2bd;
+    color: black;
 }
 .diffDeleted {
-    background: red;
-    color: white;
+    background: #ffdce0;
+    color: black;
 }
 </style>
 
@@ -50,13 +50,13 @@
 {!if showdiffs}
                 <a href="#diffs_{table}" data-uk-modal>
 {!endif}
-                {changes}
+                {changes} {!if truncated}**{!endif}
 {!if showdiffs}
                 </a>
 {!endif}
             </td>
             <td class="uk-text-center">{rowsupdated}</td>
-            <td>{time} seconds</td>
+            <td>{time} {seconds}</td>
         </tr>
 <!-- END ReportRow -->
     </table>
@@ -78,4 +78,51 @@
 </div>
 <!-- END DiffRow -->
 
+{!if dry_run_results}
+<div class="uk-alert" data-uk-alert>
+    <p>{lang_dry_run_complete}</p>
+</div>
+
+<div class="uk-panel uk-panel-box">
+    <h3 class="uk-panel-title">{lang_sr_parameters}</h3>
+
+    <table class="uk-table">
+        <tr>
+            <td class="uk-width-1-5">{lang_search_for}</td>
+            <td>{searchfor}</td>
+        </tr>
+        <tr>
+            <td class="uk-width-1-5">{lang_replace_with}</td>
+            <td>{replacewith}</td>
+        </tr>
+        <tr>
+            <td class="uk-width-1-5">{lang_case}</td>
+            <td>{case}</td>
+        </tr>
+    </table>
+</div>
+
+<form class="uk-form uk-form-horizontal" id="srform" action="{site_admin_url}/database.php" method="post">
+    <input type="hidden" id="searchreplace" name="searchreplace" value="x">
+    <input type="hidden" name="groupmembers" value="{includedtables}">
+    <input type="hidden" name="searchfor" value="{searchfor}">
+    <input type="hidden" name="replacewith" value="{replacewith}">
+{!if caseinsensitive}
+    <input type="hidden" name="caseinsensitive" value="on">
+{!endif}
+
+<div class="uk-panel uk-align-center uk-margin">
+    <button class="uk-button uk-button-danger" type="submit" value="{lang_execute}" name="sr_execute" onclick="return doubleconfirm('{lang_sr_warning_1}','{lang_sr_warning_2}');">{lang_execute}</button>
+    <button class="uk-button uk-button-success" type="cancel" onclick="DoSubmit()">{lang_edit}</button>
+    <button class="uk-button uk-button-primary" type="cancel" onclick="window.location='{site_admin_url}/database.php?sr=x';return false;">{lang_cancel}</button>
+</div>
+</form>
+{!endif}
+
+<script>
+function DoSubmit(){
+  document.getElementById("searchreplace").name = "sr";
+  return true;
+}
+</script>
 {# end {templatelocation} #}

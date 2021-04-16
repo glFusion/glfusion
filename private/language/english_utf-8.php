@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -1663,9 +1663,18 @@ $LANG_DB_ADMIN = array(
     'search'              => 'Search',
     'remove'              => 'Remove',
     'case'                => 'Case-Insensitive',
-    'dry_run'             => 'Run as dry run?',
+    'dry_run'             => 'Dry Run',
     'available_tables'    => 'Available Tables',
     'execute'             => 'Execute',
+    'sr_warning_banner'   => 'Ensure you have a recent backup of your database!  The Search / Replace feature does not have an undo option, so be careful to ensure the changes you make are correct.',
+    'dry_run_complete'    => 'Review the Dry Run results above. Validate the replacements are correct. If you are satisfied with the results, you can execute the Search and Replace by selecting the Execute button below.',
+    'sr_parameters'       => 'Search and Replace Parameters',
+    'sr_warning_1'        => 'Are you sure you want to perform the search / replace?',
+    'sr_warning_2'        => 'You do have a good backup, right?',
+    'edit'                => 'Edit',
+    'cancel'              => 'Cancel',
+    'seconds'             => 'seconds',
+
 );
 
 ###############################################################################

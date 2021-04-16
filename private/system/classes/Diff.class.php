@@ -75,9 +75,9 @@ class Diff {
   
       // generate the full diff
       $diff = array();
-      for ($index = 0; $index < $start; $index ++){
-        $diff[] = array($sequence1[$index], self::UNMODIFIED);
-      }
+ //     for ($index = 0; $index < $start; $index ++){
+ //       $diff[] = array($sequence1[$index], self::UNMODIFIED);
+ //     }
       while (count($partialDiff) > 0) $diff[] = array_pop($partialDiff);
       for ($index = $end1 + 1;
           $index < ($compareCharacters ? strlen($sequence1) : count($sequence1));
@@ -163,24 +163,24 @@ class Diff {
      */
     private static function generatePartialDiff(
         $table, $sequence1, $sequence2, $start){
-  
+
       //  initialise the diff
       $diff = array();
-  
+
       // initialise the indices
       $index1 = count($table) - 1;
       $index2 = count($table[0]) - 1;
-  
+
       // loop until there are no items remaining in either sequence
       while ($index1 > 0 || $index2 > 0){
-  
+
         // check what has happened to the items at these indices
         if ($index1 > 0 && $index2 > 0
             && $sequence1[$index1 + $start - 1]
                 == $sequence2[$index2 + $start - 1]){
-  
+
           // update the diff and the indices
-          $diff[] = array($sequence1[$index1 + $start - 1], self::UNMODIFIED);
+//          $diff[] = array($sequence1[$index1 + $start - 1], self::UNMODIFIED);
           $index1 --;
           $index2 --;
   
@@ -190,7 +190,7 @@ class Diff {
           // update the diff and the indices
           $diff[] = array($sequence2[$index2 + $start - 1], self::INSERTED);
           $index2 --;
-  
+
         }else{
   
           // update the diff and the indices
@@ -254,7 +254,7 @@ class Diff {
   
       // loop over the lines in the diff
       foreach ($diff as $line){
-  
+
         // extend the HTML with the line
         switch ($line[1]){
           case self::UNMODIFIED : $element = 'span'; break;
@@ -285,10 +285,10 @@ class Diff {
      *                defaults to '<br>'
      */
     public static function toTable($diff, $indentation = '', $separator = '<br>'){
-  
+
       // initialise the HTML
-      $html = $indentation . "<table class=\"diff\">\n";
-  
+      $html = $indentation . "<table style=\"width:100%;\" class=\"diff\">\n";
+
       // loop over the lines in the diff
       $index = 0;
       while ($index < count($diff)){
@@ -333,7 +333,7 @@ class Diff {
             . ($leftCell == $rightCell
                 ? 'Unmodified'
                 : ($leftCell == '' ? 'Blank' : 'Deleted'))
-            . '">'
+            . '" style="width:50%">'
             . $leftCell
             . "</td>\n"
             . $indentation
@@ -341,19 +341,19 @@ class Diff {
             . ($leftCell == $rightCell
                 ? 'Unmodified'
                 : ($rightCell == '' ? 'Blank' : 'Inserted'))
-            . '">'
+            . '" style="width:50%">'
             . $rightCell
             . "</td>\n"
             . $indentation
             . "  </tr>\n";
-  
+
       }
   
       // return the HTML
       return $html . $indentation . "</table>\n";
-  
+
     }
-  
+
     /* Returns the content of the cell, for use in the toTable function. The
      * parameters are:
      *

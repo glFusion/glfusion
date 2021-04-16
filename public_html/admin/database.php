@@ -1343,8 +1343,40 @@ function DBADMIN_searchAndreplace($err = '')
 {
     global $_CONF, $_TABLES, $LANG01, $LANG_ADMIN, $LANG_DB_ADMIN, $_IMAGE_TYPE;
 
+    $filter = new sanitizer();
+
     $retval = '';
     $tables = '';
+    $includetables = '';
+
+    // let's see if we are returning from somewhere else - if the POST vars are set
+    // load them up
+
+    if (isset($_POST['groupmembers'])) {
+        $includedTables = explode('|', $_POST['groupmembers']);
+    } else {
+        $includedTables = array();
+    }
+    if (isset($_POST['searchfor'])) {
+        $searchFor = $_POST['searchfor'];
+    } else {
+        $searchFor = '';
+    }
+    if (isset($_POST['replacewith'])) {
+        $replaceWith = $_POST['replacewith'];
+    } else {
+        $replaceWith = '';
+    }
+    if (isset($_POST['dryrun'])) {
+        $dryRun = 1;
+    } else {
+        $dryRun = 1;
+    }
+    if (isset($_POST['caseinsensitive'])) {
+        $caseInsensitive = 1;
+    } else {
+        $caseInsensitive = 0;
+    }
 
     $tablenames = DBADMIN_getTableList();
 
@@ -1386,13 +1418,18 @@ function DBADMIN_searchAndreplace($err = '')
             )
         )
     );
-
     $itemsToProcess = array_merge($itemsToProcess,$glFusionItems);
+
     ksort($itemsToProcess);
 
     foreach ($itemsToProcess AS $table => $tableInfo) {
-        $tables .= '<option value="'.$table.'">'.$table.' ('.$tableInfo['plugin'].')</option>\n';
+        if ( in_array($table, $includedTables)) {
+            $includetables .= '<option value="'.$table.'">'.$table.' ('.$tableInfo['plugin'].')</option>\n';
+        } else {
+            $tables .= '<option value="'.$table.'">'.$table.' ('.$tableInfo['plugin'].')</option>\n';
+        }
     }
+
     $T->set_var('glfusion_tables',$tables);
 
     $T->set_var('security_token',SEC_createToken());
@@ -1408,9 +1445,27 @@ function DBADMIN_searchAndreplace($err = '')
         'lang_dry_run'      => $LANG_DB_ADMIN['dry_run'],
         'lang_available_tables' => $LANG_DB_ADMIN['available_tables'],
         'lang_execute'      => $LANG_DB_ADMIN['execute'],
-        'action'            => "searchreplace",
+        'lang_sr_warning_banner' => $LANG_DB_ADMIN['sr_warning_banner'],
+        'action'            => 'searchreplace',
         'mode'              => "searchreplace",
     ));
+
+    $T->set_var(array(
+        'includedtables'    => $includetables,
+        'replacewith'       => $filter->editableText($replaceWith),
+        'searchfor'         => $filter->editableText($searchFor),
+    ));
+
+    if ( $caseInsensitive ) {
+        $T->set_var('caseinsensitive_checked', ' checked="checked" ');
+    } else {
+        $T->set_var('caseinsensitive_checked', '');
+    }
+    if ( $dryRun ) {
+        $T->set_var('dryrun_checked', ' checked="checked" ');
+    } else {
+        $T->set_var('dryrun_checked', '');
+    }
 
     if (!empty($err)) {
         $T->set_var('error_message',$err);
@@ -1429,6 +1484,8 @@ function DBADMIN_srExecute()
     global $_CONF, $LANG_DB_ADMIN, $_IMAGE_TYPE;
 
     $retval = '';
+
+    $filter = new sanitizer();
 
     $tables = explode('|', $_POST['groupmembers']);
 
@@ -1496,7 +1553,7 @@ function DBADMIN_srExecute()
     $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
     $T->set_file('page','dbsr-results.thtml');
 
-    $menu_arr = getAdminHeaderMenu('');
+    $menu_arr = getAdminHeaderMenu('sr_menu');
     $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
                         COM_getBlockTemplate('_admin_block', 'header')));
     $T->set_var('admin_menu',ADMIN_createMenu(
@@ -1511,14 +1568,44 @@ function DBADMIN_srExecute()
         'lang_table'            => $LANG_DB_ADMIN['table'],
         'lang_changes_found'    => $LANG_DB_ADMIN['changes_found'],
         'lang_rows_updated'     => $LANG_DB_ADMIN['rows_updated'],
+        'lang_dry_run_complete' => $LANG_DB_ADMIN['dry_run_complete'],
+        'lang_sr_parameters'    => $LANG_DB_ADMIN['sr_parameters'],
+        'lang_search_for'       => $LANG_DB_ADMIN['search_for'],
+        'lang_replace_with'     => $LANG_DB_ADMIN['replace_with'],
+        'lang_case'             => $LANG_DB_ADMIN['case'],
+        'lang_sr_warning_1'     => $LANG_DB_ADMIN['sr_warning_1'],
+        'lang_sr_warning_2'     => $LANG_DB_ADMIN['sr_warning_2'],
+        'lang_edit'             => $LANG_DB_ADMIN['edit'],
+        'lang_cancel'           => $LANG_DB_ADMIN['cancel'],
+        'lang_seconds'          => $LANG_DB_ADMIN['seconds'],
+        'case'                  => $args['case_insensitive'] == 'on' ? 'Yes' : 'No',
     ));
+
+    if ($args['dry_run'] === 'on') {
+        $T->set_var('dry_run_results',true);
+
+        $T->set_var(array(
+            'includedtables'    => $_POST['groupmembers'],
+            'searchfor'         => $filter->editableText($args['search_for']),
+            'replacewith'       => $filter->editableText($args['replace_with']),
+            'dryrun'            => $args['dry_run'],
+            'caseinsensitive'   => $args['case_insensitive'],
+            'lang_execute'      => $LANG_DB_ADMIN['execute'],
+        ));
+        if ($args['case_insensitive'] == 'on') {
+            $T->set_var('caseinsensitive','on');
+        } else {
+            $T->unset_var('caseinsensitive');
+        }
+    } else {
+        $T->unset_var('dry_run_results');
+    }
 
     $T->set_block('page', 'ReportRow', 'RRow');
     $T->set_block('page', 'DiffTableRow', 'DTRow');
     $T->set_block('page', 'DiffRow', 'DRow');
 
     foreach($resultReport AS $table => $tableRun) {
-
         $T->set_var(array(
             'table'         => $table,
             'changes'       => $tableRun['table_report']['change'],
@@ -1543,9 +1630,16 @@ function DBADMIN_srExecute()
             foreach($tableRun['table_report']['diffs'] AS $diff) {
                 $T->set_var(array(
                     'table' => $table,
-                    'diff'  => \Diff::toTable(\Diff::compare($diff[0],$diff[1])),
                     'column' => $diff[2],
                 ));
+                if (strlen($diff[0]) < 10000 && strlen($diff[1]) < 10000) {
+                    $T->set_var(
+                        'diff', \Diff::toTable(\Diff::compare($diff[0],$diff[1])),
+                    );
+                    $T->unset_var('truncated');
+                } else {
+                    $T->set_var('truncated',true);
+                }
                 $T->parse('DTRow','DiffTableRow',true);
             }
             $T->parse('DRow','DiffRow',true);
@@ -1834,6 +1928,7 @@ switch ($action) {
 
     case 'searchreplace' :
         $page .= DBADMIN_srExecute();
+//        $page .= DBADMIN_searchAndreplace();
         break;
     default :
         $page = DBADMIN_list();

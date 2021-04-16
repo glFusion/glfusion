@@ -7,20 +7,15 @@
 
 {!if error_message}
 <div class="uk-alert uk-alert-danger" data-uk-alert>
-<a href="" class="uk-alert-close uk-close"></a>
-<p>{error_message}</p>
+	<a href="" class="uk-alert-close uk-close"></a>
+	<p>{error_message}</p>
 </div>
 {!endif}
 
 <h2>{lang_title}</h2>
 
-
 <div class="uk-alert uk-alert-danger" data-uk-alert>
-	<p>
-		Back up your data before you do this.  Seriously, if you screw it up, there is no un-do button!
-		<br>
-		Always do a 'Run as dry-run' first!  Make sure you know what is changing before you do the final execution.
-	</p>
+	<p>{lang_sr_warning_banner}</p>
 </div>
 
 <div class="uk-panel uk-panel-box uk-container-center">
@@ -28,6 +23,7 @@
 	<form class="uk-form uk-form-horizontal" id="srform" action="{site_admin_url}/database.php" method="post">
 		<input type="hidden" name="searchreplace" value="x">
 		<input type="hidden" name="groupmembers">
+		<input type="hidden" name="dryrun" value="on">
 
         <fieldset>
             <div class="uk-form-row">
@@ -74,7 +70,7 @@
 						<select multiple="multiple" size="10" name="fieldTo"
 							style="width: 15em; height: 20em; padding: 2px;"
 							ondblclick="moveSelectedOptions(this.form['fieldTo'],this.form['fieldFrom'],false)">
-							{excluded_tables}
+							{includedtables}
 						</select>
 					</div>
 				</div>
@@ -84,21 +80,12 @@
             <div class="uk-form-row">
                 <label class="uk-form-label" for="title">{lang_case}</label>
                 <div class="uk-form-controls">
-                    <input type="checkbox" maxlength="255" id="caseinsensitive" name="caseinsensitive">
+                    <input type="checkbox" maxlength="255" id="caseinsensitive" name="caseinsensitive" {caseinsensitive_checked}>
                 </div>
             </div>
-
-             <div class="uk-form-row">
-                <label class="uk-form-label" for="title">{lang_dry_run}</label>
-                <div class="uk-form-controls">
-                    <input type="checkbox" maxlength="255" id="dryrun" name="dryrun" checked="checked">
-                </div>
-            </div>
-
 		</fieldset>
-
 		<div class="uk-form-row">
-			<button class="uk-button uk-button-success uk-form-width-small uk-align-center" type="submit" value="{lang_run}Run" name="sr_execute" onclick="return setUsers(this.form)">{lang_execute}</button>
+			<button class="uk-button uk-button-success uk-form-width-small uk-align-center" type="submit" value="{lang_dry_run}" name="sr_execute" onclick="return setUsers(this.form)">{lang_dry_run}</button>
 		</div>
 	</form>
 </div>
