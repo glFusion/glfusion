@@ -64,7 +64,7 @@ function FR_stripslashes( $text ) {
 
 function rescue_path_html_validate( $value ) {
     $value = trim($value);
-    if (empty($value)) return value;
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -79,7 +79,7 @@ function rescue_path_html_validate( $value ) {
 
 function rescue_path_log_validate( $value ) {
     $value = trim($value);
-    if (empty($value)) return value;
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -94,7 +94,7 @@ function rescue_path_log_validate( $value ) {
 
 function rescue_path_language_validate( $value ) {
     $value = trim($value);
-    if (empty($value)) return value;
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -109,7 +109,7 @@ function rescue_path_language_validate( $value ) {
 
 function rescue_backup_path_validate( $value ) {
     $value = trim($value);
-    if (empty($value)) return value;
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -124,7 +124,7 @@ function rescue_backup_path_validate( $value ) {
 
 function rescue_path_data_validate( $value ) {
     $value = trim($value);
-    if (empty($value)) return value;
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -139,7 +139,7 @@ function rescue_path_data_validate( $value ) {
 
 function rescue_path_images_validate( $value ) {
     $value = trim($value);
-    if (empty($value)) return value;
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -154,7 +154,7 @@ function rescue_path_images_validate( $value ) {
 
 function rescue_path_rss( $value ) {
     $value = trim($value);
-    if (empty($value)) return value;
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -170,7 +170,7 @@ function rescue_path_rss( $value ) {
 
 function rescue_path_themes_validate( $value ) {
     $value = trim($value);
-    if (empty($value)) return value;
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
