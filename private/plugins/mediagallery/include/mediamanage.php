@@ -220,8 +220,8 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
                 } else {
                     $width = 100;
                     $height = 100;
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
-                    $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'placeholder.svg';
+                    $thumbnail = $_MG_CONF['assets_url'] . '/placeholder.svg';
+                    $pThumbnail = $_MG_CONF['path_assets'] . 'placeholder.svg';
                 }
 
                 $cat_select = '<select name="cat_id[]">';

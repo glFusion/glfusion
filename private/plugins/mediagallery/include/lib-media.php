@@ -678,7 +678,7 @@ function MG_displaySWF( $aid, $I, $full ) {
                     }
                 }
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flash.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_flash.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
@@ -695,7 +695,7 @@ function MG_displaySWF( $aid, $I, $full ) {
                     }
                 }
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flash.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_flash.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
@@ -891,7 +891,7 @@ function MG_displayFLV ( $aid, $I, $full ) {
 //                $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
 //                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flv.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_flv.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
@@ -1106,7 +1106,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                 }
             } else {
                 $win_height = 320;
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             $u_pic = "javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $I['media_id'] . "'," . $win_height . "," . $win_width . ")";
@@ -1122,7 +1122,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                     }
                 }
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
@@ -1142,7 +1142,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $playback_options['width']  = 300;
             } else {
                 $u_pic='';
-                $u_tn     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $u_tn     = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
                 $playback_options['height'] = 200;
                 $playback_options['width']  = 300;
@@ -1234,7 +1234,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                     }
                 }
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
                 $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
@@ -1281,7 +1281,7 @@ function MG_displayOGG( $aid, $I, $full ) {
             }
         }
     } else {
-        $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+        $u_image     = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
         $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
     }
 
@@ -1328,7 +1328,7 @@ function MG_displayGeneric( $aid, $I, $full ) {
     } else {
         switch ( $I['mime_type'] ) {
             case 'application/pdf' :
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_pdf.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_pdf.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
                 break;
             case 'application/zip' :
@@ -1337,11 +1337,11 @@ function MG_displayGeneric( $aid, $I, $full ) {
             case 'application/x-gzip' :
             case 'multipart/x-gzip' :
             case 'application/arj' :
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_zip.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_zip.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
                 break;
             default :
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
                 break;
         }
@@ -1500,9 +1500,9 @@ function MG_displayEmbed($aid,$I,$full,$mediaObject) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
