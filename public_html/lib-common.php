@@ -184,11 +184,13 @@ if (empty($_CONF['path_data'])) {
 }
 if (empty($_CONF['path_themes'])) {
     $_CONF['path_themes'] = $_CONF['path_html'] . 'layout/';
+    $_CONF['path_layout'] = $_CONF['path_html'] . 'layout/' . $_CONF['theme'] .'/';
+    $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
 }
 if (empty($_CONF['path_rss'])) {
     $_CONF['path_rss'] = $_CONF['path_html'] . 'backend/';
 }
-
+//var_dump($_CONF);exit;
 /*
  * Initialize the system log
  */
