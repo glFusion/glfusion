@@ -163,34 +163,8 @@ if (!isset($_CONF['log_level'])) {
 
 // Set paths using defaults if not configured
 $_CONF['path_html'] = __DIR__ . '/';  // no need to configure this
-if (empty($_CONF['path_images'])) {
-    $_CONF['path_images'] = $_CONF['path_html'] . 'data/images/';
-    $_CONF['path_images_url'] = $_CONF['site_url'] . '/data/images';
-} else {
-    $path_image_url = rtrim(str_replace($_CONF['path_html'],'',$_CONF['path_images']),'/\\');
-    $_CONF['path_images_url'] = $_CONF['site_url'].'/'.$path_image_url;
-}
-if (empty($_CONF['path_log'])) {
-    $_CONF['path_log'] = $_CONF['path'] . 'logs/';
-}
-if (empty($_CONF['path_language'])) {
-    $_CONF['path_language'] = $_CONF['path'] . 'language/';
-}
-if (empty($_CONF['backup_path'])) {
-    $_CONF['backup_path'] = $_CONF['path'] . 'backups/';
-}
-if (empty($_CONF['path_data'])) {
-    $_CONF['path_data'] = $_CONF['path'] . 'data/';
-}
-if (empty($_CONF['path_themes'])) {
-    $_CONF['path_themes'] = $_CONF['path_html'] . 'layout/';
-    $_CONF['path_layout'] = $_CONF['path_html'] . 'layout/' . $_CONF['theme'] .'/';
-    $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
-}
-if (empty($_CONF['path_rss'])) {
-    $_CONF['path_rss'] = $_CONF['path_html'] . 'backend/';
-}
-//var_dump($_CONF);exit;
+config::fixupPaths();   // fix up empty (default) config paths
+
 /*
  * Initialize the system log
  */

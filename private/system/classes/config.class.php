@@ -1234,6 +1234,10 @@ class config
         $success_array = array();
         if ( is_array($this->config_array[$group]) ) {
             foreach ($this->config_array[$group] as $param_name => $param_value) {
+                if ($param_name == 'path_html') {
+                    // TODO? path_html is statically defined in lib-common.php
+                    continue;
+                }
                 if (array_key_exists($param_name, $change_array)) {
                     if ( !in_array($param_name,$this->consumer_keys) ) {
                         $change_array[$param_name] =
@@ -1256,7 +1260,7 @@ class config
         }
 
         $this->_purgeCache();
-
+        self::fixupPaths();
         return $success_array;
     }
 
@@ -1618,6 +1622,46 @@ class config
             }
         }
         return json_encode($confArray);
+    }
+
+
+    /**
+     * Set actual paths based on defaults if the configured paths are empty.
+     * Operates on the global $_CONF variable.
+     *
+     * @return  void
+     */
+    public static function fixupPaths()
+    {
+        global $_CONF;
+
+        if (empty($_CONF['path_images'])) {
+            $_CONF['path_images'] = $_CONF['path_html'] . 'data/images/';
+            $_CONF['path_images_url'] = $_CONF['site_url'] . '/data/images';
+        } else {
+            $path_image_url = rtrim(str_replace($_CONF['path_html'],'',$_CONF['path_images']),'/\\');
+            $_CONF['path_images_url'] = $_CONF['site_url'].'/'.$path_image_url;
+        }
+        if (empty($_CONF['path_log'])) {
+            $_CONF['path_log'] = $_CONF['path'] . 'logs/';
+        }
+        if (empty($_CONF['path_language'])) {
+            $_CONF['path_language'] = $_CONF['path'] . 'language/';
+        }
+        if (empty($_CONF['backup_path'])) {
+            $_CONF['backup_path'] = $_CONF['path'] . 'backups/';
+        }
+        if (empty($_CONF['path_data'])) {
+            $_CONF['path_data'] = $_CONF['path'] . 'data/';
+        }
+        if (empty($_CONF['path_themes'])) {
+            $_CONF['path_themes'] = $_CONF['path_html'] . 'layout/';
+            $_CONF['path_layout'] = $_CONF['path_html'] . 'layout/' . $_CONF['theme'] .'/';
+            $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
+        }
+        if (empty($_CONF['path_rss'])) {
+            $_CONF['path_rss'] = $_CONF['path_html'] . 'backend/';
+        }
     }
 
 }
