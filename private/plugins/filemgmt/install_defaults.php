@@ -41,12 +41,12 @@ $_FM_DEFAULT['uploadpublic']     = true;
 $_FM_DEFAULT['useshots']         = true;
 $_FM_DEFAULT['shotwidth']        = 50;
 $_FM_DEFAULT['emailoption']      = true;
-$_FM_DEFAULT['FileStore']        = $_CONF['path_html'] . 'data/filemgmt/files/';
-$_FM_DEFAULT['SnapStore']        = $_CONF['path_html'] . 'data/filemgmt/snaps/';
-$_FM_DEFAULT['SnapCat']          = $_CONF['path_html'] . 'data/filemgmt/category_snaps/';
-$_FM_DEFAULT['FileStoreURL']     = $_CONF['site_url']  . '/data/filemgmt/files/';
-$_FM_DEFAULT['FileSnapURL']      = $_CONF['site_url']  . '/data/filemgmt/snaps/';
-$_FM_DEFAULT['SnapCatURL']       = $_CONF['site_url']  . '/data/filemgmt/category_snaps/';
+$_FM_DEFAULT['FileStore']        = '';
+$_FM_DEFAULT['SnapStore']        = '';
+$_FM_DEFAULT['SnapCat']          = '';
+$_FM_DEFAULT['FileStoreURL']     = '';
+$_FM_DEFAULT['FileSnapURL']      = '';
+$_FM_DEFAULT['SnapCatURL']       = '';
 
 $_FM_DEFAULT['FilePermissions']     = (int) 0755;
 $_FM_DEFAULT['WhatsNewPeriodDays']  = 14;
@@ -78,12 +78,14 @@ if ( isset($filemgmt_FileStore) && $filemgmt_FileStore != '' && (strpos($filemgm
     $_FM_CONF['useshots']         = $mydownloads_useshots;
     $_FM_CONF['shotwidth']        = $mydownloads_shotwidth;
     $_FM_CONF['emailoption']      = $filemgmt_Emailoption;
+/*
     $_FM_CONF['FileStore']        = $filemgmt_FileStore;
     $_FM_CONF['SnapStore']        = $filemgmt_SnapStore;
     $_FM_CONF['SnapCat']          = $filemgmt_SnapCat;
     $_FM_CONF['FileStoreURL']     = $filemgmt_FileStoreURL;
     $_FM_CONF['FileSnapURL']      = $filemgmt_FileSnapURL;
     $_FM_CONF['SnapCatURL']       = $filemgmt_SnapCatURL;
+*/    
 }
 
 /**

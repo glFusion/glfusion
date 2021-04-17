@@ -171,6 +171,14 @@ class config
         return array_key_exists($group, $this->config_array);
     }
 
+    function get($name,$group) {
+        global $_TABLES, $_VARS;
+
+        $db = Database::getInstance();
+        $value = $db->getItem($_TABLES['conf_values'],'value',array('name'=>$name,'group_name'=>$group));
+        return(@unserialize($value));
+    }
+
     /**
      * This function sets a configuration variable to a value in the database
      * and in the current array. If the variable does not already exist,
@@ -1675,6 +1683,7 @@ function configmanager_select_theme_helper()
 function configmanager_path_html_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1690,6 +1699,7 @@ function configmanager_path_html_validate($value)
 function configmanager_path_log_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1705,6 +1715,7 @@ function configmanager_path_log_validate($value)
 function configmanager_path_language_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1720,6 +1731,7 @@ function configmanager_path_language_validate($value)
 function configmanager_backup_path_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1735,6 +1747,7 @@ function configmanager_backup_path_validate($value)
 function configmanager_path_data_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1750,6 +1763,7 @@ function configmanager_path_data_validate($value)
 function configmanager_path_images_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1765,6 +1779,7 @@ function configmanager_path_images_validate($value)
 function configmanager_path_pear_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1781,6 +1796,7 @@ function configmanager_path_pear_validate($value)
 function configmanager_path_themes_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }

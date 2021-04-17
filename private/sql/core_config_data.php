@@ -322,7 +322,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'rdf_file',
-    	'default_value' => '',
+    	'default_value' => 'site.rss',
     	'type' => 'text',
     	'subgroup' => 0,
     	'fieldset' => 2,
@@ -463,6 +463,17 @@ $coreConfigData = array(
     	'fieldset' => 3,
     	'selection_array' => NULL,
     	'sort' => 70,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'path_rss',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 0,
+    	'fieldset' => 3,
+    	'selection_array' => NULL,
+    	'sort' => 80,
     	'set' => TRUE,
     	'group' => 'Core'
     ),

@@ -57,6 +57,14 @@ if ( is_array($_FF_FORUM) && is_array($_FF_CONF) ) {
     $_FF_CONF = array_merge($_FF_FORUM, $_FF_CONF);
 }
 
+if (empty($_FF_CONF['uploadpath'])) {
+    $_FF_CONF['uploadpath'] = $_CONF['path_html'].'data/forum/media';
+    $_FF_CONF['downloadURL'] = $_CONF['site_url'] . '/data/forum/media';
+} else {
+    $path_download_url = rtrim(str_replace($_CONF['path_html'],'',$_FF_CONF['uploadpath']),'/\\');
+    $_FF_CONF['downloadURL'] = $_CONF['site_url'].'/'.$path_download_url;
+}
+
 // View Anonymous Posts - registed users can set this false
 $_FF_CONF['show_anonymous_posts'] = 1;
 $_FF_CONF['topic_order'] = 'ASC';

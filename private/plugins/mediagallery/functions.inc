@@ -63,7 +63,6 @@ USES_lib_image();
 * Include MediaGallery config file
 */
 require_once $_CONF['path'].'plugins/mediagallery/mediagallery.php';
-//require_once $_CONF['path'].'plugins/mediagallery/config.php';
 require_once $_CONF['path'].'plugins/mediagallery/include/classAlbum.php';
 
 $mg_installed_version = '0.0.0';
@@ -96,18 +95,24 @@ $resultSet = DB_fetchAll($result);
 foreach($resultSet AS $row) {
     $_MG_CONF[$row['config_name']] = $row['config_value'];
 }
-$_MG_CONF['tmp_path'] = $_CONF['path'] . 'plugins/mediagallery/tmp/';
+if (empty($_MG_CONF['path_mediaobjects'])) {
+    $_MG_CONF['path_mediaobjects'] = $_CONF['path_html'] . 'data/mediagallery/mediaobjects/';
+    $_MG_CONF['mediaobjects_url'] = $_CONF['site_url'] . '/data/mediagallery/mediaobjects/';
+} else {
+    $path_media_url = rtrim(str_replace($_CONF['path_html'],'',$_MG_CONF['path_mediaobjects']),'');
+    $_MG_CONF['mediaobjects_url'] = $_CONF['site_url'].'/'.$path_media_url;
+}
 
+$_MG_CONF['tmp_path'] = $_CONF['path'] . 'plugins/mediagallery/tmp/';
+$_MG_CONF['ftp_path'] = $_CONF['path'] . 'plugins/mediagallery/uploads/';
 $_MG_CONF['path_assets'] = $_CONF['path_html'] . $_MG_CONF['path_mg'] . '/assets/';
 $_MG_CONF['assets_url']  = $_CONF['site_url']  . '/' . $_MG_CONF['path_mg'] . '/assets';
-
 $_MG_CONF['path_watermarks'] = $_CONF['path_html'] . 'data/mediagallery/watermarks/';
 $_MG_CONF['watermarks_url']  = $_CONF['site_url']  . '/data/mediagallery/watermarks';
 
 if ( $_CONF['loginrequired'] == 1 ) {
     $_MG_CONF['loginrequired'] = 1;
 }
-
 $_MG_CONF['up_mp3_player_enabled'] = 0;
 
 if ( $_MG_CONF['up_display_rows_enabled'] == 1 ||
@@ -2308,10 +2313,7 @@ function MG_getFeedPath( $feedfile = '' )
 {
     global $_CONF;
 
-    $feedpath = $_CONF['rdf_file'];
-    $pos = strrpos( $feedpath, '/' );
-    $feed = substr( $feedpath, 0, $pos + 1 );
-    $feed .= $feedfile;
+    $feed = $_CONF['path_rss'] . $feedfile;
 
     return $feed;
 }

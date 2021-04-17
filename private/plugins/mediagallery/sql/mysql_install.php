@@ -523,8 +523,8 @@ $_SQL['exif_tag_data']="INSERT INTO {$_TABLES['mg_exif_tags']} (`name`, `selecte
 ('IPTC/TimeCreated', 0);";
 
 $_SQL['config_data_1']="INSERT INTO {$_TABLES['mg_config']} (`config_name`, `config_value`) VALUES
-('path_mediaobjects','".$_CONF['path_html']."data/mediagallery/mediaobjects/'),
-('mediaobjects_url','".$_CONF['site_url']."/data/mediagallery/mediaobjects'),
+('path_mediaobjects',''),
+('mediaobjects_url',''),
 ('path_mg','mediagallery'),
 ('menulabel', 'Media Gallery');";
 
@@ -556,8 +556,8 @@ $_SQL['config_data_2']="INSERT INTO {$_TABLES['mg_config']} (`config_name`, `con
 ('up_av_playback_enabled', '1'),
 ('up_thumbnail_size_enabled', '1'),
 ('tn_jpg_quality', '85'),
-('ftp_path', '".$_CONF['path']."plugins/mediagallery/uploads/'),
-('tmp_path', '".$_CONF['path']."plugins/mediagallery/tmp/'),
+('ftp_path', ''),
+('tmp_path', ''),
 ('preserve_filename', '1'),
 ('discard_original', '0'),
 ('verbose', '0'),

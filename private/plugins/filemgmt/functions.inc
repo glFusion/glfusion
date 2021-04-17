@@ -68,12 +68,27 @@ if (!isset($_FM_CONF['perpage'])) {
     $mydownloads_useshots       = $_FM_CONF['useshots'];
     $mydownloads_shotwidth      = $_FM_CONF['shotwidth'];
     $filemgmt_Emailoption       = $_FM_CONF['Emailoption'];
+
+    if (empty($_FM_CONF['FileStore'])) {
+        $_FM_CONF['FileStore'] = $_CONF['path_html'].'data/filemgmt/files/';
+        $_FM_CONF['FileStoreURL'] = $_CONF['site_url'].'/data/filemgmt/files/';
+    }
+    if (empty($_FM_CONF['SnapStore'])) {
+        $_FM_CONF['SnapStore'] = $_CONF['path_html'].'data/filemgmt/snaps/';
+        $_FM_CONF['FileSnapURL'] = $_CONF['site_url'].'/data/filemgmt/snaps/';
+    }
+    if (empty($_FM_CONF['SnapCat'])) {
+        $_FM_CONF['SnapCat'] = $_CONF['path_html'].'data/filemgmt/category_snaps/';
+        $_FM_CONF['SnapCatURLURL'] = $_CONF['site_url'].'/data/filemgmt/category_snaps/';
+    }
+
     $filemgmt_FileStore         = $_FM_CONF['FileStore'];
     $filemgmt_SnapStore         = $_FM_CONF['SnapStore'];
     $filemgmt_SnapCat           = $_FM_CONF['SnapCat'];
     $filemgmt_FileStoreURL      = $_FM_CONF['FileStoreURL'];
     $filemgmt_FileSnapURL       = $_FM_CONF['FileSnapURL'];
     $filemgmt_SnapCatURL        = $_FM_CONF['SnapCatURL'];
+
     $filemgmtWhatsNewPeriodDays = $_FM_CONF['whatsnewperioddays'];
     $filemgmtWhatsNewTitleLength= $_FM_CONF['whatsnewtitlelength'];
     $filemgmt_showWhatsNewComments = $_FM_CONF['showwhatsnewcomments'];

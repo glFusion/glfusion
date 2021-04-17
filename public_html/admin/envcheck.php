@@ -482,9 +482,7 @@ function _checkEnvironment()
     ));
 
     // extract syndication storage path
-    $feedpath = $_CONF['rdf_file'];
-    $pos = strrpos( $feedpath, '/' );
-    $feedPath = substr( $feedpath, 0, $pos + 1 );
+    $feedPath = $_CONF['path_rss'];
 
     $file_list = array( $_CONF['path_data'],
                         $_CONF['path_data'].'glfusion.lck',
@@ -502,7 +500,7 @@ function _checkEnvironment()
                         $_CONF['path_data'].'htmlpurifier/',
                         $_CONF['path_html'],
                         $feedPath,
-                        $_CONF['rdf_file'],
+                        $_CONF['path_rss']. $_CONF['rdf_file'],
                         $_CONF['path_images'],
                         $_CONF['path_images'].'articles/',
                         $_CONF['path_images'].'topics/',

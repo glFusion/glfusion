@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -415,7 +415,7 @@ $forumConfigData = array(
 
     array(
         'name' => 'uploadpath',
-        'default_value' => $_CONF['path_html'].'data/forum/media',
+        'default_value' => '',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 1,
@@ -427,7 +427,7 @@ $forumConfigData = array(
 
     array(
         'name' => 'downloadURL',
-        'default_value' => $_CONF['site_url'].'/data/forum/media',
+        'default_value' => '',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 1,

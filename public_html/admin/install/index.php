@@ -540,41 +540,11 @@ function INST_gotPathSetting($dbc_path = '')
     $_GLFUSION['dbconfig_path'] = $private_path.'data/';
     $dbconfig_path = $private_path.'data/';
 
-    // check and see if the advanced path settings were entered...
-
-    if ( isset($_POST['logpath']) && $_POST['logpath'] != '') {
-        $log_path = INST_sanitizePath(INST_stripslashes($_POST['logpath']));
-        if (!preg_match('/^.*\/$/', $log_path)) {
-            $log_path .= '/';
-        }
-        $_GLFUSION['log_path']      = $log_path;
-    }
-
-    if ( isset($_POST['langpath']) && $_POST['langpath'] != '') {
-        $lang_path = INST_sanitizePath(INST_stripslashes($_POST['langpath']));
-        if (!preg_match('/^.*\/$/', $lang_path)) {
-            $lang_path .= '/';
-        }
-        $_GLFUSION['lang_path']     = $lang_path;
-    }
-
-    if ( isset($_POST['backuppath']) && $_POST['backuppath'] != '') {
-        $backup_path = INST_sanitizePath(INST_stripslashes($_POST['backuppath']));
-        if (!preg_match('/^.*\/$/', $backup_path)) {
-            $backup_path .= '/';
-        }
-        $_GLFUSION['backup_path']   = $backup_path;
-    }
-
-    if ( isset($_POST['datapath']) && $_POST['datapath'] != '') {
-        $data_path = INST_sanitizePath(INST_stripslashes($_POST['datapath']));
-        if (!preg_match('/^.*\/$/', $data_path)) {
-            $data_path .= '/';
-        }
-        $_GLFUSION['data_path']     = $data_path;
-    } else {
-        $data_path = $_GLFUSION['private_path'] .'data/';
-    }
+    // set the paths to defaults..
+    $log_path  = $_GLFUSION['private_path'] . 'logs/';
+    $lang_path = $_GLFUSION['private_path'] . 'language/';
+    $backup_path = $_GLFUSION['private_path'] . 'backups/';
+    $data_path = $_GLFUSION['private_path'] . 'data/';
 
     // now, lets see if it exists, if not, try to rename the .dist file...
     clearstatcache();
@@ -789,19 +759,6 @@ function INST_checkEnvironment($private_path='')
     $T->set_var('notes',$LANG_INSTALL['short_open_tags']);
     $T->parse('env','envs',true);
 
-    if (version_compare(PHP_VERSION,'7.1.0','<')) {
-        $ob = ini_get('open_basedir');
-        if ( $ob == '' ) {
-            $open_basedir_restriction = 0;
-        } else {
-            $open_basedir_restriction = 1;
-            $open_basedir_directories = $ob;
-        }
-        $T->set_var('item','open_basedir');
-        $T->set_var('status',$ob == '' ? '<span class="uk-text-success">'.$LANG_INSTALL['none'].'</span>' : '<span class="uk-text-danger uk-text-bold">'.$LANG_INSTALL['enabled'].'</span>');
-        $T->set_var('notes',$LANG_INSTALL['open_basedir']);
-        $T->parse('env','envs',true);
-    }
     $memory_limit = INST_return_bytes(ini_get('memory_limit'));
     $memory_limit_print = ($memory_limit / 1024) / 1024;
     $T->set_var('item','memory_limit');
@@ -847,9 +804,9 @@ function INST_checkEnvironment($private_path='')
             $rc = @copy('../../siteconfig.php','../../data/siteconfig.php');
             @chmod('../../data/siteconfig.php',0777);
         }
-if ( !@file_exists('../../data/siteconfig.php') ) {
-    print "error - could not locate siteconfig.php";
-}
+        if ( !@file_exists('../../data/siteconfig.php') ) {
+            return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error code: ' . __LINE__);
+        }
 
         require '../../data/siteconfig.php';
 
@@ -882,6 +839,37 @@ if ( !@file_exists('../../data/siteconfig.php') ) {
         $config->load_baseconfig();
         $config->initConfig();
         $_CONF = $config->get_config('Core');
+
+        // Set paths using defaults if not configured
+        if (empty($_CONF['path_html'])) {
+            $_CONF['path_html'] = INST_getHtmlPath();
+        }
+        if (empty($_CONF['path_images'])) {
+            $_CONF['path_images'] = $_CONF['path_html'] . 'data/images/';
+            $_CONF['path_images_url'] = $_CONF['site_url'] . '/data/images';
+        } else {
+            $path_image_url = rtrim(str_replace($_CONF['path_html'],'',$_CONF['path_images']),'/\\');
+            $_CONF['path_images_url'] = $_CONF['site_url'].'/'.$path_image_url;
+        }
+        if (empty($_CONF['path_log'])) {
+            $_CONF['path_log'] = $_CONF['path'] . 'logs/';
+        }
+        if (empty($_CONF['path_language'])) {
+            $_CONF['path_language'] = $_CONF['path'] . 'language/';
+        }
+        if (empty($_CONF['backup_path'])) {
+            $_CONF['backup_path'] = $_CONF['path'] . 'backups/';
+        }
+        if (empty($_CONF['path_data'])) {
+            $_CONF['path_data'] = $_CONF['path'] . 'data/';
+        }
+        if (empty($_CONF['path_themes'])) {
+            $_CONF['path_themes'] = $_CONF['path_html'] . 'layout/';
+        }
+        if (empty($_CONF['path_rss'])) {
+            $_CONF['path_rss'] = $_CONF['path_html'] . 'backend/';
+        }
+
         $_PATH['public_html']   = $_CONF['path_html'];
         $_PATH['private_path'] = $_CONF['path'];
         $_PATH['admin_path']    = INST_getAdminPath();
@@ -894,7 +882,7 @@ if ( !@file_exists('../../data/siteconfig.php') ) {
         if ( $private_path == '' ) {
             $_PATH['private_path'] = INST_sanitizePath(INST_stripslashes($_POST['private_path']));
         } else {
-            $_PATH['private_path']     = $private_path;
+            $_PATH['private_path'] = $private_path;
         }
         $_PATH['admin_path']        = INST_getAdminPath();
 
@@ -914,7 +902,7 @@ if ( !@file_exists('../../data/siteconfig.php') ) {
         $_PATH['admin_path'] .= '/';
     }
 
-    $file_list = array( /*$_PATH['dbconfig_path'],*/
+    $file_list = array(
                         $_PATH['private_path'].'data/db-config.php',
                         $_PATH['data_path'],
                         $_PATH['data_path'].'glfusion.lck',
@@ -935,7 +923,7 @@ if ( !@file_exists('../../data/siteconfig.php') ) {
 
                         $_PATH['public_html'],
                         $_PATH['public_html'].'data/siteconfig.php',
-                        $_PATH['public_html'].'backend/glfusion.rss',
+                        $_PATH['public_html'].'backend/site.rss',
                         $_PATH['public_html'].'data/images/articles/',
                         $_PATH['public_html'].'data/images/topics/',
                         $_PATH['public_html'].'data/images/userphotos/',
@@ -1367,7 +1355,6 @@ function INST_gotSiteInformation()
     $_GLFUSION['noreply_mail']    = $noreply_mail;
     $_GLFUSION['securepassword']  = $securePassword;
 
-//    $_GLFUSION['utf8']            = isset($_POST['use_utf8']) ? 1 : 0;
     $_GLFUSION['utf8']            = 1;
 
     if ( $numErrors > 0 ) {
@@ -1722,6 +1709,7 @@ function INST_installAndContentPlugins()
     $config->set('site_admin_url', $site_admin_url);
     $config->set('site_mail', $site_mail);
     $config->set('noreply_mail', $noreply_mail);
+/* --- don't set
     $config->set('path_html', $html_path);
     $config->set('path_log', $log_path);
     $config->set('path_language', $lang_path);
@@ -1729,8 +1717,10 @@ function INST_installAndContentPlugins()
     $config->set('path_data', $data_path);
     $config->set('path_images', $html_path . 'data/images/');
     $config->set('path_themes', $html_path . 'layout/');
-    $config->set('rdf_file', $html_path . 'backend/glfusion.rss');
-    $config->set('path_pear', $_CONF['path_system'] . 'pear/');
+    $config->set('path_rss', $html_path . 'backend/');
+----- */
+    $config->set('rdf_file', 'site.rss');
+
     $config->set_default('default_photo', $site_url.'/default.jpg');
 
     $lng = INST_getDefaultLanguage($gl_path . 'language/', $language, $utf8);

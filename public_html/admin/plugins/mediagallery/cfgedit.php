@@ -446,8 +446,8 @@ function MG_editConfig( $msgString = '' ) {
         'jhead_path'                => $_MG_CONF['jhead_path'],
         'jpegtran_path'             => $_MG_CONF['jpegtran_path'],
         'zip_path'                  => $_MG_CONF['zip_path'],
-        'tmp_path'                  => $_MG_CONF['tmp_path'],
-        'ftp_path'                  => $_MG_CONF['ftp_path'],
+        'tmp_path'                  => DB_getItem($_TABLES['mg_config'],'config_value','config_name="tmp_path"'),
+        'ftp_path'                  => DB_getItem($_TABLES['mg_config'],'config_value','config_name="ftp_path"'),
         'ffmpeg_path'               => $_MG_CONF['ffmpeg_path'],
         'displayblock'              => $block_select,
         'dfidselect'                => $dfid_select,
@@ -542,8 +542,8 @@ function MG_editConfig( $msgString = '' ) {
         'lang_path_mg'              => $LANG_MG01['path_mg'],
         'lang_path_mediaobjects'    => $LANG_MG01['path_mediaobjects'],
         'lang_mediaobjects_url'     => $LANG_MG01['mediaobjects_url'],
-        'path_mediaobjects'         => $_MG_CONF['path_mediaobjects'],
-        'mediaobjects_url'          => $_MG_CONF['mediaobjects_url'],
+        'path_mediaobjects'         => DB_getItem($_TABLES['mg_config'],'config_value','config_name="path_mediaobjects"'),
+        'mediaobjects_url'          => DB_getItem($_TABLES['mg_config'],'config_value','config_name="mediaobjects_url"'),
         'path_mg'                   => $_MG_CONF['path_mg'],
         'menulabel'                 => $_MG_CONF['menulabel'],
         'gltoken_name'              => CSRF_TOKEN,
@@ -685,8 +685,11 @@ function MG_saveConfig( ) {
         $enable_ffmpeg = 0;
     }
 
-    if (!preg_match('/^.*\/$/', $tmp_path)) {
-        $tmp_path .= '/';
+    $tmp_path = rtrim($tmp_path);
+    if (!empty($tmp_path)) {
+        if (!preg_match('/^.*\/$/', $tmp_path)) {
+            $tmp_path .= '/';
+        }
     }
 
     // sanity check on values...
@@ -734,9 +737,16 @@ function MG_saveConfig( ) {
         $refresh_rate = 5;
     }
 
+    $mediaobjects_url = rtrim($mediaobjects_url);
+    $path_mediaobjects = rtrim($path_mediaobjects);
+
     $filter = sanitizer::getInstance();
-    $mediaobjects_url = rtrim($filter->sanitizeUrl( $mediaobjects_url, array('http','https')),'\\/');
-    $path_mediaobjects = (substr($path_mediaobjects,-1)!='/') ? $path_mediaobjects.='/' : $path_mediaobjects;
+    if (!empty($mediaobjects_url)) {
+        $mediaobjects_url = rtrim($filter->sanitizeUrl( $mediaobjects_url, array('http','https')),'\\/');
+    }
+    if (!empty($path_mediaobjects)) {
+        $path_mediaobjects = (substr($path_mediaobjects,-1)!='/') ? $path_mediaobjects.='/' : $path_mediaobjects;
+    }
 
     DB_save($_TABLES['mg_config'],"config_name, config_value","'path_mg','".DB_escapeString($path_mg)."'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'path_mediaobjects','".DB_escapeString($path_mediaobjects)."'");

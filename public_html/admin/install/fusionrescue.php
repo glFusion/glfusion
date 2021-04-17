@@ -40,7 +40,7 @@ require_once $_CONF['path'].'system/db-init.php';
 
 $self = basename(__FILE__);
 
-$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter','maintenance_mode','bb2_enabled','cache_driver','enable_twofactor');
+$rescueFields = array('path_html','site_url','site_admin_url','cache_templates','path_rss','path_log','path_language','backup_path','path_data','rdf_file','path_images','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter','maintenance_mode','bb2_enabled','cache_driver','enable_twofactor');
 
 /* Constants for account stats */
 define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
@@ -64,6 +64,7 @@ function FR_stripslashes( $text ) {
 
 function rescue_path_html_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -78,6 +79,7 @@ function rescue_path_html_validate( $value ) {
 
 function rescue_path_log_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -92,6 +94,7 @@ function rescue_path_log_validate( $value ) {
 
 function rescue_path_language_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -106,6 +109,7 @@ function rescue_path_language_validate( $value ) {
 
 function rescue_backup_path_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -120,6 +124,7 @@ function rescue_backup_path_validate( $value ) {
 
 function rescue_path_data_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -134,6 +139,7 @@ function rescue_path_data_validate( $value ) {
 
 function rescue_path_images_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -146,8 +152,9 @@ function rescue_path_images_validate( $value ) {
 *
 */
 
-function rescue_path_pear_validate( $value ) {
+function rescue_path_rss( $value ) {
     $value = trim($value);
+    if (empty($value)) return value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -163,6 +170,7 @@ function rescue_path_pear_validate( $value ) {
 
 function rescue_path_themes_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }

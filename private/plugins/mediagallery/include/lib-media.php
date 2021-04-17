@@ -1383,7 +1383,7 @@ function MG_displayTGA($aid,$I,$full,$mediaObject) {
     $media_size_disp = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg');
 
     if ( $media_size_disp == false ) {
-        $u_image = $_MG_CONF['mediaobjects_url'] . '/placeholder_missing.svg';
+        $u_image = $_MG_CONF['assets_url'] . '/placeholder_missing.svg';
         $media_size_disp[0] = 200;
         $media_size_disp[1] = 200;
         $media_link_start = '';
@@ -1598,7 +1598,7 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
         $u_image    = $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
     } else {
         if ( $media_size_disp == false && !$I['remote_media']) {
-            $u_image = $_MG_CONF['mediaobjects_url'] . '/placeholder_missing.svg';
+            $u_image = $_MG_CONF['assets_url'] . '/placeholder_missing.svg';
             $media_size_disp[0] = 200;
             $media_size_disp[1] = 200;
         } else {

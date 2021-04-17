@@ -141,7 +141,7 @@ function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
                             }
                         }
                         if ( $thumbnail == '' ) {
-                            $thumbnail  = $_MG_CONF['assetss_url'] . '/generic.png';
+                            $thumbnail  = $_MG_CONF['assets_url'] . '/generic.png';
                             $pThumbnail  = $_MG_CONF['path_assets'] . 'generic.png';
                         }
                         break;
@@ -261,6 +261,8 @@ function MG_batchCaptionSave( $album_id, $start, $actionURL ) {
     if ($media_id === null) {
         echo COM_refresh($actionURL);
     }
+    
+    $total_media = count($media_id);
 
     for ($i=0; $i < $total_media; $i++ ) {
         $queue = DB_count($_TABLES['mg_mediaqueue'],'media_id',DB_escapeString($media_id[$i]));

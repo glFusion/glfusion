@@ -258,7 +258,7 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
     $config->load_baseconfig();
     $config->initConfig();
     $_CONF = $config->get_config('Core');
-
+/*
     if (! file_exists($_CONF['path_log'] . 'error.log')) {
         $config->set('path_log', $path . 'logs/');
     }
@@ -291,11 +291,21 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
     if (! file_exists($_CONF['path_images'] . 'articles')) {
         $config->set('path_images', $path_html . 'data/images/');
     }
+*/
+/*
     if (substr($_CONF['rdf_file'], strlen($path_html)) != $path_html) {
         // this may not be correct but neither was the old value apparently ...
         $config->set('rdf_file', $path_html . 'backend/glfusion.rss');
     }
-
+*/
+/*
+    if (substr($_CONF['rdf_file'], strlen($path_html)) == $path_html) {
+        $config->set('rdf_file', 'glfusion.rss');
+    }
+    if (substr($_CONF['path_rss'], strlen($path_html)) != $path_html) {
+        $config->set('path_rss',$_CONF['path_html'].'backend/');
+    }
+*/
     if (! empty($site_url) && ($_CONF['site_url'] != $site_url)) {
         $config->set('site_url', $site_url);
 
@@ -1842,6 +1852,9 @@ function INST_pluginAutoInstall( $plugin )
 
 
 function INST_isWritable($path) {
+    if (empty($path)) {
+        return false;
+    }
     if ($path[strlen($path)-1]=='/') {
         if ( !is_dir($path)) {
             return false;
