@@ -2,7 +2,11 @@
 <div class="uk-form-row">
 <label class="uk-form-label" for="language">{lang_language}</label>
 <div class="uk-form-controls">
-{language_selector}
+<select id="language" name="language">
+<!-- BEGIN LangSelect -->
+	<option value="{langFile}" {!if selected}selected="selected"{!endif}>{langName}</option>
+<!-- END LangSelect -->
+</select>
 </div>
 </div>
 {# end {templatelocation} #}

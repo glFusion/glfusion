@@ -1,0 +1,12 @@
+{# begin {templatelocation} #}
+<p>{$LANG04[98]}</p>
+<form class="uk-form" action="{site_url}/usersettings.php" method="post">
+	<div>
+		<p align="center">
+			<button type="submit" class="uk-button uk-button-danger" name="btnsubmit" value="{$LANG04[96]}">{$LANG04[96]}</button>
+		</p>
+		<input type="hidden" name="mode" value="deleteconfirmed" />
+		<input type="hidden" name="account_id" value="{reqid}" />
+	</div>
+</form>
+{# begin {templatelocation} #}

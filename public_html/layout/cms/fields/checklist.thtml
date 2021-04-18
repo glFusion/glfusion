@@ -1,0 +1,10 @@
+{# begin {templatelocation} #}
+<ul class="checkboxes-list">
+<!-- BEGIN options -->
+	<li>
+		<input type="checkbox" name="{fieldname}[]" value="{value}" {!if checked}checked="checked"{!endif}>
+		<span class="{classes}">{dscp}</span>
+	</li>
+<!-- END options -->
+</ul>
+{# end {templatelocation} #}
