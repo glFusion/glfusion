@@ -7,13 +7,17 @@
 <div class="uk-form-row">
 <label class="uk-form-label" for="commentmode">{lang_displaymode}</label>
 <div class="uk-form-controls">
+<select id="commentmode" name="commentmode">';
 {displaymode_selector}
+</select>
 </div>
 </div>
 <div class="uk-form-row">
 <label class="uk-form-label" for="commentorder">{lang_sortorder}</label>
 <div class="uk-form-controls">
+<select id="commentorder" name="commentorder">
 {sortorder_selector}
+</select>
 </div>
 </div>
 <div class="uk-form-row">

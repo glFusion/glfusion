@@ -1788,7 +1788,7 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
 */
 function COM_checkList($table, $selection, $where = '', $selected = '', $fieldname = '')
 {
-    global $_TABLES, $_COM_VERBOSE;
+    global $_TABLES, $_COM_VERBOSE, $_CONF;
 
     $sql = "SELECT $selection FROM $table";
 
@@ -1812,7 +1812,10 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
 
         $S = array();
     }
-    $retval = '<ul class="checkboxes-list">' . PHP_EOL;
+
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file('checklist', 'checklist.thtml');
+    $T->set_block('checklist', 'options', 'opts');
     while ($A = $stmt->fetch()) {
         $access = true;
 
@@ -1827,25 +1830,21 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
         }
 
         if ( $access ) {
-            $retval .= '<li><input type="checkbox" name="' . $fieldname . '[]" value="' . $A[0] . '"';
-
-            $sizeS = count( $S );
-            for( $x = 0; $x < $sizeS; $x++ ) {
-                if ( $A[0] == $S[$x] ) {
-                    $retval .= ' checked="checked"';
-                    break;
-                }
-            }
+            $T->set_var(array(
+                'fieldname' => $fieldname,
+                'value' => $A[0],
+                'dscp' => $A[1],
+                'checked' => in_array($A[0], $S),
+            ) );
 
             if (( $table == $_TABLES['blocks'] ) && isset( $A[2] ) && ( $A[2] == 'gldefault' )) {
-                $retval .= '/><span class="gldefault">' .  $A[1]  . '</span></li>' . PHP_EOL;
-            } else {
-                $retval .= '/><span>' .  $A[1]  . '</span></li>' . PHP_EOL;
+                $T->set_var('classes', 'gldefault');
             }
+            $T->parse('opts', 'options', true);
         }
     }
-    $retval .= '</ul>' . PHP_EOL;
-
+    $T->parse('output', 'checklist');
+    $retval = $T->finish($T->get_var('output'));
     return $retval;
 }
 

@@ -225,11 +225,9 @@ function edituser()
         $preferences->set_var ('username_option', '');
     }
 
-    $selection = '<select id="cooktime" name="cooktime">' . LB;
-    $selection .= COM_optionList ($_TABLES['cookiecodes'], 'cc_value,cc_descr',
-                                  $A['cookietimeout'], 0);
-    $selection .= '</select>';
-    $preferences->set_var ('cooktime_selector', $selection);
+    $preferences->set_var ('cooktime_selector',
+        COM_optionList ($_TABLES['cookiecodes'], 'cc_value,cc_descr', $A['cookietimeout'], 0)
+    );
 
     $preferences->set_var ('email_value', htmlspecialchars ($A['email']));
     $preferences->set_var ('homepage_value',
@@ -410,19 +408,18 @@ function confirmAccountDelete ($form_reqid)
     $retval = '';
 
     $retval .= COM_siteHeader ('menu', $LANG04[97]);
-    $retval .= COM_startBlock ($LANG04[97], '',
-                               COM_getBlockTemplate ('_msg_block', 'header'));
-    $retval .= '<p>' . $LANG04[98] . '</p>' . LB;
-    $retval .= '<form class="uk-form" action="' . $_CONF['site_url']
-            . '/usersettings.php" method="post"><div>' . LB;
-    $retval .= '<p align="center"><button type="submit" class="uk-button uk-button-danger" name="btnsubmit" value="'.$LANG04[96].'">'.$LANG04[96].'</button></p>'.LB;
-    $retval .= '<input type="hidden" name="mode" value="deleteconfirmed" />' . LB;
-    $retval .= '<input type="hidden" name="account_id" value="' . $reqid
-            . '" />' . LB;
-    $retval .= '</div></form>' . LB;
+    $retval .= COM_startBlock(
+        $LANG04[97],
+        '',
+        COM_getBlockTemplate ('_msg_block', 'header')
+    );
+    $T = new Template($CONF['path_layout'] . '/preferences');
+    $T->set_file('form', 'conf_del_account.thtml');
+    $T->set_var('reqid', $reqid);
+    $T->parse('output', 'form');
+    $retval .= $T->finish($T->get_var('output'));
     $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $retval .= COM_siteFooter ();
-
     return $retval;
 }
 
@@ -608,30 +605,30 @@ function editpreferences()
             $similarLang = $tmp[0];
         }
 
-        $selection = '<select id="language" name="language">' . LB;
-
+        $preferences->set_block('language', 'LangSelect', 'LS');
         foreach ($language as $langFile => $langName) {
-            $selection .= '<option value="' . $langFile . '"';
-            if (($langFile == $userlang) || (($has_valid_language == 0) &&
-                    (strpos ($langFile, $similarLang) === 0))) {
-                $selection .= ' selected="selected"';
+            if (
+                $langFile == $userlang ||
+                ($has_valid_language == 0 && strpos($langFile, $similarLang) === 0)
+            ) {
+                $selected = true;
                 $has_valid_language = 1;
-            } else if ($userlang == $langFile) {
-                $selection .= ' selected="selected"';
+            } else {
+                $selected = false;
             }
-
-            $selection .= '>' . $langName . '</option>' . LB;
+            $preferences->set_var(array(
+                'langName' => $langName,
+                'langFile' => $langFile,
+                'selected' => $selected,
+            ) );
+            $preferences->parse('LS', 'LangSelect', true);
         }
-        $selection .= '</select>';
-        $preferences->set_var ('language_selector', $selection);
         $preferences->parse ('language_selection', 'language', true);
     } else {
         $preferences->set_var ('language_selection', '');
     }
 
     if ($_CONF['allow_user_themes'] == 1) {
-        $selection = '<select id="theme" name="theme">' . LB;
-
         if (empty ($_USER['theme'])) {
             $usertheme = $_CONF['theme'];
         } else {
@@ -642,11 +639,8 @@ function editpreferences()
         usort ($themeFiles,
                function ($a,$b) { return strcasecmp($a,$b); } );
 
+        $preferences->set_block('theme', 'ThemeSelect', 'TS');
         foreach ($themeFiles as $theme) {
-            $selection .= '<option value="' . $theme . '"';
-            if ($usertheme == $theme) {
-                $selection .= ' selected="selected"';
-            }
             $words = explode ('_', $theme);
             $bwords = array ();
             foreach ($words as $th) {
@@ -657,10 +651,13 @@ function editpreferences()
                     $bwords[] = $th;
                 }
             }
-            $selection .= '>' . implode (' ', $bwords) . '</option>' . LB;
+            $preferences->set_var(array(
+                'theme' => $theme,
+                'theme_dscp' => implode(' ', $bwords),
+                'selected' => $usertheme == $theme,
+            ) );
+            $preferences->parse('TS', 'ThemeSelect', true);
         }
-        $selection .= '</select>';
-        $preferences->set_var ('theme_selector', $selection);
         $preferences->parse ('theme_selection', 'theme', true);
     } else {
         $preferences->set_var ('theme_selection', '');
@@ -685,9 +682,7 @@ function editpreferences()
     }
 
     $preferences->set_var ('maxstories_value', $A['maxstories']);
-    $selection = '<select id="dfid" name="dfid">' . LB
-               . COM_optionList ($_TABLES['dateformats'], 'dfid,description',
-                                 $A['dfid']) . '</select>';
+    $selection = COM_optionList ($_TABLES['dateformats'], 'dfid,description', $A['dfid']);
     $preferences->set_var ('dateformat_selector', $selection);
     $preferences->set_var('plugin_layout_display',PLG_profileEdit($_USER['uid'],'layout','display'));
 
@@ -698,13 +693,16 @@ function editpreferences()
         $cfgSelect = array_flip($LANG_configselects['Core'][18]);
     }
 
-    $search_result_select  = '<select name="search_result_format" id="search_result_format">'.LB;
+    $preferences->set_block('display', 'SrchFmtOpts', 'sfo');
     foreach ($cfgSelect AS $type => $name ) {
-        $search_result_select .= '<option value="'. $type . '"' . ($A['search_result_format'] == $type ? 'selected="selected"' : '') . '>'.$name.'</option>'.LB;
+        $preferences->set_var(array(
+            'type' => $type,
+            'name' => $name,
+            'selected' => $type == $A['search_result_format'],
+        ) );
+        $preferences->parse('sfo', 'SrchFmtOpts', true);
     }
-    $search_result_select .= '</select>';
 
-    $preferences->set_var('search_result_select',$search_result_select);
     $preferences->set_var('lang_search_format',$LANG_confignames['Core']['search_show_type']);
 
     $preferences->parse ('display_block', 'display', true);
@@ -768,8 +766,7 @@ function editpreferences()
     if ( $_CONF['hide_exclude_content'] != 1 ) {
         $permissions = $db->getPermSQL ('');
         $preferences->set_var ('exclude_topic_checklist',
-                COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $A['tids'], 'topics'));
-
+            COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $A['tids'], 'topics'));
         if (($_CONF['contributedbyline'] == 1) && ($_CONF['hide_author_exclusion'] == 0)) {
             $preferences->set_var ('lang_authors', $LANG04[56]);
 
@@ -788,13 +785,14 @@ function editpreferences()
             $authors = explode (' ', $A['aids']);
 
             $selauthors = '';
+            $preferences->set_block('exclude', 'ExcludeAuthors', 'EA');
             while ($B = $stmt->fetch(Database::ASSOCIATIVE)) {
-                $selauthors .= '<option value="' . $B['uid'] . '"';
-                if (in_array (sprintf ('%d', $B['uid']), $authors)) {
-                   $selauthors .= ' selected';
-                }
-                $selauthors .= '>' . COM_getDisplayName ($B['uid'], $B['username'],$B['fullname'])
-                            . '</option>' . LB;
+                $preferences->set_var(array(
+                    'value' => $B['uid'],
+                    'name' => COM_getDisplayName ($B['uid'], $B['username'],$B['fullname']),
+                    'selected' => in_array (sprintf ('%d', $B['uid']), $authors),
+                ) );
+                $preferences->parse('EA', 'ExcludeAuthors', true);
             }
 
             if ($db->getCount($_TABLES['topics']) > 10) {
@@ -802,7 +800,7 @@ function editpreferences()
             } else {
                 $Selboxsize = 15;
             }
-            $preferences->set_var ('exclude_author_checklist', '<select name="selauthors[]" multiple="multiple" size="'. $Selboxsize. '">' . $selauthors . '</select>');
+            $preferences->set_var('ea_selboxsize', $Selboxsize);
         } else {
             $preferences->set_var ('lang_authors', '');
             $preferences->set_var ('exclude_author_checklist', '');
@@ -871,17 +869,14 @@ function editpreferences()
     if (empty ($A['commentorder'])) $A['commentorder'] = 0;
     if (empty ($A['commentlimit'])) $A['commentlimit'] = 100;
 
-    $selection = '<select id="commentmode" name="commentmode">';
-    $selection .= COM_optionList ($_TABLES['commentmodes'], 'mode,name',
-                                  $A['commentmode']);
-    $selection .= '</select>';
-    $preferences->set_var ('displaymode_selector', $selection);
+    $preferences->set_var ('displaymode_selector',
+        COM_optionList ($_TABLES['commentmodes'], 'mode,name', $A['commentmode'])
+    );
 
-    $selection = '<select id="commentorder" name="commentorder">';
-    $selection .= COM_optionList ($_TABLES['sortcodes'], 'code,name',
-                                  $A['commentorder']);
-    $selection .= '</select>';
-    $preferences->set_var ('sortorder_selector', $selection);
+    $preferences->set_var ('sortorder_selector',
+        COM_optionList ($_TABLES['sortcodes'], 'code,name', $A['commentorder'])
+    );
+
     $preferences->set_var ('commentlimit_value', $A['commentlimit']);
     $preferences->set_var('plugin_layout_comment',PLG_profileEdit($_USER['uid'],'layout','comment'));
     $preferences->parse ('comment_block', 'comment', true);
@@ -1718,7 +1713,7 @@ function savepreferences($A)
         $ETIDS = @array_values($A['dgtopics']); 
     }
     $allowed_etids = USER_buildTopicList ();
-    if (is_array($allowed_etids)) {
+    if (!is_array($allowed_etids)) {
         $AETIDS = explode (' ', $allowed_etids);
     }
 
@@ -1726,6 +1721,7 @@ function savepreferences($A)
     if (is_array($TIDS) && sizeof ($TIDS) > 0) {
         $tids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $TIDS)));
     }
+
     $aids = '';
     if (is_array($AIDS) && sizeof ($AIDS) > 0) {
         foreach ($AIDS as $key => $val) {

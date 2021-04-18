@@ -34,15 +34,21 @@
 <div class="uk-form-row">
 <label class="uk-form-label" for="dfid">{lang_dateformat}</label>
 <div class="uk-form-controls">
+<select id="dfid" name="dfid">
 {dateformat_selector}
+</select>
 </div>
 </div>
 <div class="uk-form-row">
 <label class="uk-form-label" for="select_result_format">{lang_search_format}</label>
 <div class="uk-form-controls">
-{search_result_select}
+<select name="search_result_format" id="search_result_format">
+<!-- BEGIN SrchFmtOpts -->
+<option value="{type}" {!if selected}selected="selected"{!endif}>{name}</option>
+<!-- END SrchFmtOpts -->
+</select>
 </div>
 </div>
-{plugin_layout_displa}
+{plugin_layout_display}
     </fieldset>
 {# end {templatelocation} #}
