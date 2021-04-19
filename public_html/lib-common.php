@@ -7144,7 +7144,7 @@ function phpblock_switch_language()
         $retval .= COM_createLink($newLang, $switchUrl);
     } else {
         $T = new Template($_CONF['path_layout']);
-        $T->set_var('form', 'switchlang.thtml');
+        $T->set_file('form', 'switchlang.thtml');
         $T->set_var('langid', $langId);
         $T->set_block('form', 'langOpts', 'opt');
         foreach( $_CONF['languages'] as $key => $value ) {
