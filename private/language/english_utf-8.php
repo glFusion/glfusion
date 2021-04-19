@@ -2894,6 +2894,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Miscellaneous',
     'sg_spam' => 'Spam / Bot Protection',
     'sg_cache' => 'Caching',
+    'sg_advanced' => 'Advanced Settings',
 );
 
 $LANG_fs['Core'] = array(
