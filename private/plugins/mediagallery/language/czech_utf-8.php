@@ -1,13 +1,13 @@
 <?php
 /**
-* glFusion CMS
+* glFusion CMS - Media Gallery Plugin
 *
 * UTF-8 Language File for the Media Gallery Plugin
 *
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2018 by the following authors:
+*  Copyright (C) 2002-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -687,10 +687,10 @@ $LANG_MG01 = array (
     'playback_options'          => 'Možnosti přehrávání',
     'meta_data'                 => 'Meta data',
     'auto_rotate'               => 'Automatické otáčení nahrávání',
-    'menulabel'                 => 'Menu Label',
-    'path_mg'                   => 'MediaGallery Directory',
-    'path_mediaobjects'         => 'Full Path to mediaobjects/ directory',
-    'mediaobjects_url'          => 'Full URL to mediaobjects/',
+    'menulabel'                 => 'Název menu',
+    'path_mg'                   => 'Adresář MediaGallery',
+    'path_mediaobjects'         => 'Plná cesta k mediaobjects/ adresáři',
+    'mediaobjects_url'          => 'Úplná adresa URL pro mediapoložky/',
 );
 
 // error messages

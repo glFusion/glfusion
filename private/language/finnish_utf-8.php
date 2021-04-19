@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -396,7 +396,7 @@ $LANG04 = array(
     159 => 'Tämä sähköposti luotiin automaattisesti. älä vastaa tähän.',
     160 => 'Paikalla',
     161 => 'Salasanan vahvuus',
-    162 => 'Käyttäjänimen tulee olla vähintään %s merkkiä pitkä, eikä siinä saa olla virheellisiä merkkejä (< > " %% & * / \  ) tai emoji-merkkejä.',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters',
     163 => 'Etäkäyttäjä',
     164 => 'Etäkäyttö käyttäjänimi',
     165 => 'Etäkäyttö palvelu',
@@ -1651,6 +1651,30 @@ $LANG_DB_ADMIN = array(
     'overall_progress'    => 'Overall Progress',
     'no_backups_found'    => 'No Backup Files Found',
     'error_msg'           => 'The following errors were encountered',
+    'missing_required'    => 'Please Fill Out All Required Fields',
+    'time'                => 'Aika',
+    'table'               => 'Table',
+    'changes_found'       => 'Changes Found',
+    'rows_updated'        => 'Rows Updated',
+    'sr_title'            => 'Search and Replace',
+    'search_for'          => 'Search for',
+    'replace_with'        => 'Replace With',
+    'tables_to_search'    => 'Tables to search',
+    'search'              => 'Etsi',
+    'remove'              => 'Poista',
+    'case'                => 'Case-Insensitive',
+    'dry_run'             => 'Dry Run',
+    'available_tables'    => 'Available Tables',
+    'execute'             => 'Execute',
+    'sr_warning_banner'   => 'Ensure you have a recent backup of your database!  The Search / Replace feature does not have an undo option, so be careful to ensure the changes you make are correct.',
+    'dry_run_complete'    => 'Review the Dry Run results above. Validate the replacements are correct. If you are satisfied with the results, you can execute the Search and Replace by selecting the Execute button below.',
+    'sr_parameters'       => 'Search and Replace Parameters',
+    'sr_warning_1'        => 'Are you sure you want to perform the search / replace?',
+    'sr_warning_2'        => 'You do have a good backup, right?',
+    'edit'                => 'Muokkaa',
+    'cancel'              => 'Peruuta',
+    'seconds'             => 'sekunnissa',
+
 );
 
 ###############################################################################
@@ -2693,7 +2717,8 @@ $LANG_confignames['Core'] = array(
     'show_right_blocks' => 'Näytä Aina Oikea Lohkot?',
     'showfirstasfeatured' => 'Näytä Ensimmäinen Juttu Pääjuttuna?',
     'backend' => 'Syötteet käytössä?',
-    'rdf_file' => 'Syndication Output Kansio',
+    'rdf_file' => 'Main RSS File',
+    'path_rss' => 'Path to store RSS feeds',
     'rdf_limit' => 'Syöte Rajoitus',
     'rdf_storytext' => 'Jutun pituuss syötteessä',
     'rdf_language' => 'Syötteen kieli',
@@ -2869,6 +2894,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Sekalaista',
     'sg_spam' => 'Spam / Bot Protection',
     'sg_cache' => 'Caching',
+    'sg_advanced' => 'Tarkemmat Asetukset',
 );
 
 $LANG_fs['Core'] = array(

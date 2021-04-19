@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -396,7 +396,7 @@ $LANG04 = array(
     159 => 'Tento email byl generován automaticky. Prosím, neodpovídej na něj.',
     160 => 'Online',
     161 => 'Síla hesla',
-    162 => 'Uživatelské jméno musí obsahovat alespoň %s znaků, nesmí obsahovat neplatné znaky ( < > " %% & * / \\ " ") ani znaky emodži',
+    162 => 'Uživatelské jméno musí obsahovat alespoň %s znaků, nesmí obsahovat neplatné znaky ( < > " %% & * / \ ) nebo znaky emoji',
     163 => 'Vzdálený uživatel',
     164 => 'Uživatelské jméno vzdáleného přístupu',
     165 => 'Vzdálená služba',
@@ -1651,6 +1651,30 @@ $LANG_DB_ADMIN = array(
     'overall_progress'    => 'Celkový průběh',
     'no_backups_found'    => 'Nebyly nalezeny žádné záložní soubory',
     'error_msg'           => 'Byly zjištěny následující chyby',
+    'missing_required'    => 'Vyplňte prosím všechna povinná pole',
+    'time'                => 'Čas',
+    'table'               => 'Tabulka',
+    'changes_found'       => 'Nalezeny změny',
+    'rows_updated'        => 'Řádky aktualizovány',
+    'sr_title'            => 'Hledat a nahradit',
+    'search_for'          => 'Hledej (co)',
+    'replace_with'        => 'Nahradit pomocí',
+    'tables_to_search'    => 'Tabulky, které chcete prohledat',
+    'search'              => 'Vyhledat',
+    'remove'              => 'Přesuň',
+    'case'                => 'Nerozlišovat velikost znaků',
+    'dry_run'             => 'Nanečisto',
+    'available_tables'    => 'Dostupné tabulky',
+    'execute'             => 'Provést',
+    'sr_warning_banner'   => 'Ujistěte se, že máte poslední zálohu vaší databáze! Funkce Hledání/nahrazení nemá možnost vrátit zpět, takže buďte opatrní, abyste zajistili, že provedené změny jsou správné.',
+    'dry_run_complete'    => 'Zkontrolujte výsledky příkazu nanečisto. Ověřte správnost náhrad. Pokud jste s výsledky spokojeni, můžete vyhledat a nahradit kliknutím na tlačítko Provézt níže.',
+    'sr_parameters'       => 'Pravidla pro hledání a nahrazování',
+    'sr_warning_1'        => 'Jste si jisti, že chcete provést vyhledávání/nahradit?',
+    'sr_warning_2'        => 'Máte uloženou zálohu, že?',
+    'edit'                => 'Editovat',
+    'cancel'              => 'Zrušit',
+    'seconds'             => 's',
+
 );
 
 ###############################################################################
@@ -2370,7 +2394,7 @@ $LANG_ENVCHK = array(
     'current'                   => 'Současně',
     'current_php_settings'      => 'Current PHP Settings',
     'database_version'          => 'Verze databáze',
-    'date_extension'            => 'Date Extension',
+    'date_extension'            => 'Rozšíření dat',
     'db_charset'                => 'Database Character Set',
     'db_collation'              => 'Database Collation',
     'db_driver'                 => 'Database Driver',
@@ -2391,7 +2415,7 @@ $LANG_ENVCHK = array(
     'gd_v1'                     => 'GD Libraries v1 is installed - This version does not fully support JPG image processing so there may be some quality issues.',
     'gettext_extension'         => 'Rozšíření knihovny gettext',
     'graphics'                  => 'Graphics Library',
-    'hash_extension'            => 'Hash Message Digest Extension',
+    'hash_extension'            => 'Rozšíření Hash zprávy Digest',
     'hide_phpinfo'              => 'Skrýt úplné informace o PHP',
     'hosting_env'               => 'Kontrola prostředí hostingu',
     'im_not_found'              => 'Nelze najít <strong>převod</strong> spustitelný soubor pro ImageMagick.',
@@ -2693,7 +2717,8 @@ $LANG_confignames['Core'] = array(
     'show_right_blocks' => 'Always Show Right Blocks',
     'showfirstasfeatured' => 'Show First Story as Featured',
     'backend' => 'Enable Feeds',
-    'rdf_file' => 'Syndication Output Folder',
+    'rdf_file' => 'Main RSS File',
+    'path_rss' => 'Path to store RSS feeds',
     'rdf_limit' => 'Feed Limit',
     'rdf_storytext' => 'Length of Stories in Feed',
     'rdf_language' => 'Feed Language',
@@ -2869,6 +2894,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Miscellaneous',
     'sg_spam' => 'Spam / Bot Protection',
     'sg_cache' => 'Caching',
+    'sg_advanced' => 'Rozšířená nastavení',
 );
 
 $LANG_fs['Core'] = array(

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -398,7 +398,7 @@ $LANG04 = array(
     159 => 'Ten e-mail został wygenerowany automatycznie. Prosimy nie odpowiadać na ten e-mail.',
     160 => 'Dostępny',
     161 => 'Siła hasła',
-    162 => 'Nazwa użytkownika musi mieć co najmniej  znaków, nie może zawierać nieprawidłowych znaków ( < > " % & * / \  )lub znaki emoji',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters',
     163 => 'Użytkownik zdalny',
     164 => 'Zdalna nazwa użytkownika',
     165 => 'Usługa zdalna',
@@ -1653,6 +1653,30 @@ $LANG_DB_ADMIN = array(
     'overall_progress'    => 'Ogólny postęp',
     'no_backups_found'    => 'Nie znaleziono plików kopii zapasowych',
     'error_msg'           => 'Wystąpiły poniższe błędy',
+    'missing_required'    => 'Please Fill Out All Required Fields',
+    'time'                => 'Czas',
+    'table'               => 'Table',
+    'changes_found'       => 'Changes Found',
+    'rows_updated'        => 'Rows Updated',
+    'sr_title'            => 'Search and Replace',
+    'search_for'          => 'Szukaj w',
+    'replace_with'        => 'Replace With',
+    'tables_to_search'    => 'Tables to search',
+    'search'              => 'Szukaj',
+    'remove'              => 'Usunąć',
+    'case'                => 'Case-Insensitive',
+    'dry_run'             => 'Dry Run',
+    'available_tables'    => 'Available Tables',
+    'execute'             => 'Execute',
+    'sr_warning_banner'   => 'Ensure you have a recent backup of your database!  The Search / Replace feature does not have an undo option, so be careful to ensure the changes you make are correct.',
+    'dry_run_complete'    => 'Review the Dry Run results above. Validate the replacements are correct. If you are satisfied with the results, you can execute the Search and Replace by selecting the Execute button below.',
+    'sr_parameters'       => 'Search and Replace Parameters',
+    'sr_warning_1'        => 'Are you sure you want to perform the search / replace?',
+    'sr_warning_2'        => 'You do have a good backup, right?',
+    'edit'                => 'Edycja',
+    'cancel'              => 'Anuluj',
+    'seconds'             => 'sekundy',
+
 );
 
 ###############################################################################
@@ -2697,7 +2721,8 @@ $LANG_confignames['Core'] = array(
     'show_right_blocks' => 'Pokaz bloki',
     'showfirstasfeatured' => 'Wyróżnij artykuł',
     'backend' => 'Włącz Feeds',
-    'rdf_file' => 'Syndication folder',
+    'rdf_file' => 'Main RSS File',
+    'path_rss' => 'Path to store RSS feeds',
     'rdf_limit' => 'Feed Limit',
     'rdf_storytext' => 'Długość artykułów w Feed',
     'rdf_language' => 'Język kanału',
@@ -2873,6 +2898,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Inne',
     'sg_spam' => 'Ochrona przed spamem / botami',
     'sg_cache' => 'Caching',
+    'sg_advanced' => 'Zaawansowane ustawienia',
 );
 
 $LANG_fs['Core'] = array(

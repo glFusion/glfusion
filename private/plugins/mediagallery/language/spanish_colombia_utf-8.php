@@ -1,13 +1,13 @@
 <?php
 /**
-* glFusion CMS
+* glFusion CMS - Media Gallery Plugin
 *
 * UTF-8 Language File for the Media Gallery Plugin
 *
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2018 by the following authors:
+*  Copyright (C) 2002-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
