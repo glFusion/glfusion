@@ -4498,17 +4498,15 @@ function COM_getAmPmFormSelection( $name, $selected = '' )
         if ( empty( $selected )) {
             $selected = date( 'a' );
         }
-
-        $retval .= '<select name="' . $name . '">' . PHP_EOL;
-        $retval .= '<option value="am"';
-        if ( $selected == 'am' ) {
-            $retval .= ' selected="selected"';
-        }
-        $retval .= '>am</option>' . PHP_EOL . '<option value="pm"';
-        if ( $selected == 'pm' ) {
-            $retval .= ' selected="selected"';
-        }
-        $retval .= '>pm</option>' . PHP_EOL . '</select>' . PHP_EOL;
+        $T = new Template($_CONF['path_layout'] . '/fields');
+        $T->set_file('form', 'ampm_select.thtml');
+        $T->set_var(array(
+            'name' => $name,
+            'sel_am' => $selected == 'am',
+            'sel_pm' => $selected == 'pm',
+        ) );
+        $T->parse('output', 'form');
+        $retval = $T->finish($T->get_var('output'));
     }
 
     return $retval;
@@ -7145,23 +7143,20 @@ function phpblock_switch_language()
                                    . $newLangId );
         $retval .= COM_createLink($newLang, $switchUrl);
     } else {
-        $retval .= '<form name="change" action="'. $_CONF['site_url']
-                . '/switchlang.php" method="get">' . PHP_EOL;
-        $retval .= '<input type="hidden" name="oldlang" value="' . $langId
-                . '"/>' . PHP_EOL;
-
-        $retval .= '<select onchange="change.submit()" name="lang">';
+        $T = new Template($_CONF['path_layout']);
+        $T->set_var('form', 'switchlang.thtml');
+        $T->set_var('langid', $langId);
+        $T->set_block('form', 'langOpts', 'opt');
         foreach( $_CONF['languages'] as $key => $value ) {
-            if ( $lang == $_CONF['language_files'][$key] ) {
-                $selected = ' selected="selected"';
-            } else {
-                $selected = '';
-            }
-            $retval .= '<option value="' . $key . '"' . $selected . '>'
-                    . $value . '</option>' . PHP_EOL;
+            $T->set_var(array(
+                'value' => $key,
+                'name' => $value,
+                'selected' => $lang == $_CONF['language_files'][$key],
+            ) );
+            $T->parse('opt', 'langOpts', true);
         }
-        $retval .= '</select>' . PHP_EOL;
-        $retval .= '</form>' . PHP_EOL;
+        $T->parse('output', 'form');
+        $retval = $T->finish($T->get_var('output'));
     }
 
     return $retval;
