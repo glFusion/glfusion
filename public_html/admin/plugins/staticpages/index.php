@@ -1,42 +1,28 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Static Pages Plugin - glFusion CMS                                       |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// |                                                                          |
-// | Administration page.                                                     |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Phill Gillespie  - phill AT mediaaustralia DOT com DOT au       |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Static Pages Plugin
+*
+* Administration Page
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Mark A. Howard  mark AT usable-web DOT com
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs        tony AT tonybibbs DOT com
+*  Tom Willett       twillett AT users DOT sourceforge DOT net
+*  Blaine Lang       langmail AT sympatico DOT ca
+*  Dirk Haun         dirk AT haun-online DOT de
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
+
+use \glFusion\Log\Log;
 
 $display = '';
 
@@ -1008,7 +994,7 @@ switch ($action) {
 
     case 'delete':
         if (empty($sp_id) || (is_numeric ($sp_id) && ($sp_id == 0))) {
-            COM_errorLog('Attempted to delete staticpage, sp_id empty or null, value =' . $sp_id);
+            Log::write('system',Log::ERROR,'Attempted to delete staticpage, sp_id empty or null, value =' . $sp_id);
             $display .= COM_refresh($_CONF['site_admin_url'] . '/plugins/staticpages/index.php');
         } elseif (SEC_checkToken()) {
             $args = array(

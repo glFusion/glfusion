@@ -1,40 +1,28 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Static Pages Plugin - glFusion CMS                                       |
-// +--------------------------------------------------------------------------+
-// | functions.inc                                                            |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
-// |          Blaine Lang      - blaine AT portalparts DOT com                |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Static Pages Plugin
+*
+* glFusion APIs
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs        tony AT tonybibbs DOT com
+*  Tom Willett       twillett AT users DOT sourceforge DOT net
+*  Blaine Lang       langmail AT sympatico DOT ca
+*  Dirk Haun         dirk AT haun-online DOT de
+*
+*/
 
 if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 $plugin_path = $_CONF['path'] . 'plugins/staticpages/';
 $lang = $_CONF['language'];
@@ -222,8 +210,8 @@ function plugin_deletecomment_staticpages($cid, $id)
                             . $id);
         $retval .= COM_refresh($url);
     } else {
-        COM_errorLog ("User {$_USER['username']} (IP: {$_SERVER['REMOTE_ADDR']}) "
-                    . "tried to illegally delete comment $cid from staticpage $id");
+        Log::write('system',Log::ERROR,'User '.$_USER['username'].' (IP: '.$_SERVER['REMOTE_ADDR'].') '
+                    . 'tried to delete comment '.$cid.' from staticpage '.$id);
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
     $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
@@ -1130,7 +1118,7 @@ function plugin_upgrade_staticpages()
         return staticpages_upgrade();
     } else {
         // upgrades are done by the install script - return a generic error
-        COM_errorLog("StaticPages plugin upgrade function not implemented");
+        Log::write('system',Log::ERROR,"StaticPages plugin upgrade function not implemented");
         return 3001;
     }
 }
@@ -1419,11 +1407,11 @@ function SP_render_content ($sp_content, $sp_php)
             try {
                 $retval = @eval ($sp_content);
                 if ( $retval == "" ) {
-                    COM_errorLog("SP PHP (return) evaluation return an error - Please check the PHP code embedded in the page");
+                    Log::write('system',Log::ERROR,"SP PHP (return) evaluation return an error - Please check the PHP code embedded in the page");
                 }
             } catch (Error $t) {
                 $retval = $t->getMessage();
-                COM_errorLog("SP PHP (return) evaluation return an error :: " . $t->getMessage());
+                Log::write('system',Log::ERROR,"SP PHP (return) evaluation return an error :: " . $t->getMessage());
             }
         } else if ($sp_php == 2) { // execute PHP
             ob_start ();
@@ -1433,7 +1421,7 @@ function SP_render_content ($sp_content, $sp_php)
                 ob_end_clean ();
             } catch (Error $t) {
                 $retval = $t->getMessage();
-                COM_errorLog("SP PHP evaluation returned an error :: " . $t->getMessage());
+                Log::write('system',Log::ERROR,"SP PHP evaluation returned an error :: " . $t->getMessage());
             }
         } else {
             $retval = $sp_content;
@@ -1441,7 +1429,7 @@ function SP_render_content ($sp_content, $sp_php)
         $retval = PLG_replacetags ($retval,'staticpages','page');
     } else {
         if ($sp_php != 0) {
-            COM_errorLog ("PHP in static pages is disabled. Can not display page '$page'.", 1);
+            Log::write('system',Log::ERROR,'PHP in static pages is disabled. Can not display page '.$page);
             $retval .= $LANG_STATIC['deny_msg'];
         } else {
             $retval .= PLG_replacetags ($sp_content,'staticpages','page');

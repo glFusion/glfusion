@@ -1,45 +1,30 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Static Pages Plugin - glFusion CMS                                       |
-// +--------------------------------------------------------------------------+
-// | services.inc.php                                                         |
-// |                                                                          |
-// | This file implements the services provided by the 'Static Pages' plugin. |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2013-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2010 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
-// |          Blaine Lang      - langmail AT sympatico DOT ca                 |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
-// |          Ramnath R Iyer   - rri AT silentyak DOT com                     |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Static Pages Plugin
+*
+* Implements the 'services' provided by the Static Pages Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2013-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2010 by the following authors:
+*  Tony Bibbs        tony AT tonybibbs DOT com
+*  Tom Willett       twillett AT users DOT sourceforge DOT net
+*  Blaine Lang       langmail AT sympatico DOT ca
+*  Dirk Haun         dirk AT haun-online DOT de
+*  Ramnath R. Iyer   rri AT silentyak DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 // this must be kept in synch with the actual size of 'sp_id' in the db ...
 define('STATICPAGE_MAX_ID_LENGTH', 128);
@@ -300,7 +285,8 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
 
     if ($duplicate_id) {
         $output .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
-        $output .= COM_errorLog ($LANG_STATIC['duplicate_id'], 2);
+        $output .= $LANG_STATIC['duplicate_id'];
+        Log::write('system',Log::ERROR,$LANG_STATIC['duplicate_id']);
         if (!$args['gl_svc']) {
             $output .= PAGE_edit($sp_id);
         }
@@ -406,7 +392,8 @@ function service_submit_staticpages($args, &$output, &$svc_msg)
         return PLG_RET_OK;
     } else {
         $output .= COM_siteHeader ('menu', $LANG_STATIC['staticpageeditor']);
-        $output .= COM_errorLog ($LANG_STATIC['no_title_or_content'], 2);
+        $output .= $LANG_STATIC['no_title_or_content'];
+        Log::write('system',Log::ERROR,$LANG_STATIC['no_title_or_content']);
         if (!$args['gl_svc']) {
             $output .= PAGE_edit($sp_id);
         }
