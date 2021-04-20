@@ -42,14 +42,14 @@
 
 			<div class="uk-form-row uk-margin-large-bottom">
                 <label class="uk-form-label" for="title">{lang_tables_to_search}</label>
-                <div class="uk-form-controls">
+
 
 				<div class="uk-grid" data-uk-grid-match="{row: false}">
 
 					<div class="uk-width-medium-2-5 uk-text-center">
-						<h3>{lang_available_tables}</h3>
+						<h3>{lang_available_tables}<br>({lang_plugin_table_column})</h3>
 						<select multiple="multiple" size="10" name="fieldFrom"
-							style="width:15em;height: 20em; padding: 2px;"
+							style="width:25em;height: 30em; padding: 2px;"
 							ondblclick="moveSelectedOptions(this.form['fieldFrom'],this.form['fieldTo'],false)">
 							{glfusion_tables}
 						</select>
@@ -66,15 +66,15 @@
 					</div>
 
 					<div class="uk-width-medium-2-5 uk-text-center">
-						<h3>{lang_tables_to_search}</h3>
+						<h3>{lang_tables_to_search}<br>({lang_plugin_table_column})</h3>
 						<select multiple="multiple" size="10" name="fieldTo"
-							style="width: 15em; height: 20em; padding: 2px;"
+						style="width:25em;height: 30em; padding: 2px;"
 							ondblclick="moveSelectedOptions(this.form['fieldTo'],this.form['fieldFrom'],false)">
 							{includedtables}
 						</select>
 					</div>
 				</div>
-			</div>
+
             </div>
 
             <div class="uk-form-row">

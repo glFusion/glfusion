@@ -1421,13 +1421,23 @@ function DBADMIN_searchAndreplace($err = '')
     );
     $itemsToProcess = array_merge($itemsToProcess,$glFusionItems);
 
-    ksort($itemsToProcess);
+    $granularArray = array();
+    foreach($itemsToProcess AS $item => $itemInfo) {
+        foreach($itemInfo['columns'] AS $column) {
+            $granularArray[] = array(
+                'value' => $item . ','. $column,
+                'desc' => $itemInfo['plugin']
+            );
+        }
+    }
+    krsort($granularArray);
 
-    foreach ($itemsToProcess AS $table => $tableInfo) {
-        if ( in_array($table, $includedTables)) {
-            $includetables .= '<option value="'.$table.'">'.$table.' ('.$tableInfo['plugin'].')</option>\n';
+    foreach ($granularArray AS $data) {
+        list($table, $column) = explode(',',$data['value']);
+        if ( in_array($data['value'], $includedTables)) {
+            $includetables .= '<option value="'.$data['value'].'">'.$data['desc'] . ' :: ' . $table.' -> '. $column ;
         } else {
-            $tables .= '<option value="'.$table.'">'.$table.' ('.$tableInfo['plugin'].')</option>\n';
+            $tables .= '<option value="'.$data['value'].'">'.$data['desc'] . ' :: ' . $table.' -> '. $column ;
         }
     }
 
@@ -1447,6 +1457,7 @@ function DBADMIN_searchAndreplace($err = '')
         'lang_available_tables' => $LANG_DB_ADMIN['available_tables'],
         'lang_execute'      => $LANG_DB_ADMIN['execute'],
         'lang_sr_warning_banner' => $LANG_DB_ADMIN['sr_warning_banner'],
+        'lang_plugin_table_column' => $LANG_DB_ADMIN['plugin_table_column'],
         'action'            => 'searchreplace',
         'mode'              => "searchreplace",
     ));
@@ -1488,7 +1499,7 @@ function DBADMIN_srExecute()
 
     $filter = new sanitizer();
 
-    $tables = explode('|', $_POST['groupmembers']);
+    $selectedTables = explode('|', $_POST['groupmembers']);
 
     if (!isset($_POST['searchfor']) || empty($_POST['searchfor'])) {
         return DBADMIN_searchAndreplace($LANG_DB_ADMIN['missing_required']);
@@ -1496,7 +1507,7 @@ function DBADMIN_srExecute()
     if (!isset($_POST['replacewith']) || empty($_POST['replacewith'])) {
         return DBADMIN_searchAndreplace($LANG_DB_ADMIN['missing_required']);
     }
-    if (count($tables) < 1) {
+    if (count($selectedTables) < 1) {
         return DBADMIN_searchAndreplace($LANG_DB_ADMIN['missing_required']);
     }
 
@@ -1512,11 +1523,21 @@ function DBADMIN_srExecute()
     }
     $dbsr = new dbsr();
 
-    $tablesToProcess = $dbsr->getTableList($tables);
+    $tablesToProcess = array();  // the tables selected by the user
+    $columnsToProcess = array(); // table-> columns selected by user
+    foreach($selectedTables AS $pair) {
+        list($table, $column) = explode(',',$pair);
+        $tablesToProcess[] = $table;
+        $columnsToProcess[$table]['columns'][] = $column;
+    }
 
-    $itemsToProcess = PLG_getContentTableInfo();
+    // this needs to pass $selectedTables which is just an array of tables only.
+    // need to build out a new array to handle this.
+    $allTables = $dbsr->getTableList($tablesToProcess);
 
-    $glFusionItems = array(
+    $availablePluginTables = PLG_getContentTableInfo();
+
+    $availableglFusionTables = array(
         'gl_stories' => array(
             'plugin' => 'glFusion',
             'primary_key' => 'id',
@@ -1541,14 +1562,30 @@ function DBADMIN_srExecute()
 
     // add the glFusion Items
 
-    $itemsToProcess = array_merge($itemsToProcess,$glFusionItems);
+    $allAvailableTables = array_merge($availablePluginTables, $availableglFusionTables);
 
     $finalList = array();
-    foreach($tablesToProcess AS $table) {
-        if (in_array($table,$tables) && isset($itemsToProcess[$table])) {
-            $finalList[$table] = $itemsToProcess[$table];
+    foreach($allTables AS $table) {
+        if (in_array($table,$tablesToProcess) && isset($allAvailableTables[$table])) {
+            $finalList[$table] = $allAvailableTables[$table];
         }
     }
+
+    // now we have our final list of selected tables with all of the columns - need to trim down the columns
+    // to just those selected.
+
+    foreach($finalList AS $table => $data) {
+        $index = 0;
+        foreach($data['columns'] AS $column) {
+            if (!in_array($column,$columnsToProcess[$table]['columns'])) {
+                unset($finalList[$table]['columns'][$index]);
+                $index++;
+            }
+        }
+    }
+
+    // DONE!  $finalList() has all the items we are supposed to process
+
     $resultReport = array();
     foreach($finalList AS $table => $details) {
         $report = $dbsr->srdb( $table, $details['primary_key'], $details['columns'], $args );

@@ -1674,6 +1674,7 @@ $LANG_DB_ADMIN = array(
     'edit'                => 'Edit',
     'cancel'              => 'Cancel',
     'seconds'             => 'seconds',
+    'plugin_table_column' => 'Plugin :: Table -> Column',
 
 );
 
