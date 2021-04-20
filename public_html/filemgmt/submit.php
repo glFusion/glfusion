@@ -20,6 +20,7 @@
 */
 
 use \glFusion\FileSystem;
+use \glFusion\Log\Log;
 
 require_once '../lib-common.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
@@ -118,7 +119,7 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
         for ($i=0;$i < $nRows; $i++ ) {
             $row = DB_fetchArray($result);
             if ( $row['email'] != '' ) {
-    			COM_errorLog("FileMgmt Upload: Sending notification email to: " . $row['email'] . " - " . $row['username']);
+    			Log::write('system',Log::ERROR,'FileMgmt Upload: Sending notification email to: ' . $row['email'] . ' - ' . $row['username']);
                 $toCount++;
                 $to[] = array('email' => $row['email'],'name' => $row['username']);
             }
@@ -132,7 +133,7 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
             $msgData['to'] = $to;
             COM_emailNotification( $msgData );
     	} else {
-        	COM_errorLog("FileMgmt Upload: Error - Did not find any administrators to email");
+        	Log::write('system',Log::ERROR,'FileMgmt Upload: Error - Did not find any administrators to notify of new upload');
     	}
         COM_updateSpeedlimit ('fmnotify');
     }
@@ -207,7 +208,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
     list($catAccessCnt) = DB_fetchArray( DB_query($sql));
 
     if ( $catAccessCnt < 1 ) {
-        COM_errorLOG("Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is:{$_SERVER['REMOTE_ADDR']}");
+        Log::write('system',Log::ERROR,'Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is: '.$_SERVER['REAL_ADDR']);
         redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOUPLOAD);
         exit;
     }
@@ -278,7 +279,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $fileExtension = strtolower(substr($uploadfilename, $pos));
             if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
                 if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                    COM_errorLOG("AddNewFile - New Upload file is rejected by config rule:$uploadfilename");
+                    Log::write('system',Log::WARNING,'AddNewFile - New Upload file is rejected by config rule: '.$uploadfilename);
                     $eh->show("1109");
                 } else {
                     $fileExtension = $_FMDOWNLOAD[$fileExtension];
@@ -320,9 +321,9 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             }
             if (!$returnMove) {
                 if ($directUploadAccess) {
-                    COM_errorLOG("Filemgmt submit error: Direct upload, file could not be created: $tmp to {$filemgmt_FileStore}{$name}");
+                    Log::write('system',Log::ERROR,'Filemgmt submit error: Direct upload, file could not be created: '.$tmp.' to '.$filemgmt_FileStore . $name);
                 } else {
-                    COM_errorLOG("Filemgmt submit error: Temporary file could not be created: $tmp to {$filemgmt_FileStore}tmp}/{$tmpfilename}");
+                    Log::write('system',Log::ERROR,'Filemgmt submit error: Temporary file could not be created: '.$tmp.' to '. $filemgmt_FileStore.'tmp/'.$tmpfilename);
                 }
                 $eh->show("1102");
             } else {
@@ -339,7 +340,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $fileExtension = strtolower(substr($uploadfilename, $pos));
             if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
                 if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                    COM_errorLOG("AddNewFile - New Upload file snapshot is rejected by config rule:$uploadfilename");
+                    Log::write('system',Log::ERROR,'AddNewFile - New Upload file snapshot is rejected by config rule: '.$uploadfilename);
                     $eh->show("1109");
                 } else {
                     $fileExtension = $_FMDOWNLOAD[$fileExtension];
@@ -376,7 +377,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                 $upload->uploadFiles();
                 if ($upload->areErrors()) {
                     $errmsg = "Upload Error: " . $upload->printErrors(false);
-                    COM_errorLog($errmsg);
+                    Log::write('system',Log::ERROR,$errmsg);
                     $logourl = '';
                     $AddNewFile = false;    // Set false again - in case it was set true above for actual file
                     $eh->show("1102");
@@ -484,7 +485,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
     }
 
 } else {
-    COM_errorLOG("Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is:{$_SERVER['REMOTE_ADDR']}");
+    Log::write('system',Log::ERROR,'Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is: '.$_SERVER['REAL_ADDR']);
     redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOUPLOAD);
 }
 
