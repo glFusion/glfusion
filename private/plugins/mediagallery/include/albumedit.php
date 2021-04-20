@@ -19,6 +19,7 @@ if (!defined ('GVERSION')) {
 
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
 
+use \glFusion\Log\Log;
 
 /**
 * Shows security control for an object
@@ -102,7 +103,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         // If edit, pull up the existing album information...
 
         if ($MG_albums[$album_id]->access != 3 ) {
-            COM_errorLog("MediaGallery: Someone has tried to illegally edit a Media Gallery Album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+            Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to edit a Media Gallery Album without the proper permissions.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         }
     } else if ($album_id==0 && $mode == 'create') {
@@ -126,7 +127,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['exif_display']		= $_MG_CONF['ad_exif_display'];
         $A['enable_slideshow']  = $_MG_CONF['ad_enable_slideshow'];
         $A['enable_random']     = $_MG_CONF['ad_enable_random'];
-//        $A['enable_shutterfly'] = $_MG_CONF['ad_enable_shutterfly'];
         $A['auto_rotate']       = 1;
         $A['enable_views']      = $_MG_CONF['ad_enable_views'];
         $A['enable_keywords']   = $_MG_CONF['ad_enable_keywords'];
@@ -213,7 +213,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $album_select = $album_selectbox;
 
     if ($valid_albums == 0  ) {
-        COM_errorLog("MediaGallery: Someone has tried to illegally create a Medig Gallery Album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to edit a Media Gallery Album.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -248,8 +248,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $ss_select		.= '<option value="0" ' . ($A['enable_slideshow'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['disabled'] . '</option>';
     $ss_select		.= '<option value="1"' . ($A['enable_slideshow'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['js_slideshow'] . '</option>';
     $ss_select		.= '<option value="2"' . ($A['enable_slideshow'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['lightbox'] . '</option>';
-    $ss_select		.= '<option value="3"' . ($A['enable_slideshow'] == 3 ? ' selected="selected"' : '') . '>' . $LANG_MG01['flash_slideshow_disp'] . '</option>';
-    $ss_select		.= '<option value="4"' . ($A['enable_slideshow'] == 4 ? ' selected="selected"' : '') . '>' . $LANG_MG01['flash_slideshow_full'] . '</option>';
     $ss_select		.= '<option value="5"' . ($A['enable_slideshow'] == 5 ? ' selected="selected"' : '') . '>' . $LANG_MG01['mp3_jukebox'] . '</option>';
     $ss_select      .= '</select>';
 
@@ -743,13 +741,9 @@ function MG_quickCreate( $parent, $title, $desc='' ) {
 
     $album = new mgAlbum();
 
-//    if ($_MG_CONF['htmlallowed'] == 1 ) {
-        $album->title       = $title;
-        $album->description = $desc;
-//    } else {
-//        $album->title       = htmlspecialchars(strip_tags(COM_checkWords($title)));
-//        $album->description = htmlspecialchars(strip_tags(COM_checkWords($desc)));
-//    }
+    $album->title       = $title;
+    $album->description = $desc;
+
     if ($album->title == "" ) {
         return -1;
     }
@@ -772,16 +766,15 @@ function MG_quickCreate( $parent, $title, $desc='' ) {
     if ( $album->parent == 0 && !$_MG_CONF['member_albums'] == 1 && !$_MG_CONF['member_album_root'] == 0 ) {
         // see if we are mediagallery.admin
         if (!SEC_hasRights('mediagallery.admin')) {
-            COM_errorLog("MediaGallery: Someone has tried to illegally save a Media Gallery Album in Root.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
-            return(MG_genericError($LANG_MG00['access_denied_msg']));
+            Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save an album in root without mediagallery.admin permissions.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);return(MG_genericError($LANG_MG00['access_denied_msg']));
         }
     } elseif ($album->parent != 0 ) {
         if ( !isset($MG_albums[$album->parent]->id )) {    // does not exist...
-            COM_errorLog("MediaGallery: Someone has tried to save a album to non-existent parent album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+            Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save an album to a non-existent parent album.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         } else {
             if ( $MG_album[$album->parent]->access != 3 && !SEC_hasRights('mediagallery.admin') && !$_MG_CONF['member_albums'] && !$_MG_CONF['member_album_root'] == $MG_album[$album->parent]->id) {
-                COM_errorLog("MediaGallery: Someone has tried to illegally save a Media Gallery Album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+                Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save a Media Gallery Album without the necessary permissions.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
                 return(MG_genericError($LANG_MG00['access_denied_msg']));
             }
         }
@@ -923,11 +916,8 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
         $album->auto_rotate = 0;
     }
 
-//    if ( isset($_POST['enable_shutterfly'] ) ) {
-//        $album->enable_shutterfly   = COM_applyFilter($_POST['enable_shutterfly'],true);
-//    } else {
-        $album->enable_shutterfly = 0;
-//    }
+    $album->enable_shutterfly = 0;
+
     if ( isset($_POST['enable_views']) ) {
         $album->enable_views        = COM_applyFilter($_POST['enable_views'],true);
     } else {
@@ -1119,16 +1109,16 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     if ( $album->parent == 0 && $update == 0 && !$_MG_CONF['member_albums'] == 1 && !$_MG_CONF['member_album_root'] == 0 ) {
         // see if we are mediagallery.admin
         if (!SEC_hasRights('mediagallery.admin')) {
-            COM_errorLog("MediaGallery: Someone has tried to illegally save a Media Gallery Album in Root.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+            Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save a Media Gallery Album in Root.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         }
     } elseif ($album->parent != 0 ) {
         if ( !isset($MG_albums[$album->parent]->id )) {    // does not exist...
-            COM_errorLog("MediaGallery: Someone has tried to save a album to non-existent parent album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+            Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save an album to a non-existent parent album.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         } else {
             if ( $MG_albums[$album->parent]->access != 3 && !SEC_hasRights('mediagallery.admin') && !$_MG_CONF['member_albums'] && !($_MG_CONF['member_album_root'] == $MG_album[$album->parent]->id)) {
-                COM_errorLog("MediaGallery: Someone has tried to illegally save a Media Gallery Album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+                Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save a Media Gallery Album.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
                 return(MG_genericError($LANG_MG00['access_denied_msg']));
             }
         }
@@ -1211,7 +1201,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     }
 
     if ( $album->id == 0 ) {
-        COM_errorLog("MediaGallery: Internal Error - album_id = 0 - Contact mark@glfusion.org  ");
+        Log::write('system',Log::ERROR,'MediaGallery: Internal Error - album_id = 0');
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
     $album->saveAlbum();

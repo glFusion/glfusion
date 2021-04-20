@@ -17,6 +17,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Log\Log;
+
 define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 
 /*

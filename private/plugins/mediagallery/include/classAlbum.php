@@ -223,6 +223,9 @@ class mgAlbum {
         $this->enable_rating    = $album['enable_rating'];
         $this->playback_type    = $album['playback_type'];
         $this->tn_attached      = $album['tn_attached'];
+        if ($album['enable_slideshow'] == 3 || $album['enable_slideshow'] == 4) {
+            $album['enable_slideshow'] = 1;
+        }
         $this->enable_slideshow = $album['enable_slideshow'];
         $this->enable_random    = $album['enable_random'];
         $this->enable_shutterfly = 0; //$album['enable_shutterfly'];

@@ -57,6 +57,7 @@
 
 ### Removed
 
+- Media Gallery Flash slideshow
 - All MooTools related widgets
 - Remove the submission related Plugin APIs - except the Moderation Queue APIs
       PLG_showSubmitForm()

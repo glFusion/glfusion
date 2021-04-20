@@ -14,6 +14,8 @@
 
 require_once '../lib-common.php';
 
+use \glFusion\Log\Log;
+
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
     exit;
@@ -115,7 +117,7 @@ if ( !isset($MG_albums[$album_id]->id) ) {
 
 if ( $errorMessage != '' ) {
     $display = MG_siteHeader();
-    COM_errorLog("Media Gallery Error - User attempted to view an album that does not exist.");
+    Log::write('system',Log::ERROR,'Media Gallery Error - User attempted to view an album that does not exist.');
     $display .= COM_startBlock ($LANG_MG02['error_header'], '',COM_getBlockTemplate ('_admin_block', 'header'));
     $T = new Template($_MG_CONF['template_path']);
     $T->set_file('error','error.thtml');

@@ -20,7 +20,7 @@ require_once $_MG_CONF['path_admin'] . 'navigation.php';
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {
     // Someone is trying access this page without proper permissions
-    COM_errorLog("Someone has tried to illegally access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
+    COM_errorLog("Someone has tried to access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
     $display  = COM_siteHeader();
     $display .= COM_startBlock($LANG_MG00['access_denied']);
     $display .= $LANG_MG00['access_denied_msg'];

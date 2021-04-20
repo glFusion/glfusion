@@ -1,33 +1,20 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | batch.php                                                                |
-// |                                                                          |
-// | Batch system interface                                                   |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Batch System Interface
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../lib-common.php';
+
+use \glFusion\Log\Log;
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -62,7 +49,7 @@ if ( isset ($_POST['cancel_button'] ) ) {
     $sql = "SELECT * FROM {$_TABLES['mg_sessions']} WHERE session_id='" . DB_escapeString($session_id) . "'";
     $result = DB_query($sql,1);
     if ( DB_error() ) {
-        COM_errorLog("Media Gallery Error - Unable to retrieve batch session data");
+        Log::write('system',Log::ERROR,"Media Gallery Error - Unable to retrieve batch session data");
         echo COM_refresh($_MG_CONF['site_url'] . '/index.php');
         exit;
     }
@@ -70,7 +57,7 @@ if ( isset ($_POST['cancel_button'] ) ) {
     if ( $nRows > 0 ) {
         $session = DB_fetchArray($result);
     } else {
-        COM_errorLog("Media Gallery Error: Unable to find batch session id");
+        Log::write('system',Log::ERROR,"Media Gallery Error: Unable to find batch session id");
         echo COM_refresh($_MG_CONF['site_url'] . '/index.php');
         exit;       // no session found
     }

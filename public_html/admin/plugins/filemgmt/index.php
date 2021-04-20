@@ -27,6 +27,7 @@ include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 USES_lib_admin();
 
@@ -927,7 +928,7 @@ function modDownloadS() {
         $upload->uploadFiles();
         if ($upload->areErrors()) {
             $errmsg = "Upload Error: " . $upload->printErrors(false);
-            COM_errorLog($errmsg);
+            Log::write('system',Log::ERROR, $errmsg);
             $eh->show("1106");
         } else {
             $url = rawurlencode($myts->makeTboxData4Save($upload->_currentFile['name']));
@@ -937,7 +938,7 @@ function modDownloadS() {
             $fileExtension = strtolower(substr($newfile, $pos));
             if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
                 if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                    COM_errorLOG("AddNewFile - New Upload file is rejected by config rule:$uploadfilename");
+                    Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' . $uploadfilename);
                     $eh->show("1109");
                 } else {
                     $fileExtension = $_FMDOWNLOAD[$fileExtension];
@@ -949,7 +950,7 @@ function modDownloadS() {
                     $rc = @copy ( $filemgmt_FileStore.$newfile , $filemgmt_FileStore.$filename );
                     if ( $rc === false ) {
                         $errmsg = "Upload Error: Unable to copy new file";
-                        COM_errorLog($errmsg);
+                        Log::write('system',Log::ERROR, $errMsg);
                         $eh->show("1106");
                     }
                     @unlink($filemgmt_FileStore.$newfile);
@@ -996,7 +997,7 @@ function modDownloadS() {
         $upload->uploadFiles();
         if ($upload->areErrors()) {
             $errmsg = "Upload Error: " . $upload->printErrors(false);
-            COM_errorLog($errmsg);
+            Log::write('system',Log::ERROR, $errMsg);
             $eh->show("1106");
         } else {
             $logourl = rawurlencode($myts->makeTboxData4Save($upload->_currentFile['name']));
@@ -1011,7 +1012,7 @@ function modDownloadS() {
             $lid = (int) COM_applyFilter($_POST['lid'],true);
             $err=@unlink ($currentSnapFQN);
             DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET logourl='' WHERE lid=".$lid);
-            COM_errorLOG("Delete repository snapfile:$currentSnapFQN.");
+            Log::write('system',Log::INFO, 'Delete repository snapfile: ' . $currentSnapFQN);
         }
     }
 
@@ -1415,7 +1416,7 @@ function addDownload() {
         $upload->uploadFiles();
         if ($upload->areErrors()) {
             $errmsg = "Upload Error: " . $upload->printErrors(false);
-            COM_errorLog($errmsg);
+            Log::write('system',Log::ERROR, $errmsg);
             $eh->show("1106");
         } else {
             $size = $myts->makeTboxData4Save(intval($upload->_currentFile['size']));
@@ -1426,7 +1427,7 @@ function addDownload() {
             $fileExtension = strtolower(substr($filename, $pos));
             if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
                 if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                    COM_errorLOG("AddNewFile - New Upload file is rejected by config rule:$uploadfilename");
+                    Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$uploadfilename);
                     $eh->show("1109");
                 } else {
                     $fileExtension = $_FMDOWNLOAD[$fileExtension];
@@ -1470,7 +1471,7 @@ function addDownload() {
     if ( $upload->numFiles() > 0 ) {
         if ($upload->areErrors()) {
             $errmsg = "Upload Error: " . $upload->printErrors(false);
-            COM_errorLog($errmsg);
+            Log::write('system',Log::ERROR, $errmsg);
             $eh->show("1106");
         } else {
             $snapfilename = $myts->makeTboxData4Save($upload->_currentFile['name']);
@@ -1563,19 +1564,19 @@ function approve(){
     $tmp = $filemgmt_FileStore ."tmp/" . $tmpfilename;
     if (file_exists($tmp) && (!is_dir($tmp))) {                      // if this temporary file was really uploaded?
         $newfile = $filemgmt_FileStore .$name;
-        COM_errorLOG("File move from ".$tmp. " to " .$newfile );
+        Log::write('system',Log::INFO, 'FileMgt Approve: File move from '.$tmp. ' to ' .$newfile );
         $rename = @rename ($tmp,$newfile);
-        COM_errorLOG("Results of rename is: ".$rename);
+        Log::write('system',Log::INFO, 'FileMgt Approve: Results of rename is: '.$rename);
         $chown = @chmod ($newfile,$filemgmtFilePermissions);
         if (!file_exists($newfile )) {
-            COM_errorLOG("Filemgmt upload approve error: New file does not exist after move of tmp file: '".$newfile ."'");
+            Log::write('system',Log::ERROR, 'Filemgmt upload approve error: New file does not exist after move of tmp file: '.$newfile);
             $AddNewFile = false;    // Set false again - in case it was set true above for actual file
             $eh->show("1101");
         } else {
            $AddNewFile = true;
         }
     } else {
-        COM_errorLOG("Filemgmt upload approve error: Temporary file does not exist: '".$tmp ."'");
+        Log::write('system',Log::ERROR, 'Filemgmt upload approve error: Temporary file does not exist: '.$tmp);
         $eh->show("1101");
     }
 
@@ -1586,12 +1587,12 @@ function approve(){
             $rename = @rename ($tmp,$newfile);
             $chown = @chmod ($newfile,$filemgmtFilePermissions);
             if (!file_exists($newfile )) {
-                COM_errorLOG("Filemgmt upload approve error: New file does not exist after move of tmp file: '".$newfile ."'");
+                Log::write('system',Log::ERROR, 'Filemgmt upload approve error: New file does not exist after move of tmp file: '.$newfile);
                 $AddNewFile = false;    // Set false again - in case it was set true above for actual file
                 $eh->show("1101");
             }
         } else {
-            COM_errorLOG("Filemgmt upload approve error: Temporary file does not exist: '".$tmp ."'");
+            Log::write('system',Log::ERROR, 'Filemgmt upload approve error: Temporary file does not exist: '.$tmp);
             $eh->show("1101");
         }
     }

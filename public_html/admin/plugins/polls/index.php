@@ -1,44 +1,30 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Polls Plugin - glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// |                                                                          |
-// | glFusion poll administration page                                        |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2015-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Polls Plugin
+*
+* Administration Page
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2015-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs        tony@tonybibbs.com
+*  Mark Limburg      mlimburg@users.sourceforge.net
+*  Jason Whittenburg jwhitten@securitygeeks.com
+*  Dirk Haun         dirk@haun-online.de
+*
+*/
 
 // Set this to true if you want to log debug messages to error.log
 $_POLL_VERBOSE = false;
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
+
+use \glFusion\Log\Log;
 
 USES_lib_admin();
 
@@ -51,7 +37,7 @@ if (!SEC_hasRights ('polls.edit')) {
     $display .= $MESSAGE[36];
     $display .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $display .= COM_siteFooter ();
-    COM_accessLog ("User {$_USER['username']} tried to access the poll administration screen.");
+    Log::write('system',Log::WARNING, 'User ' . $_USER['username'] . 'attempted to access the poll administration page');
     echo $display;
     exit;
 }
@@ -369,8 +355,7 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $description, $status
 
     // start processing the poll topic
     if ($_POLL_VERBOSE) {
-        COM_errorLog ('**** Inside POLL_save() in '
-                      . $_CONF['site_admin_url'] . '/plugins/polls/index.php ***');
+        Log::write('system',Log::DEBUG, '**** Inside POLL_save() ****');
     }
     $pid = str_replace (' ', '', $pid); // strip spaces from poll id
     $access = 0;
@@ -400,10 +385,10 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $description, $status
     }
 
     if ($_POLL_VERBOSE) {
-        COM_errorLog('owner permissions: ' . $perm_owner, 1);
-        COM_errorLog('group permissions: ' . $perm_group, 1);
-        COM_errorLog('member permissions: ' . $perm_members, 1);
-        COM_errorLog('anonymous permissions: ' . $perm_anon, 1);
+        Log::write('system',Log::DEBUG, 'Polls Admin: owner permissions: '. $perm_owner);
+        Log::write('system',Log::DEBUG, 'Polls Admin: group permissions: '. $perm_group);
+        Log::write('system',Log::DEBUG, 'Polls Admin: member permissions: '. $perm_members);
+        Log::write('system',Log::DEBUG, 'Polls Admin: anonymous permissions: '. $perm_anon);
     }
     // we delete everything and re-create it with the input from the form
     $del_pid = $pid;
@@ -498,8 +483,7 @@ function POLLS_save($pid, $old_pid, $Q, $mainpage, $topic, $description, $status
     }
 
     if ($_POLL_VERBOSE) {
-        COM_errorLog ('**** Leaving POLL_save() in '
-                      . $_CONF['site_admin_url'] . '/plugins/polls/index.php ***');
+        Log::write('system',Log::DEBUG, '**** Leaving POLL_save() ****');
     }
 
     return PLG_afterSaveSwitch (
@@ -830,7 +814,7 @@ switch ($action) {
 
     case 'delete':
         if (empty($pid)) {
-            COM_errorLog ('Ignored possibly manipulated request to delete a poll.');
+            Log::write('system',Log::ERROR, 'Polls Admin: Ignored possibly manipulated request to delete a poll.');
             $page .= COM_refresh ($_CONF['site_admin_url'] . '/plugins/polls/index.php');
         } elseif (SEC_checktoken()) {
             $page .= POLLS_delete($pid);
