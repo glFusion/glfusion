@@ -17,6 +17,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Log\Log;
+
 // load the language file(s), including custom strings if any
 
 $langfile = $_CONF['path'].'plugins/ckeditor/language/' . $_CONF['language'] . '.php';
@@ -214,7 +216,7 @@ function plugin_templatesetvars_ckeditor($ctype, &$template)
                 ));
     if ( !extension_loaded('mbstring') ) {
         $T->set_var('mbmissing',true);
-        COM_errorLog("WARNING: mbstring extension not installed - disabling FileMan plugin in CKEditor");
+        Log::write('system',Log::WARNING,'WARNING: mbstring extension not installed - disabling FileMan plugin in CKEditor');
     } else {
         $T->unset_var('mbmissing');
     }
