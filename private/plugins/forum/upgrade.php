@@ -1,44 +1,30 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Forum Plugin for glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | upgrade.php                                                              |
-// |                                                                          |
-// | Plugin upgrade                                                           |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2020 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
-// |                              www.portalparts.com                         |
-// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
-// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Forum Plugin
+*
+* Plugin Upgrade
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2010 by the following authors:
+*   Blaine Lang          blaine AT portalparts DOT com
+*                        www.portalparts.com
+*   Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com
+*   Prototype & Concept :        Mr.GxBlock, www.gxblock.com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
 require_once $_CONF['path'].'plugins/forum/forum.php';
+
+use \glFusion\Log\Log;
 
 /**
 * Called by the plugin Editor to run the SQL Update for a plugin update
@@ -332,10 +318,10 @@ function upgrade_232() {
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
-        COM_errorLOG("Forum Plugin 2.5 update: Executing SQL => " . current($_SQL));
+        Log::write('system',Log::INFO,'Forum Plugin 2.5 update: Executing SQL => ' . current($_SQL));
         DB_query(current($_SQL),'1');
         if (DB_error()) {
-            COM_errorLog("SQL Error during Forum plugin update",1);
+            Log::write('system',Log::ERROR,'SQL Error during Forum plugin update');
             return 1;
             break;
         }
@@ -358,7 +344,7 @@ function upgrade_232() {
             DB_query("UPDATE {$_TABLES['ff_moderators']} SET mod_uid = $mod_uid WHERE mod_id={$A['mod_id']}");
         }
     }
-    COM_errorLog("Success - Completed Forum plugin version 2.5 update",1);
+    Log::write('system',Log::INFO,'Success - Completed Forum plugin version 2.5 update');
     return 0;
 }
 
@@ -376,17 +362,17 @@ function upgrade_25() {
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
-        COM_errorLOG("Forum Plugin 2.6 update: Executing SQL => " . current($_SQL));
+        Log::write('system',Log::INFO,'Forum Plugin 2.6 update: Executing SQL => ' . current($_SQL));
         DB_query(current($_SQL),'1');
         if (DB_error()) {
-            COM_errorLog("SQL Error during Forum plugin update",1);
+            Log::write('system',Log::ERROR,'SQL Error during Forum plugin update');
             return 1;
             break;
         }
         next($_SQL);
     }
 
-    COM_errorLog("Success - Completed Forum plugin version 2.6 update",1);
+    Log::write('system',Log::INFO,'Success - Completed Forum plugin version 2.6 update');
     return 0;
 
 }
@@ -407,7 +393,7 @@ function upgrade_30() {
 
 
     $_SQL[] = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_attachments']} (
-      id` int(11) NOT NULL auto_increment,
+      id int(11) NOT NULL auto_increment,
       topic_id int(11) NOT NULL,
       repository_id int(11) default NULL,
       filename varchar(255) NOT NULL,
@@ -422,17 +408,17 @@ function upgrade_30() {
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
-        COM_errorLOG("Forum Plugin 3.0 update: Executing SQL => " . current($_SQL));
+        Log::write('system',Log::INFO,'Forum Plugin 3.0 update: Executing SQL => ' . current($_SQL));
         DB_query(current($_SQL),'1');
         if (DB_error()) {
-            COM_errorLog("SQL Error during Forum plugin update",1);
+            Log::write('system',Log::ERROR,'SQL Error during Forum plugin update: ' . $_SQL);
             return 1;
             break;
         }
         next($_SQL);
     }
 
-    COM_errorLog("Success - Completed Forum plugin version 3.0 update",1);
+    Log::write('system',Log::INFO,'Success - Completed Forum plugin version 3.0 update');
     return 0;
 }
 

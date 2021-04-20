@@ -24,6 +24,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 // load the language file(s), including custom strings if any
 

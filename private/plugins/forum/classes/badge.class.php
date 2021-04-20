@@ -12,6 +12,8 @@
 */
 namespace Forum;
 
+use \glFusion\Log\Log;
+
 class Badge
 {
     /**
@@ -345,7 +347,7 @@ class Badge
                             WHERE fb_id = '{$badge->fb_id}'";
                     DB_query($sql, 1);
                     if (DB_error()) {
-                        COM_errorLog("Badge::reOrder() SQL error: $sql", 1);
+                        Log::write('system',Log::ERROR,'Badge::reOrder() SQL error: '.$sql);
                     }
                 }
                 $order += $stepNumber;
@@ -385,7 +387,7 @@ class Badge
         if (!DB_error()) {
             self::reOrder();
         } else {
-            COM_errorLog("Badge::moveRow() SQL error: $sql", 1);
+            Log::write('system',Log::ERROR,'Badge::moveRow() SQL error: '.$sql);
         }
     }
 
@@ -577,10 +579,10 @@ class Badge
             $sql = "UPDATE {$_TABLES['ff_badges']}
                     SET $field=$newvalue
                     WHERE fb_id='$id'";
-            COM_errorLog($sql);
+            Log::write('system',Log::ERROR,$sql);
             DB_query($sql, 1);
             if (DB_error()) {
-                COM_errorLog("Badge::Toggle SQL Error: $sql");
+                Log::write('system',Log::ERROR,'Badge::Toggle SQL Error: '. $sql);
                 $newvalue = $oldvalue;
             }
             break;
