@@ -102,7 +102,8 @@ function DB_query ($sql, $ignore_errors = 0)
             foreach ($sql as $db => $request) {
                 $errmsg .= LB . $db . ': ' . $request;
             }
-            $result = COM_errorLog ($errmsg, 3);
+            $result = $errmsg;
+            Log::write('system',Log::ERROR,$errmsg);
             die ($result);
         }
     }
