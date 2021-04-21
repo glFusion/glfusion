@@ -25,6 +25,9 @@
 *               GNU Public License v2 or later
 *   @filesource
 */
+
+use \glFusion\Log\Log;
+
 class Topic
 {
     /**
@@ -198,9 +201,9 @@ class Topic
             $sql = "SELECT * FROM {$_TABLES['topics']} ORDER BY sortnum ASC";
             $res = DB_query($sql, 1);
             if (DB_error()) {
-                COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ': Unable to read topics table');
+                Log::write('system',Log::ERROR,__CLASS__ . '::' . __FUNCTION__ . ': Unable to read topics table');
             } elseif (DB_numRows($res) == 0) {
-                COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ': No topics found');
+                Log::write('system',Log::ERROR,__CLASS__ . '::' . __FUNCTION__ . ': No topics found');
             } else {
                 while ($A = DB_fetchArray($res, false)) {
                     self::$all[$A['tid']] = new self($A);
@@ -396,10 +399,10 @@ class Topic
         $sql = "SELECT * FROM {$_TABLES['topics']} WHERE tid = '$tid'";
         $res = DB_query($sql, 1);
         if (DB_error()) {
-            COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ': Unable to read topics table');
+            Log::write('system',Log::ERROR,__CLASS__ . '::' . __FUNCTION__ . ': Unable to read topics table');
             return NULL;
         } elseif (DB_numRows($res) == 0) {
-//            COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . ": Topic $tid not found");
+//            Log::write('system',Log::ERROR,__CLASS__ . '::' . __FUNCTION__ . ": Topic $tid not found");
             return NULL;;
         } else {
             return DB_fetchArray($res, false);
@@ -636,7 +639,7 @@ class Topic
                     WHERE tid = '{$obj->tid}'";
                 DB_query($sql, 1);
                 if (DB_error()) {
-                    COM_errorLog("Topic::reOrder() SQL error: $sql");
+                    Log::write('system',Log::ERROR,"Topic::reOrder() SQL error: ".$sql);
                     return false;
                 }
             }
@@ -774,7 +777,7 @@ class Topic
         if (DB_error()) {
             // TODO: Language string
             COM_setMsg('Error saving topic. Check for duplicate Topic ID', 'error');
-            COM_errorLog("Topic::Save() Error: $sql");
+            Log::write('system',Log::ERROR,"Topic::Save() Error: ".$sql);
             return false;
         }
 

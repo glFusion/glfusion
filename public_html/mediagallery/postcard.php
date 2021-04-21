@@ -460,7 +460,6 @@ function MG_sendPostCard() {
 * This will print a message to the glFusion access log
 *
 * @param        string      $string         Message to write to access log
-* @see COM_errorLog
 *
 */
 

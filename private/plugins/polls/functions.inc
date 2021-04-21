@@ -1,41 +1,29 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Polls Plugin - glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | functions.inc                                                            |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
-// |          Blaine Lang      - langmail AT sympatico DOT ca                 |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Polls Plugin
+*
+* Plugin APIs
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs         tony AT tonybibbs DOT com
+*  Tom Willett        twillett AT users DOT sourceforge DOT ne
+*  Blaine Lang        langmail AT sympatico DOT ca
+*  Dirk Haun          dirk AT haun-online DOT de
+*
+*/
 
 if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
+
 /*
 * load the language file(s), including custom strings if any
 */
@@ -181,8 +169,8 @@ function plugin_deletecomment_polls($cid, $id)
         $retval .= COM_refresh ($_CONF['site_url']
                                  . "/polls/index.php?pid=$id");
     } else {
-        COM_errorLog ("User {$_USER['username']} (IP: {$_SERVER['REMOTE_ADDR']}) "
-                    . "did not have permissions to delete comment $cid from poll $id");
+        Log::write('system',Log::WARNING,'User '.$_USER['username'].' (IP: '.$_SERVER['REAL_ADDR'].') '
+                    . 'did not have permissions to delete comment '.$cid.' from poll '.$id);
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
     $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
@@ -649,7 +637,7 @@ function plugin_upgrade_polls()
         return polls_upgrade();
     } else {
         // upgrades are done by the install script - return a generic error
-        COM_errorLog("Polls plugin upgrade function not implemented");
+        Log::write('system',Log::WARNING,"Polls plugin upgrade function not implemented");
         return 3001;
     }
 }
@@ -1480,9 +1468,7 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
         $questions = DB_query ($questions_sql);
         $nquestions = DB_numRows($questions);
 
-        if ($_COM_VERBOSE) {
-            COM_errorLog("got $questions questions in COM_pollResults", 1 );
-        }
+        Log::write('system',Log::DEBUG,'Polls: got '.$nquestions.' questions in COM_pollResults');
 
         if ($nquestions > 0){
             $poll = new Template($_CONF['path'] . 'plugins/polls/templates/' );
@@ -1541,9 +1527,6 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
                 $a_summ = DB_query ($a_summ_sql);
                 $S = DB_fetchArray($a_summ);
 
-                if ($_COM_VERBOSE) {
-                    COM_errorLog("got $answers answers in COM_pollResults", 1 );
-                }
                 for ($i=1; $i<=$nanswers; $i++) {
                     $A = DB_fetchArray($answers);
                     if ($S['votesumm'] == 0) {

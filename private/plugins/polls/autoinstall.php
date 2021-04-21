@@ -1,38 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Polls Plugin - glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | autoinstall.php                                                          |
-// |                                                                          |
-// | glFusion Auto Installer module                                           |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
-// |          Blaine Lang      - langmail AT sympatico DOT ca                 |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Polls Plugin
+*
+* Auto Installer
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2009-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs         tony AT tonybibbs DOT com
+*  Tom Willett        twillett AT users DOT sourceforge DOT ne
+*  Blaine Lang        langmail AT sympatico DOT ca
+*  Dirk Haun          dirk AT haun-online DOT de
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -43,6 +27,8 @@ global $_DB_dbms;
 require_once $_CONF['path'].'plugins/polls/functions.inc';
 require_once $_CONF['path'].'plugins/polls/polls.php';
 require_once $_CONF['path'].'plugins/polls/sql/mysql_install.php';
+
+use \glFusion\Log\Log;
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |
@@ -90,7 +76,7 @@ function plugin_install_polls()
     $pi_display_name    = $_PO_CONF['pi_display_name'];
     $pi_version         = $_PO_CONF['pi_version'];
 
-    COM_errorLog("Attempting to install the $pi_display_name plugin", 1);
+    Log::write('system',Log::INFO,'Attempting to install the '.$pi_display_name.' plugin');
 
     $ret = INSTALLER_install($INSTALL_plugin[$pi_name]);
     if ($ret > 0) {

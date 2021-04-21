@@ -199,8 +199,8 @@ function plugin_deletecomment_article($cid, $id)
         $retval .= COM_refresh(COM_buildUrl($_CONF['site_url']
                  . "/article.php?story=$id") . '#comments');
     } else {
-        COM_errorLog ("User {$_USER['username']} "
-                    . "did not have permissions to delete comment $cid from $id");
+        Log::write('system',Log::WARNING,"User ".$_USER['username']." "
+                    . "did not have permissions to delete comment ".$cid." from ".$id);
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
 

@@ -34,6 +34,7 @@
 require_once 'lib-common.php';
 
 use PhpXmlRpc\Value;
+use \glFusion\Log\Log;
 
 // once received, we're handling pingbacks like trackbacks,
 // so we use the trackback library even when trackback may be disabled
@@ -180,17 +181,17 @@ function PNB_handlePingback($id, $type, $url, $oururl)
             // we could also run the rest of the other site's page
             // through the spam filter here ...
             } else {
-                COM_errorLog("Pingback verification: unable to retrieve response body");
+                Log::write('system',Log::ERROR,"Pingback verification: unable to retrieve response body");
                 return new PhpXmlRpc\Response(0, 33, $PNB_ERROR['uri_invalid']);
             }
         } else {
-            COM_errorLog("Pingback verification: Got HTTP response code "
+            Log::write('system',Log::ERROR,"Pingback verification: Got HTTP response code "
                 . $http->response_status
                 . " when requesting $url");
             return new XML_RPC_Response(0, 33, $PNB_ERROR['uri_invalid']);
         }
     } else {
-        COM_errorLog("Pingback verification: " . $error . " when requesting ".$url);
+        Log::write('system',Log::ERROR,"Pingback verification: " . $error . " when requesting ".$url);
         return new PhpXmlRpc\Response(0, 33, $PNB_ERROR['uri_invalid']);
     }
 

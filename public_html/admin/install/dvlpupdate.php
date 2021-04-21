@@ -404,7 +404,7 @@ function glfusion_162()
             $sql = "UPDATE {$_TABLES['menu_elements']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
             DB_query($sql);
         } else {
-            COM_errorLog("dvlpupdate: Error retrieving non-loggedin-user group id");
+            Log::write('system',Log::ERROR,"dvlpupdate: Error retrieving non-loggedin-user group id");
         }
     }
     $_SQL = array();

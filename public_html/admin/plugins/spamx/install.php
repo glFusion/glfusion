@@ -35,11 +35,13 @@
 require_once '../../../lib-common.php';
 require_once $_CONF['path'].'/plugins/spamx/autoinstall.php';
 
+use \glFusion\Log\Log;
+
 USES_lib_install();
 
 if (!SEC_inGroup('Root')) {
     // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Spam-X install/uninstall page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+    Log::write('system',Log::ERROR,'Someone has tried to access the SpamX install/uninstall page.  User id: '.$_USER['uid'].', IP: ' . $_SERVER['REAL_ADDR']);
     $display = COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
              . COM_startBlock ($LANG_ACCESS['accessdenied'])
              . $LANG_ACCESS['plugin_access_denied_msg']

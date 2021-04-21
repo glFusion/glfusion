@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2020 by the following authors:
+*  Copyright (C) 2002-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -113,14 +113,14 @@ function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth
             break;
         case 'image/x-targa' :
         case 'image/tga' :
-            COM_errorLog("IMG_squareThumbnail: TGA files not supported by GD2 Libs");
+            Log::write('system',Log::WARNING,"IMG_squareThumbnail: TGA files not supported by GD2 Libs");
             return array(false,'TGA format not supported by GD2 Libs');;
         default :
-            COM_errorLog("IMG_squareThumbnail: GD2 only supports JPG, PNG, and GIF image types.");
+            Log::write('system',Log::WARNING,"IMG_squareThumbnail: GD2 only supports JPG, PNG, and GIF image types.");
             return array(false,'GD2 only supports JPG, PNG and GIF image types');
     }
     if ( !$image ) {
-        COM_errorLog("IMG_squareThumbnail: GD Libs failed to create working image.");
+        Log::write('system',Log::ERROR,"IMG_squareThumbnail: GD Libs failed to create working image.");
         return array(false,'GD Libs failed to create working image.');
     }
 	$original_width = $sImageWidth;
@@ -204,7 +204,7 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
             $GD_rotate = "180";
             break;
         default :
-            COM_errorLog("IMG_rotateImage: Invalid direction passed to rotate, must be left or right");
+            Log::write('system',Log::ERROR,"IMG_rotateImage: Invalid direction passed to rotate, must be left or right");
             return array(false,'Invalid direction passed to rotate, must be left or right');
     }
 
@@ -241,10 +241,10 @@ function _img_gdRotate( $src, $dest, $angle, $mimeType ) {
             break;
         case 'image/x-targa' :
         case 'image/tga' :
-            COM_errorLog("IMG_gdRotate: TGA files not supported by GD Libs");
+            Log::write('system',Log::WARNING,"IMG_gdRotate: TGA files not supported by GD Libs");
             return array(false,'TGA files not supported by GD Libs');;
         default :
-            COM_errorLog("IMG_gdRotate: GD Libs only support JPG, PNG, BMP, and GIF image formats.");
+            Log::write('system',Log::WARNING,"IMG_gdRotate: GD Libs only support JPG, PNG, BMP, and GIF image formats.");
             return array(false,'GD Libs only supports JPG, PNG, BMP and GIF image formats.');
     }
 
@@ -298,17 +298,17 @@ function _img_convertImageFormat($srcImage,$destImage,$destFormat,$mimeType) {
         case 'image/tiff' :
         case 'application/photoshop' :
         case 'application/psd' :
-            COM_errorLog("IMG_convertImageFormat: GD Libs only support JPG, PNG, BMP, and GIF source formats.");
+            Log::write('system',Log::WARNING,"IMG_convertImageFormat: GD Libs only support JPG, PNG, BMP, and GIF source formats.");
             return array(false,'GD Libs only support JPG, PNG, BMP, and GIF source formats.');
     }
     if ( !$image ) {
-        COM_errorLog("IMG_convertImageFormat: GD Libs returned an error reading source image: " . $srcImage);
+        Log::write('system',Log::ERROR,"IMG_convertImageFormat: GD Libs returned an error reading source image: " . $srcImage);
         return array(false,'GD Libs returned an error reading source image.');
     }
 
     $imgsize = @getimagesize($srcImage);
     if ($imgsize == false ) {
-        COM_errorLog("IMG_convertImageFormat: GD Libs unable to determine dimensions for source image: " . $srcImage);
+        Log::write('system',Log::ERROR,"IMG_convertImageFormat: GD Libs unable to determine dimensions for source image: " . $srcImage);
         return array(false,'GD Libs returned an error retrieving the dimensions of source image.');
     }
     $imgwidth = $imgsize[0];
@@ -320,9 +320,7 @@ function _img_convertImageFormat($srcImage,$destImage,$destFormat,$mimeType) {
     imagecopyresampled($newimage, $image, 0,0,0,0,  $imgwidth, $imgheight, $imgwidth, $imgheight);
     imagedestroy($image);
 
-    if ($_CONF['verbose'] ) {
-        COM_errorLog("IMG_convertImageFormat: Outputting new image " . $destImage . " Format: " . $destFormat);
-    }
+    Log::write('system',Log::DEBUG,"IMG_convertImageFormat: Outputting new image " . $destImage . " Format: " . $destFormat);
 
     switch ( $destFormat ) {
         case 'image/jpeg' :
@@ -345,7 +343,7 @@ function _img_convertImageFormat($srcImage,$destImage,$destFormat,$mimeType) {
             @unlink($srcImage);
         }
     } else {
-        COM_errorLog("IMG_convertImageFormat: GD Libs returned an error during conversion.");
+        Log::write('system',Log::ERROR,"IMG_convertImageFormat: GD Libs returned an error during conversion.");
         return array(false,'GD Libs returned an error during conversion');
     }
     return array(true,'');
@@ -355,7 +353,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
     global $_CONF;
 
     if ( $_CONF['debug_image_upload'] ) {
-        COM_errorLog("IMG_watermarkImage: Using GD Libs to watermark image.");
+        Log::write('system',Log::INFO,"IMG_watermarkImage: Using GD Libs to watermark image.");
     }
     $newSrcTmp  = $origImage . '.tmp';
     $file_extension = strtolower(substr(strrchr($watermarkImage,"."),1));
@@ -370,7 +368,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
             $useCopy = 0;
             break;
         default :
-            COM_errorLog("IMG_watermarkImage: Unable to apply watermark, unrecognized filetype for watermark image");
+            Log::write('system',Log::ERROR,"IMG_watermarkImage: Unable to apply watermark, unrecognized filetype for watermark image");
             return array(false,'Unrecognized filetype for watermark image');
     }
     $size     = @getimagesize($origImage);
@@ -391,10 +389,10 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
                 break;
             case 'image/x-targa' :
             case 'image/tga' :
-                COM_errorLog("IMG_watermarkImage: TGA files not supported by GD Libs");
+                Log::write('system',Log::WARNING,"IMG_watermarkImage: TGA files not supported by GD Libs");
                 return array(false,'TGA files not supported by GD Libs');
             default :
-                COM_errorLog("IMG_watermarkImage: GD Libs only support JPG, PNG, and GIF image types.");
+                Log::write('system',Log::WARNING,"IMG_watermarkImage: GD Libs only support JPG, PNG, and GIF image types.");
                 return array(false,'GD Libs only support JPG,PNG, and GIF image types');
         }
         if ( $image == false ) {
@@ -438,7 +436,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
                 $dest_y = $size[1] - $watermark_height - 5;
                 break;
             default:
-                COM_errorLog("IMG_watermarkImage: Unknown watermark location: " . $location);
+                Log::write('system',Log::ERROR,"IMG_watermarkImage: Unknown watermark location: " . $location);
                 return array(false,'Unknown watermark location');
                 break;
         }
@@ -458,9 +456,9 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
         @unlink($newSrcTmp);
         imagedestroy($image);
         imagedestroy($watermark);
-        COM_errorLog("IMG_watermarkImage: Watermark successfully applied (GD libs)");
+        Log::write('system',Log::INFO,"IMG_watermarkImage: Watermark successfully applied (GD libs)");
     } else {
-        COM_errorLog("IMG_watermarkImage: Unable to determine src image filesize for watermarking (GD libs)");
+        Log::write('system',Log::ERROR,"IMG_watermarkImage: Unable to determine src image filesize for watermarking (GD libs)");
         return array(false,'Unable to determine src image dimensions');
     }
     return array(true,'');

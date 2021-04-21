@@ -1,35 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | im-image.php                                                             |
-// |                                                                          |
-// | ImageMagick Graphic Library interface                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* ImageMagick Graphics Interface
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 function _img_getIMversion()
 {
@@ -66,7 +53,7 @@ function _img_RotateImage($srcImage, $direction,$mimeType)
             $IM_rotate = "180";
             break;
         default :
-            COM_errorLog("_img_rotateImage: Invalid direction passed to rotate, must be left or right");
+            Log::write('system',Log::WARNING,"_img_rotateImage: Invalid direction passed to rotate, must be left or right");
             return array(false,'Invalid direction passed to rotate, must be left or right');
     }
 
@@ -102,7 +89,7 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
     $JpegQuality = $_CONF['jpg_orig_quality'];
 
     if ( $_CONF['debug_image_upload'] ) {
-        COM_errorLog("_img_resizeImage: Resizing using ImageMagick src = " . $srcImage . " mimetype = " . $mimeType);
+        Log::write('system',Log::INFO,"_img_resizeImage: Resizing using ImageMagick src = " . $srcImage . " mimetype = " . $mimeType);
     }
     if ( ( $dImageHeight > $sImageHeight) && ($dImageWidth > $sImageWidth )) {
         $dImageWidth = $sImageWidth;
@@ -125,12 +112,12 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
             }
         }
         if ( $rc != true ) {
-            COM_errorLog("_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");
+            Log::write('system',Log::ERROR,"_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");
             return array(false,'Error - Unable to resize image - ImageMagick convert failed.');
         }
         clearstatcache();
         if ( !file_exists($destImage) || !filesize($destImage) ) {
-            COM_errorLog("_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");
+            Log::write('system',Log::ERROR,"_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");
             return array(false,'Error - Unable to resize image - ImageMagick convert failed.');
         }
     } else {
@@ -140,12 +127,12 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
             $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/convert" . '"' . " -flatten -quality $JpegQuality -thumbnail $newdim $srcImage -geometry $newdim $destImage");
         }
         if ( $rc != true ) {
-            COM_errorLog("_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");
+            Log::write('system',Log::ERROR,"_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");
             return array(false,'Error - Unable to resize image - ImageMagick convert failed.');
         }
         clearstatcache();
         if ( !file_exists($destImage) || !filesize($destImage) ) {
-            COM_errorLog("_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");
+            Log::write('system',Log::ERROR,"_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");
             return array(false,'Error - Unable to resize image - ImageMagick convert failed.');
         }
         if ( $_CONF['jhead_enabled'] == 1 ) {
@@ -162,15 +149,15 @@ function _img_convertImageFormat($srcImage,$destImage,$destFormat, $mimeType)
 {
     global $_CONF;
 
-    COM_errorLog("_img_convertImageFormat: Converting image to " . $destFormat);
+    Log::write('system',Log::INFO,"_img_convertImageFormat: Converting image to " . $destFormat);
     $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/convert" . '"' . " -flatten -quality " . $_CONF['jpg_orig_quality'] . " $srcImage -geometry +0+0 $destImage");
     if ( $rc != true ) {
-        COM_errorLog("_img_convertImageFormat: Error converting " . $srcImage . " to " . $destImage);
+        Log::write('system',Log::ERROR,"_img_convertImageFormat: Error converting " . $srcImage . " to " . $destImage);
         return array(false,'ImageMagick convert failed to convert image.');
     }
     clearstatcache();
     if ( !file_exists($destImage) || !filesize($destImage) ) {
-        COM_errorLog("_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");
+        Log::write('system',Log::ERROR,"_img_resizeImage: Error - Unable to resize image - ImageMagick convert failed.");
         return array(false,'ImageMagick convert failed to convert image.');
     }
 
@@ -185,7 +172,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
     global $_CONF;
 
     if ( $_CONF['debug_image_upload'] ) {
-        COM_errorLog("_img_watermarkImage: Using ImageMagick to watermark image.");
+        Log::write('system',Log::INFO,"_img_watermarkImage: Using ImageMagick to watermark image.");
     }
     switch( $location ) {
         case 'topleft' : // 1 :
@@ -216,12 +203,12 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
             $location = "SouthEast";
             break;
         default:
-            COM_errorLog("_img_watermarkImage: Unknown watermark location: " . $location);
+            Log::write('system',Log::ERROR,"_img_watermarkImage: Unknown watermark location: " . $location);
             return array(false,'Unknown watermark location');
             break;
     }
     $rc = UTL_execWrapper('"' . $_CONF['path_to_mogrify'] . "/convert" . '" ' . " $watermarkImage -fill grey50 -colorize 40  miff:- | " . '"' . $_CONF['path_to_mogrify'] . "/composite" . '"' . " -dissolve " . $opacity . " -gravity " . $location . " - $origImage $origImage");
-    COM_errorLog("_img_watermarkImage: Watermark successfully applied (ImageMagick)");
+    Log::write('system',Log::INFO,"_img_watermarkImage: Watermark successfully applied (ImageMagick)");
     return array($rc,'');
 }
 
@@ -244,7 +231,7 @@ function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth
 
     if ($_CONF['debug_image_upload']) {
         $opt .= ' -verbose';
-        COM_errorLog("_img_squareThumbnail: Resizing using ImageMagick src = " . $srcImage . " mimetype = " . $mimeType);
+        Log::write('system',Log::INFO,"_img_squareThumbnail: Resizing using ImageMagick src = " . $srcImage . " mimetype = " . $mimeType);
     }
 
     if ($mimeType == 'image/gif') {
@@ -267,14 +254,14 @@ function _img_squareThumbnail($srcImage, $destImage, $sImageHeight, $sImageWidth
                           . " $opt -resize 50% -gravity center -crop ".$dSize."x".$dSize."+0+0 +repage -quality 91 $srcImage $destImage");
 
     if ($rc != true) {
-        COM_errorLog("_img_resizeImage_crop: Error - Unable to resize image - ImageMagick convert failed.");
+        Log::write('system',Log::ERROR,"_img_resizeImage_crop: Error - Unable to resize image - ImageMagick convert failed.");
         return array(false, 'Error - Unable to resize image (square thumbnail) - ImageMagick convert failed.');
     }
 
     clearstatcache();
 
     if (!file_exists($destImage) || !filesize($destImage)) {
-        COM_errorLog("_img_resizeImage_crop: Error - Unable to resize image - ImageMagick convert failed.");
+        Log::write('system',Log::ERROR,"_img_resizeImage_crop: Error - Unable to resize image - ImageMagick convert failed.");
         return array(false, 'Error - Unable to resize image (square thumbnail) - ImageMagick convert failed.');
     }
     if (($mimeType != 'image/gif') && ($_CONF['jhead_enabled'] == 1)) {

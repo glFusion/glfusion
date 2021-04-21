@@ -1020,10 +1020,6 @@ function saveuser($A)
 {
     global $_CONF, $_TABLES, $_USER, $LANG04, $LANG24, $MESSAGE, $_US_VERBOSE;
 
-    if ($_US_VERBOSE) {
-        COM_errorLog('**** Inside saveuser in usersettings.php ****', 1);
-    }
-
     $db = Database::getInstance();
 
     $reqid = DB_getItem ($_TABLES['users'], 'pwrequestid',"uid = " . (int) $_USER['uid']);
@@ -1217,7 +1213,7 @@ function saveuser($A)
         }
 
         if ($_US_VERBOSE) {
-            COM_errorLog('cooktime = ' . $A['cooktime'],1);
+            Log::write('system',Log::DEBUG,'usersettings.php: cooktime = ' . $A['cooktime']);
         }
 
         if ($A['cooktime'] <= 0) {
@@ -1333,7 +1329,7 @@ function saveuser($A)
 
                 if ($msg != 5) {
                     $msg = 114; // Account saved but re-synch failed.
-                    COM_errorLog($MESSAGE[$msg]);
+                    Log::write('system',Log::ERROR,$MESSAGE[$msg]);
                 }
             }
         }
@@ -1342,9 +1338,6 @@ function saveuser($A)
 
         $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
 
-        if ($_US_VERBOSE) {
-            COM_errorLog('**** Leaving saveuser in usersettings.php ****', 1);
-        }
         if ( $msg == 5 ) {
             COM_setMsg($MESSAGE[$msg],'info');
         } else {
@@ -1915,10 +1908,6 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
             } else {
                 $query = array_merge($_GET, $_POST);
                 $service = $query['oauth_login'];
-                // COM_errorLog("-------------------------------------------------------------------------");
-                // COM_errorLog("usersettings.php?mode=resynch&oauth_login={$service}");
-                // COM_errorLog("-------------------------------------------------------------------------");
-
                 $consumer = new OAuthConsumer($service);
 
                 if($service == 'oauth.facebook') {
@@ -1926,7 +1915,7 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
                     $oauth_userinfo = $consumer->refresh_userinfo();
                     if (empty($oauth_userinfo)) {
                         $msg = 114; // Account saved but re-synch failed.
-                        COM_errorLog($MESSAGE[$msg]);
+                        Log::write('system',Log::ERROR,$MESSAGE[$msg]);
                     } else {
                         $consumer->resyncUserData($oauth_userinfo);
                     }
@@ -1934,11 +1923,8 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
                     // other OAuth services are more complex
                     // setup what we need to callback and authenticate
                     $callback_query_string = $consumer->getCallback_query_string();
-                    // COM_errorLog("callback_query_string={$callback_query_string}");
                     $cancel_query_string = $consumer->getCancel_query_string();
-                    // COM_errorLog("cancel_query_string={$cancel_query_string}");
                     $callback_url = $_CONF['site_url'] . '/usersettings.php?mode=synch&oauth_login=' . $service;
-                    // COM_errorLog("callback_url={$callback_url}");
 
                     // authenticate with the remote service
                     if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
@@ -1964,7 +1950,7 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
                 $display = COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $_USER['uid']);
             } else {
                 COM_setMsg( $MESSAGE[$msg], 'error',true );
-                COM_errorLog($MESSAGE[$msg]);
+                Log::write('system',Log::ERROR,$MESSAGE[$msg]);
                 $display = COM_refresh ($_CONF['site_url'] . '/usersettings.php');
             }
             break;

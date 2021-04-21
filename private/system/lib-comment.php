@@ -26,6 +26,7 @@ if (!defined ('GVERSION')) {
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Formatter;
+use \glFusion\Log\Log;
 
 USES_lib_user();
 
@@ -1563,7 +1564,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 
     // Check that anonymous comments are allowed
     if (($uid == 1) && (($_CONF['loginrequired'] == 1) || ($_CONF['commentsloginrequired'] == 1))) {
-        COM_errorLog("CMT_saveComment: IP address {$_SERVER['REMOTE_ADDR']} "
+        Log::write('system',Log::WARNING,'CMT_saveComment: IP address '.$_SERVER['REAL_ADDR'].' '
                    . 'attempted to save a comment with anonymous comments disabled for site.');
         return $ret = 2;
     }
@@ -1572,8 +1573,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     COM_clearSpeedlimit ($_CONF['commentspeedlimit'], 'comment');
     $last = COM_checkSpeedlimit ('comment');
     if ($last > 0) {
-        COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
-                   . 'to submit a comment before the speed limit expired');
+        Log::write('system',Log::WARNING,'CMT_saveComment: '.$uid.' from IP address '.$_SERVER['REAL_ADDR'].' '
+        . 'attempted to submit a comment before the speed limit expired.');
         return $ret = 3;
     }
 
@@ -1597,7 +1598,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 
     // Error Checking
     if (empty ($sid) || empty ($comment) || empty ($type) ) {
-        COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried to submit a comment with one or more missing values.");
+        Log::write('system',Log::WARNING,'CMT_saveComment: '.$uid.' from '.$_SERVER['REAL_ADDR'].' tried to submit a comment with one or more missing values.');
         if ( SESS_isSet('glfusion.commentpresave.error') ) {
             $msg = SESS_getVar('glfusion.commentpresave.error') . '<br/>' . $LANG03[12];
         } else {
@@ -1665,7 +1666,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             array(Database::INTEGER, Database::STRING)
         );
         if ($row === false) {
-            COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REAL_ADDR']} tried "
+            Log::write('system',Log::WARNING,'CMT_saveComment: '.$uid.' from '.$_SERVER['REAL_ADDR'].' tried '
                        . 'to reply to a non-existent comment or the pid/sid did not match');
             return 4;
         }
@@ -1957,7 +1958,7 @@ function CMT_deleteComment ($cid, $sid, $type)
     // Sanity check, note we return immediately here and no DB operations
     // are performed
     if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
-        COM_errorLog("CMT_deleteComment: {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+        Log::write('system',Log::WARNING,'CMT_deleteComment: '.$_USER['uid'].' from '.$_SERVER['REAL_ADDR'].' tried '
                    . 'to delete a comment with one or more missing/bad values.');
         return 1;
     }
@@ -1980,7 +1981,7 @@ function CMT_deleteComment ($cid, $sid, $type)
           array(Database::INTEGER, Database::STRING, Database::STRING)
         );
         if ($cmtData === false) {
-            COM_errorLog("CMT_deleteComment: {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+            Log::write('system',Log::WARNING,'CMT_deleteComment: '.$_USER['uid'].' from '.$_SERVER['REAL_ADDR'].' tried '
                        . 'to delete a comment that doesn\'t exist as described.');
             return $ret = 2;
         }
@@ -2664,7 +2665,6 @@ function plugin_moderationapprove_comment($id)
         }
     }
     if ($row === false) {
-        COM_errorLog("Unable to retrieve approved comment");
         return false;
     }
 

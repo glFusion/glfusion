@@ -38,6 +38,8 @@
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
+use \glFusion\Log\Log;
+
 $display = '';
 
 // Ensure user even has the rights to access this page
@@ -47,7 +49,7 @@ if (!SEC_hasRights('calendar.edit')) {
     $display .= COM_siteFooter();
 
     // Log attempt to error.log
-    COM_accessLog("User {$_USER['username']} tried to access the event administration screen.");
+    Log::write('system',Log::ERROR,'Someone has tried to access the Calendar Administration Page.  User id: '.$_USER['uid'].', IP: ' . $_SERVER['REAL_ADDR']);
 
     echo $display;
 
@@ -1106,7 +1108,7 @@ switch ($action) {
 
     case 'delete':
         if (!isset ($eid) || empty ($eid) || ($eid == 0)) {
-            COM_errorLog ('User ' . $_USER['username'] . ' attempted to delete event, eid empty, null, or is 0');
+            Log::write('system',Log::WARNING,'User ' . $_USER['username'] . ' attempted to delete event, eid empty, null, or is 0');
             $display .= COM_refresh($_CONF['site_admin_url'] . '/plugins/calendar/index.php');
         } elseif (SEC_checkToken()) {
             $display .= CALENDAR_delete($eid, $type);
