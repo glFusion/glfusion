@@ -14,6 +14,8 @@
 
 require_once '../lib-common.php';
 
+use \glFusion\Log\Log;
+
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
     exit;
@@ -49,7 +51,7 @@ if ( $source == 'q' ) {
     $mediaQueue = 0;
 }
 if ($video_id == '') {
-    COM_errorLog("MediaGallery: No video id passed to video.php");
+    Log::write('system',Log::ERROR,"MediaGallery: No video id passed to video.php");
     die("Invalid ID");
 }
 
@@ -721,7 +723,7 @@ if ( $nRows > 0 ) {
             ));
             break;
         default :
-            COM_errorLog("MG - Unknown video filetype found");
+            Log::write('system',Log::ERROR,"Media Gallery - Unknown video filetype found");
             die($row['mime_type'] . "Invalid Media Format");
             break;
     }

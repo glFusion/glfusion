@@ -17,6 +17,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Log\Log;
+
 class mgAlbum {
     var $id;
     var $title;
@@ -307,7 +309,7 @@ class mgAlbum {
             $aid = 1;
         }
         if ( $aid == 0 ) {
-            COM_errorLog("MediaGallery: Error - Returned 0 as album_id");
+            Log::write('system',Log::ERROR,'MediaGallery: Error - Returned 0 as album_id');
             $aid = 1;
         }
         return $aid;

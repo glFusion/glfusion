@@ -18,6 +18,8 @@ if (!defined ('GVERSION')) {
 
 require_once $_CONF['path'] . 'plugins/mediagallery/include/rssfeed.php';
 
+use \glFusion\Log\Log;
+
 function mediagallery_upgrade()
 {
     global $_TABLES, $_CONF, $_MG_CONF, $_DB_dbms, $TEMPLATE_OPTIONS;
@@ -298,10 +300,10 @@ function MG_upgrade_090( )
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
-        COM_errorLOG("Media Gallery plugin 0.90 update: Executing SQL => " . current($_SQL));
+        Log::write('system',Log::INFO,"Media Gallery plugin 0.90 update: Executing SQL => " . current($_SQL));
         DB_query(current($_SQL));
         if (DB_error()) {
-            COM_errorLog("SQL Error during Media Gallery plugin update",1);
+            Log::write('system',Log::ERROR,"SQL Error during Media Gallery plugin update");
             return 1;
             break;
         }

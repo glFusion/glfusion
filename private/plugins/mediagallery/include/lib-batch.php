@@ -1,37 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | lib-batch.php                                                            |
-// |                                                                          |
-// | batch process management                                                 |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Batch process management
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Log\Log;
 
 /**
 * creates a new batch session id
@@ -60,7 +46,7 @@ function MG_beginSession( $action, $origin, $description, $flag0='',$flag1='',$f
             VALUES ('$session_id',{$_USER['uid']}, '$session_description', $session_status, '$session_action','$origin', $session_start_time,$session_end_time,'$flag0','$flag1','$flag2','$flag3','$flag4')";
     $result = DB_query($sql,1);
     if ( DB_error() ) {
-        COM_errorLog("MediaGallery: Error - Unable to create new batch session");
+        Log::write('system',Log::ERROR,"MediaGallery: Error - Unable to create new batch session");
         return false;
     }
     return $session_id;
@@ -92,7 +78,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
     $sql = "SELECT * FROM {$_TABLES['mg_sessions']} WHERE session_id='" . DB_escapeString($session_id) . "'";
     $result = DB_query($sql,1);
     if ( DB_error() ) {
-        COM_errorLog("MediaGallery:  Error - Unable to retrieve batch session data");
+        Log::write('system',Log::ERROR,"MediaGallery:  Error - Unable to retrieve batch session data");
         return '';
     }
 
@@ -100,7 +86,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
     if ( $nRows > 0 ) {
         $session = DB_fetchArray($result);
     } else {
-        COM_errorLog("MediaGallery: Error - Unable to find batch session id");
+        Log::write('system',Log::ERROR,"MediaGallery: Error - Unable to find batch session id");
         return '';      // no session found
     }
 
@@ -192,7 +178,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                      $tmpImage = $_MG_CONF['tmp_path'] . '/wip' . rand() . '.jpg';
                     $rc = IMG_convertImageFormat($srcImage, $tmpImage, 'image/jpeg',0);
                     if ( $rc == false ) {
-                        COM_errorLog("MG_convertImage: Error converting uploaded image to jpeg format.");
+                        Log::write('system',Log::ERROR,"Media Gallery: MG_convertImage - Error converting uploaded image to jpeg format.");
                         @unlink($srcImage);
                         return false;
                     }
@@ -209,7 +195,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     }
                 }
                 if ( $rc == false ) {
-                    COM_errorLog("MG_convertImage: Error resizing uploaded image to thumbnail size.");
+                    Log::write('system',Log::ERROR,"Media Gallery: MG_convertImage Error resizing uploaded image to thumbnail size.");
                     @unlink($srcImage);
                 }
                 break;
@@ -236,7 +222,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     $tmpImage = $_MG_CONF['tmp_path'] . '/wip' . rand() . '.jpg';
                     list($rc,$msg) = IMG_convertImageFormat($srcImage, $tmpImage, 'image/jpeg',0);
                     if ( $rc == false ) {
-                        COM_errorLog("MG_libBatch: Error converting uploaded image to jpeg format.");
+                        Log::write('system',Log::ERROR,"Media Gallery: MG_libBatch - Error converting uploaded image to jpeg format.");
                     }
                 }
                 switch ( $MG_albums[$aid]->display_image_size ) {
@@ -343,7 +329,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
 
                     $dir = $srcFile;
                     if (!$dh = @opendir($dir)) {
-                        COM_errorLog("Media Gallery: Error - unable process FTP import directory " . $dir );
+                        Log::write('system',Log::ERROR,"Media Gallery: Error - unable process FTP import directory " . $dir );
                     } else {
                         while ( ( $file = readdir($dh) ) != false ) {
                             if ( $file == '..' || $file == '.' ) {
@@ -364,7 +350,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                             DB_query("INSERT INTO {$_TABLES['mg_session_items']} (session_id,mid,aid,data,data2,data3,status)
                                       VALUES('".DB_escapeString($session_id)."','".DB_escapeString($mid)."',$new_aid,'" . DB_escapeString($filetmp) . "','" . DB_escapeString($purgefiles) . "','" . DB_escapeString($filename) . "',0)");
                             if ( DB_error() ) {
-                                COM_errorLog("Media Gallery: Error - SQL error on inserting record into session_items table");
+                                Log::write('system',Log::ERROR,"Media Gallery: Error - SQL error on inserting record into session_items table");
                             }
                         }
                     }
@@ -372,7 +358,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
 
                     if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
-                        COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
+                        Log::write('system',Log::ERROR,"MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                         $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                         DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                         continue 2;
@@ -418,7 +404,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
-                    COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
+                    Log::write('system',Log::ERROR,"MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                     $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                     continue 2;
@@ -498,7 +484,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
-                    COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
+                    Log::write('system',Log::ERROR,"MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                     $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('$session_id','$statusMsg')");
                     continue 2;
@@ -582,7 +568,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
-                    COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
+                    Log::write('system',Log::ERROR,"MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                     $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('$session_id','$statusMsg')");
                     continue 2;
@@ -629,7 +615,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
-                    COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
+                    Log::write('system',Log::ERROR,"MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                     $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                     continue 2;
@@ -685,7 +671,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
 
                     if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
-                        COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
+                        Log::write('system',Log::ERROR,"MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                         $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                         DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                         continue 2;
@@ -765,7 +751,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                     $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
 
                     if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
-                        COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
+                        Log::write('system',Log::ERROR,"MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                         $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                         DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                         continue 2;
@@ -815,7 +801,7 @@ function MG_continueSession( $session_id, $item_limit, $refresh_rate  ) {
                 $file_extension = strtolower(substr(strrchr($baseSrcFile,"."),1));
 
                 if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($srcFile) > $MG_albums[$album_id]->max_filesize) {
-                    COM_errorLog("MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
+                    Log::write('system',Log::ERROR,"MediaGallery: File " . $baseSrcFile . " exceeds maximum filesize for this album.");
                     $statusMsg = DB_escapeString(sprintf($LANG_MG02['upload_exceeds_max_filesize'],$baseSrcFile));
                     DB_query("INSERT INTO {$_TABLES['mg_session_log']} (session_id,session_log) VALUES ('".DB_escapeString($session_id)."','$statusMsg')");
                     continue 2;
@@ -1083,7 +1069,7 @@ function MG_saveComment ($title, $comment, $sid, $pid, $type, $postmode, $uid, $
     $ret = 0;
     // Sanity check
     if (empty ($sid) || empty ($title) || empty ($comment) || empty ($type) ) {
-        COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
+        Log::write('system',Log::WARNING,"Media Gallery: MG_saveComment: ".$uid." from ".$_SERVER['REAL_ADDR']." tried "
                    . 'to submit a comment with one or more missing values.');
         return $ret = 1;
     }
@@ -1091,7 +1077,7 @@ function MG_saveComment ($title, $comment, $sid, $pid, $type, $postmode, $uid, $
     // Check that anonymous comments are allowed
     if (($uid == 1) && (($_CONF['loginrequired'] == 1)
             || ($_CONF['commentsloginrequired'] == 1))) {
-        COM_errorLog("CMT_saveComment: IP address {$_SERVER['REMOTE_ADDR']} "
+        Log::write('system',Log::WARNING,"Media Gallery: MG_saveComment: IP address ".$_SERVER['REAL_ADDR']." "
                    . 'attempted to save a comment with anonymous comments disabled for site.');
         return $ret = 2;
     }
@@ -1155,7 +1141,7 @@ function MG_saveComment ($title, $comment, $sid, $pid, $type, $postmode, $uid, $
                 DB_save ($_TABLES['comments'], 'sid,uid,comment,date,title,pid,lft,rht,indent,type,ipaddress',
                         "'$sid',$uid,'$comment','$cmtdate','$title',$pid,$rht,$rht+1,$indent+1,'$type','$ipaddress'");
             } else { //replying to non-existent comment or comment in wrong article
-                COM_errorLog("CMT_saveComment: $uid from $ipaddress tried "
+                Log::write('system',Log::WARNING,"Media Gallery: MG_saveComment: ".$uid." from ".$ipaddress." tried "
                            . 'to reply to a non-existent comment or the pid/sid did not match');
                 $ret = 4; // Cannot return here, tables locked!
             }
@@ -1177,8 +1163,8 @@ function MG_saveComment ($title, $comment, $sid, $pid, $type, $postmode, $uid, $
                               $type, $cid);
         }
     } else {
-        COM_errorLog("CMT_saveComment: $uid from $ipaddress tried "
-                   . 'to submit a comment with invalid $title and/or $comment.');
+        Log::write('system',Log::WARNING,"Media Gallery: MG_saveComment: ".$uid." from ".$ipaddress." tried "
+                   . 'to submit a comment with invalid title and/or comment.');
         return $ret = 5;
     }
 

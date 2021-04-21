@@ -20,6 +20,8 @@ if (!defined ('GVERSION')) {
 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
 
+use \glFusion\Log\Log;
+
 function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
     global $album_selectbox, $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST, $_DB_dbms;
 
@@ -48,7 +50,7 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
 
     // -- Get Album Cover Info..
     if ( $MG_albums[$album_id]->access != 3) {
-        COM_errorLog("Someone has tried to illegally edit media in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,"Media Gallery: Someone has tried to edit media without the proper permissions.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -324,12 +326,13 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
     $result = DB_query($sql);
     $row = DB_fetchArray($result);
     if ( DB_error() != 0 )  {
-        echo COM_errorLog("Media Gallery - Error retrieving album cover.");
+        echo "Media Gallery - Error retrieving album cover.";
+        Log::write('system',Log::ERROR,"Media Gallery - Error retrieving album cover.");
     }
     $access = SEC_hasAccess ($row['owner_id'],$row['group_id'],$row['perm_owner'],$row['perm_group'],$row['perm_members'],$row['perm_anon']);
 
     if ( $access != 3 && !SEC_hasRights('mediagallery.admin') ) {
-        COM_errorLog("Someone has tried to illegally manage (save) Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING, "Media Gallery: Someone has tried to manage (save) a media item without the proper permissions.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -422,7 +425,7 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
             $sql = "UPDATE " . $_TABLES['mg_albums'] . " SET album_cover = '" . DB_escapeString($cover) . "', album_cover_filename='" . $coverFilename . "' WHERE album_id = " . intval($album_id);
             DB_query($sql);
             if ( DB_error() != 0 )  {
-                echo COM_errorLog("Error setting album cover");
+                echo "Error setting album cover";
             }
         }
     }
@@ -508,7 +511,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     $row    = DB_fetchArray($result);
 
     if ( $MG_albums[$album_id]->access != 3 && !SEC_inGroup($MG_albums[$album_id]->mod_group_id) && $row['media_user_id'] != $_USER['uid'] ) {
-        COM_errorLog("Someone has tried to illegally sort albums in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,"Media Gallery: Someone has tried to edit a media item without the proper permissions.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDR']);
         return(MG_genericError( $LANG_MG00['access_denied_msg'] ));
     }
 
@@ -1218,7 +1221,7 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
 	    $file = $repfilename['tmp_name'];
 
         list($rc,$msg) = MG_getFile( $file, $filename, $album_id,'','',1,0,'',0,'','',0,0,$media_id );
-        COM_errorLog($msg);
+        Log::write('system',Log::INFO, $msg);
     }
 
     // see if we had an attached thumbnail before...
@@ -1314,7 +1317,7 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
 
     DB_query($sql);
     if ( DB_error() != 0 ) {
-        echo COM_errorLog("Media Gallery: ERROR Updating image in media database");
+        echo "Media Gallery: ERROR Updating image in media database";
     }
     PLG_itemSaved($media_id,'mediagallery');
     $media_id_db = DB_escapeString($media_id);

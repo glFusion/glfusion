@@ -17,10 +17,12 @@ require_once '../../auth.inc.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 require_once $_MG_CONF['path_admin'] . 'navigation.php';
 
+use \glFusion\Log\Log;
+
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {
     // Someone is trying access this page without proper permissions
-    COM_errorLog("Someone has tried to access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
+    Log::write('system',Log::WARNING,"Someone has tried to access the Media Gallery Configuration page.  User id: ".$_USER['uid']);
     $display  = COM_siteHeader();
     $display .= COM_startBlock($LANG_MG00['access_denied']);
     $display .= $LANG_MG00['access_denied_msg'];

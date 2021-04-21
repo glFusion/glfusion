@@ -17,6 +17,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 /**
 * Language file Include
@@ -1349,12 +1350,12 @@ function plugin_moderationapprove_mediagallery($id)
 
             DB_query($sql);
             if ( DB_error() ) {
-                COM_errorLog("Media Gallery: Error inserting queued item into album.");
+                Log::write('system',Log::ERROR,'Media Gallery: Error inserting queued item into album.');
             }
             $sql = "DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id) . "'";
             DB_query($sql);
             if ( DB_error() ) {
-                COM_errorLog("Media Gallery: Error deleting queued item from album queue.");
+                Log::write('system',Log::ERROR,'Media Gallery: Error deleting queued item from album queue.');
             }
             $statusReport .= "Media ID " . $id . $LANG_MG01['queue_processed'];
             MG_SortMedia( $row['album_id'] );

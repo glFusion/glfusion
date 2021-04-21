@@ -16,6 +16,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Log\Log;
+
 global $_DB_dbms;
 
 require_once $_CONF['path'].'plugins/mediagallery/mediagallery.php';
@@ -97,7 +99,7 @@ function plugin_install_mediagallery()
     $pi_display_name    = $_MG_CONF['pi_display_name'];
     $pi_version         = $_MG_CONF['pi_version'];
 
-    COM_errorLog("Attempting to install the $pi_display_name plugin", 1);
+    Log::write('system',Log::INFO,'Attempting to install the '.$pi_display_name.' plugin');
 
     $ret = INSTALLER_install($INSTALL_plugin[$pi_name]);
     if ($ret > 0) {

@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | remote.php                                                               |
-// |                                                                          |
-// | Remote Media routines                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Remote Media Handling
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -33,6 +18,8 @@ if (!defined ('GVERSION')) {
 }
 
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
+
+use \glFusion\Log\Log;
 
 /**
 * Remote Media Import
@@ -260,7 +247,7 @@ function MG_saveRemoteUpload( $albumId ) {
     if ( $dbCount != $aCount) {
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $dbCount .
                  " WHERE album_id=" . intval($albumId) );
-        COM_errorLog("MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
+        Log::write('system',Log::WARNING,'MediaGallery: Upload processing - Counts don\'t match - dbCount = ' . $dbCount . ' aCount = ' . $aCount);
     }
 
     $T->set_var('status_message',$statusMsg);
@@ -278,11 +265,9 @@ function MG_saveRemoteUpload( $albumId ) {
 function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywords,$category,$attachedThumbnail,$thumbnail,$resolution_x,$resolution_y) {
     global $MG_albums, $_CONF, $_MG_CONF, $_USER, $_TABLES, $LANG_MG00, $LANG_MG01, $LANG_MG02, $new_media_id;
 
-    if ($_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: Entering MG_getRemote()");
-        COM_errorLog("MG Upload: URL to process: " . htmlentities($URL));
-    }
-
+    Log::write('system',Log::DEBUG,"MG Upload: Entering MG_getRemote()");
+    Log::write('system',Log::DEBUG,"MG Upload: URL to process: " . htmlentities($URL));
+    
     $resolution_x = 0;
     $resolution_y = 0;
 
@@ -308,7 +293,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
               $albumInfo['perm_anon']);
 
     if ( $access != 3 && !$MG_albums[0]->owner_id && $albumInfo['member_uploads'] == 0) {
-        COM_errorLog("Someone has tried to illegally upload to an album in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: {$_SERVER['REMOTE_ADDR']}",1);
+        Log::write('system',Log::WARNING,'Media Gallery: Someone has tried to upload to an album in Media Gallery.  User id: '.$_USER['uid'].' IP: '.$_SERVER['REAL_ADDR']);
         return array(false,$LANG_MG00['access_denied_msg']);
     }
 
@@ -405,13 +390,9 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
 
     $disp_media_filename = $media_filename . '.' . $mimeExt;    // for remote files this will be a 0 byte file
 
-    if ( $_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: Stored filename is : " . $disp_media_filename);
-    }
+    Log::write('system',Log::DEBUG,'Media Gallery: Upload - Stored filename is : ' . $disp_media_filename);
 
-    if ( $_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: Mime Type: " . $mimeType);
-    }
+    Log::write('system',Log::DEBUG,"MG Upload: Mime Type: " . $mimeType);
 
     // now we pretent to process the file
     $media_orig = $_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/' . $media_filename . "." . $mimeExt;
@@ -420,16 +401,14 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
     touch($media_orig);
 
     if ( $errors ) {
-        COM_errorLog("MG Upload: Problem uploading a media object");
+        Log::write('system',Log::ERROR,"Media Gallery: Upload - Problem uploading a media object");
         return array( false, $errMsg );
     }
 
         // Now we need to process an uploaded thumbnail
 
-    if ( $_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: attachedThumbnail: " . $attachedThumbnail);
-        COM_errorLog("MG Upload: thumbnail: " . $thumbnail);
-    }
+    Log::write('system',Log::DEBUG,"Media Gallery: Upload - attachedThumbnail: " . $attachedThumbnail);
+    Log::write('system',Log::DEBUG,"Media Gallery: Upload - thumbnail: " . $thumbnail);
 
     if ( $attachedThumbnail == 1 && $thumbnail != '' ) {
 	    // see if it is remote, if yes go get it...
@@ -451,9 +430,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
     	}
     }
 
-    if ( $_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: Building SQL and preparing to enter database");
-    }
+    Log::write('system',Log::DEBUG,"Media Gallery: Upload - Building SQL and preparing to enter database");
 
     if ($MG_albums[$albumId]->enable_html != 1 ) {
 //    if ($_MG_CONF['htmlallowed'] != 1 ) {
@@ -494,9 +471,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
 	    $original_filename = '';
 	}
 
-    if ($_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: Inserting media record into mg_media");
-    }
+    Log::write('system',Log::DEBUG,"Media Gallery: Upload - Inserting media record into mg_media");
 
     if ( ($resolution_x == 0 || $resolution_y == 0) && ($mediaType != 0)) {
 	    $resolution_x = 320;
@@ -509,9 +484,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
             VALUES ('".DB_escapeString($new_media_id)."','".DB_escapeString($media_filename)."','".DB_escapeString($original_filename)."','".DB_escapeString($mimeExt)."','1','".DB_escapeString($mimeType)."','$media_caption','$media_desc','$media_keywords','".DB_escapeString($media_time)."','0','0','0','0.00','".DB_escapeString($attachedThumbnail)."','','1','".intval($media_user_id)."','','0','".DB_escapeString($mediaType)."','".DB_escapeString($media_upload_time)."','".DB_escapeString($category)."','0','0','0',$resolution_x,$resolution_y,1,'$remoteURL');";
     DB_query( $sql );
 
-    if ( $_MG_CONF['verbose'] ) {
-        COM_errorLog("MG Upload: Updating Album information");
-    }
+    Log::write('system',Log::DEBUG,"Media Gallery: Upload - Updating Album information");
 
     $sql = "SELECT MAX(media_order) + 10 AS media_seq FROM " . $_TABLES['mg_media_albums'] . " WHERE album_id = " . intval($albumId);
     $result = DB_query( $sql );
@@ -541,9 +514,8 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
             } else {
                 $covername = $media_filename;
             }
-            if ( $_MG_CONF['verbose']) {
-                COM_errorLog("MG Upload: Setting album cover filename to " . $covername);
-            }
+            Log::write('system',Log::DEBUG, "Media Gallery: Upload - Setting album cover filename to " . $covername);
+
             DB_query("UPDATE {$_TABLES['mg_albums']} SET album_cover_filename='" . $covername . "'" .
                      " WHERE album_id='" . $albumInfo['album_id'] . "'");
         }
@@ -559,7 +531,7 @@ function MG_getRemote( $URL, $mimeType, $albumId, $caption, $description,$keywor
         MG_buildFullRSS( );
         MG_buildAlbumRSS( $albumId );
     }
-    COM_errorLog("MG Upload: Successfully uploaded a media object");
+    Log::write('system',Log::INFO, "Media Gallery: Successfully uploaded a media object");
 
     return array (true, $errMsg );
 }
@@ -570,28 +542,19 @@ function MG_getRemoteThumbnail( $remotefile, $localfile ) {
 
     return false;
 
-    if ($_MG_CONF['verbose']) {
-        COM_errorLog("Entering MG getRemoteThumbnail");
-    }
+    Log::write('system',Log::DEBUG, "Media Gallery: Entering MG getRemoteThumbnail");
 
     if ( !function_exists('curl_init') ) {
-        if ( $_MG_CONF['verbose'] ) {
-            COM_errorLog("MG_getRemoteThumbnail - No CURL support, trying fopen");
-        }
+        Log::write('system',Log::DEBUG, "Media Gallery: MG_getRemoteThumbnail - No CURL support, trying fopen");
         if ( ($handle = @fopen ($remotefile, "rb")) == false ) {
-            if ($_MG_CONF['verbose']) {
-                COM_errorLog("Exiting MG getRemoteThumbnail(return false: handle == false)");
-            }
+            Log::write('system',Log::DEBUG,"Media Gallery: Exiting MG getRemoteThumbnail(return false: handle == false)");
     	    return false;
 	    }
         if ( ( $localhandle = fopen($localfile,"wb") ) == false ) {
         	if ( $handle ) {
 	            close($handle);
 	        }
-
-            if ($_MG_CONF['verbose']) {
-                COM_errorLog("Exiting MG getRemoteThumbnail(return false: localhandle == false)");
-            }
+            Log::write('system',Log::DEBUG,"Media Gallery: Exiting MG getRemoteThumbnail(return false: localhandle == false)");
             return false;
         }
 
@@ -606,9 +569,7 @@ function MG_getRemoteThumbnail( $remotefile, $localfile ) {
 	            fwrite($localhandle,$data);
 	        } while(true);
         } else {
-            if ($_MG_CONF['verbose']) {
-                COM_errorLog("Exiting MG getRemoteThumbnail(return false: !handle)");
-            }
+            Log::write('system',Log::DEBUG,"Media Gallery: Exiting MG getRemoteThumbnail(return false: !handle)");
     	    return false;
 	    }
 
@@ -628,24 +589,20 @@ function MG_getRemoteThumbnail( $remotefile, $localfile ) {
         $cginfo = curl_getinfo($ch);
 
         if (curl_errno($ch) ||  $cginfo['http_code'] != 200 ) {
-            COM_errorLog("MG_getRemoteThumbnail: HTTP code = ". $hcode .
+            Log::write('system',Log::ERROR, "Media Gallery: MG_getRemoteThumbnail: HTTP code = ". $hcode .
                 "\n\tcurl_errno = ". curl_errno($ch) .
                 "\n\tcurl_error text = ". curl_error($ch));
 
             curl_close($ch);
             fclose($fp);
-            if ($_MG_CONF['verbose']) {
-                COM_errorLog("Exiting MG getRemoteThumbnail(returning false: curl_errno || curl_getinfo)");
-            }
+            Log::write('system',Log::DEBUG,"Media Gallery: Exiting MG getRemoteThumbnail(returning false: curl_errno || curl_getinfo)");
 	        return false;
         }
         curl_close($ch);
         fclose($fp);
     }
 
-    if ($_MG_CONF['verbose']) {
-        COM_errorLog("Exiting MG getRemoteThumbnail");
-    }
+    Log::write('system',Log::DEBUG,"Media Gallery: Exiting MG getRemoteThumbnail");
     return true;
 }
 ?>
