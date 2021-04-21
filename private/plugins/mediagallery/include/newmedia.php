@@ -185,11 +185,11 @@ function MG_saveHTML5Upload( $album_id ) {
         $thumbnail   = '';
 
         if( $_MG_CONF['verbose'] ) {
-            Log::write('system',Log::DEBUG,'filename=' . $filename, 1 );
-            Log::write('system',Log::DEBUG,'filesize=' . $filesize, 1 );
-            Log::write('system',Log::DEBUG,'filetype=' . $filetype, 1 );
-            Log::write('system',Log::DEBUG,'filetmp=' . $filetmp, 1 );
-            Log::write('system',Log::DEBUG,'error=' . $error, 1 );
+            Log::write('system',Log::DEBUG,'filename=' . $filename );
+            Log::write('system',Log::DEBUG,'filesize=' . $filesize );
+            Log::write('system',Log::DEBUG,'filetype=' . $filetype );
+            Log::write('system',Log::DEBUG,'filetmp=' . $filetmp );
+            Log::write('system',Log::DEBUG,'error=' . $error );
         }
 
         // we need to move the max filesize stuff to the flash uploader

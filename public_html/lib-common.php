@@ -1801,13 +1801,13 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
 
     if ( !empty( $selected )) {
         if ( $_COM_VERBOSE ) {
-            Log::write('system',Log::DEBUG, "exploding selected array: $selected in COM_checkList", 1 );
+            Log::write('system',Log::DEBUG, "exploding selected array: $selected in COM_checkList" );
         }
 
         $S = explode( ' ', $selected );
     } else {
         if ( $_COM_VERBOSE ) {
-            Log::write('system',Log::DEBUG, 'selected string was empty COM_checkList', 1 );
+            Log::write('system',Log::DEBUG, 'selected string was empty COM_checkList' );
         }
 
         $S = array();
@@ -4916,7 +4916,7 @@ function COM_applyBasicFilter( $parameter, $isnumeric = false )
 
     if ( $log_manipulation ) {
         if ( strcmp( $p, $parameter ) != 0 ) {
-            Log::write('system',Log::WARNING, "Filter applied: >> $parameter << filtered to $p [IP {$_SERVER['REMOTE_ADDR']}]", 1);
+            Log::write('system',Log::WARNING, "Filter applied: >> $parameter << filtered to $p [IP {$_SERVER['REMOTE_ADDR']}]");
         }
     }
 

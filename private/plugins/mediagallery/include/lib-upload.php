@@ -464,7 +464,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     }
 
     if ( $MG_albums[$albums]->access != 3 && !$MG_albums[0]->owner_id && $MG_albums[$albums]->member_uploads == 0) {
-        Log::write('system',Log::ERROR,"Someone has tried to upload to an album in Media Gallery without the proper permissions.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
+        Log::write('system',Log::ERROR,"Someone has tried to upload to an album in Media Gallery without the proper permissions.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR']);
         return array(false,$LANG_MG00['access_denied_msg']);
     }
 
