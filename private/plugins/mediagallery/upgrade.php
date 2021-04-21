@@ -309,7 +309,7 @@ function MG_upgrade_090( )
         }
         next($_SQL);
     }
-    COM_errorLog("Success - Completed Media Gallery plugin version 0.90 update",1);
+    Log::write('system',Log::INFO,"Success - Completed Media Gallery plugin version 0.90 update");
     return 0;
 }
 
@@ -339,10 +339,9 @@ function MG_upgrade_095() {
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
-        COM_errorLOG("Media Gallery plugin 0.95 update: Executing SQL => " . current($_SQL));
         DB_query(current($_SQL));
         if (DB_error()) {
-            COM_errorLog("SQL Error during Media Gallery plugin update",1);
+            Log::write('system',Log::ERROR,"SQL Error during Media Gallery plugin update: " . $_SQL);
             return 1;
             break;
         }
@@ -356,7 +355,7 @@ function MG_upgrade_095() {
         DB_query($sql);
     }
 
-    COM_errorLog("Success - Completed Media Gallery plugin version 0.95 update",1);
+    Log::write('system',Log::INFO,"Success - Completed Media Gallery plugin version 0.95 update");
     return 0;
 }
 
@@ -373,10 +372,9 @@ function MG_upgrade_096() {
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
-        COM_errorLOG("Media Gallery plugin 0.96 update: Executing SQL => " . current($_SQL));
         DB_query(current($_SQL));
         if (DB_error()) {
-            COM_errorLog("SQL Error during Media Gallery plugin update",1);
+            Log::write('system',Log::ERROR,"SQL Error during Media Gallery plugin update: " . $_SQL);
             return 1;
             break;
         }
@@ -421,7 +419,6 @@ function MG_upgrade_096() {
         if ( $nRows > 0 ) {
             $row = DB_fetchArray($result);
             $last_update = $row['media_upload_time'];
-            COM_errorLog("Set last_update to " . $row['media_upload_time']);
         } else {
             $last_update = 0;
             $media_filename = '';
@@ -434,7 +431,7 @@ function MG_upgrade_096() {
         DB_query($sql);
     }
 
-    COM_errorLog("Success - Completed Media Gallery plugin version 0.96 update",1);
+    Log::write('system',Log::INFO,"Success - Completed Media Gallery plugin version 0.96 update");
     return 0;
 }
 
@@ -478,7 +475,6 @@ function MG_upgrade_096b() {
         if ( $nRows > 0 ) {
             $row = DB_fetchArray($result);
             $last_update = $row['media_upload_time'];
-            COM_errorLog("Set last_update to " . $row['media_upload_time']);
         } else {
             $last_update = 0;
             $media_filename = '';
@@ -491,7 +487,7 @@ function MG_upgrade_096b() {
         DB_query($sql);
     }
 
-    COM_errorLog("Success - Completed Media Gallery plugin version 0.96b update",1);
+    Log::write('system',Log::INFO,"Success - Completed Media Gallery plugin version 0.96b update");
     return 0;
 }
 
@@ -504,10 +500,9 @@ function MG_upgrade_098() {
 
     /* Execute SQL now to perform the upgrade */
     for ($i = 1; $i <= count($_SQL); $i++) {
-        COM_errorLOG("Media Gallery plugin 0.98 update: Executing SQL => " . current($_SQL));
         DB_query(current($_SQL));
         if (DB_error()) {
-            COM_errorLog("SQL Error during Media Gallery plugin update",1);
+            Log::write('system',Log::ERROR,"SQL Error during Media Gallery plugin update: " . $_SQL);
             return 1;
             break;
         }
@@ -519,7 +514,7 @@ function MG_upgrade_098() {
     $sql = "UPDATE {$_TABLES['mg_albums']} SET enable_random=1";
     DB_query($sql);
 
-    COM_errorLog("Success - Completed Media Gallery plugin version 0.98 update",1);
+    Log::write('system',Log::INFO,"Success - Completed Media Gallery plugin version 0.98 update");
     return 0;
 }
 
