@@ -30,7 +30,7 @@ USES_lib_install();
 
 if (!SEC_inGroup('Root')) {
     // Someone is trying to illegally access this page
-    Log::write('system',Log::ERROR,'Someone has tried to access the Links install/uninstall page.  User id: '.$_USER['uid'].', IP: ' . $_SERVER['REAL_ADDR']);
+    log::logAccessViolation('Links Plugin Installer');
     $display = COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
              . COM_startBlock ($LANG_ACCESS['accessdenied'])
              . $LANG_ACCESS['plugin_access_denied_msg']

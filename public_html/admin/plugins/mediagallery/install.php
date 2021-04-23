@@ -22,7 +22,7 @@ USES_lib_install();
 
 if (!SEC_inGroup('Root')) {
     // Someone is trying to illegally access this page
-    Log::write('system',Log::WARNING,"Someone has tried to access the Media Gallery install / uninstall page.  User id: ".$_USER['uid']);
+    log::logAccessViolation('Media Gallery Plugin Installer');
     $display = COM_siteHeader ('menu', $LANG_ACCESS['accessdenied'])
              . COM_startBlock ($LANG_ACCESS['accessdenied'])
              . $LANG_ACCESS['plugin_access_denied_msg']

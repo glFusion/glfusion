@@ -1468,8 +1468,6 @@ function POLLS_pollResults($pid, $scale=400, $order='', $mode='', $displaytype =
         $questions = DB_query ($questions_sql);
         $nquestions = DB_numRows($questions);
 
-        Log::write('system',Log::DEBUG,'Polls: got '.$nquestions.' questions in COM_pollResults');
-
         if ($nquestions > 0){
             $poll = new Template($_CONF['path'] . 'plugins/polls/templates/' );
             $poll->set_file(array('result' => 'pollresult.thtml',
