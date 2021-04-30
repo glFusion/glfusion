@@ -314,7 +314,7 @@ class Badge
         $paths = array(
             $_CONF['path_layout'] . 'plugins/forum/images/badges/' =>
                     $_CONF['layout_url'] . '/plugins/forum/images/badges/',
-            $_CONF['path_html'] . 'forum/badges/' =>
+            $_CONF['path_html'] . 'data/forum/badges/' =>
                     $_CONF['site_url'] . '/data/forum/badges/',
         );
 
