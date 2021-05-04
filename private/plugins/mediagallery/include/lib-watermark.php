@@ -17,6 +17,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Log\Log;
+use \glFusion\FileSystem;
 
 /**
 * Allows user/admin to manage uploaded watermarks
@@ -372,33 +373,38 @@ function MG_watermarkUploadSave() {
             $wm_id = 1;
         }
 
-        $wm_filename = $_MG_CONF['path_watermarks'] .  $uid . '_' .$filename;
-
-        if (file_exists($wm_filename) ) {
-            $statusMsg .= sprintf($LANG_MG02['wm_already_exists'], $filename);
+        if ( FileSystem::mkDir($_MG_CONF['path_watermarks']) === false ) {
+            Log::write('system',Log::ERROR,"Media Gallery: Watermark directory: " . $_MG_CONF['path_watermarks'] . " does not exist.");
+            $statusMsg .= sprintf($LANG_MG02['move_error'],$filename);
         } else {
-            $rc = move_uploaded_file($filetmp, $wm_filename);
+            $wm_filename = $_MG_CONF['path_watermarks'] .  $uid . '_' .$filename;
 
-            if ( $rc != 1 ) {
-                Log::write('system',Log::ERROR,"Media Gallery: Media Upload - Error moving uploaded file....rc = " . $rc);
-                $statusMsg .= sprintf($LANG_MG02['move_error'],$filename);
+            if (file_exists($wm_filename) ) {
+                $statusMsg .= sprintf($LANG_MG02['wm_already_exists'], $filename);
             } else {
-                chmod($wm_filename, 0644);
-                $media_title_safe = substr($description,0,254);
-                $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($media_title_safe)))));
+                $rc = move_uploaded_file($filetmp, $wm_filename);
 
-                $saveFileName = DB_escapeString($uid . '_' .$filename);
-                $sql = "INSERT INTO {$_TABLES['mg_watermarks']} (wm_id,owner_id,filename,description)
-                        VALUES ($wm_id,'$uid','$saveFileName','$media_title')";
-                DB_query( $sql );
-                Log::write('system',Log::DEBUG,"Media Gallery: Watermark Upload: Updating Album information");
-
-                if ( DB_error() ) {
-                    Log::write('system',Log::ERROR,"MediaGallery: Error inserting watermark data into database");
-                    @unlink($wm_filename);
-                    $statusMsg .= $filename . " - " . DB_error();
+                if ( $rc != 1 ) {
+                    Log::write('system',Log::ERROR,"Media Gallery: Media Upload - Error moving uploaded file....rc = " . $rc);
+                    $statusMsg .= sprintf($LANG_MG02['move_error'],$filename);
                 } else {
-                    $statusMsg .= $filename . $LANG_MG02['wm_success'];
+                    chmod($wm_filename, 0644);
+                    $media_title_safe = substr($description,0,254);
+                    $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($media_title_safe)))));
+
+                    $saveFileName = DB_escapeString($uid . '_' .$filename);
+                    $sql = "INSERT INTO {$_TABLES['mg_watermarks']} (wm_id,owner_id,filename,description)
+                            VALUES ($wm_id,'$uid','$saveFileName','$media_title')";
+                    DB_query( $sql );
+                    Log::write('system',Log::DEBUG,"Media Gallery: Watermark Upload: Updating Album information");
+
+                    if ( DB_error() ) {
+                        Log::write('system',Log::ERROR,"MediaGallery: Error inserting watermark data into database");
+                        @unlink($wm_filename);
+                        $statusMsg .= $filename . " - " . DB_error();
+                    } else {
+                        $statusMsg .= $filename . $LANG_MG02['wm_success'];
+                    }
                 }
             }
         }
