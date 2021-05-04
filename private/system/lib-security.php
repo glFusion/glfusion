@@ -1471,7 +1471,7 @@ function _sec_checkToken($ajax=0)
                 $return = false;
             } else if($tokendata['urlfor'] != $referCheck) {
                 Log::write('system',Log::WARNING,"CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
-                Log::write('system',Log::WARNING,"Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
+                Log::write('system',Log::WARNING,"Expected URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
 
                 if ( function_exists('bb2_ban') ) {
                     bb2_ban($_SERVER['REAL_ADDR'],3);
@@ -1616,9 +1616,9 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
         $numberOfTokens = count($tokenRows);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - no token found in the database - " . $action . " " . $_USER['uid']);
+                Log::write('system',Log::INFO,"CheckTokenGeneral: Token failed - no token found in the database (user must re-autheticate) - " . $action . " :: User: " . $_USER['uid']);
             } else {
-                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - more than one token found in the database");
+                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - more than one token found in the database :: User: " . $_USER['uid']);
             }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
