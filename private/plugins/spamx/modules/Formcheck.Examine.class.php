@@ -51,7 +51,7 @@ class Formcheck extends BaseCommand
                 if (!isset($data['type'])) {
                     $data['type'] = 'default';
                 }
-                Log::write('system',Log::INFO,'FormCheck: spam identified in ' . $data['type'] . ' - ' . $_SERVER['REAL_ADDR']);
+                Log::write('system',Log::WARNING,'FormCheck: spam identified in ' . $data['type'] . ' - ' . $_SERVER['REAL_ADDR']);
                 if ( function_exists('bb2_ban') ) {
                     bb2_ban($_SERVER['REAL_ADDR'],4);
                 }
