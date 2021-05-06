@@ -1107,7 +1107,14 @@ function plugin_centerblock_forum ($where = 1, $page = 1, $topic = '')
         $key = 'forumcb__'.$c->securityHash(true,true);
         if ( $c->has($key)) return $c->get($key);
 
-        $block = new Template($_CONF['path'] . 'plugins/forum/templates/blocks/');
+	// Check whether the centerblock template exists in the layout folder
+	$common_tpl_dir = $_CONF['path'].'plugins/forum/templates/blocks/';
+	$layout_tpl_dir = $_CONF['path_layout'].'plugins/forum/blocks/';
+
+	$templatepath = file_exists($layout_tpl_dir.'centerblock.thtml')
+			? $layout_tpl_dir : $common_tpl_dir;
+
+        $block = new Template($templatepath);
         $block->set_file ('block','centerblock.thtml');
         $block->set_var (array(
                 'phpself'       => $_CONF['site_url'] .'/index.php',
