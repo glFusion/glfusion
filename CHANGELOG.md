@@ -8,6 +8,7 @@
 
 ### Added
 
+- Forum plugin - select exit type - whether to show Page Not Found or Login Page when user does not have permissions to view a topic
 - Simple DB search / replace capabilities
 - Implemented direct link from Forum Likes
 - Ability to include theme specific HTML attributes - such as data-uk-lightbox to the HTML filtering allowed attributes
@@ -28,6 +29,7 @@
 
 ### Changed
 
+- Allow embedded [img] tag inside [url] tag in BBcode formatter
 - Removed 'most' HTML from the code base and moved to templates
 - Consolidate dynamic data under a single directory (actually two - private/data and public_html/data)
 - Logview now initializes the log with date/time cleared

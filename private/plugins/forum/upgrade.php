@@ -279,6 +279,9 @@ function forum_upgrade() {
         case '3.4.2' :
             // no changes to db schema
 
+        case '3.4.3' :
+            // no changes to db schema
+
         default :
             forum_update_config();
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
