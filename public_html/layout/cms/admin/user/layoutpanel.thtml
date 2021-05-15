@@ -9,13 +9,17 @@
     <div class="uk-form-row">
       <label class="uk-form-label" for="language">{lang_language}</label>
       <div class="uk-form-controls">
-        {language_selector}
+        <select id="language" name="language">
+          {language_options}
+        </select>
       </div>
     </div>
     <div class="uk-form-row">
       <label class="uk-form-label" for="theme">{lang_theme}</label>
       <div class="uk-form-controls">
-        {theme_selector}
+        <select id="theme" name="theme">
+          {theme_options}
+        </select>
       </div>
     </div>
     <div class="uk-form-row">
@@ -39,19 +43,25 @@
     <div class="uk-form-row">
       <label class="uk-form-label" for="tzid">{lang_timezone}</label>
       <div class="uk-form-controls">
-        {timezone_selector}
+        <select id="tzid" name="tzid">
+          {timezone_options}
+        </select>
       </div>
     </div>
     <div class="uk-form-row">
       <label class="uk-form-label" for="dfid">{lang_dateformat}</label>
       <div class="uk-form-controls">
-        {dateformat_selector}
+        <select id="dfid" name="dfid">
+          {dateformat_options}
+        </select>
       </div>
     </div>
     <div class="uk-form-row">
       <label class="uk-form-label" for="search_result_format">{lang_search_format}</label>
       <div class="uk-form-controls">
-        {search_result_select}
+        <select id="search_result_format" name="search_result_format">
+          {search_result_options}
+        </select>
       </div>
     </div>
 
@@ -67,13 +77,17 @@
     <div class="uk-form-row">
       <label class="uk-form-label" for="commentmode">{lang_displaymode}</label>
       <div class="uk-form-controls">
-        {displaymode_selector}
+        <select id="commentmode" name="commentmode">
+        {displaymode_options}
+        </select>
       </div>
     </div>
     <div class="uk-form-row">
       <label class="uk-form-label" for="commentorder">{lang_sortorder}</label>
       <div class="uk-form-controls">
-        {sortorder_selector}
+        <select id="sortorder" name="sortorder">
+        {sortorder_options}
+        </select>
       </div>
     </div>
     <div class="uk-form-row">

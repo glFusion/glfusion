@@ -605,24 +605,19 @@ function editpreferences()
             $similarLang = $tmp[0];
         }
 
-        $preferences->set_block('language', 'LangSelect', 'LS');
+        $options = '';
         foreach ($language as $langFile => $langName) {
+            $options .= '<option value="' . $langFile . '"';
             if (
                 $langFile == $userlang ||
                 ($has_valid_language == 0 && strpos($langFile, $similarLang) === 0)
             ) {
-                $selected = true;
+                $options .= ' selected="selected"';
                 $has_valid_language = 1;
-            } else {
-                $selected = false;
             }
-            $preferences->set_var(array(
-                'langName' => $langName,
-                'langFile' => $langFile,
-                'selected' => $selected,
-            ) );
-            $preferences->parse('LS', 'LangSelect', true);
+            $options .= '>' . $langName . '</option>' . LB;
         }
+        $preferences->set_var('language_options', $options);
         $preferences->parse ('language_selection', 'language', true);
     } else {
         $preferences->set_var ('language_selection', '');
@@ -639,7 +634,7 @@ function editpreferences()
         usort ($themeFiles,
                function ($a,$b) { return strcasecmp($a,$b); } );
 
-        $preferences->set_block('theme', 'ThemeSelect', 'TS');
+        $options = '';
         foreach ($themeFiles as $theme) {
             $words = explode ('_', $theme);
             $bwords = array ();
@@ -651,22 +646,20 @@ function editpreferences()
                     $bwords[] = $th;
                 }
             }
-            $preferences->set_var(array(
-                'theme' => $theme,
-                'theme_dscp' => implode(' ', $bwords),
-                'selected' => $usertheme == $theme,
-            ) );
-            $preferences->parse('TS', 'ThemeSelect', true);
+            $options .= '<option value="' . $theme . '"';
+            if ($usertheme == $theme) {
+                $options .= ' selected="selected"';
+            }
+            $options .= '>' . implode(' ', $bwords) . '</option>' . LB;
         }
+        $preferences->set_var('theme_options', $options);
         $preferences->parse ('theme_selection', 'theme', true);
     } else {
         $preferences->set_var ('theme_selection', '');
     }
 
     // Timezone
-    $selection = Date::getTimeZoneDropDown($A['tzid'],array('id' => 'tzid', 'name' => 'tzid'));
-
-    $preferences->set_var('timezone_selector', $selection);
+    $preferences->set_var('timezone_options', Date::getTimeZoneOptions($A['tzid']));
     $preferences->set_var('lang_timezone', $LANG04[158]);
 
     if ($A['noicons'] == '1') {
@@ -683,7 +676,7 @@ function editpreferences()
 
     $preferences->set_var ('maxstories_value', $A['maxstories']);
     $selection = COM_optionList ($_TABLES['dateformats'], 'dfid,description', $A['dfid']);
-    $preferences->set_var ('dateformat_selector', $selection);
+    $preferences->set_var ('dateformat_options', $selection);
     $preferences->set_var('plugin_layout_display',PLG_profileEdit($_USER['uid'],'layout','display'));
 
     if (isset($LANG_configSelect['Core'])) {
@@ -692,17 +685,15 @@ function editpreferences()
     } else {
         $cfgSelect = array_flip($LANG_configselects['Core'][18]);
     }
-
-    $preferences->set_block('display', 'SrchFmtOpts', 'sfo');
+    $options = '';
     foreach ($cfgSelect AS $type => $name ) {
-        $preferences->set_var(array(
-            'type' => $type,
-            'name' => $name,
-            'selected' => $type == $A['search_result_format'],
-        ) );
-        $preferences->parse('sfo', 'SrchFmtOpts', true);
+        $options .= '<option value="' . $type . '"';
+        if ($type == $A['search_result_format']) {
+            $options .= ' selected="selected"';
+        }
+        $options .= '>' . $name . '</option>' . LB;
     }
-
+    $preferences->set_var('search_format_options', $options);
     $preferences->set_var('lang_search_format',$LANG_confignames['Core']['search_show_type']);
 
     $preferences->parse ('display_block', 'display', true);
