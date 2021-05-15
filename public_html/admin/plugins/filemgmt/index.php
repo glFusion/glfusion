@@ -28,6 +28,7 @@ include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 USES_lib_admin();
 
@@ -227,9 +228,14 @@ function _fm_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
             }
             break;
         case 'edit':
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'],
-                $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?lid='.$A['lid'].'&amp;op=modDownload', $attr );
+            $retval = FieldList::edit(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?lid='.$A['lid'].'&amp;op=modDownload',
+                    'attr' => array(
+                        'title' => $LANG_ADMIN['edit']
+                    )
+                )
+            );
             break;
         default:
             $retval = $fieldvalue;

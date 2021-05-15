@@ -23,6 +23,7 @@ require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 $display = '';
 
@@ -551,6 +552,8 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     $retval = '';
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],
                             $A['perm_group'],$A['perm_members'],$A['perm_anon']);
+
+
     $enabled = ($A['sp_status'] == 1) ? true : false;
 
     $dt = new Date('now',$_USER['tzid']);
@@ -559,29 +562,31 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'edit':
             if ($access == 3) {
-                $attr['title'] = $LANG_ADMIN['edit'];
-                $retval = COM_createLink(
-                    $icon_arr['edit'],
-                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
-                    . '?edit=x&amp;sp_id=' . $A['sp_id'], $attr );
-            } else {
-                $retval = $icon_arr['blank'];
+                $retval = FieldList::edit(
+                    array(
+                        'url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'.'?edit=x&amp;sp_id=' . $A['sp_id'],
+                        'attr' => array(
+                            'title' => $LANG_ADMIN['edit']
+                        )
+                    )
+                );
             }
             break;
 
         case 'copy':
             if ($access >= 2) {
-                $attr['title'] = $LANG_ADMIN['copy'];
-                $retval = COM_createLink(
-                    $icon_arr['copy'],
-                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
-                    . '?clone=x&amp;sp_id=' . $A['sp_id'], $attr);
-            } else {
-                $retval = $icon_arr['blank'];
+                $retval = FieldList::copy(
+                    array(
+                        'url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'.'?clone=x&amp;sp_id=' . $A['sp_id'],
+                        'attr' => array(
+                            'title' => $LANG_ADMIN['copy'],
+                        )
+                    )
+                );
             }
             break;
 
-        case "sp_title":
+        case 'sp_title':
             $sp_title = $A['sp_title'];
             if ($enabled) {
                 $url = COM_buildUrl(
@@ -596,10 +601,10 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'sp_search' :
-            if ($fieldvalue == 0) {
-                $retval = '<i class="uk-icon uk-icon-minus uk-text-danger"></i>';
+            if ($fieldvalue != 1) {
+                $retval = FieldList::minus();
             } else {
-                $retval = '<i class="uk-icon uk-icon-check uk-text-success"></i>';
+                $retval = FieldList::checkmark(array('active'=> true));
             }
             break;
         case 'access':
@@ -638,15 +643,15 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'delete':
             if ($access == 3) {
-                $attr['title'] = $LANG_ADMIN['delete'];
-                $attr['onclick'] = "return confirm('" . $LANG_STATIC['delete_confirm'] . "');";
-                $retval = COM_createLink(
-                    $icon_arr['delete'],
-                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
-                    . '?delete=x&amp;sp_id=' . $A['sp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
-
-            } else {
-                $retval = $icon_arr['blank'];
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'.'?delete=x&amp;sp_id=' . $A['sp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token,
+                        'attr' => array(
+                            'title'   => $LANG_ADMIN['delete'],
+                            'onclick' => "return confirm('" . $LANG_STATIC['delete_confirm'] . "');"
+                        ),
+                    )
+                );
             }
             break;
 

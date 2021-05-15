@@ -21,6 +21,7 @@ require_once 'auth.inc.php';
 
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 $display = '';
 
@@ -140,17 +141,25 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     switch($fieldname) {
 
         case 'edit':
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'],
-                $_CONF['site_admin_url'] . '/syndication.php?edit=x&amp;fid=' . $A['fid'], $attr );
+            $retval = FieldList::edit(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x&amp;fid=' . $A['fid'],
+                    'attr' => array(
+                        'title' => $LANG_ADMIN['edit']
+                    )
+                )
+            );
             break;
-
         case 'delete':
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return confirm(\'' . $LANG33[56] . '\');"';
-            $retval = COM_createLink($icon_arr['delete'],
-                $_CONF['site_admin_url'] . '/syndication.php?delete=x&amp;fid=' . $A['fid']
-                . '&amp;' . CSRF_TOKEN . '=' . $token, $attr );
+            $retval = FieldList::delete(
+                array(
+                    'delete_url' => $_CONF['site_admin_url'] . '/syndication.php?delete=x&amp;fid=' . $A['fid']. '&amp;' . CSRF_TOKEN . '=' . $token,
+                    'attr' => array(
+                        'title'   => $LANG_ADMIN['delete'],
+                        'onclick' => 'return confirm(\'' . $LANG33[56] . '\');"'
+                    ),
+                )
+            );
             break;
 
         case 'type':

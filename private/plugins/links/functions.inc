@@ -26,6 +26,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 $plugin_path = $_CONF['path'] . 'plugins/links/';
 
@@ -1049,11 +1050,14 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
 
             case 'edit':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['edit'];
-                    $retval = COM_createLink(
-                        $icon_arr['edit'],
-                        $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x&amp;lid=' . $A['lid'],
-                        $attr);
+                    $retval = FieldList::edit(
+                        array(
+                            'url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x&amp;lid=' . $A['lid'],
+                            'attr' => array(
+                                'title' => $LANG_ADMIN['edit']
+                            )
+                        )
+                    );
                 }
                 break;
 
@@ -1100,11 +1104,15 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
 
             case 'delete':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return confirm('" . $LANG_LINKS_ADMIN[63] . "');";
-                    $retval = COM_createLink($icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/plugins/links/index.php'
-                        . '?delete=x&amp;lid=' . $A['lid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                    $retval = FieldList::delete(
+                        array(
+                            'delete_url' => $_CONF['site_admin_url'] . '/plugins/links/index.php'.'?delete=x&amp;lid='.$A['lid'].'&amp;'.CSRF_TOKEN.'='.$token,
+                            'attr' => array(
+                                'title'   => $LANG_ADMIN['delete'],
+                                'onclick' => "return confirm('" . $LANG_LINKS_ADMIN[63] . "');"
+                            ),
+                        )
+                    );
                 }
                 break;
 
@@ -1130,24 +1138,29 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
     if ($access > 0) {
 
         switch($fieldname) {
-
             case 'edit':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['edit'];
-                    $retval = COM_createLink(
-                        $icon_arr['edit'],
-                        $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;cid=' . urlencode($A['cid']),
-                        $attr);
+                    $retval = FieldList::edit(
+                        array(
+                            'url' => $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;cid=' . urlencode($A['cid']),
+                            'attr' => array(
+                                'title' => $LANG_ADMIN['edit']
+                            )
+                        )
+                    );
+
                 }
                 break;
-
             case 'addchild':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_LINKS_ADMIN[44];
-                    $retval .= COM_createLink(
-                        $icon_arr['addchild'],
-                        $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;pid=' . urlencode($A['cid']),
-                        $attr);
+                    $retval = FieldList::copy(
+                        array(
+                            'url' => $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;pid=' . urlencode($A['cid']),
+                            'attr' => array(
+                                'title' => $LANG_LINKS_ADMIN[44]
+                            )
+                        )
+                    );
                 }
                 break;
 
@@ -1176,15 +1189,6 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                 $retval = "<span style=\"padding-left:{$indent}px;\">$cat</span>";
                 break;
 
-            case 'addchild';
-                if ($access == 3) {
-                    $retval = COM_createLink(
-                        $icon_arr['addchild'],
-                        "{$_CONF['site_admin_url']}/plugins/links/category.php?edit=x&amp;pid=" . urlencode($A['cid'])
-                    );
-                }
-                break;
-
             case 'tid';
                 if ($A['tid'] == 'all') {
                     $retval = $LANG_LINKS_ADMIN[35];
@@ -1199,11 +1203,15 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
 
             case 'delete':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return confirm('" . $LANG_LINKS_ADMIN[64] . "');";
-                    $retval = COM_createLink($icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/plugins/links/category.php'
-                        . '?delete=x&amp;cid=' . $A['cid'] . '&amp;' . CSRF_TOKEN . '=' . SEC_createToken(), $attr);
+                    $retval = FieldList::delete(
+                        array(
+                            'delete_url' => $_CONF['site_admin_url'] . '/plugins/links/category.php'.'?delete=x&amp;cid='.$A['cid'].'&amp;'.CSRF_TOKEN.'='.SEC_createToken(),
+                            'attr' => array(
+                                'title'   => $LANG_ADMIN['delete'],
+                                'onclick' => "return confirm('" . $LANG_LINKS_ADMIN[64] . "');"
+                            ),
+                        )
+                    );
                 }
                 break;
 
@@ -1212,7 +1220,6 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                 break;
         }
     }
-
     return $retval;
 }
 

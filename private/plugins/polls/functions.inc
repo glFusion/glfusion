@@ -23,6 +23,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 /*
 * load the language file(s), including custom strings if any
@@ -1629,8 +1630,11 @@ function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
             case 'edit':
                 if ($access == 3) {
-                    $retval = COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/plugins/polls/index.php?edit=x&amp;pid={$A['pid']}");
+                    $retval = FieldList::edit(
+                        array(
+                            'url' => $_CONF['site_admin_url'].'/plugins/polls/index.php?edit=x&amp;pid='.$A['pid'],
+                        )
+                    );
                 }
                 break;
 
@@ -1659,7 +1663,9 @@ function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 break;
 
             case 'is_open':
-                $retval = ($A['is_open'] == 1) ? $icon_arr['check'] : '';
+                if ($A['is_open'] == 1) {
+                    $retval = FieldList::checkmark(array('active'=>true));
+                }
                 break;
 
             case 'display':
@@ -1678,14 +1684,15 @@ function POLLS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
             case 'delete':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return doubleconfirm('" . $LANG25[41] . "','" . $LANG25[42] . "');";
-                    $retval = COM_createLink(
-                        $icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/plugins/polls/index.php'
-                        . '?delete=x&amp;pid=' . $A['pid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
-                } else {
-                    $retval = $icon_arr['blank'];
+                    $retval = FieldList::delete(
+                        array(
+                            'delete_url' =>  $_CONF['site_admin_url'] . '/plugins/polls/index.php'.'?delete=x&amp;pid=' . $A['pid'] . '&amp;' . CSRF_TOKEN . '=' . $token,
+                            'attr' => array(
+                                'title' => $LANG_ADMIN['delete'],
+                                'onclick' => "return doubleconfirm('" . $LANG25[41] . "','" . $LANG25[42] . "');"
+                            )
+                        )
+                    );
                 }
                 break;
 

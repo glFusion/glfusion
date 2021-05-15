@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2019 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark Howard     mark AT usable-web DOT com
 *
@@ -26,6 +26,7 @@ use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 use \glFusion\Admin\AdminAction;
+use \glFusion\FieldList;
 
 $display = '';
 
@@ -891,39 +892,58 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case 'edit':
             $url = $_CONF['site_admin_url'] . '/group.php?edit=x&amp;grp_id=' . $A['grp_id'];
             $url .= ($showall) ? '&amp;chk_showall=1' : '';
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'], $url, $attr);
+            $retval = FieldList::edit(
+                array(
+                    'url' => $url,
+                    'attr' => array(
+                        'title' => $LANG_ADMIN['edit']
+                    )
+                )
+            );
             break;
-
         case 'grp_name':
             $retval .= ucwords($fieldvalue);
-            /*
-            $attr['title'] = $LANG_ACCESS['listusers'];
-            $url = $_CONF['site_admin_url'] . '/user.php?grp_id=' . $A['grp_id'];
-            $url .= ($showall) ? '&amp;chk_showall=1' : '';
-            $retval = COM_createLink($icon_arr['group'], $url, $attr);
-            $retval .= '&nbsp;&nbsp;';
-            $attr['style'] = 'vertical-align:top;';
-            $retval .= COM_createLink(ucwords($fieldvalue), $url, $attr);
-            */
             break;
 
         case 'grp_gl_core':
-            $retval = ($A['grp_gl_core'] == 1) ? $icon_arr['check'] : '';
+            if ($A['grp_gl_core'] == 1) {
+                $retval = FieldList::checkmark(
+                    array(
+                       'active' => true
+                    )
+                );
+            }
             break;
 
         case 'grp_default':
-            $retval = ($A['grp_default'] != 0) ? $icon_arr['check'] : '';
+            if ($A['grp_default'] != 0) {
+                $retval = FieldList::checkmark(
+                    array(
+                       'active' => true
+                    )
+                );
+            }
             break;
 
         case 'grp_admin':
-            $retval = (( $A['grp_gl_core'] == 1  || $A['grp_gl_core'] == 2) && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users' && $A['grp_name'] != 'Non-Logged-in Users') ? $icon_arr['check'] : '';
+            if (($A['grp_gl_core'] == 1  || $A['grp_gl_core'] == 2) && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users' && $A['grp_name'] != 'Non-Logged-in Users') {
+                $retval = FieldList::checkmark(
+                    array(
+                       'active' => true
+                    )
+                );
+            }
             break;
 
         case 'sendemail':
-            $url = $_CONF['site_admin_url'] . '/mail.php?grp_id=' . $A['grp_id'];
-            $attr['title'] = $LANG_ACCESS['sendemail'];
-            $retval = COM_createLink($icon_arr['mail'], $url, $attr);
+            $retval = FieldList::email(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/mail.php?grp_id=' . $A['grp_id'],
+                    'attr' => array(
+                        'title' => $LANG_ACCESS['sendemail']
+                    )
+                )
+            );
             break;
 
         case 'listusers':
@@ -938,19 +958,30 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if (($A['grp_name'] != 'All Users') && ($A['grp_name'] != 'Logged-in Users') && $A['grp_name'] != 'Non-Logged-in Users') {
                 $url = $_CONF['site_admin_url'] . '/group.php?editusers=x&amp;grp_id=' . $A['grp_id'];
                 $url .= ($showall) ? '&amp;chk_showall=1' : '';
-                $attr['title'] = $LANG_ACCESS['editusers'];
-                $retval .= COM_createLink($icon_arr['edit'], $url, $attr);
+
+                $retval = FieldList::editusers(
+                    array(
+                        'url' => $url,
+                        'attr' => array(
+                            'title' => $LANG_ACCESS['editusers']
+                        )
+                    )
+                );
             }
             break;
 
         case 'delete':
             $retval = '';
             if ($A['grp_gl_core'] <> 1) {
-                $attr['title'] = $LANG_ADMIN['delete'];
-                $attr['onclick'] = "return doubleconfirm('" . $LANG_ACCESS['confirm1'] . "','" . $LANG_ACCESS['confirm2'] . "');";
-                $retval .= COM_createLink($icon_arr['delete'],
-                    $_CONF['site_admin_url'] . '/group.php'
-                    . '?delete=x&amp;grp_id=' . $A['grp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $_CONF['site_admin_url'] . '/group.php'.'?delete=x&amp;grp_id='.$A['grp_id'].'&amp;'.CSRF_TOKEN.'='.$token,
+                        'attr' => array(
+                            'title'   => $LANG_ADMIN['delete'],
+                            'onclick' => "return doubleconfirm('" . $LANG_ACCESS['confirm1'] . "','" . $LANG_ACCESS['confirm2'] . "');"
+                        ),
+                    )
+                );
             }
             break;
 

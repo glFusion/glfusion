@@ -25,6 +25,7 @@ require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 USES_lib_admin();
 
@@ -697,13 +698,16 @@ function POLLS_getListFieldVoters($fieldname, $fieldvalue, $A, $icon_arr, $token
                 break;
 
             case 'delete':
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $_CONF['site_admin_url'] . '/plugins/polls/index.php'.'?delvote=x&amp;id='.$A['id'].'&amp;'.CSRF_TOKEN.'='.$token,
+                        'attr' => array(
+                            'title' => LANG_ADMIN['delete'],
+                            'onclick' => "return doubleconfirm('" . 'Are you sure you want to delete this vote' . "','" . 'Are you really sure you want to delete this vote?' . "');",
+                        )
+                    )
 
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return doubleconfirm('" . 'Are you sure you want to delete this vote' . "','" . 'Are you really sure you want to delete this vote?' . "');";
-                    $retval = COM_createLink(
-                        $icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/plugins/polls/index.php'
-                        . '?delvote=x&amp;id=' . $A['id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                );
                 break;
 
             case 'topic' :

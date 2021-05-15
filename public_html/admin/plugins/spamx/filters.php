@@ -1,34 +1,21 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | filters.php                                                              |
-// |                                                                          |
-// | glFusion Spamx-X filter administration.                                  |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2016-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Spam-X Plugin
+*
+* Filters
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2016-2021 by the following authors:
+*   Mark R. Evans    mark AT glfusion DOT org
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
+
+use \glFusion\FieldList;
 
 if (!SEC_hasRights ('spamx.admin')) {
     $display .= COM_siteHeader ('menu');
@@ -111,19 +98,16 @@ function spamx_filter_list($filterid = '')
         'has_limit'     => true,
         'has_paging'    => true,
     );
-    if ( $_SYSTEM['framework'] == 'uikit' ) {
-        $actions = '<button name="deletebutton" class="uk-button uk-button-mini uk-button-danger"'
-            . '" title="' . $LANG_SX00['delete']
-            . '" onclick="return doubleconfirm(\'' . $LANG_SX00['delete_confirm'] . '\',\'' . $LANG_SX00['delete_confirm_2'] . '\');"'
-            . '/><i class="uk-icon uk-icon-remove"></i></button>&nbsp;' . $LANG_SX00['delete'];
-    } else {
-        $actions = '<input name="deletebutton" type="image" src="'
-            . $_CONF['layout_url'] . '/images/admin/delete.png'
-            . '" style="vertical-align:text-bottom;" title="' . $LANG_SX00['delete']
-            . '" onclick="return doubleconfirm(\'' . $LANG_SX00['delete_confirm'] . '\',\'' . $LANG_SX00['delete_confirm_2'] . '\');"'
-            . '/>&nbsp;' . $LANG_SX00['delete'];
-    }
-
+    $actions = FieldList::deleteButton(
+        array(
+            'name' => 'deletebutton',
+            'text' => $LANG_SX00['delete'],
+            'attr' => array(
+                'title' => $LANG_SX00['delete'],
+                'onclick' => 'return doubleconfirm(\'' . $LANG_SX00['delete_confirm'] . '\',\'' . $LANG_SX00['delete_confirm_2'] . '\');',
+            )
+        )
+    );
     $option_arr = array(
         'chkselect'     => true,
         'chkall'        => true,
@@ -174,23 +158,26 @@ function spamx_getBlacklistListField($fieldname, $fieldvalue, $A, $icon_arr, $to
             break;
 
         case 'edit':
-            $retval = '';
-            if ( $_SYSTEM['framework'] == 'uikit' ) {
-                $retval = '<a href="'.$_CONF['site_admin_url'] . '/plugins/spamx/filters.php?mode=edit&amp;id=' . $A['id'].'" title="'.$LANG_ADMIN['edit'].'"><i class="uk-icon uk-icon-hover uk-icon-justify uk-icon-edit"></i></a>';
-            } else {
-                $attr['title'] = $LANG_ADMIN['edit'];
-                $retval .= COM_createLink($icon_arr['edit'],
-                    $_CONF['site_admin_url'] . '/plugins/spamx/filters.php?mode=edit&amp;id=' . $A['id'], $attr);
-            }
+            $retval = FieldList::edit(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/plugins/spamx/filters.php?mode=edit&amp;id=' . $A['id'],
+                    'attr' => array(
+                        'title' => $LANG_ADMIN['edit']
+                    )
+                )
+            );
             break;
 
         case 'delete' :
-            $retval = '';
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');';
-            $retval .= COM_createLink($icon_arr['delete'],
-            $_CONF['site_admin_url'] . '/plugins/spamx/filters.php'
-            . '?delete=x&amp;ip=' . $A['ip'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            $retval = FieldList::delete(
+                array(
+                    'delete_url' => $_CONF['site_admin_url'] . '/plugins/spamx/filters.php'.'?delete=x&amp;ip='.$A['ip'].'&amp;'.CSRF_TOKEN.'='.$token,
+                    'attr' => array(
+                        'title' => $LANG_ADMIN['delete'],
+                        'onclick' => 'return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');',
+                    )
+                )
+            );
             break;
 
         case 'name' :

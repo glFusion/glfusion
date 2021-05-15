@@ -30,6 +30,7 @@ use \glFusion\Cache\Cache;
 use \glFusion\Social\Social;
 use \glFusion\Admin\AdminAction;
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 USES_lib_user();
 USES_lib_admin();
@@ -1205,29 +1206,31 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     switch ($fieldname) {
         case 'edit':
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'],
-                "{$_CONF['site_admin_url']}/user.php?edit=x&amp;uid={$A['uid']}", $attr);
+            $args['attr'] = array('title' => $LANG_ADMIN['edit']);
+            $args['url'] = $_CONF['site_admin_url'].'/user.php?edit=x&amp;uid='.$A['uid'];
+            $retval = FieldList::edit($args);
             break;
 
         case 'username':
             $attr['title'] = $LANG28[108];
             $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
-            $retval = COM_createLink($icon_arr['user'], $url, $attr);
+            $retval = FieldList::editusers(
+                array(
+                    'url' => $url,
+                    'attr' => $attr,
+                )
+            );
             $retval .= '&nbsp;&nbsp;';
-            $attr['style'] = 'vertical-align:top;';
             $retval .= COM_createLink($fieldvalue, $url, $attr);
+            $photoico = '';
+            if (!empty ($A['photo'])) {
+                $retval .= '&nbsp;&nbsp;' . FieldList::userPhoto();
+
+            }
             break;
 
         case 'fullname':
-            $photoico = '';
-            if (!empty ($A['photo'])) {
-                $photoico = "&nbsp;<img src=\"{$_CONF['layout_url']}/images/smallcamera."
-                          . $_IMAGE_TYPE . '" alt="{$LANG04[77]}"' . '/>';
-            } else {
-                $photoico = '';
-            }
-            $retval = COM_truncate($fieldvalue, 24, ' ...', true) . $photoico;
+            $retval = COM_truncate($fieldvalue, 24, ' ...', true);
             break;
 
         case 'status':
@@ -1287,10 +1290,12 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case 'phantom_date':
 
         case 'offline_months':
+            $fieldvalue = intval($fieldvalue);
             $retval = COM_numberFormat(round($fieldvalue / 2592000));
             break;
 
         case 'online_hours':
+            $fieldvalue = intval($fieldvalue);
             $retval = COM_numberFormat(round($fieldvalue / 3600, 3));
             break;
 
@@ -1305,25 +1310,29 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'email':
             if (COM_isEmail($fieldvalue)) {
-                $url = 'mailto:' . $fieldvalue;
-                $retval = '<a href="' . $url . '" title="' . $LANG28[111] . '">' .
-                        $icon_arr['mail'] . '</a>&nbsp;&nbsp;';
+                $url = 'mailto:'.$fieldvalue;
+                $retval = FieldList::email(array(
+                    'url' => 'mailto: ' . $fieldvalue . '&nbsp;&nbsp;',
+                ));
+                $attr['title'] = $LANG28[99];
+                $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
+                $retval .= COM_createLink($fieldvalue, $url, $attr);
             } else {
-                $retval = $icon_arr['mail'] . '&nbsp;&nbsp;';
+                $retval .= $fieldvalue; //COM_createLink($fieldvalue, $url, $attr);
             }
-            $attr['title'] = $LANG28[99];
-            $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
-            $attr['style'] = 'vertical-align:top;';
-            $retval .= COM_createLink($fieldvalue, $url, $attr);
             break;
 
         case 'delete':
             $retval = '';
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');';
-            $retval .= COM_createLink($icon_arr['delete'],
-                $_CONF['site_admin_url'] . '/user.php'
-                . '?delete=x&amp;uid=' . $A['uid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            $args = array();
+            $args['attr'] = array(
+                'title' => $LANG_ADMIN['delete'],
+                'onclick' => 'return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');',
+            );
+            $args['url'] = $_CONF['site_admin_url'] . '/user.php'
+                    . '?delete=x&amp;uid=' . $A['uid'] . '&amp;' . CSRF_TOKEN . '=' . $token;
+
+            $retval = FieldList::delete($args);
             break;
 
         default:
@@ -2116,17 +2125,23 @@ function USER_batchAdmin()
         'default_filter' => "AND $filter_sql {$_TABLES['users']}.uid > 1"
     );
 
-    $actions = '<input name="delbutton" type="image" src="'
-        . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
-        . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
-        . '" onclick="return doubleconfirm(\'' . $LANG28[73] . '\',\'' . $LANG28[110] . '\');"'
-        . '/>&nbsp;' . $LANG_ADMIN['delete'];
+    $actions = FieldList::deleteButton(array(
+        'name' => 'delbutton',
+        'text' => $LANG01[124],
+        'attr' => array(
+            'title' => $LANG01[124],
+            'onclick' => 'return doubleconfirm(\'' . $LANG28[73] . '\',\'' . $LANG28[110] . '\');'
+        )
+    ));
     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-    $actions .= '<input name="reminder" type="image" src="'
-        . $_CONF['layout_url'] . '/images/admin/mail.' . $_IMAGE_TYPE
-        . '" style="vertical-align:bottom;" title="' . $LANG28[78]
-        . '" onclick="return confirm(\'' . $LANG28[100] . '\');"'
-        . '/>&nbsp;' . $LANG28[77];
+    $actions .= FieldList::emailButton(array(
+        'name' => 'reminder',
+        'text' => $LANG28[78],
+        'attr' => array(
+            'title' => $LANG28[78],
+            'onclick' => 'return confirm(\'' . $LANG28[100] . '\');'
+        )
+    ));
 
     $options = array('chkselect' => true, 'chkfield' => 'uid', 'chkactions' => $actions);
 

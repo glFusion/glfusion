@@ -24,6 +24,7 @@ require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 $display = '';
 
@@ -401,12 +402,14 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         switch($fieldname) {
 
             case 'edit':
-                $retval = '';
-                if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['edit'];
-                    $retval .= COM_createLink($icon_arr['edit'],
-                        $_CONF['site_admin_url'] . '/block.php?edit=x&amp;bid=' . $A['bid'], $attr);
-                }
+                $retval = FieldList::edit(
+                    array(
+                        'url' => $_CONF['site_admin_url'] . '/block.php?edit=x&amp;bid=' . $A['bid'],
+                        'attr' => array(
+                            'title' => $LANG_ADMIN['edit']
+                        )
+                    )
+                );
                 break;
 
             case 'blockorder':
@@ -453,11 +456,16 @@ function BLOCK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             case 'delete':
                 $retval = '';
                 if ($access == 3 && $A['type'] != 'gldefault' ) {
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return confirm('" . $LANG21[69] . "');";
-                    $retval .= COM_createLink($icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/block.php'
-                        . '?delete=x&amp;bid=' . $A['bid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                    $retval = FieldList::delete(
+                        array(
+                            'delete_url' => $_CONF['site_admin_url'].'/block.php'.'?delete=x&amp;bid='.$A['bid'].'&amp;'.CSRF_TOKEN.'='.$token,
+                            'attr' => array(
+                                'title'   => $LANG_ADMIN['delete'],
+                                'onclick' => "return confirm('" . $LANG21[69] . "');"
+                            ),
+
+                        )
+                    );
                 }
                 break;
 

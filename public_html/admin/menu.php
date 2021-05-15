@@ -20,6 +20,7 @@ use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 use \glFusion\Admin\AdminAction;
+use \glFusion\FieldList;
 
 USES_lib_admin();
 $display = '';
@@ -1356,28 +1357,54 @@ function _mb_getListField_menu($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_USER, $_TABLES, $LANG_ADMIN,$LANG_MB01;
 
+    $retval = '';
+
     switch ($fieldname) {
         case 'label':
-            $retval = "<span style=\"padding:0 5px;margin-left:" .$A['indent'] . "px;\">" . ($A['type'] == 1 ? '<b>' : '') . $fieldvalue . ($A['type'] == 1 ? '</b>' : '').'</span>';
+            $retval = "<span style=\"padding:0 5px;margin-left:" .$A['indent'] . "px;\">" . ($A['type'] == 1 ? '<strong>' : '') . $fieldvalue . ($A['type'] == 1 ? '</strong>' : '').'</span>';
             break;
         case 'enabled' :
             $retval =  '<input class="menu-element-enabler" type="checkbox" name="enableditem[' . $A['id'] . ']" onclick="submit()" value="1"' . ($fieldvalue == 1 ? ' checked="checked"' : '') . '/>';
             break;
         case 'edit' :
-            $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=edit&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id']. '">';
-            $retval .= '<img src="' . $_CONF['layout_url'] . '/images/edit.png" alt="' . $LANG_MB01['edit'] . '"/></a>';
+            $retval = FieldList::edit(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/menu.php?mode=edit&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'],
+                    'attr' => array(
+                        'title' => $LANG_MB01['edit']
+                    )
+                )
+            );
             break;
         case 'delete' :
-            $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=delete&amp;mid=' . $fieldvalue . '&amp;menuid='.$A['menu_id'].'" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');">';
-            $retval .= '<img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"/></a>';
+            $retval = FieldList::delete(
+                array(
+                    'delete_url' => $_CONF['site_admin_url'] . '/menu.php?mode=delete&amp;mid=' . $fieldvalue . '&amp;menuid='.$A['menu_id'],
+                    'attr' => array(
+                        'title'   => $LANG_MB01['delete'],
+                        'onclick' => 'return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');'
+                    ),
+                )
+            );
             break;
         case 'order' :
-            $moveup = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=up&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'] . '">';
-            $movedown = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=down&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'] . '">';
-            $retval = $moveup . '<img src="' . $_CONF['layout_url'] . '/images/up.png" alt="' . $LANG_MB01['move_up'] . '"/></a>&nbsp;' . $movedown . '<img src="' . $_CONF['layout_url'] . '/images/down.png" alt="' . $LANG_MB01['move_down'] . '"/></a>';
+            $retval .= FieldList::up(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=up&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'],
+                )
+            );
+            $retval .= FieldList::down(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=down&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'],
+                )
+            );
             break;
         case 'info' :
-            $retval = '<a class="'.COM_getToolTipStyle().'" title="' . htmlspecialchars($fieldvalue) . '" href="#"><img src="' . $_CONF['layout_url'] . '/images/info.png" alt=""/></a>';
+            $retval .= FieldList::info(
+                array(
+                    'title' => htmlspecialchars($fieldvalue),
+                )
+            );
             break;
         default :
             $retval = $fieldvalue;
@@ -1395,28 +1422,51 @@ function _mb_getListField_menulist($fieldname, $fieldvalue, $A, $icon_arr)
     switch ($fieldname) {
         case 'menu_name':
             $elementDetails = $A['menu_name'] . '::';
-            $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b><br/>' . $LANG_MB_MENU_TYPES[$A['menu_type']] . '<br/>';
+            $elementDetails .= '<strong>' . $LANG_MB01['type'] . ':</strong><br/>' . $LANG_MB_MENU_TYPES[$A['menu_type']] . '<br/>';
             $retval = '<span style="cursor:pointer;" class="'.COM_getToolTipStyle().'" title="' . $elementDetails . '">'.$A['menu_name'].'</span>';
             break;
         case 'copy' :
-            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=clone&amp;id='.$fieldvalue.'">'
-                    . '<img src="'.$_CONF['layout_url'].'/images/copy.png" alt="'.$LANG_MB01['clone'].'" />';
+            $retval = FieldList::copy(
+                array(
+                    'url' => $_CONF['site_admin_url'].'/menu.php?mode=clone&amp;id='.$fieldvalue,
+                )
+            );
             break;
         case 'active' :
             $retval = '<input class="menu-enabler" type="checkbox" name="enabledmenu[' . $A['menu_id'] . ']" onclick="submit()" value="1"' . ($A['active'] == 1 ? ' checked="checked"' : '') . '/>';
             break;
         case 'elements' :
-            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$A['menu_id'].'">'
-            . '<img src="'.$_CONF['layout_url'].'/images/edit.png" alt="'.$LANG_MB01['edit'].'">';
+            $retval = FieldList::edit(
+                array(
+                    'url' => $_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$A['menu_id'],
+                    'attr' => array(
+                        'title' => $LANG_MB01['edit']
+                    )
+                )
+            );
             break;
         case 'delete' :
             if ( $A['menu_id'] != 1 && $A['menu_id'] != 2 && $A['menu_id'] != 3 ) {
-                $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=deletemenu&amp;id=' . $A['menu_id'] . '" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');"><img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"' . '/></a>';
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $_CONF['site_admin_url'] . '/menu.php?mode=deletemenu&amp;id=' . $A['menu_id'],
+                        'attr' => array(
+                            'title' => $LANG_MB01['delete'],
+                            'onclick' => 'return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');',
+                        )
+                    )
+                );
             }
             break;
         case 'options' :
-            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=editmenu&amp;menuid='.$A['menu_id'].'">'
-            . '<img src="'.$_CONF['layout_url'].'/images/gear.png" height="16" width="16" alt="'.$LANG_MB01['options'].'"/></a>';
+            $retval = FieldList::cog(
+                array(
+                    'url' => $_CONF['site_admin_url'].'/menu.php?mode=editmenu&amp;menuid='.$A['menu_id'],
+                    'attr' => array(
+                        'title' => $LANG_MB01['options']
+                    )
+                )
+            );
             break;
         default :
             $retval = $fieldvalue;

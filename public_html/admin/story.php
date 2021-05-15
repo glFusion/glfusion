@@ -26,6 +26,7 @@ use \glFusion\Log\Log;
 use \glFusion\Article\Article;
 use \glFusion\Database\Database;
 use \glFusion\Admin\AdminAction;
+use \glFusion\FieldList;
 
 $display = '';
 
@@ -83,8 +84,9 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $retval = $access;
             } else if ($access == $LANG_ACCESS['edit']) {
                 if ($fieldname == 'edit') {
-                    $retval = COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/story.php?edit=x&amp;sid={$A['sid']}");
+                    $retval = FieldList::edit(array(
+                        'url' => $_CONF['site_admin_url'].'/story.php?edit=x&amp;sid='.$A['sid'],
+                    ));
                 }
             }
             break;
@@ -109,8 +111,9 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if ($fieldname == 'access') {
                 $retval = $access;
             } else if ($access == $LANG_ACCESS['copy']) {
-                $retval = COM_createLink($icon_arr['copy'],
-                    $_CONF['site_admin_url'].'/story.php?clone=x&amp;sid='.urlencode($A['sid']));
+                $retval = FieldList::copy(array(
+                    'url' => $_CONF['site_admin_url'].'/story.php?clone=x&amp;sid='.urlencode($A['sid']),
+                ));
             }
             break;
 
@@ -148,11 +151,15 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case "draft_flag":
-            $retval = ($A['draft_flag'] == 1) ? $icon_arr['check'] : '';
+            if ($A['draft_flag'] == 1) {
+                $retval = FieldList::checkmark(array('active'=>true));
+            }
             break;
 
         case "featured":
-            $retval = ($A['featured'] == 1) ? $icon_arr['check'] : '';
+            if ($A['featured']) {
+                $retval = FieldList::checkmark(array('active'=>true));
+            }
             break;
 
         case 'username':
@@ -170,25 +177,25 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             return $dt->format($_CONF['daytime'],true);
 
         case "ping":
-            $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
-                     . $_IMAGE_TYPE . '" alt="' . $LANG24[21] . '" title="'
-                     . $LANG24[21] . '"/>';
             if (($A['draft_flag'] == 0) && ($A['unixdate'] < time())) {
-                $url = $_CONF['site_admin_url']
-                     . '/trackback.php?mode=sendall&amp;id=' . $A['sid'];
-                $retval = COM_createLink($pingico, $url);
+                $retval = FieldList::ping(array(
+                    'url' => $_CONF['site_admin_url'].'/trackback.php?mode=sendall&amp;id=' . $A['sid']
+                ));
             } else {
                 $retval = '';
             }
             break;
 
         case 'delete':
-            $retval = '';
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return confirm(\'' . $LANG24[89] .'\');';
-            $retval .= COM_createLink($icon_arr['delete'],
-                $_CONF['site_admin_url'] . '/story.php'
-                . '?deletestory=x&amp;sid=' . $A['sid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            $retval = FieldList::delete(
+                array(
+                    'delete_url' => $_CONF['site_admin_url'] . '/story.php'.'?deletestory=x&amp;sid=' . $A['sid'] . '&amp;' . CSRF_TOKEN . '=' . $token,
+                    'attr' => array(
+                        'title' => $LANG_ADMIN['delete'],
+                        'onclick' => 'return confirm(\'' . $LANG24[89] .'\');',
+                    )
+                )
+            );
             break;
 
         default:
