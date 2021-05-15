@@ -449,6 +449,7 @@ class Date extends DateTime
     /**
      * Returns select HTML for all timezones
      *
+     * @todo    deprecate
      * @param   string  current timezone selection
      * @param   array   attributes i.e.; array('name'=>'tzid','id'=>'tzid')
      * @return  string  HTML select box
@@ -494,5 +495,28 @@ class Date extends DateTime
         $select .= '</select>' . LB;
         return $select;
     }
+
+
+    /**
+     * Returns option elements for a timezone selector.
+     *
+     * @param   string  $selected   Current timezone selection
+     * @return  string      Option elements to embed in select tags
+     */
+    public static function getTimeZoneOptions($selected='')
+    {
+        $retval = '';
+        $all = timezone_identifiers_list();
+        foreach($all AS $zone) {
+            $retval .= '<option value="' . $zone . '"';
+            if ($zone == $selected) {
+                $retval .= ' selected="selected"';
+            }
+            $retval .= '>' . str_replace('_', ' ', $zone) . '</option>' . LB;
+        }
+        return $retval;
+    }
+
 }
+
 ?>
