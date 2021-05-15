@@ -3217,72 +3217,6 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'fs_debug',
-    	'default_value' => NULL,
-    	'type' => 'fieldset',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => NULL,
-    	'sort' => 0,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'rootdebug',
-    	'default_value' => '',
-    	'type' => 'select',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => 1,
-    	'sort' => 10,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'enable_404_logging',
-    	'default_value' => 1,
-    	'type' => 'select',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => 0,
-    	'sort' => 20,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'debug_oauth',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => 0,
-    	'sort' => 30,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'debug_html_filter',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => 0,
-    	'sort' => 40,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'enable_admin_actions',
-    	'default_value' => 1,
-    	'type' => 'select',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => 0,
-    	'sort' => 50,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
     	'name' => 'fs_daily_digest',
     	'default_value' => NULL,
     	'type' => 'fieldset',
@@ -3737,19 +3671,6 @@ array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-/* -- removed in v2.0 - set statically from lib-common
-    array(
-    	'name' => 'path_html',
-    	'default_value' => '',
-    	'type' => 'text',
-    	'subgroup' => 9,
-    	'fieldset' => 1,
-    	'selection_array' => NULL,
-    	'sort' => 10,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-*/
     array(
     	'name' => 'path_log',
     	'default_value' => '',
@@ -3827,9 +3748,72 @@ array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
-
-// end of new area
-
+	array(
+		'name' => 'fs_debug',
+		'default_value' => NULL,
+		'type' => 'fieldset',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => NULL,
+		'sort' => 0,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
+		'name' => 'rootdebug',
+		'default_value' => '',
+		'type' => 'select',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => 1,
+		'sort' => 10,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
+		'name' => 'enable_404_logging',
+		'default_value' => 1,
+		'type' => 'select',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => 0,
+		'sort' => 20,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
+		'name' => 'debug_oauth',
+		'default_value' => 0,
+		'type' => 'select',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => 0,
+		'sort' => 30,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
+		'name' => 'debug_html_filter',
+		'default_value' => 0,
+		'type' => 'select',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => 0,
+		'sort' => 40,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
+		'name' => 'enable_admin_actions',
+		'default_value' => 1,
+		'type' => 'select',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => 0,
+		'sort' => 50,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
 	array(
         'name' => 'sg_cache',
         'default_value' => NULL,
@@ -4035,5 +4019,10 @@ array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
+	//  move debugging to advanced tab
+
+
+
 );
 ?>
