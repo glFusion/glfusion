@@ -21,7 +21,7 @@ USES_lib_admin();
 
 $display = '';
 
-if (!SEC_inGroup ('Root')) {
+if (!SEC_hasRights ('upgrade.admin')) {
     Log::logAccessViolation('Version Checker');
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_showMessageText($MESSAGE[200],$MESSAGE[30],true,'error')

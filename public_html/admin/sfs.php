@@ -16,11 +16,23 @@ require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 // comment out for production
 //define('DVLP_VERSION', 'Y');
 
 USES_lib_admin();
+
+// Make sure user has access to this page
+if (!SEC_hasRights('user.edit')) {
+    Log::logAccessViolation('SFS User Administration');
+    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_showMessageText($MESSAGE[37], $MESSAGE[30], true,'error');
+    $display .= COM_siteFooter ();
+    echo $display;
+    exit;
+}
+
 
 // MAIN
 if (isset($_GET['mode']) && ($_GET['mode'] == 'logout')) {

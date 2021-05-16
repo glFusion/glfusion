@@ -18,7 +18,7 @@ require_once 'auth.inc.php';
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 
-if (!SEC_inGroup('Root') ) {
+if (!SEC_hasRights('database.admin') ) {
     $display = COM_siteHeader('menu', $LANG_DB_ADMIN['database_admin']);
     $display .= COM_showMessageText($MESSAGE[46],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter();

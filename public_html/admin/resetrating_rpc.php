@@ -22,7 +22,7 @@ $ip         = $_SERVER['REMOTE_ADDR'];
 $ratingdate = time();
 $uid        = isset($_USER['uid']) ? $_USER['uid'] : 1;
 
-if ( SEC_inGroup('Root') ) {
+if ( SEC_hasRights('story.edit') ) {
     RATING_resetRating( $type, $id );
     CACHE_clear();
 

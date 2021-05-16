@@ -1594,7 +1594,14 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("DELETE FROM `{$_TABLES['plugins']}` WHERE pi_name='commentfeeds'",1);
 
             $newCapabilities = array(
-                array('ft_name' => 'system.root', 'ft_group' => 'System Root', 'ft_desc' => 'Allows Root Access')
+                array('ft_name' => 'system.root',   'ft_desc' => 'Allows Root Access'),
+                array('ft_name' => 'actions.admin', 'ft_desc' => 'Ability to view Admin Actions'),
+                array('ft_name' => 'cache.admin',   'ft_desc' => 'Ability to clear caches'),
+                array('ft_name' => 'config.admin',  'ft_desc' => 'Ability to configuration glFusion'),
+                array('ft_name' => 'database.admin','ft_desc' => 'Ability to perform Database Administration'),
+                array('ft_name' => 'env.admin',     'ft_desc' => 'Ability to view Environment Check'),
+                array('ft_name' => 'logview.admin', 'ft_desc' => 'Ability to view / clear glFusion Logs'),
+                array('ft_name' => 'upgrade.admin', 'ft_desc' => 'Ability to run Upgrade Check')
             );
 
             foreach($newCapabilities AS $feature) {

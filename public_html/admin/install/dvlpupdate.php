@@ -1055,7 +1055,14 @@ function glfusion_200()
 
     // add the new system.root permission
     $newCapabilities = array(
-        array('ft_name' => 'system.root', 'ft_group' => 'System Root', 'ft_desc' => 'Allows Root Access')
+        array('ft_name' => 'system.root',   'ft_desc' => 'Allows Root Access'),
+        array('ft_name' => 'actions.admin', 'ft_desc' => 'Ability to view Admin Actions'),
+        array('ft_name' => 'cache.admin',   'ft_desc' => 'Ability to clear caches'),
+        array('ft_name' => 'config.admin',  'ft_desc' => 'Ability to configuration glFusion'),
+        array('ft_name' => 'database.admin','ft_desc' => 'Ability to perform Database Administration'),
+        array('ft_name' => 'env.admin',     'ft_desc' => 'Ability to view Environment Check'),
+        array('ft_name' => 'logview.admin', 'ft_desc' => 'Ability to view / clear glFusion Logs'),
+        array('ft_name' => 'upgrade.admin', 'ft_desc' => 'Ability to run Upgrade Check')
     );
 
     foreach($newCapabilities AS $feature) {
@@ -1073,7 +1080,7 @@ function glfusion_200()
                 array('acc_ft_id' => $admin_ft_id, 'acc_grp_id' => 1)
             );
         } else {
-            Log::write('system',Log::DEBUG,"Feature Already Exists: " . $feature['ft_name']);
+            Log::write('system',Log::DEBUG,"Feature Already Exists: " . $feature['ft_name']. " skiping...");
         }
     }
 

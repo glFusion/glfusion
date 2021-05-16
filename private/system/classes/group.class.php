@@ -264,7 +264,7 @@ class Group
     */
     public static function inGroup($grp_to_verify, $uid='')
     {
-        global $_USER, $_GROUPS;
+        global $_USER, $_GROUPS, $_RIGHTS;
 
         if (empty($grp_to_verify)) return true;
 
@@ -286,7 +286,7 @@ class Group
         }
         if (is_numeric($grp_to_verify)) {
             if ($grp_to_verify == 1) {
-                if (SEC_hasRights('system.root')) {
+                if (in_array('system.root',$_RIGHTS)) {
                     return true;
                 }
             }
@@ -296,7 +296,7 @@ class Group
             $lgroups = array_change_key_case($groups, CASE_LOWER);
             $grp_to_verify = strtolower($grp_to_verify);
             if (strcmp($grp_to_verify,'root') === 0) {
-                if (SEC_hasRights('system.root')) {
+                if (in_array('system.root',$_RIGHTS)) {
                     return true;
                 }
             }

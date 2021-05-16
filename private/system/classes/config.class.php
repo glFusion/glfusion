@@ -800,7 +800,7 @@ class config
         if(!array_key_exists($grp, $LANG_configsubgroups)) {
             $LANG_configsubgroups[$grp] = array();
         }
-        if (!SEC_inGroup('Root')) {
+        if (!SEC_hasRights('config.admin')) {
             return config::_UI_perm_denied();
         }
 
@@ -1205,7 +1205,7 @@ class config
     {
         global $_CONF, $_TABLES, $LANG_ADM_ACTIONS;
 
-        if (!SEC_inGroup('Root')) {
+        if (!SEC_hasRights('config.admin')) {
             return null;
         }
 

@@ -190,7 +190,7 @@ function SEC_isModerator()
 */
 function SEC_isAdmin()
 {
-    return SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
+    return SEC_hasRights('system.root,story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
 }
 
 
@@ -344,6 +344,10 @@ function SEC_hasAccess($owner_id,$group_id,$perm_owner,$perm_group,$perm_members
 function SEC_hasRights($features,$operator='AND')
 {
     global $_USER, $_RIGHTS, $_SEC_VERBOSE;
+
+    if (SEC_inGroup('Root')) {
+        return true;
+    }
 
     if (is_string($features)) {
         $features = explode(',',$features);

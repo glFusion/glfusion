@@ -23,7 +23,7 @@ $config =& config::get_instance();
 
 // MAIN
 if (array_key_exists('set_action', $_POST) && SEC_checkToken()){
-    if (SEC_inGroup('Root')) {
+    if (SEC_hasRights('config.admin')) {
         if ($_POST['set_action'] == 'restore') {
             $name = COM_applyFilter($_POST['name']);
             $config->restore_param($name, $conf_group);

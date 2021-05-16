@@ -738,6 +738,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         if (! empty($groups)) {
             foreach ($groups as $g) {
                 if (in_array($g, $GroupAdminGroups) || SEC_inGroup(1)) {
+//                if (in_array($g, $GroupAdminGroups)) {
                     $db->conn->insert(
                         $_TABLES['group_assignments'],
                         array(
@@ -754,7 +755,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         }
 
         // Make sure Root group belongs to any new group
-
+/* --------------
         $ngCount = $db->getCount(
                         $_TABLES['group_assignments'],
                         array('ug_main_grp_id','ug_grp_id'),
@@ -775,7 +776,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
                 )
             );
         }
-
+------- */
         // make sure this Group Admin belongs to the new group
         if (!SEC_inGroup ('Root')) {
             $gaCount = $db->getCount(
@@ -810,7 +811,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         } else {
             PLG_groupChanged ($grp_id, 'edit');
         }
-        Cache::getInstance()->deleteItemsByTags(array('menu', 'groups', 'group_' . $grp_id));
+        Cache::getInstance()->deleteItemsByTags(array('menu', 'user_group','groups', 'group_' . $grp_id));
         COM_setMessage(49);
         $url = $_CONF['site_admin_url'] . '/group.php';
         $url .= (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
@@ -936,14 +937,16 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'sendemail':
-            $retval = FieldList::email(
-                array(
-                    'url' => $_CONF['site_admin_url'] . '/mail.php?grp_id=' . $A['grp_id'],
-                    'attr' => array(
-                        'title' => $LANG_ACCESS['sendemail']
+            if (($A['grp_name'] != 'All Users') && ($A['grp_name'] != 'Logged-in Users') && $A['grp_name'] != 'Non-Logged-in Users') {
+                $retval = FieldList::email(
+                    array(
+                        'url' => $_CONF['site_admin_url'] . '/mail.php?grp_id=' . $A['grp_id'],
+                        'attr' => array(
+                            'title' => $LANG_ACCESS['sendemail']
+                        )
                     )
-                )
-            );
+                );
+            }
             break;
 
         case 'listusers':
@@ -1167,7 +1170,7 @@ function GROUP_selectUsers($group_id, $allusers = false)
 
     $sql  = "SELECT DISTINCT uid FROM `{$_TABLES['users']}` AS u
              LEFT JOIN `{$_TABLES['group_assignments']}` AS ga ON ga.ug_uid = uid
-             WHERE u.uid > 1 AND (ga.ug_main_grp_id = 1 OR ga.ug_main_grp_id = ?)";
+             WHERE u.uid > 1 AND ga.ug_main_grp_id = ?";
 
     $stmt = $db->conn->executeQuery(
                 $sql,
@@ -1175,10 +1178,10 @@ function GROUP_selectUsers($group_id, $allusers = false)
                 array(Database::INTEGER)
     );
     $filteredusers = array();
+    $filteredusers[] = -1;
     while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
         $filteredusers[] = $A['uid'];
     }
-
     $params = array();
     $types  = array();
 

@@ -25,6 +25,16 @@ define('MAX_LOG_SIZE',262144); // 256kb
 
 USES_lib_admin();
 
+// Make sure user has access to this page
+if (!SEC_hasRights('log.admin')) {
+    Log::logAccessViolation('Log View');
+    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_showMessageText($MESSAGE[37], $MESSAGE[30], true,'error');
+    $display .= COM_siteFooter ();
+    echo $display;
+    exit;
+}
+
 $availableLogs = array();
 $info = Log::getLogs();
 foreach($info AS $name => $item) {
