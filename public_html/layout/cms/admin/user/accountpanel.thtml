@@ -44,9 +44,7 @@
         <label class="uk-form-label" for="userstatus">{lang_user_status}</label>
         <div class="uk-form-controls">
             <select name="userstatus" id="userstatus">
-<!-- BEGIN userStatusOptions -->
-                <option value="{opt_value}" {!if selected}selected="selected"{!endif}>{opt_name}</option>
-<!-- END userStatusOptions -->
+                {user_status_options}
             </select>
             <input type="hidden" name="oldstatus" value="{user_status}"/>
         </div>
@@ -103,7 +101,9 @@
      <div class="uk-form-row">
         <label class="uk-form-label" for="cooktime">{lang_cooktime}</label>
         <div class="uk-form-controls">
-          {cooktime_selector}
+          <select id="cooktime" name="cooktime">
+            {cooktime_options}
+          </select>
         </div>
     </div>
      <div class="uk-form-row">

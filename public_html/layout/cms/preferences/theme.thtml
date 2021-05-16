@@ -3,9 +3,7 @@
 <label class="uk-form-label" for="theme">{lang_theme}</label>
 <div class="uk-form-controls">
 <select id="theme" name="theme">
-<!-- BEGIN ThemeSelect -->
-	<option value="{theme}" {!if selected}selected="selected"{!endif}>{theme_dscp}</option>
-<!-- END ThemeSelect -->
+    {theme_options}
 </select>
 </div>
 </div>

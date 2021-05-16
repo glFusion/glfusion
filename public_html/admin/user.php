@@ -443,12 +443,10 @@ function USER_accountPanel($U,$newuser = 0)
         $userform->set_var('remote_user_disabled',' disabled="disabled"');
     }
 
-
-    $selection  = '<select id="cooktime" name="cooktime">' . LB;
-    $selection .= COM_optionList($_TABLES['cookiecodes'],'cc_value,cc_descr',$U['cookietimeout'], 0);
-    $selection .= '</select>';
-
-    $userform->set_var('cooktime_selector', $selection);
+    $userform->set_var(
+        'cooktime_options',
+        COM_optionList($_TABLES['cookiecodes'],'cc_value,cc_descr',$U['cookietimeout'], 0)
+    );
     $userform->set_var('email_value', @htmlspecialchars ($U['email'],ENT_NOQUOTES,COM_getEncodingt()));
 
     $statusarray = array(USER_ACCOUNT_AWAITING_ACTIVATION   => $LANG28[43],
@@ -479,16 +477,15 @@ function USER_accountPanel($U,$newuser = 0)
         $statusarray[USER_ACCOUNT_AWAITING_APPROVAL] = $LANG28[44];
     }
     asort($statusarray);
-    $userform->set_block('user', 'userStatusOptions', 'statOpts');
+    $options = '';
     foreach ($statusarray as $key => $value) {
-        $userform->set_var(array(
-            'opt_name' => $value,
-            'opt_value' => $key,
-            'selected' => ($key == $U['status']),
-        ) );
-        $userform->parse('statOpts', 'userStatusOptions', true);
+        $options .= '<option value="' . $key . '"';
+        if ($key == $U['status']) {
+            $options .= ' selected="selected"';
+        }
+        $options .= '>' . $value . '</option>' . LB;
     }
-    $userform->set_var('user_status', $U['status']);
+    $userform->set_var('user_status_options', $options);
 
     if (
         isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] &&
@@ -755,27 +752,29 @@ function USER_layoutPanel($U, $newuser = 0)
         }
 
         // build language select
-        $selection = '<select id="language" name="language">' . LB;
+        $options = '';
         foreach ($language as $langFile => $langName) {
-            $selection .= '<option value="' . $langFile . '"';
-            if (($langFile == $userlang) || (($has_valid_language == 0) &&
-                    (strpos ($langFile, $similarLang) === 0))) {
-                $selection .= ' selected="selected"';
+            $options .= '<option value="' . $langFile . '"';
+            if (
+                ($langFile == $userlang) ||
+                (
+                    ($has_valid_language == 0) && (strpos ($langFile, $similarLang) === 0)
+                )
+            ) {
+                $options .= ' selected="selected"';
                 $has_valid_language = 1;
             } else if ($userlang == $langFile) {
-                $selection .= ' selected="selected"';
+                $options .= ' selected="selected"';
             }
 
-            $selection .= '>' . $langName . '</option>' . LB;
+            $options .= '>' . $langName . '</option>' . LB;
         }
-        $selection .= '</select>';
-
-        $userform->set_var('language_selector', $selection);
+        $userform->set_var('language_options', $options);
     } else {
-        $userform->set_var('language_selector', $_CONF['language']);
+        $userform->set_var('language_name', $_CONF['language']);
     }
+
     if ($_CONF['allow_user_themes'] == 1) {
-        $selection = '<select id="theme" name="theme">' . LB;
         if (empty ($U['theme'])) {
             $usertheme = $_CONF['theme'];
         } else {
@@ -784,10 +783,11 @@ function USER_layoutPanel($U, $newuser = 0)
         $themeFiles = COM_getThemes ();
         usort ($themeFiles,function ($a,$b) { return strcasecmp($a,$b); } );
 
+        $options = '';
         foreach ($themeFiles as $theme) {
-            $selection .= '<option value="' . $theme . '"';
+            $options .= '<option value="' . $theme . '"';
             if ($usertheme == $theme) {
-                $selection .= ' selected="selected"';
+                $options .= ' selected="selected"';
             }
             $words = explode ('_', $theme);
             $bwords = array ();
@@ -799,13 +799,13 @@ function USER_layoutPanel($U, $newuser = 0)
                     $bwords[] = $th;
                 }
             }
-            $selection .= '>' . implode (' ', $bwords) . '</option>' . LB;
+            $options .= '>' . implode (' ', $bwords) . '</option>' . LB;
         }
-        $selection .= '</select>';
-        $userform->set_var('theme_selector', $selection);
+        $userform->set_var('theme_options', $options);
     } else {
-        $userform->set_var('theme_selector',$_CONF['theme']);
+        $userform->set_var('theme_name', $_CONF['theme']);
     }
+
     if ($U['noicons'] == '1') {
         $userform->set_var('noicons_checked', 'checked="checked"');
     } else {
@@ -827,27 +827,29 @@ function USER_layoutPanel($U, $newuser = 0)
     } else {
         $timezone = $_CONF['timezone'];
     }
-    $selection = Date::getTimeZoneDropDown($timezone,
-            array('id' => 'tzid', 'name' => 'tzid'));
+    $userform->set_var('timezone_options', Date::getTimeZoneOptions($timezone));
 
-    $userform->set_var('timezone_selector', $selection);
-
-    $selection = '<select id="dfid" name="dfid">' . LB
+    /*$selection = '<select id="dfid" name="dfid">' . LB
                . COM_optionList ($_TABLES['dateformats'], 'dfid,description',
-                                 $U['dfid']) . '</select>';
-    $userform->set_var('dateformat_selector', $selection);
-    $search_result_select  = '<select name="search_result_format" id="search_result_format">'.LB;
+               $U['dfid']) . '</select>';*/
+    $userform->set_var(
+        'dateformat_options',
+        COM_optionList ($_TABLES['dateformats'], 'dfid,description', $U['dfid'])
+    );
+
     if (isset($LANG_configSelect['Core'])) {
         $cfgSelect = $LANG_configSelect['Core'][18];
 
     } else {
         $cfgSelect = array_flip($LANG_configselects['Core'][18]);
     }
+    $options = '';
     foreach ($cfgSelect AS $type => $name ) {
-        $search_result_select .= '<option value="'. $type . '"' . ($U['search_result_format'] == $type ? 'selected="selected"' : '') . '>'.$name.'</option>'.LB;
+        $options .= '<option value="'. $type . '"' .
+            ($U['search_result_format'] == $type ? 'selected="selected"' : '') .
+            '>'.$name.'</option>'.LB;
     }
-    $search_result_select .= '</select>';
-    $userform->set_var('search_result_select',$search_result_select);
+    $userform->set_var('search_result_options',$options);
 
     if (!empty($uid) && $uid > 1 ) {
         $userform->set_var('plugin_layout_display',PLG_profileEdit($uid,'layout','display'));
@@ -868,18 +870,17 @@ function USER_layoutPanel($U, $newuser = 0)
         $C['commentorder'] = 0;
         $C['commentlimit'] = 100;
     }
+    $userform->set_var(
+        'displaymode_options',
+        COM_optionList ($_TABLES['commentmodes'], 'mode,name', $C['commentmode'])
+    );
 
-    $selection = '<select id="commentmode" name="commentmode">';
-    $selection .= COM_optionList ($_TABLES['commentmodes'], 'mode,name',
-                                  $C['commentmode']);
-    $selection .= '</select>';
-    $userform->set_var('displaymode_selector', $selection);
 
-    $selection = '<select id="commentorder" name="commentorder">';
-    $selection .= COM_optionList ($_TABLES['sortcodes'], 'code,name',
-                                  $C['commentorder']);
-    $selection .= '</select>';
-    $userform->set_var('sortorder_selector', $selection);
+    $userform->set_var(
+        'sortorder_options',
+        COM_optionList ($_TABLES['sortcodes'], 'code,name', $C['commentorder'])
+    );
+
     $userform->set_var('commentlimit_value', $U['commentlimit']);
     if (!empty($uid) && $uid > 1 ) {
         $userform->set_var('plugin_layout_comment',PLG_profileEdit($uid,'layout','comment'));

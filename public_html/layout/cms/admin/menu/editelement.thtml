@@ -128,7 +128,13 @@ function toggleFields() {
   <div class="uk-form-row">
     <label class="uk-form-label" for="pid">{$LANG_MB01[parent]}</label>
     <div class="uk-form-controls">
-      {parent_select}
+{!if parent_select}
+      <select class="uk-select uk-form-width-medium" name="pid" id="pid">
+        {parent_select}
+      </select>
+{!else}
+      <input type="hidden" name="pid" id="pid" value="0"/>{$LANG_MB01['top_level']}
+{!endif}
     </div>
   </div>
   <div class="uk-form-row">
@@ -143,13 +149,22 @@ function toggleFields() {
   <div class="uk-form-row" id="displayafter">
     <label class="uk-form-label" for="menuorder">{$LANG_MB01[display_after]}</label>
     <div class="uk-form-controls">
-      {order_select}
+      <select class="uk-select uk-form-width-medium" id="menuorder" name="menuorder">
+        {order_select}
+      </select>
     </div>
   </div>
   <div class="uk-form-row">
     <label class="uk-form-label" for="menutype">{$LANG_MB01[type]}</label>
     <div class="uk-form-controls">
-      {type_select}
+{!if type_disabled}
+      <input type="hidden" name="menutype" id="menutype" value="1">
+      <select id="menutyped" name="menutyped" disabled="disabled">
+{!else}
+      <select class="uk-select uk-form-width-medium" id="menutype" name="menutype">
+{!endif}
+        {type_select}
+      </select>
     </div>
   </div>
   <div class="uk-form-row" id="urldiv">
@@ -164,7 +179,9 @@ function toggleFields() {
   <div class="uk-form-row" id="targetdiv">
     <label class="uk-form-label" for="urltarget">{$LANG_MB01[target]}</label>
     <div class="uk-form-controls">
-      {target_select}
+      <select class="uk-select uk-form-width-medium" id="urltarget" name="urltarget">
+        {target_select}
+      </select>
     </div>
   </div>
   <div class="uk-form-row" id="phpdiv">
@@ -176,31 +193,41 @@ function toggleFields() {
   <div class="uk-form-row" id="glcorediv">
     <label class="uk-form-label" for="gltype">{$LANG_MB01[coretype]}</label>
     <div class="uk-form-controls">
-      {gl_select}
+      <select class="uk-select uk-form-width-medium" id="gltype" name="gltype">
+        {gl_select}
+      </select>
     </div>
   </div>
   <div class="uk-form-row" id="plugin">
     <label class="uk-form-label" for="plugin">{$LANG_MB01[plugins]}</label>
     <div class="uk-form-controls">
-      {plugin_select}
+      <select class="uk-select uk-form-width-medium" id="pluginname" name="pluginname">
+        {plugin_select}
+      </select>
     </div>
   </div>
   <div class="uk-form-row" id="staticpage">
     <label class="uk-form-label" for="spname">{$LANG_MB01[static_pages]}</label>
     <div class="uk-form-controls">
-      {sp_select}
+      <select class="uk-select uk-form-width-medium" id="spname" name="spname">
+        {sp_select}
+      </select>
     </div>
   </div>
   <div class="uk-form-row" id="topic">
     <label class="uk-form-label" for="topicname">{$LANG_MB01[topic]}</label>
     <div class="uk-form-controls">
-      {topic_select}
+      <select class="uk-select uk-form-width-medium" id="topicname" name="topicname">
+        {topic_select}
+      </select>
     </div>
   </div>
   <div class="uk-form-row" id="glfunc">
     <label class="uk-form-label" for="glfunc">{$LANG_MB01[glfusion_function]}</label>
     <div class="uk-form-controls">
-      {glfunction_select}
+      <select class="uk-select uk-form-width-medium" id="glfunction" name="glfunction">
+        {glfunction_select}
+      </select>
     </div>
   </div>
   <div class="uk-form-row">
@@ -212,7 +239,9 @@ function toggleFields() {
   <div class="uk-form-row">
     <label class="uk-form-label" for="group">{$LANG_MB01[permission]}</label>
     <div class="uk-form-controls">
+      <select class="uk-select uk-form-width-medium" id="group" name="group">
       {group_select}
+      </select>
     </div>
   </div>
 

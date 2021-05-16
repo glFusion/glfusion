@@ -1656,27 +1656,18 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
 
     $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
-    $T = new Template($_CONF['path_layout'] . '/fields');
-    $T->set_file('optionlist', 'optionlist.thtml');
-    $T->set_block('optionlist', 'options', 'opts');
+
+    $retval = '';
     while ($A = $stmt->fetch()) {
+        $retval .= '<option value="' . $A[0] . '"';
         if (
             (is_array($selected) && in_array($selected, $A[0])) ||
             (!is_array($selected) && $A[0] == $selected)
         ) {
-            $sel = true;
-        } else {
-            $sel = false;
+            $retval .= ' selected="selected"';
         }
-        $T->set_var(array(
-            'opt_value' => $A[0],
-            'opt_name' => $A[1],
-            'selected' => $sel,
-        ) );
-        $T->parse('opts', 'options', true);
+        $retval .= '>' . $A[1] . '</option>' . LB;
     }
-    $T->parse('output', 'optionlist');
-    $retval = $T->finish($T->get_var('output'));
     return $retval;
 }
 
@@ -1697,30 +1688,21 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
 */
 function COM_topicList( $selection, $selected = '', $sortcol = 1, $ignorelang = false, $access = 2 )
 {
-    global $_TABLES, $_CONF;
-
     $retval = '';
 
     $topics = COM_topicArray($selection, $sortcol, $ignorelang, $access);
     if ( is_array($topics) ) {
-        $T = new Template($_CONF['path_layout'] . '/fields');
-        $T->set_file('optionlist', 'optionlist.thtml');
-        $T->set_block('optionlist', 'options', 'opts');
         foreach ($topics as $tid => $topic) {
             if ( isset($tid) ) {
                 $topic .= ' (' . $tid . ')';
             }
-            $T->set_var(array(
-                'opt_value' => $tid,
-                'opt_name' => $topic,
-                'selected' => $tid == $selected,
-            ) );
-            $T->parse('opts', 'options', true);
+            $retval .= '<option value="' . $tid . '"';
+            if ($tid == $selected) {
+                $retval .= ' selected="selected"';
+            }
+            $retval .= '>' . $topic . '</option>' . LB;
         }
-        $T->parse('output', 'optionlist');
-        $retval .= $T->finish($T->get_var('output'));
     }
-
     return $retval;
 }
 
@@ -1758,7 +1740,7 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
             $sql .= $permsql . COM_getLangSQL('tid', 'AND');
         }
     }
-    $sql .=  " ORDER BY $select_set[$sortcol]";
+    $sql .=  " ORDER BY {$select_set[$sortcol]}";
 
     $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
@@ -6351,24 +6333,20 @@ function COM_buildOwnerList($fieldName,$owner_id=2)
 
     $stmt = $db->conn->executeQuery("SELECT * FROM `{$_TABLES['users']}` WHERE status=3 ORDER BY username ASC");
     $T = new Template($_CONF['path_layout'] . '/fields');
-    $T->set_file(array(
-        'selection' => 'selection.thtml',
-        'optionlist' => 'optionlist.thtml',
-    ) );
+    $T->set_file('selection', 'selection.thtml');
     $T->set_var('var_name', $fieldName);
-    $T->set_block('optionlist', 'options', 'opts');
+    $options = '';
     while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ( $row['uid'] == 1 ) {
             continue;
         }
-        $T->set_var(array(
-            'opt_value' => $row['uid'],
-            'opt_name' => COM_getDisplayName($row['uid']),
-            'selected' => $owner_id == $row['uid'],
-        ) );
-        $T->parse('opts', 'options', true);
+        $options .= '<option value="' . $row['uid'] . '"';
+        if ($owner_id == $row['uid']) {
+            $options .= ' selected="selected"';
+        }
+        $options .= '>' . COM_getDisplayName($row['uid']) . '</opton>' . LB;
     }
-    $T->parse('option_list', 'optionlist');
+    $T->set_var('option_list', $options);
     $T->parse('output', 'selection');
     $owner_select = $T->finish($T->get_var('output'));
     return $owner_select;
