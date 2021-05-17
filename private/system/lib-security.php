@@ -2197,7 +2197,7 @@ function SEC_loginForm($use_options = array())
                 $select = '<input type="hidden" name="service" value="'. $modules[0] . '"/>' . $modules[0] . LB;
             } else {
                 // Build select
-                $select = '<select name="service">';
+                $select = '';
                 if ( isset($_CONF['standard_auth_first']) && $_CONF['standard_auth_first'] == 1 ) {
                     if ($_CONF['user_login_method']['standard']) {
                         $select .= '<option value="">' .  $_CONF['site_name'] . '</option>' . LB;
@@ -2211,7 +2211,6 @@ function SEC_loginForm($use_options = array())
                         $select .= '<option value="">' .  $_CONF['site_name'] . '</option>' . LB;
                     }
                 }
-                $select .= '</select>';
             }
 
             $loginform->set_file('services', 'services.thtml');
