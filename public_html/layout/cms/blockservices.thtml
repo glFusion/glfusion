@@ -1,6 +1,8 @@
 {# begin {templatelocation} #}
 <label class="uk-text-bold" for="service">{lang_service}</label>:
 <br>
+<select name="service" id="service">
 {select_service}
+</select>
 <br>
 {# end {templatelocation} #}
