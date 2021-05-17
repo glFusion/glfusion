@@ -246,11 +246,19 @@ function GROUP_edit($grp_id = '')
             $whereGroups = '1=1';
         }
 
-        $header_arr = array(
-                    array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false, 'align' => 'center'),
-                    array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
-                    array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
-        );
+        if ($grp_id == 1) {
+            $header_arr = array(
+                array('text' => $LANG28[86], 'field' => 'disabled-checkbox', 'sort' => false, 'align' => 'center'),
+                array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
+                array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
+            );
+        } else {
+            $header_arr = array(
+                array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false, 'align' => 'center'),
+                array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
+                array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
+            );
+        }
 
         $defsort_arr = array('field' => 'grp_name', 'direction' => 'asc');
 
@@ -442,7 +450,7 @@ function GROUP_displayRights($grp_id = '', $core = 0)
     $retval = '<tr>';
 
     while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
-        if ((empty($grpftarray[$A['ft_name']]) OR ($grpftarray[$A['ft_name']] == 'direct')) ) {
+        if ((empty($grpftarray[$A['ft_name']]) OR ($grpftarray[$A['ft_name']] == 'direct')) && $grp_id != 1 ) {
             if (($ftcount > 0) && ($ftcount % 3 == 0)) {
                 $retval .= '</tr>' . LB . '<tr>';
             }
@@ -560,6 +568,15 @@ function GROUP_applyDefault($grp_id, $add = true)
 function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $grp_default, $grp_applydefault, $features, $groups)
 {
     global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $LANG_ADM_ACTIONS,$VERBOSE;
+
+    // no save for Root - it is a auto populated group of sub-groups and rights
+    if ($grp_id == 1) {
+        COM_setMessage(49);
+        $url = $_CONF['site_admin_url'] . '/group.php';
+        $url .= (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
+        echo COM_refresh($url);
+        exit;
+    }
 
     $retval = '';
 
