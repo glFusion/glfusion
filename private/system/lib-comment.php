@@ -307,24 +307,11 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     // Order
     $selector_data = COM_optionList( $_TABLES['sortcodes'], 'code,name', $order );
-    $selector = '<select name="order">' . LB
-              . $selector_data
-              . LB . '</select>';
-    $commentbar->set_var( 'order_selector', $selector);
-    $commentbar->set_var( 'order_select_data', $selector_data);
+    $commentbar->set_var( 'order_selector', $selector_data);
 
     // Mode
-    if( $page == 'comment.php' ) {
-        $selector = '<select name="format">';
-    } else {
-        $selector = '<select name="mode">';
-    }
     $selector_data = COM_optionList( $_TABLES['commentmodes'], 'mode,name', $mode );
-    $selector .= LB
-               . $selector_data
-               . LB . '</select>';
-    $commentbar->set_var( 'mode_selector', $selector);
-    $commentbar->set_var( 'mode_select_data',$selector_data);
+    $commentbar->set_var( 'mode_selector', $selector_data);
     $commentbar->set_var( 'mode_select_field_name', ($page == 'comment.php' ? 'format' : 'mode' ) ) ;
 
     return $commentbar->finish( $commentbar->parse( 'output', 'commentbar' ));
@@ -1452,8 +1439,6 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type = '',$mode = '',$po
         } else {
             $name = $LANG03[24]; //anonymous user
         }
-        $usernameblock = '<input type="text" name="username" size="16" value="' .
-                         $name . '" maxlength="32"/>';
         $comment_template->set_var('username', $filter->editableText($name));
 
         $comment_template->set_var('action_url', $_CONF['site_url'] . '/users.php?mode=new');
@@ -1506,14 +1491,10 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type = '',$mode = '',$po
         //for editing
         $comment_template->set_var('save_type','saveedit');
         $comment_template->set_var('lang_save',$LANG03[29]);
-        $comment_template->set_var('save_option', '<input type="submit" name="saveedit" value="'
-            . $LANG03[29] . '"/>');
     } elseif (($_CONF['skip_preview'] == 1) || ($mode == 'preview_new')) {
         //new comment
         $comment_template->set_var('save_type','savecomment');
         $comment_template->set_var('lang_save',$LANG03[11]);
-        $comment_template->set_var('save_option', '<input type="submit" name="savecomment" value="'
-            . $LANG03[11] . '"/>');
     }
 
 // set some fields if mod or admin edit
