@@ -1222,7 +1222,14 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 )
             );
             $retval .= '&nbsp;&nbsp;';
+            if (SEC_inGroup('Root',$A['uid'])) {
+                $retval .= '<strong>';
+            }
             $retval .= COM_createLink($fieldvalue, $url, $attr);
+            if (SEC_inGroup('Root',$A['uid'])) {
+                $retval .= '</strong>';
+            }
+
             $photoico = '';
             if (!empty ($A['photo'])) {
                 $retval .= '&nbsp;&nbsp;' . FieldList::userPhoto();
