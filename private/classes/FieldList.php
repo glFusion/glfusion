@@ -478,5 +478,27 @@ class FieldList
         $t->parse('output','field-ping');
         return $t->finish($t->get_var('output'));
     }
+
+    public static function rootUser($args)
+    {
+        global $_CONF;
+
+        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
+        $t->set_file('root','fieldlist.thtml');
+
+        $t->set_block('root','field-root-user');
+        if (isset($args['attr']) && is_array($args['attr'])) {
+            $t->set_block('field-root-user','attr','attributes');
+            foreach($args['attr'] AS $name => $value) {
+                $t->set_var(array(
+                    'name' => $name,
+                    'value' => $value)
+                );
+                $t->parse('attributes','attr',true);
+            }
+        }
+        $t->parse('output','field-root-user');
+        return $t->finish($t->get_var('output'));
+    }
 }
 ?>

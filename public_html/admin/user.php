@@ -1222,12 +1222,13 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 )
             );
             $retval .= '&nbsp;&nbsp;';
-            if (SEC_inGroup('Root',$A['uid'])) {
-                $retval .= '<strong>';
-            }
             $retval .= COM_createLink($fieldvalue, $url, $attr);
             if (SEC_inGroup('Root',$A['uid'])) {
-                $retval .= '</strong>';
+                $retval .= '&nbsp;' . FieldList::rootUser(array(
+                    'attr' => array(
+                        'title' => 'Root User',
+                    )
+                ));
             }
 
             $photoico = '';

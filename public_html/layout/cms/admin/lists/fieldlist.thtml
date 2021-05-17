@@ -143,4 +143,13 @@
     <i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-camera-retro"></i>
 <!-- END field-userphoto -->
 
+<!-- BEGIN field-root-user -->
+    <i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-star uk-text-danger"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    ></i>
+<!-- END field-root-user -->
+
+
 {# end admin fields #}
