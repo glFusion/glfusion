@@ -142,6 +142,7 @@ class Group
         }
 
         $data = $stmt->fetchAll(Database::ASSOCIATIVE);
+
         $stmt->closeCursor();
         if (count($data) < 1) {
             $data = array();
@@ -202,6 +203,7 @@ class Group
         // Not in cache? First get directly-assigned memberships, then
         // all inherited ones.
         $groups = self::getAssigned($uid);
+
         $cTotalGroups = count($groups);
 //        Log::write('system',Log::DEBUG,sprintf("%s::%s got %d assigned groups.",__CLASS__,__FUNCTION__,$cTotalGroups));
 
@@ -264,7 +266,9 @@ class Group
     */
     public static function inGroup($grp_to_verify, $uid='')
     {
-        global $_USER, $_GROUPS, $_RIGHTS;
+        global $_USER, $_GROUPS, $_RIGHTS, $_TABLES;
+
+        $rc = false;
 
         if (empty($grp_to_verify)) return true;
 
@@ -276,31 +280,45 @@ class Group
             }
         }
 
+        // we will return true if a member of Root or has system.root permission
+        // 'remote users' group is handled special - it will only return if an actual member of this group
+
         if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
             if (empty ($_GROUPS)) {
                 $_GROUPS = self::getAll($uid);
             }
             $groups = $_GROUPS;
+            $rights = $_RIGHTS;
         } else {
             $groups = self::getAll($uid);
+            $rights = explode( ',', SEC_getUserPermissions(0,$uid));
         }
+
         if (is_numeric($grp_to_verify)) {
-            if ($grp_to_verify == 1) {
-                if (in_array('system.root',$_RIGHTS)) {
-                    return true;
+            $rc = (in_array($grp_to_verify, $groups)) ? true : false;
+            if ($rc === false) {
+                $db = Database::getInstance();
+                $remotegroup = $db->getItem($_TABLES['groups'],'grp_id',array('grp_name' => 'remote users'),array(Database::STRING));
+                if ($grp_to_verify != $remotegroup) {
+                    if (in_array(1,$groups) || in_array('system.root',$rights)) {
+                        $rc = true;
+                    }
                 }
             }
-            return (in_array($grp_to_verify, $groups)) ? true : false;
+            return $rc;
         } else {
             // perform case-insensitive comparison
             $lgroups = array_change_key_case($groups, CASE_LOWER);
             $grp_to_verify = strtolower($grp_to_verify);
-            if (strcmp($grp_to_verify,'root') === 0) {
-                if (in_array('system.root',$_RIGHTS)) {
-                    return true;
+
+            $rc = (isset($lgroups[$grp_to_verify])) ? true : false;
+
+            if ($rc === false && strcmp($grp_to_verify,'remote users') !== 0) {
+                if (isset($lgroups['root']) || in_array('system.root',$rights)) {
+                    $rc = true;
                 }
             }
-            return (isset($lgroups[$grp_to_verify])) ? true : false;
+            return $rc;
         }
     }
 
