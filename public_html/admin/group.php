@@ -266,7 +266,9 @@ function GROUP_edit($grp_id = '')
         if (! empty($grp_id)) {
             $xsql = " AND (grp_id <> $grp_id)";
         }
-        $sql = "SELECT grp_id, grp_name, grp_descr FROM `{$_TABLES['groups']}` WHERE (grp_name <> 'Root')" . $xsql . ' AND ' . $whereGroups;
+        $sql = "SELECT grp_id, grp_name, grp_descr FROM `{$_TABLES['groups']}`
+                WHERE (grp_name <> 'Root' AND grp_name <> 'All Users' AND grp_name <> 'Non-Logged-in Users' AND grp_name <> 'Logged-in Users' AND grp_name <> 'Remote Users')"
+                . $xsql . ' AND ' . $whereGroups;
         $query_arr = array('table' => 'groups',
                            'sql' => $sql,
                            'query_fields' => array('grp_name'),
@@ -735,10 +737,9 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
             array(Database::INTEGER)
         );
 
-        if (! empty($groups)) {
+        if (!empty($groups)) {
             foreach ($groups as $g) {
                 if (in_array($g, $GroupAdminGroups) || SEC_inGroup(1)) {
-//                if (in_array($g, $GroupAdminGroups)) {
                     $db->conn->insert(
                         $_TABLES['group_assignments'],
                         array(
