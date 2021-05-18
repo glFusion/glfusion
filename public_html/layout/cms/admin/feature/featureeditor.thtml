@@ -1,0 +1,82 @@
+{# begin {templatelocation} #}
+<script src="{site_url}/javascript/moveusers.js"></script>
+<form class="uk-form uk-form-horizontal uk-margin" action="{site_admin_url}/feature.php" method="post">
+	<input type="hidden" name="ft_gl_core" value="{ft_gl_core}">
+	<input type="hidden" name="ft_id" value="{ft_id}">
+	<input type="hidden" name="ft_name" value="{ft_name}">
+	<input type="hidden" name="groupmembers">
+	<input type="hidden" name="{gltoken_name}" value="{gltoken}">
+
+	<fieldset class="uk-margin">
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="f_ft_name">{lang_ft_name}</label>
+			<div class="uk-form-controls">
+				{ft_name}
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="ft_descr">{lang_ft_descr}</label>
+			<div class="uk-form-controls">
+				<input type="text" class="uk-form-width-large required" maxlength="255" id="f_ft_descr" name="ft_descr" value="{ft_descr}">
+			</div>
+		</div>
+
+		<fieldset data-uk-margins>
+			<div class="uk-form-row uk-margin-large-bottom">
+				<div class="uk-grid uk-container-center" data-uk-grid-match="{row: false}">
+					<div class="uk-width-medium-2-5 uk-text-center">
+						<h3>{lang_available}</h3>
+						<select multiple="multiple" size="10" name="fieldFrom"
+							style="width: 15em; height: 20em; padding: 2px;"
+							ondblclick="moveSelectedOptions(this.form['fieldFrom'],this.form['fieldTo'],false)">
+							{excluded_groups}
+						</select>
+					</div>
+					<div class="uk-width-medium-1-5 uk-text-center uk-vertical-align">
+						<div class="uk-vertical-align-middle">
+							<button class="uk-button uk-button-success uk-form-width-small" name="right" onclick="moveSelectedOptions(this.form['fieldFrom'],this.form['fieldTo'],false);return false;">{LANG_add}&nbsp;<i class="uk-icon-angle-double-right"></i></button>
+							<br><br>
+							<button class="uk-button uk-button-primary uk-form-width-small" name="left" onclick="moveSelectedOptions(this.form['fieldTo'],this.form['fieldFrom'],false);return false;"><i class="uk-icon-angle-double-left"></i>&nbsp;{LANG_remove}</button>
+						</div>
+					</div>
+					<div class="uk-width-medium-2-5 uk-text-center">
+						<h3>{lang_included}</h3>
+						<select multiple="multiple" size="10" name="fieldTo"
+							style="width: 15em; height: 20em; padding: 2px;"
+							ondblclick="moveSelectedOptions(this.form['fieldTo'],this.form['fieldFrom'],false)">
+							{included_groups}
+						</select>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+{!if 0}
+		<div class="uk-form-row {hide_adminoption}">
+			<label class="uk-form-label" for="chk_grps">{lang_grp_members}</label>
+			<div class="uk-form-controls">
+				<table class="uk-table uk-table-hover uk-table-striped uk-table-contensed uk-width-1-1">
+				<tbody>
+				<tr><th>Include</th><th>Group Name</th><th>Description</th></tr>
+<!-- BEGIN grpItems -->
+				<tr>
+				<td><input type="checkbox" name="grp_id[{grp_id}]" value="1" {chk} /></td>
+				<td>{grp_name}</td>
+				<td>{grp_descr}</td>
+				</tr>
+<!-- END grpItems -->
+				</tbody>
+				</table>
+			</div>
+		</div>
+{!endif}
+
+	<div class="uk-form-row">
+		<div class="uk-grid uk-margin-top">
+			<div class="uk-width-small-3-4">
+				<button class="uk-button uk-button-success" type="submit" value="{lang_save}" name="save" onclick="return setUsers(this.form)">{lang_save}</button>
+				<a class="uk-button" href="{site_admin_url}/feature.php">{lang_cancel}</a>
+		</div>
+	</div>
+</form>
+{# end {templatelocation} #}
