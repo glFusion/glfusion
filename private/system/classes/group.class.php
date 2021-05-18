@@ -246,6 +246,7 @@ class Group
                 }
             }
         }
+        $groups['All Users'] = 2;
 
         if (count($groups) == 0) {
             $groups = array('All Users' => 2);
