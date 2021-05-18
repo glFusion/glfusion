@@ -280,6 +280,18 @@ function commandcontrol()
             'image' => $_CONF['layout_url'] . '/images/icons/moderation.' . $_IMAGE_TYPE,
             'count' => $modnum,
         ),
+        $LANG01[131] => array(
+            'condition' => SEC_hasRights('system.root'),
+            'url' =>$_CONF['site_admin_url'] . '/feature.php',
+            'lang' => $LANG01[131],
+            'image' => $_CONF['layout_url'] . '/images/icons/feature.' . $_IMAGE_TYPE,
+        ),
+        $LANG01[131] => array(
+            'condition' => SEC_hasRights('system.root'),
+            'url' =>$_CONF['site_admin_url'] . '/feature.php',
+            'lang' => $LANG01[131],
+            'image' => $_CONF['layout_url'] . '/images/icons/feature.' . $_IMAGE_TYPE,
+        ),
     );
 
     // now add the plugins
