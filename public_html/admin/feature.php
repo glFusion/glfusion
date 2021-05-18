@@ -60,7 +60,7 @@ if (isset($_POST['cancel'])) {
 switch ($action) {
 case 'edit':
     $FT = glFusion\Feature::getById($actionval);
-    $display .= COM_siteHeader('menu', $LANG_ACCESS['groupeditor']);
+    $display .= COM_siteHeader('menu', $LANG_ADMIN['feature_editor']);
     $display .= $FT->Edit();
     $display .= COM_siteFooter();
     break;
@@ -80,7 +80,7 @@ case 'save':
 
 case 'list':
 default:
-    $display .= COM_siteHeader('menu', 'Feature Administrator');
+    $display .= COM_siteHeader('menu', $LANG_ADMIN['feature_admin']);
     $display .= COM_showMessageFromParameter();
     $display .= glFusion\Feature::adminList();
     $display .= COM_siteFooter();

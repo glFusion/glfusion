@@ -325,7 +325,7 @@ class Feature
 
         $T->parse('output', 'form');
         $retval = COM_startBlock(
-            $LANG_ADMIN['feature_admin'],
+            $LANG_ADMIN['feature_editor'],
             '',
             COM_getBlockTemplate('_admin_block', 'header')
         );

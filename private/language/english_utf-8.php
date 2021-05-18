@@ -1984,6 +1984,7 @@ $LANG_ADMIN = array(
     'reset' => 'Reset',
     'remaining_chars' => 'Remaining Characters ',
     'feature_admin' => 'Feature Administration',
+    'feature_editor' => 'Feature Editor',
     'feature_list' => 'Feature List',
 );
 
