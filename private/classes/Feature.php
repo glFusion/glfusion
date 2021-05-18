@@ -402,7 +402,7 @@ class Feature
      *
      * @return  string      List of features
      */
-    public static function adminList()
+    public static function adminList($coreonly=0)
     {
         global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_ACCESS, $LANG28;
 
@@ -442,20 +442,30 @@ class Feature
             'direction' => 'ASC',
         );
 
+        if ($coreonly) {
+            $def_filter = ' WHERE ft_gl_core = 1';
+            $corechk = 'checked="checked"';
+        } else {
+            $def_filter = ' WHERE 1=1';
+            $corechk = '';
+        }
+
+        $filter = '<input type="checkbox" name="core" ' . $corechk .
+            ' onclick="this.form.submit();">&nbsp;' .
+            $LANG_ADMIN['core_only'] . '&nbsp;&nbsp;';
+
         $query_arr = array(
             'table' => 'features',
             'sql' => $sql,
             'query_fields' => array('ft_name', 'ft_descr'),
-            'default_filter' => 'WHERE 1=1',
+            'default_filter' => $def_filter,
         );
-
         $text_arr = array(
             'has_extras' => true,
             'form_url' => $_CONF['site_admin_url'] . '/feature.php',
         );
 
         $options = array();
-        $filter = '';
         $retval .= COM_startBlock(
             $LANG_ADMIN['feature_admin'],
             '',
@@ -491,14 +501,18 @@ class Feature
 
         switch($fieldname) {
         case 'edit':
-            $retval .= COM_createLink(
-                $icon_arr['edit'],
-                $_CONF['site_admin_url'] . "/feature.php?edit={$A['ft_id']}"
-            );
+            $retval = FieldList::edit(array(
+                'url' => $_CONF['site_admin_url'] . "/feature.php?edit={$A['ft_id']}",
+                'attr' => array(
+                    'title' => $LANG_ADMIN['edit']
+                )
+            ) );
             break;
         case 'ft_gl_core':
             if ($fieldvalue) {
-                $retval .= $icon_arr['check'];
+                $retval = FieldList::checkmark(array(
+                    'active' => true,
+                ) );
             }
             break;
         default:

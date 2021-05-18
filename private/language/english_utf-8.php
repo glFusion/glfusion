@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Permalink',
     129 => 'Configuration',
     130 => 'Webservices',			// depreciated
+    131 => 'Features',
     500 => 'Please remove the admin/install/ directory after installing or upgrading your site!',
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
@@ -1986,6 +1987,7 @@ $LANG_ADMIN = array(
     'feature_admin' => 'Feature Administration',
     'feature_editor' => 'Feature Editor',
     'feature_list' => 'Feature List',
+    'core_only' => 'Core Only?',
 );
 
 ###############################################################################

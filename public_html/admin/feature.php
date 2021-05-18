@@ -80,9 +80,14 @@ case 'save':
 
 case 'list':
 default:
+    if (isset($_REQUEST['core']) && $_REQUEST['core']) {
+        $coreonly = 1;
+    } else {
+        $coreonly = 0;
+    }
     $display .= COM_siteHeader('menu', $LANG_ADMIN['feature_admin']);
     $display .= COM_showMessageFromParameter();
-    $display .= glFusion\Feature::adminList();
+    $display .= glFusion\Feature::adminList($coreonly);
     $display .= COM_siteFooter();
     break;
 }
