@@ -535,7 +535,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
 
     // permission template
 
-    $usergroups = SEC_getUserGroups();
+    $usergroups = \Group::getAllAvailable();
     $groupdd = '';
     $moddd = '';
 
@@ -543,17 +543,18 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $moddd .= '<select name="mod_id">';
     for ($i = 0; $i < count($usergroups); $i++) {
         if ( $usergroups[key($usergroups)] != 2 && $usergroups[key($usergroups)] != 13 ) {
-            $groupdd .= '<option value="' . $usergroups[key($usergroups)] . '"';
             $moddd   .= '<option value="' . $usergroups[key($usergroups)] . '"';
-            if ($A['group_id'] == $usergroups[key($usergroups)]) {
-                $groupdd .= ' selected="selected"';
-            }
             if ($A['mod_group_id'] == $usergroups[key($usergroups)]) {
                 $moddd   .= ' selected="selected"';
             }
-            $groupdd .= '>' . key($usergroups) . '</option>';
             $moddd   .= '>' . key($usergroups) . '</option>';
         }
+            $groupdd .= '<option value="' . $usergroups[key($usergroups)] . '"';
+            if ($A['group_id'] == $usergroups[key($usergroups)]) {
+                $groupdd .= ' selected="selected"';
+            }
+            $groupdd .= '>' . key($usergroups) . '</option>';
+
         next($usergroups);
     }
     $groupdd .= '</select>';
