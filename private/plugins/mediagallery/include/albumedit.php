@@ -542,19 +542,20 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $groupdd .= '<select name="group_id">';
     $moddd .= '<select name="mod_id">';
     for ($i = 0; $i < count($usergroups); $i++) {
-        if ( $usergroups[key($usergroups)] != 2 && $usergroups[key($usergroups)] != 13 ) {
+        if ( $usergroups[key($usergroups)] != 2 && $usergroups[key($usergroups)] != 13 && key($usergroups) <> 'Non-Logged-in Users') {
             $moddd   .= '<option value="' . $usergroups[key($usergroups)] . '"';
             if ($A['mod_group_id'] == $usergroups[key($usergroups)]) {
                 $moddd   .= ' selected="selected"';
             }
             $moddd   .= '>' . key($usergroups) . '</option>';
         }
+        if (key($usergroups) <> 'Non-Logged-in Users') {
             $groupdd .= '<option value="' . $usergroups[key($usergroups)] . '"';
             if ($A['group_id'] == $usergroups[key($usergroups)]) {
                 $groupdd .= ' selected="selected"';
             }
             $groupdd .= '>' . key($usergroups) . '</option>';
-
+        }
         next($usergroups);
     }
     $groupdd .= '</select>';
