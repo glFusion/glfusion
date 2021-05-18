@@ -247,6 +247,9 @@ class Group
             }
         }
         $groups['All Users'] = 2;
+        if (!COM_isAnonUser()) {
+            $groups['Logged-in Users'] = 13;
+        }
 
         if (count($groups) == 0) {
             $groups = array('All Users' => 2);
@@ -372,6 +375,52 @@ class Group
             }
         }
         return $groups[$feature];
+    }
+
+  /**
+    *   Gets an array of all groups available
+    *
+    *   @return array           Array of grp_name=>grp_id
+    */
+    public static function getAllAvailable()
+    {
+        global $_TABLES, $_USER, $_SEC_VERBOSE;
+
+        $cache = false;
+        $groups = array();
+
+        $db = Database::getInstance();
+
+        // Then check the glFusion cache to save DB queries
+        $cache_key = 'group_all_available';
+        if (Cache::getInstance()->has($cache_key)) {
+            return Cache::getInstance()->get($cache_key);
+        }
+
+        // Not in cache? First get directly-assigned memberships, then
+        // all inherited ones.
+        $sql = "SELECT grp_id,grp_name
+                FROM {$_TABLES['groups']} g";
+
+        try {
+            $stmt = $db->conn->executeQuery($sql,
+                        array(),
+                        array()
+                        );
+
+        } catch(Throwable $e) {
+            // Ignore errors or failed attempts
+        }
+        $data = $stmt->fetchAll(Database::ASSOCIATIVE);
+        $stmt->closeCursor();
+        foreach($data AS $row) {
+            $groups[ucfirst($row['grp_name'])] = $row['grp_id'];
+        }
+        $groups['All Users'] = 2;
+        $groups['Logged-in Users'] = 13;
+        ksort($groups);
+        Cache::getInstance()->set($cache_key, $groups, array('groups', 'group_'));
+        return $groups;
     }
 }
 
