@@ -501,14 +501,18 @@ class Feature
 
         switch($fieldname) {
         case 'edit':
-            $retval .= COM_createLink(
-                $icon_arr['edit'],
-                $_CONF['site_admin_url'] . "/feature.php?edit={$A['ft_id']}"
-            );
+            $retval = FieldList::edit(array(
+                'url' => $_CONF['site_admin_url'] . "/feature.php?edit={$A['ft_id']}",
+                'attr' => array(
+                    'title' => $LANG_ADMIN['edit']
+                )
+            ) );
             break;
         case 'ft_gl_core':
             if ($fieldvalue) {
-                $retval .= $icon_arr['check'];
+                $retval = FieldList::checkmark(array(
+                    'active' => true,
+                ) );
             }
             break;
         default:
