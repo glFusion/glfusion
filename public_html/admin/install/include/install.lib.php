@@ -1616,6 +1616,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 }
             }
 
+            // clean up the group assignment table
+            DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id='2'",1);
+            DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id='13'",1);
+
             $current_fusion_version = '2.0.0';
 
         default:

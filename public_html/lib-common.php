@@ -693,8 +693,11 @@ COM_switchLocaleSettings();
 
 if ( !COM_isAnonUser() ) {
     $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
+    $_GROUPS['All Users'] = 2;
+    $_GROUPS['Logged-in Users'] = 13;
 } else {
     $_GROUPS = SEC_getUserGroups( 1 );
+    $_GROUPS['All Users'] = 2;
 }
 
 /**

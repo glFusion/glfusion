@@ -521,6 +521,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
             $db->conn->rollBack();
             return NULL;
         }
+/* - May 2021 - no longer need to assign users to these groups
 
         // Add user to Logged-in group (i.e. members) and the All Users group
         $loggedInUsersGrp = $db->getItem ($_TABLES['groups'], 'grp_id',
@@ -557,7 +558,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
             $db->conn->rollBack();
             return null;
         }
-
+*/
         // any default groups?
         $stmt = $db->conn->query("SELECT grp_id FROM `{$_TABLES['groups']}` WHERE grp_default=1");
         $grpDefaults = $stmt->fetchAll(Database::ASSOCIATIVE);

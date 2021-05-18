@@ -955,7 +955,8 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'sendemail':
-            if (($A['grp_name'] != 'All Users') && ($A['grp_name'] != 'Logged-in Users') && $A['grp_name'] != 'Non-Logged-in Users') {
+//            if (($A['grp_name'] != 'All Users') && ($A['grp_name'] != 'Logged-in Users') && $A['grp_name'] != 'Non-Logged-in Users') {
+            if (($A['grp_name'] != 'Logged-in Users') && $A['grp_name'] != 'Non-Logged-in Users') {
                 $retval = FieldList::email(
                     array(
                         'url' => $_CONF['site_admin_url'] . '/mail.php?grp_id=' . $A['grp_id'],

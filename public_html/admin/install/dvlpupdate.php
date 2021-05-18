@@ -1139,6 +1139,11 @@ function glfusion_200()
         }
     }
 
+    // clean up the group assignment table
+    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id='2'",1);
+    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id='13'",1);
+
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='2.0.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='2.0.0' WHERE name='glfusion'",1);

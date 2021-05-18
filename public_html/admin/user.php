@@ -1117,7 +1117,7 @@ function USER_groupSelectList( $sel_grp_id = 0 )
     $rows = DB_numRows( $result );
     for( $i = 1; $i <= $rows; $i++ )  {
         $A = DB_fetchArray ($result);
-        if ($A['grp_id'] <> 13) { // don't offer Logged-In users as an option
+        if ($A['grp_name'] <> 'Logged-in Users' && $A['grp_name'] <> 'Non-Logged-in Users') { // don't offer Logged-In users as an option
             $retval .= '<option value="' . $A['grp_id'] . '"';
             if ($sel_grp_id == $A['grp_id']) {
                 $retval .= ' selected="selected"';
@@ -1453,8 +1453,7 @@ function USER_list($grp_id)
         $_CONF['user_login_method']['3rdparty']) {
         $select_userinfo .= ',remoteservice';
     }
-
-    if ($grp_id > 0) {
+    if ($grp_id > 0 && ($grp_id != 2 && $grp_id != 13)) {
         $groups = USER_getGroupList ($grp_id);
         $text_arr['form_url'] .= '?grp_id=' . $grp_id;
         $groupList = implode (',', $groups);
@@ -1881,7 +1880,7 @@ function USER_save($uid)
             $whereGroup = 'ug_main_grp_id IN ('
                         . implode (',', $UserAdminGroups) . ')';
             DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE (ug_uid = $uid) AND " . $whereGroup);
-
+/* --- May 2021 - no longer add users to All Users or Logged-In User groups
             // make sure to add user to All Users and Logged-in Users groups
             $allUsers = DB_getItem ($_TABLES['groups'], 'grp_id',
                                     "grp_name = 'All Users'");
@@ -1893,12 +1892,11 @@ function USER_save($uid)
             if (!in_array ($logUsers, $groups)) {
                 $groups[] = $logUsers;
             }
-
+*/
             foreach ($groups as $userGroup) {
                 if (in_array ($userGroup, $UserAdminGroups) || SEC_inGroup(1)) {
                     if ($_USER_VERBOSE) {
-                        Log::write('system',Log::DEBUG,"adding group_assignment " . $userGroup
-                                      . " for $username");
+                        Log::write('system',Log::DEBUG,"adding group_assignment ".$userGroup." for $username");
                     }
                     $sql = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($userGroup, $uid)";
                     DB_query ($sql);
