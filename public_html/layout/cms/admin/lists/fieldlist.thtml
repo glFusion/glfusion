@@ -151,5 +151,51 @@
     ></i>
 <!-- END field-root-user -->
 
+<!-- BEGIN field-checkbox -->
+	<input type="checkbox"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    >
+<!-- END field-checkbox -->
 
+<!-- BEGIN field-radio -->
+	<input type="radio"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    >
+<!-- END field-radio -->
+
+<!-- BEGIN field-select -->
+<select ""
+	<!-- BEGIN attr -->
+	{name}="{value}"
+	<!-- END attr -->a
+	>
+	<!-- BEGIN options -->
+	<option value="{value}" {!if selected}selected="selected"{!endif} {!if disabled}disabled="disabled"{!endif} {other}>{opt_name}</option>
+	<!-- END options -->
+	{option_list}
+</select>
+<!-- END field-select -->
+
+<!-- BEGIN field-button -->
+{!!if {style} == 'success' !!}
+{!!set btn_style 'uk-button-success' !!}
+{!!elseif {style} == 'primary' !!}
+{!!set btn_style 'uk-button-primary' !!}
+{!!elseif {style} == 'danger' !!}
+{!!set btn_style 'uk-button-danger' !!}
+{!endif}
+{!!if {size} == 'mini' !!}
+{!!set btn_size 'uk-button-mini' !!}
+{!endif}
+    <button type="{type}" name="{name}" class="uk-button {btn_size} {btn_style} {other_cls}"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    >{text}</button>
+<!-- END field-button -->
+ 
 {# end admin fields #}

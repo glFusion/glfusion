@@ -500,5 +500,205 @@ class FieldList
         $t->parse('output','field-root-user');
         return $t->finish($t->get_var('output'));
     }
+
+
+    public static function checkbox($args)
+    {
+        global $_CONF;
+
+        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
+        $t->set_file('field','fieldlist.thtml');
+
+        $t->set_block('field','field-checkbox');
+
+        // Go through the required or special options
+        $t->set_block('field', 'attr', 'attributes');
+        foreach ($args as $name => $value) {
+            switch ($name) {
+            case 'checked':
+            case 'disabled':
+                if ($value) {
+                    $value = $name;
+                } else {
+                    continue 2;
+                }
+                break;
+            }
+            $t->set_var(array(
+                'name' => $name,
+                'value' => $value,
+            ) );
+            $t->parse('attributes', 'attr', true);
+        }
+        $t->parse('output', 'field-checkbox');
+        return $t->finish($t->get_var('output'));
+    }
+
+
+    public static function radio($args)
+    {
+        global $_CONF;
+
+        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
+        $t->set_file('field','fieldlist.thtml');
+
+        $t->set_block('field','field-radio');
+
+        // Go through the required or special options
+        $t->set_block('field', 'attr', 'attributes');
+        foreach ($args as $name=>$value) {
+            switch ($name) {
+            case 'checked':
+            case 'disabled':
+                if ($value) {
+                    $value = $name;
+                } else {
+                    continue 2;
+                }
+                break;
+            }
+            $t->set_var(array(
+                'name' => $name,
+                'value' => $value,
+            ) );
+            $t->parse('attributes', 'attr', true);
+        }
+        $t->parse('output', 'field-radio');
+        return $t->finish($t->get_var('output'));
+    }
+
+    /**
+     * Create a selection dropdown.
+     * Options can be in a string named `option_list` or an array of
+     * separate properties.
+     *
+     *  $opts = array(
+     *      'name' => 'testoption',
+     *      'onchange' => "alert('here');",
+     *      'options' => array(
+     *          'option1' => array(
+     *              'disabled' => true,
+     *              'value' => 'value1',
+     *          ),
+     *          'option2' => array(
+     *              'selected' => 'something',
+     *              'value' => 'value2',
+     *          ),
+     *          'option3' => array(
+     *              'selected' => '',
+     *              'value' => 'XXXXX',
+     *          ),
+     *      )
+     *  );
+     *
+     *  @param  array   $args   Array of properties to use
+     *  @return string      HTML for select element
+     */
+    public static function select($args)
+    {
+        global $_CONF;
+
+        if (!isset($args['options']) && !isset($args['option_list'])) {
+            return '';
+        }
+
+        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
+        $t->set_file('select','fieldlist.thtml');
+
+        $t->set_block('select','field-select');
+
+        $def_opts = array(
+            'value' => '',
+            'selected' => false,
+            'disabed' => false,
+        );
+
+        // Create the main selection element.
+        $t->set_block('field', 'attr', 'attributes');
+        foreach ($args as $name=>$value) {
+            if ($name == 'options') {
+                // Handle the options later
+                continue;
+            } elseif ($name == 'option_list') {
+                // options were supplied as a string of <option> elements
+                $t->set_var('option_list', $value);
+            } else {
+                $t->set_var(array(
+                    'name' => $name,
+                    'value' => $value,
+                ) );
+            }
+            $t->parse('attributes', 'attr', true);
+        }
+
+        // Now loop through the options.
+        if (isset($args['options']) && is_array($args['options'])) {
+            $t->set_block('select', 'options', 'opts');
+            foreach ($args['options'] as $name=>$data) {
+                $t->set_var('opt_name', $name);
+                // Go through the required or special options
+                foreach ($def_opts as $optname=>$def_val) {
+                    if (isset($data[$optname])) {
+                        $t->set_var($optname, $data[$optname]);
+                        unset($data[$optname]);
+                    } else {
+                        $t->set_var($optname, $def_val);
+                    }
+                }
+                // Now go through the remaining supplied args for this option
+                $str = '';
+                foreach ($data as $name=>$value) {
+                    $str .= "$name=\"$value\" ";
+                }
+                $t->set_var('other', $str);
+                $t->parse('opts', 'options', true);
+            }
+        }
+        $t->parse('output', 'field-select');
+        return $t->finish($t->get_var('output'));
+    }
+
+    public static function button($args)
+    {
+        global $_CONF;
+
+        $def_args = array(
+            'name' => '',
+            'value' => '',
+            'size' => '',   // mini
+            'style' => '',  // success, danger, etc.
+            'type' => '',   // submit, reset, etc.
+            'class' => '',  // additional classes
+        );
+        $args = array_merge($def_args, $args);
+
+        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
+        $t->set_file('button','fieldlist.thtml');
+        $t->set_block('button','field-button');
+
+        $t->set_var(array(
+            'name' => $args['name'],
+            'value' => $args['value'],
+            'size' => $args['size'],
+            'style' => $args['style'],
+            'type' => $args['type'],
+            'other_cls' => $args['class'],
+        ) );
+        $t->set_var('text',$args['text']);
+
+        if (isset($args['attr']) && is_array($args['attr'])) {
+            $t->set_block('field-button','attr','attributes');
+            foreach($args['attr'] AS $name => $value) {
+                $t->set_var(array(
+                    'name' => $name,
+                    'value' => $value)
+                );
+                $t->parse('attributes','attr',true);
+            }
+        }
+        $t->parse('output','field-button',true);
+        return $t->finish($t->get_var('output'));
+    }
+
 }
 ?>
