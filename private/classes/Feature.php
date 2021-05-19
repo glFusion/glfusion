@@ -272,7 +272,7 @@ class Feature
     {
         global $_CONF, $LANG_ADMIN, $LANG_ACCESS, $_TABLES;
 
-        $allgroups = \Group::getAll();
+        $allgroups = \Group::getAllAvailable();
         $inc_groups = self::Groups($this->ft_name);
 
         $included_opts = '';
