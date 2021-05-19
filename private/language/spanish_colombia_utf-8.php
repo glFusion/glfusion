@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Enlace permanente',
     129 => 'Configuración',
     130 => 'Webservices',			// depreciated
+    131 => 'Features',
     500 => '¡Debes borrar/renombrar el directorio: <b>admin/install/</b>!',
     501 => 'Depuración Root esta Habilitada',
     502 => 'No esta habilitada la falla SQL',
@@ -1461,6 +1462,8 @@ $MESSAGE = array(
     116 => "The plugin's archivos and related directories were successfully removed.",
     117 => "The remote account has been unlinked from your local account.",
     118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
+    119 => 'The feature was successfully saved.',
+    120 => 'There was an error saving the feature.',
     200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'El Cache de la plantilla se ha borrado exitosamente',
     501 => 'Token de seguridad no valido - Posible tiempo de espera de sesión agotado.',
@@ -1574,6 +1577,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'The security token has expired. Please validate your session below.',
     'token_expired_footer' => 'The security token for this operation has expired, please re-validate',
     'validation_failed' => 'Falló la Validación - Intenta de nuevo.',
+    'feature_id' => 'Feature ID',
+    'feature_name' => 'Feature Name',
+    'avail_groups' => 'Available Groups',
+    'incl_groups' => 'Included Groups',
 );
 
 ###############################################################################
@@ -1674,6 +1681,7 @@ $LANG_DB_ADMIN = array(
     'edit'                => 'Modificar',
     'cancel'              => 'Cancelar',
     'seconds'             => 'segundos',
+    'plugin_table_column' => 'Plugin :: Table -> Column',
 
 );
 
@@ -1976,6 +1984,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Reiniciar',
     'remaining_chars' => 'Remaining Characters ',
+    'feature_admin' => 'Feature Administration',
+    'feature_editor' => 'Feature Editor',
+    'feature_list' => 'Feature List',
+    'core_only' => 'Show Only Core Features',
+    'assigned_groups' => 'Assigned Groups',
 );
 
 ###############################################################################

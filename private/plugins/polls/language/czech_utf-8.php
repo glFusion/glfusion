@@ -48,7 +48,7 @@ $LANG_POLLS = array(
     'pollhidden'        => 'Výsledky hlasování budou k dispozici až po ukončení ankety.',
     'start_poll'        => 'Zahaj hlasování',
     'deny_msg' => 'Přístup k tomuto hlasování je odepřen. Buď bylo hlasování přesunuto či odstraněno nebo nemáte dostatečná práva.',
-    'login_required'    => '<a href="'.$_CONF['site_url'].'/users.php" rel="nofollow">Login</a> required to vote',
+    'login_required'    => '<a href="'.$_CONF['site_url'].'<a href="%s/users.php" rel="nofollow">Pro komentování je vyžadováno přihlášení',
     'username'          => 'Přihlašovací jméno',
     'ipaddress'         => 'IP adresa',
     'date_voted'        => 'Datum hlasování',
@@ -128,16 +128,16 @@ $LANG_configsections['polls'] = array(
 );
 
 $LANG_confignames['polls'] = array(
-    'pollsloginrequired' => 'Polls Login Required',
-    'hidepollsmenu' => 'Hide Polls Menu Entry',
-    'maxquestions' => 'Max. Questions per Poll',
-    'maxanswers' => 'Max. Options per Question',
-    'answerorder' => 'Sort Results',
-    'pollcookietime' => 'Voter Cookie Valid Duration',
-    'polladdresstime' => 'Voter IP Address Valid Duration',
-    'delete_polls' => 'Delete Polls with Owner',
-    'aftersave' => 'After Saving Poll',
-    'default_permissions' => 'Poll Default Permissions',
+    'pollsloginrequired' => 'Pro hlasování je nutné se nejdříve přihlásit',
+    'hidepollsmenu' => 'Skrýt nabídky hlasování',
+    'maxquestions' => 'Max. počet otázek v hlasování',
+    'maxanswers' => 'Max. množství otázek',
+    'answerorder' => 'Řadit výsledky',
+    'pollcookietime' => 'Délka platnosti hlasovacího cookie',
+    'polladdresstime' => 'Doba platnosti IP adresy voliče',
+    'delete_polls' => 'Odstranění ankety tvůrcem',
+    'aftersave' => 'Po uložení ankety',
+    'default_permissions' => 'Výchozí oprávnění ankety',
     'displayblocks' => 'Zobrazit bloky glFusion',
 );
 
@@ -146,16 +146,16 @@ $LANG_configsubgroups['polls'] = array(
 );
 
 $LANG_fs['polls'] = array(
-    'fs_main' => 'General Polls Settings',
+    'fs_main' => 'Obecné nastavení anket',
     'fs_permissions' => 'Výchozí oprávnění'
 );
 
 $LANG_configSelect['polls'] = array(
-    0 => array(1=>'True', 0=>'False'),
-    1 => array(true=>'True', false=>'False'),
-    2 => array('submitorder'=>'As Submitted', 'voteorder'=>'By Votes'),
-    9 => array('item'=>'Forward to Poll', 'list'=>'Zobrazit v administraci', 'plugin'=>'Zobrazit veřejný seznam', 'home'=>'Display Home', 'admin'=>'Display Admin'),
-    12 => array(0=>'No access', 2=>'Jen pro čtení', 3=>'Read-Write'),
+    0 => array(1=>'Ano', 0=>'Ne'),
+    1 => array(true=>'Ano', false=>'Ne'),
+    2 => array('submitorder'=>'Jak bylo odesláno', 'voteorder'=>'Podle hlasů'),
+    9 => array('item'=>'Vložit do ankety', 'list'=>'Zobrazit v administraci', 'plugin'=>'Zobrazit veřejný seznam', 'home'=>'Zobrazit uvítací stránku', 'admin'=>'Zobrazit správce'),
+    12 => array(0=>'Bez přístupu', 2=>'Jen pro čtení', 3=>'Čtení/zápis'),
     13 => array(0=>'Bloky nalevo', 1=>'Bloky vpravo', 2=>'Bloky nalevo a napravo', 3=>'Žádná')
 );
 

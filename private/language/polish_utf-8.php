@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Link bezpośredni',
     129 => 'Konfiguracja',
     130 => 'Webservices',			// depreciated
+    131 => 'Features',
     500 => 'Prosimy o usuniecie katalogu admin / install / po zainstalowaniu lub aktualizacji witryny!',
     501 => 'Root Debug jest włączony',
     502 => 'Brak błędu SQL jest włączony',
@@ -1463,6 +1464,8 @@ $MESSAGE = array(
     116 => "Pliki wtyczki i powiązane katalogi zostały pomyślnie usunięte.",
     117 => "Zdalne konto zostało odłączone od twojego konta lokalnego.",
     118 => 'Odłączenie zdalnego konta nie powiodło się - bieżące hasło nie zostało wprowadzone lub nie pasowało.',
+    119 => 'The feature was successfully saved.',
+    120 => 'There was an error saving the feature.',
     200 => 'Niestety, nie masz dostępu do tej strony. Pamiętaj, że wszystkie próby uzyskania dostępu do nieautoryzowanych funkcji są rejestrowane.',
     500 => 'Pamięć szablonów cache została pomyślnie wyczyszczona',
     501 => 'Token bezpieczeństwa jest nieważny - możliwe przekroczenie limitu czasu sesji.',
@@ -1576,6 +1579,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'Token bezpieczeństwa wygasł. Sprawdź swoją sesję poniżej.',
     'token_expired_footer' => 'Token bezpieczeństwa dla tej operacji wygasł. Ponownie sprawdź poprawność',
     'validation_failed' => 'Sprawdzanie poprawności nie powiodło się - proszę spróbować ponownie.',
+    'feature_id' => 'Feature ID',
+    'feature_name' => 'Feature Name',
+    'avail_groups' => 'Available Groups',
+    'incl_groups' => 'Included Groups',
 );
 
 ###############################################################################
@@ -1676,6 +1683,7 @@ $LANG_DB_ADMIN = array(
     'edit'                => 'Edycja',
     'cancel'              => 'Anuluj',
     'seconds'             => 'sekundy',
+    'plugin_table_column' => 'Plugin :: Table -> Column',
 
 );
 
@@ -1978,6 +1986,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Twoja sesja niedługo wygaśnie. Wybierz ok, aby odświeżyć sesję.',
     'reset' => 'Resetuj',
     'remaining_chars' => 'Pozostało znaków ',
+    'feature_admin' => 'Feature Administration',
+    'feature_editor' => 'Feature Editor',
+    'feature_list' => 'Feature List',
+    'core_only' => 'Show Only Core Features',
+    'assigned_groups' => 'Assigned Groups',
 );
 
 ###############################################################################

@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Permalink',
     129 => 'Instellingen Website',
     130 => 'Webservices',			// depreciated
+    131 => 'Features',
     500 => 'Verwijder A.U.B. de admin/install/ folder!',
     501 => 'Root Debug is Ingeschakeld',
     502 => 'No fail SQL is Ingeschakeld',
@@ -1461,6 +1462,8 @@ $MESSAGE = array(
     116 => "The plugin's files and related directories were successfully removed.",
     117 => "The remote account has been unlinked from your local account.",
     118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
+    119 => 'The feature was successfully saved.',
+    120 => 'There was an error saving the feature.',
     200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'De Template Cache is met succes geleegd',
     501 => 'Security Token is Invalide - Mogelijke sessie timeout.',
@@ -1574,6 +1577,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'The security token has expired. Please validate your session below.',
     'token_expired_footer' => 'The security token for this operation has expired, please re-validate',
     'validation_failed' => 'Validation Failed - Please retry.',
+    'feature_id' => 'Feature ID',
+    'feature_name' => 'Feature Name',
+    'avail_groups' => 'Available Groups',
+    'incl_groups' => 'Included Groups',
 );
 
 ###############################################################################
@@ -1674,6 +1681,7 @@ $LANG_DB_ADMIN = array(
     'edit'                => 'Wijzigen',
     'cancel'              => 'Annuleren',
     'seconds'             => 'seconden',
+    'plugin_table_column' => 'Plugin :: Table -> Column',
 
 );
 
@@ -1976,6 +1984,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Herstel',
     'remaining_chars' => 'Remaining Characters ',
+    'feature_admin' => 'Feature Administration',
+    'feature_editor' => 'Feature Editor',
+    'feature_list' => 'Feature List',
+    'core_only' => 'Show Only Core Features',
+    'assigned_groups' => 'Assigned Groups',
 );
 
 ###############################################################################

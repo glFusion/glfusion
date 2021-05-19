@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Dauerhafter Link',
     129 => 'Konfiguration',
     130 => 'Webservices',			// depreciated
+    131 => 'Features',
     500 => 'Bitte nach der Installation oder der Aktualisierung das ../pfad/zu/glfusion/admin/install Verzeichnis löschen!',
     501 => 'Root Debug ist eingeschaltet',
     502 => 'No fail SQL ist eingeschaltet',
@@ -1461,6 +1462,8 @@ $MESSAGE = array(
     116 => "Die Dateien des Plugins und verwandte Verzeichnisse wurden erfolgreich entfernt.",
     117 => "Das Remote-Konto wurde aus Deinem Lokalen-Konto entfernt.",
     118 => 'Entfernen des Remot-Kontos fehlgeschlagen - das eingegebene Passwort stimmt nicht überein.',
+    119 => 'The feature was successfully saved.',
+    120 => 'There was an error saving the feature.',
     200 => 'Leider hast Du keinen Zugriff auf diese Seite. Bitte beachte, dass alle nicht autorisierten Zugriffe protokolliert werden.',
     500 => 'Der Template-Cache wurde erfolgreich geleert',
     501 => 'Security Token ist ungültig - Möglicherweise ist die Sitzung abgelaufen.',
@@ -1574,6 +1577,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'Die Anmeldung ist abgelaufen. Bitte bestätige Deine Sitzung erneut.',
     'token_expired_footer' => 'Die Anmeldung für diese Anfrage ist abgelaufen. Bitte bestätige Deine Sitzung erneut.',
     'validation_failed' => 'Validierung fehlgeschlagen - Bitte versuche es nochmal.',
+    'feature_id' => 'Feature ID',
+    'feature_name' => 'Feature Name',
+    'avail_groups' => 'Available Groups',
+    'incl_groups' => 'Included Groups',
 );
 
 ###############################################################################
@@ -1674,6 +1681,7 @@ $LANG_DB_ADMIN = array(
     'edit'                => 'Bearbeiten',
     'cancel'              => 'Abbrechen',
     'seconds'             => 'Sekunden',
+    'plugin_table_column' => 'Plugin :: Table -> Column',
 
 );
 
@@ -1976,6 +1984,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Deine Sitzung wird in Kürze wegen Inaktivität ablaufen. Bitte drücke "OK" um die Sitzung wieder zu aktualisieren.',
     'reset' => 'Zurücksetzen',
     'remaining_chars' => 'Verbleibende Zeichen ',
+    'feature_admin' => 'Feature Administration',
+    'feature_editor' => 'Feature Editor',
+    'feature_list' => 'Feature List',
+    'core_only' => 'Show Only Core Features',
+    'assigned_groups' => 'Assigned Groups',
 );
 
 ###############################################################################

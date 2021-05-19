@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Permalink',
     129 => 'Configuration',
     130 => 'Webservices',			// depreciated
+    131 => 'Features',
     500 => 'S`il vous plaît n`oubliez pas de retirer le dossier admin / install / après l`installation ou la mise à niveau de votre site!',
     501 => 'Profitez de débogage est activé',
     502 => 'Pas sûr SQL est activé',
@@ -1461,6 +1462,8 @@ $MESSAGE = array(
     116 => "Les fichiers du plugin et répertoires liés ont été supprimés.",
     117 => "The remote account has been unlinked from your local account.",
     118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
+    119 => 'The feature was successfully saved.',
+    120 => 'There was an error saving the feature.',
     200 => 'Désolé, vous n`avez pas accès à cette page. S`il vous plaît noter que toutes les tentatives d`accès non autorisées caractéristiques sont enregistrés.',
     500 => 'Le cache de modèle a été effacé avec succès',
     501 => 'Jeton de sécurité est valide - Possible expiration de la session.',
@@ -1574,6 +1577,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'Le jeton de sécurité a expiré. S`il vous plaît valider votre session ci-dessous.',
     'token_expired_footer' => 'Le jeton de sécurité pour cette opération a expiré, s`il vous plaît re-valider',
     'validation_failed' => 'Validation a échoué - S`il vous plaît essayez de nouveau.',
+    'feature_id' => 'Feature ID',
+    'feature_name' => 'Feature Name',
+    'avail_groups' => 'Available Groups',
+    'incl_groups' => 'Included Groups',
 );
 
 ###############################################################################
@@ -1674,6 +1681,7 @@ $LANG_DB_ADMIN = array(
     'edit'                => 'Modifier',
     'cancel'              => 'Cancel',
     'seconds'             => 'secondes',
+    'plugin_table_column' => 'Plugin :: Table -> Column',
 
 );
 
@@ -1976,6 +1984,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Reset',
     'remaining_chars' => 'Remaining Characters ',
+    'feature_admin' => 'Feature Administration',
+    'feature_editor' => 'Feature Editor',
+    'feature_list' => 'Feature List',
+    'core_only' => 'Show Only Core Features',
+    'assigned_groups' => 'Assigned Groups',
 );
 
 ###############################################################################
