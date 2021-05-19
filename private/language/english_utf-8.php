@@ -1987,7 +1987,8 @@ $LANG_ADMIN = array(
     'feature_admin' => 'Feature Administration',
     'feature_editor' => 'Feature Editor',
     'feature_list' => 'Feature List',
-    'core_only' => 'Core Only?',
+    'core_only' => 'Show Only Core Features',
+    'assigned_groups' => 'Assigned Groups',
 );
 
 ###############################################################################

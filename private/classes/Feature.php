@@ -303,7 +303,7 @@ class Feature
             'included_groups' => $included_opts,
             'excluded_groups' => $excluded_opts,
             'lang_available' => $LANG_ACCESS['avail_groups'],
-            'lang_included' => $LANG_ACCESS['incl_groups'],
+            'lang_included' => $LANG_ADMIN['assigned_groups'],
             'LANG_add'      => $LANG_ACCESS['add'],
             'LANG_remove'   => $LANG_ACCESS['remove'],
         ) );
@@ -541,10 +541,10 @@ class Feature
                 'text' => $LANG_ADMIN['feature_list'],
                 'active'=> $view == 'list',
             ),
-            /*array(
-                'url' => $_CONF['site_admin_url'] . '/feature.php?edit=x',
-                'text' => $LANG_ADMIN['create_new'],
-            ),*/
+            array(
+                'url' => $_CONF['site_admin_url'] . '/group.php',
+                'text' => $LANG_ADMIN['admin_groups'],
+            ),
             array(
                 'url' => $_CONF['site_admin_url'].'/index.php',
                 'text' => $LANG_ADMIN['admin_home'],
