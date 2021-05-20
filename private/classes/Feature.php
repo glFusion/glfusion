@@ -13,6 +13,7 @@
  */
 namespace glFusion;
 
+use \glFusion\Database\Database;
 
 /**
  * Feature class.
@@ -40,7 +41,6 @@ class Feature
      * @var array() */
     private static $cache = array();
 
-
     /**
      * Constructor.
      *
@@ -67,13 +67,20 @@ class Feature
         if (isset(self::$cache[$ft_name])) {
             return self::$cache[$ft_name];
         }
+        $db = Database::getInstance();
 
-        $sql = "SELECT * FROM {$_TABLES['features']}
-                WHERE ft_name = '" . DB_escapeString($ft_name) . "'";
-        $res = DB_query($sql, 1);
-        if ($res && DB_numRows($res) > 0) {
-            $A = DB_fetchArray($res, false);    
-            self::$cache[$ft_name] = new self($A);
+        $sql = "SELECT * FROM `{$_TABLES['features']}`
+                WHERE ft_name = (?)";
+
+        try {
+            $stmt = $db->conn->executeQuery($sql,array($ft_name),array(DATABASE::STRING));
+        } catch(Throwable $e) {
+            return new self;
+        }
+        $data = $stmt->fetch(Database::ASSOCIATIVE);
+
+        if ($data !== false) {
+            self::$cache[$ft_name] = new self($data);
             return self::$cache[$ft_name];
         } else {
             return new self;
@@ -96,12 +103,19 @@ class Feature
             return self::$cache[$ft_id];
         }
 
-        $sql = "SELECT * FROM {$_TABLES['features']}
-                WHERE ft_id = " . (int)$ft_id;
-        $res = DB_query($sql, 1);
-        if ($res && DB_numRows($res) > 0) {
-            $A = DB_fetchArray($res, false);    
-            self::$cache[$ft_id] = new self($A);
+        $db = Database::getInstance();
+
+        $sql = "SELECT * FROM `{$_TABLES['features']}`
+                WHERE ft_id = ?";
+
+        try {
+            $stmt = $db->conn->executeQuery($sql,array($ft_id),array(DATABASE::INTEGER));
+        } catch(Throwable $e) {
+            return new self;
+        }
+        $data = $stmt->fetch(Database::ASSOCIATIVE);
+        if ($data !== false) {
+            self::$cache[$ft_id] = new self($data);
             return self::$cache[$ft_id];
         } else {
             return new self;
@@ -164,20 +178,27 @@ class Feature
         }
         if (isset($rights[$uid])) return $rights[$uid]; // already cached this user
 
+        $db = Database::getInstance();
+
         $rights[$uid] = array();
         $groups = \Group::getAll($uid);
         if ( count($groups) > 0 ) {
             $glist = implode(',', $groups);
-            $sql = "SELECT f.* FROM {$_TABLES['access']} ac
-                LEFT JOIN {$_TABLES['features']} ft
+
+            $sql = "SELECT ft.* FROM `{$_TABLES['access']}` ac
+                LEFT JOIN `{$_TABLES['features']}` ft
                     ON ft.ft_id = ac.acc_ft_id
                 WHERE ac.acc_grp_id IN ($glist) AND ft.ft_name IS NOT NULL
                 GROUP BY ft.ft_name";
-            $res = DB_query($sql);
-            if ($res) {
-                while ($A = DB_fetchArray($res, false)) {
-                    $rights[$uid][$A['ft_id']] = new self($A);
-                }
+
+            try {
+                $stmt = $db->conn->query($sql);
+            } catch(Throwable $e) {
+                return array();
+            }
+            $data = $stmt->fetchAll(DATABASE::ASSOCIATIVE);
+            foreach($data AS $A) {
+                $rights[$uid][$A['ft_id']] = new self($A);
             }
         }
         return $rights[$uid];
@@ -205,22 +226,28 @@ class Feature
     {
         global $_TABLES;
 
+        $db = Database::getInstance();
+
         static $groups = array();
         if (!isset($groups[$this->ft_id])) {
             $groups[$this->ft_id] = array();
 
             if ($this->ft_id > 0) {
                 $sql = "SELECT grp.grp_id, grp.grp_name
-                    FROM {$_TABLES['access']} ac
-                    LEFT JOIN {$_TABLES['groups']} grp
+                    FROM `{$_TABLES['access']}` ac
+                    LEFT JOIN `{$_TABLES['groups']}` grp
                         ON ac.acc_grp_id = grp.grp_id
-                    WHERE acc_ft_id = {$this->ft_id}
+                    WHERE acc_ft_id = ?
                     ORDER BY grp_id";
-                $res = DB_query($sql, 1);
-                if ($res) {
-                    while ($A = DB_fetchArray($res, false)) {
-                        $groups[$this->ft_id][] = (int)$A['grp_id'];
-                    }
+
+                try {
+                    $stmt = $db->conn->executeQuery($sql,array($this->ft_id),array(DATABASE::INTEGER));
+                } catch(Throwable $e) {
+                    return array();
+                }
+                $data = $stmt->fetchAll(DATABASE::ASSOCIATIVE);
+                foreach($data AS $A) {
+                    $groups[$this->ft_id][] = (int)$A['grp_id'];
                 }
             } else {
                 $groups[$this->ft_id][] = 0;
@@ -240,20 +267,28 @@ class Feature
     {
         global $_TABLES;
 
+        $db = Database::getInstance();
+
         static $groups = array();
         if (!isset($groups[$feature])) {
             $groups[$feature] = array();
 
             $ft_id = self::getByName($feature)->ft_id;
+
             if ($ft_id > 0) {
-                $sql = "SELECT * FROM {$_TABLES['access']}
-                        WHERE acc_ft_id = $ft_id
+
+                $sql = "SELECT * FROM `{$_TABLES['access']}`
+                        WHERE acc_ft_id = ?
                         ORDER BY acc_grp_id";
-                $res = DB_query($sql, 1);
-                if ($res) {
-                    while ($A = DB_fetchArray($res, false)) {
-                        $groups[$feature][] = (int)$A['acc_grp_id'];
-                    }
+
+                try {
+                    $stmt = $db->conn->executeQuery($sql,array($ft_id),array(DATABASE::INTEGER));
+                } catch(Throwable $e) {
+                    return array();
+                }
+                $data = $stmt->fetchAll(DATABASE::ASSOCIATIVE);
+                foreach($data AS $A) {
+                    $groups[$feature][] = (int)$A['acc_grp_id'];
                 }
             } else {
                 $groups[$feature][] = 0;
@@ -350,30 +385,45 @@ class Feature
             $this->setVars($A, false);
         }
 
+        $db = Database::getInstance();
+        $dataArray = array();
+        $typeArray = array();
+
         // Insert or update the record, as appropriate.
         if ($this->ft_id == 0) {
             $isNew = true;
-            $sql1 = "INSERT INTO {$_TABLES['features']}";
+            $sql1 = "INSERT INTO `{$_TABLES['features']}`";
             $sql3 = '';
         } else {
             $isNew = false;
-            $sql1 = "UPDATE {$_TABLES['features']}";
-            $sql3 = " WHERE ft_id = {$this->ft_id}";
+            $sql1 = "UPDATE `{$_TABLES['features']}`";
+            $sql3 = " WHERE ft_id = ?";
+            $dataArray[] = $this->ft_id;
+            $typeArray[] = DATABASE::INTEGER;
         }
-        $sql2 = " SET ft_name = '" . DB_escapeString($this->ft_name) . "',
-            ft_descr = '" . DB_escapeString($this->ft_descr) . "',
-            ft_gl_core  = {$this->ft_gl_core}";
+        $sql2 = " SET ft_name = ?,
+            ft_descr = ?,
+            ft_gl_core  = ?";
+        $dataArray[] = $this->ft_name;
+        $typeArray[] = DATABASE::STRING;
+
+        $dataArray[] = $this->ft_descr;
+        $typeArray[] = DATABASE::STRING;
+
+        $dataArray[] = $this->ft_gl_core;
+        $typeArray[] = DATABASE::INTEGER;
+
         $sql = $sql1 . $sql2 . $sql3;
         //echo $sql;die;
-        DB_query($sql);
-        $err = DB_error();
-        if ($err == '') {
-            if ($isNew) {
-                $this->ft_id = DB_insertID();
-            }
-            $status = true;
-        } else {
+
+        $status = true;
+        try {
+            $stmt = $db->conn->executeQuery($sql,$dataArray,$typeArray);
+        } catch(Throwable $e) {
             $status = false;
+        }
+        if ($isNew) {
+            $this->ft_id = $db->conn->lastInsertId();
         }
 
         // Now save the group assignments
@@ -381,16 +431,25 @@ class Feature
             if (!$isNew) {
                 // If updating, delete all access records.
                 // Simplest method to remove any unchecked groups.
-                DB_delete($_TABLES['access'], 'acc_ft_id', $this->ft_id);
+
+                try {
+                    $db->conn->delete($_TABLES['access'],array('acc_ft_id' => $this->ft_id),array(DATABASE::INTEGER));
+                } catch(Throwable $e) {
+                    throw($e);
+                }
             }
             if (isset($A['groupmembers'])) {
                 $grp_members = explode('|', $A['groupmembers']);
                 foreach (explode('|', $A['groupmembers']) as $grp_id) {
-                    $vals[] = "({$this->ft_id}, {$grp_id})";
+                    $vals[] = "(" . intval($this->ft_id).",".intval($grp_id).")";
                 }
                 $vals = implode(', ', $vals);
-                $sql = "INSERT INTO {$_TABLES['access']} VALUES $vals";
-                DB_query($sql);
+                $sql = "INSERT INTO `{$_TABLES['access']}` VALUES $vals";
+                try {
+                    $db->conn->query($sql);
+                } catch (Throwable $e) {
+                    throw($e);
+                }
             }
         }
         return $status;
@@ -409,7 +468,7 @@ class Feature
         USES_lib_admin();
         $retval = '';
 
-        $sql = "SELECT * FROM {$_TABLES['features']} ";
+        $sql = "SELECT * FROM `{$_TABLES['features']}` ";
         $header_arr = array(
             array(
                 'text'  => 'ID',
