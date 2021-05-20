@@ -117,7 +117,7 @@ class FieldList
         $t->set_file('approve','fieldlist.thtml');
         $t->set_block('approve-button','field-approve-button');
 
-        $t->set_var('name',$args['name']);
+        $t->set_var('button_name',$args['name']);
         $t->set_var('text',$args['text']);
 
         if (isset($args['attr']) && is_array($args['attr'])) {
@@ -143,7 +143,7 @@ class FieldList
         $t->set_file('delete','fieldlist.thtml');
         $t->set_block('delete-button','field-delete-button');
 
-        $t->set_var('name',$args['name']);
+        $t->set_var('button_name',$args['name']);
         $t->set_var('text',$args['text']);
 
         if (isset($args['attr']) && is_array($args['attr'])) {
@@ -168,7 +168,7 @@ class FieldList
         $t->set_file('email','fieldlist.thtml');
         $t->set_block('email-button','field-email-button');
 
-        $t->set_var('name',$args['name']);
+        $t->set_var('button_name',$args['name']);
         $t->set_var('text',$args['text']);
 
         if (isset($args['attr']) && is_array($args['attr'])) {
@@ -677,8 +677,8 @@ class FieldList
         $t->set_block('button','field-button');
 
         $t->set_var(array(
-            'name' => $args['name'],
-            'value' => $args['value'],
+            'button_name' => $args['name'],
+            'button-value' => $args['value'],
             'size' => $args['size'],
             'style' => $args['style'],
             'type' => $args['type'],

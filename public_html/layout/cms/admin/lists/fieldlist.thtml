@@ -93,7 +93,7 @@
 <!-- END field-cog -->
 
 <!-- BEGIN field-approve-button -->
-    <button name="{name}" class="uk-button uk-button-mini uk-button-success"
+    <button name="{button_name}" class="uk-button uk-button-mini uk-button-success"
     <!-- BEGIN attr -->
         {name}="{value}"
     <!-- END attr -->
@@ -103,7 +103,7 @@
 <!-- END field-approve-button -->
 
 <!-- BEGIN field-delete-button -->
-    <button name="{name}" class="uk-button uk-button-mini uk-button-danger"
+    <button name="{button_name}" class="uk-button uk-button-mini uk-button-danger"
     <!-- BEGIN attr -->
         {name}="{value}"
     <!-- END attr -->
@@ -113,7 +113,7 @@
 <!-- END field-delete-button -->
 
 <!-- BEGIN field-email-button -->
-    <button name="{name}" class="uk-button uk-button-mini uk-button-primary"
+    <button name="{button_name}" class="uk-button uk-button-mini uk-button-primary"
     <!-- BEGIN attr -->
         {name}="{value}"
     <!-- END attr -->
@@ -191,7 +191,7 @@
 {!!if {size} == 'mini' !!}
 {!!set btn_size 'uk-button-mini' !!}
 {!endif}
-    <button type="{type}" name="{name}" class="uk-button {btn_size} {btn_style} {other_cls}"
+    <button type="{type}" name="{button_name}" class="uk-button {btn_size} {btn_style} {other_cls}"
     <!-- BEGIN attr -->
         {name}="{value}"
     <!-- END attr -->
