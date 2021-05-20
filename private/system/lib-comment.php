@@ -2573,7 +2573,7 @@ function plugin_itemlist_comment($token)
                       'form_url'    => "{$_CONF['site_admin_url']}/moderation.php"
     );
     $actions = FieldList::approveButton(array(
-        'name' => 'approve',
+        'name' => 'approve_x',
         'text' => $LANG29[1],
         'attr' => array(
             'title' => $LANG29[44],
@@ -2583,7 +2583,7 @@ function plugin_itemlist_comment($token)
     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
 
     $actions .= FieldList::deleteButton(array(
-        'name' => 'delbutton',
+        'name' => 'delbutton_x',
         'text' => $LANG_ADMIN['delete'],
         'attr' => array(
             'title' => $LANG01[124],

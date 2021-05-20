@@ -381,7 +381,6 @@ function MODERATE_item($action='', $type='', $id='')
 */
 function MODERATE_selectedItems($action = '', $type='')
 {
-
     $retval = '';
 
     $item = (isset($_POST['selitem'])) ? $_POST['selitem'] : array();
@@ -456,7 +455,7 @@ function MODERATE_itemList($type='', $token = '')
                     );
 
                     $actions = FieldList::approveButton(array(
-                        'name' => 'approve',
+                        'name' => 'approve_x',
                         'text' => $LANG29[1],
                         'attr' => array(
                             'title' => $LANG29[44],
@@ -466,7 +465,7 @@ function MODERATE_itemList($type='', $token = '')
                     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
 
                     $actions .= FieldList::deleteButton(array(
-                        'name' => 'delbutton',
+                        'name' => 'delbutton_x',
                         'text' => $LANG_ADMIN['delete'],
                         'attr' => array(
                             'title' => $LANG01[124],
@@ -587,7 +586,7 @@ function MODERATE_itemList($type='', $token = '')
                                       'form_url'  => "{$_CONF['site_admin_url']}/moderation.php"
                     );
                     $actions = FieldList::approveButton(array(
-                        'name' => 'approve',
+                        'name' => 'approve_x',
                         'text' => $LANG29[1],
                         'attr' => array(
                             'title' => $LANG29[44],
@@ -597,7 +596,7 @@ function MODERATE_itemList($type='', $token = '')
                     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
 
                     $actions .= FieldList::deleteButton(array(
-                        'name' => 'delbutton',
+                        'name' => 'delbutton_x',
                         'text' => $LANG_ADMIN['delete'],
                         'attr' => array(
                             'title' => $LANG01[124],
@@ -693,7 +692,8 @@ function MODERATE_submissions()
 $display = '';
 
 $action = '';
-$expected = array('approve','delete','delbutton_x','approve_x');
+
+$expected = array('approve','delete','delbutton','delbutton_x','approve_x');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -717,6 +717,7 @@ switch ($action) {
 
     case 'delete':
     case 'delbutton_x':
+    case 'delbutton':
         if (SEC_checkToken()) {
             $display .= ($action=='delete') ? MODERATE_item($action, $type, $id) : MODERATE_selectedItems('delete', $type);
         } else {
