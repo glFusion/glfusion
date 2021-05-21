@@ -495,8 +495,8 @@ function STORY_list()
             $excludetopics .= ') ';
         }
     } else {
-        $excludetopics = " tid = ".$db->conn->quote($current_topic)
-                            . ' OR alternate_tid = '.$db->conn->quote($current_topic) . ' ';
+        $excludetopics = " (tid = ".$db->conn->quote($current_topic)
+                            . ' OR alternate_tid = '.$db->conn->quote($current_topic) . ') ';
         $seltopics = COM_topicList ('tid,topic,sortnum', $current_topic, 2, true);
     }
 
