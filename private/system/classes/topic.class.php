@@ -27,6 +27,7 @@
 */
 
 use \glFusion\Log\Log;
+use \glFusion\Article\Article;
 
 class Topic
 {
@@ -867,7 +868,7 @@ class Topic
                     WHERE tid = '".DB_escapeString($this->tid)."'";
         $result = DB_query($sql);
         while ($A = DB_fetchArray($result, false)) {
-            STORY_removeStory($A['sid']);
+            Article::delete($A['sid']);
         }
 
         // Delete submissions and this topic
