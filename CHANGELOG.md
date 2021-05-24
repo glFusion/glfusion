@@ -8,6 +8,8 @@
 
 ### Added
 
+- Turkish Translation
+- New Feature Administration - see what feature / rights are associated to each group
 - Forum plugin - select exit type - whether to show Page Not Found or Login Page when user does not have permissions to view a topic
 - Simple DB search / replace capabilities
 - Implemented direct link from Forum Likes
