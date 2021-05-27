@@ -47,23 +47,23 @@ if ( $nRows > 0 ) {
         case 0 :    // standard image
             $default_thumbnail = 'tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
             if ( !file_exists($_MG_CONF['path_mediaobjects'] . $default_thumbnail) ) {
-                $default_thumbnail = 'tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.jpg';
+                $default_thumbnail = $_MG_CONF['path_mediaobjects'] . 'tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.jpg';
             }
             break;
         case 1 :    // video file
             switch ( $row['mime_type'] ) {
 
                 case 'video/x-flv' :
-                    $default_thumbnail = 'flv.png';
+                    $default_thumbnail = $_MG_CONF['path_assets'].'flv.png';
                     break;
                 case 'application/x-shockwave-flash' :
-                    $default_thumbnail = 'flash.png';
+                    $default_thumbnail = $_MG_CONF['path_assets'].'flash.png';
                     break;
                 case 'video/mpeg' :
                 case 'video/x-mpeg' :
                 case 'video/x-mpeq2a' :
     				if ( $_MG_CONF['use_wmp_mpeg'] == 1 ) {
-        				$default_thumbnail = 'wmp.png';
+        				$default_thumbnail = $_MG_CONF['path_assets'].'wmp.png';
         				break;
         			}
                 case 'video/x-motion-jpeg' :
@@ -71,7 +71,7 @@ if ( $nRows > 0 ) {
                 case 'video/x-qtc' :
                 case 'audio/mpeg' :
                 case 'video/x-m4v' :
-                    $default_thumbnail = 'quicktime.png';
+                    $default_thumbnail = $_MG_CONF['path_assets'].'quicktime.png';
                     break;
                 case 'asf' :
                 case 'video/x-ms-asf' :
@@ -86,15 +86,15 @@ if ( $nRows > 0 ) {
                 case 'application/x-troff-msvideo' :
                 case 'application/x-ms-wmz' :
                 case 'application/x-ms-wmd' :
-                    $default_thumbnail = 'wmp.png';
+                    $default_thumbnail = $_MG_CONF['path_assets'].'wmp.png';
                     break;
                 default :
-                    $default_thumbnail = 'video.png';
+                    $default_thumbnail = $_MG_CONF['path_assets'].'video.png';
                     break;
             }
             break;
         case 2 :    // music file
-            $default_thumbnail = 'audio.png';
+            $default_thumbnail = $_MG_CONF['path_assets'].'audio.png';
             break;
         case 4 :    // other files
             switch ($row['mime_type']) {
@@ -103,11 +103,11 @@ if ( $nRows > 0 ) {
                 case 'arj' :
                 case 'rar' :
                 case 'gz'  :
-                    $default_thumbnail = 'zip.png';
+                    $default_thumbnail = $_MG_CONF['path_assets'].'zip.png';
                     break;
                 case 'pdf' :
                 case 'application/pdf' :
-                    $default_thumbnail = 'pdf.png';
+                    $default_thumbnail = $_MG_CONF['path_assets'].'pdf.png';
                     break;
                 default :
                     if ( isset($_MG_CONF['dt'][$row['media_mime_ext']]) ) {
@@ -115,16 +115,16 @@ if ( $nRows > 0 ) {
                     } else {
                         switch ( $row['media_mime_ext'] ) {
                             case 'pdf' :
-                                $default_thumbnail = 'pdf.png';
+                                $default_thumbnail = $_MG_CONF['path_assets'].'pdf.png';
                                 break;
                             case 'arj' :
-                                $default_thumbnail = 'zip.png';
+                                $default_thumbnail = $_MG_CONF['path_assets'].'zip.png';
                                 break;
                             case 'gz' :
-                                $default_thumbnail = 'zip.png';
+                                $default_thumbnail = $_MG_CONF['path_assets'].'zip.png';
                                 break;
                             default :
-                                $default_thumbnail = 'generic.png';
+                                $default_thumbnail = $_MG_CONF['path_assets'].'generic.png';
                                 break;
                         }
                     }
@@ -136,15 +136,15 @@ if ( $nRows > 0 ) {
     			if (preg_match("/youtube/i", $row['remote_url'])) {
     				$default_thumbnail = 'youtube.png';
     			} else if (preg_match("/google/i", $row['remote_url'])) {
-    				$default_thumbnail = 'googlevideo.png';
+    				$default_thumbnail = $_MG_CONF['path_assets'].'googlevideo.png';
     			} else {
-    				$default_thumbnail = 'remote.png';
+    				$default_thumbnail = $_MG_CONF['path_assets'].'remote.png';
     			}
     			break;
 
     }
 
-    $tn_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+    $tn_file = $default_thumbnail;
 
     header("Content-type: image/jpeg") ;
     header("Content-Length: ".filesize($tn_file));
