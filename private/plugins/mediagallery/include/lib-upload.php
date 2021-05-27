@@ -1096,7 +1096,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         }
 
         if ( $MG_albums[$albums]->enable_html != 1 ) {
-//        if ($_MG_CONF['htmlallowed'] != 1 ) {
             $media_desc     = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($description)))));
             $media_caption  = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($caption)))));
             $media_keywords = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($keywords)))));
