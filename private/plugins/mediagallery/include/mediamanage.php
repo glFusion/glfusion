@@ -71,23 +71,16 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
     $row = DB_fetchArray($result);
     $totalAlbumItems = $row['totalitems'];
 
-    if ( $_DB_dbms == "mssql" ) {
-        $sql = "SELECT *,CAST(media_desc AS TEXT) AS media_desc FROM " .
-                $_TABLES['mg_media_albums'] .
-                " as ma INNER JOIN " .
-                $_TABLES['mg_media'] .
-                " as m ON ma.media_id=m.media_id" .
-                " WHERE ma.album_id=" . intval($album_id) .
-                " ORDER BY ma.media_order DESC LIMIT " . $begin . "," . $end;
-    } else {
-        $sql = "SELECT * FROM " .
-                $_TABLES['mg_media_albums'] .
-                " as ma INNER JOIN " .
-                $_TABLES['mg_media'] .
-                " as m ON ma.media_id=m.media_id" .
-                " WHERE ma.album_id=" . intval($album_id) .
-                " ORDER BY ma.media_order DESC LIMIT " . $begin . "," . $end;
-    }
+    $orderBy = MG_getSortOrder($album_id,0);
+
+    $sql = "SELECT * FROM " .
+            $_TABLES['mg_media_albums'] .
+            " as ma INNER JOIN " .
+            $_TABLES['mg_media'] .
+            " as m ON ma.media_id=m.media_id" .
+            " WHERE ma.album_id=" . intval($album_id) .
+            $orderBy . " LIMIT " . $begin . "," . $end;
+
 
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );

@@ -86,23 +86,16 @@ function MG_batchCaptionEdit( $album_id, $start, $actionURL = '' ) {
 
     $T->set_var('album_id',$album_id);
 
-    if ( $_DB_dbms == "mssql" ) {
-        $sql = "SELECT *,CAST(media_desc AS TEXT) as media_desc FROM " .
-                $_TABLES['mg_media_albums'] .
-                " as ma INNER JOIN " .
-                $_TABLES['mg_media'] .
-                " as m ON ma.media_id=m.media_id" .
-                " WHERE ma.album_id=" . $album_id .
-                " ORDER BY ma.media_order DESC LIMIT " . $start . ",9;";
-    } else {
-        $sql = "SELECT * FROM " .
-                $_TABLES['mg_media_albums'] .
-                " as ma INNER JOIN " .
-                $_TABLES['mg_media'] .
-                " as m ON ma.media_id=m.media_id" .
-                " WHERE ma.album_id=" . $album_id .
-                " ORDER BY ma.media_order DESC LIMIT " . $start . ",9;";
-    }
+    $orderBy = MG_getSortOrder($album_id,0);
+
+    $sql = "SELECT * FROM " .
+            $_TABLES['mg_media_albums'] .
+            " as ma INNER JOIN " .
+            $_TABLES['mg_media'] .
+            " as m ON ma.media_id=m.media_id" .
+            " WHERE ma.album_id=" . $album_id .
+            $orderBy . " LIMIT " . $start . ",9;";
+
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );
 

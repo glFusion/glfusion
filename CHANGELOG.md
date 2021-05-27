@@ -72,6 +72,7 @@
 
 ### Fixed
 
+- Media Gallery Media Manage and Caption screens did not honor album sort order
 - Back button on Group Admin would re-submit the form
 - PHP v8 Compatibility Fixes
 - Error changing article SID
