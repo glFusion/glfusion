@@ -456,47 +456,6 @@ function newfileConfigAdmin(){
     $display .= $T->finish($T->get_var('output'));
     // end rework
 
-/*
-
-    $display .= '<!--begin File Management Administration -->';
-    $display .= '<form class="uk-form" method="post" enctype="multipart/form-data" action="index.php" style="margin:0px;">';
-    $display .= '<table class="uk-table uk-width-1-1" border="0" class="plugin">';
-    $display .= '<tr><td colspan="2" class="pluginHeader uk-width-1-1" style="padding:5px;">' . _MD_ADDNEWFILE ."&nbsp; &nbsp;" .'<b>(max:'."&nbsp;" . ini_get('upload_max_filesize') . ')</b></td></tr>';
-    $display .= '<tr><td align="right">'._MD_FILETITLE.'</td><td>';
-    $display .= '<input type="text" name="title" size="50" maxlength="100" />';
-
-    $display .= '</td></tr><tr><td align="right" style="white-space:nowrap;">File:</td><td>';
-    $display .= '<input type="file" name="newfile" size="50" maxlength="100" />';
-    $display .= '</td></tr>';
-
-    $display .= '<tr><td align="right" style="white-space:nowrap;">URL:</td><td>';
-    $display .= '<input type="text" name="fileurl" size="50" maxlength="250" />';
-    $display .= '</td></tr>';
-
-    $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_CATEGORYC.'</td><td>';
-    $display .= $mytree->makeMySelBox('title', 'title');
-    $display .= '</td></tr><tr><td></td><td></td></tr>';
-    $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_HOMEPAGEC.'</td><td>';
-    $display .= '<input type="text" name="homepage" size="50" maxlength="100" /></td></tr>';
-    $display .= '<tr><td align="right">'._MD_VERSIONC.'</td><td>';
-    $display .= '<input type="text" name="version" size="10" maxlength="10" /></td></tr>';
-    $display .= '<tr><td align="right" style="vertical-align:top;white-space:nowrap;">'._MD_DESCRIPTIONC.'</td><td>';
-    $display .= '<textarea name="description" cols="60" rows="5"></textarea>';
-    $display .= '</td></tr>';
-    $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_SHOTIMAGE.'</td><td>';
-    $display .= '<input type="file" name="newfileshot" size="50" maxlength="60" /></td></tr>';
-    $display .= '<tr><td align="right"></td><td>';
-    $display .= '</td></tr><tr><td align="right">'._MD_COMMENTOPTION.'</td><td>';
-    $display .= '<input type="radio" name="commentoption" value="1" checked="checked" />&nbsp;' ._MD_YES.'&nbsp;';
-    $display .= '<input type="radio" name="commentoption" value="0" />&nbsp;' ._MD_NO.'&nbsp;';
-    $display .= '</td></tr>';
-    $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
-    $display .= '<input type="hidden" name="op" value="addDownload" />';
-    $display .= '<button class="uk-button" type="submit" class="button"/>'._MD_ADD.'</button>';
-    $display .= '</td></tr></table>';
-    $display .= '</form>';
-    $display .= '<!--end File Management Administration -->';
-*/
     $display .= COM_endBlock();
     $display .= COM_siteFooter();
     echo $display;
@@ -508,7 +467,8 @@ function modDownload() {
 
     $totalvotes = '';
 
-    $lid = $_GET['lid'];
+    $lid = filter_input(INPUT_GET,'lid',FILTER_SANITIZE_NUMBER_INT);
+
     $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments,submitter,hits FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
     $nrows = DB_numRows($result);
     if ($nrows == 0) {
