@@ -1135,6 +1135,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         header('X-XSS-Protection: 0');
     }
     header('X-Frame-Options: SAMEORIGIN');
+    header("Content-Security-Policy: frame-ancestors 'self' ".$_CONF['site_url'].";");
     echo $retval;
 
     // Start caching / capturing output from glFusion / plugins
