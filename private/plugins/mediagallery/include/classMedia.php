@@ -165,7 +165,7 @@ class Media {
                 }
                 $default_orig_file = $orig.'/'.$this->filename[0].'/'.$this->filename.'.'.$this->mime_ext;
                 if ( file_exists($_MG_CONF['path_mediaobjects'] . $default_orig_file) ) {
-                    $url_orig = $_MG_CONF['site_url'].'/mediaobjects/'.$default_orig_file;
+                    $url_orig = $_MG_CONF['mediaobjects_url'].'/'.$default_orig_file;
                 } else {
                     $url_orig = '';
                 }
