@@ -342,6 +342,7 @@ function handleEditSubmit()
     global $_CONF, $_TABLES, $_USER, $LANG03, $LANG_ADM_ACTIONS, $_PLUGINS;
 
     $db = Database::getInstance();
+    $filter = sanitizer::getInstance();
 
     $modedit = false;
     $adminedit = false;
@@ -351,7 +352,15 @@ function handleEditSubmit()
     $cid        = COM_applyFilter ($_POST['cid'],true);
     $postmode   = COM_applyFilter ($_POST['postmode']);
     $comment    = $_POST['comment_text'];
-    $title      = $_POST['title'];
+    $title      = strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING));
+
+    // at this time - we do not allow entering title - so pull from DB again.
+    $itemInfo = PLG_getItemInfo($type,$sid,('url,title'));
+    if ( isset($itemInfo['title']) ) {
+        $title = $itemInfo['title'];
+    } else {
+        $title = '';
+    }
 
     if ( isset($_POST['modedit'])) {
         $modedit    = COM_applyFilter ($_POST['modedit']);
@@ -399,7 +408,6 @@ function handleEditSubmit()
     }
 
     if ( $commentuid == 1 ) {
-        $filter = sanitizer::getInstance();
 
         try {
             $db->conn->update(
@@ -630,7 +638,7 @@ if ( isset($_POST['cancel'] ) ) {
     $sid     = isset($_POST['sid']) ? COM_sanitizeID(COM_applyFilter ($_POST['sid'])) : '';
     $pid     = isset($_POST['pid']) ? COM_applyFilter ($_POST['pid'],true) : 0;
     $postmode = isset($_POST['postmode']) ? COM_applyFilter($_POST['postmode']) : 'text';
-    $title   = isset($_POST['title']) ? strip_tags ($_POST['title']) : '';
+    $title   = isset($_POST['title']) ? strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING)) : '';
     $mode    = isset($_POST['mode']) ? COM_applyFilter($_POST['mode']) : '';
 
     $modedit = isset($_POST['modedit']) ? COM_applyFilter($_POST['modedit']) : '';
@@ -685,7 +693,7 @@ if ( isset($_POST['cancel'] ) ) {
             $sid     = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
             $pid     = COM_applyFilter ($_POST['pid'],true);
             $postmode = COM_applyFilter($_POST['postmode']);
-            $title   = strip_tags ($_POST['title']);
+            $title   = strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING));
             $mode    = COM_applyFilter($_POST['mode']);
 
             if ( $type != 'article' ) {
@@ -823,7 +831,7 @@ if ( isset($_POST['cancel'] ) ) {
 // pull data passed
                 $sid   = isset($_REQUEST['sid']) ? COM_sanitizeID(COM_applyFilter ($_REQUEST['sid'])) : '';
                 $type  = isset($_REQUEST['type']) ? COM_applyFilter ($_REQUEST['type']) : '';
-                $title = isset($_REQUEST['title']) ? strip_tags($_REQUEST['title']) : '';
+                $title = isset($_REQUEST['title']) ? filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING) /*strip_tags($_REQUEST['title'])*/ : '';
 
 // set postmode (options are text or html)
 
