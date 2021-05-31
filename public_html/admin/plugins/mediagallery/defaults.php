@@ -234,7 +234,7 @@ function MG_editDefaults( ) {
 
     // permission template
 
-    $usergroups = SEC_getUserGroups();
+    $usergroups = group::getAllAvailable();
     $groupdd = '';
     $moddd = '';
 
@@ -296,13 +296,10 @@ function MG_editDefaults( ) {
         'mp3_checked'   => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_MP3 ? ' checked="checked"' : ''),
         'ogg_checked'   => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_OGG ? ' checked="checked"' : ''),
         'asf_checked'   => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_ASF ? ' checked="checked"' : ''),
-        'swf_checked'   => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_SWF ? ' checked="checked"' : ''),
         'mov_checked'   => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_MOV ? ' checked="checked"' : ''),
         'mp4_checked'   => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_MP4 ? ' checked="checked"' : ''),
         'mpg_checked'   => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_MPG ? ' checked="checked"' : ''),
         'zip_checked'   => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_ZIP ? ' checked="checked"' : ''),
-        'flv_checked'   => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_FLV ? ' checked="checked"' : ''),
-        'rflv_checked'  => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_RFLV ? ' checked="checked"' : ''),
         'emb_checked'   => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_EMB  ? ' checked="checked"' : ''),
         'other_checked' => ((int)$_MG_CONF['ad_valid_formats'] & (int)MG_OTHER ? ' checked="checked"' : ''),
         'lang_jpg'              => $LANG_MG01['jpg'],
@@ -315,13 +312,10 @@ function MG_editDefaults( ) {
         'lang_mp3'              => $LANG_MG01['mp3'],
         'lang_ogg'              => $LANG_MG01['ogg'],
         'lang_asf'              => $LANG_MG01['asf'],
-        'lang_swf'              => $LANG_MG01['swf'],
         'lang_mov'              => $LANG_MG01['mov'],
         'lang_mp4'              => $LANG_MG01['mp4'],
         'lang_mpg'              => $LANG_MG01['mpg'],
         'lang_zip'              => $LANG_MG01['zip'],
-        'lang_flv'              => $LANG_MG01['flv'],
-        'lang_rflv'             => $LANG_MG01['rflv'],
         'lang_emb'              => $LANG_MG01['emb'],
         'lang_other'            => $LANG_MG01['other'],
         'lang_allowed_formats'  => $LANG_MG01['allowed_media_formats'],
@@ -521,17 +515,14 @@ function MG_saveDefaults( ) {
     $format_mp3                 = isset($_POST['format_mp3']) ? COM_applyFilter($_POST['format_mp3'],true) : 0;
     $format_ogg                 = isset($_POST['format_ogg']) ? COM_applyFilter($_POST['format_ogg'],true) : 0;
     $format_asf                 = isset($_POST['format_asf']) ? COM_applyFilter($_POST['format_asf'],true) : 0;
-    $format_swf                 = isset($_POST['format_swf']) ? COM_applyFilter($_POST['format_swf'],true) : 0;
     $format_mov                 = isset($_POST['format_mov']) ? COM_applyFilter($_POST['format_mov'],true) : 0;
     $format_mp4                 = isset($_POST['format_mp4']) ? COM_applyFilter($_POST['format_mp4'],true) : 0;
     $format_mpg                 = isset($_POST['format_mpg']) ? COM_applyFilter($_POST['format_mpg'],true) : 0;
     $format_zip                 = isset($_POST['format_zip']) ? COM_applyFilter($_POST['format_zip'],true) : 0;
     $format_other               = isset($_POST['format_other']) ? COM_applyFilter($_POST['format_other'],true) : 0;
-    $format_flv                 = isset($_POST['format_flv']) ? COM_applyFilter($_POST['format_flv'],true) : 0;
-    $format_rflv                = isset($_POST['format_rflv']) ? COM_applyFilter($_POST['format_rflv'],true) : 0;
     $format_emb                 = isset($_POST['format_emb']) ? COM_applyFilter($_POST['format_emb'],true) : 0;
 
-    $valid_formats = ($format_jpg + $format_png + $format_tif + $format_gif + $format_bmp + $format_tga + $format_psd + $format_mp3 + $format_ogg + $format_asf + $format_swf + $format_mov + $format_mp4 + $format_mpg + $format_zip + $format_other + $format_flv + $format_rflv + $format_emb);
+    $valid_formats = ($format_jpg + $format_png + $format_tif + $format_gif + $format_bmp + $format_tga + $format_psd + $format_mp3 + $format_ogg + $format_asf + $format_mov + $format_mp4 + $format_mpg + $format_zip + $format_other + $format_emb);
 
     // put any error checking / validation here
 
