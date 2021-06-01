@@ -250,18 +250,19 @@ require_once $_CONF['path_system'].'/lib-cache.php';
 
 /////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
-    require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
-}
-/////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
 if (php_sapi_name() != 'cli') {
     if (!isset($_SERVER['REAL_ADDR'])) {
         $_SERVER['REAL_ADDR'] = $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']);
     }
+    if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
+        require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
+    }
 } else {
     $_SERVER['REAL_ADDR'] = '127.0.0.1';
 }
+
+/////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 $_SERVER['REMOTE_ADDR'] = COM_anonymizeIP($_SERVER['REAL_ADDR']);
 $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
