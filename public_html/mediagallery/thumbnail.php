@@ -45,8 +45,8 @@ if ( $nRows > 0 ) {
 
     switch( $row['media_type'] ) {
         case 0 :    // standard image
-            $default_thumbnail = 'tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
-            if ( !file_exists($_MG_CONF['path_mediaobjects'] . $default_thumbnail) ) {
+            $default_thumbnail = $_MG_CONF['path_mediaobjects'].'tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
+            if ( !file_exists($default_thumbnail) ) {
                 $default_thumbnail = $_MG_CONF['path_mediaobjects'] . 'tn/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.jpg';
             }
             break;
