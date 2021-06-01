@@ -17,7 +17,7 @@ if (!defined ('GVERSION')) {
 }
 
 function _mg_autotags ( $op, $content = '', $autotag = '') {
-    global $MG_albums, $_MG_CONF, $_CONF, $_MG_USERPREFS, $_TABLES, $LANG_MG00, $LANG_MG03, $side_count, $swfjsinclude;
+    global $MG_albums, $_MG_CONF, $_CONF, $_MG_USERPREFS, $_TABLES, $LANG_MG00, $LANG_MG03, $side_count;
     global $mgAutoTagArray, $mg_installed_version;
 
     static $ss_count = 0;
@@ -242,7 +242,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
             $align = '';
         }
 
-        if ( !in_array($autotag['tag'],array('album','media','img','slideshow','fslideshow','video','audio','download','image','oimage','mlink','alink','playall'))) {
+        if ( !in_array($autotag['tag'],array('album','media','img','slideshow','video','audio','download','image','oimage','mlink','alink','playall'))) {
             return $content;
         }
 
@@ -696,215 +696,10 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             }
                             break;
                         case 'application/x-shockwave-flash' :
-                            // set the default playback options...
-                            $playback_options['play']    = $_MG_CONF['swf_play'];
-                            $playback_options['menu']    = $_MG_CONF['swf_menu'];
-                            $playback_options['quality'] = $_MG_CONF['swf_quality'];
-                            $playback_options['height']  = $_MG_CONF['swf_height'];
-                            $playback_options['width']   = $_MG_CONF['swf_width'];
-                            $playback_options['loop']    = $_MG_CONF['swf_loop'];
-                            $playback_options['scale']   = $_MG_CONF['swf_scale'];
-                            $playback_options['wmode']   = $_MG_CONF['swf_wmode'];
-                            $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-                            $playback_options['bgcolor']    = $_MG_CONF['swf_bgcolor'];
-                            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-                            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
-
-                            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $row['media_id'] . "'");
-                            while ( $poRow = DB_fetchArray($poResult) ) {
-                                $playback_options[$poRow['option_name']] = $poRow['option_value'];
-                            }
-/*
-                            if ( $swfjsinclude > 0 ) {
-                                $u_image = '';
-                            } else {
-                                $S = new Template( MG_getTemplatePath(0) );
-                                $S->set_file(array('swf' => 'swfobject.thtml'));
-                                $S->set_var(array(
-                                    'site_url'  => $_MG_CONF['site_url'],
-                                ));
-                                $S->parse('output','swf');
-                                $u_image = $S->finish($S->get_var('output'));
-                                $swfjsinclude++;
-                            }
-*/
-                            $V = new Template( MG_getTemplatePath(0) );
-                            $V->set_file (array ('video' => 'view_swf.thtml'));
-                            $V->set_var(array(
-                                'site_url'  => $_MG_CONF['site_url'],
-                                'lang_noflash' => $LANG_MG03['no_flash'],
-                                'play'      => ($autoplay ? 'true' : 'false'),
-                                'menu'      => ($playback_options['menu'] ? 'true' : 'false'),
-                                'loop'      => ($playback_options['loop'] ? 'true' : 'false'),
-                                'scale'     => $playback_options['scale'],
-                                'wmode'     => $playback_options['wmode'],
-                                'flashvars' => $playback_options['flashvars'],
-                                'quality'   => $playback_options['quality'],
-                                'height'    => $videoheight,
-                                'width'     => $videowidth,
-                                'asa'       => $playback_options['allowscriptaccess'],
-                                'bgcolor'   => $playback_options['bgcolor'],
-                                'swf_version' => $playback_options['swf_version'],
-                                'filename'  => $row['media_original_filename'],
-                                'id'        => $row['media_filename'] . rand(),
-                                'id2'       => $row['media_filename'] . rand(),
-                                'movie'     => $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'],
-                            ));
-                            $V->parse('output','video');
-                            if ( $align != '' && $align != "center") {
-                                $u_image = '<div style="float:' . $align . ';padding:5px;">' . $V->finish($V->get_var('output'))  . '</div>';
-                            } else if ($align == "center") {
-                                $u_image = '<div style="text-align:center;padding:5px;">' . $V->finish($V->get_var('output'))  . '</div>';
-                            } else {
-                                $u_image = '<div style="padding:5px;">' . $V->finish($V->get_var('output'))  . '</div>';
-                            }
+                            return $content;
                             break;
                         case 'video/x-flv' :
-				            // set the default playback options...
-				            $playback_options['play']    = $_MG_CONF['swf_play'];
-				            $playback_options['menu']    = $_MG_CONF['swf_menu'];
-				            $playback_options['quality'] = $_MG_CONF['swf_quality'];
-				            $playback_options['height']  = $_MG_CONF['swf_height'];
-				            $playback_options['width']   = $_MG_CONF['swf_width'];
-				            $playback_options['loop']    = $_MG_CONF['swf_loop'];
-				            $playback_options['scale']   = $_MG_CONF['swf_scale'];
-				            $playback_options['wmode']   = $_MG_CONF['swf_wmode'];
-				            $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-				            $playback_options['bgcolor']    = $_MG_CONF['swf_bgcolor'];
-				            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-				            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
-
-				            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . $row['media_id'] . "'");
-				            while ( $poRow = DB_fetchArray($poResult) ) {
-				                $playback_options[$poRow['option_name']] = $poRow['option_value'];
-				            }
-                            $u_image = '';
-/*
-				            if ( $swfjsinclude > 0 ) {
-				                $u_image = '';
-				            } else {
-				                $S = new Template( MG_getTemplatePath(0) );
-				                $S->set_file(array('swf' => 'swfobject.thtml'));
-				                $S->set_var(array(
-				                    'site_url'  => $_MG_CONF['site_url'],
-				                ));
-				                $S->parse('output','swf');
-				                $u_image = $S->finish($S->get_var('output'));
-				                $swfjsinclude++;
-				            }
-*/
-				            $V = new Template( MG_getTemplatePath(0) );
-				    		$V->set_file('video','view_flv_light.thtml');
-                            $playImageJPG = MG_getImageFile('blank_blk.jpg');
-				            // now the player specific items.
-				    		$F = new Template( MG_getTemplatePath(0) );
-				           	$F->set_file(array('player' => 'flvfp.thtml'));
-				           	$playImage = $_MG_CONF['assets_url'].'/placeholder_video_w.svg';
-				        	if ( $autoplay == 1 ) {  // auto start
-				        		$playButton = '';
-				        	} else {
-				                if ( $row['media_tn_attached'] == 1 ) {
-                                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
-                                        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext) ) {
-                                            $playImage = $_MG_CONF['mediaobjects_url'] . '/tn/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext;
-                                            break;
-                                        }
-                                    }
-				                }
-								$playButton = "{ url: '" . $playImage . "', overlayId: 'play' },";
-							}
-				            if ( $row['remote_media'] == 1 ) {
-					            $urlParts = array();
-					            $urlParts = parse_url($row['remote_url']);
-
-					            $pathParts = array();
-					            $pathParts = explode('/',$urlParts['path']);
-
-					            $ppCount = count($pathParts);
-					            $pPath = '';
-					            for ($row=1; $row<$ppCount-1;$row++) {
-						            $pPath .= '/' . $pathParts[$row];
-					            }
-					            $videoFile = $pathParts[$ppCount-1];
-
-						        $pos = strrpos($videoFile, '.');
-						        if($pos === false) {
-						            $basefilename = $videoFile;
-						        } else {
-						            $basefilename = substr($videoFile,0,$pos);
-						        }
-						        $videoFile            = $basefilename;
-					           	$streamingServerURL   = "streamingServerURL: '" . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . "',";
-					           	$streamingServer      = "streamingServer: 'fms',";
-					           	$movie = '';
-				    		} else {
-				    			$streamingServerURL   = '';
-				    			$streamingServer      = '';
-				    			$videoFile            = urlencode($_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
-				    			$movie                = $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'];
-				  			}
-				  			$width  = $videowidth;
-				  			$height = $videoheight + 22;
-							$resolution_x = $videowidth;
-							$resolution_y = $videoheight;
-				            $id  = 'id_'  . rand();
-				            $id2 = 'id2_' . rand();
-				            $F->set_var(array(
-				                'site_url'  		=> $_MG_CONF['site_url'],
-				                'lang_noflash' 		=> $LANG_MG03['no_flash'],
-				                'play'          	=> ($autoplay ? 'true' : 'false'),
-				                'autoplay'          => ($autoplay ? 1 : 0),
-				                'menu'          	=> ($playback_options['menu'] ? 'true' : 'false'),
-				                'loop'          	=> ($playback_options['loop'] ? 'true' : 'false'),
-				                'scale'         	=> $playback_options['scale'],
-				                'wmode'         	=> $playback_options['wmode'],
-				                'width'				=> $width,
-				                'height'			=> $height,
-					           	'streamingServerURL'=> $streamingServerURL,
-					           	'streamingServer'	=> $streamingServer,
-					           	'videoFile'			=> $videoFile,
-					           	'movie'             => $movie,
-					           	'playButton'		=> $playButton,
-				                'id'            	=> $id,
-				                'id2'           	=> $id2,
-				                'resolution_x'  	=> $resolution_x,
-				                'resolution_y'  	=> $resolution_y,
-				                'player_url'        => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
-				                'thumbnail'         => $playImage,
-				                'tn_jpg'            => $playImageJPG,
-				                'mime_type'         => 'video/x-flv',
-				            ));
-                            if ( $align != '' && $align != "center" ) {
-                                $F->set_var('alignment','float:'.$align.';');
-                            } else {
-                                $F->set_var('alignment','');
-                            }
-				    		$F->parse('output','player');
-				    		$flv_player = $F->finish($F->get_var('output'));
-
-				    		$V->set_var(array(
-				                'site_url'  	=> $_MG_CONF['site_url'],
-				                'lang_noflash'  => $LANG_MG03['no_flash'],
-				                'id'            => $id,
-				                'id2'           => $id2,
-				                'width'         => $resolution_x,
-				                'height'        => $resolution_y,
-				                'flv_player'	=> $flv_player,
-                                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
-							));
-
-                            $V->parse('output','video');
-
-                            $u_image .= $V->finish($V->get_var('output'));
-/*
-                            if ( $align != '' && $align != "center") {
-                                $u_image .= '<span class="'.$classes.'" style="float:' . $align . ';padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
-                            } else if ($align == "center") {
-                                $u_image .= '<span class="'.$classes.'" style="text-align:center;padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
-                            } else {
-                                $u_image .= '<span class="'.$classes.'" style="padding:5px;">' . $V->finish($V->get_var('output'))  . '</span>';
-                            }
-*/
+                            return $content;
                             break;
                     }
                     $link = $u_image;
@@ -1069,70 +864,6 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     $content = str_replace ($autotag['tagstr'], $link, $content);
                     return $content;
                 }
-                break;
-            case 'fslideshow' :
-                if ( $parm1 == '' || $parm1 == 0 ) {
-                    return $content;
-                }
-                $aid = $parm1;
-                if ( !isset($MG_albums[$parm1]->id) || $MG_albums[$parm1]->access == 0 ) {
-                    $link = '';
-                    $content = str_replace ($autotag['tagstr'], $link, $content);
-                    return $content;
-                }
-
-                if ( $width > 0 && $height == 0 ) {
-                    $height = $width * 0.75;
-                } else if ( $width == 0 && $height == 0 ) {
-                    $height = $width = 200;
-                } else if ( $width == 0  && $height > 0 ) {
-                    $width = $height * 1.3333;
-                }
-                // if none of the above, assume height and width both specified.
-
-                if ($caption == '' && $_MG_CONF['autotag_caption'] && isset($aid) ) {
-                    $caption = $MG_albums[$aid]->title;
-                }
-                $captionHTML = '<br /><span style="width:' . $width . 'px;font-style:italic;font-size: smaller;text-indent:0;">' . $caption . '</span>' . LB;
-                $ss_count++;
-
-                $T = new Template( MG_getTemplatePath(0) );
-                $T->set_file(array('fslideshow' => 'fsat.thtml'));
-                $T->set_var(array(
-                    'site_url'  => $_MG_CONF['site_url'],
-                ));
-                $T->set_var(array(
-                    'id'            => 'mms' . $ss_count,
-                    'id2'           => 'fsid' . $ss_count,
-                    'movie'         => $_MG_CONF['site_url'] . '/xml.php?aid=' . $parm1 . '%26src=' . trim($src),
-                    'dropshadow'    => 'true',
-                    'delay'         => $delay,
-                    'nolink'        => ($MG_albums[$parm1]->hidden || $enable_link == 0) ? 'true' : 'false',
-                    'showtitle'     => ( $showtitle == 'bottom' || $showtitle == 'top' ) ? '&showTitle=' . $showtitle : '',
-                    'width'         => $width,
-                    'height'        => $height,
-                ));
-                $T->parse('output','fslideshow');
-                $swfobject = $T->finish($T->get_var('output'));
-                $link = $swfobject . $captionHTML;
-
-                if ( $align != '' && $align != "center") {
-                    $link = '<span class="'.$classes.'" style="float:' . $align . ';padding:5px;text-align:center;">' . $link . '</span>';
-                } else if ($align == "center") {
-                    $link = '<center><span class="'.$classes.'" style="padding:5px;text-align:center;">' . $link . '</span></center>';
-                } else {
-                    $link = '<span class="'.$classes.'" style="padding:5px;text-align:center;">' . $link . '</span>';
-                }
-                if ( $destination != 'block' ) {
-                    $content = str_replace ($autotag['tagstr'], $link, $content);
-                } else {
-                    $autoTagCount = $mgAutoTagArray['count'];
-                    $mgAutoTagArray['tags'][$autoTagCount] = $link;
-                    $mgAutoTagArray['count']++;
-                    $link = '';
-                    $content = str_replace ($autotag['tagstr'], $link, $content);
-                }
-                return $content;
                 break;
             case 'slideshow' :
                 if ( $parm1 == '' || $parm1 == 0 ) {

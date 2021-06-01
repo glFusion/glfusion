@@ -585,11 +585,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                 $mimeInfo['mime_type'] = 'image/bmp';
                 $mimeExt = 'bmp';
                 break;
-            case 'application/x-shockwave-flash' :
-                $mimeInfo['type'] = 'swf';
-                $mimeInfo['mime_type'] = 'application/x-shockwave-flash';
-                $mimeExt = 'swf';
-                break;
             case 'application/zip' :
                 $mimeInfo['type'] = 'zip';
                 $mimeInfo['mime_type'] = 'application/zip';
@@ -610,11 +605,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                 $mimeInfo['mime_type'] = 'video/x-m4v';
                 $mimeExt = 'mov';
                 break;
-            case 'video/x-flv' :
-                $mimeInfo['type'] = 'flv';
-                $mimeInfo['mime_type'] = 'video/x-flv';
-                $mimeExt = 'flv';
-                break;
             case 'audio/x-ms-wma' :
                 $mimeInfo['type'] = 'wma';
                 $mimeInfo['mime_type'] = 'audio/x-ms-wma';
@@ -623,11 +613,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             default :
                 $file_extension = strtolower(substr(strrchr($file,"."),1));
                 switch ($file_extension) {
-                    case 'flv':
-                        $mimeInfo['type'] = 'flv';
-                        $mimeInfo['mime_type'] = 'video/x-flv';
-                        $mimeExt = 'flv';
-                        break;
                     case 'wma' :
                         $mimeInfo['type'] = 'wma';
                         $mimeInfo['mime_type'] = 'audio/x-ms-wma';
@@ -666,9 +651,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         case 'image/bmp' :
             $format_type = MG_BMP;
             break;
-        case 'application/x-shockwave-flash' :
-            $format_type = MG_SWF;
-            break;
         case 'application/zip' :
             $format_type = MG_ZIP;
             break;
@@ -681,9 +663,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         case 'video/x-qtc' :
         case 'video/x-m4v' :
             $format_type = MG_MOV;
-            break;
-        case 'video/x-flv' :
-            $format_type = MG_FLV;
             break;
         case 'image/tiff' :
             $format_type = MG_TIF;
@@ -940,7 +919,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             break;
         case 'video/quicktime' :
         case 'video/mpeg' :
-        case 'video/x-flv' :
         case 'video/x-ms-asf' :
         case 'video/x-ms-asf-plugin' :
         case 'video/avi' :
@@ -951,7 +929,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         case 'video/x-ms-wvx' :
         case 'video/x-ms-wm' :
         case 'application/x-troff-msvideo' :
-        case 'application/x-shockwave-flash' :
         case 'video/mp4' :
         case 'video/x-m4v' :
         case 'video/webm' :
@@ -1139,7 +1116,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         // try to find a resolution if video...
         if ( $mediaType == 1 ) {
             switch ($mimeType) {
-                case 'application/x-shockwave-flash' :
                 case 'video/quicktime' :
                 case 'video/mpeg' :
                 case 'video/x-m4v' :
@@ -1149,20 +1125,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                     } else {
                         $resolution_x = -1;
                         $resolution_y = -1;
-                    }
-                    break;
-                case 'video/x-flv' :
-                    if ( $mimeInfo['video']['resolution_x'] < 1 || $mimeInfo['video']['resolution_y'] < 1 ) {
-                        if (isset($mimeInfo['meta']['onMetaData']['width']) && isset($mimeInfo['meta']['onMetaData']['height']) ) {
-                            $resolution_x = $mimeInfo['meta']['onMetaData']['width'];
-                            $resolution_y = $mimeInfo['meta']['onMetaData']['height'];
-                        } else {
-                            $resolution_x = -1;
-                            $resolution_y = -1;
-                        }
-                    } else {
-                        $resolution_x = $mimeInfo['video']['resolution_x'];
-                        $resolution_y = $mimeInfo['video']['resolution_y'];
                     }
                     break;
                 case 'video/x-ms-asf' :

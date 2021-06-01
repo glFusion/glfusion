@@ -165,7 +165,7 @@ class Media {
                 }
                 $default_orig_file = $orig.'/'.$this->filename[0].'/'.$this->filename.'.'.$this->mime_ext;
                 if ( file_exists($_MG_CONF['path_mediaobjects'] . $default_orig_file) ) {
-                    $url_orig = $_MG_CONF['site_url'].'/mediaobjects/'.$default_orig_file;
+                    $url_orig = $_MG_CONF['mediaobjects_url'].'/'.$default_orig_file;
                 } else {
                     $url_orig = '';
                 }
@@ -392,23 +392,7 @@ class Media {
 		            $resolution_y = $new_y;
 	            } else { // must be a video...
 		            // set the default playback options...
-		            $playback_options['play']    = $_MG_CONF['swf_play'];
-		            $playback_options['menu']    = $_MG_CONF['swf_menu'];
-		            $playback_options['quality'] = $_MG_CONF['swf_quality'];
-		            $playback_options['height']  = $_MG_CONF['swf_height'];
-		            $playback_options['width']   = $_MG_CONF['swf_width'];
-		            $playback_options['loop']    = $_MG_CONF['swf_loop'];
-		            $playback_options['scale']   = $_MG_CONF['swf_scale'];
-		            $playback_options['wmode']   = $_MG_CONF['swf_wmode'];
-		            $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-		            $playback_options['bgcolor']    = $_MG_CONF['swf_bgcolor'];
-		            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-		            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
 
-		            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($this->id) . "'");
-		            while ( $poRow = DB_fetchArray($poResult) ) {
-		                $playback_options[$poRow['option_name']] = $poRow['option_value'];
-		            }
 
 		            if ( $this->resolution_x > 0 ) {
 		                $resolution_x = $this->resolution_x;
@@ -441,8 +425,8 @@ class Media {
 		                    $resolution_y = $this->resolution_y;
 		                }
 		            }
-		            $resolution_x = $playback_options['width'];
-		            $resolution_y = $playback_options['height'];
+		            $resolution_x = 480;
+		            $resolution_y = 320;
 		            if ( $resolution_x < 1 || $resolution_y < 1 ) {
 		                $resolution_x = 480;
 		                $resolution_y = 320;
@@ -450,16 +434,6 @@ class Media {
 		                $resolution_x = $resolution_x + 40;
 		                $resolution_y = $resolution_y + 40;
 		            }
-	            	if ( $this->mime_type == 'video/x-flv' && $_MG_CONF['use_flowplayer'] != 1) {
-	            	    $resolution_x = $resolution_x + 60;
-		            	if ( $resolution_x < 590 ) {
-			            	$resolution_x = 590;
-		            	}
-		            	$resolution_y = $resolution_y + 80;
-		            	if ( $resolution_y < 500 ) {
-		            	    $resolution_y = 500;
-		                }
-	            	}
 	            	if ( $this->type == 5 ) {
 		            	$resolution_x = 460;
 		            	$resolution_y = 380;

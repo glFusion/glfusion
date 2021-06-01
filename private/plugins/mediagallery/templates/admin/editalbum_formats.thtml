@@ -32,12 +32,9 @@
                             <input type="checkbox" name="format_mp3" value="128" {mp3_checked} /> &nbsp;&nbsp;<span style="font-weight:bold">{lang_mp3}</span><br />
                             <input type="checkbox" name="format_ogg" value="256" {ogg_checked} /> &nbsp;&nbsp;<span style="font-weight:bold">{lang_ogg}</span><br />
                             <input type="checkbox" name="format_asf" value="512" {asf_checked} /> &nbsp;&nbsp;<span style="font-weight:bold">{lang_asf}</span><br />
-                            <input type="checkbox" name="format_swf" value="1024" {swf_checked} /> &nbsp;&nbsp;<span style="font-weight:bold">{lang_swf}</span><br />
                             <input type="checkbox" name="format_mov" value="2048" {mov_checked} /> &nbsp;&nbsp;<span style="font-weight:bold">{lang_mov}</span><br />
                             <input type="checkbox" name="format_mp4" value="4096" {mp4_checked} /> &nbsp;&nbsp;<span style="font-weight:bold">{lang_mp4}</span><br />
                             <input type="checkbox" name="format_mpg" value="8192" {mpg_checked} /> &nbsp;&nbsp;<span style="font-weight:bold">{lang_mpg}</span><br />
-                            <input type="checkbox" name="format_flv" value="131072" {flv_checked} /> &nbsp;&nbsp;<span style="font-weight:bold">{lang_flv}</span><br />
-                            <input type="checkbox" name="format_rflv" value="262144" {rflv_checked} /> &nbsp;&nbsp;<span style="font-weight:bold">{lang_rflv}</span><br />
                             <input type="checkbox" name="format_emb" value="524288" {emb_checked} /> &nbsp;&nbsp;<span style="font-weight:bold">{lang_emb}</span><br />
                         </td>
                     </tr>

@@ -6,7 +6,6 @@
         <li><a href="#">{lang_asf_options}</a></li>
         <li><a href="#">{lang_mov_options}</a></li>
         <li><a href="#">{lang_mp3_options}</a></li>
-        <li><a href="#">{lang_swf_options}</a></li>
     </ul>
 
     <ul id="mg_avdefaults" class="uk-switcher">
@@ -175,81 +174,7 @@
             </table>
         </li>
 
-        <li>
 
-            <table class="uk-table uk-table-hover">
-                <tr>
-                    <th style="width:20%;">
-                        {lang_option}
-                    </th>
-                    <th style="width:10%;" align="left">
-                        <span style="font-weight:bold;">{lang_off}&nbsp;&nbsp;&nbsp;&nbsp;{lang_on}</span>
-                    </th>
-                    <th>
-                        {lang_description}
-                    </th>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_auto_start}</td>
-                    <td><input type="radio" name="swf_play" value="0" {swf_play_disabled}>&nbsp;&nbsp; <input type="radio" name="swf_play" value="1" {swf_play_enabled}></td>
-                    <td class="uk-text-left">{lang_auto_start_help}</td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_menu}</td>
-                    <td><input type="radio" name="swf_menu" value="0" {swf_menu_disabled}>&nbsp;&nbsp; <input type="radio" name="swf_menu" value="1" {swf_menu_enabled}></td>
-                    <td class="uk-text-left">{lang_menu_help}</td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_scale}</td>
-                    <td>{swf_scale_select}</td>
-                    <td class="uk-text-left">{lang_swf_scale_help}</td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_wmode}</td>
-                    <td>{swf_wmode_select}</td>
-                    <td class="uk-text-left">{lang_wmode_help}</td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_asa}</td>
-                    <td>{swf_asa_select}</td>
-                    <td class="uk-text-left">{lang_asa_help}</td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_quality}</td>
-                    <td>{swf_quality_select}</td>
-                    <td class="uk-text-left">{lang_quality_help}</td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_loop}</td>
-                    <td><input type="radio" name="swf_loop" value="0" {swf_loop_disabled}>&nbsp;&nbsp; <input type="radio" name="swf_loop" value="1" {swf_loop_enabled}></td>
-                    <td class="uk-text-left">{lang_loop_help}</td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_bgcolor}</td>
-                    <td><input type="text" name="swf_bgcolor" value="{swf_bgcolor}" size="8"></td>
-                    <td class="uk-text-left">{lang_bgcolor_help}</td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_height}</td>
-                    <td><input type="text" name="swf_height" value="{swf_height}" size="3"></td>
-                    <td class="uk-text-left">{lang_height_help}</td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_width}</td>
-                    <td><input type="text" name="swf_width" value="{swf_width}" size="3"></td>
-                    <td class="uk-text-left">{lang_width_help}</td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_flash_vars}</td>
-                    <td colspan="2"><input type="text" name="swf_flashvars" value="{swf_flashvars}" size="40"></td>
-                </tr>
-                <tr>
-                    <td class="uk-text-right">{lang_codebase}</td>
-                    <td><input type="text" name="swf_version" value='{swf_version}' size="3"></td>
-                    <td class="uk-text-left">{lang_swf_version_help}</td>
-                </tr>
-            </table>
-        </li>
     </ul>
     <div class="uk-text-center uk-margin">
         <input type="hidden" name="{gltoken_name}" value="{gltoken}">

@@ -3,25 +3,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={charset}">
 {themeCSS}
-<script src="{site_url}/js/swfobject.js"></script>
-<script>
-		// <![CDATA[
-		function divResize(id, nw, nh) {
-			var obj = document.getElementById(id);
-			obj.style.width = nw + "px";
-			obj.style.height = nh + "px";
-		}
-		function divColor(id,color) {
-		    var obj = document.getElementById(id);
-		    obj.style.backgroundColor = color;
-	    }
-		// ]]>
-</script>
 <title>{title}</title>
 </head>
 <body>
 <div style="text-align:center;">
-{flv_player}
+    <div>
+        <div>
+              <img class="uk-thumbnail uk-thumbnail-large" src="{site_url}/assets/no_flash.png" alt="Flash has been retired." />
+        </div>
+        <div class="uk-container uk-margin-top uk-text-bold">
+          {lang_noflash}
+        </div>
+      </div>
 </div>
 </body>
 </html>
