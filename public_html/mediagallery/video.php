@@ -109,279 +109,25 @@ if ( $nRows > 0 ) {
 
         case 'application/x-shockwave-flash' :
             $T->set_file ('video','swf.thtml');
-            $T->set_var('movie',$_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
             $T->set_var('title',$row['media_title']);
-            $playback_options['play']   = $_MG_CONF['swf_play'];
-            $playback_options['menu']   = $_MG_CONF['swf_menu'];
-            $playback_options['quality']= $_MG_CONF['swf_quality'];
-            $playback_options['loop']   = $_MG_CONF['swf_loop'];
-            $playback_options['scale']  = $_MG_CONF['swf_scale'];
-            $playback_options['wmode']  = $_MG_CONF['swf_wmode'];
-            $playback_options['height'] = $_MG_CONF['swf_height'];
-            $playback_options['width']  = $_MG_CONF['swf_width'];
-            $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-            $playback_options['flashvars'] = $_MG_CONF['swf_flashvars'];
-            $playback_options['bgcolor']    = $_MG_CONF['swf_wmode'];
-            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-
-            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($row['media_id']) . "'");
-            $poNumRows = DB_numRows($poResult);
-            for ($i=0; $i < $poNumRows; $i++ ) {
-                $poRow = DB_fetchArray($poResult);
-                $playback_options[$poRow['option_name']] = $poRow['option_value'];
-            }
-
-            if ( $row['media_resolution_x'] > 0 ) {
-                $resolution_x = $row['media_resolution_x'];
-                $resolution_y = $row['media_resolution_y'];
-            } else {
-                if ( $row['media_resolution_x'] == 0 ) {
-                    $getID3 = new getID3;
-                    // Analyze file and store returned data in $ThisFileInfo
-                    $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
-                    getid3_lib::CopyTagsToComments($ThisFileInfo);
-                    if ( $ThisFileInfo['video']['resolution_x'] < 1 || $ThisFileInfo['video']['resolution_y'] < 1 ) {
-                        if (isset($ThisFileInfo['meta']['onMetaData']['width']) && isset($ThisFileInfo['meta']['onMetaData']['height']) ) {
-                            $resolution_x = $ThisFileInfo['meta']['onMetaData']['width'];
-                            $resolution_y = $ThisFileInfo['meta']['onMetaData']['height'];
-                        } else {
-                            $resolution_x = -1;
-                            $resolution_y = -1;
-                        }
-                    } else {
-                        $resolution_x = $ThisFileInfo['video']['resolution_x'];
-                        $resolution_y = $ThisFileInfo['video']['resolution_y'];
-                    }
-                    if ( $resolution_x != 0 ) {
-                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . DB_escapeString($row['media_id']) . "'";
-                        DB_query( $sql );
-                    }
-                } else {
-                    $resolution_x = $row['media_resolution_x'];
-                    $resolution_y = $row['media_resolution_y'];
-                }
-            }
-
             $T->set_var(array(
                 'site_url'  => $_MG_CONF['site_url'],
                 'lang_noflash' => $LANG_MG03['no_flash'],
-                'play'      => ($playback_options['play'] ? 'true' : 'false'),
-                'menu'      => ($playback_options['menu'] ? 'true' : 'false'),
-                'loop'      => ($playback_options['loop'] ? 'true' : 'false'),
-                'scale'     => $playback_options['scale'],
-                'wmode'     => $playback_options['wmode'],
-                'quality'   => $playback_options['quality'],
-                'height'    => $playback_options['height'],
-                'width'     => $playback_options['width'],
-                'asa'       => $playback_options['allowscriptaccess'],
-                'loop'      => $playback_options['loop'],
-                'bgcolor'   => $playback_options['bgcolor'],
-                'swf_version' => $playback_options['swf_version'],
-                'filename'  => $row['media_original_filename'],
-                'id'        => $row['media_mime_ext'] . rand(),
-                'id2'       => $row['media_mime_ext'] . rand(),
-                'site_url'  => $_MG_CONF['site_url'],
-                'resolution_x' => $resolution_x,
-                'resolution_y' => $resolution_y,
                 'charset'	   => $LANG_CHARSET,
             ));
-
-            $flasharray = array();
-            $flasharray = explode('&',$playback_options['flashvars']);
-			$i = 0;
-			$T->set_block('video','flashvars','flashvar');
-            foreach( $flasharray as $var ) {
-                $temp = explode("=",$var);
-                $variable = $temp[0];
-                $value = implode("=",array_slice($temp,1));
-                $T->set_var('fv','flashvars.' . $variable . '="' . $value . '";' .  LB);
-                $T->parse('flashvar','flashvars',true);
-                $i++;
-            }
             break;
         case 'video/x-flv' :
-            // set the default playback options...
-            $playback_options['play']    = $_MG_CONF['swf_play'];
-            $playback_options['menu']    = $_MG_CONF['swf_menu'];
-            $playback_options['quality'] = $_MG_CONF['swf_quality'];
-            $playback_options['height']  = $_MG_CONF['swf_height'];
-            $playback_options['width']   = $_MG_CONF['swf_width'];
-            $playback_options['loop']    = $_MG_CONF['swf_loop'];
-            $playback_options['scale']   = $_MG_CONF['swf_scale'];
-            $playback_options['wmode']   = $_MG_CONF['swf_wmode'];
-            $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-            $playback_options['bgcolor']    = $_MG_CONF['swf_bgcolor'];
-            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
-
-            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($row['media_id']) . "'");
-            while ( $poRow = DB_fetchArray($poResult) ) {
-                $playback_options[$poRow['option_name']] = $poRow['option_value'];
-            }
-            if (isset($_MG_USERPREFS['playback_mode']) && $_MG_USERPREFS['playback_mode'] != -1 ) {
-                $playback_type = $_MG_USERPREFS['playback_mode'];
-            } else {
-                $playback_type = $MG_albums[$aid]->playback_type;
-            }
-
-            if ( $row['media_resolution_x'] > 0 ) {
-                $resolution_x = $row['media_resolution_x'];
-                $resolution_y = $row['media_resolution_y'];
-            } else {
-                if ( $row['media_resolution_x'] == 0 ) {
-                    $getID3 = new getID3;
-                    // Analyze file and store returned data in $ThisFileInfo
-                    $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
-                    getid3_lib::CopyTagsToComments($ThisFileInfo);
-                    if ( $ThisFileInfo['video']['resolution_x'] < 1 || $ThisFileInfo['video']['resolution_y'] < 1 ) {
-                        if (isset($ThisFileInfo['meta']['onMetaData']['width']) && isset($ThisFileInfo['meta']['onMetaData']['height']) ) {
-                            $resolution_x = $ThisFileInfo['meta']['onMetaData']['width'];
-                            $resolution_y = $ThisFileInfo['meta']['onMetaData']['height'];
-                        } else {
-                            $resolution_x = -1;
-                            $resolution_y = -1;
-                        }
-                    } else {
-                        $resolution_x = $ThisFileInfo['video']['resolution_x'];
-                        $resolution_y = $ThisFileInfo['video']['resolution_y'];
-                    }
-                    if ( $resolution_x != 0 ) {
-                        $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . $resolution_x . ",media_resolution_y=" . $resolution_y . " WHERE media_id='" . DB_escapeString($row['media_id']) . "'";
-                        DB_query( $sql );
-                    }
-                } else {
-                    $resolution_x = $row['media_resolution_x'];
-                    $resolution_y = $row['media_resolution_y'];
-                }
-            }
-
             // Initialize the flvpopup.thtml template
-
     		$T->set_file('video','flvpopup.thtml');
 
-            // now the player specific items.
-    		$F = new Template( MG_getTemplatePath($aid) );
-            if ($_MG_CONF['use_flowplayer'] == 1 ) {	// FlowPlayer Setup
-            	$F->set_file(array('player' => 'flvfp.thtml'));
-            } else {
-            	$F->set_file(array('player' => 'flvmg.thtml'));
-            }
-
-        	if ( $playback_options['play'] == 1 ) {  // auto start
-        		$playButton = '';
-        		$autoplay   = 'true';
-        	} else {
-                if ( $row['media_tn_attached'] == 1 ) {
-                	$playImage = MG_getImageFile('blank_blk.jpg');
-                	$playButtonMG = '';
-                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
-                        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext) ) {
-                            $playImage = $_MG_CONF['mediaobjects_url'] . '/tn/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext;
-                            $playButtonMG = 'flashvars.thumbUrl="' . $_MG_CONF['mediaobjects_url'] . '/tn/' . $row['media_filename'][0] . '/tn_' . $row['media_filename'] . $ext . '";';
-                            break;
-                        }
-                    }
-                } else {
-                	$playImage = MG_getImageFile('blank_blk.jpg');
-                	$playButtonMG = '';
-				}
-				$playButton = "{ url: '" . $playImage . "', overlayId: 'play' },";
-				$playButtonMG = '';
-				$autoplay = 'false';
-			}
-            if ( $row['remote_media'] == 1 ) {
-	            $urlParts = array();
-	            $urlParts = parse_url($row['remote_url']);
-
-	            $pathParts = array();
-	            $pathParts = explode('/',$urlParts['path']);
-
-	            $ppCount = count($pathParts);
-	            $pPath = '';
-	            for ($row=1; $row<$ppCount-1;$row++) {
-		            $pPath .= '/' . $pathParts[$row];
-	            }
-	            $videoFile = $pathParts[$ppCount-1];
-
-		        $pos = strrpos($videoFile, '.');
-		        if($pos === false) {
-		            $basefilename = $videoFile;
-		        } else {
-		            $basefilename = substr($videoFile,0,$pos);
-		        }
-		        $videoFile            = $basefilename;
-	           	$streamingServerURL   = "streamingServerURL: '" . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . "',";
-	           	$streamingServer      = "streamingServer: 'fms',";
-	           	$streamingServerURLmg = 'flashvars.streamingServerUrl="' . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . '";';
-    		} else {
-    			$streamingServerURL   = '';
-    			$streamingServerURLmg = '';
-    			$streamingServer      = '';
-    			$videoFile            = urlencode($_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext']);
-  			}
-  			$width  = $playback_options['width'];
-  			$height = $playback_options['height'];
-  			if ( $MG_albums[$aid]->allow_download == 1 ) {
-  				$allowDl = 'true';
-  			} else {
-  				$allowDl = 'false';
-  			}
   			if ( $row['media_title'] != '' ) {
   				$title = urlencode($row['media_title']);
   			} else {
   				$title = urlencode($row['media_original_filename']);
   			}
-
-  			if ($_MG_CONF['use_flowplayer'] == 1 ) {
-  				$resolution_x = $width;
-  				$resolution_y = $height;
-  			} else {
-	    		$resolution_x = $width + 60;
-    			$resolution_y = $height + 190;
-    			if ( $resolution_x < 565 ) {
-    	    		$resolution_x = 565;
-    			}
-    		}
-            $id  = 'id' . rand();
-            $id2 = 'id2' . rand();
-            $F->set_var(array(
+       		$T->set_var(array(
                 'site_url'  	=> $_MG_CONF['site_url'],
                 'lang_noflash'  => $LANG_MG03['no_flash'],
-                'play'          => $autoplay,
-                'menu'          => ($playback_options['menu'] ? 'true' : 'false'),
-                'loop'          => ($playback_options['loop'] ? 'true' : 'false'),
-                'scale'         => $playback_options['scale'],
-                'wmode'         => $playback_options['wmode'],
-                'width'			=> $width,
-                'height'			=> $height,
-                'allowDl'			=> $allowDl,
-                'title'				=> $title,
-	           	'streamingServerURL'=> $streamingServerURL,
-	           	'streamingServer'	=> $streamingServer,
-	           	'videoFile'			=> $videoFile,
-	           	'playButton'		=> $playButton,
-	           	'streamingServerURLmg'  => $streamingServerURLmg,
-	           	'playButtonMG'		=> $playButtonMG,
-                'id'            	=> $id,
-                'id2'           	=> $id2,
-                'lang_download' 	=> $LANG_MG03['download'],
-                'lang_large'    	=> $LANG_MG03['large'],
-                'lang_normal'   	=> $LANG_MG03['normal'],
-                'resolution_x'  	=> $resolution_x,
-                'resolution_y'  	=> $resolution_y,
-            ));
-    		$F->parse('output','player');
-    		$flv_player = $F->finish($F->get_var('output'));
-
-    		$T->set_var(array(
-                'site_url'  	=> $_MG_CONF['site_url'],
-                'lang_noflash'  => $LANG_MG03['no_flash'],
-                'id'            => $id,
-                'id2'           => $id2,
-                'resolution_x'  => $resolution_x,
-                'resolution_y'  => $resolution_y,
-                'flv_player'	=> $flv_player,
-                'charset'		=> $LANG_CHARSET,
 			));
         	break;
         case 'video/mp4' :
@@ -639,7 +385,6 @@ if ( $nRows > 0 ) {
             break;
         case 'mp3' :
         case 'audio/mpeg' :
-            $tfile = 'mp3_swf.thtml';
             $tfile = 'mp4.thtml';
 
             $T->set_file (array ('video' => $tfile));
@@ -683,13 +428,6 @@ if ( $nRows > 0 ) {
                 $u_pic = $u_tn = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
                 $playback_options['height'] = 200;
                 $playback_options['width'] = 300;
-            }
-            if ( $tfile == 'mp3_swf.thtml' ) {
-                $playback_options['height'] = 365;
-                $playback_options['width'] = 600;
-            }
-            if ( $playback_options['autostart'] == 1 && $tfile == 'mp3_swf.thtml') {
-	            $playback_options['autostart'] = 'true';
             }
             $T->set_var(array(
                 'u_tn'              => $u_tn,

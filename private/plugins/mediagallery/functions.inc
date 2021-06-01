@@ -74,7 +74,6 @@ if ( isset($_PLUGIN_INFO['mediagallery']) && $_PLUGIN_INFO['mediagallery']['pi_e
 // This is a list of valid extensions for image media thumbnails / display images
 $_MG_CONF['validExtensions'] = array('.jpg','.jpeg','.png','.gif','.bmp');
 
-$swfjsinclude = 0;
 $themeStyle = '';
 
 $_MG_CONF['random_skin'] = 'default';
@@ -738,7 +737,7 @@ function plugin_getadminoption_mediagallery()
 
 function plugin_getheadercss_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $_USER, $_SYSTEM, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $_USER, $_SYSTEM, $themeStyle;
 
     $styles = array();
 
@@ -775,11 +774,10 @@ function plugin_getheadercss_mediagallery()
 
 function plugin_getheaderjs_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $_SYSTEM, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $_SYSTEM, $themeStyle;
 
     $js = array();
 
-    $js[] = $_MG_CONF['path_html'] . 'js/swfobject.js';
     $js[] = $_MG_CONF['path_html'] . 'js/mediagallery.js';
     if ( !isset($_SYSTEM['disable_mootools']) || $_SYSTEM['disable_mootools'] == false ) {
         $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
@@ -806,7 +804,7 @@ function plugin_getglobaljs_mediagallery()
 
 function plugin_getheadercode_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $themeStyle;
 
     $mg_header = '';
 

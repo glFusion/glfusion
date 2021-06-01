@@ -360,6 +360,8 @@ switch ( $MG_albums[$album_id]->enable_slideshow ) {
         $lang_slideshow = $LANG_MG03['slide_show'];
         break;
     case 2:
+    case 3:
+    case 4:
         $lbss_count = DB_count($_TABLES['mg_media'],'media_type',0);
         $sql = "SELECT COUNT(m.media_id) as lbss_count FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
                                 " ON ma.media_id=m.media_id WHERE m.media_type = 0 AND ma.album_id=" . (int) $album_id;
@@ -373,14 +375,6 @@ switch ( $MG_albums[$album_id]->enable_slideshow ) {
         	$MG_albums[$album_id]->enable_slideshow = 0;
         	$lang_slideshow = '';
         }
-        break;
-    case 3:
-        $url_slideshow = $_MG_CONF['site_url'] . '/fslideshow.php?aid=' . $album_id . '&amp;src=disp';
-        $lang_slideshow = $LANG_MG03['slide_show'];
-        break;
-    case 4:
-        $url_slideshow = $_MG_CONF['site_url'] . '/fslideshow.php?aid=' . $album_id . '&amp;src=orig';
-        $lang_slideshow = $LANG_MG03['slide_show'];
         break;
     case 5:
     	$url_slideshow = $_MG_CONF['site_url'] . '/playall.php?aid=' . $album_id;

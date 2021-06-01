@@ -421,7 +421,9 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 					$default_thumbnail = 'remote.png';
 				}
 				break;
-
+        default :
+            $default_thumbnail = 'generic.png';
+            break;
     }
 
     if ( $M['media_tn_attached'] == 1 ) {
@@ -434,14 +436,13 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
             }
         }
         if ( $media_thumbnail_file == '' ) {
-            $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
-            $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
         }
     } else {
-        $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
-        $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+        $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+        $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
     }
-
 
     $resolution_x = 0;
     $resolution_y = 0;
@@ -486,24 +487,6 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	            $resolution_y = $new_y;
             } else { // must be a video...
 	            // set the default playback options...
-	            $playback_options['play']    = $_MG_CONF['swf_play'];
-	            $playback_options['menu']    = $_MG_CONF['swf_menu'];
-	            $playback_options['quality'] = $_MG_CONF['swf_quality'];
-	            $playback_options['height']  = $_MG_CONF['swf_height'];
-	            $playback_options['width']   = $_MG_CONF['swf_width'];
-	            $playback_options['loop']    = $_MG_CONF['swf_loop'];
-	            $playback_options['scale']   = $_MG_CONF['swf_scale'];
-	            $playback_options['wmode']   = $_MG_CONF['swf_wmode'];
-	            $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-	            $playback_options['bgcolor']    = $_MG_CONF['swf_bgcolor'];
-	            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-	            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
-
-	            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($M['media_id']) . "'");
-	            while ( $poRow = DB_fetchArray($poResult) ) {
-	                $playback_options[$poRow['option_name']] = $poRow['option_value'];
-	            }
-
 	            if ( isset($M['media_resolution_x']) && $M['media_resolution_x'] > 0 ) {
 	                $resolution_x = $M['media_resolution_x'];
 	                $resolution_y = $M['media_resolution_y'];
@@ -534,8 +517,8 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	                    $resolution_y = $M['media_resolution_y'];
 	                }
 	            }
-	            $resolution_x = $playback_options['width'];
-	            $resolution_y = $playback_options['height'];
+	            $resolution_x = 480;
+	            $resolution_y = 320;
 	            if ( $resolution_x < 1 || $resolution_y < 1 ) {
 	                $resolution_x = 480;
 	                $resolution_y = 320;
@@ -543,16 +526,6 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	                $resolution_x = $resolution_x + 40;
 	                $resolution_y = $resolution_y + 40;
 	            }
-            	if ( $M['mime_type'] == 'video/x-flv' && $_MG_CONF['use_flowplayer'] != 1) {
-            	    $resolution_x = $resolution_x + 60;
-	            	if ( $resolution_x < 590 ) {
-		            	$resolution_x = 590;
-	            	}
-	            	$resolution_y = $resolution_y + 80;
-	            	if ( $resolution_y < 500 ) {
-	            	    $resolution_y = 500;
-	                }
-            	}
             	if ( $M['media_type'] == 5 ) {
 	            	$resolution_x = 460;
 	            	$resolution_y = 380;

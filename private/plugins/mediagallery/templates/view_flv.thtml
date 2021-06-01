@@ -1,5 +1,12 @@
 {# begin {templatelocation} #}
 <div class="uk-text-center uk-width-1-1 uk-align-center">
-	{flv_player}
+	<div>
+		<div>
+			  <img class="uk-thumbnail uk-thumbnail-large" src="{site_url}/assets/no_flash.png" alt="Flash has been retired." />
+		</div>
+		<div class="uk-container uk-margin-top uk-text-bold">
+		  {lang_noflash}
+		</div>
+	  </div>
 </div>
 {# end {templatelocation} #}

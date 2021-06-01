@@ -465,9 +465,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         'admin'         =>  'mediaedit.thtml',
         'asf_options'   =>  'edit_asf_options.thtml',
         'mp3_options'   =>  'edit_mp3_options.thtml',
-        'swf_options'   =>  'edit_swf_options.thtml',
         'mov_options'   =>  'edit_mov_options.thtml',
-        'flv_options'   =>  'edit_flv_options.thtml',
     ));
     $T->set_var('album_id',$album_id);
 
@@ -833,101 +831,6 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
             'lang_loop_help'                => $LANG_MG07['loop_help'],
         ));
         $T->parse('playback_options','mp3_options');
-    }
-
-
-    if ( $row['mime_type'] == 'application/x-shockwave-flash' || $row['mime_type'] == 'video/x-flv' ) {
-        // pull defaults, then override...
-        $playback_options['play']   = $_MG_CONF['swf_play'];
-        $playback_options['menu']   = $_MG_CONF['swf_menu'];
-        $playback_options['quality']= $_MG_CONF['swf_quality'];
-        $playback_options['height'] = $_MG_CONF['swf_height'];
-        $playback_options['width']  = $_MG_CONF['swf_width'];
-        $playback_options['loop']   = $_MG_CONF['swf_loop'];
-        $playback_options['scale']  = $_MG_CONF['swf_scale'];
-        $playback_options['wmode']  = $_MG_CONF['swf_wmode'];
-        $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-        $playback_options['bgcolor'] = $_MG_CONF['swf_bgcolor'];
-        $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-
-        $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($row['media_id']) . "'");
-        $poNumRows = DB_numRows($poResult);
-        for ($i=0; $i < $poNumRows; $i++ ) {
-            $poRow = DB_fetchArray($poResult);
-            $playback_options[$poRow['option_name']] = $poRow['option_value'];
-        }
-        $quality_select = '<select name="quality">';
-        $quality_select .= '<option value="low" '  . ($playback_options['quality'] == 'low' ? ' selected="selected"' : '') . '>' . $LANG_MG07['low'] . '</option>';
-        $quality_select .= '<option value="high" ' . ($playback_options['quality'] == 'high' ? ' selected="selected"' : '') . '>' . $LANG_MG07['high'] . '</option>';
-        $quality_select .= '</select>';
-
-        $scale_select = '<select name="scale">';
-        $scale_select .= '<option value="showall" '  . ($playback_options['scale'] == 'showall'  ? ' selected="selected"' : '') . '>' . $LANG_MG07['showall'] . '</option>';
-        $scale_select .= '<option value="noborder" ' . ($playback_options['scale'] == 'noborder' ? ' selected="selected"' : '') . '>' . $LANG_MG07['noborder'] . '</option>';
-        $scale_select .= '<option value="exactfit" ' . ($playback_options['scale'] == 'exactfit' ? ' selected="selected"' : '') . '>' . $LANG_MG07['exactfit'] . '</option>';
-        $scale_select .= '</select>';
-
-        $wmode_select = '<select name="wmode">';
-        $wmode_select .= '<option value="window" '      . ($playback_options['wmode'] == 'window'      ? ' selected="selected"' : '') . '>' . $LANG_MG07['window'] . '</option>';
-        $wmode_select .= '<option value="opaque" '      . ($playback_options['wmode'] == 'opaque'      ? ' selected="selected"' : '') . '>' . $LANG_MG07['opaque'] . '</option>';
-        $wmode_select .= '<option value="transparent" ' . ($playback_options['wmode'] == 'transparent' ? ' selected="selected"' : '') . '>' . $LANG_MG07['transparent'] . '</option>';
-        $wmode_select .= '</select>';
-
-        $asa_select = '<select name="allowscriptaccess">';
-        $asa_select .= '<option value="always" '      . ($playback_options['allowscriptaccess'] == 'always'      ? ' selected="selected"' : '') . '>' . $LANG_MG07['always'] . '</option>';
-        $asa_select .= '<option value="sameDomain" '  . ($playback_options['allowscriptaccess'] == 'sameDomain'  ? ' selected="selected"' : '') . '>' . $LANG_MG07['sameDomain'] . '</option>';
-        $asa_select .= '<option value="never" '       . ($playback_options['allowscriptaccess'] == 'never'       ? ' selected="selected"' : '') . '>' . $LANG_MG07['never'] . '</option>';
-        $asa_select .= '</select>';
-
-        $T->set_var(array(
-            'play_enabled'              => $playback_options['play'] ? ' checked="checked"' : '',
-            'play_disabled'             => $playback_options['play'] ? '' : ' checked="checked"',
-            'menu_enabled'              => $playback_options['menu'] ? ' checked="checked"' : '',
-            'menu_disabled'             => $playback_options['menu'] ? '' : ' checked="checked"',
-            'loop_enabled'              => $playback_options['loop'] ? ' checked="checked"' : '',
-            'loop_disabled'             => $playback_options['loop'] ? '' : ' checked="checked"',
-            'quality_select'            => $quality_select,
-            'scale_select'              => $scale_select,
-            'wmode_select'              => $wmode_select,
-            'asa_select'                => $asa_select,
-            'flashvars'                 => isset($playback_options['flashvars']) ? $playback_options['flashvars'] : '',
-            'height'                    => $playback_options['height'],
-            'width'                     => $playback_options['width'],
-            'bgcolor'                   => $playback_options['bgcolor'],
-            'swf_version'               => $playback_options['swf_version'],
-            'lang_playback_options'     => $LANG_MG07['playback_options'],
-            'lang_option'               => $LANG_MG07['option'],
-            'lang_description'          => $LANG_MG07['description'],
-            'lang_on'                   => $LANG_MG07['on'],
-            'lang_off'                  => $LANG_MG07['off'],
-            'lang_height'               => $LANG_MG07['height'],
-            'lang_width'                => $LANG_MG07['width'],
-            'lang_height_help'          => $LANG_MG07['height_help'],
-            'lang_width_help'           => $LANG_MG07['width_help'],
-            'lang_auto_start'           => $LANG_MG07['auto_start'],
-            'lang_auto_start_help'      => $LANG_MG07['auto_start_help'],
-            'lang_menu'                 => $LANG_MG07['menu'],
-            'lang_menu_help'            => $LANG_MG07['menu_help'],
-            'lang_scale'                => $LANG_MG07['scale'],
-            'lang_swf_scale_help'       => $LANG_MG07['swf_scale_help'],
-            'lang_wmode'                => $LANG_MG07['wmode'],
-            'lang_wmode_help'           => $LANG_MG07['wmode_help'],
-            'lang_loop'                 => $LANG_MG07['loop'],
-            'lang_loop_help'            => $LANG_MG07['loop_help'],
-            'lang_quality'              => $LANG_MG07['quality'],
-            'lang_quality_help'         => $LANG_MG07['quality_help'],
-            'lang_flash_vars'           => $LANG_MG07['flash_vars'],
-            'lang_asa'                  => $LANG_MG07['asa'],
-            'lang_asa_help'             => $LANG_MG07['asa_help'],
-            'lang_bgcolor'              => $LANG_MG07['bgcolor'],
-            'lang_bgcolor_help'         => $LANG_MG07['bgcolor_help'],
-            'lang_swf_version_help'     => $LANG_MG07['swf_version_help'],
-        ));
-    	if ( $row['mime_type'] == 'application/x-shockwave-flash' ) {
-	        $T->parse('playback_options','swf_options');
-        } else {
-	        $T->parse('playback_options','flv_options');
-        }
     }
 
     if ( $row['media_mime_ext'] == 'mov' || $row['media_mime_ext'] == 'mp4' || $row['mime_type'] == 'video/quicktime' || $row['mime_type'] == 'video/mpeg') {
@@ -1357,7 +1260,6 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
         $playback_option['wmode']       = isset($_POST['wmode']) ? DB_escapeString(COM_applyFilter($_POST['wmode'])) : '';
         $playback_option['allowscriptaccess'] = isset($_POST['allowscriptaccess']) ? DB_escapeString(COM_applyFilter($_POST['allowscriptaccess'])) : '';
         $playback_option['bgcolor']     = isset($_POST['bgcolor']) ? DB_escapeString(COM_applyFilter($_POST['bgcolor'])) : '';
-        $playback_option['swf_version'] = isset($_POST['swf_version']) ? COM_applyFilter($_POST['swf_version'],true) : 9;
 
         DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id_db','play',              {$playback_option['play']}");
         if ( $playback_option['menu'] != '' ) {
@@ -1372,7 +1274,6 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
         DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id_db','loop',             '{$playback_option['loop']}'");
         DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id_db','allowscriptaccess','{$playback_option['allowscriptaccess']}'");
         DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id_db','bgcolor',          '{$playback_option['bgcolor']}'");
-        DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id','swf_version',      '{$playback_option['swf_version']}'");
     }
 
     if (isset($_POST['autoplay'])) {    //quicktime

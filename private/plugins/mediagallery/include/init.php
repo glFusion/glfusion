@@ -381,11 +381,9 @@ function MG_getValidFileTypes( $album_id ) {
         $valid_types .= ( $valid_formats & MG_MP3 ) ? '*.mp3; ' : '';
         $valid_types .= ( $valid_formats & MG_OGG ) ? '*.ogg; ' : '';
         $valid_types .= ( $valid_formats & MG_ASF ) ? '*.asf; *.wma; *.wmv; ' : '';
-        $valid_types .= ( $valid_formats & MG_SWF ) ? '*.swf; ' : '';
         $valid_types .= ( $valid_formats & MG_MOV ) ? '*.mov; *.qt; ' : '';
         $valid_types .= ( $valid_formats & MG_MP4 ) ? '*.mp4; ' : '';
         $valid_types .= ( $valid_formats & MG_MPG ) ? '*.mpg; ' : '';
-        $valid_types .= ( $valid_formats & MG_FLV ) ? '*.flv; ' : '';
         $valid_types .= ( $valid_formats & MG_ZIP ) ? '*.zip; ' : '';
         $valid_types .= ( $valid_formats & MG_PDF ) ? '*.pdf; ' : '';
         $valid_types = substr( $valid_types, 0, strlen($valid_types)-1 );
