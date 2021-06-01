@@ -263,8 +263,14 @@ $obsoletePublicFiles = array(
     'mediagallery/watermarks/blank.png',
     'mediagallery/fslideshow.php',
 
-
-
+    'mediagallery/players/expressinstall.swf',
+    'mediagallery/players/FlowPlayer.swf',
+    'mediagallery/players/MGflv.swf',
+    'mediagallery/players/MGmp3.swf',
+    'mediagallery/players/minislideshow.swf',
+    'mediagallery/players/player.swf',
+    'mediagallery/players/slideshow.swf',
+    'mediagallery/players/sviewer.swf',
 
 // 1.7.5
     'admin/refresh.php',
