@@ -175,10 +175,6 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/timepicker.min
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/tooltip.min.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/upload.min.js');
 
-// Media Player
-$outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/mediaplayer/mediaelement-and-player.min.js');
-$outputHandle->addCSSFile($_CONF['path_html'] .'javascript/addons/mediaplayer/mediaelementplayer.css');
-
 // must load the jquery ui library we want to use if using jquery ui.
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/jquery-ui/jquery-ui.min.css');
 

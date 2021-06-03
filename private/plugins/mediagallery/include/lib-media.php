@@ -574,7 +574,7 @@ function MG_displayMP4( $aid, $I, $full ) {
                 'lang_noquicktime' => $LANG_MG03['no_quicktime'],
                 'thumbnail'     => $u_image,
                 'mime_type'     => $I['mime_type'],
-                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
+//                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
             ));
             $V->parse('output','video');
             $u_image = $V->finish($V->get_var('output'));
@@ -738,7 +738,7 @@ function MG_displayMP3( $aid, $I, $full ) {
 
             $V = new Template( MG_getTemplatePath($aid) );
 
-            $tfile = 'view_mp4.thtml';
+            $tfile = 'view_mp3.thtml';
             if ( $I['mime_type'] == 'audio/x-ms-wma' ) {
                 $tfile = 'view_mp3_wmp.thtml';
             }
@@ -793,7 +793,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                 'lang_download'     => $LANG_MG03['download'],
                 'lang_info'         => $LANG_MG03['info'],
                 'lang_noflash' 		=> $LANG_MG03['no_flash'],
-                'player_url'        => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
+//                'player_url'        => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
                 'swf_version'   	=> '9',
             ));
             $V->parse('output','video');

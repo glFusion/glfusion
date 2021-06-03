@@ -61,7 +61,8 @@
 
 ### Removed
 
-- Media Gallery Flash slideshow
+- Removed mediaelement.js - now use native HTML 5 audio / video
+- Removed all Flash / SWF / FLV media support in Media Gallery
 - All MooTools related widgets
 - Remove the submission related Plugin APIs - except the Moderation Queue APIs
       PLG_showSubmitForm()
