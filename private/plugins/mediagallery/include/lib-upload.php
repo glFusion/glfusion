@@ -942,8 +942,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             $media_orig = $_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/' . $media_filename . '.' . $mimeExt;
             $rc = @copy($filename, $media_orig);
 
-            if ( $rc != 1 )
-            {
+            if ( $rc != 1 ) {
                 Log::write('system',Log::ERROR,"MG Upload: Error moving uploaded file in video processing....");
                 Log::write('system',Log::ERROR,"Media Upload - Unable to copy file to: " . $media_orig);
                 $errors++;
@@ -1116,6 +1115,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         // try to find a resolution if video...
         if ( $mediaType == 1 ) {
             switch ($mimeType) {
+                case 'video/mp4' :
                 case 'video/quicktime' :
                 case 'video/mpeg' :
                 case 'video/x-m4v' :

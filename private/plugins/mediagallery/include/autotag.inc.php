@@ -650,7 +650,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                                 'movie'         => $_MG_CONF['mediaobjects_url'] . '/orig/' . $row['media_filename'][0] . '/' . $row['media_filename'] . '.' . $row['media_mime_ext'],
                                 'thumbnail'     => $thumb,
                                 'site_url'      => $_MG_CONF['site_url'],
-                                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
+//                                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
                             ));
 
                             if ( $align != '' && $align != "center" ) {
