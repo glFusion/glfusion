@@ -932,11 +932,12 @@ function MB_editElement( $menu_id, $mid=0 )
                                 $_CONF['layout_url'] . '/images/icons/menubuilder.png');
 
     // build types select
-    if ($curElement->type == 1 && count($curElement->children > 0)) {
+    if ($curElement->type == 1 && !empty($curElement->children)) {
         $type_disabled = true;
     } else {
         $type_disabled = false;
     }
+
     $type_select = '';
     foreach ($LANG_MB_TYPES as $key=>$name) {
         if (($menu->type == 2 || $menu->type == 4 ) && (key($LANG_MB_TYPES) == 1 || key($LANG_MB_TYPES) == 3)){
@@ -1131,7 +1132,12 @@ function MB_saveEditMenuElement ( )
     $filter->setAllowedElements($allowedElements);
     $filter->setPostmode('html');
 
-    $id            = COM_applyFilter($_POST['id'],true);
+    $newElement = false;
+    if (!isset($_POST['id'])) {
+        $newElement = true;
+    } else {
+        $id            = COM_applyFilter($_POST['id'],true);
+    }
     $menu_id       = COM_applyFilter($_POST['menu']);
     $pid           = COM_applyFilter($_POST['pid'],true);
     $label         = $filter->filterHTML($_POST['menulabel']);
@@ -1186,35 +1192,50 @@ function MB_saveEditMenuElement ( )
     $aorder             = $db->getItem($_TABLES['menu_elements'],'element_order',array('id' => $aid),array(Database::INTEGER));
     $neworder = $aorder + 1;
 
-    $db->conn->executeUpdate(
-            "UPDATE `{$_TABLES['menu_elements']}`
-             SET pid=?, element_order=?, element_label=?, element_type=?, element_subtype=?, element_active=?, element_url=?, element_target=?, group_id=?
-             WHERE id=?",
-            array(
-                $pid,
-                $neworder,
-                $label,
-                $type,
-                $subtype,
-                $active,
-                $url,
-                $target,
-                $group_id,
-                $id
-            ),
-            array(
-                Database::INTEGER,
-                Database::INTEGER,
-                Database::STRING,
-                Database::INTEGER,
-                Database::STRING,
-                Database::INTEGER,
-                Database::STRING,
-                Database::STRING,
-                Database::INTEGER,
-                Database::INTEGER
-            )
-    );
+    if ($newElement) {
+        $db->conn->insert($_TABLES['menu_elements'], array(
+            'menu_id'           => $menu_id,
+            'pid'               => $pid,
+            'element_order'     => $neworder,
+            'element_label'     => $label,
+            'element_type'      => $type,
+            'element_subtype'   => $subtype,
+            'element_active'    => $active,
+            'element_url'       => $url,
+            'element_target'    => $target,
+            'group_id'          => $group_id
+        ));
+    } else {
+        $db->conn->executeUpdate(
+                "UPDATE `{$_TABLES['menu_elements']}`
+                SET pid=?, element_order=?, element_label=?, element_type=?, element_subtype=?, element_active=?, element_url=?, element_target=?, group_id=?
+                WHERE id=?",
+                array(
+                    $pid,
+                    $neworder,
+                    $label,
+                    $type,
+                    $subtype,
+                    $active,
+                    $url,
+                    $target,
+                    $group_id,
+                    $id
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER
+                )
+        );
+    }
     $menu->reorderMenu($pid);
 }
 
