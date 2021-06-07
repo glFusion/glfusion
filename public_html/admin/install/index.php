@@ -1779,6 +1779,10 @@ function INST_installAndContentPlugins()
 
     global $_CONF, $_SYSTEM, $_VARS, $_DB, $_DB_dbms, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
 
+    $_CONF['path_html']         = $html_path;
+    $_CONF['site_url']          = $site_url;
+    $_CONF['site_admin_url']    = $site_admin_url;
+
     if ( !file_exists($_CONF['path_html'].'lib-common.php') ) {
         INST_errorLog($log_path,'INSTALL: ERROR: Unable to loate ' . $_CONF['path_html'].'lib-common.php');
         return _displayError(FILE_INCLUDE_ERROR,'pathsetting','Error Code: ' . __LINE__);
