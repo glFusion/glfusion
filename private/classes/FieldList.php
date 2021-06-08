@@ -20,15 +20,32 @@ if (!defined ('GVERSION')) {
 
 class FieldList
 {
-
-    public static function edit($args)
+    /**
+     * Return a cached template object to avoid repetitive path lookups.
+     *
+     * @return  object      Template object
+     */
+    protected static function init()
     {
         global $_CONF;
 
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('edit','fieldlist.thtml');
+        static $t = NULL;
 
-        $t->set_block('edit','field-edit');
+        if ($t === NULL) {
+            $t = new \Template($_CONF['path_layout'] . '/admin/lists/');
+            $t->set_file('field', 'fieldlist.thtml');
+        } else {
+            $t->unset_var('output');
+            $t->unset_var('attributes');
+        }
+        return $t;
+    }
+
+
+    public static function edit($args)
+    {
+        $t = self::init();
+        $t->set_block('field','field-edit');
         if (isset($args['url'])) {
             $t->set_var('edit_url',$args['url']);
         } else {
@@ -51,12 +68,9 @@ class FieldList
 
     public static function approve($args)
     {
-        global $_CONF;
+        $t = self::init();
+        $t->set_block('field','field-approve');
 
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('approve','fieldlist.thtml');
-
-        $t->set_block('edit','field-approve');
         if (isset($args['url'])) {
             $t->set_var('approve_url',$args['url']);
         } else {
@@ -79,15 +93,8 @@ class FieldList
 
     public static function delete($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('edit','fieldlist.thtml');
-
-        $t->unset_var('output');
-        $t->unset_var('delete');
-
-        $t->set_block('delete','field-delete');
+        $t = self::init();
+        $t->set_block('field','field-delete');
 
         if (isset($args['delete_url'])) {
             $t->set_var('delete_url',$args['delete_url']);
@@ -111,11 +118,8 @@ class FieldList
 
     public static function approveButton($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('approve','fieldlist.thtml');
-        $t->set_block('approve-button','field-approve-button');
+        $t = self::init();
+        $t->set_block('field','field-approve-button');
 
         $t->set_var('button_name',$args['name']);
         $t->set_var('text',$args['text']);
@@ -137,11 +141,8 @@ class FieldList
 
     public static function deleteButton($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('delete','fieldlist.thtml');
-        $t->set_block('delete-button','field-delete-button');
+        $t = self::init();
+        $t->set_block('field','field-delete-button');
 
         $t->set_var('button_name',$args['name']);
         $t->set_var('text',$args['text']);
@@ -162,11 +163,8 @@ class FieldList
 
     public static function emailButton($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('email','fieldlist.thtml');
-        $t->set_block('email-button','field-email-button');
+        $t = self::init();
+        $t->set_block('field','field-email-button');
 
         $t->set_var('button_name',$args['name']);
         $t->set_var('text',$args['text']);
@@ -187,11 +185,8 @@ class FieldList
 
     public static function userPhoto()
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('userphoto','fieldlist.thtml');
-        $t->set_block('userphoto','field-userphoto');
+        $t = self::init();
+        $t->set_block('field','field-userphoto');
         $t->parse('output','field-userphoto',true);
         return $t->finish($t->get_var('output'));
     }
@@ -199,11 +194,7 @@ class FieldList
 
     public static function checkmark($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('field','fieldlist.thtml');
-
+        $t = self::init();
         $t->set_block('field','field-checkmark');
 
         if (isset($args['active']) && $args['active'] === true) {
@@ -218,11 +209,7 @@ class FieldList
 
     public static function minus($args = array())
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('field','fieldlist.thtml');
-
+        $t = self::init();
         $t->set_block('field','field-minus');
 
         $t->parse('output','field-minus',true);
@@ -233,11 +220,7 @@ class FieldList
 
     public static function copy($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('copy','fieldlist.thtml');
-
+        $t = self::init();
         $t->set_block('copy','field-copy');
         if (isset($args['url'])) {
             $t->set_var('url',$args['url']);
@@ -261,12 +244,9 @@ class FieldList
 
     public static function up($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('up','fieldlist.thtml');
-
+        $t = self::init();
         $t->set_block('up','field-up');
+
         if (isset($args['url'])) {
             $t->set_var('url',$args['url']);
         } else {
@@ -289,12 +269,9 @@ class FieldList
 
     public static function down($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('down','fieldlist.thtml');
-
+        $t = self::init();
         $t->set_block('down','field-down');
+
         if (isset($args['url'])) {
             $t->set_var('url',$args['url']);
         } else {
@@ -317,12 +294,9 @@ class FieldList
 
     public static function email($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('email','fieldlist.thtml');
-
+        $t = self::init();
         $t->set_block('email','field-email');
+
         if (isset($args['url'])) {
             $t->set_var('url',$args['url']);
         } else {
@@ -345,12 +319,9 @@ class FieldList
 
     public static function user($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('user','fieldlist.thtml');
-
+        $t = self::init();
         $t->set_block('user','field-user');
+
         if (isset($args['url'])) {
             $t->set_var('url',$args['url']);
         } else {
@@ -375,12 +346,9 @@ class FieldList
 
     public static function editusers($args = array())
     {
-        global $_CONF;
+        $t = self::init();
+        $t->set_block('field','field-edit-users');
 
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('edit','fieldlist.thtml');
-
-        $t->set_block('edit','field-edit-users');
         if (isset($args['url'])) {
             $t->set_var('edit_url',$args['url']);
         } else {
@@ -403,16 +371,13 @@ class FieldList
 
     public static function info($args)
     {
-        global $_CONF;
-
         if (!isset($args['title'])) {
             return '';
         }
 
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('field','fieldlist.thtml');
-
+        $t = self::init();
         $t->set_block('field','field-info');
+
         if (isset($args['title'])) {
             $t->set_var('title',$args['title']);
         }
@@ -425,12 +390,9 @@ class FieldList
 
     public static function cog($args)
     {
-        global $_CONF;
+        $t = self::init();
+        $t->set_block('field','field-cog');
 
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('cog','fieldlist.thtml');
-
-        $t->set_block('cog','field-cog');
         if (isset($args['url'])) {
             $t->set_var('url',$args['url']);
         } else {
@@ -453,12 +415,9 @@ class FieldList
 
     public static function ping($args)
     {
-        global $_CONF;
+        $t = self::init();
+        $t->set_block('field','field-ping');
 
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('ping','fieldlist.thtml');
-
-        $t->set_block('ping','field-ping');
         if (isset($args['url'])) {
             $t->set_var('url',$args['url']);
         } else {
@@ -481,12 +440,9 @@ class FieldList
 
     public static function rootUser($args)
     {
-        global $_CONF;
+        $t = self::init();
+        $t->set_block('field','field-root-user');
 
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('root','fieldlist.thtml');
-
-        $t->set_block('root','field-root-user');
         if (isset($args['attr']) && is_array($args['attr'])) {
             $t->set_block('field-root-user','attr','attributes');
             foreach($args['attr'] AS $name => $value) {
@@ -504,11 +460,7 @@ class FieldList
 
     public static function checkbox($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('field','fieldlist.thtml');
-
+        $t = self::init();
         $t->set_block('field','field-checkbox');
 
         // Go through the required or special options
@@ -537,11 +489,7 @@ class FieldList
 
     public static function radio($args)
     {
-        global $_CONF;
-
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('field','fieldlist.thtml');
-
+        $t = self::init();
         $t->set_block('field','field-radio');
 
         // Go through the required or special options
@@ -596,16 +544,12 @@ class FieldList
      */
     public static function select($args)
     {
-        global $_CONF;
-
         if (!isset($args['options']) && !isset($args['option_list'])) {
             return '';
         }
 
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('select','fieldlist.thtml');
-
-        $t->set_block('select','field-select');
+        $t = self::init();
+        $t->set_block('field','field-select');
 
         $def_opts = array(
             'value' => '',
@@ -655,13 +599,12 @@ class FieldList
             }
         }
         $t->parse('output', 'field-select');
+        $t->clear_var('opts');
         return $t->finish($t->get_var('output'));
     }
 
     public static function button($args)
     {
-        global $_CONF;
-
         $def_args = array(
             'name' => '',
             'value' => '',
@@ -672,9 +615,8 @@ class FieldList
         );
         $args = array_merge($def_args, $args);
 
-        $t = new \Template($_CONF['path_layout'].'/admin/lists/');
-        $t->set_file('button','fieldlist.thtml');
-        $t->set_block('button','field-button');
+        $t = self::init();
+        $t->set_block('field','field-button');
 
         $t->set_var(array(
             'button_name' => $args['name'],
