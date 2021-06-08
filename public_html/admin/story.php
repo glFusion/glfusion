@@ -481,7 +481,7 @@ function STORY_list()
             $excludetopics .= ') ';
         }
     } else {
-        $excludetopics = " tid = '$current_topic' OR alternate_tid = '$current_topic' ";
+        $excludetopics = " (tid = '$current_topic' OR alternate_tid = '$current_topic') ";
         $seltopics = COM_topicList ('tid,topic,sortnum', $current_topic, 2, true);
     }
 
