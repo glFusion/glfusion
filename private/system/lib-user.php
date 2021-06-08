@@ -509,7 +509,7 @@ function USER_sendNotification ($username, $email, $uid, $mode='inactive')
     $mailsubject = $_CONF['site_name'] . ' ' . $LANG29[40];
 
     $to = array();
-    $to   = COM_formatEmailAddress( '',$_CONF['noreply_mail'] );
+    $to   = COM_formatEmailAddress( '',$_CONF['site_mail']);
     COM_mail ($to, $mailsubject, $mailbody);
 }
 
