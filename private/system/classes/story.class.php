@@ -1820,7 +1820,7 @@ class Story
                 break;
 
             case 'subtitle':
-                $return = $this->_displayEscape($filter->htmlspecialchars($this->_subtitle));
+                $return = $this->_displayEscape($this->_subtitle);
                 break;
 
             case 'shortdate':
