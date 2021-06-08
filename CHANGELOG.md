@@ -8,6 +8,9 @@
 
 ### Fixed
 
+- Subtitle's on stories did not handle quotes properly
+- User notifications were being sent to the no-reply address instead of the site address
+- Story Admin did not properly show story lists based on search criteria
 - PHP v8 Compatibility Updates
 - Code error in SpamX logging for SFS checks
 - fusionrescue code cleanup - improved hanlding of configuration items with array values
