@@ -139,14 +139,13 @@ function FF_ForumHeader($forum,$showtopic) {
         }
         $groupname = _ff_getGroup($grp_id);
         if (!SEC_inGroup($groupname)) {
-//TODO: need option to check exit type - eitehr login or 404
-// create an Exit
-$display  = FF_siteHeader();
-$display .= SEC_loginRequiredForm();
-$display .= FF_siteFooter();
-echo $display;
-exit;
-
+            if (isset($_FF_CONF['exit_type']) && $_FF_CONF['exit_type'] === 'login') {
+                $display  = FF_siteHeader();
+                $display .= SEC_loginRequiredForm();
+                $display .= FF_siteFooter();
+                echo $display;
+                exit;
+            }
             echo COM_404();
             exit;
         }

@@ -45,13 +45,12 @@ as Apache, Nginx, Caddy, LiteSpeed, IIS, Lighttpd,and Abyss are known to work.
 PHP needs to be at least version 7.3.0, the latest PHP release is highly
 recommended and well supported by glFusion.
 
-### MySQL v5.0.15 or later
+### MySQL v5.6.0 or later
 
-MySQL needs to be at least v5.0.15. It is highly recommended that you run a newer
-version of MySQL, v5.7 or higher (including MySQL v8). The MySQL Group continues
-to provide support for v5.0 and v5.1 on older operating systems.
+MySQL needs to be at least v5.6.0. It is highly recommended that you run a newer
+version of MySQL, v5.7 or higher (including MySQL v8).
 
-glFusion also supports MariaDB v5.1 or newer. MariaDB is a drop-in replacement for
+glFusion also supports MariaDB v10.2 or newer. MariaDB is a drop-in replacement for
 MySQL. MariaDB is developed as open source software and as a relational database.
 The MariaDB Foundation ensures continuity and open collaboration in the MariaDB
 ecosystem. The foundation guarantees that there is a global contact point for

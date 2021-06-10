@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2019 by the following authors:
+*  Copyright (C) 2017-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -191,7 +191,7 @@ class Log
 
     public static function logAccessViolation($type = '')
     {
-        self::write('system',Log::ERROR, "User attempted to access area without proper permissions", array('Type' => $type,'IP' => $_SERVER['REAL_ADDR']));
+        self::write('system',Log::WARNING, "User attempted to access area without proper permissions", array('Type' => $type,'IP' => $_SERVER['REAL_ADDR']));
     }
 
     public static function debug($msg = '')

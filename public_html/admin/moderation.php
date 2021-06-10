@@ -27,6 +27,7 @@ use \glFusion\Article\Article;
 use \glFusion\Log\Log;
 use \glFusion\Cache\Cache;
 use \glFusion\Admin\AdminAction;
+use \glFusion\FieldList;
 
 $display = '';
 if (!SEC_isModerator()) {
@@ -86,6 +87,7 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     $dt = new Date('now',$_USER['tzid']);
 
     $field = $fieldname;
+    $field = ($fieldname == 0 ) ? 'edit' : $field;
     $field = ($type == 'user' && $fieldname == 1) ? 'user' : $field;
     $field = ($type == 'article' && $fieldname == 2) ? 'day' : $field;
     $field = ($type == 'article' && $fieldname == 3) ? 'tid' : $field;
@@ -96,13 +98,15 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     switch ($field) {
 
         case 'edit':
-            $retval = COM_createLink($icon_arr['edit'], $A['edit']);
+            $retval = FieldList::edit(
+                array(
+                    'url' => $A['edit'],
+                )
+            );
             break;
 
         case 'user':
-            $retval =  '<img src="' . $_CONF['layout_url']
-            . '/images/admin/user.' . $_IMAGE_TYPE
-            . '" style="vertical-align:bottom;"/>&nbsp;' . $fieldvalue;
+            $retval = FieldList::user(array()) . '&nbsp;' . $fieldvalue;
             break;
 
         case 'day':
@@ -129,48 +133,53 @@ function MODERATE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                             . '&nbsp;&nbsp;'
                             . '<span style="vertical-align:top">' . $username . '</span>';
             } else {
+                $retval = FieldList::editusers(
+                    array(
+                        'url' => $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'],
+                        'attr' => array(
+                            'title' => $LANG28[108],
+                        )
+                    )
+                        );
+
+
                 $attr['title'] = $LANG28[108];
                 $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
-                $retval = COM_createLink($icon_arr['user'], $url, $attr);
-                $retval .= '&nbsp;&nbsp;';
-                $attr['style'] = 'vertical-align:top;';
                 $retval .= COM_createLink($username, $url, $attr);
             }
             break;
 
         case 'email':
-            $url = 'mailto:' . $fieldvalue;
-            $attr['title'] = $LANG28[111];
-            $retval = COM_createLink($icon_arr['mail'], $url, $attr);
+            $retval = FieldList::email(array(
+                'url' => 'mailto:' . $fieldvalue,
+                'attr' => array(
+                    'title' => $LANG28[111],
+                )
+            ));
             $retval .= '&nbsp;&nbsp;';
             $attr['title'] = $LANG28[99];
             $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
-            $attr['style'] = 'vertical-align:top;';
             $retval .= COM_createLink($fieldvalue, $url, $attr);
             break;
 
         case 'approve':
-            $retval = '';
-            $attr['title'] = $LANG29[1];
-            $attr['onclick'] = 'return confirm(\'' . $LANG29[48] . '\');';
-            $retval .= COM_createLink($icon_arr['accept'],
-                $_CONF['site_admin_url'] . '/moderation.php'
-                . '?approve=x'
-                . '&amp;type=' . $A['_type_']
-                . '&amp;id=' . $A[0]
-                . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            $retval = FieldList::approve(array(
+                'url' =>  $_CONF['site_admin_url'].'/moderation.php'.'?approve=x'.'&amp;type='.$A['_type_'].'&amp;id=' . $A[0].'&amp;'.CSRF_TOKEN.'='.$token,
+                'attr' => array(
+                    'title' => $LANG29[1],
+                    'onclick' => 'return confirm(\'' . $LANG29[48] . '\');'
+                )
+            ));
             break;
 
         case 'delete':
-            $retval = '';
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return confirm(\'' . $LANG29[49] . '\');';
-            $retval .= COM_createLink($icon_arr['delete'],
-                $_CONF['site_admin_url'] . '/moderation.php'
-                . '?delete=x'
-                . '&amp;type=' . $A['_type_']
-                . '&amp;id=' . $A[0]
-                . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            $retval = FieldList::delete(array(
+                'delete_url' => $_CONF['site_admin_url'] . '/moderation.php'.'?delete=x'.'&amp;type=' . $A['_type_'].'&amp;id=' . $A[0].'&amp;' . CSRF_TOKEN . '=' . $token,
+                'attr' => array(
+                    'title' => $LANG_ADMIN['delete'],
+                    'onclick' => 'return confirm(\'' . $LANG29[49] . '\');'
+                )
+            ));
             break;
 
         case 'preview' :
@@ -372,7 +381,6 @@ function MODERATE_item($action='', $type='', $id='')
 */
 function MODERATE_selectedItems($action = '', $type='')
 {
-
     $retval = '';
 
     $item = (isset($_POST['selitem'])) ? $_POST['selitem'] : array();
@@ -446,18 +454,24 @@ function MODERATE_itemList($type='', $token = '')
                                       'form_url'  => "{$_CONF['site_admin_url']}/moderation.php"
                     );
 
-                    $actions = '<input name="approve" type="image" src="'
-                        . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
-                        . '" style="vertical-align:bottom;" title="' . $LANG29[44]
-                        . '" onclick="return confirm(\'' . $LANG29[45] . '\');"'
-                        . '/>&nbsp;' . $LANG29[1];
+                    $actions = FieldList::approveButton(array(
+                        'name' => 'approve_x',
+                        'text' => $LANG29[1],
+                        'attr' => array(
+                            'title' => $LANG29[44],
+                            'onclick' => 'return confirm(\'' . $LANG29[45] . '\');'
+                        )
+                    ));
                     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-                    $actions .= '<input name="delbutton" type="image" src="'
-                        . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
-                        . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
-                        . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
-                        . '/>&nbsp;' . $LANG_ADMIN['delete'];
 
+                    $actions .= FieldList::deleteButton(array(
+                        'name' => 'delbutton_x',
+                        'text' => $LANG_ADMIN['delete'],
+                        'attr' => array(
+                            'title' => $LANG01[124],
+                            'onclick' => 'return confirm(\'' . $LANG29[45] . '\');'
+                        )
+                    ));
                     $options = array('chkselect' => true,
                                      'chkfield' => 'uid',
                                      'chkname' => 'selitem',
@@ -571,7 +585,25 @@ function MODERATE_itemList($type='', $token = '')
                                       'no_data'   => $LANG29[39],
                                       'form_url'  => "{$_CONF['site_admin_url']}/moderation.php"
                     );
+                    $actions = FieldList::approveButton(array(
+                        'name' => 'approve_x',
+                        'text' => $LANG29[1],
+                        'attr' => array(
+                            'title' => $LANG29[44],
+                            'onclick' => 'return confirm(\'' . $LANG29[45] . '\');'
+                        )
+                    ));
+                    $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
 
+                    $actions .= FieldList::deleteButton(array(
+                        'name' => 'delbutton_x',
+                        'text' => $LANG_ADMIN['delete'],
+                        'attr' => array(
+                            'title' => $LANG01[124],
+                            'onclick' => 'return confirm(\'' . $LANG01[125] . '\');'
+                        )
+                    ));
+/*
                     $actions = '<input name="approve" type="image" src="'
                         . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
                         . '" style="vertical-align:bottom;" title="' . $LANG29[44]
@@ -583,7 +615,7 @@ function MODERATE_itemList($type='', $token = '')
                         . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
                         . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
                         . '/>&nbsp;' . $LANG_ADMIN['delete'];
-
+*/
                     $options = array('chkselect' => true,
                                      'chkfield' => 'id',
                                      'chkname' => 'selitem',
@@ -660,7 +692,8 @@ function MODERATE_submissions()
 $display = '';
 
 $action = '';
-$expected = array('approve','delete','delbutton_x','approve_x');
+
+$expected = array('approve','delete','delbutton','delbutton_x','approve_x');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -684,6 +717,7 @@ switch ($action) {
 
     case 'delete':
     case 'delbutton_x':
+    case 'delbutton':
         if (SEC_checkToken()) {
             $display .= ($action=='delete') ? MODERATE_item($action, $type, $id) : MODERATE_selectedItems('delete', $type);
         } else {

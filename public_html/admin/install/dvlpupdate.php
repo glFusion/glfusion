@@ -22,7 +22,7 @@ use \glFusion\Admin\AdminActions;
 // Only let admin users access this page
 
 if (!SEC_inGroup('Root')) {
-    // Someone is trying to illegally access this page
+    // Someone is trying to the page without proper access
     log::logAccessViolation('DvlpUpdate');
     $display  = COM_siteHeader();
     $display .= COM_startBlock($LANG27[12]);
@@ -404,7 +404,7 @@ function glfusion_162()
             $sql = "UPDATE {$_TABLES['menu_elements']} SET group_id = " . $nonloggedin_group_id . " WHERE group_id = 998";
             DB_query($sql);
         } else {
-            COM_errorLog("dvlpupdate: Error retrieving non-loggedin-user group id");
+            Log::write('system',Log::ERROR,"dvlpupdate: Error retrieving non-loggedin-user group id");
         }
     }
     $_SQL = array();
@@ -1053,11 +1053,123 @@ function glfusion_200()
     DB_query("UPDATE {$_TABLES['syndication']} SET type='comment' WHERE type='commentfeeds'",1);
     DB_query("DELETE FROM {$_TABLES['plugins']} WHERE pi_name='commentfeeds'",1);
 
+    // add the new system.root permission
+    $newCapabilities = array(
+        array('ft_name' => 'system.root',   'ft_desc' => 'Allows Root Access'),
+        array('ft_name' => 'actions.admin', 'ft_desc' => 'Ability to view Admin Actions'),
+        array('ft_name' => 'cache.admin',   'ft_desc' => 'Ability to clear caches'),
+        array('ft_name' => 'config.admin',  'ft_desc' => 'Ability to configuration glFusion'),
+        array('ft_name' => 'database.admin','ft_desc' => 'Ability to perform Database Administration'),
+        array('ft_name' => 'env.admin',     'ft_desc' => 'Ability to view Environment Check'),
+        array('ft_name' => 'logview.admin', 'ft_desc' => 'Ability to view / clear glFusion Logs'),
+        array('ft_name' => 'upgrade.admin', 'ft_desc' => 'Ability to run Upgrade Check')
+    );
+
+    foreach($newCapabilities AS $feature) {
+        $admin_ft_id = 0;
+        $group_id = 0;
+        $tmp_admin_ft_id = $db->conn->fetchOne("SELECT ft_id FROM {$_TABLES['features']} WHERE ft_name = ?", array($feature['ft_name']));
+        if ($tmp_admin_ft_id === false) {
+            $db->conn->insert(
+                $_TABLES['features'],
+                array('ft_name' => $feature['ft_name'], 'ft_descr' => $feature['ft_desc'], 'ft_gl_core' => 1)
+            );
+            $admin_ft_id = $db->conn->lastInsertId();
+            // assign new feature to root
+            $db->conn->insert($_TABLES['access'],
+                array('acc_ft_id' => $admin_ft_id, 'acc_grp_id' => 1)
+            );
+        } else {
+            Log::write('system',Log::DEBUG,"Feature Already Exists: " . $feature['ft_name']. " skiping...");
+        }
+    }
+
+    // zero out paths
+
+    $path_html = _getHtmlPath();
+    $cfg_path_html = $c->get('path_html','Core');
+    if (!empty($cfg_path_html) && $path_html == $cfg_path_html) {
+        $c->set('path_html','','Core');
+    }
+    $path_images = $_CONF['path_html'] . 'data/images/';
+    $cfg_path_images = $c->get('path_images','Core');
+    if (!empty($cfg_path_images) && $path_images == $cfg_path_images) {
+        $c->set('path_images','','Core');
+    }
+    $path_log = $_CONF['path']  . 'logs/';
+    $cfg_path_log = $c->get('path_log','Core');
+    if (!empty($path_log) && $path_log == $cfg_path_log) {
+        $c->set('path_log','','Core');
+    }
+    $path_language = $_CONF['path']  . 'language/';
+    $cfg_path_language = $c->get('path_language','Core');
+    if (!empty($cfg_path_language) && $path_language == $cfg_path_language) {
+        $c->set('path_language','','Core');
+    }
+    $backup_path = $_CONF['path'] . 'backups/';
+    $cfg_backup_path = $c->get('backup_path','Core');
+    if (!empty($cfg_backup_path) && $backup_path == $cfg_backup_path) {
+        $c->set('backup_path','','Core');
+    }
+    $path_data = $_CONF['path']  . 'data/';
+    $cfg_path_data = $c->get('path_data','Core');
+    if (!empty($cfg_path) && $path_data == $cfg_path_data) {
+        $c->set('path_data','','Core');
+    }
+    $path_themes = $_CONF['path_html'] . 'layout/';
+    $cfg_path_themes = $c->get('path_themes','Core');
+    if (!empty($cfg_path_themes) && $path_themes == $cfg_path_themes) {
+        $c->set('path_themes','','Core');
+    }
+
+    // create new path_rss
+    $pos = strrpos($_CONF['rdf_file'],'/');
+    if ($pos !== false) {
+        $rdf_file = substr($_CONF['rdf_file'], $pos +1);
+        if (strpos($rdf_file,'.') !== false) {
+            // we are pretty sure we have a filename
+            $rdf_path = substr($_CONF['rdf_file'],0,$pos+1);
+            $c->set('rdf_file',$rdf_file,'Core');
+            $path_rss = $_CONF['path_html'] . 'backend/';
+            if ($path_rss == $rdf_path) {
+                $c->set('path_rss','','Core');
+            } else {
+                $c->set('path_rss', $rdf_path,'Core');
+            }
+        }
+    }
+
+    // clean up the group assignment table
+    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id='2'",1);
+    DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id='13'",1);
+
+
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='2.0.0',name='glfusion'",1);
     DB_query("UPDATE {$_TABLES['vars']} SET value='2.0.0' WHERE name='glfusion'",1);
 
     \glFusion\Admin\AdminAction::write('system','dvlpupdate','System has been updated to latest glFusion version using DvlpUpdate.');
+}
+
+function _getHtmlPath()
+{
+    $path = str_replace('\\', '/', __FILE__);
+    if ( $path[1] == '/' ) {
+        $double = true;
+    } else {
+        $double = false;
+    }
+    $path = str_replace('//', '/', $path);
+    $parts = explode('/', $path);
+    $num_parts = count($parts);
+    if (($num_parts < 3) || ($parts[$num_parts-1] != 'dvlpupdate.php')) {
+        die('Fatal error - can not figure out my own path');
+    }
+    $returnPath = implode('/', array_slice($parts, 0, $num_parts - 3)) . '/';
+    if ( $double ) {
+        $returnPath = '/'.$returnPath;
+    }
+    return $returnPath;
 }
 
 function _spamx_update_config()

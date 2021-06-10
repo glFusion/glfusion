@@ -34,32 +34,36 @@ sitemap.xml
 mobile.xml
 
 # Data directories
-private/data/
+#private/data/
 private/backups/
 private/logs/
 private/lib/htmlpurifier/HTMLPurifier/DefinitionCache/**
 
 #Images
-public_html/images/
-public_html/images/articles/
-public_html/images/userphotos/
-public_html/images/topics/
-public_html/images/forum/
+#public_html/images/
+#public_html/images/articles/
+#public_html/images/userphotos/
+#public_html/images/topics/
+#public_html/images/forum/
 public_html/backend/
+
+#Development
+public_html/test/
+public_html/utils/
 
 # Media Gallery
 private/plugins/mediagallery/config.php
-public_html/mediagallery/mediaobjects/tn/
-public_html/mediagallery/mediaobjects/orig/
-public_html/mediagallery/mediaobjects/disp/
-private/plugins/mediagallery/uploads/
+#public_html/mediagallery/mediaobjects/tn/
+#public_html/mediagallery/mediaobjects/orig/
+#public_html/mediagallery/mediaobjects/disp/
+#private/plugins/mediagallery/uploads/
 
 # Forum
-public_html/forum/media/
+#public_html/forum/media/
 
 # FileMgmt
-public_html/filemgmt_data/files/
-public_html/filemgmt_data/category_snaps/
+#public_html/filemgmt_data/files/
+#public_html/filemgmt_data/category_snaps/
 
 # Non-bundled plugins
 
@@ -143,12 +147,25 @@ private/plugins/vthemes/
 public_html/vthemes/
 public_html/admin/plugins/vthemes/
 
+# glFusion2Check
+private/plugins/glfusion2check/
+public_html/glfusion2check/
+public_html/admin/plugins/glfusion2check/
+
+
 # Development Themes
 
 public_html/layout/demo/
 public_html/layout/uikit/
 public_html/layout/legacy/
 public_html/layout/equinox/
+public_html/layout/skeleton/
+public_html/layout/nextide/
+public_html/layout/base/
+public_html/layout/modern/
+public_html/layout/uikit-3/
+public_html/layout/bootstrap/
+public_html/layout/uikit3-master/
 
 #
 # Put additional local excludes here...
@@ -161,3 +178,31 @@ public_html/admin/plugins/analytics/
 
 public_html/layout/uikit3/
 public_html/layout/nouveau/
+
+private/plugins/lglib/
+public_html/lglib/
+public_html/admin/plugins/lglib/
+
+private/plugins/forms/
+public_html/forms/
+public_html/admin/plugins/forms/
+
+private/plugins/faq/
+public_html/faq/
+public_html/admin/plugins/faq/
+
+private/plugins/indexer/
+public_html/indexer/
+public_html/admin/plugins/indexer/
+
+private/plugins/search/
+public_html/search/
+public_html/admin/plugins/search/
+
+private/plugins/file/
+public_html/file/
+public_html/admin/plugins/file/
+
+private/plugins/test/
+public_html/admin/plugins/test/
+/Icon*

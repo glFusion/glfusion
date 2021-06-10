@@ -15,7 +15,9 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="menutype">{$LANG_MB01[menu_type]}</label>
 		<div class="uk-form-controls">
-			{menutype_select}
+			<select id="menutype" name="menutype">
+				{menutype_select}
+			</select>
 		</div>
 	</div>
 	<div class="uk-form-row">
@@ -27,7 +29,9 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="group">{$LANG_MB01[permission]}</label>
 		<div class="uk-form-controls">
-			{group_select}
+			<select id="group" name="group">
+				{group_select}
+			</select>
 		</div>
 	</div>
 	<div class="uk-form-row">

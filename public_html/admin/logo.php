@@ -48,8 +48,8 @@ function _logoEdit() {
 
     $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
-    if ( file_exists($_CONF['path_html'] . '/images/' . $_LOGO['logo_name'] ) ) {
-        $current_logo = '<img src="' . $_CONF['site_url'] . '/images/' . $_LOGO['logo_name'] . '" alt="" border="0"/>';
+    if ( file_exists($_CONF['path_images'] . $_LOGO['logo_name'] ) ) {
+        $current_logo = '<img src="' . $_CONF['path_images_url'] . '/' . $_LOGO['logo_name'] . '" alt="" border="0"/>';
     } else {
         $current_logo = $LANG_LOGO['no_logo_graphic'];
     }
@@ -115,10 +115,10 @@ function _saveLogo() {
                 $retval = 4;
             } else {
                 $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;
-                $rc = move_uploaded_file($file['tmp_name'], $_CONF['path_html'] . 'images/' . $newlogoname);
-                @chmod($_CONF['path_html'] . 'images/' . $newlogoname,0644);
+                $rc = move_uploaded_file($file['tmp_name'], $_CONF['path_images'] . $newlogoname);
+                @chmod($_CONF['path_images'] . $newlogoname,0644);
                 if ( $rc ) {
-                    @unlink($_CONF['path_html'] . '/images/' . $_LOGO['logo_name']);
+                    @unlink($_CONF['path_images'] . $_LOGO['logo_name']);
                     $logo_name = $newlogoname;
                 }
             }

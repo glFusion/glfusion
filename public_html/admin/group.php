@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2019 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark Howard     mark AT usable-web DOT com
 *
@@ -26,6 +26,7 @@ use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 use \glFusion\Admin\AdminAction;
+use \glFusion\FieldList;
 
 $display = '';
 
@@ -120,6 +121,8 @@ function GROUP_edit($grp_id = '')
               'text' => $LANG28[38]),
         array('url' => $_CONF['site_admin_url'] . '/group.php?edit=x',
               'text' => $lang_create_edit,'active' => true),
+        array('url' => $_CONF['site_admin_url'] . '/feature.php',
+              'text' => $LANG_ADMIN['feature_admin']),
         array('url' => $_CONF['site_admin_url'] . '/user.php',
               'text' => $LANG_ADMIN['admin_users']),
         array('url' => $_CONF['site_admin_url'].'/index.php',
@@ -245,11 +248,19 @@ function GROUP_edit($grp_id = '')
             $whereGroups = '1=1';
         }
 
-        $header_arr = array(
-                    array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false, 'align' => 'center'),
-                    array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
-                    array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
-        );
+//        if ($grp_id == 1) {
+//            $header_arr = array(
+//                array('text' => $LANG28[86], 'field' => 'disabled-checkbox', 'sort' => false, 'align' => 'center'),
+//                array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
+//                array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
+//            );
+//        } else {
+            $header_arr = array(
+                array('text' => $LANG28[86], 'field' => 'checkbox', 'sort' => false, 'align' => 'center'),
+                array('text' => $LANG_ACCESS['groupname'], 'field' => 'grp_name', 'sort' => true),
+                array('text' => $LANG_ACCESS['description'], 'field' => 'grp_descr', 'sort' => true)
+            );
+//        }
 
         $defsort_arr = array('field' => 'grp_name', 'direction' => 'asc');
 
@@ -265,7 +276,9 @@ function GROUP_edit($grp_id = '')
         if (! empty($grp_id)) {
             $xsql = " AND (grp_id <> $grp_id)";
         }
-        $sql = "SELECT grp_id, grp_name, grp_descr FROM `{$_TABLES['groups']}` WHERE (grp_name <> 'Root')" . $xsql . ' AND ' . $whereGroups;
+        $sql = "SELECT grp_id, grp_name, grp_descr FROM `{$_TABLES['groups']}`
+                WHERE (grp_name <> 'Root' AND grp_name <> 'All Users' AND grp_name <> 'Non-Logged-in Users' AND grp_name <> 'Logged-in Users' AND grp_name <> 'Remote Users')"
+                . $xsql . ' AND ' . $whereGroups;
         $query_arr = array('table' => 'groups',
                            'sql' => $sql,
                            'query_fields' => array('grp_name'),
@@ -439,7 +452,7 @@ function GROUP_displayRights($grp_id = '', $core = 0)
     $retval = '<tr>';
 
     while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
-        if ((empty($grpftarray[$A['ft_name']]) OR ($grpftarray[$A['ft_name']] == 'direct')) ) {
+        if ((empty($grpftarray[$A['ft_name']]) OR ($grpftarray[$A['ft_name']] == 'direct')) && $grp_id != 1 ) {
             if (($ftcount > 0) && ($ftcount % 3 == 0)) {
                 $retval .= '</tr>' . LB . '<tr>';
             }
@@ -557,7 +570,16 @@ function GROUP_applyDefault($grp_id, $add = true)
 function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $grp_default, $grp_applydefault, $features, $groups)
 {
     global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $LANG_ADM_ACTIONS,$VERBOSE;
-
+/*
+    // no save for Root - it is a auto populated group of sub-groups and rights
+    if ($grp_id == 1) {
+        COM_setMessage(49);
+        $url = $_CONF['site_admin_url'] . '/group.php';
+        $url .= (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
+        echo COM_refresh($url);
+        exit;
+    }
+*/
     $retval = '';
 
     $db = Database::getInstance();
@@ -734,7 +756,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
             array(Database::INTEGER)
         );
 
-        if (! empty($groups)) {
+        if (!empty($groups)) {
             foreach ($groups as $g) {
                 if (in_array($g, $GroupAdminGroups) || SEC_inGroup(1)) {
                     $db->conn->insert(
@@ -753,7 +775,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         }
 
         // Make sure Root group belongs to any new group
-
+/* --------------
         $ngCount = $db->getCount(
                         $_TABLES['group_assignments'],
                         array('ug_main_grp_id','ug_grp_id'),
@@ -774,7 +796,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
                 )
             );
         }
-
+------- */
         // make sure this Group Admin belongs to the new group
         if (!SEC_inGroup ('Root')) {
             $gaCount = $db->getCount(
@@ -809,7 +831,7 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
         } else {
             PLG_groupChanged ($grp_id, 'edit');
         }
-        Cache::getInstance()->deleteItemsByTags(array('menu', 'groups', 'group_' . $grp_id));
+        Cache::getInstance()->deleteItemsByTags(array('menu', 'user_group','groups', 'group_' . $grp_id));
         COM_setMessage(49);
         $url = $_CONF['site_admin_url'] . '/group.php';
         $url .= (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
@@ -891,39 +913,61 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case 'edit':
             $url = $_CONF['site_admin_url'] . '/group.php?edit=x&amp;grp_id=' . $A['grp_id'];
             $url .= ($showall) ? '&amp;chk_showall=1' : '';
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'], $url, $attr);
+            $retval = FieldList::edit(
+                array(
+                    'url' => $url,
+                    'attr' => array(
+                        'title' => $LANG_ADMIN['edit']
+                    )
+                )
+            );
             break;
-
         case 'grp_name':
             $retval .= ucwords($fieldvalue);
-            /*
-            $attr['title'] = $LANG_ACCESS['listusers'];
-            $url = $_CONF['site_admin_url'] . '/user.php?grp_id=' . $A['grp_id'];
-            $url .= ($showall) ? '&amp;chk_showall=1' : '';
-            $retval = COM_createLink($icon_arr['group'], $url, $attr);
-            $retval .= '&nbsp;&nbsp;';
-            $attr['style'] = 'vertical-align:top;';
-            $retval .= COM_createLink(ucwords($fieldvalue), $url, $attr);
-            */
             break;
 
         case 'grp_gl_core':
-            $retval = ($A['grp_gl_core'] == 1) ? $icon_arr['check'] : '';
+            if ($A['grp_gl_core'] == 1) {
+                $retval = FieldList::checkmark(
+                    array(
+                       'active' => true
+                    )
+                );
+            }
             break;
 
         case 'grp_default':
-            $retval = ($A['grp_default'] != 0) ? $icon_arr['check'] : '';
+            if ($A['grp_default'] != 0) {
+                $retval = FieldList::checkmark(
+                    array(
+                       'active' => true
+                    )
+                );
+            }
             break;
 
         case 'grp_admin':
-            $retval = (( $A['grp_gl_core'] == 1  || $A['grp_gl_core'] == 2) && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users' && $A['grp_name'] != 'Non-Logged-in Users') ? $icon_arr['check'] : '';
+            if (($A['grp_gl_core'] == 1  || $A['grp_gl_core'] == 2) && $A['grp_name'] != 'All Users' && $A['grp_name'] != 'Logged-in Users' && $A['grp_name'] != 'Non-Logged-in Users') {
+                $retval = FieldList::checkmark(
+                    array(
+                       'active' => true
+                    )
+                );
+            }
             break;
 
         case 'sendemail':
-            $url = $_CONF['site_admin_url'] . '/mail.php?grp_id=' . $A['grp_id'];
-            $attr['title'] = $LANG_ACCESS['sendemail'];
-            $retval = COM_createLink($icon_arr['mail'], $url, $attr);
+//            if (($A['grp_name'] != 'All Users') && ($A['grp_name'] != 'Logged-in Users') && $A['grp_name'] != 'Non-Logged-in Users') {
+            if (($A['grp_name'] != 'Logged-in Users') && $A['grp_name'] != 'Non-Logged-in Users') {
+                $retval = FieldList::email(
+                    array(
+                        'url' => $_CONF['site_admin_url'] . '/mail.php?grp_id=' . $A['grp_id'],
+                        'attr' => array(
+                            'title' => $LANG_ACCESS['sendemail']
+                        )
+                    )
+                );
+            }
             break;
 
         case 'listusers':
@@ -938,19 +982,30 @@ function GROUP_getListField1($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if (($A['grp_name'] != 'All Users') && ($A['grp_name'] != 'Logged-in Users') && $A['grp_name'] != 'Non-Logged-in Users') {
                 $url = $_CONF['site_admin_url'] . '/group.php?editusers=x&amp;grp_id=' . $A['grp_id'];
                 $url .= ($showall) ? '&amp;chk_showall=1' : '';
-                $attr['title'] = $LANG_ACCESS['editusers'];
-                $retval .= COM_createLink($icon_arr['edit'], $url, $attr);
+
+                $retval = FieldList::editusers(
+                    array(
+                        'url' => $url,
+                        'attr' => array(
+                            'title' => $LANG_ACCESS['editusers']
+                        )
+                    )
+                );
             }
             break;
 
         case 'delete':
             $retval = '';
             if ($A['grp_gl_core'] <> 1) {
-                $attr['title'] = $LANG_ADMIN['delete'];
-                $attr['onclick'] = "return doubleconfirm('" . $LANG_ACCESS['confirm1'] . "','" . $LANG_ACCESS['confirm2'] . "');";
-                $retval .= COM_createLink($icon_arr['delete'],
-                    $_CONF['site_admin_url'] . '/group.php'
-                    . '?delete=x&amp;grp_id=' . $A['grp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $_CONF['site_admin_url'] . '/group.php'.'?delete=x&amp;grp_id='.$A['grp_id'].'&amp;'.CSRF_TOKEN.'='.$token,
+                        'attr' => array(
+                            'title'   => $LANG_ADMIN['delete'],
+                            'onclick' => "return doubleconfirm('" . $LANG_ACCESS['confirm1'] . "','" . $LANG_ACCESS['confirm2'] . "');"
+                        ),
+                    )
+                );
             }
             break;
 
@@ -1050,6 +1105,8 @@ function GROUP_list($show_all_groups = false)
               'text' => $LANG28[38],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/group.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
+        array('url' => $_CONF['site_admin_url'] . '/feature.php',
+              'text' => $LANG_ADMIN['feature_admin']),
         array('url' => $_CONF['site_admin_url'] . '/user.php',
               'text' => $LANG_ADMIN['admin_users']),
         array('url' => $_CONF['site_admin_url'].'/index.php',
@@ -1136,7 +1193,7 @@ function GROUP_selectUsers($group_id, $allusers = false)
 
     $sql  = "SELECT DISTINCT uid FROM `{$_TABLES['users']}` AS u
              LEFT JOIN `{$_TABLES['group_assignments']}` AS ga ON ga.ug_uid = uid
-             WHERE u.uid > 1 AND (ga.ug_main_grp_id = 1 OR ga.ug_main_grp_id = ?)";
+             WHERE u.uid > 1 AND ga.ug_main_grp_id = ?";
 
     $stmt = $db->conn->executeQuery(
                 $sql,
@@ -1144,10 +1201,10 @@ function GROUP_selectUsers($group_id, $allusers = false)
                 array(Database::INTEGER)
     );
     $filteredusers = array();
+    $filteredusers[] = -1;
     while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
         $filteredusers[] = $A['uid'];
     }
-
     $params = array();
     $types  = array();
 
@@ -1231,6 +1288,8 @@ function GROUP_editUsers($grp_id)
     $menu_arr = array(
                     array('url'  => $form_url,
                           'text' => $LANG28[38]),
+                    array('url' => $_CONF['site_admin_url'] . '/feature.php',
+                          'text' => $LANG_ADMIN['feature_admin']),
                     array('url' => $_CONF['site_admin_url'] . '/user.php',
                           'text' => $LANG_ADMIN['admin_users']),
                     array('url'  => $_CONF['site_admin_url'].'/index.php',

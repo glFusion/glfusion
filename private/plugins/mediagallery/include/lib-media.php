@@ -1,36 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | lib-media.php                                                            |
-// |                                                                          |
-// | General purpose media display / manipulation interface                   |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* General purpose media display / manipulation interface
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 define('GETID3_HELPERAPPSDIR', 'C:/helperapps/');
 
@@ -154,9 +141,9 @@ function MG_displayASF( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -174,9 +161,9 @@ function MG_displayASF( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -233,9 +220,9 @@ function MG_displayASF( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -340,9 +327,9 @@ function MG_displayMOV( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -360,9 +347,9 @@ function MG_displayMOV( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -378,9 +365,9 @@ function MG_displayMOV( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -508,9 +495,9 @@ function MG_displayMP4( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -528,9 +515,9 @@ function MG_displayMP4( $aid, $I, $full ) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
@@ -587,7 +574,7 @@ function MG_displayMP4( $aid, $I, $full ) {
                 'lang_noquicktime' => $LANG_MG03['no_quicktime'],
                 'thumbnail'     => $u_image,
                 'mime_type'     => $I['mime_type'],
-                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
+//                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
             ));
             $V->parse('output','video');
             $u_image = $V->finish($V->get_var('output'));
@@ -626,169 +613,18 @@ function MG_displaySWF( $aid, $I, $full ) {
 
     $retval = '';
 
-    // set the default playback options...
-    $playback_options['play']    = $_MG_CONF['swf_play'];
-    $playback_options['menu']    = $_MG_CONF['swf_menu'];
-    $playback_options['quality'] = $_MG_CONF['swf_quality'];
-    $playback_options['height']  = $_MG_CONF['swf_height'];
-    $playback_options['width']   = $_MG_CONF['swf_width'];
-    $playback_options['loop']    = $_MG_CONF['swf_loop'];
-    $playback_options['scale']   = $_MG_CONF['swf_scale'];
-    $playback_options['wmode']   = $_MG_CONF['swf_wmode'];
-    $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-    $playback_options['bgcolor']    = $_MG_CONF['swf_bgcolor'];
-    $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-    $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
-
-    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($I['media_id']) . "'");
-    while ( $poRow = DB_fetchArray($poResult) ) {
-        $playback_options[$poRow['option_name']] = $poRow['option_value'];
-    }
-    if (isset($_MG_USERPREFS['playback_mode']) && $_MG_USERPREFS['playback_mode'] != -1 ) {
-        $playback_type = $_MG_USERPREFS['playback_mode'];
-    } else {
-        $playback_type = $MG_albums[$aid]->playback_type;
-    }
-    if ( isset($I['resolution_x']) && $I['resolution_x'] > 0 ) {
-        $resolution_x = $I['resolution_x'];
-        $resolution_y = $I['resolution_y'];
-    } else {
-        if ( $I['media_resolution_x'] == 0 ) {
-            $getID3 = new getID3;
-            // Analyze file and store returned data in $ThisFileInfo
-            $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
-            getid3_lib::CopyTagsToComments($ThisFileInfo);
-            if ( $ThisFileInfo['video']['resolution_x'] < 1 || $ThisFileInfo['video']['resolution_y'] < 1 ) {
-                if (isset($ThisFileInfo['meta']['onMetaData']['width']) && isset($ThisFileInfo['meta']['onMetaData']['height']) ) {
-                    $resolution_x = $ThisFileInfo['meta']['onMetaData']['width'];
-                    $resolution_y = $ThisFileInfo['meta']['onMetaData']['height'];
-                } else {
-                    $resolution_x = -1;
-                    $resolution_y = -1;
-                }
-            } else {
-                $resolution_x = $ThisFileInfo['video']['resolution_x'];
-                $resolution_y = $ThisFileInfo['video']['resolution_y'];
-            }
-            if ( $resolution_x != 0 ) {
-                $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . DB_escapeString($I['media_id']) . "'";
-                DB_query( $sql );
-            }
-        } else {
-            $resolution_x = $I['media_resolution_x'];
-            $resolution_y = $I['media_resolution_y'];
-        }
-    }
-    switch ($playback_type) {
-        case 0 :                    // Popup Window
-            $win_width  = $playback_options['width'] + 40;
-            $win_height = $playback_options['height'] + 40;
-            $u_pic = "javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $I['media_id'] . "'," . $win_height . "," . $win_width . ")";
-            if ( $I['media_tn_attached'] == 1 ) {
-                foreach ($_MG_CONF['validExtensions'] as $ext ) {
-                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext) ) {
-                        $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext;
-                        $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext);
-                        break;
-                    }
-                }
-            } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flash.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
-            }
-            break;
-        case 1: // download
-        case 3: // mms - not supported for flash
-            $u_pic = $_MG_CONF['site_url'] . '/download.php?mid=' . $I['media_id'];
-
-            if ( $I['media_tn_attached'] == 1 ) {
-                foreach ($_MG_CONF['validExtensions'] as $ext ) {
-                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext) ) {
-                        $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext;
-                        $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext);
-                        break;
-                    }
-                }
-            } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flash.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
-            }
-            break;
-        case 2 :    // inline
-			$u_image = '';
-            $V = new Template( MG_getTemplatePath($aid) );
-            $V->set_file (array ('video' => 'view_swf.thtml'));
-            $V->set_var(array(
-                'site_url'  => $_MG_CONF['site_url'],
-                'lang_noflash' => $LANG_MG03['no_flash'],
-                'play'      => ($playback_options['play'] ? 'true' : 'false'),
-                'menu'      => ($playback_options['menu'] ? 'true' : 'false'),
-                'loop'      => ($playback_options['loop'] ? 'true' : 'false'),
-                'scale'     => $playback_options['scale'],
-                'wmode'     => $playback_options['wmode'],
-                'quality'   => $playback_options['quality'],
-                'height'    => $playback_options['height'],
-                'width'     => $playback_options['width'],
-                'asa'       => $playback_options['allowscriptaccess'],
-                'bgcolor'   => $playback_options['bgcolor'],
-                'swf_version' => $playback_options['swf_version'],
-                'filename'  => $I['media_original_filename'],
-                'id'        => 'swf' . rand(),
-                'id2'       => 'swf2' . rand(),
-                'movie'     => $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'],
-                'mime_type' => 'application/x-shockwave-flash',
-            ));
-
-            $flasharray = array();
-            $flasharray = explode('&',$playback_options['flashvars']);
-
-			$i = 0;
-			$V->set_block('video','flashvars','flashvar');
-
-            foreach( $flasharray as $var ) {
-//                $temp = split("=",$var);
-                $temp = explode('=',$var);
-                $variable = $temp[0];
-                $value = implode("=",array_slice($temp,1));
-                if ( !isset($variable) && $variable != '' ) {
-                    $V->set_var('fv','flashvars.' . $variable . '="' . $value . '";' .  LB);
-                    $V->parse('flashvar','flashvars',true);
-                    $i++;
-                }
-                $i++;
-            }
-            $V->parse('output','video');
-
-            $u_image .= $V->finish($V->get_var('output'));
-            return array($u_image,'',$resolution_x,$resolution_y,'');
-            break;
-    }
-
-    $imageWidth  = $media_size_disp[0];
-    $imageHeight = $media_size_disp[1];
-
-    //frame
-    $F = new Template($_MG_CONF['template_path']);
-    $F->set_var('media_frame',$MG_albums[$aid]->displayFrameTemplate);
-    $F->set_var(array(
-        'media_link_start'  =>  '<a href="' . $u_pic . '">',
-        'media_link_end'    =>  '</a>',
-        'url_media_item'    =>  $u_pic,
-        'media_thumbnail'   =>  $u_image,
-        'media_size'        =>  'width="' . $imageWidth . '" height="' . $imageHeight . '"',
-        'media_height'      =>  $imageHeight,
-        'media_width'       =>  $imageWidth,
-        'border_width'      =>  $imageWidth + 15,
-        'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
-        'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
-        'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
-        'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
-
+    $u_image = '';
+    $V = new Template( MG_getTemplatePath($aid) );
+    $V->set_file (array ('video' => 'view_swf.thtml'));
+    $V->set_var(array(
+        'site_url'  => $_MG_CONF['site_url'],
+        'lang_noflash' => $LANG_MG03['no_flash'],
     ));
-    $F->parse('media','media_frame');
-    $retval .= $F->finish($F->get_var('media'));
-    return array($retval,$u_image,$imageWidth,$imageHeight,$u_pic);
+
+    $V->parse('output','video');
+
+    $u_image .= $V->finish($V->get_var('output'));
+    return array($u_image,'',250,250,'');
 }
 
 
@@ -797,283 +633,18 @@ function MG_displayFLV ( $aid, $I, $full ) {
 
     $retval = '';
 
-    // set the default playback options...
-    $playback_options['play']    = $_MG_CONF['swf_play'];
-    $playback_options['menu']    = $_MG_CONF['swf_menu'];
-    $playback_options['quality'] = $_MG_CONF['swf_quality'];
-    $playback_options['height']  = $_MG_CONF['swf_height'];
-    $playback_options['width']   = $_MG_CONF['swf_width'];
-    $playback_options['loop']    = $_MG_CONF['swf_loop'];
-    $playback_options['scale']   = $_MG_CONF['swf_scale'];
-    $playback_options['wmode']   = $_MG_CONF['swf_wmode'];
-    $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-    $playback_options['bgcolor']    = $_MG_CONF['swf_bgcolor'];
-    $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-    $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
+    $u_image = '';
+    // Initialize the flvpopup.thtml template
 
-    $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($I['media_id']) . "'");
-    while ( $poRow = DB_fetchArray($poResult) ) {
-        $playback_options[$poRow['option_name']] = $poRow['option_value'];
-    }
-    if (isset($_MG_USERPREFS['playback_mode']) && $_MG_USERPREFS['playback_mode'] != -1 ) {
-        $playback_type = $_MG_USERPREFS['playback_mode'];
-    } else {
-        $playback_type = $MG_albums[$aid]->playback_type;
-    }
-
-    if ( isset($I['resolution_x']) && $I['resolution_x'] > 0 ) {
-        $resolution_x = $I['resolution_x'];
-        $resolution_y = $I['resolution_y'];
-    } else {
-        if ( $I['media_resolution_x'] == 0 && $I['remote_media'] == 0 ) {
-            $getID3 = new getID3;
-            // Analyze file and store returned data in $ThisFileInfo
-            $ThisFileInfo = $getID3->analyze($_MG_CONF['path_mediaobjects'] . 'orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
-            getid3_lib::CopyTagsToComments($ThisFileInfo);
-            if ( $ThisFileInfo['video']['resolution_x'] < 1 || $ThisFileInfo['video']['resolution_y'] < 1 ) {
-                if (isset($ThisFileInfo['meta']['onMetaData']['width']) && isset($ThisFileInfo['meta']['onMetaData']['height']) ) {
-                    $resolution_x = $ThisFileInfo['meta']['onMetaData']['width'];
-                    $resolution_y = $ThisFileInfo['meta']['onMetaData']['height'];
-                } else {
-                    $resolution_x = -1;
-                    $resolution_y = -1;
-                }
-            } else {
-                $resolution_x = $ThisFileInfo['video']['resolution_x'];
-                $resolution_y = $ThisFileInfo['video']['resolution_y'];
-            }
-            if ( $resolution_x != 0 ) {
-                $sql = "UPDATE " . $_TABLES['mg_media'] . " SET media_resolution_x=" . intval($resolution_x) . ",media_resolution_y=" . intval($resolution_y) . " WHERE media_id='" . DB_escapeString($I['media_id']) . "'";
-                DB_query( $sql );
-            }
-        } else {
-            $resolution_x = 320; //$I['media_resolution_x'];
-            $resolution_y = 240; //$I['media_resolution_y'];
-        }
-    }
-
-    switch ($playback_type) {
-        case 0 :                    // Popup Window
-            $resolution_x = $playback_options['width'];
-            $resolution_y = $playback_options['height'];
-            if ( $resolution_x < 1 || $resolution_y < 1 ) {
-                $resolution_x = 480;
-                $resolution_y = 320;
-            } else {
-                $resolution_x = $resolution_x + 40;
-                $resolution_y = $resolution_y + 40;
-            }
-        	if ( $I['mime_type'] == 'video/x-flv' && $_MG_CONF['use_flowplayer'] != 1) {
-        	    $resolution_x = $resolution_x + 60;
-            	if ( $resolution_x < 590 ) {
-	            	$resolution_x = 590;
-            	}
-            	$resolution_y = $resolution_y + 80;
-            	if ( $resolution_y < 500 ) {
-            	    $resolution_y = 500;
-                }
-        	}
-        	if ( $I['media_type'] == 5 ) {
-            	$resolution_x = 460;
-            	$resolution_y = 380;
-        	}
-
-            $u_pic = "javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $I['media_id'] . "'," . $resolution_y . "," . $resolution_x . ")";
-            if ( $I['media_tn_attached'] == 1 ) {
-                foreach ($_MG_CONF['validExtensions'] as $ext ) {
-                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext) ) {
-                        $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext;
-                        $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext);
-                        break;
-                    }
-                }
-            } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flv.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
-            }
-            break;
-        case 1: // download
-            $u_pic = $_MG_CONF['site_url'] . '/download.php?mid=' . $I['media_id'];
-            $raw_link_url = $_MG_CONF['site_url'] . '/download.php?mid=' . $I['media_id'];
-            if ( $I['media_tn_attached'] == 1 ) {
-                foreach ($_MG_CONF['validExtensions'] as $ext ) {
-                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext) ) {
-                        $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext;
-                        $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext);
-                        break;
-                    }
-                }
-//                $u_image = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg';
-//                $media_size_orig = $media_size_disp  = @getimagesize($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.jpg');
-            } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_flv.svg';
-                $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
-            }
-            break;
-        case 3: // mms - not supported for flash
-        case 2 :    // inline
-			$u_image = '';
-            // Initialize the flvpopup.thtml template
-
-            $V = new Template( MG_getTemplatePath($aid) );
-    		$V->set_file('video','view_flv.thtml');
-
-            // now the player specific items.
-    		$F = new Template( MG_getTemplatePath($aid) );
-            if ($_MG_CONF['use_flowplayer'] == 1 ) {	// FlowPlayer Setup
-            	$F->set_file(array('player' => 'flvfp.thtml'));
-            } else {
-            	$F->set_file(array('player' => 'flvmg.thtml'));
-            }
-
-        	if ( $playback_options['play'] == 1 ) {  // auto start
-        		$playButton = '';
-        		$playButtonMG = '';
-        		$autoplay   = 'true';
-        	} else {
-                if ( $I['media_tn_attached'] == 1 ) {
-                    foreach ($_MG_CONF['validExtensions'] as $ext ) {
-                        if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext) ) {
-                            $playImage = $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . $ext;
-                            break;
-                        }
-                    }
-					$playButtonMG = 'flashvars.thumbUrl="' . $_MG_CONF['mediaobjects_url'] . '/tn/' . $I['media_filename'][0] . '/tn_' . $I['media_filename'] . '.'.$ext.'";';
-                } else {
-                	$playImage = $_MG_CONF['site_url'] . MG_getImageFile('blank_blk.jpg');
-                	$playButtonMG = '';
-				}
-				$playButton = "{ url: '" . $playImage . "', overlayId: 'play' },";
-				$autoplay = 'false';
-			}
-            if ( $I['remote_media'] == 1 ) {
-	            $urlParts = array();
-	            $urlParts = parse_url($I['remote_url']);
-
-	            $pathParts = array();
-	            $pathParts = explode('/',$urlParts['path']);
-
-	            $ppCount = count($pathParts);
-	            $pPath = '';
-	            for ($I=1; $I<$ppCount-1;$I++) {
-		            $pPath .= '/' . $pathParts[$I];
-	            }
-	            $videoFile = $pathParts[$ppCount-1];
-
-		        $pos = strrpos($videoFile, '.');
-		        if($pos === false) {
-		            $basefilename = $videoFile;
-		        } else {
-		            $basefilename = substr($videoFile,0,$pos);
-		        }
-		        $videoFile            = $basefilename;
-	           	$streamingServerURL   = "streamingServerURL: '" . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . "',";
-	           	$streamingServer      = "streamingServer: 'fms',";
-	           	$streamingServerURLmg = 'flashvars.streamingServerUrl="' . $urlParts['scheme'] . '://' . $urlParts['host'] . $pPath . '";';
-    		} else {
-    			$streamingServerURL   = '';
-    			$streamingServerURLmg = '';
-    			$streamingServer      = '';
-    			$videoFile            = urlencode($_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
-                $movie                = urlencode($_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext']);
-  			}
-  			$width  = $playback_options['width'];
-  			$height = $playback_options['height'];
-  			if ( $MG_albums[$aid]->allow_download == 1 ) {
-  				$allowDl = 'true';
-  			} else {
-  				$allowDl = 'false';
-  			}
-  			if ( $I['media_title'] != '' && $I['media_title'] != ' ') {
-  				$title = urlencode($I['media_title']);
-  			} else {
-  				$title = urlencode($I['media_original_filename']);
-  			}
-
-  			if ($_MG_CONF['use_flowplayer'] == 1 ) {
-  				$resolution_x = $width;
-  				$resolution_y = $height;
-  			} else {
-	    		$resolution_x = $resolution_x + 60;
-    			$resolution_y = $resolution_y + 190;
-    			if ( $resolution_x < 565 ) {
-    	    		$resolution_x = 565;
-    			}
-    		}
-            $id  = 'id'  . rand();
-            $id2 = 'idtwo' . rand();
-            $F->set_var(array(
-                'site_url'  	=> $_MG_CONF['site_url'],
-                'lang_noflash'  => $LANG_MG03['no_flash'],
-                'play'          => $autoplay,
-                'autoplay_text' => true,
-                'autoplay'      => $autoplay,
-                'menu'          => ($playback_options['menu'] ? 'true' : 'false'),
-                'loop'          => ($playback_options['loop'] ? 'true' : 'false'),
-                'scale'         => $playback_options['scale'],
-                'wmode'         => $playback_options['wmode'],
-                'width'			=> $width,
-                'height'		=> $height,
-                'allowDl'		=> $allowDl,
-                'title'			=> $title,
-	           	'streamingServerURL'	=> $streamingServerURL,
-	           	'videoFile'				=> $videoFile,
-                'movie' => $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'],
-	           	'playButton'			=> $playButton,
-	           	'streamingServerURLmg'  => $streamingServerURLmg,
-	           	'playButtonMG'			=> $playButtonMG,
-                'id'            => $id,
-                'id2'           => $id2,
-                'lang_download' => $LANG_MG03['download'],
-                'lang_large'    => $LANG_MG03['large'],
-                'lang_normal'   => $LANG_MG03['normal'],
-                'resolution_x'  => $resolution_x,
-                'resolution_y'  => $resolution_y,
-                'mime_type'     => 'video/x-flv',
-            ));
-    		$F->parse('output','player');
-    		$flv_player = $F->finish($F->get_var('output'));
-
-    		$V->set_var(array(
-                'site_url'  	=> $_MG_CONF['site_url'],
-                'lang_noflash'  => $LANG_MG03['no_flash'],
-                'id'            => $id,
-                'id2'           => $id2,
-                'resolution_x'  => $resolution_x,
-                'resolution_y'  => $resolution_y,
-                'flv_player'	=> $flv_player,
-                'player_url'    => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
-			));
-            $V->parse('output','video');
-            $u_image .= $V->finish($V->get_var('output'));
-            return array($u_image,'',$resolution_x,$resolution_y,'');
-			break;
-    }
-
-    $imageWidth  = $media_size_disp[0];
-    $imageHeight = $media_size_disp[1];
-
-    //frame
-    $F = new Template($_MG_CONF['template_path']);
-    $F->set_var('media_frame',$MG_albums[$aid]->displayFrameTemplate);
-    $F->set_var(array(
-        'media_link_start'  =>  '<a href="' . $u_pic . '">',
-        'media_link_end'    =>  '</a>',
-        'url_media_item'    =>  $u_pic,
-        'media_thumbnail'   =>  $u_image,
-        'media_size'        =>  'width="' . $imageWidth . '" height="' . $imageHeight . '"',
-        'media_height'      =>  $imageHeight,
-        'media_width'       =>  $imageWidth,
-        'border_width'      =>  $imageWidth + 15,
-        'border_height'     =>  $imageHeight + 15,
-        'media_title'       =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? PLG_replaceTags($I['media_title'],'mediagallery','media_title') : '',
-        'media_tag'         =>  (isset($I['media_title']) && $I['media_title'] != ' ') ? strip_tags($I['media_title']) : '',
-        'frWidth'           =>  $imageWidth  - $MG_albums[$aid]->dfrWidth,
-        'frHeight'          =>  $imageHeight - $MG_albums[$aid]->dfrHeight,
+    $V = new Template( MG_getTemplatePath($aid) );
+    $V->set_file('video','view_flv.thtml');
+    $V->set_var(array(
+        'site_url'  	=> $_MG_CONF['site_url'],
+        'lang_noflash'  => $LANG_MG03['no_flash'],
     ));
-    $F->parse('media','media_frame');
-    $retval .= $F->finish($F->get_var('media'));
-    return array($retval,$u_image,$imageWidth,$imageHeight,$u_pic);
+    $V->parse('output','video');
+    $u_image .= $V->finish($V->get_var('output'));
+    return array($u_image,'',250,250,'');
 }
 
 function MG_displayMP3( $aid, $I, $full ) {
@@ -1121,7 +692,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                 }
             } else {
                 $win_height = 320;
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             $u_pic = "javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $I['media_id'] . "'," . $win_height . "," . $win_width . ")";
@@ -1137,7 +708,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                     }
                 }
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
@@ -1157,7 +728,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $playback_options['width']  = 300;
             } else {
                 $u_pic='';
-                $u_tn     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $u_tn     = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
                 $playback_options['height'] = 200;
                 $playback_options['width']  = 300;
@@ -1167,8 +738,7 @@ function MG_displayMP3( $aid, $I, $full ) {
 
             $V = new Template( MG_getTemplatePath($aid) );
 
-//            $tfile = 'view_mp3_swf.thtml';
-            $tfile = 'view_mp4.thtml';
+            $tfile = 'view_mp3.thtml';
             if ( $I['mime_type'] == 'audio/x-ms-wma' ) {
                 $tfile = 'view_mp3_wmp.thtml';
             }
@@ -1193,13 +763,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                 $mp3_artist = '';
             }
 
-            $S = new Template( MG_getTemplatePath($aid) );
-            $S->set_file(array('swf' => 'swfobject.thtml'));
-            $S->set_var(array(
-                'site_url'  => $_MG_CONF['site_url'],
-            ));
-            $S->parse('output','swf');
-            $u_image = $S->finish($S->get_var('output'));
+            $u_image = '';
 
             $V->set_file (array ('video' => $tfile));
             $V->set_var(array(
@@ -1229,7 +793,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                 'lang_download'     => $LANG_MG03['download'],
                 'lang_info'         => $LANG_MG03['info'],
                 'lang_noflash' 		=> $LANG_MG03['no_flash'],
-                'player_url'        => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
+//                'player_url'        => $_CONF['site_url'].'/javascript/addons/mediaplayer/',
                 'swf_version'   	=> '9',
             ));
             $V->parse('output','video');
@@ -1249,7 +813,7 @@ function MG_displayMP3( $aid, $I, $full ) {
                     }
                 }
             } else {
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
                 $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
             }
             break;
@@ -1296,7 +860,7 @@ function MG_displayOGG( $aid, $I, $full ) {
             }
         }
     } else {
-        $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_audio.svg';
+        $u_image     = $_MG_CONF['assets_url'] . '/placeholder_audio.svg';
         $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
     }
 
@@ -1343,7 +907,7 @@ function MG_displayGeneric( $aid, $I, $full ) {
     } else {
         switch ( $I['mime_type'] ) {
             case 'application/pdf' :
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_pdf.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_pdf.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'placeholder_audio.svg');
                 break;
             case 'application/zip' :
@@ -1352,11 +916,11 @@ function MG_displayGeneric( $aid, $I, $full ) {
             case 'application/x-gzip' :
             case 'multipart/x-gzip' :
             case 'application/arj' :
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_zip.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder_zip.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
                 break;
             default :
-                $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $u_image     = $_MG_CONF['assets_url'] . '/placeholder.svg';
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
                 break;
         }
@@ -1398,7 +962,7 @@ function MG_displayTGA($aid,$I,$full,$mediaObject) {
     $media_size_disp = @getimagesize($_MG_CONF['path_mediaobjects'] . 'disp/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.jpg');
 
     if ( $media_size_disp == false ) {
-        $u_image = $_MG_CONF['mediaobjects_url'] . '/placeholder_missing.svg';
+        $u_image = $_MG_CONF['assets_url'] . '/placeholder_missing.svg';
         $media_size_disp[0] = 200;
         $media_size_disp[1] = 200;
         $media_link_start = '';
@@ -1515,9 +1079,9 @@ function MG_displayEmbed($aid,$I,$full,$mediaObject) {
                 }
             } else {
                 if ( $MG_albums[$aid]->tnWidth > $MG_albums[$aid]->tnHeight ) {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video_w.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video_w.svg';
                 } else {
-                    $u_image     = $_MG_CONF['mediaobjects_url'] . '/placeholder_video.svg';
+                    $u_image     = $_MG_CONF['assets_url'] . '/placeholder_video.svg';
                 }
                 $media_size_orig = $media_size_disp  = array($MG_albums[$aid]->tnWidth,$MG_albums[$aid]->tnHeight);
             }
@@ -1613,7 +1177,7 @@ function MG_displayJPG($aid,$I,$full,$mid,$sortOrder,$sortID=0,$spage=0) {
         $u_image    = $_MG_CONF['mediaobjects_url'] . '/orig/' . $I['media_filename'][0] . '/' . $I['media_filename'] . '.' . $I['media_mime_ext'];
     } else {
         if ( $media_size_disp == false && !$I['remote_media']) {
-            $u_image = $_MG_CONF['mediaobjects_url'] . '/placeholder_missing.svg';
+            $u_image = $_MG_CONF['assets_url'] . '/placeholder_missing.svg';
             $media_size_disp[0] = 200;
             $media_size_disp[1] = 200;
         } else {
@@ -1937,7 +1501,6 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
 			break;
         case 'application/x-shockwave-flash' :
            	list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displaySWF($aid,$media[$mediaObject],$full);
-
             break;
         case 'video/x-flv' :
             list($u_image,$raw_image,$raw_image_width,$raw_image_height,$raw_link_url) = MG_displayFLV($aid,$media[$mediaObject],$full);
@@ -2127,6 +1690,8 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             $url_slideshow = '<a href="' . $_MG_CONF['site_url'] . '/slideshow.php?aid=' . $aid . '&amp;sort=' . $sortOrder . '"><b>' . $LANG_MG03['slide_show'] . '</b></a>';
             break;
         case 2:
+        case 3:
+        case 4:
             $lbss_count = DB_count($_TABLES['mg_media'],'media_type',0);
             $sql = "SELECT COUNT(m.media_id) as lbss_count FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
                                 " ON ma.media_id=m.media_id WHERE m.media_type = 0 AND ma.album_id=" . $aid;
@@ -2138,12 +1703,6 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
             } else {
             	$MG_albums[$aid]->enable_slideshow = 0;
             }
-            break;
-        case 3:
-            $url_slideshow = '<a href="' . $_MG_CONF['site_url'] . '/fslideshow.php?aid=' . $aid . '&amp;src=disp"><b>' . $LANG_MG03['slide_show'] . '</b></a>';
-            break;
-        case 4:
-            $url_slideshow = '<a href="' . $_MG_CONF['site_url'] . '/fslideshow.php?aid=' . $aid . '&amp;src=orig"><b>' . $LANG_MG03['slide_show'] . '</b></a>';
             break;
     }
 

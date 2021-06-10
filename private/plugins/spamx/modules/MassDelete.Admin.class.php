@@ -1,5 +1,4 @@
 <?php
-
 /**
 * File:  MassDelete.Admin.class.php
 * Mass delete comment spam
@@ -23,6 +22,8 @@ if (!defined ('GVERSION')) {
 */
 require_once $_CONF['path'] . 'plugins/spamx/modules/BaseAdmin.class.php';
 require_once $_CONF['path_system'] . 'lib-comment.php';
+
+use \glFusion\Log\Log;
 
 /**
 * MassDelete class: Mass-delete comments
@@ -158,7 +159,7 @@ class MassDelete extends BaseAdmin {
                 DB_change($_TABLES['stories'], 'comments', $comments,
                           'sid', $sid);
             } else {
-                COM_errorLog("User {$_USER['username']} (IP: {$_SERVER['REMOTE_ADDR']}) tried to illegally delete comment $cid from $type $sid");
+                Log::write('system',Log::WARNING,'User '.$_USER['uid'].' (IP: '.$_SERVER['REAL_ADDR'].') tried to delete comment '.$cid.' from '.$type.' '.$sid);
             }
             break;
 

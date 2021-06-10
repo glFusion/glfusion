@@ -29,8 +29,11 @@
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
+
 USES_forum_functions();
 USES_forum_admin();
+
+use \glFusion\FieldList;
 
 if (!SEC_hasRights('forum.edit')) {
     COM_404();
@@ -170,18 +173,21 @@ function FF_getAdminField_ranks($fieldname, $fieldvalue, $A, $icon_arr)
 
     switch($fieldname) {
     case 'edit':
-        $retval = COM_createLink(
-                '<i class="uk-icon uk-icon-edit"></i>',
-                $base_url . '?edit=x&amp;posts=' .$A['posts']
-                );
+        $retval .= FieldList::edit(
+            array(
+                'url' => $base_url . '?edit=x&amp;posts=' .$A['posts'],
+            )
+        );
         break;
-
     case 'delete':
-        $retval = COM_createLink('<i class="uk-icon uk-icon-trash" style="color:red;"></i>',
-                "$base_url?posts={$A['posts']}&delete",
-                array(
-                     'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');",
-                ) );
+        $retval .= FieldList::delete(
+            array(
+                'delete_url' => $base_url . '?posts=' .$A['posts'].'&delete',
+                'attr' => array(
+                    'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');"
+                )
+            )
+        );
         break;
 
     case 'posts':

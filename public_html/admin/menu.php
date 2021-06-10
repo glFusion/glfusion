@@ -20,6 +20,7 @@ use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 use \glFusion\Admin\AdminAction;
+use \glFusion\FieldList;
 
 USES_lib_admin();
 $display = '';
@@ -261,9 +262,10 @@ function MB_saveCloneMenu()
 
 /*
  * Create a new menu
+ * @deprecated
  */
 
-function MB_createMenu( )
+function XMB_createMenu( )
 {
     global $_CONF, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_MENU_TYPES, $LANG_ADMIN;
@@ -600,9 +602,10 @@ function MB_moveElement($menu_id, $mid, $direction)
 
 /*
  * Creates a new menu element
+ * @deprecated
  */
 
-function MB_createElement ($menu_id)
+function XMB_createElement ($menu_id)
 {
     global $_CONF, $_TABLES, $_PLUGINS, $LANG_MB01, $LANG_MB_ADMIN, $LANG_MB_TYPES,
            $LANG_MB_GLTYPES, $LANG_MB_GLFUNCTION, $LANG_ADMIN;
@@ -746,7 +749,6 @@ function MB_createElement ($menu_id)
     // build group select
 
     $rootUser = $db->getItem($_TABLES['group_assignments'],'ug_uid',array('ug_main_grp_id' => 1),array(Database::INTEGER));
-
     $usergroups = SEC_getUserGroups($rootUser);
     uksort($usergroups, "strnatcasecmp");
     $group_select .= '<select id="group" name="group">' . LB;
@@ -806,6 +808,7 @@ function MB_saveNewMenuElement ()
     $filter->setPostmode('html');
 
     // build post vars
+    $E = array();
     $E['menu_id']           = COM_applyFilter($_POST['menu'],true);
     $E['pid']               = COM_applyFilter($_POST['pid'],true);
     $E['element_label']     = $filter->filterHTML($_POST['menulabel']);
@@ -896,7 +899,7 @@ function MB_saveNewMenuElement ()
  * Edit an existing menu element
  */
 
-function MB_editElement( $menu_id, $mid )
+function MB_editElement( $menu_id, $mid=0 )
 {
     global $_CONF, $_TABLES, $_PLUGINS, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION,$LANG_ADMIN;
@@ -904,6 +907,13 @@ function MB_editElement( $menu_id, $mid )
     $retval = '';
 
     $menu = menu::getInstance($menu_id);
+    // Get the current menu element, or create an empty one to use for
+    // determining current options.
+    if ($mid > 0 && isset($menu->menu_elements[$mid])) {
+        $curElement = $menu->menu_elements[$mid];
+    } else {
+        $curElement = new menuElement;
+    }
 
     $db = Database::getInstance();
 
@@ -922,62 +932,61 @@ function MB_editElement( $menu_id, $mid )
                                 $_CONF['layout_url'] . '/images/icons/menubuilder.png');
 
     // build types select
-
-    if ( $menu->menu_elements[$mid]->type == 1 && count($menu->menu_elements[$mid]->children) > 0) {
-        $type_select = '<input type="hidden" name="menutype" id="menutype" value="1">';
-        $type_select .= '<select id="menutyped" name="menutyped" disabled="disabled">' . LB;
+    if ($curElement->type == 1 && !empty($curElement->children)) {
+        $type_disabled = true;
     } else {
-        $type_select = '<select id="menutype" name="menutype">' . LB;
+        $type_disabled = false;
     }
-    while ( $types = current($LANG_MB_TYPES) ) {
-        if ( ($menu->type == 2 || $menu->type == 4 ) && (key($LANG_MB_TYPES) == 1 || key($LANG_MB_TYPES) == 3)){
+
+    $type_select = '';
+    foreach ($LANG_MB_TYPES as $key=>$name) {
+        if (($menu->type == 2 || $menu->type == 4 ) && (key($LANG_MB_TYPES) == 1 || key($LANG_MB_TYPES) == 3)){
             // skip it
         } else {
-            $type_select .= '<option value="' . key($LANG_MB_TYPES) . '"';
-            $type_select .= ($menu->menu_elements[$mid]->type==key($LANG_MB_TYPES) ? ' selected="selected"' : '') . '>' . $types . '</option>' . LB;
+            $type_select .= '<option value="' . $key . '"';
+            if ($curElement->type == $key) {
+                $type_select .= ' selected="selected"';
+            }
+            $type_select .= '>' . $name . '</option>' . LB;
         }
-        next($LANG_MB_TYPES);
     }
-    $type_select .= '</select>' . LB;
 
-    $glfunction_select = '<select id="glfunction" name="glfunction">' . LB;
-    while ( $glfunction = current($LANG_MB_GLFUNCTION) ) {
-        $glfunction_select .= '<option value="' . key($LANG_MB_GLFUNCTION) . '"';
-        $glfunction_select .= ($menu->menu_elements[$mid]->subtype==key($LANG_MB_GLFUNCTION) ? ' selected="selected"' : '') . '>' . $glfunction . '</option>' . LB;
-        next($LANG_MB_GLFUNCTION);
+    $glfunction_select = '';
+    foreach ($LANG_MB_GLFUNCTION as $key=>$name) {
+        $glfunction_select .= '<option value="' . $key . '"';
+        if ($curElement->subtype == $key) {
+            $glfunction_select .= ' selected="selected"';
+        }
+        $glfunction_select .= '>' . $name . '</option>' . LB;
     }
-    $glfunction_select .= '</select>' . LB;
 
-    $gl_select = '<select id="gltype" name="gltype">' . LB;
-    while ( $gltype = current($LANG_MB_GLTYPES) ) {
-        $gl_select .= '<option value="' . key($LANG_MB_GLTYPES) . '"';
-        $gl_select .= ($menu->menu_elements[$mid]->subtype==key($LANG_MB_GLTYPES) ? ' selected="selected"' : '') . '>' . $gltype . '</option>' . LB;
-        next($LANG_MB_GLTYPES);
+    $gl_select = '';
+    foreach ($LANG_MB_GLTYPES as $key=>$gltype) {
+        $gl_select .= '<option value="' . $key . '"';
+        if ($curElement->subtype == $key) {
+            $gl_select .= ' selected="selected"';
+        }
+        $gl_select .= '>' . $gltype . '</option>' . LB;
     }
-    $gl_select .= '</select>' . LB;
 
-    $plugin_select = '<select id="pluginname" name="pluginname">' . LB;
+    $plugin_select = '';
     $plugin_menus = _mbPLG_getMenuItems();
     ksort($plugin_menus);
     $found = 0;
     $num_plugins = count($plugin_menus);
-    for( $i = 1; $i <= $num_plugins; $i++ ) {
-        $plugin_select .= '<option value="' . key($plugin_menus) . '"';
-
-        if ( $menu->menu_elements[$mid]->subtype==key($plugin_menus) ) {
+    foreach ($plugin_menus as $pi_name=>$url) {
+        $plugin_select .= '<option value="' . $pi_name . '"';
+        if ($curElement->subtype == $pi_name ) {
             $plugin_select .= ' selected="selected"';
             $found++;
         }
-        $plugin_select .= '>' . ucfirst(key($plugin_menus)) . '</option>' . LB;
-
-        next( $plugin_menus );
+        $plugin_select .= '>' . ucfirst($pi_name) . '</option>' . LB;
     }
     if ( $found == 0 ) {
-        $plugin_select .= '<option value="'.$menu->menu_elements[$mid]->subtype.'" selected="selected">'.$LANG_MB01['disabled_plugin'].'</option>'.LB;
+        $plugin_select .= '<option value="'.$curElement->subtype.'" selected="selected">'.$LANG_MB01['disabled_plugin'].'</option>'.LB;
     }
-    $plugin_select .= '</select>' . LB;
 
-    $sp_select = '<select id="spname" name="spname">' . LB;
+    $sp_select = '';
     if (in_array('staticpages', $_PLUGINS)) {
         $sql = "SELECT sp_id,sp_title,sp_label FROM {$_TABLES['staticpage']} WHERE sp_status = 1 ORDER BY sp_title";
 
@@ -988,24 +997,28 @@ function MB_editElement( $menu_id, $mid )
             } else {
                 $label = $spRecord['sp_label'];
             }
-            $sp_select .= '<option value="' . $spRecord['sp_id'] . '"' . ($menu->menu_elements[$mid]->subtype == $spRecord['sp_id'] ? ' selected="selected"' : '') . '>' . $label . '</option>' . LB;
+            $sp_select .= '<option value="' . $spRecord['sp_id'] . '"';
+            if ($curElement->subtype == $spRecord['sp_id']) {
+                $sp_select .= ' selected="selected"';
+            }
+            $sp_select .= '>' . $label . '</option>' . LB;
         }
     }
-    $sp_select .= '</select>' . LB;
 
-    $topic_select = '<select id="topicname" name="topicname">' . LB;
-
+    $topic_select = '';
     $stmt = $db->conn->query("SELECT tid,topic FROM `{$_TABLES['topics']}` ORDER BY topic");
     while ($tpRecord = $stmt->fetch(Database::ASSOCIATIVE)) {
-        $topic_select .= '<option value="' . $tpRecord['tid'] . '"' . ($menu->menu_elements[$mid]->subtype == $tpRecord['tid'] ? ' selected="selected"' : '') . '>' . $tpRecord['topic'] . '</option>' . LB;
+        $topic_select .= '<option value="' . $tpRecord['tid'] . '"';
+        if ($curElement->subtype == $tpRecord['tid']) {
+            $topic_select .= ' selected="selected"';
+        }
+        $topic_select .= '>' . $tpRecord['topic'] . '</option>' . LB;
     }
-    $topic_select .= '</select>' . LB;
 
     if ( $menu->type == 2 || $menu->type == 4 ) {
-        $parent_select = '<input type="hidden" name="pid" id="pid" value="0"/>'.$LANG_MB01['top_level'];
+        $parent_select = '';
     } else {
-        $parent_select = '<select id="pid" name="pid">' . LB;
-        $parent_select .= '<option value="0">' . $LANG_MB01['top_level'] . '</option>' . LB;
+        $parent_select = '<option value="0">' . $LANG_MB01['top_level'] . '</option>' . LB;
 
         $stmt = $db->conn->executeQuery(
                     "SELECT id,element_label FROM `{$_TABLES['menu_elements']}` WHERE menu_id=? AND element_type=1",
@@ -1014,79 +1027,76 @@ function MB_editElement( $menu_id, $mid )
         );
         while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
             if ($row['id'] != $mid ) {
-                $parent_select .= '<option value="' . $row['id'] . '" ' . ($menu->menu_elements[$mid]->pid==$row['id'] ? 'selected="selected"' : '') . '>' . $row['element_label'] . '</option>' . LB;
+                $parent_select .= '<option value="' . $row['id'] . '"';
+                if ($curElement->pid==$row['id']) {
+                    $parent_select .= ' selected="selected"';
+                }
+                $parent_select .= '>' . $row['element_label'] . '</option>' . LB;
             }
         }
-        $parent_select .= '</select>' . LB;
     }
 
     // build group select
 
     $rootUser = $db->getItem($_TABLES['group_assignments'],'ug_uid',array('ug_main_grp_id' => 1),array(Database::INTEGER));
 
+    $group_select = '';
     $usergroups = SEC_getUserGroups($rootUser);
-
     uksort($usergroups, "strnatcasecmp");
-    $group_select = '<select id="group" name="group">' . LB;
-
-    for ($i = 0; $i < count($usergroups); $i++) {
-        $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
-        if ($menu->menu_elements[$mid]->group_id == $usergroups[key($usergroups)] ) {
+    foreach ($usergroups as $grp_name=>$grp_id) {
+        $group_select .= '<option value="' . $grp_id . '"';
+        if ($curElement->group_id == $grp_id ) {
             $group_select .= ' selected="selected"';
         }
-        $group_select .= '>' . ucfirst(key($usergroups)) . '</option>' . LB;
-        next($usergroups);
+        $group_select .= '>' . ucfirst($grp_name) . '</option>' . LB;
     }
-    $group_select .= '</select>' . LB;
 
-    $target_select = '<select id="urltarget" name="urltarget">' . LB;
-    $target_select .= '<option value=""' . ($menu->menu_elements[$mid]->target == "" ? ' selected="selected"' : '') . '>' . $LANG_MB01['same_window'] . '</option>' . LB;
-    $target_select .= '<option value="_blank"' . ($menu->menu_elements[$mid]->target == "_blank" ? ' selected="selected"' : '') . '>' . $LANG_MB01['new_window'] . '</option>' . LB;
-    $target_select .= '</select>' . LB;
+    $target_select = '<option value=""' . ($curElement->target == "" ? ' selected="selected"' : '') . '>' . $LANG_MB01['same_window'] . '</option>' . LB;
+    $target_select .= '<option value="_blank"' . ($curElement->target == "_blank" ? ' selected="selected"' : '') . '>' . $LANG_MB01['new_window'] . '</option>' . LB;
 
-    if ( $menu->menu_elements[$mid]->active ) {
+    if ( $curElement->active ) {
         $active_selected = ' checked="checked"';
     } else {
         $active_selected = '';
     }
 
-    $order_select = '<select id="menuorder" name="menuorder">' . LB;
-    $order_select .= '<option value="0">' . $LANG_MB01['first_position'] . '</option>' . LB;
-
+    $order_select = '<option value="0">' . $LANG_MB01['first_position'] . '</option>' . LB;
     $stmt = $db->conn->executeQuery(
                 "SELECT id,element_label,element_order FROM `{$_TABLES['menu_elements']}`
                  WHERE menu_id=? AND pid=? ORDER BY element_order ASC",
-                array($menu_id,$menu->menu_elements[$mid]->pid),
-                array(Database::INTEGER,Database::INTEGER)
+                array($menu_id, (int)$curElement->pid),
+                array(Database::INTEGER, Database::INTEGER)
     );
 
     $order = 10;
-
     while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
-        if ( $menu->menu_elements[$mid]->order != $order ) {
+        if ( $curElement->order != $order ) {
             $label = strip_tags($row['element_label']);
             if ( trim($label) == "") {
                 $label = htmlspecialchars($row['element_label']);
             }
             $test_order = $order + 10;
-            $order_select .= '<option value="' . $row['id'] . '"' . ($menu->menu_elements[$mid]->order == $test_order ? ' selected="selected"' : '') . '>' . $label . '</option>' . LB;
+            $order_select .= '<option value="' . $row['id'] . '"';
+            if ($curElement->order == $test_order) {
+                $order_select .= ' selected="selected"';
+            }
+            $order_select .= '>' . $label . '</option>' . LB;
         }
         $order += 10;
     }
-    $order_select .= '</select>' . LB;
 
     $T = new Template($_CONF['path_layout'] . 'admin/menu');
     $T->set_file('admin','editelement.thtml');
-
     $T->set_var(array(
         'form_action'       => $_CONF['site_admin_url'] . '/menu.php',
         'birdseed'          => '<a href="'.$_CONF['site_admin_url'].'/menu.php">'.$LANG_MB01['menu_list'].'</a> :: <a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$menu_id.'">'.$menu->name.'</a> :: '.$LANG_MB01['edit_element'],
-        'menulabel'         => htmlspecialchars($menu->menu_elements[$mid]->label),
-        'menuorder'         => $menu->menu_elements[$mid]->order,
+        'menulabel'         => htmlspecialchars($curElement->label),
+        'menuorder'         => $curElement->order,
         'order_select'      => $order_select,
-        'menuurl'           => $menu->menu_elements[$mid]->url,
-        'phpfunction'       => $menu->menu_elements[$mid]->subtype,
+        'menuurl'           => $curElement->url,
+        'phpfunction'       => $curElement->subtype,
         'type_select'       => $type_select,
+        'type_disabled'     => $type_disabled,
         'gl_select'         => $gl_select,
         'plugin_select'     => $plugin_select,
         'sp_select'         => $sp_select,
@@ -1122,7 +1132,12 @@ function MB_saveEditMenuElement ( )
     $filter->setAllowedElements($allowedElements);
     $filter->setPostmode('html');
 
-    $id            = COM_applyFilter($_POST['id'],true);
+    $newElement = false;
+    if (!isset($_POST['id'])) {
+        $newElement = true;
+    } else {
+        $id            = COM_applyFilter($_POST['id'],true);
+    }
     $menu_id       = COM_applyFilter($_POST['menu']);
     $pid           = COM_applyFilter($_POST['pid'],true);
     $label         = $filter->filterHTML($_POST['menulabel']);
@@ -1177,35 +1192,50 @@ function MB_saveEditMenuElement ( )
     $aorder             = $db->getItem($_TABLES['menu_elements'],'element_order',array('id' => $aid),array(Database::INTEGER));
     $neworder = $aorder + 1;
 
-    $db->conn->executeUpdate(
-            "UPDATE `{$_TABLES['menu_elements']}`
-             SET pid=?, element_order=?, element_label=?, element_type=?, element_subtype=?, element_active=?, element_url=?, element_target=?, group_id=?
-             WHERE id=?",
-            array(
-                $pid,
-                $neworder,
-                $label,
-                $type,
-                $subtype,
-                $active,
-                $url,
-                $target,
-                $group_id,
-                $id
-            ),
-            array(
-                Database::INTEGER,
-                Database::INTEGER,
-                Database::STRING,
-                Database::INTEGER,
-                Database::STRING,
-                Database::INTEGER,
-                Database::STRING,
-                Database::STRING,
-                Database::INTEGER,
-                Database::INTEGER
-            )
-    );
+    if ($newElement) {
+        $db->conn->insert($_TABLES['menu_elements'], array(
+            'menu_id'           => $menu_id,
+            'pid'               => $pid,
+            'element_order'     => $neworder,
+            'element_label'     => $label,
+            'element_type'      => $type,
+            'element_subtype'   => $subtype,
+            'element_active'    => $active,
+            'element_url'       => $url,
+            'element_target'    => $target,
+            'group_id'          => $group_id
+        ));
+    } else {
+        $db->conn->executeUpdate(
+                "UPDATE `{$_TABLES['menu_elements']}`
+                SET pid=?, element_order=?, element_label=?, element_type=?, element_subtype=?, element_active=?, element_url=?, element_target=?, group_id=?
+                WHERE id=?",
+                array(
+                    $pid,
+                    $neworder,
+                    $label,
+                    $type,
+                    $subtype,
+                    $active,
+                    $url,
+                    $target,
+                    $group_id,
+                    $id
+                ),
+                array(
+                    Database::INTEGER,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::STRING,
+                    Database::STRING,
+                    Database::INTEGER,
+                    Database::INTEGER
+                )
+        );
+    }
     $menu->reorderMenu($pid);
 }
 
@@ -1267,7 +1297,7 @@ function MB_deleteChildElements( $id, $menu_id )
 }
 
 
-function MB_editMenu( $mid )
+function MB_editMenu( $mid=0 )
 {
     global $_CONF, $_TABLES, $_ST_CONF, $stMenu, $LANG_MB00, $LANG_MB01, $LANG_MB_ADMIN,
            $LANG_MB_TYPES, $LANG_MB_GLTYPES,$LANG_MB_GLFUNCTION,
@@ -1293,34 +1323,27 @@ function MB_editMenu( $mid )
                                 $_CONF['layout_url'] . '/images/icons/menubuilder.png');
 
     // build menu type select
-
-    $menuTypeSelect = '<select id="menutype" name="menutype">' . LB;
-    while ( $types = current($LANG_MB_MENU_TYPES) ) {
+    $menuTypeSelect = '';
+    foreach ($LANG_MB_MENU_TYPES as $key=>$type) {
         $menuTypeSelect .= '<option value="' . key($LANG_MB_MENU_TYPES) . '"';
-        if (key($LANG_MB_MENU_TYPES) == $menu->type) {
+        if ($key == $menu->type) {
             $menuTypeSelect .= ' selected="selected"';
         }
-        $menuTypeSelect .= '>' . $types . '</option>' . LB;
-        next($LANG_MB_MENU_TYPES);
+        $menuTypeSelect .= '>' . $type . '</option>' . LB;
     }
-    $menuTypeSelect .= '</select>' . LB;
 
     // build group select
-
+    $group_select = '';
     $rootUser = $db->getItem($_TABLES['group_assignments'],'ug_uid',array('ug_main_grp_id' => 1),array(Database::INTEGER));
     $usergroups = SEC_getUserGroups($rootUser);
     uksort($usergroups, "strnatcasecmp");
-
-    $group_select = '<select id="group" name="group">' . LB;
-    for ($i = 0; $i < count($usergroups); $i++) {
-        $group_select .= '<option value="' . $usergroups[key($usergroups)] . '"';
-        if ( $usergroups[key($usergroups)] == $menu->group_id) {
+    foreach ($usergroups as $grp_name=>$grp_id) {
+        $group_select .= '<option value="' . $grp_id . '"';
+        if ($grp_id  == $menu->group_id) {
             $group_select .= ' selected="selected"';
         }
-        $group_select .= '>' . ucfirst(key($usergroups)) . '</option>' . LB;
-        next($usergroups);
+        $group_select .= '>' . ucfirst($grp_name) . '</option>' . LB;
     }
-    $group_select .= '</select>' . LB;
 
     $T = new Template($_CONF['path_layout'] . 'admin/menu');
     $T->set_file( array( 'admin' => 'editmenu.thtml'));
@@ -1356,28 +1379,54 @@ function _mb_getListField_menu($fieldname, $fieldvalue, $A, $icon_arr)
 {
     global $_CONF, $_USER, $_TABLES, $LANG_ADMIN,$LANG_MB01;
 
+    $retval = '';
+
     switch ($fieldname) {
         case 'label':
-            $retval = "<span style=\"padding:0 5px;margin-left:" .$A['indent'] . "px;\">" . ($A['type'] == 1 ? '<b>' : '') . $fieldvalue . ($A['type'] == 1 ? '</b>' : '').'</span>';
+            $retval = "<span style=\"padding:0 5px;margin-left:" .$A['indent'] . "px;\">" . ($A['type'] == 1 ? '<strong>' : '') . $fieldvalue . ($A['type'] == 1 ? '</strong>' : '').'</span>';
             break;
         case 'enabled' :
             $retval =  '<input class="menu-element-enabler" type="checkbox" name="enableditem[' . $A['id'] . ']" onclick="submit()" value="1"' . ($fieldvalue == 1 ? ' checked="checked"' : '') . '/>';
             break;
         case 'edit' :
-            $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=edit&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id']. '">';
-            $retval .= '<img src="' . $_CONF['layout_url'] . '/images/edit.png" alt="' . $LANG_MB01['edit'] . '"/></a>';
+            $retval = FieldList::edit(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/menu.php?mode=edit&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'],
+                    'attr' => array(
+                        'title' => $LANG_MB01['edit']
+                    )
+                )
+            );
             break;
         case 'delete' :
-            $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=delete&amp;mid=' . $fieldvalue . '&amp;menuid='.$A['menu_id'].'" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');">';
-            $retval .= '<img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"/></a>';
+            $retval = FieldList::delete(
+                array(
+                    'delete_url' => $_CONF['site_admin_url'] . '/menu.php?mode=delete&amp;mid=' . $fieldvalue . '&amp;menuid='.$A['menu_id'],
+                    'attr' => array(
+                        'title'   => $LANG_MB01['delete'],
+                        'onclick' => 'return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');'
+                    ),
+                )
+            );
             break;
         case 'order' :
-            $moveup = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=up&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'] . '">';
-            $movedown = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=down&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'] . '">';
-            $retval = $moveup . '<img src="' . $_CONF['layout_url'] . '/images/up.png" alt="' . $LANG_MB01['move_up'] . '"/></a>&nbsp;' . $movedown . '<img src="' . $_CONF['layout_url'] . '/images/down.png" alt="' . $LANG_MB01['move_down'] . '"/></a>';
+            $retval .= FieldList::up(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=up&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'],
+                )
+            );
+            $retval .= FieldList::down(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/menu.php?mode=move&amp;where=down&amp;mid=' . $A['id'] . '&amp;menu=' . $A['menu_id'],
+                )
+            );
             break;
         case 'info' :
-            $retval = '<a class="'.COM_getToolTipStyle().'" title="' . htmlspecialchars($fieldvalue) . '" href="#"><img src="' . $_CONF['layout_url'] . '/images/info.png" alt=""/></a>';
+            $retval .= FieldList::info(
+                array(
+                    'title' => htmlspecialchars($fieldvalue),
+                )
+            );
             break;
         default :
             $retval = $fieldvalue;
@@ -1395,28 +1444,51 @@ function _mb_getListField_menulist($fieldname, $fieldvalue, $A, $icon_arr)
     switch ($fieldname) {
         case 'menu_name':
             $elementDetails = $A['menu_name'] . '::';
-            $elementDetails .= '<b>' . $LANG_MB01['type'] . ':</b><br/>' . $LANG_MB_MENU_TYPES[$A['menu_type']] . '<br/>';
+            $elementDetails .= '<strong>' . $LANG_MB01['type'] . ':</strong><br/>' . $LANG_MB_MENU_TYPES[$A['menu_type']] . '<br/>';
             $retval = '<span style="cursor:pointer;" class="'.COM_getToolTipStyle().'" title="' . $elementDetails . '">'.$A['menu_name'].'</span>';
             break;
         case 'copy' :
-            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=clone&amp;id='.$fieldvalue.'">'
-                    . '<img src="'.$_CONF['layout_url'].'/images/copy.png" alt="'.$LANG_MB01['clone'].'" />';
+            $retval = FieldList::copy(
+                array(
+                    'url' => $_CONF['site_admin_url'].'/menu.php?mode=clone&amp;id='.$fieldvalue,
+                )
+            );
             break;
         case 'active' :
             $retval = '<input class="menu-enabler" type="checkbox" name="enabledmenu[' . $A['menu_id'] . ']" onclick="submit()" value="1"' . ($A['active'] == 1 ? ' checked="checked"' : '') . '/>';
             break;
         case 'elements' :
-            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$A['menu_id'].'">'
-            . '<img src="'.$_CONF['layout_url'].'/images/edit.png" alt="'.$LANG_MB01['edit'].'">';
+            $retval = FieldList::edit(
+                array(
+                    'url' => $_CONF['site_admin_url'].'/menu.php?mode=menu&amp;menu='.$A['menu_id'],
+                    'attr' => array(
+                        'title' => $LANG_MB01['edit']
+                    )
+                )
+            );
             break;
         case 'delete' :
             if ( $A['menu_id'] != 1 && $A['menu_id'] != 2 && $A['menu_id'] != 3 ) {
-                $retval = '<a href="' . $_CONF['site_admin_url'] . '/menu.php?mode=deletemenu&amp;id=' . $A['menu_id'] . '" onclick="return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');"><img src="' . $_CONF['layout_url'] . '/images/delete.png" alt="' . $LANG_MB01['delete'] . '"' . '/></a>';
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $_CONF['site_admin_url'] . '/menu.php?mode=deletemenu&amp;id=' . $A['menu_id'],
+                        'attr' => array(
+                            'title' => $LANG_MB01['delete'],
+                            'onclick' => 'return confirm(\'' . $LANG_MB01['confirm_delete'] . '\');',
+                        )
+                    )
+                );
             }
             break;
         case 'options' :
-            $retval = '<a href="'.$_CONF['site_admin_url'].'/menu.php?mode=editmenu&amp;menuid='.$A['menu_id'].'">'
-            . '<img src="'.$_CONF['layout_url'].'/images/gear.png" height="16" width="16" alt="'.$LANG_MB01['options'].'"/></a>';
+            $retval = FieldList::cog(
+                array(
+                    'url' => $_CONF['site_admin_url'].'/menu.php?mode=editmenu&amp;menuid='.$A['menu_id'],
+                    'attr' => array(
+                        'title' => $LANG_MB01['options']
+                    )
+                )
+            );
             break;
         default :
             $retval = $fieldvalue;
@@ -1461,7 +1533,8 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             break;
         case 'new' :
             $menu = COM_applyFilter($_GET['menuid'],true);
-            $content = MB_createElement ( $menu );
+            //$content = MB_createElement ( $menu );
+            $content = MB_editElement( $menu );
             break;
         case 'move' :
             // do something with the direction
@@ -1497,7 +1570,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             $rc = MB_saveNewMenu();
             if ( $rc != '' ) {
                 $content = COM_showMessageText($rc, '', true,'error');
-                $content .= MB_createMenu();
+                $content .= MB_editMenu();
             } else {
                 $content = MB_displayMenuList( );
             }
@@ -1551,7 +1624,7 @@ if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !i
             exit;
             break;
         case 'newmenu' :
-            $content = MB_createMenu( );
+            $content = MB_editMenu( );
             $currentSelect = $LANG_MB01['menu_builder'];
             break;
         default :

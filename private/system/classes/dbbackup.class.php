@@ -13,6 +13,7 @@
 *   @filesource
 */
 
+use \glFusion\Log\Log;
 
 /**
 *   Class for backup
@@ -213,7 +214,7 @@ class dbBackup
                 $this->fp = @fopen($this->backup_dir.$filename, $mode);
 
             if(!$this->fp) {
-                COM_errorLog('Could not open the backup file for writing! (' .
+                Log::write('system',Log::ERROR,'Could not open the backup file for writing! (' .
                     $this->backup_dir . $this->backup_filename . ')');
                 return false;
             }
@@ -264,7 +265,7 @@ class dbBackup
     {
         $backtrace = debug_backtrace();
         $method = $backtrace[1]['class'].'::'.$backtrace[1]['function'];
-        COM_errorLog($method . ' - ' . $msg);
+        Log::write('system',Log::ERROR,$method . ' - ' . $msg);
     }
 
 
@@ -697,7 +698,7 @@ class dbBackup
         }
 
         if(!$mail->Send()) {
-            COM_errorLog("Email Error: " . $mail->ErrorInfo);
+            Log::write('system',Log::ERROR,"Email Error: " . $mail->ErrorInfo);
             return false;
         }
         return true;
@@ -718,11 +719,11 @@ class dbBackup
         $diskfile = $this->backup_dir . $filename;
         $recipient = $_VARS['_dbback_sendto'];
         if (!file_exists($diskfile)) {
-            COM_errorLog("dbBackup: File $diskfile does not exist");
+            Log::write('system',Log::ERROR,'dbBackup: File '.$diskfile.' does not exist');
             return false;
         }
         if (!COM_isEmail( $recipient ) ) {
-            COM_errorLog("$recipient is not a valid email address");
+            Log::write('system',Log::ERROR,$recipient.' is not a valid email address');
             return false;
         }
         $message = sprintf("Attached to this email is\n   %s\n   Size:%s kilobytes\n", $filename, round(filesize($diskfile)/1024));

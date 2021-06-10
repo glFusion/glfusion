@@ -171,6 +171,14 @@ class config
         return array_key_exists($group, $this->config_array);
     }
 
+    function get($name,$group) {
+        global $_TABLES, $_VARS;
+
+        $db = Database::getInstance();
+        $value = $db->getItem($_TABLES['conf_values'],'value',array('name'=>$name,'group_name'=>$group));
+        return(@unserialize($value));
+    }
+
     /**
      * This function sets a configuration variable to a value in the database
      * and in the current array. If the variable does not already exist,
@@ -792,7 +800,7 @@ class config
         if(!array_key_exists($grp, $LANG_configsubgroups)) {
             $LANG_configsubgroups[$grp] = array();
         }
-        if (!SEC_inGroup('Root')) {
+        if (!SEC_hasRights('config.admin')) {
             return config::_UI_perm_denied();
         }
 
@@ -1197,7 +1205,7 @@ class config
     {
         global $_CONF, $_TABLES, $LANG_ADM_ACTIONS;
 
-        if (!SEC_inGroup('Root')) {
+        if (!SEC_hasRights('config.admin')) {
             return null;
         }
 
@@ -1226,6 +1234,10 @@ class config
         $success_array = array();
         if ( is_array($this->config_array[$group]) ) {
             foreach ($this->config_array[$group] as $param_name => $param_value) {
+                if ($param_name == 'path_html') {
+                    // TODO? path_html is statically defined in lib-common.php
+                    continue;
+                }
                 if (array_key_exists($param_name, $change_array)) {
                     if ( !in_array($param_name,$this->consumer_keys) ) {
                         $change_array[$param_name] =
@@ -1248,7 +1260,7 @@ class config
         }
 
         $this->_purgeCache();
-
+        self::fixupPaths();
         return $success_array;
     }
 
@@ -1612,6 +1624,46 @@ class config
         return json_encode($confArray);
     }
 
+
+    /**
+     * Set actual paths based on defaults if the configured paths are empty.
+     * Operates on the global $_CONF variable.
+     *
+     * @return  void
+     */
+    public static function fixupPaths()
+    {
+        global $_CONF;
+
+        if (empty($_CONF['path_images'])) {
+            $_CONF['path_images'] = $_CONF['path_html'] . 'data/images/';
+            $_CONF['path_images_url'] = $_CONF['site_url'] . '/data/images';
+        } else {
+            $path_image_url = rtrim(str_replace($_CONF['path_html'],'',$_CONF['path_images']),'/\\');
+            $_CONF['path_images_url'] = $_CONF['site_url'].'/'.$path_image_url;
+        }
+        if (empty($_CONF['path_log'])) {
+            $_CONF['path_log'] = $_CONF['path'] . 'logs/';
+        }
+        if (empty($_CONF['path_language'])) {
+            $_CONF['path_language'] = $_CONF['path'] . 'language/';
+        }
+        if (empty($_CONF['backup_path'])) {
+            $_CONF['backup_path'] = $_CONF['path'] . 'backups/';
+        }
+        if (empty($_CONF['path_data'])) {
+            $_CONF['path_data'] = $_CONF['path'] . 'data/';
+        }
+        if (empty($_CONF['path_themes'])) {
+            $_CONF['path_themes'] = $_CONF['path_html'] . 'layout/';
+            $_CONF['path_layout'] = $_CONF['path_html'] . 'layout/' . $_CONF['theme'] .'/';
+            $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_CONF['theme'];
+        }
+        if (empty($_CONF['path_rss'])) {
+            $_CONF['path_rss'] = $_CONF['path_html'] . 'backend/';
+        }
+    }
+
 }
 
 /**
@@ -1675,6 +1727,7 @@ function configmanager_select_theme_helper()
 function configmanager_path_html_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1690,6 +1743,7 @@ function configmanager_path_html_validate($value)
 function configmanager_path_log_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1705,6 +1759,7 @@ function configmanager_path_log_validate($value)
 function configmanager_path_language_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1720,6 +1775,7 @@ function configmanager_path_language_validate($value)
 function configmanager_backup_path_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1735,6 +1791,7 @@ function configmanager_backup_path_validate($value)
 function configmanager_path_data_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1750,6 +1807,7 @@ function configmanager_path_data_validate($value)
 function configmanager_path_images_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1765,6 +1823,7 @@ function configmanager_path_images_validate($value)
 function configmanager_path_pear_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -1781,6 +1840,7 @@ function configmanager_path_pear_validate($value)
 function configmanager_path_themes_validate($value)
 {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }

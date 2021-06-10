@@ -33,18 +33,6 @@
 				document.mediabrowser.showtitle.disabled=true;
 				document.mediabrowser.link_src.disabled=true;
 				break;
-				case'fslideshow':
-				document.mediabrowser.autoplay.disabled=true;
-				document.mediabrowser.border.disabled=true;
-				document.mediabrowser.alignment.disabled=false;
-				document.mediabrowser.source.disabled=false;
-				document.mediabrowser.link.disabled=false;
-				document.mediabrowser.caption.disabled=false;
-				document.mediabrowser.delay.disabled=false;
-				document.mediabrowser.ribbon.disabled=true;
-				document.mediabrowser.showtitle.disabled=false;
-				document.mediabrowser.link_src.disabled=true;
-				break;
 				case'img':
 				document.mediabrowser.autoplay.disabled=true;
 				document.mediabrowser.border.disabled=true;
@@ -154,7 +142,6 @@
 				<ul class="uk-grid uk-grid-width-1-4 uk-margin">
 					<li><input type="radio" name="autotag" value="album" onChange="dodisabled()"{albumon}><label> {lang_album}</label></li>
 					<li><input type="radio" name="autotag" value="slideshow" onChange="dodisabled()"{slideshowon}><label> {lang_slideshow}</label></li>
-					<li><input type="radio" name="autotag" value="fslideshow" onChange="dodisabled()"{fslideshowon}><label> {lang_fslideshow}</label></li>
 					<li><input type="radio" name="autotag" value="media" onChange="dodisabled()"{mediaon}><label> {lang_media}</label></li>
 					<li><input type="radio" name="autotag" value="mlink" onChange="dodisabled()"{mlinkon}><label> {lang_mlink}</label></li>
 					<li><input type="radio" name="autotag" value="img" onChange="dodisabled()"{imgon}><label> {lang_img}</label></li>

@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | batch.php                                                                |
-// |                                                                          |
-// | Batch processing administration                                          |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Batch Processing
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -34,6 +19,8 @@ if (!defined ('GVERSION')) {
 
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
+
+use \glFusion\Log\Log;
 
 function MG_batchProcess( $album_id, $action, $actionURL = '' ) {
     global $_CONF, $MG_albums, $_TABLES, $_MG_CONF, $LANG_MG01, $_POST, $_SERVER;
@@ -113,13 +100,13 @@ function MG_batchDeleteMedia( $album_id, $actionURL = '' ) {
     $result = DB_query($sql);
     $A = DB_fetchArray($result);
     if ( DB_error() != 0 )  {
-        echo COM_errorLog("Media Gallery - Error retrieving album cover.");
+        Log::write('system',Log::ERROR,'Media Gallery: Error retrieving album cover');
     }
 
     $access = SEC_hasAccess ($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
 
     if ( $access != 3 && !SEC_hasRights('mediagallery.admin')) {
-        COM_errorLog("Someone has tried to illegally delete items from album in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING, 'Someone has tried to delete items from album in Media Gallery.  User id: '.$_USER['uid'].', IP: '.$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
     $mediaCount = $A['media_count'];
@@ -129,7 +116,7 @@ function MG_batchDeleteMedia( $album_id, $actionURL = '' ) {
         $sql = "DELETE FROM {$_TABLES['mg_media_albums']} WHERE media_id='" . DB_escapeString($_POST['sel'][$i]) . "' AND album_id=" . intval($album_id);
         $result = DB_query($sql);
         if ( DB_error() ) {
-            COM_errorLog("Error removing media from mg_media_albums");
+            Log::write('system',Log::ERROR,'Media Gallery: Error removing media from mg_media_albums');
         }
         $sql = "SELECT media_filename, media_mime_ext FROM {$_TABLES['mg_media']} WHERE media_id='" . DB_escapeString($_POST['sel'][$i]) . "'";
         $result = DB_query($sql);
@@ -160,7 +147,7 @@ function MG_batchDeleteMedia( $album_id, $actionURL = '' ) {
                 $row = DB_fetchArray($result);
                 DB_query("UPDATE {$_TABLES['mg_albums']} set album_cover=-1,album_cover_filename='" . $row['media_filename'] . "' WHERE album_id=" . $A['album_id']);
                 if ( DB_error() ) {
-                    COM_errorLog("Media Gallery - Error setting new album cover after media move");
+                    Log::write('system',Log::ERROR, 'Media Gallery: Error setting new album cover after media move');
                 }
             } else {
                 // album must be empty now or it only has video / audio files
@@ -234,12 +221,12 @@ function MG_batchMoveMedia( $album_id, $actionURL = '' ) {
     $result = DB_query($sql);
     $A = DB_fetchArray($result);
     if ( DB_error() != 0 )  {
-        echo COM_errorLog("Media Gallery - Error retrieving album cover.");
+        Log::write('system',Log::ERROR,'Media Gallery: Error retrieving album cover.');
     }
     $access = SEC_hasAccess ($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
 
     if ( $access != 3 && !SEC_hasRights('mediagallery.admin') ) {
-        COM_errorLog("Someone has tried to illegally delete items from album in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,'Someone has tried to delete items from album in Media Gallery.  User id: '.$_USER['uid'].', IP: '.$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -251,12 +238,13 @@ function MG_batchMoveMedia( $album_id, $actionURL = '' ) {
     $result = DB_query($sql);
     $D = DB_fetchArray($result);
     if ( DB_error() != 0 )  {
-        echo COM_errorLog("Media Gallery - Error retrieving destination album.");
+        echo "Media Gallery - Error retrieving destination album.";
+        Log::write('system',Log::ERROR,'Media Gallery: Error retreiving destination album');
     }
     $access = SEC_hasAccess ($D['owner_id'],$D['group_id'],$D['perm_owner'],$D['perm_group'],$D['perm_members'],$D['perm_anon']);
 
     if ( $access != 3 && !SEC_hasRights('mediagallery.admin')) {
-        COM_errorLog("Someone has tried to illegally move items from album in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,'Someone has tried to move items from album in Media Gallery.  User id: '.$_USER['uid'].', IP: '.$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -291,7 +279,7 @@ function MG_batchMoveMedia( $album_id, $actionURL = '' ) {
         $sql = "UPDATE {$_TABLES['mg_media_albums']} SET album_id=" . $destination . ", media_order=" . $media_seq . " WHERE album_id=" . $album_id . " AND media_id='" . DB_escapeString($_POST['sel'][$i]) . "'";
         DB_query($sql);
         if (DB_error()) {
-            COM_errorLog("Media Gallery - Error moving " . $_POST['sel'][$i] . " to new destination album " . $album_id);
+            Log::write('system',Log::ERROR,'Media Gallery: Error moving ' . $_POST['sel'][$i] . ' to new destination album ' . $album_id);
         }
         $media_seq += 10;
         // update the media count in both albums...
@@ -316,7 +304,7 @@ function MG_batchMoveMedia( $album_id, $actionURL = '' ) {
                 $row = DB_fetchArray($result);
                 DB_query("UPDATE {$_TABLES['mg_albums']} set album_cover=-1,album_cover_filename='" . $row['media_filename'] . "' WHERE album_id=" . $A['album_id']);
                 if ( DB_error() ) {
-                    COM_errorLog("Media Gallery - Error setting new album cover after media move");
+                    Log::write('system',Log::ERROR,'Media Gallery - Error setting new album cover after media move');
                 }
             } else {
                 // album must be empty now or it only has video / audio files
@@ -395,14 +383,14 @@ function MG_deleteAlbumConfirm( $album_id, $actionURL = '' ) {
     $T->set_var('album_id',$album_id);
 
     if ($MG_albums[$album_id]->access != 3 ) {
-        COM_errorLog("MediaGallery: Someone has tried to delete a album they do not have permissions.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,'MediaGallery: Someone has tried to delete a album they do not have permissions.  User id: '.$_USER['uid'].', IP: '.$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
 
     if ( !isset($MG_albums[$album_id]->id) ) {
 
-        COM_errorLog("MediaGallery: Someone has tried to delete a album to non-existent parent album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,'MediaGallery: Someone has tried to delete a album to non-existent parent album.  User id: '.$_USER['uid'].', IP: '.$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -451,7 +439,7 @@ function MG_deleteAlbum( $album_id, $target_id, $actionURL='' ) {
     // need to check perms here...
 
     if ( $MG_albums[$album_id]->access != 3) {
-        COM_errorLog("MediaGallery: Someone has tried to illegally delete an album in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,'MediaGallery: Someone has tried to delete an album in Media Gallery.  User id: '.$_USER['uid'].', IP: '.$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -494,11 +482,11 @@ function MG_deleteAlbum( $album_id, $target_id, $actionURL='' ) {
                     }
                 }
             } else {
-                COM_errorLog("MediaGallery: User attempting to move to a album that user does not have privelges too!");
+                Log::write('system',Log::WARNING,'MediaGallery: User attempting to move to a album that user does not have privelges to!');
                 return(MG_genericError($LANG_MG00['access_denied_msg']));
             }
         } else {
-            COM_errorLog("MediaGallery: Deleting Album - ERROR - Target albums does not exist");
+            Log::write('system',Log::ERROR,'MediaGallery: Deleting Album - ERROR - Target albums does not exist');
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         }
     }

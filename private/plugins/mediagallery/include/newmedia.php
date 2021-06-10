@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | newmedia.php                                                             |
-// |                                                                          |
-// | Media Upload routines                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Media Upload
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -34,6 +19,8 @@ if (!defined ('GVERSION')) {
 
 require_once $_CONF['path'].'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'].'plugins/mediagallery/include/sort.php';
+
+use \glFusion\Log\Log;
 
 /**
 * Set content type based upon file extension
@@ -93,7 +80,7 @@ function MG_HTML5Upload( $album_id ) {
     $select = $album_id;
 
     if( $_MG_CONF['verbose'] ) {
-        COM_errorLog( '***Inside MG_HTML5Upload()***' );
+        Log::write('system',Log::DEBUG,'***Inside MG_HTML5Upload()***' );
     }
 
     // construct the album selectbox ...
@@ -103,11 +90,11 @@ function MG_HTML5Upload( $album_id ) {
 
     // tell the flash uploader what the maximum file size can be.
     $file_size_limit = MG_getUploadLimit( $album_id ) . ' B';
-    if( $_MG_CONF['verbose'] ) COM_errorLog( 'file_size_limit=' . $file_size_limit );
+    if( $_MG_CONF['verbose'] ) Log::write('system',Log::DEBUG, 'file_size_limit=' . $file_size_limit );
 
     // determine the valid filetypes for the current album
     $allowed_file_types = MG_getValidFileTypes( $album_id );
-    if ( $_MG_CONF['verbose'] ) COM_errorLog( 'allowed_file_types=' . $allowed_file_types );
+    if ( $_MG_CONF['verbose'] ) Log::write('system',Log::DEBUG,'allowed_file_types=' . $allowed_file_types );
 
     $user_id = $_USER['uid'];
     $user_token = SEC_createTokenGeneral( 'html5upload', 14400 );
@@ -151,13 +138,13 @@ function MG_saveHTML5Upload( $album_id ) {
     $albums = $album_id;
 
     if( $_MG_CONF['verbose'] ) {
-        COM_errorLog( '*** Inside MG_saveHTML5Upload()***' );
-        COM_errorLog( 'uploading to album_id=' . $albums );
-        COM_errorLog("album owner_id=" . $MG_albums[0]->owner_id );
+        Log::write('system',Log::DEBUG,'*** Inside MG_saveHTML5Upload()***' );
+        Log::write('system',Log::DEBUG,'uploading to album_id=' . $albums );
+        Log::write('system',Log::DEBUG,"album owner_id=" . $MG_albums[0]->owner_id );
     }
 
     if ( !isset( $MG_albums[$albums]->id ) || $albums == 0 ) {
-        COM_errorLog( 'MediaGallery: HTML5Upload was unable to determine album id' );
+        Log::write('system',Log::ERROR,'MediaGallery: HTML5Upload was unable to determine album id' );
         return $LANG_MG01['html5upload_err_album_id'];
     }
 
@@ -198,17 +185,17 @@ function MG_saveHTML5Upload( $album_id ) {
         $thumbnail   = '';
 
         if( $_MG_CONF['verbose'] ) {
-            COM_errorLog( 'filename=' . $filename, 1 );
-            COM_errorLog( 'filesize=' . $filesize, 1 );
-            COM_errorLog( 'filetype=' . $filetype, 1 );
-            COM_errorLog( 'filetmp=' . $filetmp, 1 );
-            COM_errorLog( 'error=' . $error, 1 );
+            Log::write('system',Log::DEBUG,'filename=' . $filename );
+            Log::write('system',Log::DEBUG,'filesize=' . $filesize );
+            Log::write('system',Log::DEBUG,'filetype=' . $filetype );
+            Log::write('system',Log::DEBUG,'filetmp=' . $filetmp );
+            Log::write('system',Log::DEBUG,'error=' . $error );
         }
 
         // we need to move the max filesize stuff to the flash uploader
         if ( $MG_albums[$album_id]->max_filesize != 0 && $filesize > $MG_albums[$album_id]->max_filesize ) {
-            COM_errorLog('MediaGallery: File ' . $filename . ' exceeds maximum allowed filesize for this album');
-            COM_errorLog('MediaGallery: Max filesize for this album=' . $MG_albums[$album_id]->max_filesize );
+            Log::write('system',Log::ERROR,'MediaGallery: File ' . $filename . ' exceeds maximum allowed filesize for this album');
+            Log::write('system',Log::ERROR,'MediaGallery: Max filesize for this album=' . $MG_albums[$album_id]->max_filesize );
             $tmpmsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'], $filename);
             @unlink($filetmp);
             return $tmpmsg;
@@ -219,7 +206,7 @@ function MG_saveHTML5Upload( $album_id ) {
         if ( $user_quota > 0 ) {
             $disk_used = MG_quotaUsage( $_USER['uid'] );
             if ( $disk_used+$filesize > $user_quota) {
-                COM_errorLog("MG Upload: File " . $filename . " would exceeds the users quota");
+                Log::write('system',Log::WARNING,"MG Upload: File " . $filename . " would exceeds the users quota");
                 $tmpmsg = sprintf($LANG_MG02['upload_exceeds_quota'], $filename);
                 $statusMsg .= $tmpmsg . '<br/>';
                 @unlink($filetmp);
@@ -238,7 +225,7 @@ function MG_saveHTML5Upload( $album_id ) {
         if ( $rc == true ) {
             $successfull_upload++;
         } else {
-            COM_errorLog( 'MG_saveHTML5Upload error: ' . $msg, 1 );
+            Log::write('system',Log::ERROR,'MG_saveHTML5Upload error: ' . $msg);
             return $msg;
         }
     }
@@ -257,7 +244,7 @@ function MG_saveHTML5Upload( $album_id ) {
     if ( $dbCount != $aCount) {
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $dbCount .
                  " WHERE album_id=" . intval($album_id) );
-        COM_errorLog("MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
+                 Log::write('system',Log::WARNING,"MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
     }
     MG_SortMedia( $album_id );
 
@@ -418,7 +405,7 @@ function MG_saveUserUpload( $album_id ) {
             continue;
 
         if ( $MG_albums[$album_id]->max_filesize != 0 && $filesize > $MG_albums[$album_id]->max_filesize ) {
-            COM_errorLog("MG Upload: File " . $filename . " exceeds maximum allowed filesize for this album");
+            Log::write('system',Log::ERROR,"MG Upload: File " . $filename . " exceeds maximum allowed filesize for this album");
             $tmpmsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'], $filename);
             $statusMsg .= $tmpmsg . '<br/>';
             continue;
@@ -435,17 +422,17 @@ function MG_saveUserUpload( $album_id ) {
                 case 1 :
                     $tmpmsg = sprintf($LANG_MG02['upload_too_big'],$filename);
                     $statusMsg .= $tmpmsg . '<br/>';
-                    COM_errorLog('MediaGallery:  Error - ' .$tmpmsg);
+                    Log::write('system',Log::ERROR,'MediaGallery:  Error - ' .$tmpmsg);
                     break;
                 case 2 :
                     $tmpmsg = sprintf($LANG_MG02['upload_too_big_html'], $filename);
                     $statusMsg .= $tmpmsg  . '<br/>';
-                    COM_errorLog('MediaGallery: Error - ' .$tmpmsg);
+                    Log::write('system',Log::ERROR,'MediaGallery: Error - ' .$tmpmsg);
                     break;
                 case 3 :
                     $tmpmsg = sprintf($LANG_MG02['partial_upload'], $filename);
                     $statusMsg .= $tmpmsg  . '<br/>';
-                    COM_errorLog('MediaGallery: Error - ' .$tmpmsg);
+                    Log::write('system',Log::ERROR,'MediaGallery: Error - ' .$tmpmsg);
                     break;
                 case 4 :
                     break;
@@ -467,7 +454,7 @@ function MG_saveUserUpload( $album_id ) {
         if ( $user_quota > 0 ) {
             $disk_used = MG_quotaUsage( $_USER['uid'] );
             if ( $disk_used+$filesize > $user_quota) {
-                COM_errorLog("MG Upload: File " . $filename . " would exceeds the users quota");
+                Log::write('system',Log::WARNING,"MG Upload: File " . $filename . " would exceeds the users quota");
                 $tmpmsg = sprintf($LANG_MG02['upload_exceeds_quota'], $filename);
                 $statusMsg .= $tmpmsg . '<br/>';
                 continue;
@@ -499,7 +486,7 @@ function MG_saveUserUpload( $album_id ) {
     if ( $dbCount != $aCount) {
         DB_query("UPDATE " . $_TABLES['mg_albums'] . " SET media_count=" . $dbCount .
                  " WHERE album_id=" . (int) $album_id );
-        COM_errorLog("MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
+        Log::write('system',Log::WARNING,"MediaGallery: Upload processing - Counts don't match - dbCount = " . $dbCount . " aCount = " . $aCount);
     }
 
     MG_SortMedia( $album_id );

@@ -137,7 +137,6 @@ function makeHtmlForInsertion(obj) {
             tag += "]";
             break;
         case 'slideshow':
-        case 'fslideshow':
             if (aid == '') {
                 alert('You must select an album');
                 return false

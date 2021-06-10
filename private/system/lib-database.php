@@ -90,6 +90,8 @@ function DB_query ($sql, $ignore_errors = 0)
 {
     global $_SYSTEM, $_DB_dbms;
 
+    $dbError = '';
+
     $db = Database::getInstance();
 
     if (is_array ($sql)) {
@@ -100,7 +102,8 @@ function DB_query ($sql, $ignore_errors = 0)
             foreach ($sql as $db => $request) {
                 $errmsg .= LB . $db . ': ' . $request;
             }
-            $result = COM_errorLog ($errmsg, 3);
+            $result = $errmsg;
+            Log::write('system',Log::ERROR,$errmsg);
             die ($result);
         }
     }
@@ -112,20 +115,20 @@ function DB_query ($sql, $ignore_errors = 0)
     try {
         $result = $db->conn->query($sql);
     } catch (Throwable $e) {
+        $err = $db->conn->errorInfo();
+        if (isset($err[2])) {
+            $dbError = preg_replace('!\s+!', ' ', $err[2]);
+        }
         if (defined ('DVLP_DEBUG')) {
-            if (class_exists('Log::write')) {
-                $err = $db->conn->errorInfo();
-                if (isset($err[2])) {
-                    $output = preg_replace('!\s+!', ' ', $err[2]);
-                    Log::write('system',Log::DEBUG,"SQL Error: " . $output);
-                    Log::write('system',Log::DEBUG,"SQL: " . $sql);
-                }
+            if (class_exists('\glFusion\Log\Log',true)) {
+//                Log::write('system',Log::DEBUG,"SQL Error: " . $dbError);
+//                Log::write('system',Log::DEBUG,"SQL: " . $sql);
             }
         }
         if ($ignore_errors) {
             return false;
         }
-        $db->dbError($e->getMessage());
+        $db->dbError($dbError,$sql);
     }
     if ($result === false) {
         if ($ignore_errors) {
@@ -522,6 +525,9 @@ function DB_error($sql = '')
                 }
             }
         }
+//        Log::write('system',Log::ERROR,"SQL Error: " . $db->getErrno());
+//        Log::write('system',Log::ERROR,"SQL: " . $sql);
+
         if ($db->_display_error) {
             return  $db->getErrno() . ': ' . $sql;
         } else {

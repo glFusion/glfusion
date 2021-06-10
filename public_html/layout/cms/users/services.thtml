@@ -2,7 +2,9 @@
 <div class="uk-form-row">
 	<label class="uk-form-label">{lang_service}</label>
 	<div class="uk-form-controls">
+		<select name="service">
 		{select_service}
+		</select>
 	</div>
 </div>
 {# end {templatelocation} #}

@@ -20,6 +20,7 @@ require_once 'auth.inc.php';
 
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 if (!$_CONF['trackback_enabled'] && !$_CONF['pingback_enabled'] &&
         !$_CONF['ping_enabled']) {
@@ -472,8 +473,12 @@ function TRACKBACK_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     switch($fieldname) {
 
         case "edit":
-            $retval = COM_createLink($icon_arr['edit'],
-                "{$_CONF['site_admin_url']}/trackback.php?mode=editservice&amp;service_id={$A['pid']}");
+            $retval = FieldList::edit(array(
+                'url' => $_CONF['site_admin_url'].'/trackback.php?mode=editservice&amp;service_id='.$A['pid'],
+                'attr' => array(
+                    'title' => $LANG_ADMIN['edit'],
+                )
+            ));
             break;
 
         case "name":

@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | index-all.php                                                            |
-// |                                                                          |
-// | Main interface to Media Gallery                                          |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Full Index page
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 /* ---------------------------------------------------
  * Configuration Options:
@@ -69,9 +54,19 @@ class mediaItem extends Media {
 
         switch( $this->type ) {
             case 0 :    // standard image
+
+                $foundImageDefaultThumbnail = false;
+
                 $default_thumbnail = 'tn/' . $this->filename[0] . '/' . $this->filename . '.' . $this->mime_ext;
-                if ( !file_exists($_MG_CONF['path_mediaobjects'] . $default_thumbnail) ) {
-                    $default_thumbnail = 'tn/' . $this->filename[0] . '/' . $this->filename . '.jpg';
+                foreach ($_MG_CONF['validExtensions'] as $ext ) {
+                    if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/'.  $this->filename[0] . '/' . $this->filename . $ext) ) {
+                        $default_thumbnail      = 'tn/'.  $this->filename[0] . '/' . $this->filename . $ext;
+                        $foundImageDefaultThumbnail = true;
+                        break;
+                    }
+                }
+                if ($foundImageDefaultThumbnail === false) {
+                    $default_thumbnail = 'placeholder.svg';
                 }
                 break;
             case 1 :    // video file
@@ -178,9 +173,12 @@ class mediaItem extends Media {
                     break;
                 }
             }
-        } else {
+        } else if ($foundImageDefaultThumbnail === true) {
             $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
             $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+        } else {
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
         }
 
         // type == 1 video
@@ -226,26 +224,8 @@ class mediaItem extends Media {
 		            $resolution_x = $new_x;
 		            $resolution_y = $new_y;
 	            } else { // must be a video...
-		            // set the default playback options...
-		            $playback_options['play']    = $_MG_CONF['swf_play'];
-		            $playback_options['menu']    = $_MG_CONF['swf_menu'];
-		            $playback_options['quality'] = $_MG_CONF['swf_quality'];
-		            $playback_options['height']  = $_MG_CONF['swf_height'];
-		            $playback_options['width']   = $_MG_CONF['swf_width'];
-		            $playback_options['loop']    = $_MG_CONF['swf_loop'];
-		            $playback_options['scale']   = $_MG_CONF['swf_scale'];
-		            $playback_options['wmode']   = $_MG_CONF['swf_wmode'];
-		            $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-		            $playback_options['bgcolor']    = $_MG_CONF['swf_bgcolor'];
-		            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-		            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
 
-		            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($this->id) . "'");
-		            while ( $poRow = DB_fetchArray($poResult) ) {
-		                $playback_options[$poRow['option_name']] = $poRow['option_value'];
-		            }
-
-		            if ( $this->resolution_x > 0 ) {
+                    if ( $this->resolution_x > 0 ) {
 		                $resolution_x = $this->resolution_x;
 		                $resolution_y = $this->resolution_y;
 		            } else {
@@ -285,16 +265,6 @@ class mediaItem extends Media {
 		                $resolution_x = $resolution_x + 40;
 		                $resolution_y = $resolution_y + 40;
 		            }
-	            	if ( $this->mime_type == 'video/x-flv' && $_MG_CONF['use_flowplayer'] != 1) {
-	            	    $resolution_x = $resolution_x + 60;
-		            	if ( $resolution_x < 590 ) {
-			            	$resolution_x = 590;
-		            	}
-		            	$resolution_y = $resolution_y + 80;
-		            	if ( $resolution_y < 500 ) {
-		            	    $resolution_y = 500;
-		                }
-	            	}
 	            	if ( $this->type == 5 ) {
 		            	$resolution_x = 460;
 		            	$resolution_y = 380;
@@ -334,8 +304,8 @@ class mediaItem extends Media {
 
         if ( $media_size == false ) {
             $default_thumbnail    = 'placeholder.svg';
-            $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
-            $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
             $media_size           = array(200,200); //@getimagesize($media_thumbnail_file);
         }
 

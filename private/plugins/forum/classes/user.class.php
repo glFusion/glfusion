@@ -202,7 +202,7 @@ class User
         if ($this->photo != '') {
             $this->avatar = USER_getPhoto($this->uid,'','','','0');
         } elseif (!isset($_CONF['default_photo']) || $_CONF['default_photo'] == '') {
-            $this->avatar = $_CONF['site_url'] . '/images/userphotos/default.jpg';
+            $this->avatar = $_CONF['site_url'] . '/assets/image/default.jpg';
         } else {
             $this->avatar = $_CONF['default_photo'];
         }

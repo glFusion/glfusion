@@ -14,6 +14,8 @@
 
 require_once '../lib-common.php';
 
+use \glFusion\Log\Log;
+
 if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];
@@ -82,12 +84,12 @@ function pagePreview()
         }
 
 
-$outputHandle = outputHandler::getInstance();
-$page .= $outputHandle->renderHeader('style');
-$page .= $outputHandle->renderHeader('script');
-$page .= $outputHandle->renderHeader('raw');
-$page .= $preview_content;
-COM_errorLog(print_r($preview_content,true));
+    $outputHandle = outputHandler::getInstance();
+    $page .= $outputHandle->renderHeader('style');
+    $page .= $outputHandle->renderHeader('script');
+    $page .= $outputHandle->renderHeader('raw');
+    $page .= $preview_content;
+    
     $retval['preview'] = $page;
     $retval['errorCode'] = 0;
 

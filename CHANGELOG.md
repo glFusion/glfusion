@@ -8,6 +8,13 @@
 
 ### Added
 
+- Turkish Translation
+- New Feature Administration - see what feature / rights are associated to each group
+- Forum plugin - select exit type - whether to show Page Not Found or Login Page when user does not have permissions to view a topic
+- Simple DB search / replace capabilities
+- Implemented direct link from Forum Likes
+- Ability to include theme specific HTML attributes - such as data-uk-lightbox to the HTML filtering allowed attributes
+- Czech Translations
 - Added INTL extension to the environment checks - need to update wiki to show used by Agenda plugin
 - Admin / Moderator actions are now logged and available for viewing in Command & Control
   - Configuration option to enable / disable - Config -> Miscellaneous -> Debug -> Enable Admin Actions
@@ -24,6 +31,9 @@
 
 ### Changed
 
+- Allow embedded [img] tag inside [url] tag in BBcode formatter
+- Removed 'most' HTML from the code base and moved to templates
+- Consolidate dynamic data under a single directory (actually two - private/data and public_html/data)
 - Logview now initializes the log with date/time cleared
 - Admin Actions now displays the IP
 - Story Editor - display thumbnail of attached images
@@ -42,6 +52,7 @@
 - Template class code significantly streamlined - utilizes new caching engine to allow for memory based caching of templates
 - Replaced all old style Cache calls to new Cache class interface
 - FileMgmt Admin screens now adhere to glFusion UI standards
+- Password is required to change any user profile fields
 
 ### Depreciated
 
@@ -50,6 +61,8 @@
 
 ### Removed
 
+- Removed mediaelement.js - now use native HTML 5 audio / video
+- Removed all Flash / SWF / FLV media support in Media Gallery
 - All MooTools related widgets
 - Remove the submission related Plugin APIs - except the Moderation Queue APIs
       PLG_showSubmitForm()
@@ -60,7 +73,9 @@
 
 ### Fixed
 
-- PHP v7.4 Compatibility Fixes
+- Media Gallery Media Manage and Caption screens did not honor album sort order
+- Back button on Group Admin would re-submit the form
+- PHP v8 Compatibility Fixes
 - Error changing article SID
 
 ### Security

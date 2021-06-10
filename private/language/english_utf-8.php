@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Permalink',
     129 => 'Configuration',
     130 => 'Webservices',			// depreciated
+    131 => 'Features',
     500 => 'Please remove the admin/install/ directory after installing or upgrading your site!',
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
@@ -396,7 +397,7 @@ $LANG04 = array(
     159 => 'This email was generated automatically. Please do not reply to this email.',
     160 => 'On-line',
     161 => 'Password Strength',
-    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " % & * / \ ) or emoji characters',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters',
     163 => 'Remote User',
     164 => 'Remote User name',
     165 => 'Remote Service',
@@ -1461,6 +1462,8 @@ $MESSAGE = array(
     116 => "The plugin's files and related directories were successfully removed.",
     117 => "The remote account has been unlinked from your local account.",
     118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
+    119 => 'The feature was successfully saved.',
+    120 => 'There was an error saving the feature.',
     200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'The Template Cache has been successfully cleared',
     501 => 'Security Token is Invalid - Possible session timeout.',
@@ -1574,6 +1577,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'The security token has expired. Please validate your session below.',
     'token_expired_footer' => 'The security token for this operation has expired, please re-validate',
     'validation_failed' => 'Validation Failed - Please retry.',
+    'feature_id' => 'Feature ID',
+    'feature_name' => 'Feature Name',
+    'avail_groups' => 'Available Groups',
+    'incl_groups' => 'Included Groups',
 );
 
 ###############################################################################
@@ -1651,6 +1658,31 @@ $LANG_DB_ADMIN = array(
     'overall_progress'    => 'Overall Progress',
     'no_backups_found'    => 'No Backup Files Found',
     'error_msg'           => 'The following errors were encountered',
+    'missing_required'    => 'Please Fill Out All Required Fields',
+    'time'                => 'Time',
+    'table'               => 'Table',
+    'changes_found'       => 'Changes Found',
+    'rows_updated'        => 'Rows Updated',
+    'sr_title'            => 'Search and Replace',
+    'search_for'          => 'Search for',
+    'replace_with'        => 'Replace With',
+    'tables_to_search'    => 'Tables to search',
+    'search'              => 'Search',
+    'remove'              => 'Remove',
+    'case'                => 'Case-Insensitive',
+    'dry_run'             => 'Dry Run',
+    'available_tables'    => 'Available Tables',
+    'execute'             => 'Execute',
+    'sr_warning_banner'   => 'Ensure you have a recent backup of your database!  The Search / Replace feature does not have an undo option, so be careful to ensure the changes you make are correct.',
+    'dry_run_complete'    => 'Review the Dry Run results above. Validate the replacements are correct. If you are satisfied with the results, you can execute the Search and Replace by selecting the Execute button below.',
+    'sr_parameters'       => 'Search and Replace Parameters',
+    'sr_warning_1'        => 'Are you sure you want to perform the search / replace?',
+    'sr_warning_2'        => 'You do have a good backup, right?',
+    'edit'                => 'Edit',
+    'cancel'              => 'Cancel',
+    'seconds'             => 'seconds',
+    'plugin_table_column' => 'Plugin :: Table -> Column',
+
 );
 
 ###############################################################################
@@ -1952,6 +1984,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Reset',
     'remaining_chars' => 'Remaining Characters ',
+    'feature_admin' => 'Feature Administration',
+    'feature_editor' => 'Feature Editor',
+    'feature_list' => 'Feature List',
+    'core_only' => 'Show Only Core Features',
+    'assigned_groups' => 'Assigned Groups',
 );
 
 ###############################################################################
@@ -2693,7 +2730,8 @@ $LANG_confignames['Core'] = array(
     'show_right_blocks' => 'Always Show Right Blocks',
     'showfirstasfeatured' => 'Show First Story as Featured',
     'backend' => 'Enable Feeds',
-    'rdf_file' => 'Syndication Output Folder',
+    'rdf_file' => 'Main RSS File',
+    'path_rss' => 'Path to store RSS feeds',
     'rdf_limit' => 'Feed Limit',
     'rdf_storytext' => 'Length of Stories in Feed',
     'rdf_language' => 'Feed Language',
@@ -2869,6 +2907,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Miscellaneous',
     'sg_spam' => 'Spam / Bot Protection',
     'sg_cache' => 'Caching',
+    'sg_advanced' => 'Advanced Settings',
 );
 
 $LANG_fs['Core'] = array(

@@ -118,7 +118,7 @@
 <p id="drop-area">
     <span class="drop-instructions">{$LANG_MG01['html5upload_drop_here']}</span>
     <span class="drop-over">{$LANG_MG01[html5upload_drop_here]}</span>
-    <span style="text-align:center;">or</span><br />
+    <span style="text-align:center;">or</span><br>
     <span style="text-align:center;"><input id="files-upload" type="file" multiple></span>
 </p>
 <div id="divThumbnails">
@@ -277,8 +277,8 @@
         } else {
             imgDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">' + filename + '</span>';
         }
-
-        inputDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[title]}</span><br /><textarea rows="2" cols="60" name="media_title[]" style="width:80%;">'+ filename + '</textarea><br /><span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[description]}</span><br /><textarea rows="2" cols="60" name="media_desc[]" style="width:80%;"></textarea><input type="hidden" name="media_id[]" value="' + id + '" />';
+        basefilename = filename.split('.').slice(0, -1).join('.');
+        inputDiv.innerHTML = '<span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[title]}</span><br><textarea rows="2" cols="60" name="media_title[]" style="width:80%;">'+ basefilename + '</textarea><br><span style="font-weight:bold;vertical-align:top;">{$LANG_MG01[description]}</span><br><textarea rows="2" cols="60" name="media_desc[]" style="width:80%;"></textarea><input type="hidden" name="media_id[]" value="' + id + '" />';
 
         clrDiv.setAttribute('style','clear:both;border-bottom:1px solid;border-bottom-color:#D9E4FF;margin-bottom:5px;');
 

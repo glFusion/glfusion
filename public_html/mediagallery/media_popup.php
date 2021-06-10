@@ -1,33 +1,20 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | media_popup.php                                                          |
-// |                                                                          |
-// | Displays media item in pop-up window                                     |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Displays media item in pop-up window
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../lib-common.php';
+
+use \glFusion\Log\Log;
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -37,7 +24,7 @@ if (!in_array('mediagallery', $_PLUGINS)) {
 // Check user has rights to access this page
 if (!SEC_hasRights('mediagallery.view','mediagallery.admin','OR')) {
     // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Media Gallery page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+    Log::write('system',Log::WARNING,"Someone has tried to access the Media Gallery page.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDR']);
     $display = COM_siteHeader();
     $display .= COM_startBlock($LANG_MG00['access_denied']);
     $display .= $LANG_MG00['access_denied_msg'];

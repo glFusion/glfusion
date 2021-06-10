@@ -190,7 +190,7 @@ function SEC_isModerator()
 */
 function SEC_isAdmin()
 {
-    return SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
+    return SEC_hasRights('system.root,story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
 }
 
 
@@ -344,6 +344,10 @@ function SEC_hasAccess($owner_id,$group_id,$perm_owner,$perm_group,$perm_members
 function SEC_hasRights($features,$operator='AND')
 {
     global $_USER, $_RIGHTS, $_SEC_VERBOSE;
+
+    if (SEC_inGroup('Root')) {
+        return true;
+    }
 
     if (is_string($features)) {
         $features = explode(',',$features);
@@ -1471,7 +1475,7 @@ function _sec_checkToken($ajax=0)
                 $return = false;
             } else if($tokendata['urlfor'] != $referCheck) {
                 Log::write('system',Log::WARNING,"CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
-                Log::write('system',Log::WARNING,"Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
+                Log::write('system',Log::WARNING,"Expected URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
 
                 if ( function_exists('bb2_ban') ) {
                     bb2_ban($_SERVER['REAL_ADDR'],3);
@@ -1616,9 +1620,9 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
         $numberOfTokens = count($tokenRows);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - no token found in the database - " . $action . " " . $_USER['uid']);
+                Log::write('system',Log::INFO,"CheckTokenGeneral: Token failed - no token found in the database (user must re-autheticate) - " . $action . " :: User: " . $_USER['uid']);
             } else {
-                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - more than one token found in the database");
+                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - more than one token found in the database :: User: " . $_USER['uid']);
             }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
@@ -2193,7 +2197,7 @@ function SEC_loginForm($use_options = array())
                 $select = '<input type="hidden" name="service" value="'. $modules[0] . '"/>' . $modules[0] . LB;
             } else {
                 // Build select
-                $select = '<select name="service">';
+                $select = '';
                 if ( isset($_CONF['standard_auth_first']) && $_CONF['standard_auth_first'] == 1 ) {
                     if ($_CONF['user_login_method']['standard']) {
                         $select .= '<option value="">' .  $_CONF['site_name'] . '</option>' . LB;
@@ -2207,7 +2211,6 @@ function SEC_loginForm($use_options = array())
                         $select .= '<option value="">' .  $_CONF['site_name'] . '</option>' . LB;
                     }
                 }
-                $select .= '</select>';
             }
 
             $loginform->set_file('services', 'services.thtml');

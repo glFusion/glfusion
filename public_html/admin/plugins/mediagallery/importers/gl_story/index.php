@@ -1,36 +1,24 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin for glFusion CMS                                    |
-// +--------------------------------------------------------------------------+
-// | glFusion Story Image Import                                              |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-//
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Story Image Import
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../../../../../lib-common.php';
 require_once '../../../../auth.inc.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-upload.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/lib-batch.php';
+
+use \glFusion\Log\Log;
 
 USES_lib_story();
 
@@ -274,7 +262,7 @@ class mgAlbumg {
             $album_id = 1;
         }
         if ( $album_id == 0 ) {
-            COM_errorLog("Media Gallery Error - Returned 0 as album_id");
+            Log::write('system',Log::ERROR,"Media Gallery Error - Returned 0 as album_id");
             $album_id = 1;
         }
         return $album_id;
@@ -388,7 +376,7 @@ class mgAlbumg {
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.admin')) {
     // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Media Gallery Import Page.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+    Log::write('system',Log::WARNING,"Someone has tried to access the Media Gallery Configuration page.  User id: ".$_USER['uid']);
     $display  = COM_siteHeader();
     $display .= COM_startBlock($LANG_MG00['access_denied']);
     $display .= $LANG_MG00['access_denied_msg'];
@@ -543,7 +531,7 @@ function MG_importAlbums( $aid, $parent, $session_id=0 ) {
                     $A['album_id'] = 1;
                 }
                 if ( $A['album_id'] == 0 ) {
-                    COM_errorLog("Media Gallery Error - Returned 0 as album_id");
+                    Log::write('system',Log::ERROR,"Media Gallery: Error - Returned 0 as album_id");
                     $A['album_id'] = 1;
                 }
 
@@ -584,7 +572,7 @@ function MG_importAlbums( $aid, $parent, $session_id=0 ) {
             } else {
                 $mgAlbums[$children[$i]]->mgid = $parent;
             }
-            COM_errorLog("Media Gallery: glFusion Story Import processed " . $mgAlbums[$children[$i]]->title . " MGID: " . $mgAlbums[$children[$i]]->mgid . " Parent: " . $mgAlbums[$children[$i]]->mgparent);
+            Log::write('system',Log::INFO,"Media Gallery: glFusion Story Import processed " . $mgAlbums[$children[$i]]->title . " MGID: " . $mgAlbums[$children[$i]]->mgid . " Parent: " . $mgAlbums[$children[$i]]->mgparent);
 
             MG_importFiles($mgAlbums[$children[$i]]->mgid, $mgAlbums[$children[$i]]->id,$session_id);
 

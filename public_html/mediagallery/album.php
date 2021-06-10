@@ -1,33 +1,20 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | album.php                                                                |
-// |                                                                          |
-// | Displays the contents of a MG album                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Displays the Album
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../lib-common.php';
+
+use \glFusion\Log\Log;
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -130,7 +117,7 @@ if ( !isset($MG_albums[$album_id]->id) ) {
 
 if ( $errorMessage != '' ) {
     $display = MG_siteHeader();
-    COM_errorLog("Media Gallery Error - User attempted to view an album that does not exist.");
+    Log::write('system',Log::ERROR,'Media Gallery Error - User attempted to view an album that does not exist.');
     $display .= COM_startBlock ($LANG_MG02['error_header'], '',COM_getBlockTemplate ('_admin_block', 'header'));
     $T = new Template($_MG_CONF['template_path']);
     $T->set_file('error','error.thtml');
@@ -373,6 +360,8 @@ switch ( $MG_albums[$album_id]->enable_slideshow ) {
         $lang_slideshow = $LANG_MG03['slide_show'];
         break;
     case 2:
+    case 3:
+    case 4:
         $lbss_count = DB_count($_TABLES['mg_media'],'media_type',0);
         $sql = "SELECT COUNT(m.media_id) as lbss_count FROM {$_TABLES['mg_media_albums']} as ma INNER JOIN " . $_TABLES['mg_media'] . " as m " .
                                 " ON ma.media_id=m.media_id WHERE m.media_type = 0 AND ma.album_id=" . (int) $album_id;
@@ -386,14 +375,6 @@ switch ( $MG_albums[$album_id]->enable_slideshow ) {
         	$MG_albums[$album_id]->enable_slideshow = 0;
         	$lang_slideshow = '';
         }
-        break;
-    case 3:
-        $url_slideshow = $_MG_CONF['site_url'] . '/fslideshow.php?aid=' . $album_id . '&amp;src=disp';
-        $lang_slideshow = $LANG_MG03['slide_show'];
-        break;
-    case 4:
-        $url_slideshow = $_MG_CONF['site_url'] . '/fslideshow.php?aid=' . $album_id . '&amp;src=orig';
-        $lang_slideshow = $LANG_MG03['slide_show'];
         break;
     case 5:
     	$url_slideshow = $_MG_CONF['site_url'] . '/playall.php?aid=' . $album_id;

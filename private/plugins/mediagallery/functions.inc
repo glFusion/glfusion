@@ -1,35 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | functions.inc                                                            |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* MediaGallery Plugin APIs
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 /**
 * Language file Include
@@ -76,7 +64,6 @@ USES_lib_image();
 * Include MediaGallery config file
 */
 require_once $_CONF['path'].'plugins/mediagallery/mediagallery.php';
-require_once $_CONF['path'].'plugins/mediagallery/config.php';
 require_once $_CONF['path'].'plugins/mediagallery/include/classAlbum.php';
 
 $mg_installed_version = '0.0.0';
@@ -87,7 +74,6 @@ if ( isset($_PLUGIN_INFO['mediagallery']) && $_PLUGIN_INFO['mediagallery']['pi_e
 // This is a list of valid extensions for image media thumbnails / display images
 $_MG_CONF['validExtensions'] = array('.jpg','.jpeg','.png','.gif','.bmp');
 
-$swfjsinclude = 0;
 $themeStyle = '';
 
 $_MG_CONF['random_skin'] = 'default';
@@ -109,12 +95,24 @@ $resultSet = DB_fetchAll($result);
 foreach($resultSet AS $row) {
     $_MG_CONF[$row['config_name']] = $row['config_value'];
 }
+if (empty($_MG_CONF['path_mediaobjects'])) {
+    $_MG_CONF['path_mediaobjects'] = $_CONF['path_html'] . 'data/mediagallery/mediaobjects/';
+    $_MG_CONF['mediaobjects_url'] = $_CONF['site_url'] . '/data/mediagallery/mediaobjects/';
+} else {
+    $path_media_url = rtrim(str_replace($_CONF['path_html'],'',$_MG_CONF['path_mediaobjects']),'');
+    $_MG_CONF['mediaobjects_url'] = $_CONF['site_url'].'/'.$path_media_url;
+}
+
 $_MG_CONF['tmp_path'] = $_CONF['path'] . 'plugins/mediagallery/tmp/';
+$_MG_CONF['ftp_path'] = $_CONF['path'] . 'plugins/mediagallery/uploads/';
+$_MG_CONF['path_assets'] = $_CONF['path_html'] . $_MG_CONF['path_mg'] . '/assets/';
+$_MG_CONF['assets_url']  = $_CONF['site_url']  . '/' . $_MG_CONF['path_mg'] . '/assets';
+$_MG_CONF['path_watermarks'] = $_CONF['path_html'] . 'data/mediagallery/watermarks/';
+$_MG_CONF['watermarks_url']  = $_CONF['site_url']  . '/data/mediagallery/watermarks';
 
 if ( $_CONF['loginrequired'] == 1 ) {
     $_MG_CONF['loginrequired'] = 1;
 }
-
 $_MG_CONF['up_mp3_player_enabled'] = 0;
 
 if ( $_MG_CONF['up_display_rows_enabled'] == 1 ||
@@ -124,6 +122,192 @@ if ( $_MG_CONF['up_display_rows_enabled'] == 1 ||
      $_MG_CONF['up_thumbnail_size_enabled'] == 1) {
     $LANG_MYACCOUNT['pe_mgprefs'] = "MG Prefs";
 }
+
+// advanced config options
+$_MG_CONF['path_html']  = $_CONF['path_html'] . $_MG_CONF['path_mg'] . '/';
+$_MG_CONF['site_url']   = $_CONF['site_url'] . '/' . $_MG_CONF['path_mg'];
+$_MG_CONF['admin_url']  = $_CONF['site_admin_url'] . '/plugins/mediagallery/';
+$_MG_CONF['path_admin'] = $_CONF['path_html'] . 'admin/plugins/mediagallery/';
+$_MG_CONF['watermark_types'] = array('image/jpeg','image/jpg','image/png','image/bmp');
+$_MG_CONF['link_to_member_album'] = 1;
+
+/*
+ * By default, Media Gallery plays MP4 video files as QuickTime
+ * videos, using the QuickTime player.
+ *
+ * If you prefer to use the Flash Video Player for MP4 files,
+ * set this value to true.
+ *
+ */
+$_MG_CONF['play_mp4_flv'] = false;
+
+/*
+ * Number of seconds to wait between ratings
+ */
+$_MG_CONF['rating_speedlimit'] = 45;
+
+/*
+ * By default, Media Gallery will always size thumbnails at 200x200
+ * To use the specified size instead, set this to 1
+ */
+
+$_MG_CONF['thumbnail_actual_size'] = 1;
+
+/*
+ * By default, Media Gallery references its templates from the plugin
+ * directory.  If you want to have separate templates for each of your
+ * themes, set the path to the template directory here.
+ */
+
+$_MG_CONF['template_path'] = $_CONF['path'] . 'plugins/mediagallery/templates';
+//$_MG_CONF['template_path'] = $_CONF['path_layout'] . 'mediagallery/';
+
+/*
+ * Disable Media Gallery's search integration with glFusion.
+ */
+
+$_MG_CONF['disable_search_integration'] = 0;
+
+
+/*
+ * Disable version check - Media Gallery will check to see if a new version
+ * is available for download each time you enter the administration screen.
+ * To disable this check, set this variable to 1.
+ */
+
+$_MG_CONF['disable_version_check']   = 1;
+
+/*
+ * Set the maximum number of media items to display in the Media Manage Screen
+ */
+
+$_MG_CONF['mediamanage_items']       = 100;
+
+/*
+ * Media Gallery will attempt to automatically locate some of the external
+ * utilities.  If your PHP installation has openbase_dir restrictions enabled
+ * this can cause some issues.  Set this variable to 1 to skip the automatic
+ * searching.
+ */
+
+$_MG_CONF['skip_file_find']          = 0;
+
+/*
+ * If set to 1, MG will not automatically populate the video playback
+ *  resolution, instead it will use the default settings
+ */
+
+$_MG_CONF['use_default_resolution']  = 0;
+
+/*
+ * if set to 1, MG will use the larger stars in the album view for ratings
+ */
+
+$_MG_CONF['use_large_stars'] = 0;
+
+/*
+ * By default, Media Gallery will play MPEG videos with Apple's QuickTime
+ * player. If you wish to use Microsoft's Windows Media Player instead,
+ * set this variable to 1.
+ */
+
+$_MG_CONF['use_wmp_mpeg']			 = 0;
+
+/*
+ * By default, Media Gallery will attempt to extract the actual image capture
+ * date from the meta data included by many digital cameras and graphics
+ * packages.  If you prefer to always use the upload date (the date you added
+ * the image to your Media Gallery album) as the displayed date, set this
+ * variable to 1.
+ */
+
+$_MG_CONF['use_upload_time']		 = 0;
+
+/**
+ * FFMPEG Command line options
+ *
+ * There are lots of versions of ffmpeg out there, some work with one set of
+ * switches and some don't.  You can easily modify the commands used to create
+ * thumbnails from videos by modifying the arguments below.  The first %s is
+ * the source video and the second %s is the destination thumbnail, both %s
+ * need to be in the command.
+ */
+
+$_MG_CONF['ffmpeg_command_args'] = ' -i %s -f mjpeg -t 0.01 -y %s';
+
+// $_MG_CONF['ffmpeg_command_args'] = ' -i %s -f mjpeg -an -r 1 -ss 00:00:03 -vframes 1 -y %s';
+// $_MG_CONF['ffmpeg_command_args'] = ' -i %s -f singlejpeg -an -r 1 -ss 00:00:03 -vframes 1 -y %s';
+// --- RIVA FLV Encoded / converter for Windows command line
+// $_MG_CONF['ffmpeg_command_args'] = ' -an -y  -i "%s" -t 0.001 -s 640x480 -deinterlace   -hq -f image2 "%s"';
+
+/*
+ * SimpleViewer Theme Layout Options
+ *
+ * textColor - Color of title and caption text (hexidecimal color value e.g 0xff00ff).
+ * frameColor - Color of image frame, navigation buttons and thumbnail frame (hexidecimal color value e.g 0xff00ff).
+ * frameWidth - Width of image frame in pixels.
+ * stagePadding - Distance between image and thumbnails and around gallery edge in pixels.
+ * thumbnailColumns - number of thumbnail rows. (To disable thumbnails completely set this value to 0.)
+ * thumbnailRows - number of thumbnail columns. (To disable thumbnails completely set this value to 0.)
+ * navPosition - Position of thumbnails relative to image. Can be "top", "bottom","left" or "right".
+ * enableRightClickOpen - Whether to display a 'Open In new Window...' dialog when right-clicking on an image. Can be "true" or "false"
+ *
+ */
+
+$_MG_CONF['simpleviewer']['textcolor'] = '0x000000';
+$_MG_CONF['simpleviewer']['framecolor'] = '0x000000';
+$_MG_CONF['simpleviewer']['framewidth'] = 5;
+$_MG_CONF['simpleviewer']['stagepadding'] = 50;
+$_MG_CONF['simpleviewer']['thumbnailcolumns'] = 6;
+$_MG_CONF['simpleviewer']['thumbnailrows'] = 1;
+$_MG_CONF['simpleviewer']['navposition'] = 'top';
+$_MG_CONF['simpleviewer']['enablerightclickopen'] = 'false';
+
+/*
+ * Default thumbnails for non-media type files
+ *
+ * This allows you to specify new default thumbnails for non-media file types.
+ * Place the thumbnail image in the mediaobjects/ directory.
+ *
+ */
+
+$_MG_CONF['dt']['pdf'] = 'pdf.png';
+$_MG_CONF['dt']['zip'] = 'zip.png';
+// $_MG_CONF['dt']['doc'] = 'doc.gif';
+// $_MG_CONF['dt']['xls'] = 'xls.png';
+
+/*
+ * The JavaScript used by the lightbox slideshow can cause
+ * conflicts with other JS libraries.  You can set this to true to disable
+ * the lightbox slideshow feature.
+ */
+
+$_MG_CONF['disable_lightbox'] = false;
+
+/*
+ * If you want Media Gallery to update the 'last updated' time for all parent
+ * albums, set this to true.
+ */
+
+$_MG_CONF['update_parent_lastupdated'] = false;
+
+/*
+ * If you want to allow users who 'own' (uploaded) a media item to be able
+ * to also edit the media item, set this value to true.
+ */
+
+$_MG_CONF['allow_user_edit'] = false;
+
+/*
+ * Media Gallery provides limited support for including remotely hosted
+ * images in your albums.  Your web host must support the CURL PHP extension
+ * or allow opening remote URLs to take full advantage of this features.
+ * To enable remote image support, set this value to true.
+ */
+
+$_MG_CONF['enable_remote_images'] = false;
+
+
 
 function plugin_chkVersion_mediagallery() {
     global $_MG_CONF;
@@ -524,7 +708,7 @@ function plugin_getmenuitems_mediagallery()
     if ( COM_isAnonUser() && $_MG_CONF['loginrequired'] == 1 )  {
         return '';
     }
-
+    if (!isset($_MG_CONF['menulabel'])) $_MG_CONF['menulabel'] = 'Media Gallery';
     $menulabel = $_MG_CONF['menulabel'];
     $menurul   = $_MG_CONF['site_url'] . "/index.php";     // Menu url here
 
@@ -553,7 +737,7 @@ function plugin_getadminoption_mediagallery()
 
 function plugin_getheadercss_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $_USER, $_SYSTEM, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $_USER, $_SYSTEM, $themeStyle;
 
     $styles = array();
 
@@ -590,11 +774,10 @@ function plugin_getheadercss_mediagallery()
 
 function plugin_getheaderjs_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $_SYSTEM, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $_SYSTEM, $themeStyle;
 
     $js = array();
 
-    $js[] = $_MG_CONF['path_html'] . 'js/swfobject.js';
     $js[] = $_MG_CONF['path_html'] . 'js/mediagallery.js';
     if ( !isset($_SYSTEM['disable_mootools']) || $_SYSTEM['disable_mootools'] == false ) {
         $js[] = $_MG_CONF['path_html'] . 'js/slideshow.js';
@@ -621,7 +804,7 @@ function plugin_getglobaljs_mediagallery()
 
 function plugin_getheadercode_mediagallery()
 {
-    global $_CONF, $_MG_CONF, $swfjsinclude,$themeStyle;
+    global $_CONF, $_MG_CONF, $themeStyle;
 
     $mg_header = '';
 
@@ -938,27 +1121,27 @@ function _mg_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 case 1 :
                     switch ( $A['media_mime_ext'] ) {
                         case 'swf' :
-                            $thumbnail = $_MG_CONF['mediaobjects_url'] . '/flash.png';
-                            $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'flash.png';
+                            $thumbnail = $_MG_CONF['assets_url'] . '/flash.png';
+                            $pThumbnail = $_MG_CONF['path_assets'] . 'flash.png';
                             break;
                         case 'mov' :
                         case 'mp4' :
-                            $thumbnail = $_MG_CONF['mediaobjects_url'] . '/quicktime.png';
-                            $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'quicktime.png';
+                            $thumbnail = $_MG_CONF['assets_url'] . '/quicktime.png';
+                            $pThumbnail = $_MG_CONF['path_assets'] . 'quicktime.png';
                             break;
                         case 'asf' :
-                            $thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
-                            $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'wmp.png';
+                            $thumbnail = $_MG_CONF['assets_url'] . '/wmp.png';
+                            $pThumbnail = $_MG_CONF['path_assets'] . 'wmp.png';
                             break;
                         default :
-                            $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/video.png';
-                            $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'video.png';
+                            $thumbnail  = $_MG_CONF['assets_url'] . '/video.png';
+                            $pThumbnail = $_MG_CONF['path_assets'] . 'video.png';
                             break;
                     }
                     break;
                 case 2 :
-                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/audio.png';
-                    $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'audio.png';
+                    $thumbnail  = $_MG_CONF['assets_url'] . '/audio.png';
+                    $pThumbnail = $_MG_CONF['path_assets'] . 'audio.png';
                     break;
                 case 4 :
                     switch ($A['media_mime_ext']) {
@@ -966,16 +1149,16 @@ function _mg_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                         case 'arj' :
                         case 'rar' :
                         case 'gz'  :
-                            $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/zip.png';
-                            $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'zip.png';
+                            $thumbnail  = $_MG_CONF['assets_url'] . '/zip.png';
+                            $pThumbnail  = $_MG_CONF['path_assets'] . 'zip.png';
                             break;
                         case 'pdf' :
-                            $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/pdf.png';
-                            $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'pdf.png';
+                            $thumbnail  = $_MG_CONF['assets_url'] . '/pdf.png';
+                            $pThumbnail  = $_MG_CONF['path_assets'] . 'pdf.png';
                             break;
                         default :
-                            $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/generic.png';
-                            $pThumbnail  = $_MG_CONF['path_mediaobjects'] . 'generic.png';
+                            $thumbnail  = $_MG_CONF['assets_url'] . '/generic.png';
+                            $pThumbnail  = $_MG_CONF['path_assets'] . 'generic.png';
                             break;
                     }
                     break;
@@ -1165,12 +1348,12 @@ function plugin_moderationapprove_mediagallery($id)
 
             DB_query($sql);
             if ( DB_error() ) {
-                COM_errorLog("Media Gallery: Error inserting queued item into album.");
+                Log::write('system',Log::ERROR,'Media Gallery: Error inserting queued item into album.');
             }
             $sql = "DELETE FROM " . $_TABLES['mg_media_album_queue'] . " WHERE media_id='" . DB_escapeString($id) . "'";
             DB_query($sql);
             if ( DB_error() ) {
-                COM_errorLog("Media Gallery: Error deleting queued item from album queue.");
+                Log::write('system',Log::ERROR,'Media Gallery: Error deleting queued item from album queue.');
             }
             $statusReport .= "Media ID " . $id . $LANG_MG01['queue_processed'];
             MG_SortMedia( $row['album_id'] );
@@ -1745,6 +1928,32 @@ function plugin_itemdeleted_mediagallery($id, $type, $children = null)
     $c->deleteItemsByTag('mediagallery');
 }
 
+function plugin_getContentTableInfo_mediagallery()
+{
+    global $_DB_table_prefix;
+
+    $contentItems = array(
+            $_DB_table_prefix.'mg_albums' => array(
+                'plugin' => 'mediagallery',
+                'primary_key' => 'album_id',
+                'columns' => array(
+                    'album_title',
+                    'album_desc'
+                )
+            ),
+            $_DB_table_prefix.'mg_media' => array(
+                'plugin' => 'mediagallery',
+                'primary_key' => 'media_id',
+                'columns' => array(
+                    'media_title',
+                    'media_desc'
+                )
+            )
+    );
+
+    return $contentItems;
+}
+
 function MG_clean_directories($path, $needle = '')
 {
     if ( $path[strlen($path)-1] != '/' ) {
@@ -2103,10 +2312,7 @@ function MG_getFeedPath( $feedfile = '' )
 {
     global $_CONF;
 
-    $feedpath = $_CONF['rdf_file'];
-    $pos = strrpos( $feedpath, '/' );
-    $feed = substr( $feedpath, 0, $pos + 1 );
-    $feed .= $feedfile;
+    $feed = $_CONF['path_rss'] . $feedfile;
 
     return $feed;
 }

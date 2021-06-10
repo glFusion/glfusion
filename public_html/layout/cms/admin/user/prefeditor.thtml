@@ -7,17 +7,33 @@
     </tr>
     <tr>
       <td><label for="language">{lang_language}:</label></td>
-      <td>{language_selector}</td>
+      <td>
+        <select id="language" name="language">
+          {lang_options}
+        </select>
+      </td>
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="language"></td>
     </tr>
     <tr>
       <td><label for="theme">{lang_theme}:</label></td>
-      <td>{theme_selector}</td>
+      <td>
+{!if theme_name}
+        {theme_name}
+{!else}
+        <select id="theme" name="theme">
+          {theme_options}
+        </select>
+{!endif}
+      </td>
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="theme"></td>
     </tr>
     <tr>
       <td><label for="cooktime">{lang_cooktime}:</label></td>
-      <td>{cooktime_selector}</td>
+      <td>
+        <select id="cooktime" name="cooktime">
+          {cooktime_options}
+        </select>
+      </td>
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="cooktime"></td>
     </tr>
     <tr>
@@ -42,22 +58,38 @@
     </tr>
     <tr>
       <td><label for="dfid">{lang_dateformat}:</label></td>
-      <td>{dateformat_selector}</td>
+      <td>
+        <select id="dfid" name="dfid">
+          {dateformat_options}
+        </select>
+      </td>
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="dfid"></td>
     </tr>
     <tr>
       <td><label for="search_result_format">{lang_search_format}:</label></td>
-      <td>{search_result_select}</td>
+      <td>
+        <select name="search_result_format" id="search_result_format">
+          {search_result_options}
+        </select>
+      </td>
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="search_result_format"></td>
     </tr>
     <tr>
       <td><label for="commentmode">{lang_displaymode}:</label></td>
-      <td>{displaymode_selector}</td>
+      <td>
+        <select id="commentmode" name="commentmode">
+          {commentmode_options}
+        </select>
+      </td>
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="commentmode"></td>
     </tr>
     <tr>
       <td><label for="commentorder">{lang_sortorder}:</label></td>
-      <td>{sortorder_selector}</td>
+      <td>
+        <select id="commentorder" name="commentorder">
+          {commentorder_options}
+        </select>
+      </td>
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="commentorder"></td>
     </tr>
     <tr>

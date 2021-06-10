@@ -1,0 +1,12 @@
+{# begin {templatelocation} #}
+<form class="uk-form" action="{site_admin_url}/user.php" method="post" enctype="multipart/form-data">
+    <div>
+        {lang_path}: <input type="file" dir="ltr" name="importfile" size="40" />
+        <input type="hidden" name="importexec" value="x" />
+        <button class="uk-button uk-button-primary" type="submit" name="submit" value="{lang_submit}"/>
+            {lang_submit}
+        </button>
+        <input type="hidden" name="{crsf_token}" value="{token}"/>
+    </div>
+</form>
+{# end {templatelocation} #}

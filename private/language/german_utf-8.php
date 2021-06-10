@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Dauerhafter Link',
     129 => 'Konfiguration',
     130 => 'Webservices',			// depreciated
+    131 => 'Features',
     500 => 'Bitte nach der Installation oder der Aktualisierung das ../pfad/zu/glfusion/admin/install Verzeichnis löschen!',
     501 => 'Root Debug ist eingeschaltet',
     502 => 'No fail SQL ist eingeschaltet',
@@ -396,7 +397,7 @@ $LANG04 = array(
     159 => 'Diese E-Mail wurde automatisch generiert. Bitte nicht auf diese E-Mail antworten.',
     160 => 'Online',
     161 => 'Passwortstärke',
-    162 => 'Der Benutzername muss aus  Zeichen bestehen. Nicht erlaubt sind: ( < > " % & * / \ ) ',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters',
     163 => 'Remote Benutzer',
     164 => 'Remote Benutzername',
     165 => 'Remote Service',
@@ -1461,6 +1462,8 @@ $MESSAGE = array(
     116 => "Die Dateien des Plugins und verwandte Verzeichnisse wurden erfolgreich entfernt.",
     117 => "Das Remote-Konto wurde aus Deinem Lokalen-Konto entfernt.",
     118 => 'Entfernen des Remot-Kontos fehlgeschlagen - das eingegebene Passwort stimmt nicht überein.',
+    119 => 'The feature was successfully saved.',
+    120 => 'There was an error saving the feature.',
     200 => 'Leider hast Du keinen Zugriff auf diese Seite. Bitte beachte, dass alle nicht autorisierten Zugriffe protokolliert werden.',
     500 => 'Der Template-Cache wurde erfolgreich geleert',
     501 => 'Security Token ist ungültig - Möglicherweise ist die Sitzung abgelaufen.',
@@ -1574,6 +1577,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'Die Anmeldung ist abgelaufen. Bitte bestätige Deine Sitzung erneut.',
     'token_expired_footer' => 'Die Anmeldung für diese Anfrage ist abgelaufen. Bitte bestätige Deine Sitzung erneut.',
     'validation_failed' => 'Validierung fehlgeschlagen - Bitte versuche es nochmal.',
+    'feature_id' => 'Feature ID',
+    'feature_name' => 'Feature Name',
+    'avail_groups' => 'Available Groups',
+    'incl_groups' => 'Included Groups',
 );
 
 ###############################################################################
@@ -1651,6 +1658,31 @@ $LANG_DB_ADMIN = array(
     'overall_progress'    => 'Gesamt-Fortschritt',
     'no_backups_found'    => 'Keine Backup-Dateien gefunden',
     'error_msg'           => 'Die folgenden Fehler sind aufgetreten',
+    'missing_required'    => 'Please Fill Out All Required Fields',
+    'time'                => 'Uhrzeit',
+    'table'               => 'Tabelle',
+    'changes_found'       => 'Changes Found',
+    'rows_updated'        => 'Rows Updated',
+    'sr_title'            => 'Search and Replace',
+    'search_for'          => 'Suche nach',
+    'replace_with'        => 'Replace With',
+    'tables_to_search'    => 'Tables to search',
+    'search'              => 'Suchen',
+    'remove'              => 'Löschen',
+    'case'                => 'Case-Insensitive',
+    'dry_run'             => 'Dry Run',
+    'available_tables'    => 'Available Tables',
+    'execute'             => 'Execute',
+    'sr_warning_banner'   => 'Ensure you have a recent backup of your database!  The Search / Replace feature does not have an undo option, so be careful to ensure the changes you make are correct.',
+    'dry_run_complete'    => 'Review the Dry Run results above. Validate the replacements are correct. If you are satisfied with the results, you can execute the Search and Replace by selecting the Execute button below.',
+    'sr_parameters'       => 'Search and Replace Parameters',
+    'sr_warning_1'        => 'Are you sure you want to perform the search / replace?',
+    'sr_warning_2'        => 'You do have a good backup, right?',
+    'edit'                => 'Bearbeiten',
+    'cancel'              => 'Abbrechen',
+    'seconds'             => 'Sekunden',
+    'plugin_table_column' => 'Plugin :: Table -> Column',
+
 );
 
 ###############################################################################
@@ -1952,6 +1984,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Deine Sitzung wird in Kürze wegen Inaktivität ablaufen. Bitte drücke "OK" um die Sitzung wieder zu aktualisieren.',
     'reset' => 'Zurücksetzen',
     'remaining_chars' => 'Verbleibende Zeichen ',
+    'feature_admin' => 'Feature Administration',
+    'feature_editor' => 'Feature Editor',
+    'feature_list' => 'Feature List',
+    'core_only' => 'Show Only Core Features',
+    'assigned_groups' => 'Assigned Groups',
 );
 
 ###############################################################################
@@ -2693,7 +2730,8 @@ $LANG_confignames['Core'] = array(
     'show_right_blocks' => 'Immer rechte Blöcke anzeigen',
     'showfirstasfeatured' => 'Ersten Artikel als Hauptartikel',
     'backend' => 'Feed einschalten',
-    'rdf_file' => 'Ausgabe-Unterverzeichnis',
+    'rdf_file' => 'Main RSS File',
+    'path_rss' => 'Path to store RSS feeds',
     'rdf_limit' => 'Feed-Limit',
     'rdf_storytext' => 'Artikellänge',
     'rdf_language' => 'Sprache',
@@ -2869,6 +2907,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Vermischtes &amp; Rechte',
     'sg_spam' => 'Spam / Bot Schutz',
     'sg_cache' => 'Caching',
+    'sg_advanced' => 'Weitere Einstellungen',
 );
 
 $LANG_fs['Core'] = array(

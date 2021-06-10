@@ -24,13 +24,11 @@ use \glFusion\Formatter;
 use \glFusion\Admin\AdminAction;
 
 // Only let admin users access this page
-if (!SEC_inGroup('Root')) {
+if (!SEC_hasRights ('actions.admin')) {
     Log::logAccessViolation('Admin Actions');
-    $display = COM_siteHeader();
-    $display .= COM_startBlock($LANG_ADMIN['access_denied']);
-    $display .= $LANG_ADMIN['access_denied_msg'];
-    $display .= COM_endBlock();
-    $display .= COM_siteFooter(true);
+    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
+    $display .= COM_siteFooter ();
     echo $display;
     exit;
 }
@@ -138,7 +136,7 @@ function actions_admin_menu($action = '')
 $page = '';
 $display = '';
 
-if (isset($_CONF['enable_admin_actions']) && $_CONF['enable_admin_actions'] == 1 && SEC_inGroup('Root')) {
+if (isset($_CONF['enable_admin_actions']) && $_CONF['enable_admin_actions'] == 1 && SEC_hasRights('actions.admin')) {
     $page = listActions();
 } else {
     $page = '<div class="uk-panel uk-panel-box"><h2>Admin Actions are currently disabled in the configuration</h2></div>';

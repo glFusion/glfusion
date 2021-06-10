@@ -1,41 +1,29 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin for glFusion CMS                                    |
-// +--------------------------------------------------------------------------+
-// | Edit Media Gallery A/V Default Settings.                                 |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-//
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Edit Media Gallery A/V Default Settings
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 require_once $_MG_CONF['path_admin'] . 'navigation.php';
+
+use \glFusion\Log\Log;
 
 $display = '';
 
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {
     // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}",1);
+    Log::write('system',Log::WARNING,"Someone has tried to access the Media Gallery Configuration page.  User id: ".$_USER['uid']);
     $display  = COM_siteHeader();
     $dipslay .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_MG00['access_denied'],true,'error');
     $display .= COM_siteFooter(true);
@@ -60,7 +48,6 @@ function MG_editAVDefaults( ) {
     $navbar->add_menuitem($LANG_MG07['wmp_options'],'showhideMGAdminEditorDiv("wmp",0);return false;',true);
     $navbar->add_menuitem($LANG_MG07['qt_options'],'showhideMGAdminEditorDiv("qt",1);return false;',true);
     $navbar->add_menuitem($LANG_MG07['mp3_options'],'showhideMGAdminEditorDiv("mp3",2);return false;',true);
-    $navbar->add_menuitem($LANG_MG07['swf_options'],'showhideMGAdminEditorDiv("flash",3);return false;',true);
     $navbar->set_selected($LANG_MG07['wmp_options']);
     $T->set_var ('navbar', $navbar->generate());
     $T->set_var ('no_javascript_warning',$LANG04[150]);
@@ -85,29 +72,6 @@ function MG_editAVDefaults( ) {
     $mp3_uimode_select .= '<option value="full" ' . ($_MG_CONF['mp3_uimode'] == 'full' ? ' selected="selected"' : '') . '>' . $LANG_MG07['full'] . '</option>';
     $mp3_uimode_select .= '</select>';
 
-    $swf_quality_select = '<select name="swf_quality">';
-    $swf_quality_select .= '<option value="low" '  . ($_MG_CONF['swf_quality'] == 'low' ? ' selected="selected"' : '') . '>' . $LANG_MG07['low'] . '</option>';
-    $swf_quality_select .= '<option value="high" ' . ($_MG_CONF['swf_quality'] == 'high' ? ' selected="selected"' : '') . '>' . $LANG_MG07['high'] . '</option>';
-    $swf_quality_select .= '</select>';
-
-    $swf_scale_select = '<select name="swf_scale">';
-    $swf_scale_select .= '<option value="showall" '  . ($_MG_CONF['swf_scale'] == 'showall'  ? ' selected="selected"' : '') . '>' . $LANG_MG07['showall'] . '</option>';
-    $swf_scale_select .= '<option value="noborder" ' . ($_MG_CONF['swf_scale'] == 'noborder' ? ' selected="selected"' : '') . '>' . $LANG_MG07['noborder'] . '</option>';
-    $swf_scale_select .= '<option value="exactfit" ' . ($_MG_CONF['swf_scale'] == 'exactfit' ? ' selected="selected"' : '') . '>' . $LANG_MG07['exactfit'] . '</option>';
-    $swf_scale_select .= '</select>';
-
-    $swf_wmode_select = '<select name="swf_wmode">';
-    $swf_wmode_select .= '<option value="window" '      . ($_MG_CONF['swf_wmode'] == 'window'      ? ' selected="selected"' : '') . '>' . $LANG_MG07['window'] . '</option>';
-    $swf_wmode_select .= '<option value="opaque" '      . ($_MG_CONF['swf_wmode'] == 'opaque'      ? ' selected="selected"' : '') . '>' . $LANG_MG07['opaque'] . '</option>';
-    $swf_wmode_select .= '<option value="transparent" ' . ($_MG_CONF['swf_wmode'] == 'transparent' ? ' selected="selected"' : '') . '>' . $LANG_MG07['transparent'] . '</option>';
-    $swf_wmode_select .= '</select>';
-
-    $swf_asa_select = '<select name="swf_allowscriptaccess">';
-    $swf_asa_select .= '<option value="always" '      . ($_MG_CONF['swf_allowscriptaccess'] == 'always'      ? ' selected="selected"' : '') . '>' . $LANG_MG07['always'] . '</option>';
-    $swf_asa_select .= '<option value="sameDomain" '  . ($_MG_CONF['swf_allowscriptaccess'] == 'sameDomain'  ? ' selected="selected"' : '') . '>' . $LANG_MG07['sameDomain'] . '</option>';
-    $swf_asa_select .= '<option value="never" '       . ($_MG_CONF['swf_allowscriptaccess'] == 'never'       ? ' selected="selected"' : '') . '>' . $LANG_MG07['never'] . '</option>';
-    $swf_asa_select .= '</select>';
-
     $T->set_var(array(
         'lang_save'                     => $LANG_MG01['save'],
         'lang_cancel'                   => $LANG_MG01['cancel'],
@@ -115,7 +79,6 @@ function MG_editAVDefaults( ) {
         'lang_asf_options'              => $LANG_MG07['wmp_options'],
         'lang_mov_options'              => $LANG_MG07['qt_options'],
         'lang_mp3_options'              => $LANG_MG07['mp3_options'],
-        'lang_swf_options'              => $LANG_MG07['swf_options'],
         'lang_playcount'                => $LANG_MG07['playcount'],
         'lang_playcount_help'           => $LANG_MG07['playcount_help'],
         'lang_option'                   => $LANG_MG07['option'],
@@ -151,19 +114,16 @@ function MG_editAVDefaults( ) {
         'lang_menu'                     => $LANG_MG07['menu'],
         'lang_menu_help'                => $LANG_MG07['menu_help'],
         'lang_scale'                    => $LANG_MG07['scale'],
-        'lang_swf_scale_help'           => $LANG_MG07['swf_scale_help'],
         'lang_wmode'                    => $LANG_MG07['wmode'],
         'lang_wmode_help'               => $LANG_MG07['wmode_help'],
         'lang_quality'                  => $LANG_MG07['quality'],
         'lang_quality_help'             => $LANG_MG07['quality_help'],
-        'lang_flash_vars'               => $LANG_MG07['flash_vars'],
         'lang_asa'                      => $LANG_MG07['asa'],
         'lang_asa_help'                 => $LANG_MG07['asa_help'],
         'lang_bgcolor'                  => $LANG_MG07['bgcolor'],
         'lang_bgcolor_help'             => $LANG_MG07['bgcolor_help'],
         'lang_clsid'                    => $LANG_MG07['clsid'],
         'lang_codebase'                 => $LANG_MG07['codebase'],
-        'lang_swf_version_help'         => $LANG_MG07['swf_version_help'],
         'asf_autostart_enabled'         => $_MG_CONF['asf_autostart'] ? ' checked="checked"' : '',
         'asf_autostart_disabled'        => $_MG_CONF['asf_autostart'] ? '' : ' checked="checked"',
         'asf_enablecontextmenu_enabled' => $_MG_CONF['asf_enablecontextmenu'] ? ' checked="checked"' : '',
@@ -202,22 +162,6 @@ function MG_editAVDefaults( ) {
         'mp3_loop_disabled'             => $_MG_CONF['mp3_loop'] ? '' : ' checked="checked"',
         'mp3_uimode_select'             => $mp3_uimode_select,
         'mp3_uimode'                    => $_MG_CONF['mp3_uimode'],
-        'swf_play_enabled'              => $_MG_CONF['swf_play'] ? ' checked="checked"' : '',
-        'swf_play_disabled'             => $_MG_CONF['swf_play'] ? '' : ' checked="checked"',
-        'swf_menu_enabled'              => $_MG_CONF['swf_menu'] ? ' checked="checked"' : '',
-        'swf_menu_disabled'             => $_MG_CONF['swf_menu'] ? '' : ' checked="checked"',
-        'swf_loop_enabled'              => $_MG_CONF['swf_loop'] ? ' checked="checked"' : '',
-        'swf_loop_disabled'             => $_MG_CONF['swf_loop'] ? '' : ' checked="checked"',
-        'swf_quality_select'            => $swf_quality_select,
-        'swf_scale_select'              => $swf_scale_select,
-        'swf_wmode_select'              => $swf_wmode_select,
-        'swf_asa_select'                => $swf_asa_select,
-        'swf_flashvars'                 => $_MG_CONF['swf_flashvars'],
-        'swf_height'                    => $_MG_CONF['swf_height'],
-        'swf_width'                     => $_MG_CONF['swf_width'],
-        'swf_bgcolor'                   => $_MG_CONF['swf_bgcolor'],
-        'swf_codebase'                  => $_MG_CONF['swf_version'],
-        'swf_version'                   => $_MG_CONF['swf_version'],
         'rtl'                           => $LANG_DIRECTION == "rtl" ? "rtl" : "",
         'gltoken_name'                  => CSRF_TOKEN,
         'gltoken'                       => SEC_createToken(),
@@ -257,19 +201,6 @@ function MG_saveAVDefaults( ) {
     $mp3_loop               = COM_applyFilter($_POST['mp3_loop'],true);
     $mp3_uimode             = COM_applyFilter($_POST['mp3_uimode']);
 
-    $swf_play               = COM_applyFilter($_POST['swf_play'],true);
-    $swf_menu               = COM_applyFilter($_POST['swf_menu'],true);
-    $swf_loop               = COM_applyFilter($_POST['swf_loop'],true);
-    $swf_quality            = COM_applyFilter($_POST['swf_quality']);
-    $swf_scale              = COM_applyFilter($_POST['swf_scale']);
-    $swf_wmode              = COM_applyFilter($_POST['swf_wmode']);
-    $swf_asa                = COM_applyFilter($_POST['swf_allowscriptaccess']);
-    $swf_flashvars          = COM_applyFilter($_POST['swf_flashvars']);
-    $swf_version            = COM_applyFilter($_POST['swf_version'],true);
-    $swf_height             = COM_applyFilter($_POST['swf_height'],true);
-    $swf_width              = COM_applyFilter($_POST['swf_width'],true);
-    $swf_bgcolor            = COM_applyFilter($_POST['swf_bgcolor']);
-
     // put any error checking / validation here
     DB_save($_TABLES['mg_config'],"config_name, config_value","'asf_autostart','$asf_autostart'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'asf_enablecontextmenu','$asf_enablecontextmenu'");
@@ -294,18 +225,6 @@ function MG_saveAVDefaults( ) {
     DB_save($_TABLES['mg_config'],"config_name, config_value","'mp3_showstatusbar','$mp3_showstatusbar'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'mp3_loop','$mp3_loop'");
     DB_save($_TABLES['mg_config'],"config_name, config_value","'mp3_uimode','$mp3_uimode'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_play','$swf_play'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_menu','$swf_menu'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_loop','$swf_loop'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_quality','$swf_quality'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_scale','$swf_scale'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_wmode','$swf_wmode'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_allowscriptaccess','$swf_asa'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_flashvars','$swf_flashvars'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_version','$swf_version'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_height','$swf_height'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_width','$swf_width'");
-    DB_save($_TABLES['mg_config'],"config_name, config_value","'swf_bgcolor','$swf_bgcolor'");
 
     COM_setMessage(5);
     echo COM_refresh($_MG_CONF['admin_url'] . 'index.php');

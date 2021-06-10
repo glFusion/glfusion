@@ -1,36 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | lib-watermark.php                                                        |
-// |                                                                          |
-// | Watermark admin functions                                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Watermark Admin Functions
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
-// this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
+use \glFusion\FileSystem;
 
 /**
 * Allows user/admin to manage uploaded watermarks
@@ -66,7 +53,7 @@ function MG_watermarkManage( $actionURL = '' ) {
     ));
 
     if ( $MG_albums[0]->access != 3 && !$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) {
-        COM_errorLog("Someone has tried to illegally edit media in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,"Media Gallery: Someone has tried to edit media in Media Gallery.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
     $retval .= '<h2>' . $LANG_MG01['wm_management'] . '</h2>';
@@ -110,8 +97,8 @@ function MG_watermarkManage( $actionURL = '' ) {
                 }
                 $mediaObject[] = $row;
 
-                $thumbnail  = $_MG_CONF['site_url']  . '/watermarks/' . $row['filename'];
-                $pThumbnail = $_MG_CONF['path_html'] . 'watermarks/' . $row['filename'];
+                $thumbnail  = $_MG_CONF['watermarks_url']  . '/' . $row['filename'];
+                $pThumbnail = $_MG_CONF['path_watermarks'] . $row['filename'];
 
                 $img_size = @getimagesize($pThumbnail);
                 $width = $img_size[0];
@@ -174,7 +161,7 @@ function MG_watermarkSave( $actionURL = '' ) {
 
     // check permissions...
     if ( $MG_albums[0]->access != 3 && !SEC_hasRights('mediagallery.admin')) {
-        COM_errorLog("Someone has tried to illegally save a watermark image in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,"Media Gallery: Someone has tried to save a watermark image in Media Gallery.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -202,7 +189,7 @@ function MG_watermarkDelete( $actionURL = '') {
 
     // check permissions...
     if ( $MG_albums[0]->access != 3 && !$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) {
-        COM_errorLog("Someone has tried to illegally save a watermark image in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,"Media Gallery: Someone has tried to save a watermark image in Media Gallery.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -215,9 +202,9 @@ function MG_watermarkDelete( $actionURL = '') {
            $sql = "DELETE FROM {$_TABLES['mg_watermarks']} WHERE wm_id='" . intval($wm_id) . "'";
             $result = DB_query($sql);
             if ( DB_error() ) {
-                COM_errorLog("MG Admin: Error removing watermark");
+                Log::write('system',Log::ERROR,"Media Gallery: MG Admin: Error removing watermark");
             }
-            @unlink($_MG_CONF['path_html'] . 'watermarks/'   . $filename);
+            @unlink($_MG_CONF['path_watermarks'] . $filename);
 
             // now check and see if this is assigned to any albums....
 
@@ -250,7 +237,7 @@ function MG_watermarkUpload( $actionURL = '') {
     ));
 
     if ( $MG_albums[0]->access != 3 && !$MG_albums[0]->owner_id/*SEC_hasRights('mediagallery.admin')*/) {
-        COM_errorLog("Someone has tried to illegally edit media in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING, "Media Gallery: Someone has tried to edit media in Media Gallery.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -313,7 +300,7 @@ function MG_watermarkUploadSave() {
         $description = $_POST['description'][$key];
 
         if ( $filesize > 65536 ) { // right now we hard coded 64kb
-            COM_errorLog("MG Upload: File " . $filename . " exceeds maximum allowed filesize for this album");
+            Log::write('system',Log::ERROR,"Media Gallery: File " . $filename . " exceeds maximum allowed filesize for this album");
             $tmpmsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'], $filename);
             $statusMsg .= $tmpmsg . '<br/>';
             continue;
@@ -324,17 +311,17 @@ function MG_watermarkUploadSave() {
                 case 1 :
                     $tmpmsg = sprintf($LANG_MG02['upload_too_big'],$filename);
                     $statusMsg .= $tmpmsg . '<br/>';
-                    COM_errorLog('Media Gallery Error - ' .$tmpmsg);
+                    Log::write('system',Log::ERROR,'Media Gallery Error - ' .$tmpmsg);
                     break;
                 case 2 :
                     $tmpmsg = sprintf($LANG_MG02['upload_too_big_html'], $filename);
                     $statusMsg .= $tmpmsg  . '<br />';
-                    COM_errorLog('Media Gallery Error - ' .$tmpmsg);
+                    Log::write('system',Log::ERROR,'Media Gallery Error - ' .$tmpmsg);
                     break;
                 case 3 :
                     $tmpmsg = sprintf($LANG_MG02['partial_upload'], $filename);
                     $statusMsg .= $tmpmsg  . '<br />';
-                    COM_errorLog('Media Gallery Error - ' .$tmpmsg);
+                    Log::write('system',Log::ERROR,'Media Gallery Error - ' .$tmpmsg);
                     break;
                 case 4 :
                     break;
@@ -382,38 +369,42 @@ function MG_watermarkUploadSave() {
             $wm_id = 1;
         }
         if ( $wm_id == 0 ) {
-            COM_errorLog("Media Gallery Error - Returned 0 as wm_id");
+            Log::write('system',Log::ERROR,"Media Gallery Error - Returned 0 as wm_id");
             $wm_id = 1;
         }
 
-        $wm_filename = $_MG_CONF['path_html'] . 'watermarks/' . $uid . '_' .$filename;
-
-        if (file_exists($wm_filename) ) {
-            $statusMsg .= sprintf($LANG_MG02['wm_already_exists'], $filename);
+        if ( FileSystem::mkDir($_MG_CONF['path_watermarks']) === false ) {
+            Log::write('system',Log::ERROR,"Media Gallery: Watermark directory: " . $_MG_CONF['path_watermarks'] . " does not exist.");
+            $statusMsg .= sprintf($LANG_MG02['move_error'],$filename);
         } else {
-            $rc = move_uploaded_file($filetmp, $wm_filename);
+            $wm_filename = $_MG_CONF['path_watermarks'] .  $uid . '_' .$filename;
 
-            if ( $rc != 1 ) {
-                COM_errorLog("Media Upload - Error moving uploaded file....rc = " . $rc);
-                $statusMsg .= sprintf($LANG_MG02['move_error'],$filename);
+            if (file_exists($wm_filename) ) {
+                $statusMsg .= sprintf($LANG_MG02['wm_already_exists'], $filename);
             } else {
-                chmod($wm_filename, 0644);
-                $media_title_safe = substr($description,0,254);
-                $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($media_title_safe)))));
+                $rc = move_uploaded_file($filetmp, $wm_filename);
 
-                $saveFileName = DB_escapeString($uid . '_' .$filename);
-                $sql = "INSERT INTO {$_TABLES['mg_watermarks']} (wm_id,owner_id,filename,description)
-                        VALUES ($wm_id,'$uid','$saveFileName','$media_title')";
-                DB_query( $sql );
-                if ( $_MG_CONF['verbose'] ) {
-                    COM_errorLog("MG Upload: Updating Album information");
-                }
-                if ( DB_error() ) {
-                    COM_errorLog("MediaGallery: Error inserting watermark data into database");
-                    @unlink($wm_filename);
-                    $statusMsg .= $filename . " - " . DB_error();
+                if ( $rc != 1 ) {
+                    Log::write('system',Log::ERROR,"Media Gallery: Media Upload - Error moving uploaded file....rc = " . $rc);
+                    $statusMsg .= sprintf($LANG_MG02['move_error'],$filename);
                 } else {
-                    $statusMsg .= $filename . $LANG_MG02['wm_success'];
+                    chmod($wm_filename, 0644);
+                    $media_title_safe = substr($description,0,254);
+                    $media_title = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($media_title_safe)))));
+
+                    $saveFileName = DB_escapeString($uid . '_' .$filename);
+                    $sql = "INSERT INTO {$_TABLES['mg_watermarks']} (wm_id,owner_id,filename,description)
+                            VALUES ($wm_id,'$uid','$saveFileName','$media_title')";
+                    DB_query( $sql );
+                    Log::write('system',Log::DEBUG,"Media Gallery: Watermark Upload: Updating Album information");
+
+                    if ( DB_error() ) {
+                        Log::write('system',Log::ERROR,"MediaGallery: Error inserting watermark data into database");
+                        @unlink($wm_filename);
+                        $statusMsg .= $filename . " - " . DB_error();
+                    } else {
+                        $statusMsg .= $filename . $LANG_MG02['wm_success'];
+                    }
                 }
             }
         }
@@ -436,7 +427,12 @@ function MG_watermark( $origImage, $aid, $runJhead ) {
     if ( $MG_albums[$aid]->wm_id == 0 ) {
         return false;
     }
-    $watermarkImage = $_MG_CONF['path_html'] . 'watermarks/' . DB_getItem($_TABLES['mg_watermarks'],'filename','wm_id="' . $MG_albums[$aid]->wm_id . '"');
+    $watermarkImage = $_MG_CONF['path_watermarks'] . DB_getItem($_TABLES['mg_watermarks'],'filename','wm_id="' . $MG_albums[$aid]->wm_id . '"');
+
+    if (!file_exists($watermarkImage)) {
+        return false;
+    }
+
     $opacity = $MG_albums[$aid]->wm_opacity;
     switch( $MG_albums[$aid]->wm_location ) {
         case 1 :

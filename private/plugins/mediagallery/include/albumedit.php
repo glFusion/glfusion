@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin for glFusion CMS                                    |
-// +--------------------------------------------------------------------------+
-// | albumedit.php                                                            |
-// |                                                                          |
-// | Album editing administration                                             |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+ /**
+* glFusion CMS - Media Gallery Plugin
+*
+* Album Edit / Administration
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -34,6 +19,7 @@ if (!defined ('GVERSION')) {
 
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
 
+use \glFusion\Log\Log;
 
 /**
 * Shows security control for an object
@@ -117,7 +103,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         // If edit, pull up the existing album information...
 
         if ($MG_albums[$album_id]->access != 3 ) {
-            COM_errorLog("MediaGallery: Someone has tried to illegally edit a Media Gallery Album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+            Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to edit a Media Gallery Album without the proper permissions.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         }
     } else if ($album_id==0 && $mode == 'create') {
@@ -141,7 +127,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
         $A['exif_display']		= $_MG_CONF['ad_exif_display'];
         $A['enable_slideshow']  = $_MG_CONF['ad_enable_slideshow'];
         $A['enable_random']     = $_MG_CONF['ad_enable_random'];
-//        $A['enable_shutterfly'] = $_MG_CONF['ad_enable_shutterfly'];
         $A['auto_rotate']       = 1;
         $A['enable_views']      = $_MG_CONF['ad_enable_views'];
         $A['enable_keywords']   = $_MG_CONF['ad_enable_keywords'];
@@ -228,7 +213,7 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $album_select = $album_selectbox;
 
     if ($valid_albums == 0  ) {
-        COM_errorLog("MediaGallery: Someone has tried to illegally create a Medig Gallery Album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to edit a Media Gallery Album.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -263,8 +248,6 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $ss_select		.= '<option value="0" ' . ($A['enable_slideshow'] == 0 ? ' selected="selected"' : '') . '>' . $LANG_MG01['disabled'] . '</option>';
     $ss_select		.= '<option value="1"' . ($A['enable_slideshow'] == 1 ? ' selected="selected"' : '') . '>' . $LANG_MG01['js_slideshow'] . '</option>';
     $ss_select		.= '<option value="2"' . ($A['enable_slideshow'] == 2 ? ' selected="selected"' : '') . '>' . $LANG_MG01['lightbox'] . '</option>';
-    $ss_select		.= '<option value="3"' . ($A['enable_slideshow'] == 3 ? ' selected="selected"' : '') . '>' . $LANG_MG01['flash_slideshow_disp'] . '</option>';
-    $ss_select		.= '<option value="4"' . ($A['enable_slideshow'] == 4 ? ' selected="selected"' : '') . '>' . $LANG_MG01['flash_slideshow_full'] . '</option>';
     $ss_select		.= '<option value="5"' . ($A['enable_slideshow'] == 5 ? ' selected="selected"' : '') . '>' . $LANG_MG01['mp3_jukebox'] . '</option>';
     $ss_select      .= '</select>';
 
@@ -430,13 +413,10 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
             'mp3_checked'   => ($A['valid_formats'] & MG_MP3 ? ' checked="checked"' : ''),
             'ogg_checked'   => ($A['valid_formats'] & MG_OGG ? ' checked="checked"' : ''),
             'asf_checked'   => ($A['valid_formats'] & MG_ASF ? ' checked="checked"' : ''),
-            'swf_checked'   => ($A['valid_formats'] & MG_SWF ? ' checked="checked"' : ''),
             'mov_checked'   => ($A['valid_formats'] & MG_MOV ? ' checked="checked"' : ''),
             'mp4_checked'   => ($A['valid_formats'] & MG_MP4 ? ' checked="checked"' : ''),
             'mpg_checked'   => ($A['valid_formats'] & MG_MPG ? ' checked="checked"' : ''),
             'zip_checked'   => ($A['valid_formats'] & MG_ZIP ? ' checked="checked"' : ''),
-            'flv_checked'   => ($A['valid_formats'] & MG_FLV ? ' checked="checked"' : ''),
-            'rflv_checked'  => ($A['valid_formats'] & MG_RFLV ? ' checked="checked"' : ''),
             'emb_checked'   => ($A['valid_formats'] & MG_EMB ? ' checked="checked"' : ''),
             'other_checked'   => ($A['valid_formats'] & MG_OTHER ? ' checked="checked"' : ''),
             'lang_jpg'              => $LANG_MG01['jpg'],
@@ -449,13 +429,10 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
             'lang_mp3'              => $LANG_MG01['mp3'],
             'lang_ogg'              => $LANG_MG01['ogg'],
             'lang_asf'              => $LANG_MG01['asf'],
-            'lang_swf'              => $LANG_MG01['swf'],
             'lang_mov'              => $LANG_MG01['mov'],
             'lang_mp4'              => $LANG_MG01['mp4'],
             'lang_mpg'              => $LANG_MG01['mpg'],
             'lang_zip'              => $LANG_MG01['zip'],
-            'lang_flv'              => $LANG_MG01['flv'],
-            'lang_rflv'             => $LANG_MG01['rflv'],
             'lang_emb'              => $LANG_MG01['emb'],
             'lang_other'            => $LANG_MG01['other'],
             'lang_allowed_formats'  => $LANG_MG01['allowed_media_formats'],
@@ -523,13 +500,13 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
     $wm_select =  '<select name="wm_id"  onchange="change(this)">';
     $wm_select .= '<option value="blank.png">' . $LANG_MG01['no_watermark'] . '</option>';
 
-    $wm_current = '<img src="' . $_MG_CONF['site_url'] . '/watermarks/blank.png" name="myImage" alt=""/>';
+    $wm_current = '<img src="' . $_MG_CONF['assets_url'] . '/watermarks/blank.png" name="myImage" alt=""/>';
 
     for ($i=0;$i<$nRows;$i++) {
         $row = DB_fetchArray($result);
         $wm_select .= '<option value="' . $row['filename'] . '"' . ($A['wm_id']==$row['wm_id'] ? 'selected="selected"' : '') . '>' . $row['filename'] . '</option>';
         if ( $A['wm_id'] == $row['wm_id']) {
-            $wm_current = '<img src="' . $_MG_CONF['site_url'] . '/watermarks/' . $row['filename'] . '" name="myImage" alt=""/>';
+            $wm_current = '<img src="' . $_MG_CONF['watermarks_url'] . '/' . $row['filename'] . '" name="myImage" alt=""/>';
         }
     }
     $wm_select .= '</select>';
@@ -552,24 +529,26 @@ function MG_editAlbum( $album_id=0, $mode ='', $actionURL='', $oldaid = 0 ) {
 
     // permission template
 
-    $usergroups = SEC_getUserGroups();
+    $usergroups = \Group::getAllAvailable();
     $groupdd = '';
     $moddd = '';
 
     $groupdd .= '<select name="group_id">';
     $moddd .= '<select name="mod_id">';
     for ($i = 0; $i < count($usergroups); $i++) {
-        if ( $usergroups[key($usergroups)] != 2 && $usergroups[key($usergroups)] != 13 ) {
-            $groupdd .= '<option value="' . $usergroups[key($usergroups)] . '"';
+        if ( $usergroups[key($usergroups)] != 2 && $usergroups[key($usergroups)] != 13 && key($usergroups) <> 'Non-Logged-in Users') {
             $moddd   .= '<option value="' . $usergroups[key($usergroups)] . '"';
-            if ($A['group_id'] == $usergroups[key($usergroups)]) {
-                $groupdd .= ' selected="selected"';
-            }
             if ($A['mod_group_id'] == $usergroups[key($usergroups)]) {
                 $moddd   .= ' selected="selected"';
             }
-            $groupdd .= '>' . key($usergroups) . '</option>';
             $moddd   .= '>' . key($usergroups) . '</option>';
+        }
+        if (key($usergroups) <> 'Non-Logged-in Users') {
+            $groupdd .= '<option value="' . $usergroups[key($usergroups)] . '"';
+            if ($A['group_id'] == $usergroups[key($usergroups)]) {
+                $groupdd .= ' selected="selected"';
+            }
+            $groupdd .= '>' . key($usergroups) . '</option>';
         }
         next($usergroups);
     }
@@ -758,13 +737,9 @@ function MG_quickCreate( $parent, $title, $desc='' ) {
 
     $album = new mgAlbum();
 
-//    if ($_MG_CONF['htmlallowed'] == 1 ) {
-        $album->title       = $title;
-        $album->description = $desc;
-//    } else {
-//        $album->title       = htmlspecialchars(strip_tags(COM_checkWords($title)));
-//        $album->description = htmlspecialchars(strip_tags(COM_checkWords($desc)));
-//    }
+    $album->title       = $title;
+    $album->description = $desc;
+
     if ($album->title == "" ) {
         return -1;
     }
@@ -787,16 +762,15 @@ function MG_quickCreate( $parent, $title, $desc='' ) {
     if ( $album->parent == 0 && !$_MG_CONF['member_albums'] == 1 && !$_MG_CONF['member_album_root'] == 0 ) {
         // see if we are mediagallery.admin
         if (!SEC_hasRights('mediagallery.admin')) {
-            COM_errorLog("MediaGallery: Someone has tried to illegally save a Media Gallery Album in Root.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
-            return(MG_genericError($LANG_MG00['access_denied_msg']));
+            Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save an album in root without mediagallery.admin permissions.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);return(MG_genericError($LANG_MG00['access_denied_msg']));
         }
     } elseif ($album->parent != 0 ) {
         if ( !isset($MG_albums[$album->parent]->id )) {    // does not exist...
-            COM_errorLog("MediaGallery: Someone has tried to save a album to non-existent parent album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+            Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save an album to a non-existent parent album.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         } else {
             if ( $MG_album[$album->parent]->access != 3 && !SEC_hasRights('mediagallery.admin') && !$_MG_CONF['member_albums'] && !$_MG_CONF['member_album_root'] == $MG_album[$album->parent]->id) {
-                COM_errorLog("MediaGallery: Someone has tried to illegally save a Media Gallery Album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+                Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save a Media Gallery Album without the necessary permissions.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
                 return(MG_genericError($LANG_MG00['access_denied_msg']));
             }
         }
@@ -938,11 +912,8 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
         $album->auto_rotate = 0;
     }
 
-//    if ( isset($_POST['enable_shutterfly'] ) ) {
-//        $album->enable_shutterfly   = COM_applyFilter($_POST['enable_shutterfly'],true);
-//    } else {
-        $album->enable_shutterfly = 0;
-//    }
+    $album->enable_shutterfly = 0;
+
     if ( isset($_POST['enable_views']) ) {
         $album->enable_views        = COM_applyFilter($_POST['enable_views'],true);
     } else {
@@ -1065,16 +1036,13 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
         $format_mp3                 = isset($_POST['format_mp3']) ? COM_applyFilter($_POST['format_mp3'],true) : 0;
         $format_ogg                 = isset($_POST['format_ogg']) ? COM_applyFilter($_POST['format_ogg'],true) : 0;
         $format_asf                 = isset($_POST['format_asf']) ? COM_applyFilter($_POST['format_asf'],true) : 0;
-        $format_swf                 = isset($_POST['format_swf']) ? COM_applyFilter($_POST['format_swf'],true) : 0;
         $format_mov                 = isset($_POST['format_mov']) ? COM_applyFilter($_POST['format_mov'],true) : 0;
         $format_mp4                 = isset($_POST['format_mp4']) ? COM_applyFilter($_POST['format_mp4'],true) : 0;
         $format_mpg                 = isset($_POST['format_mpg']) ? COM_applyFilter($_POST['format_mpg'],true) : 0;
         $format_zip                 = isset($_POST['format_zip']) ? COM_applyFilter($_POST['format_zip'],true) : 0;
         $format_other               = isset($_POST['format_other']) ? COM_applyFilter($_POST['format_other'],true) : 0;
-        $format_flv                 = isset($_POST['format_flv']) ? COM_applyFilter($_POST['format_flv'],true) : 0;
-        $format_rflv                = isset($_POST['format_rflv']) ? COM_applyFilter($_POST['format_rflv'],true) : 0;
         $format_emb                 = isset($_POST['format_emb']) ? COM_applyFilter($_POST['format_emb'],true) : 0;
-        $album->valid_formats       = ($format_jpg + $format_png + $format_tif + $format_gif + $format_bmp + $format_tga + $format_psd + $format_mp3 + $format_ogg + $format_asf + $format_swf + $format_mov + $format_mp4 + $format_mpg + $format_zip + $format_other + $format_flv + $format_rflv + $format_emb);
+        $album->valid_formats       = ($format_jpg + $format_png + $format_tif + $format_gif + $format_bmp + $format_tga + $format_psd + $format_mp3 + $format_ogg + $format_asf + $format_mov + $format_mp4 + $format_mpg + $format_zip + $format_other + $format_emb);
 
         if ( isset($_POST['featured']) ) {
             $album->featured            = COM_applyFilter($_POST['featured'],true);         // admin only
@@ -1134,16 +1102,16 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     if ( $album->parent == 0 && $update == 0 && !$_MG_CONF['member_albums'] == 1 && !$_MG_CONF['member_album_root'] == 0 ) {
         // see if we are mediagallery.admin
         if (!SEC_hasRights('mediagallery.admin')) {
-            COM_errorLog("MediaGallery: Someone has tried to illegally save a Media Gallery Album in Root.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+            Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save a Media Gallery Album in Root.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         }
     } elseif ($album->parent != 0 ) {
         if ( !isset($MG_albums[$album->parent]->id )) {    // does not exist...
-            COM_errorLog("MediaGallery: Someone has tried to save a album to non-existent parent album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+            Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save an album to a non-existent parent album.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
             return(MG_genericError($LANG_MG00['access_denied_msg']));
         } else {
             if ( $MG_albums[$album->parent]->access != 3 && !SEC_hasRights('mediagallery.admin') && !$_MG_CONF['member_albums'] && !($_MG_CONF['member_album_root'] == $MG_album[$album->parent]->id)) {
-                COM_errorLog("MediaGallery: Someone has tried to illegally save a Media Gallery Album.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+                Log::write('system',Log::ERROR,'MediaGallery: Someone has tried to save a Media Gallery Album.  User id: '.$_USER['uid'].', Username: '.$_USER['username'].', IP: '.$REMOTE_ADDR);
                 return(MG_genericError($LANG_MG00['access_denied_msg']));
             }
         }
@@ -1226,7 +1194,7 @@ function MG_saveAlbum( $album_id, $actionURL='' ) {
     }
 
     if ( $album->id == 0 ) {
-        COM_errorLog("MediaGallery: Internal Error - album_id = 0 - Contact mark@glfusion.org  ");
+        Log::write('system',Log::ERROR,'MediaGallery: Internal Error - album_id = 0');
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
     $album->saveAlbum();

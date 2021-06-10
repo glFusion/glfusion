@@ -1,29 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | profile.inc.php                                                          |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* glFusion Profile Interface
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -195,14 +182,14 @@ function _mg_profileblocksdisplay( $uid ) {
             case 1 :    // video file
                 switch ( $row['mime_type'] ) {
                     case 'application/x-shockwave-flash' :
-                        $url_thumb = $_MG_CONF['mediaobjects_url'] . '/flash.png';
-                        $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flash.png');
+                        $url_thumb = $_MG_CONF['assets_url'] . '/flash.png';
+                        $msize = @getimagesize($_MG_CONF['path_assets'] . 'flash.png');
                         break;
                     case 'video/quicktime' :
                     case 'video/mpeg' :
                     case 'video/x-m4v' :
-                        $url_thumb = $_MG_CONF['mediaobjects_url'] . '/quicktime.png';
-                        $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'quicktime.png');
+                        $url_thumb = $_MG_CONF['assets_url'] . '/quicktime.png';
+                        $msize = @getimagesize($_MG_CONF['path_assets'] . 'quicktime.png');
                         break;
                     case 'video/x-ms-asf' :
                     case 'video/x-ms-wvx' :
@@ -211,18 +198,18 @@ function _mg_profileblocksdisplay( $uid ) {
                     case 'video/x-msvideo' :
                     case 'application/x-ms-wmz' :
                     case 'application/x-ms-wmd' :
-                        $url_thumb = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
-                        $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.png');
+                        $url_thumb = $_MG_CONF['assets_url'] . '/wmp.png';
+                        $msize = @getimagesize($_MG_CONF['path_assets'] . 'wmp.png');
                         break;
                     default :
-                        $url_thumb = $_MG_CONF['mediaobjects_url'] . '/video.png';
-                        $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'video.png');
+                        $url_thumb = $_MG_CONF['assets_url'] . '/video.png';
+                        $msize = @getimagesize($_MG_CONF['path_assets'] . 'video.png');
                         break;
                 }
                 break;
             case 2 :    // music file
-                $url_thumb = $_MG_CONF['mediaobjects_url'] . '/audio.png';
-                $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'audio.png');
+                $url_thumb = $_MG_CONF['assets_url'] . '/audio.png';
+                $msize = @getimagesize($_MG_CONF['path_assets'] . 'audio.png');
                 break;
             case 4 :    // other files
                 switch ($row['media_mime_ext']) {
@@ -230,27 +217,27 @@ function _mg_profileblocksdisplay( $uid ) {
                     case 'arj' :
                     case 'rar' :
                     case 'gz'  :
-                        $url_thumb = $_MG_CONF['mediaobjects_url'] . '/zip.png';
-                        $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'zip.png');
+                        $url_thumb = $_MG_CONF['assets_url'] . '/zip.png';
+                        $msize = @getimagesize($_MG_CONF['path_assets'] . 'zip.png');
                         break;
                     case 'pdf' :
-                        $url_thumb = $_MG_CONF['mediaobjects_url'] . '/pdf.png';
-                        $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'pdf.png');
+                        $url_thumb = $_MG_CONF['assets_url'] . '/pdf.png';
+                        $msize = @getimagesize($_MG_CONF['path_assets'] . 'pdf.png');
                         break;
                     default :
-                        $url_thumb = $_MG_CONF['mediaobjects_url'] . '/generic.png';
-                        $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'generic.png');
+                        $url_thumb = $_MG_CONF['assets_url'] . '/generic.png';
+                        $msize = @getimagesize($_MG_CONF['path_assets'] . 'generic.png');
                         break;
                 }
                 break;
             case 5 :
-                $url_thumb = $_MG_CONF['mediaobjects_url'] . '/remote.png';
-                $msize = @getimagesize($_MG_CONF['path_mediaobjects'] . 'remote.png');
+                $url_thumb = $_MG_CONF['assets_url'] . '/remote.png';
+                $msize = @getimagesize($_MG_CONF['path_assets'] . 'remote.png');
                 break;
         }
 
         if ($msize == false ) {
-            $url_thumb = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+            $url_thumb = $_MG_CONF['assets_url'] . '/placeholder.svg';
             $msize = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
         }
         $imgwidth = $msize[0];
@@ -340,14 +327,14 @@ function _mg_profileblocksdisplay( $uid ) {
         }
 
         if ($msize == false || $url_thumb == '' ) {
-            $url_thumb = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+            $url_thumb = $_MG_CONF['assets_url'] . '/placeholder.svg';
             $msize = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
         }
         $imgwidth = $msize[0];
         $imgheight = $msize[1];
 
         if ( $imgwidth == 0 || $imgheight == 0 ) {
-            $url_thumb = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+            $url_thumb = $_MG_CONF['assets_url'] . '/placeholder.svg';
             $msize = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
             $imgwidth = $msize[0];
             $imgheight = $msize[1];

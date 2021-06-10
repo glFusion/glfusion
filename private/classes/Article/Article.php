@@ -184,7 +184,7 @@ class Article
     protected $fullname = 'Anonymous';
     protected $username = 'Anonymous';
     protected $user_about = '';
-    protected $user_photo = 'default.jpg';
+    protected $user_photo = '';
     protected $ownerFullName;
     protected $authorFullName;
     protected $ownerUsername;
@@ -1728,7 +1728,7 @@ class Article
                         $this->fullname = '';
                     }
                     if (empty($this->user_photo)) {
-                        $this->user_photo = 'default.jpg';
+                        $this->user_photo = '';
                     }
 
                     break;
@@ -2124,7 +2124,11 @@ class Article
                 break;
 
             case 'author_photo' :
-                $retval = $_CONF['site_url'].'/images/userphotos/'.$this->user_photo;
+                if (empty($this->user_photo)) {
+                    $retval = $_CONF['default_photo'];
+                } else {
+                    $retval = $_CONF['path_images_url'].'/userphotos/'.$this->user_photo;
+                }
                 break;
 
             case 'about' :
@@ -2994,15 +2998,15 @@ class Article
                     $T->set_var('ai_filename', $row['ai_filename']);
                     $T->set_var('ai_link',
                         COM_createLink(
-                            $row['ai_filename'], $_CONF['site_url'].'/images/articles/'.$row['ai_filename']
+                            $row['ai_filename'], $_CONF['path_images_url'].'/articles/'.$row['ai_filename']
                         )
                     );
                     if ($_CONF['keep_unscaled_image'] == 1) {
                         $originalFilename = substr_replace($row['ai_filename'], '_original.',
                                                 strrpos($row['ai_filename'], '.'), 1);
-                        $T->set_var('ai_image_url',$_CONF['site_url'].'/images/articles/'.$originalFilename);
+                        $T->set_var('ai_image_url',$_CONF['path_images_url'].'/articles/'.$originalFilename);
                     } else {
-                        $T->set_var('ai_image_url',$_CONF['site_url'].'/images/articles/'.$row['ai_filename']);
+                        $T->set_var('ai_image_url',$_CONF['path_images_url'].'/articles/'.$row['ai_filename']);
                     }
                     $counter++;
                     $T->parse('ai','article_images',true);

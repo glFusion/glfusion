@@ -27,6 +27,8 @@ include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 USES_lib_admin();
 
@@ -226,9 +228,14 @@ function _fm_getListField_forum($fieldname, $fieldvalue, $A, $icon_arr)
             }
             break;
         case 'edit':
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'],
-                $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?lid='.$A['lid'].'&amp;op=modDownload', $attr );
+            $retval = FieldList::edit(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?lid='.$A['lid'].'&amp;op=modDownload',
+                    'attr' => array(
+                        'title' => $LANG_ADMIN['edit']
+                    )
+                )
+            );
             break;
         default:
             $retval = $fieldvalue;
@@ -449,47 +456,6 @@ function newfileConfigAdmin(){
     $display .= $T->finish($T->get_var('output'));
     // end rework
 
-/*
-
-    $display .= '<!--begin File Management Administration -->';
-    $display .= '<form class="uk-form" method="post" enctype="multipart/form-data" action="index.php" style="margin:0px;">';
-    $display .= '<table class="uk-table uk-width-1-1" border="0" class="plugin">';
-    $display .= '<tr><td colspan="2" class="pluginHeader uk-width-1-1" style="padding:5px;">' . _MD_ADDNEWFILE ."&nbsp; &nbsp;" .'<b>(max:'."&nbsp;" . ini_get('upload_max_filesize') . ')</b></td></tr>';
-    $display .= '<tr><td align="right">'._MD_FILETITLE.'</td><td>';
-    $display .= '<input type="text" name="title" size="50" maxlength="100" />';
-
-    $display .= '</td></tr><tr><td align="right" style="white-space:nowrap;">File:</td><td>';
-    $display .= '<input type="file" name="newfile" size="50" maxlength="100" />';
-    $display .= '</td></tr>';
-
-    $display .= '<tr><td align="right" style="white-space:nowrap;">URL:</td><td>';
-    $display .= '<input type="text" name="fileurl" size="50" maxlength="250" />';
-    $display .= '</td></tr>';
-
-    $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_CATEGORYC.'</td><td>';
-    $display .= $mytree->makeMySelBox('title', 'title');
-    $display .= '</td></tr><tr><td></td><td></td></tr>';
-    $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_HOMEPAGEC.'</td><td>';
-    $display .= '<input type="text" name="homepage" size="50" maxlength="100" /></td></tr>';
-    $display .= '<tr><td align="right">'._MD_VERSIONC.'</td><td>';
-    $display .= '<input type="text" name="version" size="10" maxlength="10" /></td></tr>';
-    $display .= '<tr><td align="right" style="vertical-align:top;white-space:nowrap;">'._MD_DESCRIPTIONC.'</td><td>';
-    $display .= '<textarea name="description" cols="60" rows="5"></textarea>';
-    $display .= '</td></tr>';
-    $display .= '<tr><td align="right" style="white-space:nowrap;">'._MD_SHOTIMAGE.'</td><td>';
-    $display .= '<input type="file" name="newfileshot" size="50" maxlength="60" /></td></tr>';
-    $display .= '<tr><td align="right"></td><td>';
-    $display .= '</td></tr><tr><td align="right">'._MD_COMMENTOPTION.'</td><td>';
-    $display .= '<input type="radio" name="commentoption" value="1" checked="checked" />&nbsp;' ._MD_YES.'&nbsp;';
-    $display .= '<input type="radio" name="commentoption" value="0" />&nbsp;' ._MD_NO.'&nbsp;';
-    $display .= '</td></tr>';
-    $display .= '<tr><td colspan="2" style="text-align:center;padding:10px;">';
-    $display .= '<input type="hidden" name="op" value="addDownload" />';
-    $display .= '<button class="uk-button" type="submit" class="button"/>'._MD_ADD.'</button>';
-    $display .= '</td></tr></table>';
-    $display .= '</form>';
-    $display .= '<!--end File Management Administration -->';
-*/
     $display .= COM_endBlock();
     $display .= COM_siteFooter();
     echo $display;
@@ -501,7 +467,8 @@ function modDownload() {
 
     $totalvotes = '';
 
-    $lid = $_GET['lid'];
+    $lid = filter_input(INPUT_GET,'lid',FILTER_SANITIZE_NUMBER_INT);
+
     $result = DB_query("SELECT cid, title, url, homepage, version, size, logourl, comments,submitter,hits FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
     $nrows = DB_numRows($result);
     if ($nrows == 0) {
@@ -918,8 +885,8 @@ function modDownloadS() {
 
     if ( $newfile != '' ) {
         $upload = new upload();
-        $upload->setFieldName('newfile');
         $upload->setPath($filemgmt_FileStore);
+        $upload->setFieldName('newfile');
         $upload->setAllowAnyMimeType(true);     // allow any file type
         $upload->setMaxFileSize(100000000);
         $upload->setMaxDimensions(8192,8192);
@@ -927,7 +894,7 @@ function modDownloadS() {
         $upload->uploadFiles();
         if ($upload->areErrors()) {
             $errmsg = "Upload Error: " . $upload->printErrors(false);
-            COM_errorLog($errmsg);
+            Log::write('system',Log::ERROR, $errmsg);
             $eh->show("1106");
         } else {
             $url = rawurlencode($myts->makeTboxData4Save($upload->_currentFile['name']));
@@ -937,7 +904,7 @@ function modDownloadS() {
             $fileExtension = strtolower(substr($newfile, $pos));
             if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
                 if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                    COM_errorLOG("AddNewFile - New Upload file is rejected by config rule:$uploadfilename");
+                    Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' . $uploadfilename);
                     $eh->show("1109");
                 } else {
                     $fileExtension = $_FMDOWNLOAD[$fileExtension];
@@ -949,7 +916,7 @@ function modDownloadS() {
                     $rc = @copy ( $filemgmt_FileStore.$newfile , $filemgmt_FileStore.$filename );
                     if ( $rc === false ) {
                         $errmsg = "Upload Error: Unable to copy new file";
-                        COM_errorLog($errmsg);
+                        Log::write('system',Log::ERROR, $errMsg);
                         $eh->show("1106");
                     }
                     @unlink($filemgmt_FileStore.$newfile);
@@ -996,7 +963,7 @@ function modDownloadS() {
         $upload->uploadFiles();
         if ($upload->areErrors()) {
             $errmsg = "Upload Error: " . $upload->printErrors(false);
-            COM_errorLog($errmsg);
+            Log::write('system',Log::ERROR, $errMsg);
             $eh->show("1106");
         } else {
             $logourl = rawurlencode($myts->makeTboxData4Save($upload->_currentFile['name']));
@@ -1011,7 +978,7 @@ function modDownloadS() {
             $lid = (int) COM_applyFilter($_POST['lid'],true);
             $err=@unlink ($currentSnapFQN);
             DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET logourl='' WHERE lid=".$lid);
-            COM_errorLOG("Delete repository snapfile:$currentSnapFQN.");
+            Log::write('system',Log::INFO, 'Delete repository snapfile: ' . $currentSnapFQN);
         }
     }
 
@@ -1415,7 +1382,7 @@ function addDownload() {
         $upload->uploadFiles();
         if ($upload->areErrors()) {
             $errmsg = "Upload Error: " . $upload->printErrors(false);
-            COM_errorLog($errmsg);
+            Log::write('system',Log::ERROR, $errmsg);
             $eh->show("1106");
         } else {
             $size = $myts->makeTboxData4Save(intval($upload->_currentFile['size']));
@@ -1426,7 +1393,7 @@ function addDownload() {
             $fileExtension = strtolower(substr($filename, $pos));
             if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
                 if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                    COM_errorLOG("AddNewFile - New Upload file is rejected by config rule:$uploadfilename");
+                    Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$uploadfilename);
                     $eh->show("1109");
                 } else {
                     $fileExtension = $_FMDOWNLOAD[$fileExtension];
@@ -1470,7 +1437,7 @@ function addDownload() {
     if ( $upload->numFiles() > 0 ) {
         if ($upload->areErrors()) {
             $errmsg = "Upload Error: " . $upload->printErrors(false);
-            COM_errorLog($errmsg);
+            Log::write('system',Log::ERROR, $errmsg);
             $eh->show("1106");
         } else {
             $snapfilename = $myts->makeTboxData4Save($upload->_currentFile['name']);
@@ -1563,19 +1530,19 @@ function approve(){
     $tmp = $filemgmt_FileStore ."tmp/" . $tmpfilename;
     if (file_exists($tmp) && (!is_dir($tmp))) {                      // if this temporary file was really uploaded?
         $newfile = $filemgmt_FileStore .$name;
-        COM_errorLOG("File move from ".$tmp. " to " .$newfile );
+        Log::write('system',Log::INFO, 'FileMgt Approve: File move from '.$tmp. ' to ' .$newfile );
         $rename = @rename ($tmp,$newfile);
-        COM_errorLOG("Results of rename is: ".$rename);
+        Log::write('system',Log::INFO, 'FileMgt Approve: Results of rename is: '.$rename);
         $chown = @chmod ($newfile,$filemgmtFilePermissions);
         if (!file_exists($newfile )) {
-            COM_errorLOG("Filemgmt upload approve error: New file does not exist after move of tmp file: '".$newfile ."'");
+            Log::write('system',Log::ERROR, 'Filemgmt upload approve error: New file does not exist after move of tmp file: '.$newfile);
             $AddNewFile = false;    // Set false again - in case it was set true above for actual file
             $eh->show("1101");
         } else {
            $AddNewFile = true;
         }
     } else {
-        COM_errorLOG("Filemgmt upload approve error: Temporary file does not exist: '".$tmp ."'");
+        Log::write('system',Log::ERROR, 'Filemgmt upload approve error: Temporary file does not exist: '.$tmp);
         $eh->show("1101");
     }
 
@@ -1586,12 +1553,12 @@ function approve(){
             $rename = @rename ($tmp,$newfile);
             $chown = @chmod ($newfile,$filemgmtFilePermissions);
             if (!file_exists($newfile )) {
-                COM_errorLOG("Filemgmt upload approve error: New file does not exist after move of tmp file: '".$newfile ."'");
+                Log::write('system',Log::ERROR, 'Filemgmt upload approve error: New file does not exist after move of tmp file: '.$newfile);
                 $AddNewFile = false;    // Set false again - in case it was set true above for actual file
                 $eh->show("1101");
             }
         } else {
-            COM_errorLOG("Filemgmt upload approve error: Temporary file does not exist: '".$tmp ."'");
+            Log::write('system',Log::ERROR, 'Filemgmt upload approve error: Temporary file does not exist: '.$tmp);
             $eh->show("1101");
         }
     }

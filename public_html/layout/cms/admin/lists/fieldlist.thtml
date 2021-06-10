@@ -1,0 +1,201 @@
+{# general admin field types #}
+
+<!-- BEGIN field-edit -->
+    <a href="{edit_url}"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-edit uk-text-primary"></i></a>
+<!-- END field-edit -->
+
+<!-- BEGIN field-copy -->
+    <a href="{url}"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-copy uk-text-primary"></i></a>
+<!-- END field-copy -->
+
+<!-- BEGIN field-up -->
+    <a href="{url}"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-arrow-up uk-text-primary"></i></a>
+<!-- END field-up -->
+
+<!-- BEGIN field-down -->
+    <a href="{url}"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-arrow-down uk-text-primary"></i></a>
+<!-- END field-down -->
+
+<!-- BEGIN field-approve -->
+    <a href="{approve_url}"
+    <!-- BEGIN attr -->
+      {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-check-square uk-text-success"></i>
+    </a>
+<!-- END field-approve -->
+
+<!-- BEGIN field-delete -->
+    <a href="{delete_url}"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-minus-square uk-text-danger"></i>
+    </a>
+<!-- END field-delete -->
+
+<!-- BEGIN field-info -->
+    <a class="{tooltip_style}" title="{title}"><i class="uk-icon uk-icon-info-circle"></i></a>
+<!-- END field-info -->
+
+<!-- BEGIN field-checkmark -->
+{!!if {style} == 'active' !!}
+{!!set color 'success' !!}
+{!else}
+{!!set color 'muted' !!}
+{!endif}
+    <i class="uk-icon uk-icon-hover uk-icon-justify uk-icon-check uk-text-{color}"></i>
+<!-- END field-checkmark -->
+
+<!-- BEGIN field-minus -->
+    <i class="uk-icon uk-icon-hover uk-icon-justify uk-icon-minus uk-text-danger"></i>
+<!-- END field-minus -->
+
+<!-- BEGIN field-email -->
+    <a href="{url}"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-envelope-o"></i>
+    </a>
+<!-- END field-email -->
+
+<!-- BEGIN field-edit-users -->
+    <a href="{edit_url}"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-user uk-text-primary"></i></a>
+<!-- END field-edit-users -->
+
+<!-- BEGIN field-cog -->
+    <a href="{url}"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-cog uk-text-primary"></i></a>
+<!-- END field-cog -->
+
+<!-- BEGIN field-approve-button -->
+    <button name="{button_name}" class="uk-button uk-button-mini uk-button-success"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-check"></i>
+    </button>
+    &nbsp;{text}
+<!-- END field-approve-button -->
+
+<!-- BEGIN field-delete-button -->
+    <button name="{button_name}" class="uk-button uk-button-mini uk-button-danger"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-remove"></i>
+    </button>
+    &nbsp;{text}
+<!-- END field-delete-button -->
+
+<!-- BEGIN field-email-button -->
+    <button name="{button_name}" class="uk-button uk-button-mini uk-button-primary"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-envelope-o"></i>
+    </button>
+    &nbsp;{text}
+<!-- END field-email-button -->
+
+<!-- BEGIN field-ping -->
+    <a href="{url}"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-retweet uk-text-primary"></i></a>
+<!-- END field-ping -->
+
+<!-- BEGIN field-user -->
+    <a href="{url}"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-user"></i>
+    </a>
+<!-- END field-user -->
+
+<!-- BEGIN field-userphoto -->
+    <i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-camera-retro"></i>
+<!-- END field-userphoto -->
+
+<!-- BEGIN field-root-user -->
+    <i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-star uk-text-danger"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    ></i>
+<!-- END field-root-user -->
+
+<!-- BEGIN field-checkbox -->
+	<input type="checkbox"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    >
+<!-- END field-checkbox -->
+
+<!-- BEGIN field-radio -->
+	<input type="radio"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    >
+<!-- END field-radio -->
+
+<!-- BEGIN field-select -->
+<select ""
+	<!-- BEGIN attr -->
+	{name}="{value}"
+	<!-- END attr -->a
+	>
+	<!-- BEGIN options -->
+	<option value="{value}" {!if selected}selected="selected"{!endif} {!if disabled}disabled="disabled"{!endif} {other}>{opt_name}</option>
+	<!-- END options -->
+	{option_list}
+</select>
+<!-- END field-select -->
+
+<!-- BEGIN field-button -->
+{!!if {style} == 'success' !!}
+{!!set btn_style 'uk-button-success' !!}
+{!!elseif {style} == 'primary' !!}
+{!!set btn_style 'uk-button-primary' !!}
+{!!elseif {style} == 'danger' !!}
+{!!set btn_style 'uk-button-danger' !!}
+{!endif}
+{!!if {size} == 'mini' !!}
+{!!set btn_size 'uk-button-mini' !!}
+{!endif}
+    <button type="{type}" name="{button_name}" class="uk-button {btn_size} {btn_style} {other_cls}"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    >{text}</button>
+<!-- END field-button -->
+ 
+{# end admin fields #}

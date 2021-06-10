@@ -7,12 +7,14 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2016-2017 by the following authors:
+*  Copyright (C) 2016-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
 
 require_once 'lib-common.php';
+
+use \glFusion\Log\Log;
 
 if ( COM_isAnonUser() ) die('invalid request');
 if ( !isset($_CONF['enable_twofactor']) || $_CONF['enable_twofactor'] == 0 ) die('invalid request');
@@ -132,7 +134,7 @@ function tfaEnroll()
     }
     $qrcode = $tfa->getQRCodeImageAsDataURI($secret, $_USER['username']);
     if ( $qrcode == null ) {
-        COM_errorLog("ERROR: Two Factor Authentication could not generate the QR code");
+        Log::write('system',Log::ERROR,"ERROR: Two Factor Authentication could not generate the QR code");
         tfaError();
     }
 
@@ -186,7 +188,7 @@ function tfaVerify()
             DB_query("UPDATE {$_TABLES['users']} SET tfa_enabled=1 WHERE uid=".(int) $_USER['uid']);
         }
     } else {
-        COM_errorLog("Security token check failed");
+        Log::write('system',Log::ERROR,"TwoFactor: Security token check failed");
         $rc = false;
     }
     return $rc;

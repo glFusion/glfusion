@@ -34,7 +34,7 @@ if (empty ($_CONF['cookiedomain'])) {
             // e.g. 'localhost' or other local names
             $_CONF['cookiedomain'] = '';
         } else {
-            $_CONF['cookiedomain'] = '.' . $server[1];
+            $_CONF['cookiedomain'] = $server[1];
         }
     }
 }

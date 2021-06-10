@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2020 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by:
@@ -1002,6 +1002,7 @@ $LANG_confignames['forum'] = array(
     'enable_user_rating_system' => 'Benutzer Bewertungs-System',
     'enable_likes' => '„Gefällt mir" System aktivieren',
     'enable_likes_profile' => '„Gefällt mir" - Statistik im Benutzerprofil anzeigen',
+    'likes_threshold' => 'Maximale Anzahl an Namen, die in der Liste angezeigt werden sollen.',
     'bbcode_signature' => 'Eigene BBcode-Signatur',
     'use_wysiwyg_editor' => 'WYSIWYG HTML-Editor',
     'bbcode_disabled' => 'Standart für BBCode',

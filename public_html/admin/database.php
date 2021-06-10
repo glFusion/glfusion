@@ -20,14 +20,18 @@
 
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
+require_once $_CONF['path'].'system/classes/Diff.class.php';
 
+use \glFusion\Database\Database;
 use \glFusion\FileSystem;
 use \glFusion\Log\Log;
+use \glFusion\Cache\Cache;
+use \glFusion\Admin\AdminAction;
 
 $display = '';
 $page    = '';
 
-if (!SEC_inGroup('Root') ) {
+if (!SEC_hasRights('database.admin') ) {
     $display = COM_siteHeader('menu', $LANG_DB_ADMIN['database_admin']);
     $display .= COM_showMessageText($MESSAGE[46],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter();
@@ -1275,6 +1279,11 @@ function getAdminHeaderMenu( $activeItem = '' )
                 'url'   => $_CONF['site_admin_url'].'/database.php?utf8mb4=x',
                 'text'  => $LANG_DB_ADMIN['utf8_title']
                 ),
+        'sr_menu'    => array(
+                'url'   => $_CONF['site_admin_url'].'/database.php?sr=x',
+                'text'  => 'Search/Replace'
+                ),
+
         'configure'     => array(
                 'url'   => $_CONF['site_admin_url'].'/database.php?config=x',
                 'text'  => $LANG_DB_ADMIN['configure']
@@ -1324,8 +1333,373 @@ function getAdminHeaderMenu( $activeItem = '' )
     return $menu_arr;
 }
 
+
+/**
+* Search / Replace
+*
+* @return   string  HTML form
+*
+*/
+function DBADMIN_searchAndreplace($err = '')
+{
+    global $_CONF, $_TABLES, $LANG01, $LANG_ADMIN, $LANG_DB_ADMIN, $_IMAGE_TYPE;
+
+    $filter = new sanitizer();
+
+    $retval = '';
+    $tables = '';
+    $includetables = '';
+
+    // let's see if we are returning from somewhere else - if the POST vars are set
+    // load them up
+
+    if (isset($_POST['groupmembers'])) {
+        $includedTables = explode('|', $_POST['groupmembers']);
+    } else {
+        $includedTables = array();
+    }
+    if (isset($_POST['searchfor'])) {
+        $searchFor = $_POST['searchfor'];
+    } else {
+        $searchFor = '';
+    }
+    if (isset($_POST['replacewith'])) {
+        $replaceWith = $_POST['replacewith'];
+    } else {
+        $replaceWith = '';
+    }
+    if (isset($_POST['dryrun'])) {
+        $dryRun = 1;
+    } else {
+        $dryRun = 1;
+    }
+    if (isset($_POST['caseinsensitive'])) {
+        $caseInsensitive = 1;
+    } else {
+        $caseInsensitive = 0;
+    }
+
+    $tablenames = DBADMIN_getTableList();
+
+    $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
+    $T->set_file('page','dbsearchreplace.thtml');
+
+    $menu_arr = getAdminHeaderMenu('sr_menu');
+
+    $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'] . ' Search and Replace', '',
+                        COM_getBlockTemplate('_admin_block', 'header')));
+
+    $T->set_var('admin_menu',ADMIN_createMenu(
+                $menu_arr,
+                "",
+                $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
+    );
+
+    $itemsToProcess = PLG_getContentTableInfo();
+
+    $glFusionItems = array(
+        'gl_stories' => array(
+            'plugin' => 'glFusion',
+            'primary_key' => 'id',
+            'columns' => array(
+                'title',
+                'subtitle',
+                'introtext',
+                'bodytext',
+                'story_image',
+                'story_video',
+            )
+        ),
+        'gl_comments' => array(
+            'plugin' => 'glFusion',
+            'primary_key' => 'cid',
+            'columns' => array(
+                'title',
+                'comment'
+            )
+        )
+    );
+    $itemsToProcess = array_merge($itemsToProcess,$glFusionItems);
+
+    $granularArray = array();
+    foreach($itemsToProcess AS $item => $itemInfo) {
+        foreach($itemInfo['columns'] AS $column) {
+            $granularArray[] = array(
+                'value' => $item . ','. $column,
+                'desc' => $itemInfo['plugin']
+            );
+        }
+    }
+    krsort($granularArray);
+
+    foreach ($granularArray AS $data) {
+        list($table, $column) = explode(',',$data['value']);
+        if ( in_array($data['value'], $includedTables)) {
+            $includetables .= '<option value="'.$data['value'].'">'.$data['desc'] . ' :: ' . $table.' -> '. $column ;
+        } else {
+            $tables .= '<option value="'.$data['value'].'">'.$data['desc'] . ' :: ' . $table.' -> '. $column ;
+        }
+    }
+
+    $T->set_var('glfusion_tables',$tables);
+
+    $T->set_var('security_token',SEC_createToken());
+    $T->set_var('security_token_name',CSRF_TOKEN);
+    $T->set_var(array(
+        'lang_title'        => $LANG_DB_ADMIN['sr_title'],
+        'lang_search_for'   => $LANG_DB_ADMIN['search_for'],
+        'lang_replace_with' => $LANG_DB_ADMIN['replace_with'],
+        'lang_tables_to_search' => $LANG_DB_ADMIN['tables_to_search'],
+        'lang_search'       => $LANG_DB_ADMIN['search'],
+        'lang_remove'       => $LANG_DB_ADMIN['remove'],
+        'lang_case'         => $LANG_DB_ADMIN['case'],
+        'lang_dry_run'      => $LANG_DB_ADMIN['dry_run'],
+        'lang_available_tables' => $LANG_DB_ADMIN['available_tables'],
+        'lang_execute'      => $LANG_DB_ADMIN['execute'],
+        'lang_sr_warning_banner' => $LANG_DB_ADMIN['sr_warning_banner'],
+        'lang_plugin_table_column' => $LANG_DB_ADMIN['plugin_table_column'],
+        'action'            => 'searchreplace',
+        'mode'              => "searchreplace",
+    ));
+
+    $T->set_var(array(
+        'includedtables'    => $includetables,
+        'replacewith'       => $filter->editableText($replaceWith),
+        'searchfor'         => $filter->editableText($searchFor),
+    ));
+
+    if ( $caseInsensitive ) {
+        $T->set_var('caseinsensitive_checked', ' checked="checked" ');
+    } else {
+        $T->set_var('caseinsensitive_checked', '');
+    }
+    if ( $dryRun ) {
+        $T->set_var('dryrun_checked', ' checked="checked" ');
+    } else {
+        $T->set_var('dryrun_checked', '');
+    }
+
+    if (!empty($err)) {
+        $T->set_var('error_message',$err);
+    }
+
+    $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+
+    $T->parse('output', 'page');
+    $retval .= $T->finish($T->get_var('output'));
+
+    return $retval;
+}
+
+function DBADMIN_srExecute()
+{
+    global $_CONF, $LANG_DB_ADMIN, $_IMAGE_TYPE;
+
+    $retval = '';
+
+    $filter = new sanitizer();
+
+    $selectedTables = explode('|', $_POST['groupmembers']);
+
+    if (!isset($_POST['searchfor']) || empty($_POST['searchfor'])) {
+        return DBADMIN_searchAndreplace($LANG_DB_ADMIN['missing_required']);
+    }
+    if (!isset($_POST['replacewith']) || empty($_POST['replacewith'])) {
+        return DBADMIN_searchAndreplace($LANG_DB_ADMIN['missing_required']);
+    }
+    if (count($selectedTables) < 1) {
+        return DBADMIN_searchAndreplace($LANG_DB_ADMIN['missing_required']);
+    }
+
+    $args = array();
+    $args['search_for'] 	    = $_POST['searchfor'];
+    $args['replace_with'] 	    = $_POST['replacewith'];
+    $args['dry_run']            = isset($_POST['dryrun']) ? $_POST['dryrun'] : '';
+    $args['case_insensitive']   = isset($_POST['caseinsensitive']) ? $_POST['caseinsensitive'] : '';
+
+    if ($args['dry_run'] !== 'on' ) {
+        $aaMessage = 'Replaced ' . $args['search_for'] . ' with ' . $args['replace_with'] . ' on ' . $_POST['groupmembers'];
+        AdminAction::write('system','replace',$aaMessage);
+    }
+    $dbsr = new dbsr();
+
+    $tablesToProcess = array();  // the tables selected by the user
+    $columnsToProcess = array(); // table-> columns selected by user
+    foreach($selectedTables AS $pair) {
+        list($table, $column) = explode(',',$pair);
+        $tablesToProcess[] = $table;
+        $columnsToProcess[$table]['columns'][] = $column;
+    }
+
+    // this needs to pass $selectedTables which is just an array of tables only.
+    // need to build out a new array to handle this.
+    $allTables = $dbsr->getTableList($tablesToProcess);
+
+    $availablePluginTables = PLG_getContentTableInfo();
+
+    $availableglFusionTables = array(
+        'gl_stories' => array(
+            'plugin' => 'glFusion',
+            'primary_key' => 'id',
+            'columns' => array(
+                'title',
+                'subtitle',
+                'introtext',
+                'bodytext',
+                'story_image',
+                'story_video',
+            )
+        ),
+        'gl_comments' => array(
+            'plugin' => 'glFusion',
+            'primary_key' => 'cid',
+            'columns' => array(
+                'title',
+                'comment'
+            )
+        )
+    );
+
+    // add the glFusion Items
+
+    $allAvailableTables = array_merge($availablePluginTables, $availableglFusionTables);
+
+    $finalList = array();
+    foreach($allTables AS $table) {
+        if (in_array($table,$tablesToProcess) && isset($allAvailableTables[$table])) {
+            $finalList[$table] = $allAvailableTables[$table];
+        }
+    }
+
+    // now we have our final list of selected tables with all of the columns - need to trim down the columns
+    // to just those selected.
+
+    foreach($finalList AS $table => $data) {
+        $index = 0;
+        foreach($data['columns'] AS $column) {
+            if (!in_array($column,$columnsToProcess[$table]['columns'])) {
+                unset($finalList[$table]['columns'][$index]);
+                $index++;
+            }
+        }
+    }
+
+    // DONE!  $finalList() has all the items we are supposed to process
+
+    $resultReport = array();
+    foreach($finalList AS $table => $details) {
+        $report = $dbsr->srdb( $table, $details['primary_key'], $details['columns'], $args );
+        $resultReport[$table] = $report;
+    }
+
+    $T = new Template($_CONF['path_layout'] . 'admin/dbadmin');
+    $T->set_file('page','dbsr-results.thtml');
+
+    $menu_arr = getAdminHeaderMenu('sr_menu');
+    $T->set_var('start_block', COM_startBlock($LANG_DB_ADMIN['database_admin'], '',
+                        COM_getBlockTemplate('_admin_block', 'header')));
+    $T->set_var('admin_menu',ADMIN_createMenu(
+                $menu_arr,
+                "",
+                $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE)
+    );
+
+    $T->set_var(array(
+        'lang_title'            => $LANG_DB_ADMIN['sr_title'],
+        'lang_time'             => $LANG_DB_ADMIN['time'],
+        'lang_table'            => $LANG_DB_ADMIN['table'],
+        'lang_changes_found'    => $LANG_DB_ADMIN['changes_found'],
+        'lang_rows_updated'     => $LANG_DB_ADMIN['rows_updated'],
+        'lang_dry_run_complete' => $LANG_DB_ADMIN['dry_run_complete'],
+        'lang_sr_parameters'    => $LANG_DB_ADMIN['sr_parameters'],
+        'lang_search_for'       => $LANG_DB_ADMIN['search_for'],
+        'lang_replace_with'     => $LANG_DB_ADMIN['replace_with'],
+        'lang_case'             => $LANG_DB_ADMIN['case'],
+        'lang_sr_warning_1'     => $LANG_DB_ADMIN['sr_warning_1'],
+        'lang_sr_warning_2'     => $LANG_DB_ADMIN['sr_warning_2'],
+        'lang_edit'             => $LANG_DB_ADMIN['edit'],
+        'lang_cancel'           => $LANG_DB_ADMIN['cancel'],
+        'lang_seconds'          => $LANG_DB_ADMIN['seconds'],
+        'case'                  => $args['case_insensitive'] == 'on' ? 'Yes' : 'No',
+    ));
+
+    if ($args['dry_run'] === 'on') {
+        $T->set_var('dry_run_results',true);
+
+        $T->set_var(array(
+            'includedtables'    => $_POST['groupmembers'],
+            'searchfor'         => $filter->editableText($args['search_for']),
+            'replacewith'       => $filter->editableText($args['replace_with']),
+            'dryrun'            => $args['dry_run'],
+            'caseinsensitive'   => $args['case_insensitive'],
+            'lang_execute'      => $LANG_DB_ADMIN['execute'],
+        ));
+        if ($args['case_insensitive'] == 'on') {
+            $T->set_var('caseinsensitive','on');
+        } else {
+            $T->unset_var('caseinsensitive');
+        }
+    } else {
+        $T->unset_var('dry_run_results');
+    }
+
+    $T->set_block('page', 'ReportRow', 'RRow');
+    $T->set_block('page', 'DiffTableRow', 'DTRow');
+    $T->set_block('page', 'DiffRow', 'DRow');
+
+    foreach($resultReport AS $table => $tableRun) {
+        $T->set_var(array(
+            'table'         => $table,
+            'changes'       => $tableRun['table_report']['change'],
+            'rowsupdated'   => $tableRun['table_report']['updates'],
+            'time'          => round((float) ($tableRun['table_report']['end'] - $tableRun['table_report']['start']),5),
+            'errors'        => count($tableRun['table_report']['errors']),
+        ));
+        if (count($tableRun['table_report']['errors']) > 0) {
+            $T->set_var('showerrors',true);
+        } else {
+            $T->unset_var('showerrors');
+        }
+        if (isset($tableRun['table_report']['diffs'])) {
+            if (count($tableRun['table_report']['diffs']) > 0) {
+                $T->set_var('showdiffs',true);
+            } else {
+                $T->unset_var('showdiffs');
+            }
+        }
+        $T->parse('RRow','ReportRow',true);
+        if ( isset($tableRun['table_report']['diffs'])) {
+            foreach($tableRun['table_report']['diffs'] AS $diff) {
+                $T->set_var(array(
+                    'table' => $table,
+                    'column' => $diff[2],
+                ));
+                if (strlen($diff[0]) < 10000 && strlen($diff[1]) < 10000) {
+                    $T->set_var(
+                        'diff', \Diff::toTable(\Diff::compare($diff[0],$diff[1])),
+                    );
+                    $T->unset_var('truncated');
+                } else {
+                    $T->set_var('truncated',true);
+                }
+                $T->parse('DTRow','DiffTableRow',true);
+            }
+            $T->parse('DRow','DiffRow',true);
+            $T->set_var('DTRow','');
+        }
+        $T->unset_var('showerrors');
+        $T->unset_var('showdiffs');
+    }
+
+    $T->set_var('end_block',COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer')));
+    $T->parse('output', 'page');
+    $retval .= $T->finish($T->get_var('output'));
+
+    return $retval;
+}
+
 $action = '';
-$expected = array('backup','backupdb','config','download','delete','innodb','doinnodb','myisam','domyisam','optimize','dooptimize','mode','saveconfig','doutf8','utf8mb4');
+$expected = array('backup','backupdb','config','download','delete','innodb','doinnodb','myisam','domyisam','optimize','dooptimize','mode','saveconfig','doutf8','utf8mb4','sr','searchreplace');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -1337,6 +1711,10 @@ foreach($expected as $provided) {
 if ( isset($_POST['dbcancelbutton'])) $action = '';
 
 switch ($action) {
+
+    case 'sr' :
+        $page = DBADMIN_searchAndreplace();
+        break;
 
     case 'config' :
         $page = DBADMIN_configBackup();
@@ -1589,6 +1967,11 @@ switch ($action) {
 
         }
         break;
+
+    case 'searchreplace' :
+        $page .= DBADMIN_srExecute();
+//        $page .= DBADMIN_searchAndreplace();
+        break;
     default :
         $page = DBADMIN_list();
         break;
@@ -1599,4 +1982,5 @@ $display  = COM_siteHeader('menu', $LANG_DB_ADMIN['database_admin']);
 $display .= $page;
 $display .= COM_siteFooter();
 echo $display;
+
 ?>

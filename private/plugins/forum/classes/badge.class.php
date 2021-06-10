@@ -12,6 +12,8 @@
 */
 namespace Forum;
 
+use \glFusion\Log\Log;
+
 class Badge
 {
     /**
@@ -157,7 +159,7 @@ class Badge
             }
             switch ($this->fb_type) {
             case 'img':
-                $this->fb_data = $A['fb_image'];
+//                $this->fb_data = $A['fb_image'];
                 break;
             case 'css':
                 $this->fb_fgcolor = isset($A['fb_fgcolor']) ? $A['fb_fgcolor'] : self::$def_fg;
@@ -312,8 +314,8 @@ class Badge
         $paths = array(
             $_CONF['path_layout'] . 'plugins/forum/images/badges/' =>
                     $_CONF['layout_url'] . '/plugins/forum/images/badges/',
-            $_CONF['path_html'] . 'images/forum/badges/' =>
-                    $_CONF['site_url'] . '/images/forum/badges/',
+            $_CONF['path_html'] . 'data/forum/badges/' =>
+                    $_CONF['site_url'] . '/data/forum/badges/',
         );
 
         foreach ($paths as $path=>$url) {
@@ -345,7 +347,7 @@ class Badge
                             WHERE fb_id = '{$badge->fb_id}'";
                     DB_query($sql, 1);
                     if (DB_error()) {
-                        COM_errorLog("Badge::reOrder() SQL error: $sql", 1);
+                        Log::write('system',Log::ERROR,'Badge::reOrder() SQL error: '.$sql);
                     }
                 }
                 $order += $stepNumber;
@@ -385,7 +387,7 @@ class Badge
         if (!DB_error()) {
             self::reOrder();
         } else {
-            COM_errorLog("Badge::moveRow() SQL error: $sql", 1);
+            Log::write('system',Log::ERROR,'Badge::moveRow() SQL error: '.$sql);
         }
     }
 
@@ -439,7 +441,7 @@ class Badge
         global $_CONF;
 
         $retval = '';
-        $path = $_CONF['path_html'] . 'images/forum/badges';
+        $path = $_CONF['path_html'] . 'data/forum/badges';
         if (!is_dir($path) || !is_readable($path)) {
             return '';
         }
@@ -525,7 +527,7 @@ class Badge
     {
         global $_CONF;
 
-        $path = $_CONF['path_html'] . '/images/forum/badges';
+        $path = $_CONF['path_html'] . 'data/forum/badges';
 
         $Upload = new \upload();
         $Upload->setContinueOnError(true);
@@ -577,10 +579,10 @@ class Badge
             $sql = "UPDATE {$_TABLES['ff_badges']}
                     SET $field=$newvalue
                     WHERE fb_id='$id'";
-            COM_errorLog($sql);
+            Log::write('system',Log::ERROR,$sql);
             DB_query($sql, 1);
             if (DB_error()) {
-                COM_errorLog("Badge::Toggle SQL Error: $sql");
+                Log::write('system',Log::ERROR,'Badge::Toggle SQL Error: '. $sql);
                 $newvalue = $oldvalue;
             }
             break;

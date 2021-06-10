@@ -615,7 +615,7 @@ function _doSiteConfigUpgrade() {
     $T->parse('output','page');
     $siteconfig_data = $T->finish($T->get_var('output'));
 
-    $siteconfig_path = $_CONF['path_html'] . 'siteconfig.php';
+    $siteconfig_path = $_CONF['path_html'] . 'data/siteconfig.php';
     if (is_writable($siteconfig_path)) {
         $siteconfig_file = fopen($siteconfig_path, 'w');
         if (fwrite($siteconfig_file, $siteconfig_data)) {

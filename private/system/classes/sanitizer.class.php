@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2019 by the following authors:
+*  Copyright (C) 2014-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -15,6 +15,8 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 /*
  * the following are the configuration vars
@@ -331,7 +333,7 @@ class sanitizer
                  ($_CONF['skip_html_filter_for_root'] == 1) &&
                  SEC_inGroup('Root')) {
             if ($_CONF['debug_html_filter'] == true) {
-                COM_errorLog("HTMLFILTER: Skipped for root user");
+                Log::write('system',Log::INFO,"HTMLFILTER: Skipped for root user");
             }
             return $str;
         }
@@ -354,8 +356,20 @@ class sanitizer
         if ($_CONF['debug_html_filter'] == true) {
             $config->set('Core.CollectErrors',true);
         }
-        $purifier = new HTMLPurifier($config);
 
+        $def = $config->getHTMLDefinition(true);
+        if (function_exists('theme_getAttributes')) {
+            $additionalAttributes = theme_getAttributes();
+            foreach($additionalAttributes AS $attr) {
+                if (is_array($attr) && count($attr) == 3) {
+                    $def->addAttribute($attr[0], $attr[1],$attr[2]);
+                }
+            }
+        }
+//        $def->addAttribute('a', 'data-uk-lightbox','Bool');
+//        $def->addAttribute('span', 'data-uk-tooltip','CDATA');
+
+        $purifier = new HTMLPurifier($config);
         $clean_html = $purifier->purify($str);
 
         if ($_CONF['debug_html_filter'] == true) {
@@ -364,7 +378,7 @@ class sanitizer
             if (is_array($errArray)) {
                 foreach ($errArray as $error) {
                     if ( $error[1] == 1 ) {
-                        COM_errorLog("HTMLFILTER: " .  $error[2]);
+                        Log::write('system',Log::ERROR,"HTMLFILTER: " .  $error[2]);
                     }
                 }
             }

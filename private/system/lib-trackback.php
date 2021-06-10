@@ -1,39 +1,25 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-trackback.php                                                        |
-// |                                                                          |
-// | Functions needed to handle trackback comments.                           |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2005-2008 by the following authors:                        |
-// |                                                                          |
-// | Author: Dirk Haun - dirk AT haun-online DOT de                           |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* Trackback Comment Handler
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2005-2008 by the following authors:
+*  Dirk Haun          dirk AT haun-online DOT de
+*
+*/
 
 if (!defined ('GVERSION')) {
     die('This file can not be used on its own!');
 }
+
+use \glFusion\Log\Log;
 
 // result codes for TRB_saveTrackbackComment
 define('TRB_SAVE_OK', 0);
@@ -92,7 +78,7 @@ function TRB_logRejected($reason, $url = '')
         if (function_exists('SPAMX_log')) {
             SPAMX_log($logmsg);
         } else {
-            COM_errorLog($logmsg);
+            Log::write('system',Log::ERROR,$logmsg);
         }
     }
 }
@@ -509,13 +495,13 @@ function TRB_linksToUs($sid, $type, $urlToGet)
             if ( strlen($body) > 0 ) {
                 $retval = TRB_containsBacklink($body, $urlToCheck);
             } else {
-                COM_errorLog("Trackback verification: unable to retrieve response body");
+                Log::write('system',Log::ERROR,"Trackback verification: unable to retrieve response body");
             }
         } else {
-            COM_errorLog("Trackback verification: Got HTTP response code ".$http->response_status." when requesting ".$urlToGet);
+            Log::write('system',Log::ERROR,"Trackback verification: Got HTTP response code ".$http->response_status." when requesting ".$urlToGet);
         }
     } else {
-        COM_errorLog("Trackback verification: " . $error . " when requesting ".$urlToGet);
+        Log::write('system',Log::ERROR,"Trackback verification: " . $error . " when requesting ".$urlToGet);
     }
 
     return $retval;
@@ -837,15 +823,15 @@ function TRB_detectTrackbackUrl($url)
         if ( $http->response_status == 200 ) {
             $error = $http->ReadWholeReplyBody($page);
             if ( $error != "" && strlen($body) === 0 ) {
-                COM_errorLog("Trackback Detect TRB URL: unable to retrieve response body");
+                Log::write('system',Log::ERROR,"Trackback Detect TRB URL: unable to retrieve response body");
                 return false;
             }
         } else {
-            COM_errorLog("Trackback Detect TRB URL: Got HTTP response code ".$http->response_status." when requesting ".$url);
+            Log::write('system',Log::ERROR,"Trackback Detect TRB URL: Got HTTP response code ".$http->response_status." when requesting ".$url);
             return false;
         }
     } else {
-        COM_errorLog("Trackback Detect TRB URL: " . $error . " when requesting ".$url);
+        Log::write('system',Log::ERROR,"Trackback Detect TRB URL: " . $error . " when requesting ".$url);
         return false;
     }
 

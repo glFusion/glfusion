@@ -1,35 +1,20 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | functions.inc                                                            |
-// |                                                                          |
-// | Plugin interface to glFusion                                             |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2021 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - FileMgmt Plugin
+*
+* glFusion Plugin APIs
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by Consult4Hire Inc.
+*  Author:
+*  Blaine Lang          blaine AT portalparts DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -83,12 +68,27 @@ if (!isset($_FM_CONF['perpage'])) {
     $mydownloads_useshots       = $_FM_CONF['useshots'];
     $mydownloads_shotwidth      = $_FM_CONF['shotwidth'];
     $filemgmt_Emailoption       = $_FM_CONF['Emailoption'];
+
+    if (empty($_FM_CONF['FileStore'])) {
+        $_FM_CONF['FileStore'] = $_CONF['path_html'].'data/filemgmt/files/';
+        $_FM_CONF['FileStoreURL'] = $_CONF['site_url'].'/data/filemgmt/files/';
+    }
+    if (empty($_FM_CONF['SnapStore'])) {
+        $_FM_CONF['SnapStore'] = $_CONF['path_html'].'data/filemgmt/snaps/';
+        $_FM_CONF['FileSnapURL'] = $_CONF['site_url'].'/data/filemgmt/snaps/';
+    }
+    if (empty($_FM_CONF['SnapCat'])) {
+        $_FM_CONF['SnapCat'] = $_CONF['path_html'].'data/filemgmt/category_snaps/';
+        $_FM_CONF['SnapCatURLURL'] = $_CONF['site_url'].'/data/filemgmt/category_snaps/';
+    }
+
     $filemgmt_FileStore         = $_FM_CONF['FileStore'];
     $filemgmt_SnapStore         = $_FM_CONF['SnapStore'];
     $filemgmt_SnapCat           = $_FM_CONF['SnapCat'];
     $filemgmt_FileStoreURL      = $_FM_CONF['FileStoreURL'];
     $filemgmt_FileSnapURL       = $_FM_CONF['FileSnapURL'];
     $filemgmt_SnapCatURL        = $_FM_CONF['SnapCatURL'];
+
     $filemgmtWhatsNewPeriodDays = $_FM_CONF['whatsnewperioddays'];
     $filemgmtWhatsNewTitleLength= $_FM_CONF['whatsnewtitlelength'];
     $filemgmt_showWhatsNewComments = $_FM_CONF['showwhatsnewcomments'];
@@ -1329,6 +1329,30 @@ function plugin_privacy_export_filemgmt_DISABLED($uid,$email='',$username='',$ip
     }
 
     return $retval;
+}
+
+function plugin_getContentTableInfo_filemgmt()
+{
+    global $_DB_table_prefix;
+
+    $contentItems = array(
+            $_DB_table_prefix.'filemgmt_filedesc' => array(
+                'plugin' => 'filemgmt',
+                'primary_key' => 'id',
+                'columns' => array(
+                    'description',
+                )
+            ),
+            $_DB_table_prefix.'filemgmt_filedetail' => array(
+                'plugin' => 'filemgmt',
+                'primary_key' => 'lid',
+                'columns' => array(
+                    'title',
+                )
+            )
+    );
+
+    return $contentItems;
 }
 
 ?>

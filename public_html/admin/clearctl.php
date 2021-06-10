@@ -16,14 +16,13 @@ require_once '../lib-common.php';
 
 $display = '';
 
-if (!SEC_inGroup ('Root')) {
+if (!SEC_hasRights ('cache.admin')) {
     $display .= COM_siteHeader ('menu');
     $display .= COM_showMessageText($LANG20[6],$LANG20[1],true,'error');
     $display .= COM_siteFooter ();
     echo $display;
     exit;
 }
-
 
 /*
  * Main processing

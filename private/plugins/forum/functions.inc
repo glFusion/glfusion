@@ -1,39 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Forum Plugin for glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | functions.inc                                                            |
-// |                                                                          |
-// | This file implements the necessary glFusion Plugin API functions and     |
-// | includes some common Forum functions                                     |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
-// |                              www.portalparts.com                         |
-// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
-// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Forum Plugin
+*
+* glFusion Plugin APIs
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2010 by the following authors:
+*   Blaine Lang          blaine AT portalparts DOT com
+*                        www.portalparts.com
+*   Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com
+*   Prototype & Concept :        Mr.GxBlock, www.gxblock.com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -41,6 +24,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 // load the language file(s), including custom strings if any
 
@@ -72,6 +56,14 @@ $ff_config = config::get_instance();
 $_FF_FORUM = $ff_config->get_config('forum');
 if ( is_array($_FF_FORUM) && is_array($_FF_CONF) ) {
     $_FF_CONF = array_merge($_FF_FORUM, $_FF_CONF);
+}
+
+if (empty($_FF_CONF['uploadpath'])) {
+    $_FF_CONF['uploadpath'] = $_CONF['path_html'].'data/forum/media';
+    $_FF_CONF['downloadURL'] = $_CONF['site_url'] . '/data/forum/media';
+} else {
+    $path_download_url = rtrim(str_replace($_CONF['path_html'],'',$_FF_CONF['uploadpath']),'/\\');
+    $_FF_CONF['downloadURL'] = $_CONF['site_url'].'/'.$path_download_url;
 }
 
 // View Anonymous Posts - registed users can set this false
@@ -685,6 +677,36 @@ function plugin_upgrade_forum() {
     require_once $_CONF['path'] . 'plugins/forum/upgrade.php';
 
     return forum_upgrade();
+}
+
+
+/**
+* Return tables and columns for search / replace
+*/
+function plugin_getContentTableInfo_forum()
+{
+    global $_DB_table_prefix;
+
+    $contentItems = array(
+            $_DB_table_prefix.'forum_topic' => array(
+                'plugin' => 'forum',
+                'primary_key' => 'id',
+                'columns' => array(
+                    'subject',
+                    'comment'
+                )
+            ),
+            $_DB_table_prefix.'forum_forums' => array(
+                'plugin' => 'forum',
+                'primary_key' => 'forum_id',
+                'columns' => array(
+                    'forum_name',
+                    'forum_dscp'
+                )
+            )
+    );
+
+    return $contentItems;
 }
 
 

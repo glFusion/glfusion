@@ -19,12 +19,13 @@ require_once 'auth.inc.php';
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\FileSystem;
 
 USES_lib_admin();
 
 $display = '';
 
-if (!SEC_inGroup ('Root')) {
+if (!SEC_hasRights ('env.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_showMessageText($MESSAGE[200],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
@@ -481,9 +482,7 @@ function _checkEnvironment()
     ));
 
     // extract syndication storage path
-    $feedpath = $_CONF['rdf_file'];
-    $pos = strrpos( $feedpath, '/' );
-    $feedPath = substr( $feedpath, 0, $pos + 1 );
+    $feedPath = $_CONF['path_rss'];
 
     $file_list = array( $_CONF['path_data'],
                         $_CONF['path_data'].'glfusion.lck',
@@ -501,15 +500,16 @@ function _checkEnvironment()
                         $_CONF['path_data'].'htmlpurifier/',
                         $_CONF['path_html'],
                         $feedPath,
-                        $_CONF['rdf_file'],
-                        $_CONF['path_html'].'images/articles/',
-                        $_CONF['path_html'].'images/topics/',
-                        $_CONF['path_html'].'images/userphotos/',
-                        $_CONF['path_html'].'images/library/File/',
-                        $_CONF['path_html'].'images/library/Flash/',
-                        $_CONF['path_html'].'images/library/Image/',
-                        $_CONF['path_html'].'images/library/Media/',
-                        $_CONF['path_html'].'images/library/userfiles/',
+                        $_CONF['path_rss']. $_CONF['rdf_file'],
+                        $_CONF['path_images'],
+                        $_CONF['path_images'].'articles/',
+                        $_CONF['path_images'].'topics/',
+                        $_CONF['path_images'].'userphotos/',
+                        $_CONF['path_images'].'library/File/',
+                        $_CONF['path_images'].'library/Flash/',
+                        $_CONF['path_images'].'library/Image/',
+                        $_CONF['path_images'].'library/Media/',
+                        $_CONF['path_images'].'library/userfiles/',
                     );
     $mg_file_list = array();
     if (isset($_MG_CONF)) {
@@ -567,7 +567,7 @@ function _checkEnvironment()
                             $_MG_CONF['path_mediaobjects'].'orig/f/',
                             $_MG_CONF['path_mediaobjects'].'disp/f/',
                             $_MG_CONF['path_mediaobjects'].'tn/f/',
-                            $_MG_CONF['path_html'].'watermarks/',
+                            $_CONF['path_html'].'data/mediagallery/watermarks/',
                         );
     }
 
@@ -746,8 +746,10 @@ function _phpOutOfDate()
 }
 
 function _isWritable($path) {
-    if ($path[strlen($path)-1]=='/')
+    if ($path[strlen($path)-1]=='/') {
+        FileSystem::mkDir($path);
         return _isWritable($path.uniqid(mt_rand()).'.tmp');
+    }
 
     if (@file_exists($path)) {
         if (!($f = @fopen($path, 'r+')))

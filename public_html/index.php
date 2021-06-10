@@ -18,7 +18,7 @@
 *
 */
 
-if (!@file_exists('siteconfig.php') ) {
+if (!@file_exists('data/siteconfig.php') ) {
     header("Location:admin/install/index.php");
     exit;
 }
@@ -328,8 +328,7 @@ $queryBuilder->addOrderBy($story_sort,$story_sort_dir);
 
 $countQueryBuilder = clone $queryBuilder;
 $countQueryBuilder->select("COUNT(*) AS count");
-$countQueryBuilder->groupBy('s.sid');
-
+//print $countQueryBuilder->getSQL();exit;
 try {
     $cStmt = $countQueryBuilder->execute();
 } catch(Throwable $e) {

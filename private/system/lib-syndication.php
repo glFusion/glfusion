@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2020 by the following authors:
+*  Copyright (C) 2017-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2003-2010 by the following authors:
@@ -504,8 +504,7 @@ function SYND_updateFeed( $fid )
         if ( !empty( $A['filename'] )) {
             $filename = $A['filename'];
         } else {
-            $pos = strrpos( $_CONF['rdf_file'], '/' );
-            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
+            $filename = 'site.rss';
         }
         $rss->syndicationURL = SYND_getFeedUrl( $filename );
         $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
@@ -576,8 +575,9 @@ function SYND_updateFeediCal( $A )
         if ( !empty( $A['filename'] )) {
             $filename = $A['filename'];
         } else {
-            $pos = strrpos( $_CONF['rdf_file'], '/' );
-            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
+            $filename = 'glfusion.rss';
+//            $pos = strrpos( $_CONF['rdf_file'], '/' );
+//            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
         }
 
         $content = PLG_getFeedContent($A['type'], $A['fid'], $link, $data, $format[0], $format[1]);
@@ -730,10 +730,7 @@ function SYND_getFeedPath( $feedfile = '' )
 {
     global $_CONF;
 
-    $feedpath = $_CONF['rdf_file'];
-    $pos = strrpos( $feedpath, '/' );
-    $feed = substr( $feedpath, 0, $pos + 1 );
-    $feed .= $feedfile;
+    $feed = $_CONF['path_rss'] . $feedfile;
 
     return $feed;
 }

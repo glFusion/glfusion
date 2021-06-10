@@ -142,6 +142,7 @@ class Group
         }
 
         $data = $stmt->fetchAll(Database::ASSOCIATIVE);
+
         $stmt->closeCursor();
         if (count($data) < 1) {
             $data = array();
@@ -202,6 +203,7 @@ class Group
         // Not in cache? First get directly-assigned memberships, then
         // all inherited ones.
         $groups = self::getAssigned($uid);
+
         $cTotalGroups = count($groups);
 //        Log::write('system',Log::DEBUG,sprintf("%s::%s got %d assigned groups.",__CLASS__,__FUNCTION__,$cTotalGroups));
 
@@ -244,6 +246,10 @@ class Group
                 }
             }
         }
+        $groups['All Users'] = 2;
+        if (!COM_isAnonUser()) {
+            $groups['Logged-in Users'] = 13;
+        }
 
         if (count($groups) == 0) {
             $groups = array('All Users' => 2);
@@ -264,9 +270,11 @@ class Group
     */
     public static function inGroup($grp_to_verify, $uid='')
     {
-        global $_USER, $_GROUPS;
+        global $_USER, $_GROUPS, $_RIGHTS, $_TABLES;
 
-        if (empty($grp_to_verify)) return true;        
+        $rc = false;
+
+        if (empty($grp_to_verify)) return true;
 
         if (empty ($uid)) {
             if (COM_isAnonUser()) {
@@ -276,21 +284,45 @@ class Group
             }
         }
 
+        // we will return true if a member of Root or has system.root permission
+        // 'remote users' group is handled special - it will only return if an actual member of this group
+
         if ( (isset($_USER['uid']) && $uid == $_USER['uid'])) {
             if (empty ($_GROUPS)) {
                 $_GROUPS = self::getAll($uid);
             }
             $groups = $_GROUPS;
+            $rights = $_RIGHTS;
         } else {
             $groups = self::getAll($uid);
+            $rights = explode( ',', SEC_getUserPermissions(0,$uid));
         }
+
         if (is_numeric($grp_to_verify)) {
-            return (in_array($grp_to_verify, $groups)) ? true : false;
+            $rc = (in_array($grp_to_verify, $groups)) ? true : false;
+            if ($rc === false) {
+                $db = Database::getInstance();
+                $remotegroup = $db->getItem($_TABLES['groups'],'grp_id',array('grp_name' => 'remote users'),array(Database::STRING));
+                if ($grp_to_verify != $remotegroup) {
+                    if (in_array(1,$groups) || in_array('system.root',$rights)) {
+                        $rc = true;
+                    }
+                }
+            }
+            return $rc;
         } else {
             // perform case-insensitive comparison
             $lgroups = array_change_key_case($groups, CASE_LOWER);
             $grp_to_verify = strtolower($grp_to_verify);
-            return (isset($lgroups[$grp_to_verify])) ? true : false;
+
+            $rc = (isset($lgroups[$grp_to_verify])) ? true : false;
+
+            if ($rc === false && strcmp($grp_to_verify,'remote users') !== 0) {
+                if (isset($lgroups['root']) || in_array('system.root',$rights)) {
+                    $rc = true;
+                }
+            }
+            return $rc;
         }
     }
 
@@ -343,6 +375,52 @@ class Group
             }
         }
         return $groups[$feature];
+    }
+
+  /**
+    *   Gets an array of all groups available
+    *
+    *   @return array           Array of grp_name=>grp_id
+    */
+    public static function getAllAvailable()
+    {
+        global $_TABLES, $_USER, $_SEC_VERBOSE;
+
+        $cache = false;
+        $groups = array();
+
+        $db = Database::getInstance();
+
+        // Then check the glFusion cache to save DB queries
+        $cache_key = 'group_all_available';
+        if (Cache::getInstance()->has($cache_key)) {
+            return Cache::getInstance()->get($cache_key);
+        }
+
+        // Not in cache? First get directly-assigned memberships, then
+        // all inherited ones.
+        $sql = "SELECT grp_id,grp_name
+                FROM {$_TABLES['groups']} g";
+
+        try {
+            $stmt = $db->conn->executeQuery($sql,
+                        array(),
+                        array()
+                        );
+
+        } catch(Throwable $e) {
+            // Ignore errors or failed attempts
+        }
+        $data = $stmt->fetchAll(Database::ASSOCIATIVE);
+        $stmt->closeCursor();
+        foreach($data AS $row) {
+            $groups[ucfirst($row['grp_name'])] = $row['grp_id'];
+        }
+        $groups['All Users'] = 2;
+        $groups['Logged-in Users'] = 13;
+        ksort($groups);
+        Cache::getInstance()->set($cache_key, $groups, array('groups', 'group_'));
+        return $groups;
     }
 }
 

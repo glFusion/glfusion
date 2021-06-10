@@ -1,36 +1,24 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | lib-upload.php                                                           |
-// |                                                                          |
-// | Upload library                                                           |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Upload Library
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
+use \glFusion\FileSystem;
 
 require_once $_CONF['path'].'plugins/mediagallery/include/lib-exif.php';
 require_once $_CONF['path'].'plugins/mediagallery/include/lib-watermark.php';
@@ -44,7 +32,7 @@ function MG_videoThumbnail($aid, $srcImage, $media_filename ) {
         $ffmpeg_cmd = sprintf('"' . $_MG_CONF['ffmpeg_path'] . "/ffmpeg" . '" ' . $_MG_CONF['ffmpeg_command_args'],$srcImage, $thumbNail);
 
         $rc = UTL_execWrapper($ffmpeg_cmd);
-        COM_errorLog("MG Upload: FFMPEG returned: " . $rc);
+        Log::write('system',Log::DEBUG,"MG Upload: FFMPEG returned: " . $rc);
         if ( $rc != 1 ) {
             @unlink ($thumbNail);
             return 0;
@@ -64,7 +52,7 @@ function MG_processOriginal( $srcImage, $mimeExt, $mimeType, $aid, $baseFilename
     $newSrc = $srcImage;
 
     if ($_MG_CONF['verbose'] ) {
-        COM_errorLog("MG Upload: Entering MG_processOriginal()");
+        Log::write('system',Log::DEBUG,'MG Upload: Entering MG_processOriginal()');
     }
     $imgsize = @getimagesize("$srcImage");
     $imgwidth = $imgsize[0];
@@ -99,11 +87,11 @@ function MG_convertImage( $srcImage, $imageThumb, $imageDisplay, $mimeExt, $mime
     $makeSquare = 0;
 
     if ($_MG_CONF['verbose'] ) {
-        COM_errorLog("MG Upload: Entering MG_convertImage()");
+        Log::write('system',Log::DEBUG,'MG Upload: Entering MG_convertImage()');
     }
 
     if ($_MG_CONF['verbose'] ) {
-        COM_errorLog("MG Upload: Creating thumbnail image");
+        Log::write('system',Log::DEBUG,'MG Upload: Creating thumbnail image');
     }
     $imgsize = @getimagesize("$srcImage");
     if ( $imgsize == false &&
@@ -168,7 +156,7 @@ function MG_convertImage( $srcImage, $imageThumb, $imageDisplay, $mimeExt, $mime
         $tmpImage = $_MG_CONF['tmp_path'] . '/wip' . rand() . '.jpg';
         list($rc,$msg) = IMG_convertImageFormat($srcImage, $tmpImage, 'image/jpeg',0);
         if ( $rc == false ) {
-            COM_errorLog("MG_convertImage: Error converting uploaded image to jpeg format.");
+            Log::write('system',Log::ERROR,'MG_convertImage: Error converting uploaded image to jpeg format.');
             @unlink($srcImage);
             return array(false,$msg);
         }
@@ -185,7 +173,7 @@ function MG_convertImage( $srcImage, $imageThumb, $imageDisplay, $mimeExt, $mime
         }
     }
     if ( $rc == false ) {
-        COM_errorLog("MG_convertImage: Error resizing uploaded image to thumbnail size.");
+        Log::write('system',Log::ERROR,'MG_convertImage: Error resizing uploaded image to thumbnail size.');
         @unlink($srcImage);
         return array(false,$msg);
     }
@@ -338,7 +326,7 @@ function MG_processDir ($dir, $album_id, $purgefiles, $recurse ) {
            $file_extension = strtolower(substr(strrchr($filename,"."),1));
 
             if ( $MG_albums[$album_id]->max_filesize != 0 && filesize($filetmp) > $MG_albums[$album_id]->max_filesize) {
-                COM_errorLog("MG Upload: File " . $file . " exceeds maximum filesize for this album.");
+                Log::write('system',Log::ERROR,'MG Upload: File ' . $file . ' exceeds maximum filesize for this album.');
                 $statusMsg = sprintf($LANG_MG02['upload_exceeds_max_filesize'] . '<br/>',$file);
                 continue;
             }
@@ -409,26 +397,26 @@ function MG_file_exists( $potential_file ) {
 
     $potential_file_regex = "/".$potential_file."/i";
 
-    if ( $dir = opendir($image_path) )  {
+    if ( $dir = opendir($image_path))  {
         while ($file = readdir($dir)) {
             if (  preg_match($potential_file_regex , $file )  ) {
                 closedir($dir);
                 return true;
             }
         }
+        closedir($dir);
     }
-    closedir($dir);
 
     $image_path = $_MG_CONF['path_mediaobjects'] . 'orig/' . $potential_file[0];
-    if ( $dir = opendir($image_path) )  {
+    if ( $dir = opendir($image_path))  {
         while ($file = readdir($dir)) {
             if (  preg_match($potential_file_regex , $file )  ) {
                 closedir($dir);
                 return true;
             }
         }
+        closedir($dir);
     }
-    closedir($dir);
     return false;
 }
 
@@ -447,13 +435,13 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 
     $sizeofalbums = sizeof($MG_albums);
     if ($_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: *********** Beginning media upload process...");
-        COM_errorLog("Filename to process: " . $filename);
-        COM_errorLog("Size of MG_albums()=" . $sizeofalbums );
-        COM_errorLog("UID=" . $_USER['uid']);
-        COM_errorLog("album access=" . $MG_albums[$albums]->access );
-        COM_errorLog("album owner_id=" . $MG_albums[$albums]->owner_id );
-        COM_errorLog("member_uploads=" . $MG_albums[$albums]->member_uploads );
+        Log::write('system',Log::DEBUG,"MG Upload: *********** Beginning media upload process...");
+        Log::write('system',Log::DEBUG,"Filename to process: " . $filename);
+        Log::write('system',Log::DEBUG,"Size of MG_albums()=" . $sizeofalbums );
+        Log::write('system',Log::DEBUG,"UID=" . $_USER['uid']);
+        Log::write('system',Log::DEBUG,"album access=" . $MG_albums[$albums]->access );
+        Log::write('system',Log::DEBUG,"album owner_id=" . $MG_albums[$albums]->owner_id );
+        Log::write('system',Log::DEBUG,"member_uploads=" . $MG_albums[$albums]->member_uploads );
     }
 
     clearstatcache();
@@ -476,7 +464,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     }
 
     if ( $MG_albums[$albums]->access != 3 && !$MG_albums[0]->owner_id && $MG_albums[$albums]->member_uploads == 0) {
-        COM_errorLog("Someone has tried to upload to an album in Media Gallery without the proper permissions.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR'],1);
+        Log::write('system',Log::ERROR,"Someone has tried to upload to an album in Media Gallery without the proper permissions.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: " . $_SERVER['REMOTE_ADDR']);
         return array(false,$LANG_MG00['access_denied_msg']);
     }
 
@@ -493,6 +481,12 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         $_USER['username'] = 'guestuser';
     }
 
+    if ( FileSystem::mkDir($_MG_CONF['tmp_path']) === false ) {
+        Log::write('system',Log::ERROR,'MediaGallery: Media Upload failed as _MG_CONF[tmp_path] does not exist');
+        $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
+        return array(false,$errMsg);
+    }
+
     $tmpPath = $_MG_CONF['tmp_path'] . '/' . $_USER['username'] . COM_makesid() . '.tmp';
 
     if ($upload) {
@@ -504,8 +498,8 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         $importSource = $filename;
     }
     if ( $rc != 1 ) {
-        COM_errorLog("Media Upload - Error moving uploaded file in generic processing....");
-        COM_errorLog("Media Upload - Unable to copy file to: " . $tmpPath);
+        Log::write('system',Log::ERROR,"Media Upload - Error moving uploaded file in generic processing....");
+        Log::write('system',Log::ERROR,"Media Upload - Unable to copy file to: " . $tmpPath);
         $errors++;
         $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
         if ( $upload ) {
@@ -513,7 +507,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         } else if ( !$purgefiles ) {
             @unlink($tmpPath);
         }
-        COM_errorLog("MG Upload: Problem uploading a media object");
         return array( false, $errMsg );
     }
 
@@ -539,7 +532,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     $mimeInfo['type'] = $mimeExt;
 
     if ( !isset($mimeInfo['mime_type']) || $mimeInfo['mime_type'] == '' ) {
-        COM_errorLog("MG Upload: getID3 was unable to detect mime type - using PHP detection");
+        Log::write('system',Log::ERROR,"MG Upload: getID3 was unable to detect mime type - using PHP detection");
         $mimeInfo['mime_type'] = $filetype;
     }
 
@@ -550,7 +543,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	}
 
     if ($_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: found mime type of " . $mimeInfo['type']);
+        Log::write('system',Log::ERROR,"MG Upload: found mime type of " . $mimeInfo['type']);
     }
 
     if ( $mimeExt == '' || $mimeInfo['mime_type'] == 'application/octet-stream' || $mimeInfo['mime_type'] == '' ) {
@@ -592,11 +585,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                 $mimeInfo['mime_type'] = 'image/bmp';
                 $mimeExt = 'bmp';
                 break;
-            case 'application/x-shockwave-flash' :
-                $mimeInfo['type'] = 'swf';
-                $mimeInfo['mime_type'] = 'application/x-shockwave-flash';
-                $mimeExt = 'swf';
-                break;
             case 'application/zip' :
                 $mimeInfo['type'] = 'zip';
                 $mimeInfo['mime_type'] = 'application/zip';
@@ -617,11 +605,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                 $mimeInfo['mime_type'] = 'video/x-m4v';
                 $mimeExt = 'mov';
                 break;
-            case 'video/x-flv' :
-                $mimeInfo['type'] = 'flv';
-                $mimeInfo['mime_type'] = 'video/x-flv';
-                $mimeExt = 'flv';
-                break;
             case 'audio/x-ms-wma' :
                 $mimeInfo['type'] = 'wma';
                 $mimeInfo['mime_type'] = 'audio/x-ms-wma';
@@ -630,11 +613,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             default :
                 $file_extension = strtolower(substr(strrchr($file,"."),1));
                 switch ($file_extension) {
-                    case 'flv':
-                        $mimeInfo['type'] = 'flv';
-                        $mimeInfo['mime_type'] = 'video/x-flv';
-                        $mimeExt = 'flv';
-                        break;
                     case 'wma' :
                         $mimeInfo['type'] = 'wma';
                         $mimeInfo['mime_type'] = 'audio/x-ms-wma';
@@ -652,7 +630,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                 }
         }
         if ($_MG_CONF['verbose']) {
-            COM_errorLog("MG Upload: override mime type to: " . $mimeInfo['type'] . ' based upon file extension of: ' . $filetype );
+            Log::write('system',Log::DEBUG,"MG Upload: override mime type to: " . $mimeInfo['type'] . ' based upon file extension of: ' . $filetype );
         }
     }
 
@@ -673,9 +651,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         case 'image/bmp' :
             $format_type = MG_BMP;
             break;
-        case 'application/x-shockwave-flash' :
-            $format_type = MG_SWF;
-            break;
         case 'application/zip' :
             $format_type = MG_ZIP;
             break;
@@ -688,9 +663,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         case 'video/x-qtc' :
         case 'video/x-m4v' :
             $format_type = MG_MOV;
-            break;
-        case 'video/x-flv' :
-            $format_type = MG_FLV;
             break;
         case 'image/tiff' :
             $format_type = MG_TIF;
@@ -732,7 +704,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 
     $mimeType = $mimeInfo['mime_type'];
     if ( $_MG_CONF['verbose'] ) {
-        COM_errorLog("MG Upload: PHP detected mime type is : " . $filetype);
+        Log::write('system',Log::DEBUG,"MG Upload: PHP detected mime type is : " . $filetype);
     }
     if ( $filetype == 'video/x-m4v' ) {
         $mimeType = 'video/x-m4v';
@@ -806,11 +778,11 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
     $disp_media_filename = $media_filename . '.' . $mimeExt;
 
     if ( $_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: Stored filename is : " . $disp_media_filename);
+        Log::write('system',Log::DEBUG,"MG Upload: Stored filename is : " . $disp_media_filename);
     }
 
     if ( $_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: Mime Type: " . $mimeType);
+        Log::write('system',Log::DEBUG,"MG Upload: Mime Type: " . $mimeType);
     }
 
     switch ( $mimeType ) {
@@ -848,14 +820,30 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                 $media_time = time();
             }
 
+            if ( FileSystem::mkDir($_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/') === false ) {
+                Log::write('system',Log::ERROR,'MediaGallery: Unable to create directory: ' . $_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/');
+                $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
+                return array(false,$errMsg);
+            }
+            if ( FileSystem::mkDir($_MG_CONF['path_mediaobjects'] . 'disp/' . $media_filename[0] . '/') === false ) {
+                Log::write('system',Log::ERROR,'MediaGallery: Unable to create directory: ' . $_MG_CONF['path_mediaobjects'] . 'disp/' . $media_filename[0] . '/');
+                $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
+                return array(false,$errMsg);
+            }
+            if ( FileSystem::mkDir($_MG_CONF['path_mediaobjects'] . 'tn/' . $media_filename[0] . '/') === false ) {
+                Log::write('system',Log::ERROR,'MediaGallery: Unable to create directory: ' . $_MG_CONF['path_mediaobjects'] . 'tn/' . $media_filename[0] . '/');
+                $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
+                return array(false,$errMsg);
+            }
+
             if ( $_MG_CONF['verbose'] ) {
-                COM_errorLog("MG Upload: About to move/copy file");
+                Log::write('system',Log::DEBUG,"MG Upload: About to move/copy file");
             }
             $rc = @copy($filename, $media_orig);
 
             if ( $rc != 1 ) {
-                COM_errorLog("Media Upload - Error moving uploaded file....");
-                COM_errorLog("Media Upload - Unable to copy file to: " . $media_orig);
+                Log::write('system',Log::ERROR,"Media Upload - Error moving uploaded file....");
+                Log::write('system',Log::ERROR,"Media Upload - Unable to copy file to: " . $media_orig);
                 $errors++;
                 $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
             } else {
@@ -865,7 +853,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                 @chmod($media_orig, 0644);
 
                 if ( $_MG_CONF['verbose'] ) {
-                    COM_errorLog("MG Upload: Calling MG_convertImage()");
+                    Log::write('system',Log::DEBUG,"MG Upload: Calling MG_convertImage()");
                 }
 
                 // auto rotate
@@ -931,7 +919,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             break;
         case 'video/quicktime' :
         case 'video/mpeg' :
-        case 'video/x-flv' :
         case 'video/x-ms-asf' :
         case 'video/x-ms-asf-plugin' :
         case 'video/avi' :
@@ -942,7 +929,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         case 'video/x-ms-wvx' :
         case 'video/x-ms-wm' :
         case 'application/x-troff-msvideo' :
-        case 'application/x-shockwave-flash' :
         case 'video/mp4' :
         case 'video/x-m4v' :
         case 'video/webm' :
@@ -956,10 +942,9 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             $media_orig = $_MG_CONF['path_mediaobjects'] . 'orig/' . $media_filename[0] . '/' . $media_filename . '.' . $mimeExt;
             $rc = @copy($filename, $media_orig);
 
-            if ( $rc != 1 )
-            {
-                COM_errorLog("MG Upload: Error moving uploaded file in video processing....");
-                COM_errorLog("Media Upload - Unable to copy file to: " . $media_orig);
+            if ( $rc != 1 ) {
+                Log::write('system',Log::ERROR,"MG Upload: Error moving uploaded file in video processing....");
+                Log::write('system',Log::ERROR,"Media Upload - Unable to copy file to: " . $media_orig);
                 $errors++;
                 $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
             } else {
@@ -982,7 +967,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 
             $rc = @copy($filename, $media_orig);
 
-    		COM_errorLog("MG Upload: Extracting audio meta data");
+    		Log::write('system',Log::DEBUG,"MG Upload: Extracting audio meta data");
 
         	if ( isset($mimeInfo['tags']['id3v1']['title'][0]) ) {
         		if ( $caption == '' ) {
@@ -1001,8 +986,8 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         	}
             if ( $rc != 1 )
             {
-                COM_errorLog("Media Upload - Error moving uploaded file in audio processing....");
-                COM_errorLog("Media Upload - Unable to copy file to: " . $media_orig);
+                Log::write('system',Log::ERROR,"Media Upload - Error moving uploaded file in audio processing....");
+                Log::write('system',Log::ERROR,"Media Upload - Unable to copy file to: " . $media_orig);
                 $errors++;
                 $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
             } else {
@@ -1028,8 +1013,8 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 
             if ( $rc != 1 )
             {
-                COM_errorLog("Media Upload - Error moving uploaded file in generic processing....");
-                COM_errorLog("Media Upload - Unable to copy file to: " . $media_orig);
+                Log::write('system',Log::ERROR,"Media Upload - Error moving uploaded file in generic processing....");
+                Log::write('system',Log::ERROR,"Media Upload - Unable to copy file to: " . $media_orig);
                 $errors++;
                 $errMsg .= sprintf($LANG_MG02['move_error'],$filename);
             } else {
@@ -1057,7 +1042,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         if ( $upload ) {
             @unlink($tmpPath);
         }
-        COM_errorLog("MG Upload: Problem uploading a media object");
+        Log::write('system',Log::ERROR,"MG Upload: Problem uploading a media object");
         return array( false, $errMsg );
     }
 
@@ -1083,11 +1068,10 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
             $atttn = 1;
         }
         if ( $_MG_CONF['verbose']) {
-            COM_errorLog("MG Upload: Building SQL and preparing to enter database");
+            Log::write('system',Log::DEBUG,"MG Upload: Building SQL and preparing to enter database");
         }
 
         if ( $MG_albums[$albums]->enable_html != 1 ) {
-//        if ($_MG_CONF['htmlallowed'] != 1 ) {
             $media_desc     = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($description)))));
             $media_caption  = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($caption)))));
             $media_keywords = DB_escapeString(htmlspecialchars(strip_tags(COM_checkWords(COM_killJS($keywords)))));
@@ -1123,7 +1107,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         }
 
         if ($_MG_CONF['verbose']) {
-            COM_errorLog("MG Upload: Inserting media record into mg_media");
+            Log::write('system',Log::DEBUG,"MG Upload: Inserting media record into mg_media");
         }
 
         $resolution_x = 0;
@@ -1131,7 +1115,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         // try to find a resolution if video...
         if ( $mediaType == 1 ) {
             switch ($mimeType) {
-                case 'application/x-shockwave-flash' :
+                case 'video/mp4' :
                 case 'video/quicktime' :
                 case 'video/mpeg' :
                 case 'video/x-m4v' :
@@ -1141,20 +1125,6 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
                     } else {
                         $resolution_x = -1;
                         $resolution_y = -1;
-                    }
-                    break;
-                case 'video/x-flv' :
-                    if ( $mimeInfo['video']['resolution_x'] < 1 || $mimeInfo['video']['resolution_y'] < 1 ) {
-                        if (isset($mimeInfo['meta']['onMetaData']['width']) && isset($mimeInfo['meta']['onMetaData']['height']) ) {
-                            $resolution_x = $mimeInfo['meta']['onMetaData']['width'];
-                            $resolution_y = $mimeInfo['meta']['onMetaData']['height'];
-                        } else {
-                            $resolution_x = -1;
-                            $resolution_y = -1;
-                        }
-                    } else {
-                        $resolution_x = $mimeInfo['video']['resolution_x'];
-                        $resolution_y = $mimeInfo['video']['resolution_y'];
                     }
                     break;
                 case 'video/x-ms-asf' :
@@ -1214,7 +1184,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	        DB_query( $sql );
 
 	        if ( $_MG_CONF['verbose'] ) {
-	            COM_errorLog("MG Upload: Updating Album information");
+	            Log::write('system',Log::DEBUG,"MG Upload: Updating Album information");
 	        }
 	        $x = 0;
 	        $sql = "SELECT MAX(media_order) + 10 AS media_seq FROM " . $_TABLES['mg_media_albums'] . " WHERE album_id = " . $albums;
@@ -1257,7 +1227,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
 	                    $covername = $media_filename;
 	                }
 	                if ( $_MG_CONF['verbose']) {
-	                    COM_errorLog("MG Upload: Setting album cover filename to " . $covername);
+	                    Log::write('system',Log::DEBUG,"MG Upload: Setting album cover filename to " . $covername);
 	                }
 	                DB_query("UPDATE {$_TABLES['mg_albums']} SET album_cover_filename='" . $covername . "'" .
 	                         " WHERE album_id='" . $MG_albums[$albums]->id . "'");
@@ -1278,7 +1248,7 @@ function MG_getFile( $filename, $file, $albums, $caption = '', $description = ''
         MG_buildAlbumRSS( $albums );
         $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
     }
-    COM_errorLog("MG Upload: Successfully uploaded a media object");
+    Log::write('system',Log::INFO,"MG Upload: Successfully uploaded a media object");
 
     if ( $upload )
         @unlink($tmpPath);
@@ -1290,7 +1260,7 @@ function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename, $origMediaFilenam
 
     $makeSquare = 0;
     if ($_MG_CONF['verbose']) {
-        COM_errorLog("MG Upload: Processing attached thumbnail: " . $thumbnail );
+        Log::write('system',Log::DEBUG,"MG Upload: Processing attached thumbnail: " . $thumbnail );
     }
 
     if ( $MG_albums[$aid]->tn_size == 3 || $MG_albums[$aid]->tn_size == 4 ) {
@@ -1338,7 +1308,7 @@ function MG_attachThumbnail( $aid, $thumbnail, $mediaFilename, $origMediaFilenam
             $tnExt = '.bmp';
             break;
         default:
-            COM_errorLog("MG_attachThumbnail: Invalid graphics type for attached thumbnail.");
+        Log::write('system',Log::ERROR,"MG_attachThumbnail: Invalid graphics type for attached thumbnail.");
             return false;
     }
     $attach_tn   = $mediaFilename . $tnExt;
@@ -1439,7 +1409,7 @@ function MG_notifyModerators( $aid ) {
             $row = DB_fetchArray($result);
             if ( $row['email'] != '' ) {
 			    if ($_MG_CONF['verbose'] ) {
-					COM_errorLog("MG Upload: Sending notification email to: " . $row['email'] . " - " . $row['username']);
+					Log::write('system',Log::DEBUG,"MG Upload: Sending notification email to: " . $row['email'] . " - " . $row['username']);
 				}
                 $toCount++;
                 $to[] = array('email' => $row['email'], 'name' => $row['username']);
@@ -1454,7 +1424,7 @@ function MG_notifyModerators( $aid ) {
             $msgData['to'] = $to;
             COM_emailNotification( $msgData );
     	} else {
-        	COM_errorLog("MG Upload: Error - Did not find any moderators to email");
+        	Log::write('system',Log::ERROR,"MG Upload: Error - Did not find any moderators to email");
     	}
         COM_updateSpeedlimit ('mgnotify');
     }

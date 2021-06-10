@@ -1,43 +1,29 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Forum Plugin for glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | admin.inc.php                                                            |
-// |                                                                          |
-// | Forum Admin functions                                                    |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
-// |                              www.portalparts.com                         |
-// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
-// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Forum Plugin
+*
+* glFusion Plugin APIs
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Blaine Lang          blaine AT portalparts DOT com
+*                        www.portalparts.com
+*   Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com
+*   Prototype & Concept :        Mr.GxBlock, www.gxblock.com
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 global $LANG_GF06, $navbarMenu;
 
@@ -116,7 +102,7 @@ function FF_adminfooter() {
 function gf_resyncforum($id) {
     global $_CONF,$_TABLES;
 
-    COM_errorLog("Re-Syncing Forum id:$id");
+    Log::write('system',Log::INFO,'Forum: Re-Syncing Forum id: '.$id);
     // Update all the Topics lastupdated timestamp to that of the last posted comment
     $topicsQuery = DB_query("SELECT id FROM {$_TABLES['ff_topic']} WHERE forum=$id and pid=0");
     $topicCount = DB_numRows($topicsQuery);
@@ -148,10 +134,10 @@ function gf_resyncforum($id) {
             $numreplies = DB_Count($_TABLES['ff_topic'], "pid", $trecord['id']);
             DB_query("UPDATE {$_TABLES['ff_topic']} SET replies = '$numreplies' WHERE id='{$trecord['id']}'");
         }
-        COM_errorLog("$recCount Topic Records Updated");
+        Log::write('system',Log::INFO,'Forum: '.$recCount.' Topic Records Updated');
     } else {
         DB_query("UPDATE {$_TABLES['ff_forums']} SET topic_count=0, post_count=0 WHERE forum_id=$id");
-        COM_errorLog("No topic records to resync");
+        Log::write('system',Log::INFO,'Forum: No topic records to resync');
     }
 
 }

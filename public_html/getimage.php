@@ -2,14 +2,17 @@
 /**
 * glFusion CMS
 *
-* glFusion Main Index Page
+* Display Image
 *
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
+*  Copyright (C) 2009-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
 *  Based on prior work Copyright (C) 2004-2009 by the following authors:
-*   Tony Bibbs        tony@tonybibbs.com
-*   Dirk Haun         dirk@haun-online.de
+*  Tony Bibbs        tony@tonybibbs.com
+*  Dirk Haun         dirk@haun-online.de
 *
 */
 
@@ -23,6 +26,8 @@
 */
 
 require_once 'lib-common.php';
+
+use \glFusion\Log\Log;
 
 $downloader = new downloader();
 
@@ -107,7 +112,8 @@ if (is_file($pathToImage)) {
         $downloader->downloadFile($image);
     }
 } else {
-    $display = COM_errorLog('File, ' . $image . ', was not found in getimage.php');
+    $display = 'File, ' . $image . ', was not found in getimage.php';
+
 
     // send 404 in any case
     header('HTTP/1.1 404 Not Found');

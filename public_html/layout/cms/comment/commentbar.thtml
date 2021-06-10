@@ -29,10 +29,14 @@
 				<input type="hidden" name="type" value="{comment_type}">
 
 {!if order_selector}
+				<select name="order">
 				{order_selector}
+				</select>
 {!endif}
 {!if mode_selector}
+				<select name="{mode_select_field_name}">
 				{mode_selector}
+				</select>
 {!endif}
 				<button class="uk-button uk-button-primary" type="submit" value="{lang_refresh}">{lang_refresh}</button>
 			</form>
@@ -58,8 +62,12 @@
 	<form class="uk-form uk-margin-remove uk-display-inline-block" action="{parent_url}" method="post">
 		{hidden_field}
 		<input type="hidden" name="type" value="{comment_type}">
+		<select name="order">
 		{order_selector}
+		</select>
+		<select name="{mode_select_field_name}">
 		{mode_selector}
+		</select>
 		<button class="uk-button uk-button-primary uk-button-small submit" type="submit" value="{lang_refresh}">{lang_refresh}</button>
 	</form>
 

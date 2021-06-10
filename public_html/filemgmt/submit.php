@@ -1,40 +1,26 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | submit.php                                                               |
-// |                                                                          |
-// | Allow users to submit new downloads                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2011 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// |                                                                          |
-// | Based on:                                                                |
-// | myPHPNUKE Web Portal System - http://myphpnuke.com/                      |
-// | PHP-NUKE Web Portal System - http://phpnuke.org/                         |
-// | Thatware - http://thatware.org/                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - FileMgmt Plugin
+*
+* User File Submission
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by the following authors:
+*   Authors: Blaine Lang            blaine@portalparts.com
+*
+*  Based on:
+*    myPHPNUKE Web Portal System - http://myphpnuke.com/
+*    PHP-NUKE Web Portal System - http://phpnuke.org/
+*    Thatware - http://thatware.org/
+*/
+
+use \glFusion\FileSystem;
+use \glFusion\Log\Log;
 
 require_once '../lib-common.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
@@ -42,7 +28,6 @@ include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
-
 
 function FM_notifyAdmins( $filename,$file_user_id,$description ) {
     global $LANG_DIRECTION, $LANG_CHARSET, $LANG_FM00, $_USER, $_FM_CONF, $_CONF, $_TABLES;
@@ -134,7 +119,7 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
         for ($i=0;$i < $nRows; $i++ ) {
             $row = DB_fetchArray($result);
             if ( $row['email'] != '' ) {
-    			COM_errorLog("FileMgmt Upload: Sending notification email to: " . $row['email'] . " - " . $row['username']);
+    			Log::write('system',Log::ERROR,'FileMgmt Upload: Sending notification email to: ' . $row['email'] . ' - ' . $row['username']);
                 $toCount++;
                 $to[] = array('email' => $row['email'],'name' => $row['username']);
             }
@@ -148,7 +133,7 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
             $msgData['to'] = $to;
             COM_emailNotification( $msgData );
     	} else {
-        	COM_errorLog("FileMgmt Upload: Error - Did not find any administrators to email");
+        	Log::write('system',Log::ERROR,'FileMgmt Upload: Error - Did not find any administrators to notify of new upload');
     	}
         COM_updateSpeedlimit ('fmnotify');
     }
@@ -223,7 +208,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
     list($catAccessCnt) = DB_fetchArray( DB_query($sql));
 
     if ( $catAccessCnt < 1 ) {
-        COM_errorLOG("Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is:{$_SERVER['REMOTE_ADDR']}");
+        Log::write('system',Log::ERROR,'Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is: '.$_SERVER['REAL_ADDR']);
         redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOUPLOAD);
         exit;
     }
@@ -294,7 +279,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $fileExtension = strtolower(substr($uploadfilename, $pos));
             if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
                 if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                    COM_errorLOG("AddNewFile - New Upload file is rejected by config rule:$uploadfilename");
+                    Log::write('system',Log::WARNING,'AddNewFile - New Upload file is rejected by config rule: '.$uploadfilename);
                     $eh->show("1109");
                 } else {
                     $fileExtension = $_FMDOWNLOAD[$fileExtension];
@@ -313,6 +298,10 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             }
             $tmp  = $_FILES["newfile"]['tmp_name'];    // temporary name of file in temporary directory on server
             $returnMove = false;
+
+            FileSystem::mkDir($filemgmt_FileStore);
+            FileSystem::mkDir($filemgmt_FileStore.'tmp/');
+
             if (isset($_FILES["newfile"]['_data_dir']) && file_exists($tmp)) {
                 if ($directUploadAccess) {
                     $returnMove = @copy($tmp, "{$filemgmt_FileStore}{$name}");
@@ -332,9 +321,9 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             }
             if (!$returnMove) {
                 if ($directUploadAccess) {
-                    COM_errorLOG("Filemgmt submit error: Direct upload, file could not be created: $tmp to {$filemgmt_FileStore}{$name}");
+                    Log::write('system',Log::ERROR,'Filemgmt submit error: Direct upload, file could not be created: '.$tmp.' to '.$filemgmt_FileStore . $name);
                 } else {
-                    COM_errorLOG("Filemgmt submit error: Temporary file could not be created: $tmp to {$filemgmt_FileStore}tmp}/{$tmpfilename}");
+                    Log::write('system',Log::ERROR,'Filemgmt submit error: Temporary file could not be created: '.$tmp.' to '. $filemgmt_FileStore.'tmp/'.$tmpfilename);
                 }
                 $eh->show("1102");
             } else {
@@ -351,7 +340,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $fileExtension = strtolower(substr($uploadfilename, $pos));
             if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
                 if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                    COM_errorLOG("AddNewFile - New Upload file snapshot is rejected by config rule:$uploadfilename");
+                    Log::write('system',Log::ERROR,'AddNewFile - New Upload file snapshot is rejected by config rule: '.$uploadfilename);
                     $eh->show("1109");
                 } else {
                     $fileExtension = $_FMDOWNLOAD[$fileExtension];
@@ -388,7 +377,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                 $upload->uploadFiles();
                 if ($upload->areErrors()) {
                     $errmsg = "Upload Error: " . $upload->printErrors(false);
-                    COM_errorLog($errmsg);
+                    Log::write('system',Log::ERROR,$errmsg);
                     $logourl = '';
                     $AddNewFile = false;    // Set false again - in case it was set true above for actual file
                     $eh->show("1102");
@@ -496,7 +485,7 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
     }
 
 } else {
-    COM_errorLOG("Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is:{$_SERVER['REMOTE_ADDR']}");
+    Log::write('system',Log::ERROR,'Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is: '.$_SERVER['REAL_ADDR']);
     redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOUPLOAD);
 }
 

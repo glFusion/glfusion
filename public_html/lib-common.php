@@ -82,7 +82,7 @@ $_REQUEST = array_merge($_GET, $_POST);
   * 3) config->get_config('Core') - loads config pairs for group 'core'
   *
   */
-require_once 'siteconfig.php' ;
+require_once 'data/siteconfig.php';
 
 /**
   * Here, we shall establish an error handler. This will mean that whenever a
@@ -160,6 +160,10 @@ if ( $_CONF['cookiesecure']) {
 if (!isset($_CONF['log_level'])) {
     $_CONF['log_level'] = Log::WARNING;
 }
+
+// Set paths using defaults if not configured
+$_CONF['path_html'] = __DIR__ . '/';  // no need to configure this
+config::fixupPaths();   // fix up empty (default) config paths
 
 /*
  * Initialize the system log
@@ -246,14 +250,19 @@ require_once $_CONF['path_system'].'/lib-cache.php';
 
 /////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
-    require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
+if (php_sapi_name() != 'cli') {
+    if (!isset($_SERVER['REAL_ADDR'])) {
+        $_SERVER['REAL_ADDR'] = $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']);
+    }
+    if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) {
+        require_once $_CONF['path_html'].'bad_behavior2/bad-behavior-glfusion.php';
+    }
+} else {
+    $_SERVER['REAL_ADDR'] = '127.0.0.1';
 }
+
 /////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-if (!isset($_SERVER['REAL_ADDR'])) {
-    $_SERVER['REAL_ADDR'] = $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']);
-}
 $_SERVER['REMOTE_ADDR'] = COM_anonymizeIP($_SERVER['REAL_ADDR']);
 $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
@@ -279,7 +288,7 @@ $uiStyles = array(
   * Make sure some config values are set properly
   */
 if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
-    $_CONF['default_photo'] = $_CONF['site_url'].'/images/userphotos/default.jpg';
+    $_CONF['default_photo'] = $_CONF['site_url'].'/assets/image/default.jpg';
 }
 
 if ( !isset($_SYSTEM['admin_session']) ) {
@@ -415,8 +424,9 @@ require_once $_CONF['path_system'].'lib-autotag.php';
 * hacks to make upgrading easier.
 *
 */
-
-require_once $_CONF['path_system'].'lib-custom.php';
+if (@file_exists($_CONF['path_system'].'lib-custom.php')) {
+    require_once $_CONF['path_system'].'lib-custom.php';
+}
 
 // Set theme
 
@@ -678,8 +688,11 @@ COM_switchLocaleSettings();
 
 if ( !COM_isAnonUser() ) {
     $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
+    $_GROUPS['All Users'] = 2;
+    $_GROUPS['Logged-in Users'] = 13;
 } else {
     $_GROUPS = SEC_getUserGroups( 1 );
+    $_GROUPS['All Users'] = 2;
 }
 
 /**
@@ -1087,7 +1100,8 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     }
     $header->set_var('page_title_and_site_name', $title_and_name);
 
-    $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . PHP_EOL;
+//    $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . PHP_EOL;
+    $rdf = substr_replace( $_CONF['path_rss'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . '/'.$_CONF['rdf_file'].PHP_EOL;
 
     list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
     list($cacheFile,$js_cache_url) = COM_getJSCacheLocation();
@@ -1116,6 +1130,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         header('X-XSS-Protection: 0');
     }
     header('X-Frame-Options: SAMEORIGIN');
+    header("Content-Security-Policy: frame-ancestors 'self' ".$_CONF['site_url'].";");
     echo $retval;
 
     // Start caching / capturing output from glFusion / plugins
@@ -1184,18 +1199,14 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     if ( !isset( $_GET['topic'] )) {
         if ( isset( $_GET['story'] )) {
             $sid = filter_input(INPUT_GET, 'story', FILTER_SANITIZE_STRING);
-//            $sid = COM_applyFilter( $_GET['story'] );
         } elseif ( isset( $_GET['sid'] )) {
             $sid = filter_input(INPUT_GET, 'sid', FILTER_SANITIZE_STRING);
-//            $sid = COM_applyFilter( $_GET['sid'] );
         } elseif ( isset( $_POST['story'] )) {
-//            $sid = COM_applyFilter( $_POST['story'] );
             $sid = filter_input(INPUT_POST, 'story', FILTER_SANITIZE_STRING);
         }
         if ( empty( $sid ) && $_CONF['url_rewrite'] &&
                 ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
             COM_setArgNames( array( 'story', 'mode' ));
-//            $sid = COM_applyFilter( COM_getArgument( 'story' ));
             $sid = filter_var(COM_getArgument( 'story' ), FILTER_SANITIZE_STRING);
         } if ( !empty( $sid )) {
             $db = Database::getInstance();
@@ -1206,7 +1217,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         }
     } else {
         $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
-//        $topic = COM_applyFilter( $_GET['topic'] );
     }
     if ( !isset($_GET['ncb'])) {
         $theme->set_var('cb',true);
@@ -1425,18 +1435,22 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $plugin = '';
         if (isset ($_GET['plugin'])) {
             $plugin = filter_input(INPUT_GET, 'plugin', FILTER_SANITIZE_STRING);
-//            $plugin = COM_applyFilter ($_GET['plugin']);
         }
         $msgTxt = COM_showMessage ($msg, $plugin,'',0,'info');
     }
 
     if ( SESS_isSet('glfusion.infoblock') ) {
-        $msgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
-        if ( !isset($msgArray['msg'] ) ) $msgArray['msg'] = '';
-        if ( !isset($msgArray['persist'] ) ) $msgArray['persist'] = 0;
-        if ( !isset($msgArray['type'] ) ) $msgArray['type'] = 'info';
-        $msgTxt .= COM_showMessageText($msgArray['msg'], '', $msgArray['persist'], $msgArray['type']);
+        $fullMsgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
+        foreach ($fullMsgArray AS $msgArray) {
+            if (is_array($msgArray)) {
+                if ( !isset($msgArray['msg'] ) ) $msgArray['msg'] = '';
+                if ( !isset($msgArray['persist'] ) ) $msgArray['persist'] = 0;
+                if ( !isset($msgArray['type'] ) ) $msgArray['type'] = 'info';
+                $msgTxt .= COM_showMessageText($msgArray['msg'], '', $msgArray['persist'], $msgArray['type']);
+            }
+        }
         SESS_unSet('glfusion.infoblock');
+
     }
     $theme->set_var('info_block',$msgTxt);
 
@@ -1605,27 +1619,17 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
     $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
 
-    $T = new Template($_CONF['path_layout'] . '/fields');
-    $T->set_file('optionlist', 'optionlist.thtml');
-    $T->set_block('optionlist', 'options', 'opts');
+    $retval = '';
     while ($A = $stmt->fetch()) {
+        $retval .= '<option value="' . $A[0] . '"';
         if (
             (is_array($selected) && in_array($selected, $A[0])) ||
             (!is_array($selected) && $A[0] == $selected)
         ) {
-            $selected = true;
-        } else {
-            $selected = false;
+            $retval .= ' selected="selected"';
         }
-        $T->set_var(array(
-            'opt_value' => $A[0],
-            'opt_name' => $A[1],
-            'selected' => $selected,
-        ) );
-        $T->parse('opts', 'options', true);
+        $retval .= '>' . $A[1] . '</option>' . LB;
     }
-    $T->parse('output', 'optionlist');
-    $retval = $T->finish($T->get_var('output'));
     return $retval;
 }
 
@@ -1646,30 +1650,21 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
 */
 function COM_topicList( $selection, $selected = '', $sortcol = 1, $ignorelang = false, $access = 2 )
 {
-    global $_TABLES, $_CONF;
-
     $retval = '';
 
     $topics = COM_topicArray($selection, $sortcol, $ignorelang, $access);
     if ( is_array($topics) ) {
-        $T = new Template($_CONF['path_layout'] . '/fields');
-        $T->set_file('optionlist', 'optionlist.thtml');
-        $T->set_block('optionlist', 'options', 'opts');
         foreach ($topics as $tid => $topic) {
             if ( isset($tid) ) {
                 $topic .= ' (' . $tid . ')';
             }
-            $T->set_var(array(
-                'opt_value' => $tid,
-                'opt_name' => $topic,
-                'selected' => $tid == $selected,
-            ) );
-            $T->parse('opts', 'options', true);
+            $retval .= '<option value="' . $tid . '"';
+            if ($tid == $selected) {
+                $retval .= ' selected="selected"';
+            }
+            $retval .= '>' . $topic . '</option>' . LB;
         }
-        $T->parse('output', 'optionlist');
-        $retval .= $T->finish($T->get_var('output'));
     }
-
     return $retval;
 }
 
@@ -1707,7 +1702,7 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
             $sql .= $permsql . COM_getLangSQL('tid', 'AND');
         }
     }
-    $sql .=  " ORDER BY $select_set[$sortcol]";
+    $sql .=  " ORDER BY {$select_set[$sortcol]}";
 
     $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
@@ -1741,7 +1736,7 @@ function COM_topicArray($selection, $sortcol = 0, $ignorelang = false, $access =
 */
 function COM_checkList($table, $selection, $where = '', $selected = '', $fieldname = '')
 {
-    global $_TABLES, $_COM_VERBOSE;
+    global $_TABLES, $_COM_VERBOSE, $_CONF;
 
     $sql = "SELECT $selection FROM $table";
 
@@ -1754,18 +1749,21 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
 
     if ( !empty( $selected )) {
         if ( $_COM_VERBOSE ) {
-            Log::write('system',Log::DEBUG, "exploding selected array: $selected in COM_checkList", 1 );
+            Log::write('system',Log::DEBUG, "exploding selected array: $selected in COM_checkList" );
         }
 
         $S = explode( ' ', $selected );
     } else {
         if ( $_COM_VERBOSE ) {
-            Log::write('system',Log::DEBUG, 'selected string was empty COM_checkList', 1 );
+            Log::write('system',Log::DEBUG, 'selected string was empty COM_checkList' );
         }
 
         $S = array();
     }
-    $retval = '<ul class="checkboxes-list">' . PHP_EOL;
+
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file('checklist', 'checklist.thtml');
+    $T->set_block('checklist', 'options', 'opts');
     while ($A = $stmt->fetch()) {
         $access = true;
 
@@ -1780,25 +1778,21 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
         }
 
         if ( $access ) {
-            $retval .= '<li><input type="checkbox" name="' . $fieldname . '[]" value="' . $A[0] . '"';
-
-            $sizeS = count( $S );
-            for( $x = 0; $x < $sizeS; $x++ ) {
-                if ( $A[0] == $S[$x] ) {
-                    $retval .= ' checked="checked"';
-                    break;
-                }
-            }
+            $T->set_var(array(
+                'fieldname' => $fieldname,
+                'value' => $A[0],
+                'dscp' => $A[1],
+                'checked' => in_array($A[0], $S),
+            ) );
 
             if (( $table == $_TABLES['blocks'] ) && isset( $A[2] ) && ( $A[2] == 'gldefault' )) {
-                $retval .= '/><span class="gldefault">' .  $A[1]  . '</span></li>' . PHP_EOL;
-            } else {
-                $retval .= '/><span>' .  $A[1]  . '</span></li>' . PHP_EOL;
+                $T->set_var('classes', 'gldefault');
             }
+            $T->parse('opts', 'options', true);
         }
     }
-    $retval .= '</ul>' . PHP_EOL;
-
+    $T->parse('output', 'checklist');
+    $retval = $T->finish($T->get_var('output'));
     return $retval;
 }
 
@@ -2173,7 +2167,7 @@ function COM_userMenu( $help='', $title='', $position='' )
                             . $modules[0] . '"/>' . $modules[0];
                 } else {
                     // Build select
-                    $select = '<select name="service" id="service">';
+                    $select = '';
                     if ( isset($_CONF['standard_auth_first']) && $_CONF['standard_auth_first'] == 1 ) {
                         if ($_CONF['user_login_method']['standard']) {
                             $select .= '<option value="">' . $_CONF['site_name'].'</option>';
@@ -2189,7 +2183,6 @@ function COM_userMenu( $help='', $title='', $position='' )
                         }
                     }
 
-                    $select .= '</select>';
                 }
 
                 $login->set_file('services', 'blockservices.thtml');
@@ -3821,13 +3814,20 @@ function COM_setMessage( $msg = 0 )
 
 function COM_setMsg( $msg, $type='info', $persist=0 )
 {
+    $currentMsgArray = array();
+    if ( SESS_isSet('glfusion.infoblock') ) {
+        $currentMsgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
+    }
+
     $msgArray = array(
                         'msg' => $msg,
                         'type' => $type,
                         'persist' => $persist,
                         'title' => '',
                     );
-    SESS_setVar('glfusion.infoblock', serialize($msgArray));
+
+    $currentMsgArray[] = $msgArray;
+    SESS_setVar('glfusion.infoblock', serialize($currentMsgArray));
 }
 
 /**
@@ -4445,17 +4445,15 @@ function COM_getAmPmFormSelection( $name, $selected = '' )
         if ( empty( $selected )) {
             $selected = date( 'a' );
         }
-
-        $retval .= '<select name="' . $name . '">' . PHP_EOL;
-        $retval .= '<option value="am"';
-        if ( $selected == 'am' ) {
-            $retval .= ' selected="selected"';
-        }
-        $retval .= '>am</option>' . PHP_EOL . '<option value="pm"';
-        if ( $selected == 'pm' ) {
-            $retval .= ' selected="selected"';
-        }
-        $retval .= '>pm</option>' . PHP_EOL . '</select>' . PHP_EOL;
+        $T = new Template($_CONF['path_layout'] . '/fields');
+        $T->set_file('form', 'ampm_select.thtml');
+        $T->set_var(array(
+            'name' => $name,
+            'sel_am' => $selected == 'am',
+            'sel_pm' => $selected == 'pm',
+        ) );
+        $T->parse('output', 'form');
+        $retval = $T->finish($T->get_var('output'));
     }
 
     return $retval;
@@ -4865,7 +4863,7 @@ function COM_applyBasicFilter( $parameter, $isnumeric = false )
 
     if ( $log_manipulation ) {
         if ( strcmp( $p, $parameter ) != 0 ) {
-            Log::write('system',Log::WARNING, "Filter applied: >> $parameter << filtered to $p [IP {$_SERVER['REMOTE_ADDR']}]", 1);
+            Log::write('system',Log::WARNING, "Filter applied: >> $parameter << filtered to $p [IP {$_SERVER['REMOTE_ADDR']}]");
         }
     }
 
@@ -5148,42 +5146,8 @@ function COM_getCurrentURL()
 
     $thisUrl = '';
 
-    if ( empty( $_SERVER['SCRIPT_URI'] )) {
-        if ( !empty( $_SERVER['DOCUMENT_URI'] )) {
-            $document_uri = $_SERVER['DOCUMENT_URI'];
-            $first_slash = strpos( $_CONF['site_url'], '/' );
-            if ( $first_slash === false ) {
-                // special case - assume it's okay
-                $thisUrl = $_CONF['site_url'] . $document_uri;
-            } else if ( $first_slash + 1 == strrpos( $_CONF['site_url'], '/' )) {
-                // site is in the document root
-                $thisUrl = $_CONF['site_url'] . $document_uri;
-            } else {
-                // extract server name first
-                $pos = strpos( $_CONF['site_url'], '/', $first_slash + 2 );
-                $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $document_uri;
-            }
-        }
-    } else {
-        $thisUrl = $_SERVER['SCRIPT_URI'];
-    }
-    if ( !empty( $thisUrl ) && !empty( $_SERVER['QUERY_STRING'] ) && (strpos($thisUrl,'?') === false)  ) {
-        $thisUrl .= '?' . $_SERVER['QUERY_STRING'];
-    }
-    if ( empty( $thisUrl )) {
+    if (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
         $requestUri = $_SERVER['REQUEST_URI'];
-        if ( empty( $_SERVER['REQUEST_URI'] )) {
-            // on a Zeus webserver, prefer PATH_INFO over SCRIPT_NAME
-            if ( empty( $_SERVER['PATH_INFO'] )) {
-                $requestUri = $_SERVER['SCRIPT_NAME'];
-            } else {
-                $requestUri = $_SERVER['PATH_INFO'];
-            }
-            if ( !empty( $_SERVER['QUERY_STRING'] )) {
-                $requestUri .= '?' . $_SERVER['QUERY_STRING'];
-            }
-        }
-
         $firstslash = strpos( $_CONF['site_url'], '/' );
         if ( $firstslash === false ) {
             // special case - assume it's okay
@@ -5197,6 +5161,56 @@ function COM_getCurrentURL()
             $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $requestUri;
         }
     }
+    if (empty($thisUrl)) {
+        if (empty( $_SERVER['SCRIPT_URI'])) {
+            if ( !empty( $_SERVER['DOCUMENT_URI'] )) {
+                $document_uri = $_SERVER['DOCUMENT_URI'];
+                $first_slash = strpos( $_CONF['site_url'], '/' );
+                if ( $first_slash === false ) {
+                    // special case - assume it's okay
+                    $thisUrl = $_CONF['site_url'] . $document_uri;
+                } else if ( $first_slash + 1 == strrpos( $_CONF['site_url'], '/' )) {
+                    // site is in the document root
+                    $thisUrl = $_CONF['site_url'] . $document_uri;
+                } else {
+                    // extract server name first
+                    $pos = strpos( $_CONF['site_url'], '/', $first_slash + 2 );
+                    $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $document_uri;
+                }
+            }
+        } else {
+            $thisUrl = $_SERVER['SCRIPT_URI'];
+        }
+        if (!empty( $thisUrl ) && !empty( $_SERVER['QUERY_STRING'] ) && (strpos($thisUrl,'?') === false)  ) {
+            $thisUrl .= '?' . $_SERVER['QUERY_STRING'];
+        }
+    }
+    if (empty( $thisUrl)) {
+        if ( !isset($_SERVER['REQUEST_URI']) || empty( $_SERVER['REQUEST_URI'] )) {
+            // on a Zeus webserver, prefer PATH_INFO over SCRIPT_NAME
+            if ( empty( $_SERVER['PATH_INFO'] )) {
+                $requestUri = $_SERVER['SCRIPT_NAME'];
+            } else {
+                $requestUri = $_SERVER['PATH_INFO'];
+            }
+            if ( !empty( $_SERVER['QUERY_STRING'] )) {
+                $requestUri .= '?' . $_SERVER['QUERY_STRING'];
+            }
+        }
+        $firstslash = strpos( $_CONF['site_url'], '/' );
+        if ( $firstslash === false ) {
+            // special case - assume it's okay
+            $thisUrl = $_CONF['site_url'] . $requestUri;
+        } else if ( $firstslash + 1 == strrpos( $_CONF['site_url'], '/' )) {
+            // site is in the document root
+            $thisUrl = $_CONF['site_url'] . $requestUri;
+        } else {
+            // extract server name first
+            $pos = strpos( $_CONF['site_url'], '/', $firstslash + 2 );
+            $thisUrl = substr( $_CONF['site_url'], 0, $pos ) . $requestUri;
+        }
+    }
+
     $filter = sanitizer::getInstance();
     $thisUrl = $filter->sanitizeURL($thisUrl);
     return $thisUrl;
@@ -5675,7 +5689,7 @@ function COM_truncateHTML ( $html, $maxLength, $end = '&hellip;', $endchars = 0 
         // Print text leading up to the tag.
         $str = substr($html, $position, $tagPosition - $position);
         if ($printedLength + strlen($str) > $maxLength) {
-            $retval .= (substr($str, 0, $maxLength - $printedLength));
+            $retval .= rtrim((substr($str, 0, $maxLength - $printedLength)));
             $printedLength = $maxLength;
             break;
         }
@@ -6014,6 +6028,7 @@ function COM_checkVersion($have, $need) {
 
     list($major,$minor,$rev,$extra) = explode('.',$have.'....');
     list($requireMajor,$requireMinor,$requireRev,$requireExtra) = explode('.',$need.'....');
+
     if ( !isset($major) )
         $major = 0;
     if ( !isset($minor) )
@@ -6021,7 +6036,7 @@ function COM_checkVersion($have, $need) {
     if ( !isset($rev) )
         $rev = 0;
     if ( !isset($extra) )
-        $extra = '';
+        $extra = 0;
     if ( !isset($requireMajor) )
         $requireMajor = 0;
     if ( !isset($requireMinor) )
@@ -6029,8 +6044,17 @@ function COM_checkVersion($have, $need) {
     if ( !isset($requireRev) )
         $requireRev = 0;
     if ( !isset($requireExtra) )
-        $RequireExtra = '';
+        $requireExtra = 0;
+
+    if (strstr($extra,"pl") !== false) {
+        $extra = (int) substr($extra,2);
+    }
+    if (strstr($requireExtra,"pl") !== false) {
+        $requireExtra = (int) substr($requireExtra,2);
+    }
+
     $passed = 0;
+
     if ( $requireMajor <= $major ) {
         if ( $requireMajor < $major ) {
             $passed = 1;
@@ -6040,12 +6064,8 @@ function COM_checkVersion($have, $need) {
             } else if ( $requireRev <= (int) $rev ) {
                 if ( $requireRev < (int) $rev ) {
                     $passed = 1;
-                } else if ($requireExtra != '' ) {
-                    if ( $requireExtra == 'fusion' ) {
+                } else if ($requireExtra <=  (int) $extra) {
                         $passed = 1;
-                    }
-                } else {
-                    $passed = 1;
                 }
             }
         }
@@ -6274,24 +6294,20 @@ function COM_buildOwnerList($fieldName,$owner_id=2)
 
     $stmt = $db->conn->executeQuery("SELECT * FROM `{$_TABLES['users']}` WHERE status=3 ORDER BY username ASC");
     $T = new Template($_CONF['path_layout'] . '/fields');
-    $T->set_file(array(
-        'selection' => 'selection.thtml',
-        'optionlist' => 'optionlist.thtml',
-    ) );
+    $T->set_file('selection', 'selection.thtml');
     $T->set_var('var_name', $fieldName);
-    $T->set_block('optionlist', 'options', 'opts');
+    $options = '';
     while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
         if ( $row['uid'] == 1 ) {
             continue;
         }
-        $T->set_var(array(
-            'opt_value' => $row['uid'],
-            'opt_name' => COM_getDisplayName($row['uid']),
-            'selected' => $owner_id == $row['uid'],
-        ) );
-        $T->parse('opts', 'options', true);
+        $options .= '<option value="' . $row['uid'] . '"';
+        if ($owner_id == $row['uid']) {
+            $options .= ' selected="selected"';
+        }
+        $options .= '>' . COM_getDisplayName($row['uid']) . '</opton>' . LB;
     }
-    $T->parse('option_list', 'optionlist');
+    $T->set_var('option_list', $options);
     $T->parse('output', 'selection');
     $owner_select = $T->finish($T->get_var('output'));
     return $owner_select;
@@ -7070,23 +7086,20 @@ function phpblock_switch_language()
                                    . $newLangId );
         $retval .= COM_createLink($newLang, $switchUrl);
     } else {
-        $retval .= '<form name="change" action="'. $_CONF['site_url']
-                . '/switchlang.php" method="get">' . PHP_EOL;
-        $retval .= '<input type="hidden" name="oldlang" value="' . $langId
-                . '"/>' . PHP_EOL;
-
-        $retval .= '<select onchange="change.submit()" name="lang">';
+        $T = new Template($_CONF['path_layout']);
+        $T->set_file('form', 'switchlang.thtml');
+        $T->set_var('langid', $langId);
+        $T->set_block('form', 'langOpts', 'opt');
         foreach( $_CONF['languages'] as $key => $value ) {
-            if ( $lang == $_CONF['language_files'][$key] ) {
-                $selected = ' selected="selected"';
-            } else {
-                $selected = '';
-            }
-            $retval .= '<option value="' . $key . '"' . $selected . '>'
-                    . $value . '</option>' . PHP_EOL;
+            $T->set_var(array(
+                'value' => $key,
+                'name' => $value,
+                'selected' => $lang == $_CONF['language_files'][$key],
+            ) );
+            $T->parse('opt', 'langOpts', true);
         }
-        $retval .= '</select>' . PHP_EOL;
-        $retval .= '</form>' . PHP_EOL;
+        $T->parse('output', 'form');
+        $retval = $T->finish($T->get_var('output'));
     }
 
     return $retval;
@@ -7149,8 +7162,8 @@ function phpblock_whosonline()
 
             if (!empty( $A['photo'] ) AND $_CONF['allow_user_photo'] == 1) {
                 if ($_CONF['whosonline_photo'] == true) {
-                    $usrimg = '<img src="' . $_CONF['site_url']
-                            . '/images/userphotos/' . $A['photo']
+                    $usrimg = '<img src="' . $_CONF['path_images_url']
+                            . '/userphotos/' . $A['photo']
                             . '" alt="" height="30" width="30"/>';
                 } else {
                     $usrimg = '<img src="' . $_CONF['layout_url']
