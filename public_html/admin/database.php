@@ -1531,6 +1531,7 @@ function DBADMIN_srExecute()
         $columnsToProcess[$table]['columns'][] = $column;
     }
 
+
     // this needs to pass $selectedTables which is just an array of tables only.
     // need to build out a new array to handle this.
     $allTables = $dbsr->getTableList($tablesToProcess);
@@ -1579,8 +1580,8 @@ function DBADMIN_srExecute()
         foreach($data['columns'] AS $column) {
             if (!in_array($column,$columnsToProcess[$table]['columns'])) {
                 unset($finalList[$table]['columns'][$index]);
-                $index++;
             }
+            $index++;
         }
     }
 
