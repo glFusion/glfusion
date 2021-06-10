@@ -194,31 +194,19 @@ function commandcontrol()
             'image' => $_CONF['layout_url'] . '/images/icons/plugins.' . $_IMAGE_TYPE,
         ),
         $LANG01['ctl'] => array(
-<<<<<<< HEAD
-            'condition' => SEC_inGroup('Root'),
-=======
             'condition' => SEC_hasRights('cache.admin'),
->>>>>>> develop
             'url' => $_CONF['site_admin_url'] . '/clearctl.php',
             'lang' => $LANG01['ctl'],
             'image' => $_CONF['layout_url'] . '/images/icons/ctl.' . $_IMAGE_TYPE,
         ),
         $LANG01['env_check'] => array(
-<<<<<<< HEAD
-            'condition' => SEC_inGroup('Root'),
-=======
             'condition' => SEC_hasRights('env.admin'),
->>>>>>> develop
             'url' => $_CONF['site_admin_url'].'/envcheck.php',
             'lang' => $LANG01['env_check'],
             'image' => $_CONF['layout_url'] . '/images/icons/envcheck.' . $_IMAGE_TYPE,
         ),
         $LANG01['logview'] => array(
-<<<<<<< HEAD
-            'condition' => SEC_inGroup('Root'),
-=======
             'condition' => SEC_hasRights('log.admin'),
->>>>>>> develop
             'url' => $_CONF['site_admin_url'] . '/logview.php',
             'lang' => $LANG_LOGVIEW['logview'],
             'image' => $_CONF['layout_url'] . '/images/icons/logview.' . $_IMAGE_TYPE,
@@ -242,11 +230,7 @@ function commandcontrol()
             'image' => $_CONF['layout_url'] . '/images/icons/at.' . $_IMAGE_TYPE,
         ),
         'SFS User Check' => array(
-<<<<<<< HEAD
-            'condition' => SEC_inGroup('Root'),
-=======
             'condition' => SEC_hasRights('user.edit'),
->>>>>>> develop
             'url' => $_CONF['site_admin_url'] . '/sfs.php',
             'lang' => 'SFS User Check',
             'image' => $_CONF['layout_url'] . '/images/icons/sfs.' . $_IMAGE_TYPE,
@@ -258,21 +242,13 @@ function commandcontrol()
             'image' => $_CONF['layout_url'] . '/images/icons/social.' . $_IMAGE_TYPE,
         ),
         $LANG01[103] => array(
-<<<<<<< HEAD
-            'condition' => SEC_inGroup ('Root'),
-=======
             'condition' => SEC_hasRights('database.admin'),
->>>>>>> develop
             'url' => $_CONF['site_admin_url'] . '/database.php',
             'lang' => $LANG01[103],
             'image' => $_CONF['layout_url'] . '/images/icons/database.' . $_IMAGE_TYPE,
         ),
         'Admin Actions' => array(
-<<<<<<< HEAD
-            'condition' => SEC_inGroup('Root') &&
-=======
             'condition' => SEC_hasRights('actions.admin') &&
->>>>>>> develop
                 isset($_CONF['enable_admin_actions']) &&
                 $_CONF['enable_admin_actions'] == 1,
             'url' => $_CONF['site_admin_url'] . '/actions.php',
@@ -286,22 +262,14 @@ function commandcontrol()
             'image' => $_CONF['layout_url'] . '/images/icons/docs.' . $_IMAGE_TYPE,
         ),
         $LANG01[107] => array(
-<<<<<<< HEAD
-            'condition' => (SEC_inGroup ('Root') &&
-=======
             'condition' => (SEC_hasRights ('upgrade.admin') &&
->>>>>>> develop
                               ($_CONF['link_versionchecker'] == 1)),
             'url' => $_CONF['site_admin_url'].'/vercheck.php',
             'lang' => $LANG01[107],
             'image' => $_CONF['layout_url'] . '/images/icons/versioncheck.' . $_IMAGE_TYPE,
         ),
         $LANG01[129] => array(
-<<<<<<< HEAD
-            'condition' => (SEC_inGroup ('Root')),
-=======
             'condition' => (SEC_hasRights ('config.admin')),
->>>>>>> develop
             'url'=>$_CONF['site_admin_url'] . '/configuration.php',
             'lang' => $LANG01[129],
             'image' => $_CONF['layout_url'] . '/images/icons/configuration.' . $_IMAGE_TYPE,
@@ -313,8 +281,6 @@ function commandcontrol()
             'image' => $_CONF['layout_url'] . '/images/icons/moderation.' . $_IMAGE_TYPE,
             'count' => $modnum,
         ),
-<<<<<<< HEAD
-=======
         $LANG01[131] => array(
             'condition' => SEC_hasRights('system.root'),
             'url' =>$_CONF['site_admin_url'] . '/feature.php',
@@ -327,7 +293,6 @@ function commandcontrol()
             'lang' => $LANG01[131],
             'image' => $_CONF['layout_url'] . '/images/icons/feature.' . $_IMAGE_TYPE,
         ),
->>>>>>> develop
     );
 
     // now add the plugins
