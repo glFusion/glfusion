@@ -1,179 +1,181 @@
 {# begin {templatelocation} #}
 <script>
-function LogoToggle(cbox, id, type, oldval) {
-    if (cbox.type == "select-one") {
-        newval = cbox.value;
-    } else {
-        newval = cbox.checked ? 1 : 0;
-        oldval = cbox.checked ? 0 : 1;
-    }
+var Theme = (function() {
+	return {
+		// Display a notification popup for a short time.
+		toggle: function(cbox, id, type, oldval) {
+			if (cbox.type == "select-one") {
+				newval = cbox.value;
+			} else {
+				newval = cbox.checked ? 1 : 0;
+				oldval = cbox.checked ? 0 : 1;
+			}
 
-    var dataS = {
-        "ajaxtoggle": "true",
-        "theme": id,
-        "oldval": oldval,
-        "newval": newval,
-        "type": type,
-    };
-    data = $.param(dataS);
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        url: "{site_admin_url}/logo.php",
-        data: data,
-        success: function(result) {
-            if (cbox.type == "checkbox") {
-                cbox.checked = result.newval == 1 ? true : false;
-            } else {
-                cbox.value = result.newval;
-            }
-            try {
-                $.UIkit.notify('<i class="uk-icon-check"></i>&nbsp;' + result.statusMessage, {timeout: 1000,pos:'top-center'});
-            }
-            catch(err) {
-                // Form is already updated, annoying popup message not needed
-                // alert(result.statusMessage);
-            }
-        }
-    });
-    return false;
-}
-function LOGO_delImage(theme_name)
-{
-    if (!confirm("Are you sure you want to delete this image?")) {
-        return false;
-    }
+			var dataS = {
+				"ajaxtoggle": "true",
+				"theme": id,
+				"oldval": oldval,
+				"newval": newval,
+				"type": type,
+			};
+			data = $.param(dataS);
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "{site_admin_url}/themes.php",
+				data: data,
+				success: function(result) {
+					if (cbox.type == "checkbox") {
+						cbox.checked = result.newval == 1 ? true : false;
+					} else {
+						cbox.value = result.newval;
+					}
+					try {
+						$.UIkit.notify('<i class="uk-icon-check"></i>&nbsp;' + result.statusMessage, {timeout: 1000,pos:'top-center'});
+					}
+					catch(err) {
+						// Form is already updated, annoying popup message not needed
+						// alert(result.statusMessage);
+					}
+				}
+			});
+		},
+		changeImage: function(fld, theme)
+		{
+			if (window.FormData) {
+				formdata = new FormData();
+				reader = new FileReader();
+				reader.onloadend = function(e) {
+					//console.log(e);
+				}
+				file = fld.files[0];
+				reader.readAsDataURL(file);
+				formdata.append("images[]", file);
+				formdata.append("ajaxupload", "x");
+				formdata.append("theme", theme);
+				$.ajax({
+					url: "{site_admin_url}/themes.php",
+					type: "POST",
+					data: formdata,
+					dataType: "json",
+					processData: false,
+					contentType: false,
+					success: function (res) {
+						if (res.status) {
+							elem = $("#logo_file_" + theme);
+							html = 
+							'<span id="logo_url[' + theme + ']">' + res.url + '</span>' +
+							'<a href="#" onclick="return Theme.delImage(\'' + theme + '\');">' +
+							'<i class="uk-icon uk-icon-minus-square uk-icon-justify uk-text-danger uk-hover tooltip" title="Delete Image"></i></a>';
+							elem.html(html);
+						} else {
+							$.UIkit.notify(res.message, {status:'danger', timeout: 3000,pos:'top-center'});
+						}
+					}
+				});
+				$("#newlogo_" + theme).val("");
+			}
+		},
+		delImage: function(theme_name)
+		{
+			if (!confirm("Are you sure you want to delete this image?")) {
+				return false;
+			}
 
-    var dataS = {
-        "del_logo_img": "true",
-        "theme": theme_name,
-    };
-    data = $.param(dataS);
-    $.ajax({
-        type: "POST",
-        dataType: "json",
-        url: "{site_admin_url}/logo.php",
-        data: data,
-        success: function(result) {
-            elem = $("#logo_file_" + theme_name);
-            elem.html("");
-            $.UIkit.notify('<i class="uk-icon-check"></i>&nbsp;' + result.statusMessage, {timeout: 1000,pos:'top-center'});
-        },
-        error: function(e, x, r) {
-            console.log(e);
-            console.log(x);
-            console.log(r);
-        }
-    });
-    return false;
-}
+			var dataS = {
+				"del_logo_img": "true",
+				"theme": theme_name,
+			};
+			data = $.param(dataS);
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				url: "{site_admin_url}/themes.php",
+				data: data,
+				success: function(result) {
+					elem = $("#logo_file_" + theme_name);
+					elem.html("");
+					$.UIkit.notify('<i class="uk-icon-check"></i>&nbsp;' + result.statusMessage, {timeout: 1000,pos:'top-center'});
+				},
+				error: function(e, x, r) {
+					console.log(e);
+					console.log(x);
+					console.log(r);
+				}
+			});
+		}
 
-function LOGO_changeFile(fld, theme)
-{
-    //console.log(fld);
-    if (window.FormData) {
-        formdata = new FormData();
-        reader = new FileReader();
-        reader.onloadend = function(e) {
-//            console.log(e);
-        }
-        file = fld.files[0];
-        reader.readAsDataURL(file);
-        formdata.append("images[]", file);
-        formdata.append("ajaxupload", "x");
-        formdata.append("theme", theme);
-        $.ajax({
-            url: "{site_admin_url}/logo.php",
-            type: "POST",
-            data: formdata,
-            dataType: "json",
-            processData: false,
-            contentType: false,
-            success: function (res) {
-                if (res.status) {
-                    elem = $("#logo_file_" + theme);
-                    html = 
-                    '<span id="logo_url[' + theme + ']">' + res.url + '</span>' +
-                    '<br />' +
-                    '<figcaption class="uk-overlay-panel uk-overlay-background uk-overlay-bottom uk-overlay-slide-bottom">' +
-                    '<button class="uk-button uk-button-mini uk-button-danger" onclick="return LOGO_delImage(\'' + theme + '\');">Delete</button></figcaption>';
-console.log(html);
-                    elem.html(html);
-                } else {
-                    console.log("invalid logo image uploaded");
-                }
-                //document.getElementById("response").innerHTML = res; 
-            }
-        });
-    }
-}
+	};
+})();
 </script>
-<form class="uk-form" action="{site_admin_url}/logo.php"
-    method="post" enctype="multipart/form-data">
+
+<form class="uk-form" action="{site_admin_url}/themes.php" method="post" enctype="multipart/form-data">
 <table class="uk-table">
-    <tr>
-        <th>Theme</th>
-        <th>Enabled</th>
-        <th>Logo Type</th>
-        <th>Show Site Slogan?</th>
-        <th>Logo File</th>
-        <th>Upload New</th>
-    </tr>
+	<tr>
+		<th>Theme</th>
+		<th>Enabled</th>
+		<th>Logo Type</th>
+		<th>Show Site Slogan?</th>
+		<th>Logo File</th>
+		<th>Upload New</th>
+	</tr>
 <!-- BEGIN dataRow -->
-    <tr>
-        <td>{theme_name}</td>
-        <td>
-            <input type="checkbox" name="enabled[{theme_name}]" value="1"
-{!if enabled}
-                checked="checked"
+	<tr>
+		<td>{theme_name}</td>
+		<td>
+{!if is_default}
+			N/A
+{!elseif is_site_theme}
+			All Users (Site Theme)
+{!else}
+			<select name="grp_access" onchange="Theme.toggle(this, '{theme_name}', 'grp_access', this.value);">
+				<option value="0" {grp_0_sel}>-- Disabled --</option>
+				{grp_access_options}
+			</select>
 {!endif}
-{!if disabled}
-                disabled="disabled"
+		</td>
+		<td>
+			<select name="logo_type[{theme_name}]" id="logo_type_{theme_name}"
+				onchange='Theme.toggle(this, "{theme_name}", "logo_type", "{type_sel}");'>
+{!if is_default}
+{!else}
+				<option value="-1" {type_sel_-1}>Default</option>
 {!endif}
-                onchange="LogoToggle(this, '{theme_name}', 'enabled', this.value);" />
-        </td>
-        <td>
-            <select name="logo_type[{theme_name}]" id="logo_type_{theme_name}"
-                onchange='LogoToggle(this, "{theme_name}", "logo_type", "{type_sel}");'>
-{!if not_default}
-                <option value="-1" {type_sel_-1}>Default</option>
+				<option value="0" {type_sel_0}>None</option>
+				<option value="1" {type_sel_1}>Graphic</option>
+				<option value="2" {type_sel_2}>Text</option>
+			</select>
+		</td>
+		<td>
+			<select name="display_site_slogan[{theme_name}]" id="display_site_slogan_{theme_name}"
+				onchange='Theme.toggle(this, "{theme_name}", "display_site_slogan", "{slogan_sel}");'>
+{!if is_default}
+{!else}
+				<option value="-1" {slogan_sel_-1}>Default</option>
 {!endif}
-                <option value="0" {type_sel_0}>None</option>
-                <option value="1" {type_sel_1}>Graphic</option>
-                <option value="2" {type_sel_2}>Text</option>
-            </select>
-        </td>
-        <td>
-            <select name="display_site_slogan[{theme_name}]" id="display_site_slogan_{theme_name}"
-                onchange='LogoToggle(this, "{theme_name}", "display_site_slogan", "{slogan_sel}");'>
-{!if not_default}
-                <option value="-1" {slogan_sel_-1}>Default</option>
-{!endif}
-                <option value="1" {slogan_sel_1}>Yes</option>
-                <option value="0" {slogan_sel_0}>No</option>
-            </select>
-        </td>
-        <td>
-            <figure class="uk-overlay uk-overlay-hover">
-                <span id="logo_file_{theme_name}">
+				<option value="1" {slogan_sel_1}>Yes</option>
+				<option value="0" {slogan_sel_0}>No</option>
+			</select>
+		</td>
+		<td style="white-space:nowrap;">
+				<span id="logo_file_{theme_name}">
 {!if img_url}
-                    <span id="logo_url[{theme_name}]">{img_url}</span>
-                    <br />
-                    <figcaption class="uk-overlay-panel uk-overlay-background uk-overlay-bottom uk-overlay-slide-bottom">
-                        <button class="uk-button uk-button-mini uk-button-danger" onclick="return LOGO_delImage('{theme_name}');">Delete</button></figcaption>
+					<span id="logo_url[{theme_name}]">{img_url}</span>
+					<a href="#" onclick="return Theme.delImage('{theme_name}');">
+						<i class="uk-icon uk-icon-minus-square uk-icon-justify uk-text-danger uk-hover tooltip" title="Delete Image"></i>
+					</a>
 {!endif}
-                </span>
-            </figure>
-        </td>
-        <td>
-            <input type="file" name="newlogo[{theme_name}]" id="newlogo[{theme_name}]" onchange="LOGO_changeFile(this, '{theme_name}');"/>
-        </td>
-    </tr>
+				</span>
+		</td>
+		<td>
+			<input type="file" name="newlogo[{theme_name}]" id="newlogo_{theme_name}" onchange="Theme.changeImage(this, '{theme_name}');"/>
+		</td>
+	</tr>
 <!-- END dataRow -->
 </table>
 {!if 0}
 <div>
-    <button type="submit" class="uk-button uk-button-success" name="savelogos">{$LANG_ADMIN['submit']}</button>
+	<button type="submit" class="uk-button uk-button-success" name="savelogos">{$LANG_ADMIN['submit']}</button>
 </div>
 {!endif}
 </form>

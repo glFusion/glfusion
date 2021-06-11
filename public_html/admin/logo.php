@@ -23,15 +23,14 @@ USES_lib_admin();
 $display = '';
 
 // Only let admin users access this page
-/*if (!SEC_hasRights('logo.admin')) {
+if (!SEC_hasRights('logo.admin')) {
     Log::logAccessViolation('Logo Administration');
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
     echo $display;
     exit;
-}*/
-
+}
 
 function _logoEdit() {
     global $_CONF, $_LOGO, $_TABLES, $LANG_ADMIN, $LANG_LOGO, $_IMAGE_TYPE;
@@ -167,88 +166,40 @@ if ( isset($_GET['mode']) ) {
     $mode = '';
 }
 
-$content = '';
-$expected = array('ajaxupload', 'ajaxtoggle', 'savelogos', 'del_logo_img');
-$action = 'listlogos';
-foreach ($expected as $provided) {
-    if (isset($_POST[$provided])) {
-        $action = $provided;
-    }
-}
+if ( (isset($_POST['execute']) || $mode != '') && !isset($_POST['cancel']) && !isset($_POST['defaults'])) {
+    switch ( $mode ) {
+        case 'logo' :
+            $content    = _logoEdit ( );
+            $currentSelect = $LANG_LOGO['logo'];
+            break;
+        case 'savelogo' :
+            $mtype = 'info';
+            $rc = _saveLogo();
+            switch ( $rc ) {
+                case 2:
+                    $message = $LANG_LOGO['invalid_type'];
+                    $mtype = 'error';
+                    break;
+                case 4 :
+                    $message = $LANG_LOGO['invalid_size'].$_CONF['max_logo_height'].'x'.$_CONF['max_logo_width'].'px';
+                    $mtype = 'error';
+                    break;
+                default :
+                    $message = $LANG_LOGO['logo_saved'];
+                    $mtype = 'info';
+                    break;
+            }
 
-switch ($action) {
-case 'ajaxupload':
-    $Logo = new Logo($_POST['theme']);
-    $retval = array(
-        'status' => false,
-    );
-    $retval = $Logo->handleUpload($_FILES['images'], 0);
-    echo json_encode($retval);
-    exit;
-    break;
-
-case 'ajaxtoggle':
-    $Logo = new Logo($_POST['theme']);
-    if (!$Logo->Exists()) {
-        // If the logo record doesn't exist yet, create it.
-        $Logo->createRecord();
+            $content = COM_setMsg($message,$mtype);
+            $content .= _logoEdit( );
+            $currentSelect = $LANG_LOGO['logo_admin'];
+            break;
+        default :
+            $content    = _logoEdit ( );
+            break;
     }
-    switch ($_POST['type']) {
-    case 'display_site_slogan':
-    case 'logo_type':
-    case 'enabled':
-        $oldval = (int)$_POST['oldval'];
-        $newval = (int)$_POST['newval'];
-        $result = $Logo->setval($_POST['type'], $oldval, $newval);
-        if ($newval == $result) {   // successfully changed
-            $msg = _('Field has been updated.');
-        } else {
-            $msg = _('Item was not changed.');
-        }
-        $retval = array(
-            'newval' => $newval,
-            'statusMessage' => $msg,
-        );
-        echo json_encode($retval);
-        break;
-    }
-    exit;
-    break;
-case 'del_logo_img':
-    $Logo = new Logo($_POST['theme']);
-    if ($Logo->delImage()) {
-        $retval = array(
-            'status' => true,
-            'statusMessage' => 'Got it done',
-        );
-    } else {
-        $retval = array(
-            'status' => false,
-            'statusMessage' => 'No change made',
-        );
-    }
-    echo json_encode($retval);
-    exit;
-    break;
-
-case 'savelogos':
-    $messages = Logo::saveLogos();
-    $msg = '';
-    foreach ($messages as $key=>$info) {
-        if (isset($info['message'])) {
-            $msg .= '<li>' . $info['theme'] . ': ' . $info['message'] . '</li>';
-        }
-    }
-    if (!empty($msg)) {
-        $msg = '<ul>' . $msg . '</ul>';
-        COM_setMsg($msg, 'error');
-    }
-    COM_refresh($_CONF['site_url'] . '/admin/logo.php');
-    break;
-case 'listlogos':
-default:
-    $content = Logo::adminList();
-    break;
+} else {
+    $content    = _logoEdit ( );
 }
 
 $display = COM_siteHeader();
