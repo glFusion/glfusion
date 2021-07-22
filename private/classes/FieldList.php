@@ -560,23 +560,26 @@ class FieldList
         // Create the main selection element.
         $t->set_block('field', 'attr', 'attributes');
         foreach ($args as $name=>$value) {
-            if ($name == 'options') {
-                // Handle the options later
-                continue;
-            } elseif ($name == 'option_list') {
-                // options were supplied as a string of <option> elements
-                $t->set_var('option_list', $value);
-            } else {
+            switch ($name) {
+            case 'options':
+            case 'option_list':
+                continue 2;
+            default:
                 $t->set_var(array(
                     'name' => $name,
                     'value' => $value,
                 ) );
+                $t->parse('attributes', 'attr', true);
+                break;
             }
-            $t->parse('attributes', 'attr', true);
         }
 
         // Now loop through the options.
-        if (isset($args['options']) && is_array($args['options'])) {
+        // If an option_list string was supplied, use it as-is.
+        // Otherwise, construct the option strings from the supplied array.
+        if (isset($args['option_list'])) {
+            $t->set_var('option_list', $args['option_list']);
+        } elseif (isset($args['options']) && is_array($args['options'])) {
             $t->set_block('select', 'options', 'opts');
             foreach ($args['options'] as $name=>$data) {
                 $t->set_var('opt_name', $name);
