@@ -908,10 +908,10 @@ function INST_checkEnvironment($private_path='')
                         $_PATH['data_path'].'glfusion.lck',
                         $_PATH['data_path'].'glfusion_css.lck',
                         $_PATH['data_path'].'glfusion_js.lck',
-                        $_PATH['log_path'].'error.log',
-                        $_PATH['log_path'].'access.log',
-                        $_PATH['log_path'].'captcha.log',
-                        $_PATH['log_path'].'spamx.log',
+                        $_PATH['log_path'].'system.log',
+//                        $_PATH['log_path'].'access.log',
+//                        $_PATH['log_path'].'captcha.log',
+//                        $_PATH['log_path'].'spamx.log',
                         $_PATH['log_path'].'404.log',
                         $_PATH['data_path'].'cache/',
                         $_PATH['data_path'].'layout_cache/',
@@ -1772,10 +1772,11 @@ function INST_installAndContentPlugins()
 
     $config->_purgeCache();
     INST_errorLog($log_path,'INSTALL: Touching default log files');
-    @touch($log_path.'error.log');
-    @touch($log_path.'access.log');
-    @touch($log_path.'captcha.log');
-    @touch($log_path.'spamx.log');
+    @touch($log_path.'systemlog');
+    @touch($log_path.'404.log');
+//    @touch($log_path.'access.log');
+//    @touch($log_path.'captcha.log');
+//    @touch($log_path.'spamx.log');
 
     global $_CONF, $_SYSTEM, $_VARS, $_DB, $_DB_dbms, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
 
