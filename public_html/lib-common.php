@@ -6376,7 +6376,7 @@ function COM_404()
 
     $url = COM_sanitizeUrl(COM_getCurrentURL());
 
-    if ( isset($_CONF['enable_404_logging']) || $_CONF['enable_404_logging'] == true ) {
+    if ( isset($_CONF['enable_404_logging']) && $_CONF['enable_404_logging'] == true ) {
         if (isset($_USER['uid']) && isset($_USER['username'])) {
             $byUser = $_USER['username'] . '@' . $_SERVER['REMOTE_ADDR'];
         } else {
