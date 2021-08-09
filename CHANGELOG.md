@@ -4,10 +4,12 @@
 
 ### Changed
 
+- Updated CKEditor to v4.16.1
 - Minimum supported PHP version bumped to PHP v5.6.0
 
 ### Fixed
 
+- 404 errors were always logged regardless of configuration setting
 - Subtitle's on stories did not handle quotes properly
 - User notifications were being sent to the no-reply address instead of the site address
 - Story Admin did not properly show story lists based on search criteria
