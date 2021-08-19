@@ -1,0 +1,59 @@
+{# begin {templatelocation} #}
+<form class="uk-form" method="post" action="index.php">
+	<input type="hidden" name="op" value="" />
+	<input type="hidden" name="rid" value="" />
+	<input type="hidden" name="lid" value="{lid}" />
+	<table class="uk-table uk-width-1-1" style="vertical-align:top;" class="pluginSubTable">
+	<tr><th colspan="7">{lang_dlratings}</th></tr>
+	<tr>
+		<th>{lang_user}</th>
+		<th>{lang_ip}</th>
+		<th>{lang_rating}</th>
+		<th>{lang_date}</th>
+		<th style="text-align:center">{lang_delete}</th>
+	</tr>
+<!-- BEGIN reg_votes -->
+    <tr class="pluginRow{cssid}">
+		<td>{ratinguname}</td>
+		<td>{ratinghostname}</td>
+		<td>{rating}</td>
+        <td>{formatted_date}</td>
+		<td style="text-align:center">
+			<a href="{site_url}/admin/plugins/filemgmt/index.php?delVote={ratingid}&lid={lid}"
+				onclick='return confirm("Delete this rating entry?");'><i class="uk-icon uk-icon-remove uk-text-danger"></i></a>
+        </td>
+	</tr>
+<!-- END reg_votes -->
+	</table>
+</form>
+{!if 0}
+<form class="uk-form" method="post" action="index.php" onsubmit="alert(this.form.op.value)">
+	<input type="hidden" name="op" value="" />
+	<input type="hidden" name="rid" value="" />
+	<input type="hidden" name="lid" value="{lid}" />
+    <table class="uk-table uk-width-1-1" style="vertical-align:top;" class="pluginSubTable">
+	<tr><th colspan="7">{lang_anonvotes}: {anonvotes}</th></tr>
+	<tr>
+		<th colspan="2">{lang_ip}</th>
+		<th colspan="3">{lang_rating}</th>
+		<th colspan="2">{lang_date}</th>
+	</tr>
+{!!if {votes} == "0" !!}
+    <tr><td colspan="7" align="center">{lang_no_anon_votes}</td></tr>
+{!endif}
+<!-- BEGIN anon_votes -->
+	<tr class="pluginRow{cssid}" style="vertical-align:bottom;">
+		<td colspan="2">{ratinghostname}</td>
+		<td colspan="3">{rating}</td>
+        <td>{formatted_date}</td>
+		<td style="text-align:center;padding-right:20px;">
+	        <input type="image" src="{site_url}/filemgmt/images/delete.png"
+				onclick='if (confirm("Delete this record")) {this.form.op.value="delVote";this.form.lid.value="{lid}";this.form.rid.value="{ratingid}";return true};return false;' value="Delete" />
+        </td>
+	</tr>
+<!-- END anon_votes -->
+    <tr><td colspan="6">&nbsp;<br /></td></tr>
+    </table>
+</form>
+{!endif}
+{# end {templatelocation} #}

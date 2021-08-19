@@ -69,7 +69,7 @@ $display = FM_siteHeader($LANG_FILEMGMT['usermenu1']);
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
-    'records'          =>     'filelisting_record.thtml',
+    //'records'          =>     'filelisting_record.thtml',
     'category'         =>     'filelisting_subcategory.thtml',
     'sortmenu'         =>     'sortmenu.thtml'));
 
@@ -174,7 +174,14 @@ if($maxrows > 0) {
         $p->parse ('sort_menu', 'sortmenu');
     }
     $cssid = 1;
+    $p->set_block('page', 'fileRecords', 'fRecord');
     for ($x = 1; $x <= $numrows; $x++) {
+        $A = DB_fetchArray($result, false);
+        $D = new Filemgmt\Download($A['lid']);
+        $p->set_var('filelisting_record', $D->showListingRecord());
+        $p->parse('fRecord', 'fileRecords', true);
+        continue;
+
         list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $submitter, $logourl, $status, $time, $hits, $rating, $votes, $comments, $description) = DB_fetchArray($result);
         $rating = number_format($rating, 2);
         $dtitle = $myts->makeTboxData4Show($dtitle);
@@ -190,7 +197,7 @@ if($maxrows > 0) {
         $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
         include $_CONF['path'] .'plugins/filemgmt/include/dlformat.php';
         $p->set_var('cssid',$cssid);
-        $p->parse ('filelisting_records', 'records',true);
+        //$p->parse ('filelisting_records', 'records',true);
         $cssid = ($cssid == 2) ? 1 : 2;
 
         // Print Google-like paging navigation
@@ -198,6 +205,8 @@ if($maxrows > 0) {
         $p->set_var('page_navigation', COM_printPageNavigation($base_url,$page, $numpages));
     }
 
+    $base_url = $_CONF['site_url'] . '/filemgmt/viewcat.php?cid='.$cid.'&amp;orderby='.convertorderbyout($orderby);
+    $p->set_var('page_navigation', COM_printPageNavigation($base_url,$page, $numpages));
     $p->parse ('output', 'page');
     $display .= $p->finish ($p->get_var('output'));
 }  else {

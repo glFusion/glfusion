@@ -32,7 +32,32 @@ use \glFusion\FieldList;
 
 USES_lib_admin();
 
-$op = isset($_REQUEST['op']) ? COM_applyFilter($_REQUEST['op']) : '';
+// Set view and action variables.
+$op = 'files';
+$expected = array(
+    // Actions to perform
+    'saveCat', 'delCat', 'delVote', 'delDownload', 'addDownload',
+    // Views to display
+    'modCat', 'categoryConfigAdmin',
+    'modDownload', 'newfileConfigAdmin', 'listNewDownloads', 'files', 'listBrokenDownloads',
+    // Check "op" last
+    'op'
+);
+foreach($expected as $provided) {
+    if (isset($_POST[$provided])) {
+        $op = $provided;
+        $opval = $_POST[$provided];
+        break;
+    } elseif (isset($_GET[$provided])) {
+        $op = $provided;
+        $opval = $_GET[$provided];
+        break;
+    }
+}
+if ($op == 'op') {
+    $op = $opval;
+}
+
 $display = '';
 if (!SEC_hasRights('filemgmt.edit')) {
     if ($op != 'comment') {
@@ -119,10 +144,10 @@ function mydownloads() {
     }
 
     $selcat = '';
+    $display = '';
+    //$display = COM_siteHeader();
 
-    $display = COM_siteHeader();
-
-    $display .= filemgmt_navbar();
+    //$display .= filemgmt_navbar();
 
     $sql = "SELECT * FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ORDER BY title ASC";
     $result = DB_query($sql);
@@ -177,8 +202,8 @@ function mydownloads() {
                           $text_arr, $query_arr, $defsort_arr,$filter);
 
     $display .= COM_endBlock();
-    $display .= COM_siteFooter();
-    echo $display;
+    //$display .= COM_siteFooter();
+    return $display;
 }
 
 function _fm_getChildrenCat( $pid,$indent,$current_cat ) {
@@ -850,15 +875,10 @@ function ignoreBrokenDownloads() {
     exit();
 }
 
-function delVote() {
-   global $_CONF,$_TABLES,$eh;
-
-   $rid = intval($_POST['rid']);
-   $lid = intval($_POST['lid']);
-
-   RATING_deleteVote( $rid );
-   redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?lid=$lid&amp;op=modDownload",2,_MD_VOTEDELETED);
-   exit();
+function delVote($rid)
+{
+   $rid = (int)$rid;
+   RATING_deleteVote($rid);
 }
 
 
@@ -1618,68 +1638,95 @@ if ( isset($_POST['cancel']) ) {
     exit;
 }
 
+$content = '';
 switch ($op) {
-        default:
-            mydownloads();
-            break;
-        case "comment":
-            filemgmt_comments($firstcomment);
-            break;
-        case "delNewDownload":
-            delNewDownload();
-            break;
-        case "addCat":
-            addCat();
-            break;
-        case "addSubCat":
-            addSubCat();
-            break;
-        case "addDownload":
-            addDownload();
-            break;
-        case "listBrokenDownloads":
-            listBrokenDownloads();
-            break;
-        case "delBrokenDownloads":
-            delBrokenDownloads();
-            break;
-        case "ignoreBrokenDownloads":
-            ignoreBrokenDownloads();
-            break;
-        case "approve":
-            approve();
-            break;
-        case "delVote":
-            delVote();
-            modDownload();
-            break;
-        case "delCat":
-            delCat();
-            break;
-        case "modCat":
-            modCat();
-            break;
-        case "modCatS":
-            modCatS();
-            break;
-        case "modDownload":
-            modDownload();
-            break;
-        case "modDownloadS":
-            modDownloadS();
-            break;
-        case "delDownload":
-            delDownload();
-            break;
-        case "categoryConfigAdmin":
-            categoryConfigAdmin();
-            break;
-        case "newfileConfigAdmin":
-              newfileConfigAdmin();
-            break;
-        case "listNewDownloads":
-            listNewDownloads();
-            break;
+case "comment":
+    filemgmt_comments($firstcomment);
+    break;
+case "delNewDownload":
+    delNewDownload();
+    break;
+case "addCat":
+    addCat();
+    break;
+case "addSubCat":
+    addSubCat();
+    break;
+case "addDownload":
+    $content .= Filemgmt\Download::getInstance($_POST['lid'])->Save($_POST);
+    //addDownload();
+    break;
+case "listBrokenDownloads":
+    $content .= Filemgmt\BrokenLink::adminList();
+    break;
+case "delBrokenDownloads":
+    delBrokenDownloads();
+    break;
+case "ignoreBrokenDownloads":
+    ignoreBrokenDownloads();
+    break;
+case "approve":
+    approve();
+    break;
+case "delVote":
+    RATING_deleteVote($opval);
+    $lid = (int)$_GET['lid'];
+    COM_setMsg(_MD_VOTEDELETED);
+    COM_refresh("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?modDownload=$lid");
+    exit;
+    break;
+case "delCat":
+    delCat();
+    break;
+case 'modCat':
+    $content .= Filemgmt\Category::getInstance($opval)->edit();
+    //modCat();
+    break;
+case 'saveCat':
+case "modCatS":
+    $status = Filemgmt\Category::getInstance($_POST['cid'])->save($_POST);
+    COM_refresh("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?categoryConfigAdmin");
+    modCatS();
+    break;
+case "modDownload":
+    $content .= Filemgmt\Download::getInstance($opval)->edit();
+    //modDownload();
+    break;
+case "modDownloadS":
+    modDownloadS();
+    break;
+case "delDownload":
+    if (Filemgmt\Download::getInstance($opval)->delete()) {
+        COM_setMsg(_MD_FILEDELETED);
+    } else {
+        COM_setMsg(_MD_FILENOTDELETED, 'error');
+    }
+    COM_refresh("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php");
+    break;
+case "categoryConfigAdmin":
+    $content .= Filemgmt\Category::adminList();
+    //categoryConfigAdmin();
+    break;
+case "newfileConfigAdmin":
+    $content .= Filemgmt\Download::getInstance(0)->edit();
+    break;
+case "listNewDownloads":
+    $content .= Filemgmt\Download::adminList(0, 0);
+    break;
+case 'files':
+default:
+    $op = 'files';
+    //$content .= mydownloads();
+    if (isset($_REQUEST['cat'])) {
+        $cat = $_REQUEST['cat'];
+    } else {
+        $cat = 0;
+    }
+    $content .= Filemgmt\Download::adminList($cat);
+    break;
 }
 
-?>
+echo COM_siteHeader('menu');
+echo Filemgmt\Menu::Admin($op);
+echo $content;
+echo COM_siteFooter();

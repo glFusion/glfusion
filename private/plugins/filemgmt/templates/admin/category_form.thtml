@@ -1,0 +1,57 @@
+{# begin {templatelocation} #}
+<form class="uk-form uk-form-horizontal" action="index.php" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="cid" value="{cid}">
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="cat_name">Title
+		</label>
+		<div class="uk-form-controls uk-form-controls-text">
+			<input class="uk-input uk-form-width-large" required type="text" id="title" name="title" value="{title}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label">View Access
+		</label>
+		<div class="uk-form-controls uk-form-controls-text">
+			{grp_access_options}
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label">Upload Access
+		</label>
+		<div class="uk-form-controls uk-form-controls-text">
+			{grp_writeaccess_options}
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label">Image
+		</label>
+		<div class="uk-form-controls uk-form-controls-text">
+			<input type="file" name="imgurl" value="{imgurl}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label">Parent Category
+		</label>
+		<div class="uk-form-controls uk-form-controls-text">
+			<select name="pid" class="uk-select">
+				<option value="0">-- Select --</option>
+				{pid_options}
+			</select>
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label">&nbsp;</label>
+		<div class="uk-form-controls uk-form-controls-text">
+			<button class="uk-button uk-button-success" type="submit" name="saveCat" value="saveCat">{lang_save}</button>&nbsp;
+			<button class="uk-button uk-button-danger" type="submit" name="delCat" value="delCat" onClick=\'if (confirm("Delete this file ?")) {this.form.op.value="delCat";return true}; return false\'>{lang_delete}</button>
+		    &nbsp;<a href="index.php?categoryConfigAdmin" class="uk-button">{lang_cancel}</a>
+		</div>
+	</div>
+</form>
+{# end {templatelocation} #}

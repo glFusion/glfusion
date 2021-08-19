@@ -54,7 +54,7 @@ $FM_ratedIds = RATING_getRatedIds('filemgmt');
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
-    'records'          =>     'filelisting_record.thtml',
+    //'records'          =>     'filelisting_record.thtml',
     'category'         =>     'filelisting_category.thtml'));
 
 $myts = new MyTextSanitizer;
@@ -72,15 +72,18 @@ if ($lid == 0) {  // Check if the script is being called from the commentbar
     }
 }
 
-$groupsql = filemgmt_buildAccessSql();
+$groupsql = SEC_buildAccessSql();
 
-$sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} a ";
-$sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
-$sql .= "WHERE a.lid='".DB_escapeString($lid)."' $groupsql AND a.status > 0";
-list($fileAccessCnt) = DB_fetchArray( DB_query($sql));
+if ($lid > 0) {
+    $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} a ";
+    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
+    $sql .= "WHERE a.lid='".DB_escapeString($lid)."' $groupsql AND a.status > 0";
+    list($fileAccessCnt) = DB_fetchArray( DB_query($sql));
+} else {
+    $fileAccessCnt = 0;
+}
 
 if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_escapeString($lid) ) == 1) {
-
     $p->set_var('block_header', COM_startBlock("<b>". $LANG_FILEMGMT['plugin_name'] ."</b>"));
     $p->set_var('block_footer', COM_endBlock());
 
@@ -155,10 +158,11 @@ if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_esc
 } else {
     $display = FM_siteHeader($LANG_FILEMGMT['usermenu1']);
     $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
-    $p->set_file (array (
+    $p->set_file(array (
         'page'             =>     'filelisting.thtml',
-        'records'          =>     'filelisting_record.thtml',
-        'category'         =>     'filelisting_category.thtml'));
+        //'records'          =>     'filelisting_record.thtml',
+        'category'         =>     'filelisting_category.thtml',
+    ));
 
     $p->set_var ('imgset',$_CONF['layout_url'] . '/nexflow/images');
     $p->set_var ('tablewidth', $mydownloads_shotwidth+10);
@@ -167,9 +171,9 @@ if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_esc
     if (!isset($page) OR $page == 0) {
         $page = 1;
     }
-    $show = $mydownloads_perpage;
+    $show = (int)$_FM_CONF['perpage'];
 
-    $groupsql = filemgmt_buildAccessSql();
+    $groupsql = SEC_buildAccessSql();
     $sql = "SELECT cid, title, imgurl,grp_access FROM {$_TABLES['filemgmt_cat']} WHERE pid = 0 ";
     $sql .= $groupsql . ' ORDER BY CID';
     $result = DB_query($sql);
@@ -251,10 +255,15 @@ if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_esc
     }
     $offset = ($page - 1) * $show;
 
-    $sql = "SELECT d.lid, d.cid, d.title, url, homepage, version, size, platform, submitter, logourl, status, ";
-    $sql .= "date, hits, rating, votes, comments, description, grp_access FROM ({$_TABLES['filemgmt_filedetail']} d, ";
-    $sql .= "{$_TABLES['filemgmt_filedesc']} t) LEFT JOIN {$_TABLES['filemgmt_cat']} c ON d.cid=c.cid ";
-    $sql .= "WHERE status > 0 ".$groupsql." AND d.lid=t.lid ORDER BY date DESC LIMIT $offset, $show";
+    $sql = "SELECT d.*, t.description, c.grp_access
+        FROM {$_TABLES['filemgmt_filedetail']} d
+        LEFT JOIN {$_TABLES['filemgmt_cat']} c
+            ON d.cid=c.cid
+        LEFT JOIN {$_TABLES['filemgmt_filedesc']} t
+            ON t.lid = d.lid
+        WHERE d.status > 0 " . $groupsql .
+        " AND d.lid=t.lid ORDER BY date DESC LIMIT $offset, $show";
+    //echo $sql;die;
     $result = DB_query($sql);
     $numrows = DB_numROWS($result);
     $countsql = DB_query("SELECT COUNT(*) FROM ".$_TABLES['filemgmt_filedetail']." WHERE status > 0");
@@ -262,11 +271,14 @@ if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_esc
     $p->set_var('listing_heading', _MD_LATESTLISTING);
     if ($numrows > 0 ) {
         $cssid = 1;
+        $p->set_block('page', 'fileRecords', 'fRecords');
         for ($x =1; $x <=$numrows; $x++) {
-            list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $platform, $submitter, $logourl, $status, $time, $hits, $rating, $votes, $comments, $description,$grp_access)=DB_fetchArray($result);
-            $secGroup = DB_getItem($_TABLES['groups'], "grp_name", "grp_id='$grp_access'");
-            if (SEC_inGroup($secGroup)) {
-                $rating = number_format($rating, 2);
+            $A = DB_fetchArray($result, false);
+            $D = new Filemgmt\Download($A);
+            //list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $platform, $submitter, $logourl, $status, $time, $hits, $rating, $votes, $comments, $description,$grp_access)=DB_fetchArray($result);
+            //$secGroup = DB_getItem($_TABLES['groups'], "grp_name", "grp_id='$grp_access'");
+            //if (SEC_inGroup($secGroup)) {
+                /*$rating = number_format($rating, 2);
                 $dtitle = $myts->makeTboxData4Show($dtitle);
                 $url = $myts->makeTboxData4Show($url);
                 $homepage = $myts->makeTboxData4Show($homepage);
@@ -275,19 +287,21 @@ if ($fileAccessCnt > 0 AND DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_esc
                 $platform = $myts->makeTboxData4Show(isset($platform) ? $platform : '');
                 $logourl = $myts->makeTboxData4Show($logourl);
                 $datetime = formatTimestamp($time);
-                $description = PLG_replaceTags($myts->makeTareaData4Show($description,0),'filemgmt','description'); //no html
-                $breakPosition = strpos($description,"<br /><br />");
+                $description = PLG_replaceTags($myts->makeTareaData4Show($description,0),'filemgmt','description'); //no html*/
+                /*$breakPosition = strpos($description,"<br /><br />");
                 if (($breakPosition > 0) AND ($breakPosition < strlen($description)) AND $mydownloads_trimdesc) {
                     $description = substr($description, 0,$breakPosition) . "<p style=\"text-align:left;\"><a href=\"{$_CONF['site_url']}/filemgmt/index.php?id=$lid&amp;comments=1\">{$LANG_FILEMGMT['more']}</a></p>";
                 }
                 $result2 = DB_query("SELECT username,fullname,photo  FROM {$_TABLES['users']} WHERE uid = $submitter");
                 list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
                 $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-                include $_CONF['path'] .'plugins/filemgmt/include/dlformat.php';
+                include $_CONF['path'] .'plugins/filemgmt/include/dlformat.php';*/
+                $p->set_var('filelisting_record', $D->showListingRecord());
+                $p->parse('fRecords', 'fileRecords', true);
                 $p->set_var('cssid',$cssid);
-                $p->parse ('filelisting_records', 'records',true);
+                //$p->parse ('filelisting_records', 'records',true);
                 $cssid = ($cssid == 2) ? 1 : 2;
-            }
+            //}
         }
 
         // Print Google-like paging navigation

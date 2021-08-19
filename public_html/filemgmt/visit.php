@@ -60,109 +60,48 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
     $status = '';
     if ( isset($_GET['lid']) ) {
         $lid = COM_applyFilter($_GET['lid'],true);
-        $status = 'status>0';
+        //$status = 'status>0';
     }
-    if ( isset($_GET['tid']) ) {
-        $lid = COM_applyFilter($_GET['tid'],true);
-        $tempFile = 1;
-        $status = ' status = 0';
-    }
-    if ($tempFile == 1 && !SEC_hasRights('filemgmt.edit')) {
-        exit;
-    }
-    $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
-    $groupsql = filemgmt_buildAccessSql();
 
-    $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} a ";
-    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
-    $sql .= "WHERE a.lid='".DB_escapeString($lid)."' $groupsql";
-    list($testaccess_cnt) = DB_fetchArray( DB_query($sql));
+    $File = Filemgmt\Download::getInstance($lid);
+    if ($File->canRead()) {
+        COM_errorLog("Unauthorized download attempt for file " . $File->getLid());
+        COM_404();
+    }
 
-    if ($testaccess_cnt == 0 OR DB_count($_TABLES['filemgmt_filedetail'],"lid",DB_escapeString($lid) ) == 0) {
-        Log::write('system',Log::ERROR,"filemgmt visit.php ERROR: Invalid attempt to download a file. User:{$_USER['username']}, File ID:{$lid}");
-        echo COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
-        exit;
+    $File->addHit();
+    $url = $File->getUrl();
+
+    $found_it = false;
+    Log::write('system',Log::INFO, "Download File:{$url}, User ID is:{$uid}");
+ 
+    $pos = utf8_strpos( $url, ':' );
+    if( $pos === false ) {
+        $DL = new Filemgmt\UploadDownload();
+        $DL->setAllowAnyMimeType(true);
+        $DL->setPath($_FM_CONF['FileStore']);
+        $DL->downloadFile($url);
     } else {
-        $result = DB_query("SELECT url,platform FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."' AND ".$status);
-        list($url,$tmpnames) = DB_fetchArray($result);
-        if ( $tempFile == 1 ) {
-            $tmpfilenames = explode(";",$tmpnames);
-            $tempfilepath = $filemgmt_FileStore . 'tmp/' .$tmpfilenames[0];
-        } else {
-            DB_query("INSERT INTO {$_TABLES['filemgmt_history']} (uid, lid, remote_ip, date) VALUES ($uid, '".DB_escapeString($lid)."', '".DB_escapeString($_SERVER['REMOTE_ADDR'])."', NOW())") or $eh->show("0013");
-            DB_query("UPDATE {$_TABLES['filemgmt_filedetail']} SET hits=hits+1 WHERE lid='".DB_escapeString($lid)."' AND status>0");
-        }
-        $allowed_protocols = array('http','https','ftp');
+        $protocol = utf8_substr( $url, 0, $pos + 1 );
         $found_it = false;
-        Log::write('system',Log::INFO, "Download File:{$url}, User ID is:{$uid}");
-        $pos = utf8_strpos( $url, ':' );
-        if( $pos === false ) {
-            if ( $_FM_CONF['outside_webroot'] == 1 ) {
-                if ( $tempFile == 1 ) {
-                    $fullurl = $tempfilepath;
-                } else {
-                    $fullurl = $filemgmt_FileStore . rawurldecode($url);
-                }
-                if ( file_exists($fullurl) ) {
-                    if ($fd = fopen ($fullurl, "rb")) {
-                        if(ini_get('zlib.output_compression')) {
-                            ini_set('zlib.output_compression', 'Off');
-                        }
-                        header('Content-Description: File Transfer');
-                        header('Content-Type: application/octet-stream');
-                        header('Content-Disposition: attachment; filename="'.basename($fullurl).'"');
-                        header('Expires: 0');
-                        header('Cache-Control: must-revalidate');
-                        header('Pragma: public');
-                        header('Content-Length: ' . filesize($fullurl));
-                        ob_clean();
-                        flush();
-                        readfile($fullurl);
-                        exit;
-                    } else {
-                        Log::write('system',Log::ERROR,"FileMgmt: Error - Unable to download selected file: ". urldecode($url));
-                    }
-                }
-            } else {
-                $fullurl = $filemgmt_FileStore . rawurldecode($url);
-                $fullurl = $fullurl;
-                if(ini_get('zlib.output_compression')) {
-                    @ini_set('zlib.output_compression', 'Off');
-                }
-                header('Content-Description: File Transfer');
-                header('Content-Type: application/octet-stream');
-                header('Content-Disposition: attachment; filename="'.basename($fullurl).'"');
-                header('Expires: 0');
-                header('Cache-Control: must-revalidate');
-                header('Pragma: public');
-                header('Content-Length: ' . filesize($fullurl));
-                ob_clean();
-                flush();
-                readfile($fullurl);
-                exit;
+        $allowed_protocols = array('http','https','ftp');
+        foreach( $allowed_protocols as $allowed ) {
+            if( substr( $allowed, -1 ) != ':' ) {
+                $allowed .= ':';
             }
-        } else {
-            $protocol = utf8_substr( $url, 0, $pos + 1 );
-            $found_it = false;
-            foreach( $allowed_protocols as $allowed ) {
-                if( substr( $allowed, -1 ) != ':' ) {
-                    $allowed .= ':';
-                }
-                if( $protocol == $allowed ) {
-                    $found_it = true;
-                    break;
-                }
+            if( $protocol == $allowed ) {
+                $found_it = true;
+                break;
             }
-            if( !$found_it ) {
-                exit;
-            } else {
-                $fullurl = $url;
-            }
-            $fullurl = $fullurl;
-            Header("Location: $fullurl");
-            echo "<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=".$fullurl."\"></meta></head><body></body></html>";
-            exit();
         }
+        if( !$found_it ) {
+            exit;
+        } else {
+            $fullurl = $url;
+        }
+        $fullurl = $fullurl;
+        Header("Location: $fullurl");
+        echo "<html><head><meta http-equiv=\"Refresh\" content=\"0; URL=".$fullurl."\"></meta></head><body></body></html>";
+        exit();
     }
 }
-?>

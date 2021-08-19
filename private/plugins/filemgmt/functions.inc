@@ -19,6 +19,36 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+spl_autoload_register(function ($class)
+{
+    // project-specific namespace prefix
+    $prefix = 'Filemgmt\\';
+
+    // does the class use the namespace prefix?
+    $len = strlen($prefix);
+    if (strncmp($prefix, $class, $len) !== 0) {
+        // no, move to the next registered autoloader
+        return;
+    }
+
+    // base directory for the namespace prefix
+    $base_dir = __DIR__ . '/classes/';
+
+    // get the relative class name
+    $relative_class = substr($class, $len);
+
+    // replace the namespace prefix with the base directory, replace namespace
+    // separators with directory separators in the relative class name, append
+    // with .php
+    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.class.php';
+
+    // if the file exists, require it
+    if (file_exists($file)) {
+        require $file;
+    }
+});
+
 /*
 * load the language file(s), including custom strings if any
 */
@@ -1355,4 +1385,49 @@ function plugin_getContentTableInfo_filemgmt()
     return $contentItems;
 }
 
-?>
+
+/**
+ * Additional activity when a submission is approved.
+ *
+ * @param   string  $lid    File ID being approved
+ */
+function plugin_moderationapprove_filemgmt($lid)
+{
+    Filemgmt\Download::getInstance($lid)->approve();
+}
+
+
+/**
+ * Additional activity when a submission is deleted.
+ *
+ * @param   string  $lid    File ID being approved
+ */
+function plugin_moderationdelete_filemgmt($lid)
+{
+    Filemgmt\Download::getInstance($lid)->delete();
+}
+
+
+/**
+ * Get a list of items to be moderated.
+ *
+ * @return  object  Plugin object containg item data
+ */
+function plugin_itemlist_filemgmt()
+{
+    global $_TABLES;
+
+    if (SEC_hasRights('filemgmt.admin')) {
+        $plugin = new Plugin();
+        $plugin->submissionlabel = 'File Submissions';
+        $plugin->getsubmissionssql =
+            "SELECT f.lid AS id, f.title, FROM_UNIXTIME(f.date), c.title AS cat_title, f.submitter AS uid
+            FROM {$_TABLES['filemgmt_filedetail']} f
+            LEFT JOIN {$_TABLES['filemgmt_cat']} c
+            ON c.cid = f.cid
+            WHERE f.status = 0
+            ORDER BY f.date ASC";
+        return $plugin;
+    }
+}
+
