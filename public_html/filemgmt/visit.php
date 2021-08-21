@@ -37,8 +37,8 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
+//include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
+//include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 
 use \glFusion\Log\Log;
 
@@ -46,7 +46,8 @@ USES_lib_image();
 
 if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
     Log::write('system',Log::ERROR,"Visit.php => FileMgmt Plugin Access denied. Attempted download of file ID:{$lid}");
-    redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOACCESS);
+    COM_setMsg(_GL_ERRORNOACCESS, 'error');
+    COM_refresh($_CONF['site_url']."/index.php");
     exit();
 } else {
     if (!COM_isAnonUser()) {
@@ -64,7 +65,7 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 
     }
 
     $File = Filemgmt\Download::getInstance($lid);
-    if ($File->canRead()) {
+    if (!$File->canRead()) {
         COM_errorLog("Unauthorized download attempt for file " . $File->getLid());
         COM_404();
     }
