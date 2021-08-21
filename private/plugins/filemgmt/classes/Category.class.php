@@ -761,4 +761,40 @@ class Category
         return $retval;
     }
 
+
+    /**
+     * Get the selection options for child categories, indenting each level.
+     *
+     * @param   integer $pid        Parent category ID
+     * @param   string  $indent     String to use for indenting
+     * @param   integer $current_cat    Current category ID, to set "selected"
+     * @return  string      HTML for selection options
+     */
+    public static function getChildOptions($pid, $indent, $current_cat)
+    {
+        global $_TABLES;
+
+        $pid = (int)$pid;
+        $retval = '';
+        $spaces = ($indent+1) * 2;
+
+        $sql = "SELECT * FROM {$_TABLES['filemgmt_cat']}
+            WHERE pid = $pid
+            ORDER BY title ASC";
+        $result = DB_query($sql);
+        while (($C = DB_fetchArray($result)) != NULL) {
+            $retval .= '<option value="'.$C['cid'].'"';
+            if ( $C['cid'] == $current_cat ) {
+                $retval .= ' selected="selected"';
+            }
+            $retval .= '>';
+            for ($x=0;$x<=$spaces;$x++) {
+                $retval .= '&nbsp;';
+            }
+            $retval .= $C['title'].'</option>';
+            $retval .= self::getChildOptions($C['cid'], $indent+1, $current_cat);
+        }
+        return $retval;
+    }
+
 }

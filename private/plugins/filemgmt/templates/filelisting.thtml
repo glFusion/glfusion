@@ -1,4 +1,9 @@
 {# begin {templatelocation} #}
+{!if back_to_list}
+<div class="uk-width-1-1 uk-margin" style="margin-bottom:10px;">
+	<a class="uk-button uk-button-primary" style="float:right;margin-bottom:10px;" href="{site_url}/filemgmt/index.php">Back to Listing</a>
+</div>
+{!endif}
 {!if category_path_link}
 <div>{category_path_link}</div>
 {!endif}
@@ -9,12 +14,11 @@
 <div style="margin-top:1em;">
 	{listing_heading}
 </div>
-<div class="uk-width-1-1">
+<div class="uk-width-1-1 uk-margin" style="clear:both;margin-top:10px;">
 <!-- BEGIN fileRecords -->
 	{filelisting_record}
 <!-- END fileRecords -->
 </div>
 <div>{page_navigation}</div>
-<br />
-{comment_records}
+<div>{comment_records}</div>
 {# end {templatelocation} #}

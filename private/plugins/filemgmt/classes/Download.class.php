@@ -12,8 +12,10 @@
  * @filesource
  */
 namespace Filemgmt;
+use glFusion\Database\Database;
 use glFusion\Log\Log;
 use glFusion\Cache\Cache;
+use Filemgmt\Models\Status;
 
 
 /**
@@ -35,6 +37,7 @@ class Download
     private $title = '';
 
     /** Actual file name.
+     * Local files have just a file name, remote files have a full URL.
      * @var string */
     private $url = '';
 
@@ -133,8 +136,6 @@ class Download
              ->setHomepage($row['homepage'])
              ->setVersion($row['version'])
              ->setSize($row['size'])
-//             ->setPlatform($row['platform'])
-        //     ->setLogoUrl($row['logourl'])
              ->setSubmitter($row['submitter'])
              ->setHits($row['hits'])
              ->setDescription($row['description']);
@@ -170,20 +171,68 @@ class Download
             return;
         }
 
+        $db = Database::getInstance();
         $sql = "SELECT det.*, dscp.description
             FROM {$_TABLES['filemgmt_filedetail']} det
             LEFT JOIN {$_TABLES['filemgmt_filedesc']} dscp
             ON det.lid = dscp.lid
-            WHERE det.lid = '$id'";
-        $result = DB_query($sql);
-        if (!$result || DB_numRows($result) != 1) {
+            WHERE det.lid = ?";
+        try {
+            $stmt = $db->conn->executeQuery(
+                $sql,
+                array($id),
+                array(Database::INTEGER)
+            );
+        } catch(Throwable $e) {
+            // Ignore errors or failed attempts
+        }
+        $data = $stmt->fetchAll(Database::ASSOCIATIVE);
+        $stmt->closeCursor();
+
+        /*$result = DB_query($sql);
+        if (!$result || DB_numRows($result) != 1) {*/
+        if (count($data) < 1) {
             return false;
         } else {
-            $row = DB_fetchArray($result, false);
-            $this->setVars($row, true);
+            //$row = DB_fetchArray($result, false);
+            $this->setVars($data[0], true);
             $this->isNew = false;
             return true;
         }
+    }
+
+
+    public static function getAll($where = '', $limit = '')
+    {
+        global $_TABLES;
+
+        $db = Database::getInstance();
+        $sql = "SELECT det.*, dscp.description
+            FROM {$_TABLES['filemgmt_filedetail']} det
+            LEFT JOIN {$_TABLES['filemgmt_filedesc']} dscp
+            ON det.lid = dscp.lid";
+        if ($where != '') {
+            $sql .= " WHERE $where";
+        }
+        if ($limit != '') {
+            $sql .= " LIMIT $limit";
+        }
+
+        try {
+            $stmt = $db->conn->executeQuery($sql);
+        } catch(Throwable $e) {
+            // Ignore errors or failed attempts
+        }
+        return $stmt->fetchAll(Database::ASSOCIATIVE);
+    }
+
+
+    public static function getNewUploads()
+    {
+        global $_FM_CONF;
+
+        $interval = 86400 * (int)$_FM_CONF['whatsnewperioddays'];
+        return self::getAll("date > UNIX_TIMESTAMP() - $interval ORDER BY date DESC", 15);
     }
 
 
@@ -215,6 +264,12 @@ class Download
     }
 
 
+    /**
+     * Set the file record ID.
+     *
+     * @param   integer $id     DB record ID
+     * @return  object  $this
+     */
     public function setLid($id)
     {
         $this->lid = (int)$id;
@@ -222,12 +277,23 @@ class Download
     }
 
 
-    public function getLid()
+    /**
+     * Get the file record ID.
+     *
+     * @return  integer     DB record ID
+     */
+    public function getID()
     {
         return $this->lid;
     }
 
 
+    /**
+     * Set the category ID for this download.
+     *
+     * @param   integer $id     Category record ID
+     * @return  object  $this
+     */
     public function setCid($id)
     {
         $this->cid = (int)$id;
@@ -235,6 +301,12 @@ class Download
     }
 
 
+    /**
+     * Set the file title string.
+     *
+     * @param   @string $title  Title string
+     * @return  object  $this
+     */
     public function setTitle($title)
     {
         $this->title = $title;
@@ -242,6 +314,23 @@ class Download
     }
 
 
+    /**
+     * Get the file title.
+     *
+     * @return  string      Title string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+
+    /**
+     * Set the file title string.
+     *
+     * @param   @string $title  Title string
+     * @return  object  $this
+     */
     public function setUrl($url)
     {
         $this->url = $url;
@@ -302,6 +391,11 @@ class Download
     }
 
 
+    public function getSubmitter()
+    {
+        return (int)$this->submitter;
+    }
+
     public function setStatus($flag)
     {
         $this->status = (int)$flag;
@@ -344,12 +438,30 @@ class Download
     }
 
 
+    public function getCommentFlag()
+    {
+        return (int)$this->comments;
+    }
+
+
     public function setDescription($dscp)
     {
         $this->description = $dscp;
         return $this;
     }
 
+
+    public static function getTotalItems($sel_id, $status=-1)
+    {
+        global $_TABLES, $_DB_name;
+
+        if ($status != -1) {
+            return DB_count($_TABLES['filemgmt_filedetail']);
+        } else {
+            return DB_count($_TABLES['filemgmt_filedetail'], 'status', (int)$status);
+        }
+        return $count;
+    }
 
 
     /**
@@ -360,20 +472,22 @@ class Download
      */
     public function save($A = array())
     {
-        global $_CONF,$_USER,$_TABLES, $_FM_CONF;
-        global $_FMDOWNLOAD,$filemgmtFilePermissions;
+        global $_CONF, $_USER, $_TABLES, $_FM_CONF;
+        global $filemgmtFilePermissions;
 
         if (is_array($A)) {
             $this->setVars($A, false);
         }
 
         if (defined('DEMO_MODE')) {
-            redirect_header($_CONF['site_url']."/index.php",10,'Uploads are disabled in demo mode');
-            exit;
+            return Status::UPL_NODEMO;
         }
 
-        $myts = new \MyTextSanitizer;
-        $eh = new \ErrorHandler;
+        // Be optimistic
+        $retval = Status::UPL_OK;
+
+        $myts = new MyTextSanitizer;
+        $eh = new ErrorHandler;
 
         /*$title = $myts->makeTboxData4Save($_POST['title']);
         $homepage = $myts->makeTboxData4Save($_POST['homepage']);
@@ -410,8 +524,9 @@ class Download
         $snapfilename = '';// = $myts->makeTboxData4Save($_FILES['newfileshot']['name']);
         $logourl = '';//$myts->makeTboxData4Save(rawurlencode($snapfilename));
          */
-if (0) {
+
         $upload = new UploadDownload();
+        $upload->setPerms('0644');
         $upload->setFieldName('newfile');
         $upload->setPath($_FM_CONF['FileStore']);
         $upload->setAllowAnyMimeType(true);     // allow any file type
@@ -433,12 +548,12 @@ if (0) {
 
                 $pos = strrpos($filename,'.') + 1;
                 $fileExtension = strtolower(substr($filename, $pos));
-                if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
-                    if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
+                if (array_key_exists($fileExtension, $_FM_CONF['extensions_map'])) {
+                    if ($_FM_CONF['extensions_map'][$fileExtension] == 'reject' ) {
                         Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$uploadfilename);
                         $eh->show("1109");
                     } else {
-                        $fileExtension = $_FMDOWNLOAD[$fileExtension];
+                        $fileExtension = $_FM_CONF['extensions_map'][$fileExtension];
                         $pos = strrpos($url,'.') + 1;
                         $this->url = strtolower(substr($this->url, 0,$pos)) . $fileExtension;
 
@@ -455,9 +570,10 @@ if (0) {
             $size = 0;
             $AddNewFile = true;
         }
-}
+
         $upload = new UploadDownload();
         $upload->setFieldName('newfileshot');
+        $upload->setPerms('0644');
         $upload->setPath($_FM_CONF['SnapStore']);
         $upload->setAllowAnyMimeType(false);
         $upload->setAllowedMimeTypes(
@@ -493,14 +609,23 @@ if (0) {
             }
         }
 
-        if ($AddNewFile){
-            $chown = @chmod($_FM_CONF['FileStore'].$filename, $filemgmt_FilePermissions);
+        if ($AddNewFile || $this->lid > 0) {
+            /*if ($AddNewFile) {
+                $chown = @chmod($_FM_CONF['FileStore'].$filename, $_FM_CONF['FilePermissions']);
+        }*/
             if (strlen($this->version) > 9) {
                 $this->version = substr($this->version,0,8);
             }
 
-            $sql = "INSERT INTO {$_TABLES['filemgmt_filedetail']} SET
-                cid = {$this->cid},
+            if ($this->lid == 0) {
+                $sql1 = "INSERT INTO {$_TABLES['filemgmt_filedetail']} SET
+                    date = UNIX_TIMESTAMP(), ";
+                $sql3 = '';
+            } else {
+                $sql1 = "UPDATE {$_TABLES['filemgmt_filedetail']} SET ";
+                $sql3 = " WHERE lid = {$this->lid} ";
+            }
+            $sql2 = "cid = {$this->cid},
                 title = '" . DB_escapeString($this->title) . "',
                 url = '" . DB_escapeString($this->url) . "',
                 homepage = '" . DB_escapeString($this->homepage) . "',
@@ -509,33 +634,37 @@ if (0) {
                 logourl = '" . DB_escapeString($this->logourl) . "',
                 submitter = {$this->submitter},
                 status = {$this->status},
-                date = UNIX_TIMESTAMP(),
                 hits = {$this->hits},
                 rating = {$this->rating},
                 votes = {$this->votes},
                 comments = {$this->comments}";
+            $sql = $sql1 . $sql2 . $sql3;
             DB_query($sql);
-            $newid = DB_insertID();
+            if ($this->lid == 0) {
+                $this->lid = DB_insertID();
+            }
+
+            // Update the description table
+            $desc = DB_escapeString($this->description);
             DB_query(
                 "INSERT INTO {$_TABLES['filemgmt_filedesc']} SET
-                    lid = $newid,
-                    description = '" . DB_escapeString($this->description) . "'"
+                    lid = {$this->lid},
+                    description = '$desc'
+                ON DUPLICATE KEY UPDATE
+                    description = '$desc'"
             );
-            PLG_itemSaved($newid,'filemgmt');
+            PLG_itemSaved($this->lid, 'filemgmt');
             $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
             if (isset($duplicatefile) && $duplicatefile) {
-                redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_NEWDLADDED_DUPFILE);
+                $retval = Status::UPL_DUPFILE;
             } elseif (isset($duplicatesnap) && $duplicatesnap) {
-                redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_NEWDLADDED_DUPSNAP);
-            } else {
-                redirect_header("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php",2,_MD_NEWDLADDED);
+                $retval = Status::UPL_DUPSNAP;
             }
-            exit();
-
         } else {
-            redirect_header("index.php",2,_MD_ERRUPLOAD."");
-            exit();
+            // Could not upload the file
+            $retval = Status::UPL_ERROR;
         }
+        return $retval;
 
     }   // function Save()
 
@@ -572,72 +701,35 @@ if (0) {
      */
     public function delete()
     {
-        global $_TABLES, $_CONF, $_FM_CONF;
+        global $_TABLES, $_FM_CONF;
 
+        $tmpfile = $_FM_CONF['FileStore'] . $this->url;
         $tmpsnap  = $_FM_CONF['SnapStore'] . $this->logourl;
-        DB_query("DELETE FROM {$_TABLES['filemgmt_filedetail']}  WHERE lid=$lid");
-        DB_query("DELETE FROM {$_TABLES['filemgmt_filedesc']}    WHERE lid=$lid");
-        DB_query("DELETE FROM {$_TABLES['filemgmt_votedata']}    WHERE lid=$lid");
-        DB_query("DELETE FROM {$_TABLES['filemgmt_brokenlinks']} WHERE lid=$lid");
 
-        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid = 'fileid_".DB_escapeString($this->lid)."' AND type = 'filemgmt'");
-
+        DB_delete($_TABLES['filemgmt_filedetail'], 'lid', $lid);
+        DB_delete($_TABLES['filemgmt_filedesc'], 'lid', $lid);
+        DB_delete($_TABLES['filemgmt_votedata'], 'lid', $lid);
+        DB_delete($_TABLES['filemgmt_brokenlinks'], 'lid', $lid);
+        DB_delete($_TABLES['comments'], array('sid', 'type'), array($this->lid, 'filemgmt'));
 
         // Check for duplicate files of the same filename (actual filename in repository)
-        // We don't want to delete actual file if there are more then 1 record linking to it.
-        // Site may be allowing more then 1 file listing to duplicate files
-        if ($numrows > 1) {
-            return false;
-        } else {
-            if ($tmpfile != "" && file_exists($tmpfile) && (!is_dir($tmpfile))) {
-                $err=@unlink ($tmpfile);
-            }
-            if ($tmpsnap != "" && file_exists($tmpsnap) && (!is_dir($tmpsnap))) {
-                $err=@unlink ($tmpsnap);
+        // We don't want to delete actual file if there is more then 1 record linking to it.
+        // Site may be allowing more than 1 file listing to duplicate files.
+        if ($this->url != '') {     // should always have one, but check anyway
+            $refs = DB_count($_TABLES['filemgmt_filedetail'], 'url', $this->url);
+            if ($refs == 0 && is_file($tmpfile)) {
+                @unlink($tmpfile);
             }
         }
+        if ($this->logourl != '') {
+            $refs = DB_count($_TABLES['filemgmt_filedetail'], 'logourl', $this->logourl);
+            if ($refs == 0 && is_file($tmpsnap)) {
+                @unlink($_FM_CONF['SnapStore'] . $this->logourl);
+            }
+        }
+
         PLG_itemDeleted($lid,'filemgmt');
         $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
-        return true;
-    }
-
-
-    /**
-     * Deletes a single image from disk.
-     * $del_db is used to save a DB call if this is called from Save().
-     *
-     * @param   boolean $del_db     True to update the database.
-     */
-    public function deleteImage($del_db = true)
-    {
-        global $_TABLES, $_SHOP_CONF;
-
-        $filename = $this->image;
-        if (is_file("{$_SHOP_CONF['catimgpath']}/{$filename}")) {
-            @unlink("{$_SHOP_CONF['catimgpath']}/{$filename}");
-        }
-
-        if ($del_db) {
-            DB_query("UPDATE {$_TABLES['filemgmt_cat']}
-                    SET image=''
-                    WHERE cid = '" . $this->cid . "'");
-        }
-        $this->image = '';
-    }
-
-
-    /**
-     *  Determines if the current record is valid.
-     *
-     *  @return boolean     True if ok, False when first test fails.
-     */
-    public function isValidRecord()
-    {
-        // Check that basic required fields are filled in
-        if ($this->title == '') {
-            return false;
-        }
-
         return true;
     }
 
@@ -654,9 +746,9 @@ if (0) {
 
         $display = '';
         $totalvotes = '';
-        $myts = new \MyTextSanitizer;
-        $mytree = new \XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
-        $eh = new \ErrorHandler;
+        $myts = new MyTextSanitizer;
+        $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
+        $eh = new ErrorHandler;
 
         $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates/admin');
         $T->set_file(array(
@@ -686,15 +778,15 @@ if (0) {
             'lang_hits'     => _MD_HITSC,
         ));
 
-        $pathstring = "<a href=\"{$_CONF['site_url']}/filemgmt/index.php\">"._MD_MAIN."</a>&nbsp;:&nbsp;";
-        $nicepath = $mytree->getNicePathFromId($this->cid, "title", "{$_CONF['site_url']}/filemgmt/viewcat.php");
+        $pathstring = "<a href=\"{$_FM_CONF['url']}/index.php\">"._MD_MAIN."</a>&nbsp;:&nbsp;";
+        $nicepath = $mytree->getNicePathFromId($this->cid, "title", "{$_FM_CONF['url']}/viewcat.php");
         $pathstring .= $nicepath;
         if ($this->lid > 0) {
             $hdr_title = $this->title;
         } else {
             $hdr_title = 'New File';
         }
-        $pathstring .= "<a href=\"{$_CONF['site_url']}/filemgmt/index.php?id={$this->lid}\">{$hdr_title}</a>";
+        $pathstring .= "<a href=\"{$_FM_CONF['url']}/index.php?id={$this->lid}\">{$hdr_title}</a>";
 
         $T->set_var(array(
             'lid'   => $this->lid,
@@ -753,7 +845,7 @@ if (0) {
             $cssid = 1;
             $T->set_block('ratings', 'reg_votes', 'rVotes');
             foreach ($ratingData AS $data) {
-                $formatted_date = formatTimestamp($data['ratingdate']);
+                $formatted_date = self::formatTimestamp($data['ratingdate']);
                 $T->set_var(array(
                     'ratinguname' => $data['username'],
                     'ratinghostname' => $data['ip_address'],
@@ -877,13 +969,14 @@ if (0) {
 
     /**
      * Determine if the current user has read access to this file.
+     * First checks that this is a valid record.
      *
      * @param   array|null  $groups     Array of groups, needed for sitemap
      * @return  boolean     True if user has access, False if not
      */
     public function canRead($groups = NULL)
     {
-        return Category::getInstance($this->cid)->canRead($groups);
+        return $this->lid > 0 && Category::getInstance($this->cid)->canRead($groups);
     }
 
 
@@ -909,7 +1002,7 @@ if (0) {
      * @param   integer $id ID of current category
      * @return  string      Location string ready for display
      */
-    public function Breadcrumbs()
+    public function XXBreadcrumbs()
     {
         $T = new Template;
         $T->set_file('cat_bc_tpl', 'cat_bc.thtml');
@@ -1012,7 +1105,7 @@ if (0) {
      */
     public static function adminList($cid=0, $status = -1)
     {
-        global $_CONF,$LANG_FM02,$_TABLES, $LANG_ADMIN;
+        global $_FM_CONF, $LANG_FM02, $_TABLES, $LANG_ADMIN;
 
         $cid = (int)$cid;
         $selcat = '';
@@ -1027,8 +1120,7 @@ if (0) {
             }
             $selcat .= '>';
             $selcat .= $C['title'].'</option>';
-
-            $selcat .= _fm_getChildrenCat( $C['cid'],1,$cid);
+            $selcat .= Category::getChildOptions( $C['cid'],1,$cid);
 
         }
         $allcat = '<option value="0">'._MD_ALL.'</option>';
@@ -1072,7 +1164,7 @@ if (0) {
         );
         $text_arr = array(
             'has_extras' => true,
-            'form_url'   => $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?cat='.(int) $cid,
+            'form_url'   => $_FM_CONF['admin_url'] . '/index.php?cat='.(int) $cid,
             'help_url'   => ''
         );
 
@@ -1104,7 +1196,7 @@ if (0) {
 
         $display .= COM_createLink(
             'New Item',
-            $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?modDownload=0',
+            $_FM_CONF['admin_url'] . '/index.php?modDownload=0',
             array(
                 'class' => 'uk-button uk-button-success',
                 'style' => 'float:left',
@@ -1133,7 +1225,7 @@ if (0) {
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_CONF, $_USER, $_TABLES, $LANG_ADMIN;
+        global $_FM_CONF, $_USER, $_TABLES, $LANG_ADMIN;
 
         $retval = '';
         static $grp_names = array();
@@ -1147,7 +1239,7 @@ if (0) {
         case 'edit':
             $retval .= COM_createLink(
                 '<i class="uk-icon uk-icon-edit tooltip" title="Edit"></i>',
-                $_CONF['site_admin_url'] . "/plugins/filemgmt/index.php?modDownload={$A['lid']}"
+                $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}"
             );
             break;
 
@@ -1178,19 +1270,24 @@ if (0) {
     }
 
 
+    /**
+     * Create the listing display for this file.
+     *
+     * @return  string      HTML for file record
+     */
     public function showListingRecord()
     {
-        global $_CONF, $_FM_CONF, $_TABLES;
+        global $_CONF, $_FM_CONF, $_TABLES, $LANG01, $LANG_FILEMGMT;
 
         static $mytree = NULL;
         $dt = new \Date($this->date);
 
         if ($mytree === NULL) {
-            $mytree = new \XoopsTree('',$_TABLES['filemgmt_cat'],"cid","pid");
+            $mytree = new XoopsTree('',$_TABLES['filemgmt_cat'],"cid","pid");
         }
         $path = $mytree->getPathFromId($this->cid, "title");
         $path = substr($path, 1);
-        $path = str_replace("/"," <img src='" .$_CONF['site_url'] ."/filemgmt/images/arrow.gif' alt=''> ",$path);
+        $path = str_replace("/"," <img src='" .$_FM_CONF['url'] ."/images/arrow.gif' alt=''> ",$path);
 
         $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates');
         $T->set_file('record', 'filelisting_record.thtml');
@@ -1202,7 +1299,7 @@ if (0) {
             'is_found' => true,
             'LANG_DLNOW' => _MD_DLNOW,
             'LANG_SUBMITTEDBY' => _MD_SUBMITTEDBY,
-            'is_newdownload' => time() > (time() - (86400 * 7)),
+            'is_newdownload' => $this->date > (time() - (86400 * $_FM_CONF['whatsnewperioddays'])),
             'is_popular'    => $this->hits >= $_FM_CONF['popular_download'],
             'download_title' => _MD_CLICK2DL . urldecode($this->url),
             'url'       => $this->url,
@@ -1213,7 +1310,7 @@ if (0) {
             'snapshot_url' => $_FM_CONF['FileSnapURL'] . $this->logourl,
             'LANG_VERSION' =>  _MD_VERSION,
             'LANG_SUBMITDATE' => _MD_SUBMITDATE,
-            'datetime'  => $dt->toMySQL(true),
+            'datetime'  => $dt->format('M.d.Y', true),
             'version'   => $this->version,
             'LANG_RATING' => $_FM_CONF['enable_rating'] ? _MD_RATINGC : '',
             'have_dlreport' => $this->hits > 0 && SEC_hasRights('filemgmt.edit'),
@@ -1229,17 +1326,25 @@ if (0) {
             'category_path' => $path,
             'submitter_name' => COM_getDisplayName($this->submitter),
             'submitter_link' => $this->submitter > 1,
-
+            'LANG_EDIT' => plugin_ismoderator_filemgmt() ? _MD_EDIT : '',
+            'LANG_CLICK2SEE' => _MD_CLICK2SEE,
+            'lang_pop'  => _MD_POP,
+            'lang_new'  => _MD_NEW,
+            'lang_new_title' => $LANG_FILEMGMT['newly_uploaded'],
+            'lang_popular' => _MD_POPULAR,
         ) );
-        $pos = MBYTE_strpos($this->url, ':');
-        if( $pos === false ) {
-            $T->set_var('file_size',PrettySize($this->size));
+
+        // Check if this is a local or remotely-hosted file.
+        $parts = parse_url($this->url);
+        if (!isset($parts['scheme'])) {
+            // Local file, check that the file exists
+            $T->set_var('file_size',self::prettySize($this->size));
             $fullurl = $_FM_CONF['FileStore'] . rawurldecode($this->url);
-            $is_found = false;
-            if ( file_exists($fullurl) ) $is_found = true;
+            $is_found = file_exists($fullurl);
         } else {
-            if ( $size != 0 ) {
-                $T->set_var('file_size',PrettySize($this->size));
+            // Remote file, assume the file exists
+            if ($this->size != 0) {
+                $T->set_var('file_size',self::prettySize($this->size));
             } else {
                 $T->set_var('file_size', 'Remote');
             }
@@ -1265,37 +1370,119 @@ if (0) {
             $comment_link = CMT_getCommentLinkWithCount(
                 'filemgmt',
                 $this->lid,
-                $_CONF['site_url'] .'/filemgmt/index.php?id=' .$this->lid,
+                $_FM_CONF['url'] .'/index.php?id=' .$this->lid,
                 $commentCount,
                 1
             );
-
             $T->set_var('comment_link',$comment_link['link_with_count']);
+            $T->set_var('comment_tooltip', $comment_link['comment_count']);
             $T->set_var('show_comments','true');
         } else {
             $T->set_var('show_comments','none');
             $T->unset_var('show_comments');
         }
 
-
-
-/*        if ($FilemgmtAdmin) {
-    $p->set_var('LANG_EDIT', _MD_EDIT);
-    $p->set_var('show_editlink','');
-} else {
-    $p->set_var('LANG_EDIT', '');
-    $p->set_var('show_editlink','none');
-}*/
-
         if ( $_FM_CONF['enable_rating'] ) {
             $static = false;
             $voted  = 0;
-            $rating_box = RATING_ratingBar( 'filemgmt',$this->lid, $this->votes,$this->rating, $voted ,5,$static,'sm');
-            $T->set_var('rating_bar',$rating_box);
+            $T->set_var('rating_bar', RATING_ratingBar('filemgmt',
+                $this->lid,
+                $this->votes,
+                $this->rating,
+                $voted,
+                5,
+                $static,
+                'sm'
+            ) );
         }
 
         $T->parse('output', 'record');
         return $T->finish($T->get_var('output'));
+    }
+
+
+    /**
+     * Show comments for this file.
+     *
+     * @return  string      Comment listing, empty string if disabled
+     */
+    public function showComments()
+    {
+        if (!$this->comments) {
+            return '';
+        }
+
+        USES_lib_comment();
+
+        $cmt_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        if (isset($_POST['order'])) {
+            $cmt_order  =  $_POST['order'] == 'ASC' ? 'ASC' : 'DESC';
+        } elseif (isset($_GET['order']) ) {
+            $cmt_order =  $_GET['order'] == 'ASC' ? 'ASC' : 'DESC';
+        } else {
+            $cmt_order = '';
+        }
+        if (isset($_POST['mode'])) {
+            $cmt_mode = COM_applyFilter($_POST['mode']);
+        } elseif ( isset($_GET['mode']) ) {
+            $cmt_mode = COM_applyFilter($_GET['mode']);
+        } else {
+            $cmt_mode = '';
+        }
+        $valid_cmt_modes = array('flat','nested','nocomment','threaded','nobar');
+        if (!in_array($cmt_mode,$valid_cmt_modes)) {
+            $cmt_mode = '';
+        }
+
+        return CMT_userComments(
+            "fileid_{$this->lid}",
+            $this->title,
+            'filemgmt',
+            $cmt_order,
+            $cmt_mode,
+            0,
+            $cmt_page,
+            false,
+            plugin_ismoderator_filemgmt(),
+            0,
+            $this->submitter
+        );
+    }
+
+
+    /**
+     * Convert a number of bytes to a more readable format.
+     *
+     * @param   integer $size   Size in bytes
+     * @return  string      Formatted size, e.g. "2.5 KB"
+     */
+    public static function prettySize($size)
+    {
+        if ($size > 1048576) {      // > 1 MB
+            $mysize = sprintf('%01.2f', $size/1048573) . " MB";
+        }
+        elseif ($size >= 1024) {    // > 1 KB
+            $mysize = sprintf('%01.2f' , $size/1024) . " KB";
+        }
+        else {
+            $mysize = sprintf(_MD_NUMBYTES, $size);
+        }
+        return $mysize;
+    }
+
+
+    /**
+     * Format a timestamp to a day string.
+     *
+     * @param   integer $ts     Unix timestamp
+     * @return  string      Formatted string
+     */
+    public static function formatTimestamp($ts)
+    {
+        global $_USER;
+
+        $dt = new \Date($ts, $_USER['tzid']);
+        return $dt->format('M.d.y', true);
     }
 
 }

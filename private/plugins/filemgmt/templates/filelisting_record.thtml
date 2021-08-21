@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
-<div uk-grid class="uk-grid fm_record" style="border:solid 1px;padding:5px;border-radius:5px;margin-top:10px;">
-	<ul uk-grid class="uk-grid uk-width-1-1 uk-grid-width-1-1 uk-grid-width-medium-1-2 fm_category">
+<div class="fm_record" style="border:solid 1px;padding:5px;border-radius:5px;margin-top:10px;">
+	<ul uk-grid class="uk-grid uk-grid-collapse uk-width-1-1 uk-grid-width-1-1 uk-grid-width-medium-1-2 uk-child-width-1-1@s uk-child-width-1-2@s fm_category">
 		<li><b>{LANG_CATEGORY}</b>{category_path}</li>
 		<li style="text-align:right;">{LANG_SUBMITTEDBY}
 {!if submitter_link}
@@ -10,59 +10,57 @@
 {!endif}
 		</li>
 	</ul>
-	<div class="uk-width-1-1" style="font-weight:bold;">
+	<div class="" style="font-weight:bold;">
+		<div>
 {!if is_found}
-		<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow">
-			<i class="uk-icon-cloud-download uk-icon-medium tooltip" title="{LANG_DLNOW}" alt="{LANG_DLNOW}"></i></a>&nbsp;<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow" title="{download_title}">
-			{dtitle}
-		</a>
+			<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow">
+				<i class="uk-icon-cloud-download uk-icon-medium tooltip" title="{LANG_DLNOW}" alt="{LANG_DLNOW}"></i></a>&nbsp;<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow" title="{download_title}">
+				{dtitle}
+			</a>
 {!else}
-		{dtitle}
+			{dtitle}
 {!endif}
-	  &nbsp;&nbsp;&nbsp;
 {!if is_newdownload}
-		<div class="uk-badge uk-badge-notification">new</div>
+			<div class="uk-badge uk-badge-notification tooltip" title="{lang_new_title}" style="margin-left:10px;">{lang_new}</div>
 {!endif}
 {!if is_popular}
-		<div class="uk-badge  uk-badge-notification uk-badge-danger">pop</div>
+			<div class="uk-badge uk-badge-notification uk-badge-danger tooltip" title="{lang_popular}" style="margin-left:10px;">{lang_pop}</div>
 {!endif}
-		{image_newdownload}{image_popular}
-	  </div>
-	  <div class="uk-width-1-1">
+			{image_newdownload}{image_popular}
+		 </div>
+	</div>
+	<div class="uk-width-1-1">
 		{file_description}
-	  </div>
-	<ul class="uk-grid uk-width-1-1 uk-grid-width-1-2 uk-grid-width-medium-1-5" style="margin-top:5px;">
-		<li class="uk-width-1-2 uk-width-medium-1-6"><b>{LANG_VERSION}:</b>&nbsp;{version}</li>
+	</div>
+
+	<ul uk-grid class="uk-grid uk-grid-collapse uk-width-1-1 uk-grid-width-1-2 uk-grid-width-medium-1-5 uk-child-width-1-2@s uk-child-width-1-5@m " style="margin-top:5px;">
+		<li><b>{LANG_VERSION}:</b>&nbsp;{version}</li>
 		<li><b>{LANG_SUBMITDATE}:</b>&nbsp;{datetime}</li>
-		<li><b>{LANG_RATING}</b>&nbsp;{rating}{votestring}</li>
-		<li class="uk-width-1-2 uk-width-medium-1-10">
+		<li><!--<i class="uk-icon uk-icon-bar-chart"></i>&nbsp;{rating}{votestring}--></li>
+		<li class="uk-width-1-2 uk-width-medium-1-10 uk-width-1-2@s uk-width-1-10@m">
 {!if have_dlreport}
 		    <a href="{site_url}/filemgmt/downloadhistory.php?lid={lid}" target="_blank">
-				<i class="uk-icon-floppy-o tooltip" title="{download_times}" alt="{download_times}"></i>&nbsp;{download_count}</a>
-{!else}
-			Downloads: {download_count}
+{!endif}
+				<i class="uk-icon-floppy-o tooltip" title="{download_times}" alt="{download_times}"></i>&nbsp;{download_count}
+{!if have_dlreport}
+</a>
 {!endif}
 		</li>
-		<li class="uk-width-1-2 uk-width-medium-1-6"><i class="uk-icon-info-circle tooltip" title="{LANG_FILESIZE}" alt="{LANG_FILESIZE}"></i>&nbsp;{file_size}</li>
-		<li class="uk-width-1-2 uk-width-medium-1-10">
-{!if homepage_url}
-		<a href="{homepage_url}" target="_blank" rel="nofollow"><i class="uk-icon-home tooltipo" title="{LANG_HOMEPAGE}:{homepage}" alt="{LANG_HOMEPAGE}:{homepage}"></i></a>
-{!endif}
+		<li class="uk-width-1-2 uk-width-medium-1-6 uk-width-1-2@s uk-width-1-6@m"><i class="uk-icon-info-circle tooltip" title="{LANG_FILESIZE}" alt="{LANG_FILESIZE}"></i>&nbsp;{file_size}</li>
+		<li class="uk-width-1-2 uk-width-medium-1-10 uk-width-1-2@s uk-width-1-10@m" uk-lightbox>
 {!if logourl}
-			  <a href="{snapshot_url}" rel="lightbox" data-uk-lightbox rel="nofollow" target="_blank" title="{LANG_CLICK2SEE}">
-				<img src="{site_url}/filemgmt/images/screenshoticon.gif" style=""width:14px;height:14px;" border="0" />
-{snapshot_icon}{LANG_SCREENSHOT}</a>
+			<a href="{snapshot_url}" data-uk-lightbox rel="nofollow" target="_blank" class="tooltip" title="{LANG_CLICK2SEE}"><i class="uk-icon uk-icon-file-image-o"></i></a>
 {!endif}
 		</li>
 	</ul>
 
-	<div class="uk-grid uk-width-1-1 uk-grid-width-small-1-2 uk-text-center" style="font-size:smaller;margin-top:5px;">
+	<div uk-grid class="uk-grid uk-width-1-1 uk-grid-width-small-1-2 uk-child-width-1-1@s uk-child-width-1-2@m uk-text-center" style="font-size:smaller;margin-top:5px;">
 		<div style="text-align:center !important;" class="fm-rating">{rating_bar}</div>
 		<div style="padding-top:10px;">
 			<ul class="uk-grid uk-grid-width-1-1 uk-grid-width-1-5 uk-text-center" style="font-size:smaller;margin-left:20px;">
 				<li>
 {!if show_comments}
-					<a href="{site_url}/filemgmt/index.php?id={lid}#comments"><i class="uk-icon-comment uk-icon-medium tooltip" title="Comments"></i></a>
+					<a href="{site_url}/filemgmt/index.php?id={lid}#comments" class="tooltip" title="{comment_tooltip}"><i class="uk-icon uk-icon-comment uk-icon-medium""></i></a>
 {!endif}
 				</li>
 				<li>
@@ -73,7 +71,9 @@
 					<a href="{site_url}/filemgmt/brokenfile.php?lid={lid}" rel="nofollow"><i class="uk-icon-chain-broken uk-icon-medium tooltip" title="{LANG_REPORTBROKEN}"></i></a>
 				</li>
 				<li>
-					<a href="{site_admin_url}/plugins/filemgmt/index.php?lid={lid}&amp;op=modDownload" rel="nofollow"><i class="uk-icon-edit uk-icon-medium tooltip" title="{LANG_EDIT}"></i></a>
+{!if LANG_EDIT}
+					<a href="{site_admin_url}/plugins/filemgmt/index.php?modDownload={lid}" rel="nofollow"><i class="uk-icon-edit uk-icon-medium tooltip" title="{LANG_EDIT}"></i></a>
+{!endif}
 				</li>
 {!if homepage_url}
 				<li>
