@@ -45,7 +45,7 @@ class XoopsTree
 {
 
     private $table;     //table with parent-child structure
-    private $id;        //name of unique id for records in table $table
+    public  $id;        //name of unique id for records in table $table
     private $pid;       // name of parent id used in table $table
     private $order;     //specifies the order of query results
     private $title;     // name of a field in table $table which will be used when  selection box and paths are generated
