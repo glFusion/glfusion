@@ -130,14 +130,22 @@ class Download
     {
         if (!is_array($row)) return;
 
-        $this->setLid($row['lid'])
-             ->setCid($row['cid'])
+        if (isset($row['lid'])) {
+            $this->setLid($row['lid']);
+        }
+        if (isset($row['size'])) {
+            $this->setSize($row['size']);
+        }
+        if (isset($row['hits'])) {
+            $this->setHits($row['hits']);
+        }
+        if (isset($row['submitter'])) {
+            $this->setSubmitter($row['submitter']);
+        }
+        $this->setCid($row['cid'])
              ->setTitle($row['title'])
              ->setHomepage($row['homepage'])
              ->setVersion($row['version'])
-             ->setSize($row['size'])
-             ->setSubmitter($row['submitter'])
-             ->setHits($row['hits'])
              ->setDescription($row['description']);
         if ($fromDB) {
             $this->setLogoUrl($row['logourl'])
@@ -621,6 +629,13 @@ class Download
                 $sql1 = "INSERT INTO {$_TABLES['filemgmt_filedetail']} SET
                     date = UNIX_TIMESTAMP(), ";
                 $sql3 = '';
+                // Determine write access to category for new uploads
+                $Cat = new Category($this->cid);
+                if ($Cat->hasWriteAccess()) {
+                    $this->status = 1;
+                } else {
+                    $this->status = 0;
+                }
             } else {
                 $sql1 = "UPDATE {$_TABLES['filemgmt_filedetail']} SET ";
                 $sql3 = " WHERE lid = {$this->lid} ";
@@ -1485,6 +1500,24 @@ class Download
 
         $dt = new \Date($ts, $_USER['tzid']);
         return $dt->format('M.d.y', true);
+    }
+
+
+    /**
+     * Generate a random filename used for new uploads.
+     *
+     * @return  string      Random filename
+     */
+    public static function randomFilename()
+    {
+        $length=10;
+        srand((double)microtime()*1000000);
+        $possible_charactors = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $string = "";
+        while(strlen($string)<$length) {
+            $string .= substr($possible_charactors, rand()%(strlen($possible_charactors)),1);
+        }
+        return($string);
     }
 
 }
