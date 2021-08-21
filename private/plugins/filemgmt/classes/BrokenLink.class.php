@@ -94,6 +94,11 @@ class BrokenLink
 
         $header_arr = array(
             array(
+                'text' => _MD_EDIT,
+                'field' => 'edit',
+                'sort' => true,
+            ),
+            array(
                 'text' => _MD_FILETITLE,
                 'field' => 'title',
                 'sort' => true,
@@ -184,7 +189,7 @@ class BrokenLink
 
         case 'ignore':
             $retval = COM_createLink(
-                '<i class="uk-icon-remove uk-text-danger"></i>',
+                '<i class="uk-icon-remove uk-text-warning"></i>',
                 $_FM_CONF['admin_url'] . '/index.php?ignoreBrokenLink=' . $A['lid'],
                 array(
                     'onclick' => "return confirm('Delete this broken file report?')",
