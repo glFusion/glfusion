@@ -1474,19 +1474,7 @@ class Download
             $T->unset_var('show_comments');
         }
 
-        if ( $_FM_CONF['enable_rating'] ) {
-            $static = false;
-            $voted  = 0;
-            $T->set_var('rating_bar', RATING_ratingBar('filemgmt',
-                $this->lid,
-                $this->votes,
-                $this->rating,
-                $voted,
-                5,
-                $static,
-                'sm'
-            ) );
-        }
+        $T->set_var('rating_bar', $this->getRatingBar());
 
         $T->parse('output', 'record');
         return $T->finish($T->get_var('output'));
@@ -1593,6 +1581,52 @@ class Download
             $string .= substr($possible_charactors, rand()%(strlen($possible_charactors)),1);
         }
         return($string);
+    }
+
+
+    /**
+     * Get the rating bar to show for this file.
+     *
+     * @return  string      Rating bar HTML, empty string if not available.
+     */
+    public function getRatingBar()
+    {
+        global $_FM_CONF, $_USER;
+
+        $retval = '';
+
+        if ($_FM_CONF['enable_rating']) {
+            $static = false;
+            $voted  = 0;
+            if (COM_isAnonUser()) {
+                $static = true;
+                $voted = 1;
+            } else if (isset($_USER['uid']) && $_USER['uid'] == $this->submitter) {
+                $static = true;
+                $voted = 0;
+            } else {
+                $FM_ratedIds = RATING_getRatedIds('filemgmt');
+                if (@in_array($lid,$FM_ratedIds)) {
+                    $static = true;
+                    $voted = 1;
+                } else {
+                    $static = 0;
+                    $voted = 0;
+                }
+            }
+
+            $retval = RATING_ratingBar(
+                'filemgmt',
+                $this->lid,
+                $this->votes,
+                $this->rating,
+                $voted,
+                5,
+                $static,
+                'sm'
+            );
+        }
+        return $retval;
     }
 
 }
