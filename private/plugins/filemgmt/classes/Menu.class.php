@@ -28,13 +28,13 @@ class Menu
      */
     public static function Admin($view='')
     {
-        global $_CONF,$LANG_FM02,$_TABLES, $LANG_ADMIN,$LANG_FILEMGMT;
+        global $_CONF, $_FM_CONF, $LANG_FM02, $_TABLES, $LANG_ADMIN, $LANG_FILEMGMT;
 
         USES_lib_admin();
         $retval = '';
         $totalnewdownloads = DB_count($_TABLES['filemgmt_filedetail'],'status',0);
         $totalbrokendownloads = DB_count($_TABLES['filemgmt_brokenlinks']);
-        $index_url = $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php';
+        $index_url = $_FM_CONF['admin_url'] . '/index.php';
         $menu_arr = array (
             array(
                 'url' => $index_url . '?files',
@@ -65,7 +65,7 @@ class Menu
         $retval .= \ADMIN_createMenu(
             $menu_arr,
             $LANG_FM02['instructions'],
-            $_CONF['site_url'] . '/filemgmt/images/filemgmt.png'
+            $_FM_CONF['url'] . '/images/filemgmt.png'
         );
         return $retval;
     }

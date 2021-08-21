@@ -454,7 +454,7 @@ class Category
      */
     public static function adminList($cid=0)
     {
-        global $_CONF, $_TABLES, $_USER, $LANG_ADMIN;
+        global $_CONF, $_FM_CONF, $_TABLES, $_USER, $LANG_ADMIN;
 
         USES_lib_admin();
 
@@ -514,7 +514,7 @@ class Category
         $display .= COM_startBlock('', '', COM_getBlockTemplate('_admin_block', 'header'));
         $display .= COM_createLink(
             'New Item',
-            $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?modCat=0',
+            $_FM_CONF['admin_url'] . '/index.php?modCat=0',
             array(
                 'class' => 'uk-button uk-button-success',
                 'style' => 'float:left',
@@ -556,7 +556,7 @@ class Category
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_CONF, $_SHOP_CONF, $_TABLES, $LANG_ADMIN;
+        global $_SHOP_CONF, $_TABLES, $LANG_ADMIN;
 
         $retval = '';
         static $grp_names = array();
@@ -566,7 +566,7 @@ class Category
         case 'edit':
             $retval .= COM_createLink(
                 '<i class="uk-icon uk-icon-edit tooltip" title="Edit"></i>',
-                $_CONF['site_admin_url'] . "/plugins/filemgmt/index.php?modCat={$A['cid']}"
+                $_FM_CONF['admin_url'] . "/index.php?modCat={$A['cid']}"
             );
             break;
 
