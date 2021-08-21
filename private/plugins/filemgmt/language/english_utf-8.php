@@ -121,7 +121,8 @@ $LANG_FILEMGMT = array(
     'all_html_allowed' => 'All HTML is allowed',
     'no_new_files'  => 'No new files',
     'no_comments'   => 'No new comments',
-    'more'          => '<em>more ...</em>'
+    'more'          => '<em>more ...</em>',
+    'newly_uploaded' => 'Newly Uploaded',
 );
 
 $LANG_FILEMGMT_AUTOTAG = array(
@@ -163,6 +164,7 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Enable Ratings',
     'displayblocks'         => 'Display glFusion Blocks',
     'silent_edit_default'   => 'Silent Edit Default',
+    'extensions_map' => 'Extensions used for downloads',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Main Settings'
@@ -205,6 +207,7 @@ define("_MD_SEARCH","Search");
 define("_MD_MAIN","Main");
 define("_MD_SUBMITFILE","Submit File");
 define("_MD_POPULAR","Popular");
+define("_MD_POP", "Pop");   // abbrevision for listing badge
 define("_MD_NEW","New");
 define("_MD_TOPRATED","Top Rated");
 
@@ -438,4 +441,3 @@ define("_MD_COMMENTSWANTED","Comments are appreciated");
 define("_MD_CLICK2SEE","Click to see: ");
 define("_MD_CLICK2DL","Click to download: ");
 define("_MD_ORDERBY","Order By: ");
-?>

@@ -1,6 +1,7 @@
 <?php
 /**
- * Class to manage file items.
+ * Class to manage broken link functions.
+ * Displays the list and reporting form, and handles admin actions.
  *
  * @author      Lee Garner <lee@leegarner.com>
  * @copyright   Copyright (c) 2021 Lee Garner <lee@leegarner.com>
@@ -15,33 +16,23 @@ namespace Filemgmt;
 
 
 /**
- * Class for downloadable items.
+ * Class for handling broken link functions.
  * @package filemgmt
  */
 class BrokenLink
 {
-
     /**
-     * Constructor.
-     * Reads in the specified class, if $id is set.  If $id is zero,
-     * then a new entry is being created.
+     * Ignore a broken link report.
+     * This just deletes the report from the database.
      *
-     * @param   integer|array   $id Record ID or array
+     * @param   integer $lid    File record ID
      */
-    public function __construct($lid=0)
+    public static function ignore($lid)
     {
-        global $_USER, $_VARS;
+        global $_TABLES;
 
-        $this->isNew = true;
-
-        if (is_array($lid)) {
-            $this->setVars($lid, true);
-        } elseif ($lid > 0) {
-            $this->lid = (int)$lid;
-            if (!$this->Read()) {
-                $this->lid = 0;
-            }
-        }
+        $lid = (int)$lid;
+        DB_delete($_TABLES['filemgmt_brokenlinks'], 'lid', $lid);
     }
 
 
@@ -50,35 +41,42 @@ class BrokenLink
      *
      * @param   integer $lid    Link record ID
      */
-    public static function delete()
+    public static function delete($lid)
     {
-        global $_TABLES, $_CONF, $_FM_CONF;
+        global $_TABLES;
 
-        $tmpsnap  = $_FM_CONF['SnapStore'] . $this->logourl;
-        DB_query("DELETE FROM {$_TABLES['filemgmt_filedetail']}  WHERE lid=$lid");
-        DB_query("DELETE FROM {$_TABLES['filemgmt_filedesc']}    WHERE lid=$lid");
-        DB_query("DELETE FROM {$_TABLES['filemgmt_votedata']}    WHERE lid=$lid");
-        DB_query("DELETE FROM {$_TABLES['filemgmt_brokenlinks']} WHERE lid=$lid");
-
-        DB_query("DELETE FROM {$_TABLES['comments']} WHERE sid = 'fileid_".DB_escapeString($this->lid)."' AND type = 'filemgmt'");
+        $lid = (int)$lid;
+        self::ignore($lid);
+        DB_delete($_TABLES['filemgmt_filedetail'], 'lid', $lid);
+        PLG_itemDeleted($lid, 'filemgmt');
+    }
 
 
-        // Check for duplicate files of the same filename (actual filename in repository)
-        // We don't want to delete actual file if there are more then 1 record linking to it.
-        // Site may be allowing more then 1 file listing to duplicate files
-        if ($numrows > 1) {
-            return false;
-        } else {
-            if ($tmpfile != "" && file_exists($tmpfile) && (!is_dir($tmpfile))) {
-                $err=@unlink ($tmpfile);
-            }
-            if ($tmpsnap != "" && file_exists($tmpsnap) && (!is_dir($tmpsnap))) {
-                $err=@unlink ($tmpsnap);
-            }
-        }
-        PLG_itemDeleted($lid,'filemgmt');
-        $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
-        return true;
+    /**
+     * Display the reporting form for a broken link.
+     *
+     * @param   integer $lid    File record ID
+     * @return  string      HTML for reporting form
+     */
+    public static function showForm($lid)
+    {
+        global $_CONF;
+
+        $lid = (int)$lid;
+        $display = COM_startBlock(_MD_REPORTBROKEN);
+        $T = new \Template($_CONF['path'] . '/plugins/filemgmt/templates/');
+        $T->set_file('form', 'brokenfile.thtml');
+        $T->set_var(array(
+            'lid' => $lid,
+            'lang_reportbroken' => _MD_REPORTBROKEN,
+            'lang_thanksforhelp' => _MD_THANKSFORHELP,
+            'lang_forsecurity' => _MD_FORSECURITY,
+            'lang_cancel' => _MD_CANCEL,
+        ) );
+        $T->parse('output', 'form');
+        $display .= $T->finish($T->get_var('output'));
+        $display .= COM_endBlock();
+        return $display;
     }
 
 
@@ -184,18 +182,26 @@ class BrokenLink
             $retval = $dt->format('M d, Y',true);
             break;
 
+        case 'ignore':
+            $retval = COM_createLink(
+                '<i class="uk-icon-remove uk-text-danger"></i>',
+                $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?ignoreBrokenDownloads=' . $A['lid'],
+                array(
+                    'onclick' => "return confirm('Delete this broken file report?')",
+                )
+            );
+            break;
+
         case 'delete':
-            if (!self::isUsed($A['cid'])) {
-                $retval .= COM_createLink(
-                    '<i class="uk-icon uk-icon-remove uk-text-danger"></i>',
-                    'index.php?delCat=' . $A['cid'],
-                    array(
-                        'onclick' => "return confirm('OK to delete?');",
-                        'title' => 'Delete Item',
-                        'class' => 'tooltip',
-                    )
-                );
-            }
+            $retval .= COM_createLink(
+                '<i class="uk-icon uk-icon-remove uk-text-danger"></i>',
+                $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?delBrokenDownloads=' . $A['lid'],
+                array(
+                    'onclick' => "return confirm('OK to delete?');",
+                    'title' => 'Delete Item',
+                    'class' => 'tooltip',
+                )
+            );
             break;
 
         default:
