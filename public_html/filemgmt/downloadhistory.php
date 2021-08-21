@@ -37,91 +37,28 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 
 $lid = COM_applyFilter($_GET['lid'],true);
 
 // Comment out the following security check if you want general filemgmt users access to this report
 if (!SEC_hasRights("filemgmt.edit")) {
     COM_errorLOG("Downloadhistory.php => Filemgmt Plugin Access denied. Attempted access for file ID:{$lid}, Remote address is:{$_SERVER['REMOTE_ADDR']}");
-    redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOADMIN);
+    COM_setMsg(_GL_ERRORNOADMIN, 'error');
+    COM_refresh($_CONF['site_url']."/index.php");
     exit();
 }
 
-USES_lib_admin();
-
-$display = COM_siteHeader('none');
-
-$result=DB_query("SELECT title FROM {$_TABLES['filemgmt_filedetail']} WHERE lid='".DB_escapeString($lid)."'");
-list($dtitle)=DB_fetchArray($result);
-
-$sql = "SELECT fh.date, fh.uid, fh.remote_ip, u.username
-    FROM {$_TABLES['filemgmt_history']} fh
-    LEFT JOIN {$_TABLES['users']} u
-    ON u.uid = fh.uid
-    WHERE fh.lid = $lid";
-$header_arr = array(
-    array(
-        'text'  => 'Date',
-        'field' => 'date',
-        'sort'  => true,
-    ),
-    array(
-        'text'  => 'User',
-        'field' => 'username',
-        'sort'  => false,
-    ),
-    array(
-        'text'  => 'Remote IP',
-        'field' => 'remote_ip',
-        'sort'  => false,
-    ),
-);
-$defsort_arr = array(
-    'field' => 'date',
-    'direction' => 'desc',
-);
-
-$content = '';
-$query_arr = array(
-    'table' => 'shop.products',
-    'sql'   => $sql,
-    'query_fields' => array(),
-    'default_filter' => '',
-);
-$filter = '';
-$options = '';
-$text_arr = array(
-    'has_extras' => false,
-    'form_url' => $_CONF['site_url'] . "/filemgmt/downloadhistory.php?lid=$lid",
-);
-
-$content .= ADMIN_list(
-    'filemgmt_downloadhistory',
-    NULL,
-    $header_arr, $text_arr, $query_arr, $defsort_arr,
-    $filter, '', $options, ''
-);
+$File = Filemgmt\Download::getInstance($lid);
 
 $T = new Template($_CONF['path'] . 'plugins/filemgmt/templates/');
 $T->set_file('report', 'downloadhistory.thtml');
-$T->set_var('dtitle', $dtitle);
-$T->set_var('admin_list', $content);
-
-/*$result = DB_query($sql);
-$T->set_block('report', 'dataRow', 'dr');
-while ($A = DB_fetchArray($result, false)) {
-    $T->set_var(array(
-        'date'  => $A['date'],
-        'username' => $A['username'],
-        'remote_ip' => $A['remote_ip'],
-    ) );
-    $T->parse('dr', 'dataRow', true);
-}*/
+$T->set_var(array(
+    'dtitle' => $File->getTitle(),
+    'admin_list' => $File->getDownloadHistory(),
+) );
 $T->parse('output', 'report');
-$display .= $T->finish ($T->get_var('output'));
-$display .= COM_siteFooter();
-echo $display;
 
-?>
+$display = Filemgmt\Menu::siteHeader('none');
+$display .= $T->finish ($T->get_var('output'));
+$display .= Filemgmt\Menu::siteFooter();
+echo $display;

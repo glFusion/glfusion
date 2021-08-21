@@ -1232,7 +1232,82 @@ class Download
 
 
     /**
-     * Get an individual field for the category list.
+     * Get the download history report for this file.
+     *
+     * @return  string      HTML for history report
+     */
+    public function getDownloadHistory()
+    {
+        global $_TABLES, $_FM_CONF;
+
+        USES_lib_admin();
+
+        $sql = "SELECT fh.date, fh.uid, fh.remote_ip, u.username
+            FROM {$_TABLES['filemgmt_history']} fh
+            LEFT JOIN {$_TABLES['users']} u
+            ON u.uid = fh.uid
+            WHERE fh.lid = {$this->lid}";
+        $header_arr = array(
+            array(
+                'text'  => 'Date',
+                'field' => 'date',
+                'sort'  => true,
+            ),
+            array(
+                'text'  => 'User',
+                'field' => 'username',
+                'sort'  => false,
+            ),
+            array(
+                'text'  => 'Remote IP',
+                'field' => 'remote_ip',
+                'sort'  => false,
+            ),
+        );
+        $defsort_arr = array(
+            'field' => 'date',
+            'direction' => 'desc',
+        );
+
+        $content = '';
+        $query_arr = array(
+            'table' => 'shop.products',
+            'sql'   => $sql,
+            'query_fields' => array(),
+            'default_filter' => '',
+        );
+        $filter = '';
+        $options = '';
+        $text_arr = array(
+            'has_extras' => false,
+            'form_url' => $_FM_CONF['url'] . "/downloadhistory.php?lid={$this->lid}",
+        );
+
+        $query_arr = array(
+            'table' => 'shop.products',
+            'sql'   => $sql,
+            'query_fields' => array(),
+            'default_filter' => '',
+        );
+        $filter = '';
+        $options = '';
+        $text_arr = array(
+            'has_extras' => false,
+            'form_url' => $_FM_CONF['url'] . "/downloadhistory.php?lid={$this->lid}",
+        );
+
+        $retval = ADMIN_list(
+            'filemgmt_downloadhistory',
+            NULL,
+            $header_arr, $text_arr, $query_arr, $defsort_arr,
+            $filter, '', $options, ''
+        );
+        return $retval;
+    }
+
+
+    /**
+     * Get an individual field for the file admin list.
      *
      * @param   string  $fieldname  Name of field (from the array, not the db)
      * @param   mixed   $fieldvalue Value of the field
