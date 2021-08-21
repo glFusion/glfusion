@@ -568,7 +568,7 @@ class UploadDownload
         $returnChmod = true;
         $perms = $this->_getPermissions();
         if (!empty($perms)) {
-            $returnChmod = @chmod ($this->_filePath . '/' . $this->_getDestinationName (), octdec ($perms));
+            $returnChmod = @chmod ($this->_filePath . '/' . $this->_getDestinationName (), octdec($perms));
         }
         if ($returnMove && $returnChmod) {
             return true;
@@ -1105,7 +1105,7 @@ class UploadDownload
      */
     public function setPerms($perms)
     {
-        if (isset($perms) AND is_array($perms)) {
+        if (is_array($perms)) {
             // this is an array of file names, set them
             $this->_permissions = $perms;
         } else {
