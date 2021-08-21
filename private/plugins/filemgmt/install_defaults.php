@@ -255,20 +255,8 @@ $_FM_DEFAULT = array(
         'set' => true,
         'group' => 'filemgmt',
     ),
-
     array(
         'name' => 'useshots',
-        'default_value' => true,
-        'type' => 'select',
-        'subgroup' => 0,
-        'fieldset' => 0,
-        'selection_array' => 0,
-        'sort' => 80,
-        'set' => true,
-        'group' => 'filemgmt',
-    ),
-    array(
-        'name' => 'publicpriv',
         'default_value' => true,
         'type' => 'select',
         'subgroup' => 0,
