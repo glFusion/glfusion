@@ -1007,76 +1007,6 @@ class Download
     }
 
 
-    /**
-     * Create the breadcrumb display, with links.
-     * Creating a static breadcrumb field in the category record won't
-     * work because of the group access control. If a category is
-     * encountered that the current user can't access, it is simply
-     * skipped.
-     *
-     * @param   integer $id ID of current category
-     * @return  string      Location string ready for display
-     */
-    public function XXBreadcrumbs()
-    {
-        $T = new Template;
-        $T->set_file('cat_bc_tpl', 'cat_bc.thtml');
-        $T->set_var('pi_url', SHOP_URL . '/index.php');
-        $breadcrumbs = array(
-            COM_createLink(
-                $LANG_SHOP['home'],
-                SHOP_URL
-            )
-        );
-        if ($this->cid > 0 && !$this->isRoot()) {
-            // A specific subcategory is being viewed
-            $cats = $this->getPath();
-            foreach ($cats as $cat) {
-                // Root category already shown in top header
-                if ($cat->isRoot()) continue;
-                // Don't show a link if the user can't access it.
-                if (!$cat->hasAccess()) continue;
-                $breadcrumbs[] = COM_createLink(
-                    $cat->title,
-                    SHOP_URL . '/index.php?category=' . (int)$cat->cid
-                );
-            }
-        }
-        $T->set_block('cat_bc_tpl', 'cat_bc', 'bc');
-        foreach ($breadcrumbs as $bc_url) {
-            $T->set_var('bc_url', $bc_url);
-            $T->parse('bc', 'cat_bc', true);
-        }
-        $children = $this->getChildren();
-        if (!empty($children)) {
-            $T->set_var('bc_form', true);
-            $T->set_block('cat_bc_tpl', 'cat_sel', 'sel');
-            foreach ($children as $c) {
-                if (!$c->hasAccess()) continue;
-                $T->set_var(array(
-                    'cid'   => $c->cid,
-                    'title' => $c->title,
-                ) );
-                $T->parse('sel', 'cat_sel', true);
-            }
-        }
-        $T->parse('output', 'cat_bc_tpl');
-        $retval = $T->finish($T->get_var('output'));
-        return $retval;
-    }
-
-
-    /**
-     * Helper function to check if this is the Root category.
-     *
-     * @return  boolean     True if this category is Root, False if not
-     */
-    public function isRoot()
-    {
-        return $this->cid == 1;
-    }
-
-
     public function approve()
     {
         global $_TABLES;
@@ -1120,7 +1050,7 @@ class Download
      */
     public static function adminList($cid=0, $status = -1)
     {
-        global $_FM_CONF, $LANG_FM02, $_TABLES, $LANG_ADMIN;
+        global $_FM_CONF, $LANG_FM02, $_TABLES, $LANG_ADMIN, $_DB_name;
 
         USES_lib_admin();
 
@@ -1128,23 +1058,12 @@ class Download
         $selcat = '';
         $display = '';
 
-        $sql = "SELECT * FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ORDER BY title ASC";
-        $result = DB_query($sql);
-        while (($C = DB_fetchArray($result)) != NULL ) {
-            $selcat .= '<option value="'.$C['cid'].'"';
-            if ( $C['cid'] == $cid) {
-                $selcat .= ' selected="selected"';
-            }
-            $selcat .= '>';
-            $selcat .= $C['title'].'</option>';
-            $selcat .= Category::getChildOptions( $C['cid'],1,$cid);
-
-        }
-        $allcat = '<option value="0">'._MD_ALL.'</option>';
-
-        $filter = _MD_CATEGORYC
-            . ' <select name="cat" style="width: 125px" onchange="this.form.submit()">'
-            . $allcat . $selcat . '</select>';
+        $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'], "cid", "pid");
+        $filter = _MD_CATEGORYC .
+            ': <select name="cat" onchange="this.form.submit()">' . LB .
+            '<option value="0">' . _MD_ALL . '</option>' .
+            $mytree->makeMySelBoxNoHeading("title", "title", $cid, 0, "cat", 'this.form.submit();') .
+            '</select>' . LB;
 
         $header_arr = array(
             array(
@@ -1191,7 +1110,7 @@ class Download
         );
 
         if ( $cid != 0 ) {
-            $where = " c.cid=".(int) $current_cat . " ";
+            $where = " c.cid=".(int)$cid . " ";
         } else {
             $where = " 1=1 ";
         }
@@ -1212,7 +1131,7 @@ class Download
         );
 
         $display .= COM_createLink(
-            'New Item',
+            _MD_ADDNEWFILE,
             $_FM_CONF['admin_url'] . '/index.php?modDownload=0',
             array(
                 'class' => 'uk-button uk-button-success',
