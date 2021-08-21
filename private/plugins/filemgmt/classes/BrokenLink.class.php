@@ -159,21 +159,21 @@ class BrokenLink
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_CONF, $_USER, $_TABLES, $LANG_ADMIN;
+        global $_FM_CONF, $_USER, $_TABLES, $LANG_ADMIN;
 
         $retval = '';
         static $grp_names = array();
         static $cat_names = array();
         static $dt = NULL;
         if ($dt === NULL) {
-            $dt = new \Date('now',$_USER['tzid']);
+            $dt = new \Date('now', $_USER['tzid']);
         }
 
         switch($fieldname) {
         case 'edit':
             $retval .= COM_createLink(
                 '<i class="uk-icon uk-icon-edit tooltip" title="Edit"></i>',
-                $_CONF['site_admin_url'] . "/plugins/filemgmt/index.php?modDownload={$A['lid']}"
+                $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}"
             );
             break;
 
@@ -185,7 +185,7 @@ class BrokenLink
         case 'ignore':
             $retval = COM_createLink(
                 '<i class="uk-icon-remove uk-text-danger"></i>',
-                $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?ignoreBrokenDownloads=' . $A['lid'],
+                $_FM_CONF['admin_url'] . '/index.php?ignoreBrokenLink=' . $A['lid'],
                 array(
                     'onclick' => "return confirm('Delete this broken file report?')",
                 )
@@ -195,7 +195,7 @@ class BrokenLink
         case 'delete':
             $retval .= COM_createLink(
                 '<i class="uk-icon uk-icon-remove uk-text-danger"></i>',
-                $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?delBrokenDownloads=' . $A['lid'],
+                $_FM_CONF['admin_url'] . '/index.php?delBrokenLink=' . $A['lid'],
                 array(
                     'onclick' => "return confirm('OK to delete?');",
                     'title' => 'Delete Item',
