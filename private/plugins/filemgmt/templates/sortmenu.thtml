@@ -1,40 +1,45 @@
 {# begin {templatelocation} #}
-	<tr>
-		<td colspan="2" class="uk-text-small uk-text-center">
-			{LANG_SORTBY}&nbsp;&nbsp;{LANG_TITLE}&nbsp;(
-			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=titleA"><i class="uk-icon-arrow-up uk-icon-small tooltip" alt="{LANG_SORTBY} {LANG_TITLE} Ascending"></i></a>
-			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=titleD">
-				<i class="uk-icon-arrow-down uk-icon-small tooltip" alt="{LANG_SORTBY} {LANG_TITLE} Descending"></i>
-			</a>
-			)&nbsp;
-
+<ul uk-grid class="uk-grid">
+	<li>
+		{LANG_SORTBY}&nbsp;&nbsp;{LANG_TITLE}&nbsp;(
+		<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=title&dir=asc"><i class="uk-icon-arrow-up uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_TITLE} Ascending" alt="{LANG_SORTBY} {LANG_TITLE} Ascending"></i>
+		</a>
+		<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=title&dir=desc">
+			<i class="uk-icon-arrow-down uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_TITLE} Descending" alt="{LANG_SORTBY} {LANG_TITLE} Descending"></i>
+		</a>
+			)
+	</li>
+	<li>
 			{LANG_DATE}&nbsp;(
-			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=dateA"><i class="uk-icon-arrow-up uk-icon-small tooltip" alt="{LANG_SORTBY} {LANG_DATE} Ascending"></i></a>
-			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=dateD">
-				<i class="uk-icon-arrow-down uk-icon-small tooltip" alt="{LANG_SORTBY} {LANG_DATE} Descending"></i>
-			</a>
-			)&nbsp;
-
-			{LANG_RATING}&nbsp;(
-			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=ratingA"><i class="uk-icon-arrow-up uk-icon-small tooltip" alt="{LANG_SORTBY} {LANG_RATING} Ascending"></i></a>
-			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=ratingD">
-				<i class="uk-icon-arrow-down uk-icon-small tooltipo" alt="{LANG_SORTBY} {LANG_RATING} Descending"></i>
-			</a>
-			)&nbsp;
-
-			{LANG_POPULARITY}&nbsp;(
-			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=hitsA">
-				<i class="uk-icon-arrow-up uk-icon-small uk-icon-small tooltip" alt="{LANG_SORTBY} {LANG_POPULARITY} Ascending"></i>
-			</a>
-			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=hitsD">
-				<i class="uk-icon-arrow-down uk-icon-small tooltip" alt="{LANG_SORTBY} {LANG_POPULARITY} Descending"></i>
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=date&dir=asc"><i class="uk-icon-arrow-up uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_DATE} Ascending" alt="{LANG_SORTBY} {LANG_DATE} Ascending"></i></a>
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=date&dir=desc">
+				<i class="uk-icon-arrow-down uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_DATE} Descending" alt="{LANG_SORTBY} {LANG_DATE} Descending"></i>
 			</a>
 			)
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="uk-text-small uk-text-center" style="text-align:center;font-weight:bold;">
-			{LANG_CURSORTBY}&nbsp;{orderbyTrans}
-		</td>
-	</tr>
+	</li>
+	<li>
+			{LANG_RATING}&nbsp;(
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=rating&dir=asc"><i class="uk-icon-arrow-up uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_RATING} Ascending" alt="{LANG_SORTBY} {LANG_RATING} Ascending"></i></a>
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=rating&dir=desc">
+				<i class="uk-icon-arrow-down uk-icon-small tooltipo" title="{LANG_SORTBY} {LANG_RATING} Descending" alt="{LANG_SORTBY} {LANG_RATING} Descending"></i>
+			</a>
+			)
+	</li>
+
+	<li>
+			{LANG_POPULARITY}&nbsp;(
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=hits&dir=asc">
+				<i class="uk-icon-arrow-up uk-icon-small uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_POPULARITY} Ascending" alt="{LANG_SORTBY} {LANG_POPULARITY} Ascending"></i>
+			</a>
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=hits&dir=desc">
+				<i class="uk-icon-arrow-down uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_POPULARITY} Descending" alt="{LANG_SORTBY} {LANG_POPULARITY} Descending"></i>
+			</a>
+			)
+	</li>
+</ul>
+<ul uk-grid class="uk-grid">
+	<li>
+		{LANG_CURSORTBY}&nbsp;{orderbyTrans}
+	</li>
+</ul>
 {# end {templatelocation} #}
