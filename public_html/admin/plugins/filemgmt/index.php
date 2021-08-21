@@ -20,19 +20,12 @@
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 use \glFusion\FieldList;
 use Filemgmt\Download;
 use Filemgmt\Models\Status;
-
-USES_lib_admin();
 
 // Set view and action variables.
 $op = 'files';
@@ -75,10 +68,6 @@ if (!SEC_hasRights('filemgmt.edit')) {
         exit;
     }
 }
-
-$myts = new MyTextSanitizer;
-$mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
-$eh = new ErrorHandler;
 
 if ( isset($_POST['cancel']) ) {
     echo COM_refresh($_CONF['site_url'].'/filemgmt/index.php');

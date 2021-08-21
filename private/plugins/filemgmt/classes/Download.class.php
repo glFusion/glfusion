@@ -1107,6 +1107,8 @@ class Download
     {
         global $_FM_CONF, $LANG_FM02, $_TABLES, $LANG_ADMIN;
 
+        USES_lib_admin();
+
         $cid = (int)$cid;
         $selcat = '';
         $display = '';

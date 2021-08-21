@@ -456,6 +456,8 @@ class Category
     {
         global $_CONF, $_TABLES, $_USER, $LANG_ADMIN;
 
+        USES_lib_admin();
+
         $display = '';
         $sql = "SELECT cat.*, parent.title as pcat
             FROM {$_TABLES['filemgmt_cat']} cat
