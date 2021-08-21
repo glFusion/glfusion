@@ -19,15 +19,19 @@
 *    Thatware - http://thatware.org/
 */
 
+require_once '../lib-common.php';
 use \glFusion\FileSystem;
 use \glFusion\Log\Log;
+use Filemgmt\XoopsTree;
+use Filemgmt\MyTextSanitizer;
+use Filemgmt\ErrorHandler;
 
-require_once '../lib-common.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
+/*include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
 include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
+ */
 
 function FM_notifyAdmins( $filename,$file_user_id,$description ) {
     global $LANG_DIRECTION, $LANG_CHARSET, $LANG_FM00, $_USER, $_FM_CONF, $_CONF, $_TABLES;
@@ -180,7 +184,8 @@ function FM_getGroupList ($basegroup)
 $display = '';
 
 if ( defined('DEMO_MODE') ) {
-    redirect_header($_CONF['site_url']."/filemgmt/index.php",10,'Uploads are disabled in demo mode');
+    COM_setMsg('Uploads are disabled in demo mode', 'error');
+    COM_refresh($_FM_CONF['url'] . '/index.php');
     exit;
 }
 
@@ -190,26 +195,22 @@ if ( isset($_USER['uid']) ) {
     $uid = 1;
 }
 
-if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
-
-    $logourl = '';
-
-    // Get the number of files in the database and post it in the title.
-    $_GROUPS = SEC_getUserGroups( $uid );
+if (SEC_hasRights("filemgmt.upload") OR $_FM_CONF['uploadselect']) {
 
     $myts = new MyTextSanitizer; // MyTextSanitizer object
     $eh = new ErrorHandler; //ErrorHandler object
     $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
     $mytree->setGroupAccessFilter($_GROUPS);
 
-    $groupsql = filemgmt_buildAccessSql();
+    $groupsql = SEC_buildAccessSql();
     $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
     $sql .= $groupsql;
     list($catAccessCnt) = DB_fetchArray( DB_query($sql));
 
     if ( $catAccessCnt < 1 ) {
         Log::write('system',Log::ERROR,'Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is: '.$_SERVER['REAL_ADDR']);
-        redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOUPLOAD);
+        COM_setMsg(_GL_ERRORNOUPLOAD, 'error');
+        COM_refresh($_CONF['site_url'] . '/index.php');
         exit;
     }
 
@@ -225,207 +226,26 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
             $eh->show("1001");
         }
 
-        // Check if filename entered
-        if ($_FILES['newfile']['name'] != '') {
-            $name = ($_FILES['newfile']['name']);
-            $url = rawurlencode($name);
-            $name = DB_escapeString($name);
-            $url = DB_escapeString($url);
-        } else {
-            $eh->show("1016");
-        }
-
-        // Check if Description entered
-        if ($_POST['description'] == '') {
-            $eh->show("1008");
-        }
-
-        $uploadfilename = DB_escapeString($_FILES['newfile']['name']);
-
-        // Check if file is already on file
-        if (DB_COUNT($_TABLES['filemgmt_filedetail'], 'url', $uploadfilename) > 0) {
-            $eh->show("1108");
-        }
-
-        if ( !empty($_POST['cid']) ) {
-            $cid = (int) COM_applyFilter($_POST['cid'],true);
-        } else {
-            $cid = 0;
-            $eh->show("1109");
-        }
-
-        $AddNewFile = false;    // Set true if fileupload was sucessfull
-        $name = DB_escapeString($name);
-        $title = DB_escapeString($_POST['title']);
-        $homepage = DB_escapeString($_POST['homepage']);
-        $version = DB_escapeString($_POST['version']);
-        $size = intval($_FILES['newfile']['size']);
-        $description = $myts->makeTareaData4Save($_POST['description']);
-        $comments = (int) COM_applyFilter($_POST['commentoption'],true);
-        $date = time();
-        $tmpfilename = randomfilename();
-
-        // Determine write group access to this category
-        $grp_writeaccess = DB_getItem($_TABLES['filemgmt_cat'],'grp_writeaccess',"cid=".(int) $cid);
-        if (SEC_inGroup($grp_writeaccess)) {
-            $directUploadAccess = true;
-        } else {
-            $directUploadAccess = false;
-        }
-
-        // Upload New file
-        if ($uploadfilename != '') {
-            $pos = strrpos($uploadfilename,'.') + 1;
-            $fileExtension = strtolower(substr($uploadfilename, $pos));
-            if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
-                if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                    Log::write('system',Log::WARNING,'AddNewFile - New Upload file is rejected by config rule: '.$uploadfilename);
-                    $eh->show("1109");
-                } else {
-                    $fileExtension = $_FMDOWNLOAD[$fileExtension];
-                    $tmpfilename = $tmpfilename . ".$fileExtension";
-
-                    /* Need to also rename the uploaded filename or URL that will be used for the approval name */
-                    /* Grab the filename without extension and add the mapped extension */
-                    $pos = strrpos($url,'.') + 1;
-                    $url = strtolower(substr($url, 0,$pos)) . $fileExtension;
-
-                    $pos2 = strrpos($name,'.') + 1;
-                    $name = substr($name,0,$pos2) . $fileExtension;
-                }
-            } else {
-                $tmpfilename = $tmpfilename . ".$fileExtension";
-            }
-            $tmp  = $_FILES["newfile"]['tmp_name'];    // temporary name of file in temporary directory on server
-            $returnMove = false;
-
-            FileSystem::mkDir($filemgmt_FileStore);
-            FileSystem::mkDir($filemgmt_FileStore.'tmp/');
-
-            if (isset($_FILES["newfile"]['_data_dir']) && file_exists($tmp)) {
-                if ($directUploadAccess) {
-                    $returnMove = @copy($tmp, "{$filemgmt_FileStore}{$name}");
-                    @unlink($tmp);
-                } else {
-                    $returnMove = @copy($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);
-                    @unlink($tmp);
-                    FM_notifyAdmins($name,$submitter,$description);
-                }
-            } elseif (is_uploaded_file ($tmp)) {                               // is this temporary file really uploaded?
-                if ($directUploadAccess) {
-                    $returnMove = move_uploaded_file($tmp, "{$filemgmt_FileStore}{$name}");             // move file to your upload directory
-                } else {
-                    $returnMove = move_uploaded_file($tmp, $filemgmt_FileStore."tmp/".$tmpfilename);    // move temporary file to your upload directory
-                    FM_notifyAdmins($name,$submitter,$description);
-                }
-            }
-            if (!$returnMove) {
-                if ($directUploadAccess) {
-                    Log::write('system',Log::ERROR,'Filemgmt submit error: Direct upload, file could not be created: '.$tmp.' to '.$filemgmt_FileStore . $name);
-                } else {
-                    Log::write('system',Log::ERROR,'Filemgmt submit error: Temporary file could not be created: '.$tmp.' to '. $filemgmt_FileStore.'tmp/'.$tmpfilename);
-                }
-                $eh->show("1102");
-            } else {
-                $AddNewFile = true;
-            }
-        }
-
-        // Upload New file snapshot image  - but only is file was uploaded ok
-        $uploadfilename = DB_escapeString($_FILES['newfileshot']['name']);
-        if ( $uploadfilename != '' ) {
-            $tmpshotname = randomfilename();
-            $tmp = $_FILES['newfileshot']['tmp_name'];    // temporary name of file in temporary directory on server
-            $pos = strrpos($uploadfilename,'.') + 1;
-            $fileExtension = strtolower(substr($uploadfilename, $pos));
-            if (array_key_exists($fileExtension, $_FMDOWNLOAD)) {
-                if ( $_FMDOWNLOAD[$fileExtension] == 'reject' ) {
-                    Log::write('system',Log::ERROR,'AddNewFile - New Upload file snapshot is rejected by config rule: '.$uploadfilename);
-                    $eh->show("1109");
-                } else {
-                    $fileExtension = $_FMDOWNLOAD[$fileExtension];
-                    $tmpshotname = $tmpshotname . ".$fileExtension";
-                    // Need to also rename the uploaded filename or URL that will be used for the approval name
-                    // Grab the filename without extension and add the mapped extension
-                    $pos = strrpos($logourl,'.') + 1;
-                    $logourl = strtolower(substr($logourl, 0,$pos)) . $fileExtension;
-                }
-            } else {
-                $tmpshotname = $tmpshotname . ".$fileExtension";
-                $logourl = rawurlencode(DB_escapeString($tmpshotname));
-            }
-            if ( $uploadfilename != '' AND $AddNewFile ) {
-                $upload = new upload();
-                $upload->setFieldName('newfileshot');
-                $upload->setFileNames($tmpshotname);
-                $upload->setPath($filemgmt_SnapStore);
-                $upload->setAllowAnyMimeType(false);
-                $upload->setAllowedMimeTypes (array ('image/gif'   => '.gif',
-                                                     'image/jpeg'  => '.jpg,.jpeg',
-                                                     'image/pjpeg' => '.jpg,.jpeg',
-                                                     'image/x-png' => '.png',
-                                                     'image/png'   => '.png'
-                                             )      );
-                $upload->setAutomaticResize (true);
-                if (isset ($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {
-                    $upload->setLogFile ($_CONF['path'] . 'logs/error.log');
-                    $upload->setDebug (true);
-                }
-                $upload->setMaxDimensions (640,480);
-                $upload->setAutomaticResize (true);
-                $upload->setMaxFileSize(100000000);
-                $upload->uploadFiles();
-                if ($upload->areErrors()) {
-                    $errmsg = "Upload Error: " . $upload->printErrors(false);
-                    Log::write('system',Log::ERROR,$errmsg);
-                    $logourl = '';
-                    $AddNewFile = false;    // Set false again - in case it was set true above for actual file
-                    $eh->show("1102");
-                }
-            }
-        }
-
-        if ($AddNewFile){
-            if ($directUploadAccess) {
-                $status = 1;
-            } else {
-                $status = 0;
-            }
-            $fields = 'cid,title,url,homepage,version,size,platform,logourl,submitter,status,date,hits,rating,votes,comments';
-            $sql = "INSERT INTO {$_TABLES['filemgmt_filedetail']} ($fields) VALUES ";
-            $sql .= "($cid,'$title','$url','$homepage','$version','$size','$tmpfilename','$logourl',$submitter,$status,'$date',0,0,0,$comments)";
-            DB_query($sql) or $eh->show("0013");
-            $newid = DB_insertID();
-            DB_query("INSERT INTO {$_TABLES['filemgmt_filedesc']} (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
-            if ($directUploadAccess) {
-				PLG_itemSaved($newid,'filemgmt');
-                $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
-                redirect_header("index.php",2,_MD_FILEAPPROVED);
-            } else {
-                redirect_header("index.php",2,_MD_RECEIVED."<br>"._MD_WHENAPPROVED."");
-            }
-            exit();
-        } else {
-            redirect_header("index.php",2,_MD_ERRUPLOAD."");
-            exit();
-        }
-
+        $File = new Filemgmt\Download;
+        $File->Save($_POST);
+        COM_refresh($_FM_CONF['url']);
     } else {
 
         $T = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
         $T->set_file('page', 'upload.thtml');
 
-        $categorySelectHTML = '';
+        /*$categorySelectHTML = '';
         $sql = "SELECT cid,title,grp_writeaccess FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
         if (count($_GROUPS) == 1) {
             $sql .= " AND grp_access = '" . current($_GROUPS) ."' ";
         } else {
             $sql .= " AND grp_access IN (" . implode(',',array_values($_GROUPS)) .") ";
-        }
-        $sql .= "ORDER BY cid";
+        }*/
+        /*$sql .= "ORDER BY cid";
         $query = DB_query($sql);
-
-        while (list($cid,$title,$directUploadGroup) = DB_fetchArray($query)) {
+            $categorySelectHTML = $mytree->makeMySelBox("title", "title", 1, 0,"cid");
+         */
+        /*while (list($cid,$title,$directUploadGroup) = DB_fetchArray($query)) {
             $categorySelectHTML .= '<option value="'.$cid.'">';
             if (!SEC_inGroup($directUploadGroup)) {
                 $categorySelectHTML .= "$title *";
@@ -445,48 +265,47 @@ if (SEC_hasRights("filemgmt.upload") OR $mydownloads_uploadselect) {
                 }
                 $categorySelectHTML .= "</option>\n";
             }
-        }
+            }*/
 
         $T->set_var(array(
-                    'lang_submitnotice' => _MD_SUBMITONCE,
-                    'lang_allpending'   => _MD_ALLPENDING,
-                    'lang_dontabuse'    => _MD_DONTABUSE,
-                    'lang_takedays'     => _MD_TAKEDAYS,
-                    'lang_required'     => _MD_REQUIRED,
-                    'lang_filetitle'    => _MD_FILETITLE,
-                    'lang_filename'     => _MD_DLFILENAME,
-                    'lang_category'     => _MD_CATEGORY,
-                    'lang_approve'      => _MD_APPROVEREQ,
-                    'lang_homepage'     => _MD_HOMEPAGEC,
-                    'lang_version'      => _MD_VERSIONC,
-                    'lang_desc'         => _MD_DESCRIPTIONC,
-                    'lang_screenshot'   => _MD_SHOTIMAGE,
-                    'lang_commentoption'=> _MD_COMMENTOPTION,
-                    'lang_no'           => _MD_NO,
-                    'lang_yes'          => _MD_YES,
-                    'lang_submit'       => _MD_SUBMIT,
-                    'lang_cancel'       => _MD_CANCEL,
-                    'token_name'        => CSRF_TOKEN,
-                    'security_token'    => SEC_createToken(),
-                    'cat_select_options'=> $categorySelectHTML,
-                    'uid'               => $uid,
+            'lang_submitnotice' => _MD_SUBMITONCE,
+            'lang_allpending'   => _MD_ALLPENDING,
+            'lang_dontabuse'    => _MD_DONTABUSE,
+            'lang_takedays'     => _MD_TAKEDAYS,
+            'lang_required'     => _MD_REQUIRED,
+            'lang_filetitle'    => _MD_FILETITLE,
+            'lang_filename'     => _MD_DLFILENAME,
+            'lang_category'     => _MD_CATEGORY,
+            'lang_approve'      => _MD_APPROVEREQ,
+            'lang_homepage'     => _MD_HOMEPAGEC,
+            'lang_version'      => _MD_VERSIONC,
+            'lang_desc'         => _MD_DESCRIPTIONC,
+            'lang_screenshot'   => _MD_SHOTIMAGE,
+            'lang_commentoption'=> _MD_COMMENTOPTION,
+            'lang_no'           => _MD_NO,
+            'lang_yes'          => _MD_YES,
+            'lang_submit'       => _MD_SUBMIT,
+            'lang_cancel'       => _MD_CANCEL,
+            'token_name'        => CSRF_TOKEN,
+            'security_token'    => SEC_createToken(),
+            'cat_select_options'=> $mytree->makeMySelBoxNoHeading("title", "title", 1, 0,"cid"),
+            'uid'               => $uid,
         ));
 
-        $display .= FM_siteHeader();
+        $display .= Filemgmt\Menu::siteHeader();
         $display .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
 
         $T->parse('output', 'page');
         $display .= $T->finish($T->get_var('output'));
 
         $display .= COM_endBlock();
-        $display .= FM_siteFooter();
+        $display .= Filemgmt\Menu::siteFooter();
         echo $display;
 
     }
 
 } else {
     Log::write('system',Log::ERROR,'Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is: '.$_SERVER['REAL_ADDR']);
-    redirect_header($_CONF['site_url']."/index.php",1,_GL_ERRORNOUPLOAD);
+    COM_setMsg(_GL_ERRORNOUPLOAD, 'error');
+    COM_refresh($_CONF['site_url'] . '/index.php');
 }
-
-?>
