@@ -31,7 +31,7 @@ use Filemgmt\Models\Status;
 $op = 'files';
 $expected = array(
     // Actions to perform
-    'saveCat', 'delCat', 'delVote', 'delDownload', 'saveDownload',
+    'saveCat', 'delCat', 'delVote', 'delDownload', 'saveDownload', 'dl_bulk',
     'ignoreBrokenLink', 'delBrokenLink',
     // Views to display
     'modCat', 'categoryConfigAdmin',
@@ -70,7 +70,7 @@ if (!SEC_hasRights('filemgmt.edit')) {
 }
 
 if ( isset($_POST['cancel']) ) {
-    echo COM_refresh($_CONF['site_url'].'/filemgmt/index.php');
+    echo COM_refresh($_FM_CONF['admin_url'] . '/index.php');
     exit;
 }
 
@@ -108,8 +108,7 @@ case "saveDownload":
         COM_setMsg(_MD_ERRUPLOAD, 'error');
         break;
     }
-    COM_refresh($_CONF['site_admin_url'] . '/plugins/filemgmt/index.php');
-    //addDownload();
+    COM_refresh($_FM_CONF['admin_url'] . '/index.php');
     break;
 case "listBrokenLinks":
     $content .= Filemgmt\BrokenLink::adminList();
@@ -117,13 +116,12 @@ case "listBrokenLinks":
 case "delBrokenLink":
     Filemgmt\BrokenLink::delete($opval);
     COM_setMsg(_MD_FILEDELETED);
-    COM_refresh($_CONF['site_admin_url'] . "/plugins/filemgmt/index.php?listBrokenDownloads");
-    //delBrokenDownloads();
+    COM_refresh($_FM_CONF['admin_url'] . "/index.php?listBrokenLinks");
     break;
 case "ignoreBrokenLink":
     Filemgmt\BrokenLink::ignore($opval);
     COM_setMsg(_MD_BROKENDELETED);
-    COM_refresh($_CONF['site_admin_url'] . "/plugins/filemgmt/index.php?listBrokenDownloads");
+    COM_refresh($_FM_CONF['admin_url'] . "/index.php?listBrokenLinks");
     //ignoreBrokenDownloads();
     break;
 case 'reportBrokenLink':
@@ -136,7 +134,7 @@ case "delVote":
     RATING_deleteVote($opval);
     $lid = (int)$_GET['lid'];
     COM_setMsg(_MD_VOTEDELETED);
-    COM_refresh("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?modDownload=$lid");
+    COM_refresh("{$_FM_CONF['admin_url']}/index.php?modDownload=$lid");
     exit;
     break;
 case "delCat":
@@ -144,17 +142,15 @@ case "delCat":
     break;
 case 'modCat':
     $content .= Filemgmt\Category::getInstance($opval)->edit();
-    //modCat();
     break;
 case 'saveCat':
 case "modCatS":
     $status = Filemgmt\Category::getInstance($_POST['cid'])->save($_POST);
-    COM_refresh("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php?categoryConfigAdmin");
+    COM_refresh("{$_FM_CONF['admin_url']}/index.php?categoryConfigAdmin");
     modCatS();
     break;
 case 'modDownload':
     $content .= Filemgmt\Download::getInstance($opval)->edit();
-    //modDownload();
     break;
 case "modDownloadS":
     echo "here";die;
@@ -166,7 +162,15 @@ case "delDownload":
     } else {
         COM_setMsg(_MD_FILENOTDELETED, 'error');
     }
-    COM_refresh("{$_CONF['site_admin_url']}/plugins/filemgmt/index.php");
+    COM_refresh("{$_FM_CONF['admin_url']}/index.php");
+    break;
+case 'dl_bulk':
+    if (is_array($opval)) {
+        foreach ($opval as $lid) {
+            Filemgmt\Download::getInstance($lid)->delete();
+        }
+    }
+    COM_refresh("{$_FM_CONF['admin_url']}/index.php");
     break;
 case "categoryConfigAdmin":
     $content .= Filemgmt\Category::adminList();
