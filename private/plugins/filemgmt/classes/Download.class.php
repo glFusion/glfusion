@@ -942,6 +942,19 @@ class Download
 
 
     /**
+     * Check if the current user can upload files at all.
+     *
+     * @return  boolean     True if uploads are allowed, False if not
+     */
+    public static function canSubmit()
+    {
+        global $_FM_CONF;
+
+        return (SEC_hasRights("filemgmt.upload") || $_FM_CONF['uploadselect']);
+    }
+
+
+    /**
      * Mark this file as approved.
      *
      * @return  object  $this
@@ -1042,8 +1055,14 @@ class Download
         );
         $text_arr = array(
             'has_extras' => true,
-            'form_url'   => $_FM_CONF['admin_url'] . '/index.php?cat='.(int) $cid,
+            'form_url'   => $_FM_CONF['admin_url'] . '/index.php?cat=' . (int)$cid,
             'help_url'   => ''
+        );
+        $options = array(
+            'chkdelete' => true,
+            'chkall' => true,
+            'chkfield' => 'lid',
+            'chkname' => 'dl_bulk',
         );
 
         $defsort_arr = array(
@@ -1085,7 +1104,7 @@ class Download
             'filelist',
             array(__CLASS__, 'getAdminField'),
             $header_arr,
-            $text_arr, $query_arr, $defsort_arr,$filter
+            $text_arr, $query_arr, $defsort_arr,$filter, '', $options
         );
         $display .= COM_endBlock();
         return $display;
