@@ -43,9 +43,12 @@
 
 	<ul uk-grid class="uk-grid uk-grid-collapse uk-width-1-1 uk-grid-width-1-2 uk-grid-width-medium-1-5 uk-child-width-1-2@s uk-child-width-1-5@m " style="margin-top:5px;">
 		<li><b>{LANG_VERSION}:</b>&nbsp;{version}</li>
+
 		<li><b>{LANG_SUBMITDATE}:</b>&nbsp;{datetime}</li>
-		<li><!--<i class="uk-icon uk-icon-bar-chart"></i>&nbsp;{rating}{votestring}--></li>
-		<li class="uk-width-1-2 uk-width-medium-1-10 uk-width-1-2@s uk-width-1-10@m">
+
+		<!--<li><i class="uk-icon uk-icon-bar-chart"></i>&nbsp;{rating}{votestring}</li>-->
+
+		<li>
 {!if have_dlreport}
 		    <a href="{site_url}/filemgmt/downloadhistory.php?lid={lid}" target="_blank">
 {!endif}
@@ -54,8 +57,10 @@
 </a>
 {!endif}
 		</li>
-		<li class="uk-width-1-2 uk-width-medium-1-6 uk-width-1-2@s uk-width-1-6@m"><i class="uk-icon-info-circle tooltip" title="{LANG_FILESIZE}" alt="{LANG_FILESIZE}"></i>&nbsp;{file_size}</li>
-		<li class="uk-width-1-2 uk-width-medium-1-10 uk-width-1-2@s uk-width-1-10@m" uk-lightbox>
+
+		<li><i class="uk-icon-info-circle tooltip" title="{LANG_FILESIZE}" alt="{LANG_FILESIZE}"></i>&nbsp;{file_size}</li>
+
+		<li uk-lightbox>
 {!if logourl}
 			<a href="{snapshot_url}" data-uk-lightbox rel="nofollow" target="_blank" class="tooltip" title="{LANG_CLICK2SEE}"><i class="uk-icon uk-icon-file-image-o"></i></a>
 {!endif}
