@@ -313,9 +313,9 @@ class Category
             'lang_delete' => 'Delete',
             'lang_cancel' => 'Cancel',
         ) );
-        if (!self::isUsed($this->cid)) {
+        //if (!self::isUsed($this->cid)) {
             $T->set_var('can_delete', 'true');
-        }
+        //}
         $T->parse('output', 'category');
         $retval .= $T->finish($T->get_var('output'));
         $retval .= COM_endBlock();
@@ -350,10 +350,6 @@ class Category
         global $_TABLES;
 
        $cid = (int)$cid;
-
-        if ($cid == 1) {
-            return true;
-        }
 
         // Check if any products are under this category
         if (self::hasFiles($cid) > 0) {
@@ -556,7 +552,7 @@ class Category
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_SHOP_CONF, $_TABLES, $LANG_ADMIN;
+        global $_SHOP_CONF, $_TABLES, $LANG_ADMIN, $_FM_CONF;
 
         $retval = '';
         static $grp_names = array();
@@ -598,7 +594,7 @@ class Category
             break;
 
         case 'delete':
-            if (!self::isUsed($A['cid'])) {
+            //if (!self::isUsed($A['cid'])) {
                 $retval .= COM_createLink(
                     '<i class="uk-icon uk-icon-remove uk-text-danger"></i>',
                     'index.php?delCat=' . $A['cid'],
@@ -608,7 +604,7 @@ class Category
                         'class' => 'tooltip',
                     )
                 );
-            }
+            //}
             break;
 
         case 'title':
