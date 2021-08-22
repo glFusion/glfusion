@@ -44,7 +44,7 @@ use \glFusion\Log\Log;
 
 USES_lib_image();
 
-if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $mydownloads_publicpriv != 1 )  {
+if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_FM_CONF['selectpriv'] == 1 )  {
     Log::write('system',Log::ERROR,"Visit.php => FileMgmt Plugin Access denied. Attempted download of file ID:{$lid}");
     COM_setMsg(_GL_ERRORNOACCESS, 'error');
     COM_refresh($_CONF['site_url']."/index.php");
