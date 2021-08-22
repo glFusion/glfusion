@@ -427,7 +427,7 @@ class Category
     {
         global $_GROUPS;
 
-        if (in_array($this->grp_writeaccess, $groups)) {
+        if (in_array($this->grp_writeaccess, $_GROUPS)) {
             return true;
         } else {
             return false;

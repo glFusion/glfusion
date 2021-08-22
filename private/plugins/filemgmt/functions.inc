@@ -623,8 +623,10 @@ function plugin_cclabel_filemgmt()
 
 
 /**
-* Setup the user menu options for this plugin.
-*/
+ * Setup the user menu options for this plugin.
+ *
+ * @return  array|boolean   Array of menu information, false if not allowed.
+ */
 function plugin_getuseroption_filemgmt()
 {
     global $_CONF, $_TABLES, $LANG_FILEMGMT, $_FM_CONF;
