@@ -103,6 +103,7 @@ if ($lid > 0) {
 
     $p->set_var ('imgset',$_CONF['layout_url'] . '/nexflow/images');
     $p->set_var ('tablewidth', $_FM_CONF['shotwidth'] + 10);
+    $p->set_var('can_submit', Filemgmt\Download::canSubmit());
 
     $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
     if ($page < 1) {

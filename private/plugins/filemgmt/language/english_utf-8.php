@@ -284,7 +284,7 @@ define("_MD_INTFILEAT","Interesting Download File at %s"); // %s is your site na
 define("_MD_INTFILEFOUND","Here is an interesting download file I have found at %s"); // %s is your site name
 
 define("_MD_RECEIVED","We received your download information. Thanks!");
-define("_MD_WHENAPPROVED","You'll receive an E-mail when it's approved.");
+define("_MD_WHENAPPROVED","You&apos;ll receive an E-mail when it&apos;s approved.");
 define("_MD_SUBMITONCE","Submit your file/script only once.");
 define("_MD_APPROVED", "Your file has been approved");
 define("_MD_ALLPENDING","All file/script information are posted pending verification.");

@@ -77,7 +77,7 @@ function FM_notifyAdmins( $filename,$file_user_id,$description ) {
             'username'          =>  $uname,
             'filename'          =>  $filename,
             'description'       =>  $description,
-            'url_moderate'      =>  '<a href="' . $_CONF['site_admin_url'] . '/plugins/filemgmt/index.php?op=listNewDownloads">Click here to view</a>',
+            'url_moderate'      =>  '<a href="' . $_FM_CONF['admin_url'] . '/index.php?op=listNewDownloads">Click here to view</a>',
             'site_name'         =>  $_CONF['site_name'] . ' - ' . $_CONF['site_slogan'],
             'site_url'          =>  $_CONF['site_url'],
         ));
@@ -189,8 +189,7 @@ if ( isset($_USER['uid']) ) {
     $uid = 1;
 }
 
-if (SEC_hasRights("filemgmt.upload") OR $_FM_CONF['uploadselect']) {
-
+if (Filemgmt\Download::canSubmit()) {
     $groupsql = SEC_buildAccessSql();
     $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
     $sql .= $groupsql;
@@ -231,7 +230,7 @@ if (SEC_hasRights("filemgmt.upload") OR $_FM_CONF['uploadselect']) {
             COM_setMsg(_MD_NEWDLADDED);
             break;
         case Status::UPL_PENDING:
-            COM_setMsg(_MD_RECEIVED . '<br />' . _MD_WHENAPPROVED);
+            COM_setMsg(_MD_RECEIVED . '<br />' . _MD_WHENAPPROVED, 'success');
             break;
         case Status::UPL_ERROR:
         default:
@@ -282,7 +281,6 @@ if (SEC_hasRights("filemgmt.upload") OR $_FM_CONF['uploadselect']) {
         $display .= COM_endBlock();
         $display .= Filemgmt\Menu::siteFooter();
         echo $display;
-
     }
 
 } else {
