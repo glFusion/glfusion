@@ -11,9 +11,17 @@
 <div>{category_records}</div>
 {!endif}
 {sort_menu}
-<div style="margin-top:1em;">
-	{listing_heading}
+<div uk-grid class="uk-grid uk-grid-width-1-2 uk-child-width-1-2">
+	<div>
+		{listing_heading}
+	</div>
+{!if can_submit}
+	<div style="text-align:right">
+		<a href="{site_url}/filemgmt/submit.php" class="uk-button uk-button-success">{$LANG_FILEMGMT['usermenu3']}</a>
+	</div>
+{!endif}
 </div>
+
 <div class="uk-width-1-1 uk-margin" style="clear:both;margin-top:10px;">
 <!-- BEGIN fileRecords -->
 	{filelisting_record}
