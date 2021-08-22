@@ -37,11 +37,6 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
-/*include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
- */
 use \glFusion\Database\Database;
 
 $display = '';
@@ -52,7 +47,10 @@ $mytree = new Filemgmt\XoopsTree('',$_TABLES['filemgmt_cat'],'cid','pid');
 $mytree->setGroupAccessFilter($_GROUPS);
 $db = Database::getInstance();
 
-$page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+$page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 1;
+if ($page < 1) {
+    $page = 1;
+}
 $cid  = isset($_GET['cid']) ? COM_applyFilter($_GET['cid'],true) : 0;
 $orderby  = isset($_GET['orderby']) ? @html_entity_decode(COM_applyFilter($_GET['orderby'],false)) : 'date';
 if (!in_array($orderby, array('date', 'title', 'hits', 'rating'))) {
@@ -78,8 +76,6 @@ if ($cid == 0 || $category_rows == 0) {
     exit;
 }
 
-$FM_ratedIds = RATING_getRatedIds('filemgmt');
-
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
@@ -87,22 +83,19 @@ $p->set_file (array (
     'category'         =>     'filelisting_subcategory.thtml',
     'sortmenu'         =>     'sortmenu.thtml'));
 
-$p->set_var ('tablewidth', $mydownloads_shotwidth+10);
+$p->set_var ('tablewidth', $_FM_CONF['shotwidth'] + 10);
 $p->set_var('block_header', COM_startBlock(_MD_CATEGORYTITLE));
 $p->set_var('block_footer', COM_endBlock());
 
 $trimDescription=true;    // Set to false if you do not want to auto trim the description and insert the <more..> link
 
-if (!isset($page) || $page == 0) {
-    // If no page sent then assume the first.
-    $page = 1;
-}
-$show = $mydownloads_perpage;
+$show = (int)$_FM_CONF['perpage'];
 $offset = ($page - 1) * $show;
 
 $pathstring = "<a href='index.php'>"._MD_MAIN."</a>&nbsp;:&nbsp;";
 $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_FM_CONF['url']}/viewcat.php");
 $pathstring .= $nicepath;
+
 $p->set_var('category_path_link',$pathstring);
 $p->set_var('cid',$cid);
 
@@ -117,7 +110,7 @@ foreach($arr as $ele) {
     $totalfiles = 0;
     //debugbreak();
     $chtitle=$myts->makeTboxData4Show($ele['title']);
-    $totalfiles = $totalfiles + getTotalItems($ele['cid'], 1);
+    $totalfiles = $totalfiles + Filemgmt\Download::getTotalByCategory($ele['cid'], 1);
     $subcategories = '<a href="' .$_FM_CONF['url'] .'/viewcat.php?cid=' .$ele['cid'] .'">' .$chtitle .'</a>&nbsp;('.$totalfiles.')&nbsp;&nbsp;';
     $p->set_var('subcategories',$subcategories);
     if ($count == $numCategoriesPerRow) {
@@ -153,18 +146,17 @@ try {
 if ($stmt) {
     $results = $stmt->fetchAll(Database::ASSOCIATIVE);
 }
-
+$categories = $cid;
 foreach ($results as $A) {
-    $categories .= ",$category";
+    $categories .= ",{$A['cid']}";
 }
 
 try {
     $stmt = $db->conn->prepare(
         "SELECT COUNT(*) as num_rows FROM {$_TABLES['filemgmt_filedetail']} a
         LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid
-        WHERE a.cid = ? AND status > 0 $groupsql"
+        WHERE a.cid IN ($categories) AND status > 0 $groupsql"
     );
-    $stmt->bindParam(1, $cid, Database::INTEGER);
     $stmt->execute();
     $maxrows = $stmt->fetchColumn();
 } catch(Throwable $e) {
@@ -178,16 +170,15 @@ $numpages = ceil($maxrows / $show);
 if($maxrows > 0) {
     try {
         $stmt = $db->conn->prepare(
-            "SELECT a.lid, b.description
+            "SELECT a.*, b.description
                 FROM {$_TABLES['filemgmt_filedetail']} a
                 LEFT JOIN  {$_TABLES['filemgmt_filedesc']} b on a.lid=b.lid
                 LEFT JOIN {$_TABLES['filemgmt_cat']} c ON a.cid=c.cid
-                WHERE a.cid = :cid
+                WHERE a.cid IN ($categories)
                 AND a.status > 0 $groupsql
                 ORDER BY a.$orderby $sortdir
                 LIMIT :offset, :show"
         );
-        $stmt->bindParam('cid', $cid, Database::INTEGER);
         $stmt->bindParam('offset', $offset, Database::INTEGER);
         $stmt->bindParam('show', $show, Database::INTEGER);
         $stmt->execute();
@@ -232,20 +223,19 @@ if($maxrows > 0) {
     $cssid = 1;
     $p->set_block('page', 'fileRecords', 'fRecord');
     foreach ($records as $A) {
-        $D = new Filemgmt\Download($A['lid']);
+        $D = new Filemgmt\Download($A);
         $p->set_var('filelisting_record', $D->showListingRecord());
         $p->parse('fRecord', 'fileRecords', true);
     }
 
     $base_url = $_FM_CONF['url'] . "/viewcat.php?cid=$cid&amp;orderby=$orderby&amp;dir=$sortdir";
     $p->set_var('page_navigation', COM_printPageNavigation($base_url,$page, $numpages));
-    $p->parse ('output', 'page');
-    $display .= $p->finish($p->get_var('output'));
 }  else {
-    $p->set_var('filelisting_records','<tr><td><div class="pluginAlert" style="width:500px;padding:10px;margin:10px;border:1px dashed #CCC;">'._MD_NOFILES.'</div></td></tr>');
-    $p->parse ('output', 'page');
-    $display .= $p->finish ($p->get_var('output'));
+    $p->set_var('no_files', true);
+    $p->set_var('lang_nofiles', _MD_NOFILES);
 }
+$p->parse ('output', 'page');
+$display .= $p->finish ($p->get_var('output'));
 
 echo Filemgmt\Menu::siteHeader($LANG_FILEMGMT['usermenu1']);
 echo $display;

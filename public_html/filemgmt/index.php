@@ -105,7 +105,7 @@ if ($lid > 0) {
     $p->set_var ('tablewidth', $_FM_CONF['shotwidth'] + 10);
 
     $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
-    if (!isset($page) OR $page == 0) {
+    if ($page < 1) {
         $page = 1;
     }
     $show = (int)$_FM_CONF['perpage'];
@@ -128,7 +128,8 @@ if ($lid > 0) {
     $p->set_var('block_footer', COM_endBlock());
     $count = 0;
 
-    if ($nrows > 0) {        // Display the categories - Top Level (plus #files) with links to sub categories
+    if ($nrows > 0) {
+        // Display the categories - Top Level (plus #files) with links to sub categories
         for ($i = 1; $i <= $nrows; $i++) {
             $myrow = DB_fetchArray($result);
             $secGroup = DB_getItem($_TABLES['groups'], "grp_name", "grp_id='{$myrow['grp_access']}'");
@@ -145,13 +146,9 @@ if ($lid > 0) {
                     $p->set_var('category_link','');
                 }
 
-                $downloadsWaitingSubmission = Filemgmt\Download::getTotalItems($myrow['cid'], 0);
-                $p->set_var('num_files', Filemgmt\Download::getTotalItems($myrow['cid'], 1));
-                if ($downloadsWaitingSubmission > 0) {
-                    $p->set_var('files_waiting_submission','(' . Filemgmt\Download::getTotalItems($myrow['cid'], 0) .')');
-                } else {
-                   $p->set_var('files_waiting_submission','');
-                }
+                $downloadsWaitingSubmission = Filemgmt\Download::getTotalByCategory($myrow['cid'], 0);
+                $p->set_var('num_files', Filemgmt\Download::getTotalByCategory($myrow['cid'], 1));
+                $p->set_var('files_waiting_submission', $downloadsWaitingSubmission);
 
                 // get child category objects
                 $subcategories = '';
