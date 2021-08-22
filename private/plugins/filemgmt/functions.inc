@@ -120,8 +120,8 @@ if (!isset($_FM_CONF['perpage'])) {
     //$filemgmtWhatsNewTitleLength= $_FM_CONF['whatsnewtitlelength'];
     //$filemgmt_showWhatsNewComments = $_FM_CONF['showwhatsnewcomments'];
 }
-$_FM_CONF['url'] = $_CONF['site_url'] . '/filemgmt/';
-$_FM_CONF['admin_url'] = $_CONF['site_admin_url'] . '/plugins/filemgmt/';
+$_FM_CONF['url'] = $_CONF['site_url'] . '/filemgmt';
+$_FM_CONF['admin_url'] = $_CONF['site_admin_url'] . '/plugins/filemgmt';
 
 if ( COM_isAnonUser() ) {
     $$_FM_CONF['uploadselect'] = $_FM_CONF['uploadpublic'];
@@ -144,10 +144,9 @@ function plugin_getmenuitems_filemgmt()
     if (COM_isAnonUser() && $_FM_CONF['selectpriv'] == 1) {
         return '';
     }
-
-    $menuitems = array();
-    $menuitems["{$LANG_FILEMGMT['downloads']}"] = $_FM_CONF['url'] . "/index.php";
-    return $menuitems;
+    return array(
+        $LANG_FILEMGMT['downloads'] => $_FM_CONF['url'] . '/index.php',
+    );
 }
 
 
@@ -655,12 +654,11 @@ function plugin_getadminoption_filemgmt()
     global $_FM_CONF, $_TABLES, $LANG_FILEMGMT;
 
     if (SEC_hasRights('filemgmt.edit')) {
-        $result = DB_query("SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} WHERE status=0");
-        list($submittedfiles) = DB_fetchARRAY($result);
+        $count = DB_count($_TABLES['filemgmt_filedetail'], 'status', 1);
         return array(
             $LANG_FILEMGMT['admin_menu'],
             $_FM_CONF['admin_url'] . '/index.php',
-            $submittedfiles
+            $count,
         );
     }
 }
