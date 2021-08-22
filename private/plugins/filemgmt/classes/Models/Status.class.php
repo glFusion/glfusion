@@ -28,4 +28,5 @@ class Status
     const UPL_DUPSNAP = 2;
     const UPL_ERROR = 3;
     const UPL_NODEMO = 4;
+    const UPL_PENDING = 5;
 }

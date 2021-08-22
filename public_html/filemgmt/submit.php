@@ -25,13 +25,7 @@ use \glFusion\Log\Log;
 use Filemgmt\XoopsTree;
 use Filemgmt\MyTextSanitizer;
 use Filemgmt\ErrorHandler;
-
-/*include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/errorhandler.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
- */
+use Filemgmt\Models\Status;
 
 function FM_notifyAdmins( $filename,$file_user_id,$description ) {
     global $LANG_DIRECTION, $LANG_CHARSET, $LANG_FM00, $_USER, $_FM_CONF, $_CONF, $_TABLES;
@@ -197,11 +191,6 @@ if ( isset($_USER['uid']) ) {
 
 if (SEC_hasRights("filemgmt.upload") OR $_FM_CONF['uploadselect']) {
 
-    $myts = new MyTextSanitizer; // MyTextSanitizer object
-    $eh = new ErrorHandler; //ErrorHandler object
-    $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
-    $mytree->setGroupAccessFilter($_GROUPS);
-
     $groupsql = SEC_buildAccessSql();
     $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
     $sql .= $groupsql;
@@ -227,46 +216,38 @@ if (SEC_hasRights("filemgmt.upload") OR $_FM_CONF['uploadselect']) {
         }
 
         $File = new Filemgmt\Download;
-        $File->Save($_POST);
-        COM_refresh($_FM_CONF['url']);
+        $status = $File->Save($_POST);
+        switch($status) {
+        case Status::UPL_NODEMO:
+            COM_setMsg('Uploads are disabled in demo mode', 'error');
+            break;
+        case Status::UPL_DUPFILE:
+            COM_setMsg(_MD_NEWDLADDED_DUPFILE, 'error');
+            break;
+        case Status::UPL_DUPSNAP:
+            COM_setMsg(_MD_NEWDLADDED_DUPSNAP, 'error');
+            break;
+        case Status::OK:
+            COM_setMsg(_MD_NEWDLADDED);
+            break;
+        case Status::UPL_PENDING:
+            COM_setMsg(_MD_RECEIVED . '<br />' . _MD_WHENAPPROVED);
+            break;
+        case Status::UPL_ERROR:
+        default:
+            COM_setMsg(_MD_ERRUPLOAD, 'error');
+            break;
+        }
+        COM_refresh($_FM_CONF['url'] . '/index.php');
     } else {
+
+        $myts = new MyTextSanitizer; // MyTextSanitizer object
+        $eh = new ErrorHandler; //ErrorHandler object
+        $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
+        $mytree->setGroupAccessFilter($_GROUPS);
 
         $T = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
         $T->set_file('page', 'upload.thtml');
-
-        /*$categorySelectHTML = '';
-        $sql = "SELECT cid,title,grp_writeaccess FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
-        if (count($_GROUPS) == 1) {
-            $sql .= " AND grp_access = '" . current($_GROUPS) ."' ";
-        } else {
-            $sql .= " AND grp_access IN (" . implode(',',array_values($_GROUPS)) .") ";
-        }*/
-        /*$sql .= "ORDER BY cid";
-        $query = DB_query($sql);
-            $categorySelectHTML = $mytree->makeMySelBox("title", "title", 1, 0,"cid");
-         */
-        /*while (list($cid,$title,$directUploadGroup) = DB_fetchArray($query)) {
-            $categorySelectHTML .= '<option value="'.$cid.'">';
-            if (!SEC_inGroup($directUploadGroup)) {
-                $categorySelectHTML .= "$title *";
-            } else {
-                $categorySelectHTML .= "$title";
-            }
-            $categorySelectHTML .= "</option>\n";
-            $arr = $mytree->getChildTreeArray($cid);
-            foreach ( $arr as $option ) {
-                $option['prefix'] = str_replace(".","--",$option['prefix']);
-                $catpath = $option['prefix']."&nbsp;".$myts->makeTboxData4Show($option[2]);
-                $categorySelectHTML .= '<option value="'.$option[$mytree->id] . '">';
-                if (!SEC_inGroup($option[5])) {
-                    $categorySelectHTML .= "$catpath *";
-                } else {
-                    $categorySelectHTML .= "$catpath";
-                }
-                $categorySelectHTML .= "</option>\n";
-            }
-            }*/
-
         $T->set_var(array(
             'lang_submitnotice' => _MD_SUBMITONCE,
             'lang_allpending'   => _MD_ALLPENDING,

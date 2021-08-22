@@ -631,10 +631,11 @@ class Download
                 $sql3 = '';
                 // Determine write access to category for new uploads
                 $Cat = new Category($this->cid);
-                if ($Cat->hasWriteAccess()) {
-                    $this->status = 1;
+                if ($Cat->canUpload()) {
+                    $this->status = Status::APPROVED;
                 } else {
-                    $this->status = 0;
+                    $this->status = Status::SUBMISSION;
+                    $retval = Status::UPL_PENDING;
                 }
             } else {
                 $sql1 = "UPDATE {$_TABLES['filemgmt_filedetail']} SET ";
@@ -721,10 +722,10 @@ class Download
         $tmpfile = $_FM_CONF['FileStore'] . $this->url;
         $tmpsnap  = $_FM_CONF['SnapStore'] . $this->logourl;
 
-        DB_delete($_TABLES['filemgmt_filedetail'], 'lid', $lid);
-        DB_delete($_TABLES['filemgmt_filedesc'], 'lid', $lid);
-        DB_delete($_TABLES['filemgmt_votedata'], 'lid', $lid);
-        DB_delete($_TABLES['filemgmt_brokenlinks'], 'lid', $lid);
+        DB_delete($_TABLES['filemgmt_filedetail'], 'lid', $this->lid);
+        DB_delete($_TABLES['filemgmt_filedesc'], 'lid', $this->lid);
+        DB_delete($_TABLES['filemgmt_votedata'], 'lid', $this->lid);
+        DB_delete($_TABLES['filemgmt_brokenlinks'], 'lid', $this->lid);
         DB_delete($_TABLES['comments'], array('sid', 'type'), array($this->lid, 'filemgmt'));
 
         // Check for duplicate files of the same filename (actual filename in repository)
@@ -743,7 +744,7 @@ class Download
             }
         }
 
-        PLG_itemDeleted($lid,'filemgmt');
+        PLG_itemDeleted($this->lid,'filemgmt');
         $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
         return true;
     }
