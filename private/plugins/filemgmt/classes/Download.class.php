@@ -2,8 +2,9 @@
 /**
  * Class to manage file items.
  *
+ * @author      Mark R. Evans <mark AT glfusion DOT org>
  * @author      Lee Garner <lee@leegarner.com>
- * @copyright   Copyright (c) 2021 Lee Garner <lee@leegarner.com>
+ * @copyright   Copyright (c) 2008-2021 Mark R. Evans <mark AT glfusion DOT org>
  * @package     filemgmt
  * @version     v1.9.0
  * @since       v0.9.0
@@ -105,8 +106,6 @@ class Download
     {
         global $_USER;
 
-        $this->isNew = true;
-
         if (is_array($lid)) {
             $this->setVars($lid, true);
         } elseif ($lid > 0) {
@@ -204,12 +203,18 @@ class Download
         } else {
             //$row = DB_fetchArray($result, false);
             $this->setVars($data[0], true);
-            $this->isNew = false;
             return true;
         }
     }
 
 
+    /**
+     * Get all file downloads, subject to an opional query string and limit.
+     *
+     * @param   string  $where  Optional WHERE clause, not including keyword
+     * @param   string  $limit  Optionsl LIMIT clause, not including keyword
+     * @return  array       Array of all matching download records
+     */
     public static function getAll($where = '', $limit = '')
     {
         global $_TABLES;
@@ -235,6 +240,12 @@ class Download
     }
 
 
+    /**
+     * Get an array of all new uploads.
+     *
+     * @uses    self::getAll()
+     * @return  array       Array of newly-upload downloads.
+     */
     public static function getNewUploads()
     {
         global $_FM_CONF;
@@ -245,8 +256,8 @@ class Download
 
 
     /**
-     * Get a category instance.
-     * Checks cache first and creates a new object if not found.
+     * Get a download instance.
+     * Checks static var first to limit DB reads for duplcicate requests.
      *
      * @param   integer $lid    Download ID
      * @return  object          Category object
@@ -258,17 +269,6 @@ class Download
             $files[$lid] = new self($lid);
         }
         return $files[$lid];
-    }
-
-
-    /**
-     * Determine if this category is a new record, or one that was not found
-     *
-     * @return  integer     1 if new, 0 if existing
-     */
-    public function isNew()
-    {
-        return $this->isNew ? 1 : 0;
     }
 
 
@@ -346,12 +346,23 @@ class Download
     }
 
 
+    /**
+     * Get the file URL.
+     *
+     * @return  string      File URL
+     */
     public function getUrl()
     {
         return $this->url;
     }
 
 
+    /**
+     * Set the home page value.
+     *
+     * @param   string  $hp     Home pate
+     * @return  object  $this
+     */
     public function setHomepage($hp)
     {
         $this->homepage = $hp;
@@ -359,6 +370,12 @@ class Download
     }
 
 
+    /**
+     * Set the file version.
+     *
+     * @param   string  $ver    File version
+     * @return  object  $this
+     */
     public function setVersion($ver)
     {
         $this->version = $ver;
@@ -366,6 +383,12 @@ class Download
     }
 
 
+    /**
+     * Set the file size value.
+     *
+     * @param   integer $size   File size in bytes
+     * @return  object  $this
+     */
     public function setSize($size)
     {
         $this->size = (int)$size;
@@ -373,18 +396,36 @@ class Download
     }
 
 
+    /**
+     * Set the platform for the file.
+     *
+     * @param   string  $platform   Platform value
+     * @return  object  $this
+     */
     public function setPlatform($platform)
     {
         $this->platform = $platform;
         return $this;
     }
 
+
+    /**
+     * Get the platform for this file.
+     *
+     * @return  string      File platform
+     */
     public function getPlatform()
     {
         return $this->platform;
     }
 
 
+    /**
+     * Set the logo filename.
+     *
+     * @param   string  $url    Logo URL (filename)
+     * @return  object  $this
+     */
     public function setLogoUrl($url)
     {
         $this->logourl = $url;
@@ -392,6 +433,12 @@ class Download
     }
 
 
+    /**
+     * Set the submitter's user ID.
+     *
+     * @param   integer $uid    User ID of the submitter
+     * @return  object  $this
+     */
     public function setSubmitter($uid)
     {
         $this->submitter = (int)$uid;
@@ -399,11 +446,24 @@ class Download
     }
 
 
+    /**
+     * Get the submitter's user ID.
+     *
+     * @return  integer     Submitter user ID
+     */
     public function getSubmitter()
     {
         return (int)$this->submitter;
     }
 
+
+    /**
+     * Set the status flag.
+     * 1 = approved, 0 = submission
+     *
+     * @param   integer $flag   Status flag
+     * @return  object  $this
+     */
     public function setStatus($flag)
     {
         $this->status = (int)$flag;
@@ -411,6 +471,12 @@ class Download
     }
 
 
+    /**
+     * Set the file upload date as a timestamp.
+     *
+     * @param   integer $ts     Timestamp
+     * @return  object  $this
+     */
     public function setDate($ts)
     {
         $this->date = (int)$ts;
@@ -418,6 +484,12 @@ class Download
     }
 
 
+    /**
+     * Set the download count.
+     *
+     * @param   integer $hits   Download counter value
+     * @return  object  $this
+     */
     public function setHits($hits)
     {
         $this->hits = (int)$hits;
@@ -425,6 +497,12 @@ class Download
     }
 
 
+    /**
+     * Set the rating value.
+     *
+     * @param   float   $rating Rating score
+     * @return  object  $this
+     */
     public function setRating($rating)
     {
         $this->rating = (float)$rating;
@@ -432,6 +510,12 @@ class Download
     }
 
 
+    /**
+     * Set the number of votes recieved.
+     *
+     * @param   integer $votes  Number of votes received
+     * @return  object  $this
+     */
     public function setVotes($votes)
     {
         $this->votes = (int)$votes;
@@ -439,6 +523,12 @@ class Download
     }
 
 
+    /**
+     * Set the comment flag value.
+     *
+     * @param   integer $flag   Flag value (0, 1 or 2)
+     * @return  object  $this
+     */
     public function setComments($flag)
     {
         $this->comments = (int)$flag;
@@ -446,29 +536,27 @@ class Download
     }
 
 
+    /**
+     * Get the comment flag value.
+     *
+     * @return  integer     Comment flag
+     */
     public function getCommentFlag()
     {
         return (int)$this->comments;
     }
 
 
+    /**
+     * Set the file description.
+     *
+     * @param   strng   $dscp   File description
+     * @return  object  $this
+     */
     public function setDescription($dscp)
     {
         $this->description = $dscp;
         return $this;
-    }
-
-
-    public static function getTotalItems($sel_id, $status=-1)
-    {
-        global $_TABLES, $_DB_name;
-
-        if ($status != -1) {
-            return DB_count($_TABLES['filemgmt_filedetail']);
-        } else {
-            return DB_count($_TABLES['filemgmt_filedetail'], 'status', (int)$status);
-        }
-        return $count;
     }
 
 
@@ -493,19 +581,10 @@ class Download
 
         // Be optimistic
         $retval = Status::UPL_OK;
+        $errormsg = "";
 
         $myts = new MyTextSanitizer;
         $eh = new ErrorHandler;
-
-        /*$title = $myts->makeTboxData4Save($_POST['title']);
-        $homepage = $myts->makeTboxData4Save($_POST['homepage']);
-        $version = $myts->makeTboxData4Save($_POST['version']);
-        $description = $myts->makeTareaData4Save($_POST['description']);
-        $commentoption = $_POST['comments'];
-        $fileurl = COM_applyFilter($_POST['fileurl']);
-        $submitter = $_USER['uid'];*/
-
-        $errormsg = "";
 
         // Check if Title blank
         if ($this->title=="") {
@@ -526,12 +605,6 @@ class Download
             $cid = 0;
             $eh->show("1110");
         }
-
-        /*$filename = ''; //$myts->makeTboxData4Save($_FILES['newfile']['name']);
-        $url = ''; //$myts->makeTboxData4Save(rawurlencode($filename));
-        $snapfilename = '';// = $myts->makeTboxData4Save($_FILES['newfileshot']['name']);
-        $logourl = '';//$myts->makeTboxData4Save(rawurlencode($snapfilename));
-         */
 
         $upload = new UploadDownload();
         $upload->setPerms('0644');
@@ -682,38 +755,11 @@ class Download
         }
         return $retval;
 
-    }   // function Save()
+    }   // function save()
 
 
     /**
-     * Propagate permissions to sub-categories.
-     *
-     * @param   integer $grp_id     Group ID to allow permission
-     */
-    private function _propagatePerms($grp_id)
-    {
-        global $_TABLES;
-
-        if ($grp_id == $this->grp_access) return;   // nothing to do
-
-        $c = self::getTree($this->cid);
-        $upd_cats = array();
-        foreach ($c as $cat) {
-            if ($cat->cid == $this->cid) continue; // already saved
-            $upd_cats[] = $cat->cid;
-        }
-        if (!empty($upd_cats)) {
-            $upd_cats = implode(',', $upd_cats);
-            $sql = "UPDATE {$_TABLES['filemgmt_cat']}
-                    SET grp_access = {$this->grp_access}
-                    WHERE cid IN ($upd_cats)";
-            DB_query($sql);
-        }
-    }
-
-
-    /**
-     *  Delete the current category record from the database.
+     * Delete the current download record from the database.
      */
     public function delete()
     {
@@ -751,10 +797,10 @@ class Download
 
 
     /**
-     *  Creates the edit form.
+     * Creates the edit form.
      *
-     *  @param  integer $id Optional ID, current record used if zero
-     *  @return string      HTML for edit form
+     * @param  integer $id Optional ID, current record used if zero
+     * @return string      HTML for edit form
      */
     public function edit()
     {
@@ -883,109 +929,8 @@ class Download
 
 
     /**
-     * Toogles a boolean value to the opposite of the current value.
-     *
-     * @param   integer $oldvalue   Old value to change
-     * @param   string  $varname    Field name to change
-     * @param   integer $id         ID number of element to modify
-     * @return  integer             New value, or old value upon failure
-     */
-    protected static function do_toggle($oldvalue, $varname, $id)
-    {
-        $newval = self::Toggle($oldvalue, $varname, $id);
-        return $newval;
-    }
-
-
-    /**
-     * Sets the "enabled" field to the specified value.
-     *
-     * @param   integer $oldvalue   Original value to be changed
-     * @param   integer $id         ID number of element to modify
-     * @return  integer         New value, or old value upon failure
-     */
-    public static function toggleEnabled($oldvalue, $id)
-    {
-        return self::do_toggle($oldvalue, 'enabled', $id);
-    }
-
-
-    /**
-     * Check if there are any products directly under a category ID.
-     *
-     * @param   integer$cid     Category ID to check
-     * @return  integer     Number of products under the category
-     */
-    public static function hasFiles($cid)
-    {
-        global $_TABLES;
-
-        return DB_count($_TABLES['filemgmt_filedetail'], 'cid', (int)$cid);
-    }
-
-
-    /**
-     * Determine if a category is used by any products.
-     * Used to prevent deletion of a category if it would orphan a product.
-     *
-     *  @param  integer$cid     Category ID to check.
-     * @return  boolean     True if used, False if not
-     */
-    public static function isUsed($cid=0)
-    {
-        global $_TABLES;
-
-       $cid = (int)$cid;
-
-        if ($cid == 1) {
-            return true;
-        }
-
-        // Check if any products are under this category
-        if (self::hasFiles($cid) > 0) {
-            return true;
-        }
-
-        // Check if any categories are under this one.
-        if (DB_count($_TABLES['filemgmt_cat'], 'pid', $cid) > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Add an error message to the Errors array.
-     * Also could be used to log certain errors or perform other actions.
-     *
-     * @param   string  $msg    Error message to append
-     */
-    public function AddError($msg)
-    {
-        $this->Errors[] = $msg;
-    }
-
-
-    /**
-     *  Create a formatted display-ready version of the error messages.
-     *
-     *  @return string      Formatted error messages.
-     */
-    public function PrintErrors()
-    {
-        $retval = '';
-
-        foreach($this->Errors as $key=>$msg) {
-            $retval .= "<li>$msg</li>\n";
-        }
-        return $retval;
-    }
-
-
-    /**
      * Determine if the current user has read access to this file.
-     * First checks that this is a valid record.
+     * First checks that this is a valid record (ID > 0).
      *
      * @param   array|null  $groups     Array of groups, needed for sitemap
      * @return  boolean     True if user has access, False if not
@@ -997,17 +942,10 @@ class Download
 
 
     /**
-     * Get the URL to the category image.
-     * Returns an empty string if no image defined or found.
+     * Mark this file as approved.
      *
-     * @return  string  URL of image, empty string if file not found
+     * @return  object  $this
      */
-    public function getImage()
-    {
-        return Images\Category::getUrl($this->image);
-    }
-
-
     public function approve()
     {
         global $_TABLES;
@@ -1023,6 +961,8 @@ class Download
 
     /**
      * Update the download counter.
+     *
+     * @return  object  $this
      */
     public function addHit()
     {
@@ -1040,14 +980,15 @@ class Download
             SET hits=hits+1
             WHERE lid='{$this->lid}' AND status>0"
         );
+        return $this;
     }
 
 
     /**
-     * Category Admin List View.
+     * File Admin List View.
      *
      * @param   integer $cid     Optional category ID to limit listing
-     * @return  string      HTML for the category list.
+     * @return  string      HTML for the file list.
      */
     public static function adminList($cid=0, $status = -1)
     {
@@ -1294,15 +1235,25 @@ class Download
         static $mytree = NULL;
         $dt = new \Date($this->date);
 
+        $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates');
+        $T->set_file('record', 'filelisting_record.thtml');
+
         if ($mytree === NULL) {
             $mytree = new XoopsTree('',$_TABLES['filemgmt_cat'],"cid","pid");
         }
         $path = $mytree->getPathFromId($this->cid, "title");
-        $path = substr($path, 1);
-        $path = str_replace("/"," <img src='" .$_FM_CONF['url'] ."/images/arrow.gif' alt=''> ",$path);
+        $parts = explode('/', substr($path, 1));
+        $T->set_block('record', 'catPathElements', 'PE');
+        foreach ($parts as $key=>$value) {
+            $T->set_var(array(
+                'first_element' => $key == 0,
+                'path_element' => $value,
+            ) );
+            $T->parse('PE', 'catPathElements', true);
+        }
 
-        $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates');
-        $T->set_file('record', 'filelisting_record.thtml');
+        //$path = str_replace("/"," <img src='" .$_FM_CONF['url'] ."/images/arrow.gif' alt=''> ",$path);
+
         $T->set_var(array(
             'lid'       => $this->lid,
             'dtitle'    => $this->title,
@@ -1547,6 +1498,44 @@ class Download
             );
         }
         return $retval;
+    }
+
+
+    /**
+     * Get the total files under the specified category, limited by status.
+     *
+     * @param   integer $sel_id     Selected category
+     * @param   integer $status     Status to limit results
+     * @return  intger      Count of file records
+     */
+    public static function getTotalByCategory($sel_id, $status=NULL)
+    {
+        global $_TABLES, $_DB_name;
+
+        $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
+        $count = 0;
+        $arr = array();
+        if ($status !== NULL) {
+            $status_sql = 'AND a.status = ' . (int)$status;
+        } else {
+            $status_sql = '';
+        }
+        $sel_id = (int)$sel_id;
+        $sql = "SELECT count(*) from {$_TABLES['filemgmt_filedetail']} a
+            LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid
+            WHERE a.cid = {$sel_id} $status_sql {$mytree->filtersql}";
+        list($thing) = DB_fetchArray(DB_query($sql));
+        $count = $thing;
+        $arr = $mytree->getAllChildId($sel_id);
+        $size = sizeof($arr);
+        for( $i=0; $i<$size; $i++){
+            $sql = "SELECT count(*) from {$_TABLES['filemgmt_filedetail']} a
+                LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid
+                WHERE  a.cid = '{$arr[$i]}' $status_sql $mytree->filtersql";
+            list($thing) = DB_fetchArray(DB_query($sql));
+            $count += $thing;
+        }
+        return $count;
     }
 
 }
