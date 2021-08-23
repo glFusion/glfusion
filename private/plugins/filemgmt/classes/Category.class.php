@@ -4,7 +4,7 @@
  *
  * @author      Lee Garner <lee@leegarner.com>
  * @copyright   Copyright (c) 2021 Lee Garner <lee@leegarner.com>
- * @package     shop
+ * @package     filemgmt
  * @version     v1.9.0
  * @since       v0.9.0
  * @license     http://opensource.org/licenses/gpl-2.0.php
@@ -17,7 +17,7 @@ namespace Filemgmt;
 /**
  * Class for product categories.
  * Each product belongs to one category.
- * @package shop
+ * @package filemgmt
  */
 class Category
 {
@@ -67,7 +67,7 @@ class Category
                 $this->cid = 0;
             }
         }
-        $this->isAdmin = plugin_ismoderator_shop() ? 1 : 0;
+        $this->isAdmin = plugin_ismoderator_filemgmt() ? 1 : 0;
     }
 
 
@@ -161,21 +161,52 @@ class Category
      */
     public function save($A = array())
     {
-        global $_TABLES, $_SHOP_CONF;
+        global $_TABLES, $_FM_CONF;
 
         if (is_array($A)) {
             $this->setVars($A);
         }
 
-        // For new images, move the image from temp storage into the
-        // main category image space.
-        if ($this->isNew && $this->imgurl != '') {
-            $src_img = "{$_SHOP_CONF['tmpdir']}images/temp/{$this->imgurl}";
-            if (is_file($src_img)) {
-                $dst_img = "{$_SHOP_CONF['catimgpath']}/{$this->imgurl}";
-                if (!@rename($src_img, $dst_img)) {
-                    // If image not found, unset the image value.
-                    $this->imgurl= '';
+        if (
+            isset($_FILES['imgurl']) &&
+            isset($_FILES['imgurl']['name']) &&
+            !empty($_FILES['imgurl']['name'])
+        ) {
+            $upload = new UploadDownload();
+            $upload->setPerms('0644');
+            $upload->setFieldName('imgurl');
+            $upload->setPath($_FM_CONF['SnapCat']);
+            $upload->setAllowAnyMimeType(true);     // allow any file type
+            $upload->setMaxFileSize(100000000);
+            $upload->setMaxDimensions(8192,8192);
+
+            if ($upload->numFiles() > 0) {
+                $upload->uploadFiles();
+                if ($upload->areErrors()) {
+                    $errmsg = "Upload Error: " . $upload->printErrors(false);
+                    $this->addError($errmsg);
+                    Log::write('system',Log::ERROR, $errmsg);
+                    $eh->show("1106");
+                } else {
+                    $uploaded_file = $upload->getUploadedFiles()[0];
+                    $this->size = (int)$uploaded_file['size'];
+                    $filename = $uploaded_file['name'];
+                    $this->imgurl = rawurlencode($filename);
+
+                    $fileExtension = strtolower($uploaded_file['extension']);
+                    if (array_key_exists($fileExtension, $_FM_CONF['extensions_map'])) {
+                        if ($_FM_CONF['extensions_map'][$fileExtension] == 'reject' ) {
+                            Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$uploadfilename);
+                            $eh->show("1109");
+                        } else {
+                            $fileExtension = $_FM_CONF['extensions_map'][$fileExtension];
+                            $pos = strrpos($url,'.') + 1;
+                            $this->url = strtolower(substr($this->url, 0,$pos)) . $fileExtension;
+
+                            $pos2 = strrpos($filename,'.') + 1;
+                            $filename = substr($filename,0,$pos2) . $fileExtension;
+                        }
+                    }
                 }
             }
         }
@@ -198,7 +229,6 @@ class Category
             $sql = $sql1 . $sql2 . $sql3;
             //echo $sql;die;
             //COM_errorLog($sql);
-            SHOP_log($sql, SHOP_LOG_DEBUG);
             DB_query($sql);
             if (!DB_error()) {
                 if ($this->isNew) {
@@ -212,7 +242,7 @@ class Category
                     $this->_propagatePerms($_POST['old_grp']);
                 }*/
             } else {
-                $this->AddError('Failed to insert or update record');
+                $this->addError('Failed to insert or update record');
             }
         }
 
@@ -229,14 +259,14 @@ class Category
      */
     public function delete()
     {
-        global $_TABLES, $_SHOP_CONF;
+        global $_TABLES;
 
-        if ($this->cid <= 1)
+        if ($this->cid <= 1) {
             return false;
+        }
 
         $this->deleteImage(false);
         DB_delete($_TABLES['filemgmt_cat'], 'cid', $this->cid);
-        PLG_itemDeleted($this->cid, 'shop_category');
         $this->cid = 0;
         return true;
     }
@@ -250,19 +280,19 @@ class Category
      */
     public function deleteImage($del_db = true)
     {
-        global $_TABLES, $_SHOP_CONF;
+        global $_TABLES, $_FM_CONF;
 
         $filename = $this->imgurl;
-        if (is_file("{$_SHOP_CONF['catimgpath']}/{$filename}")) {
-            @unlink("{$_SHOP_CONF['catimgpath']}/{$filename}");
+        if (is_file("{$_FM_CONF['SnapCat']}/{$filename}")) {
+            @unlink("{$_FM_CONF['SnapCat']}/{$filename}");
         }
 
+        $this->imgurl= '';
         if ($del_db) {
             DB_query("UPDATE {$_TABLES['filemgmt_cat']}
-                    SET image=''
-                    WHERE cid = '" . $this->cid . "'");
+                    SET imgurl = '{$this->imgurl}'
+                    WHERE cid = '$this->cid'");
         }
-        $this->imgurl= '';
     }
 
 
@@ -274,7 +304,7 @@ class Category
      */
     public function edit()
     {
-        global $_TABLES, $_CONF, $_SYSTEM;
+        global $_TABLES, $_CONF, $_SYSTEM, $_FM_CONF;
 
         $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates/admin');
         $T->set_file('category', 'category_form.thtml');
@@ -286,13 +316,9 @@ class Category
         if ($id > 0) {
             $retval = COM_startBlock('Edit Category' . ': ' . $this->title);
             $T->set_var('cid', $id);
-            //$not = 'NOT';
-            //$items = $id;
         } else {
             $retval = COM_startBlock('Create Category');
             $T->set_var('cid', '');
-            //$not = '';
-            //$items = '';
         }
 
         $T->set_var(array(
@@ -313,6 +339,11 @@ class Category
             'lang_delete' => 'Delete',
             'lang_cancel' => 'Cancel',
         ) );
+        if (!empty($this->imgurl) && is_file($_FM_CONF['SnapCat'].$this->imgurl)) {
+            $T->set_var('thumbnail', $_FM_CONF['SnapCatURL'] . $this->imgurl);
+        } else {
+            $T->unset_var('thumbnail');
+        }
         //if (!self::isUsed($this->cid)) {
             $T->set_var('can_delete', 'true');
         //}
@@ -371,7 +402,7 @@ class Category
      *
      * @param   string  $msg    Error message to append
      */
-    public function AddError($msg)
+    public function addError($msg)
     {
         $this->Errors[] = $msg;
     }
@@ -494,8 +525,6 @@ class Category
             ),
             array(
                 'text'  => 'Delete',
-                    //'&nbsp;<i class="uk-icon uk-icon-question-circle tooltip" title="' .
-                    //$LANG_SHOP['del_cat_instr'] . '"></i>',
                 'field' => 'delete',
                 'sort' => false,
                 'align' => 'center',
@@ -552,7 +581,7 @@ class Category
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_SHOP_CONF, $_TABLES, $LANG_ADMIN, $_FM_CONF;
+        global $_TABLES, $LANG_ADMIN, $_FM_CONF;
 
         $retval = '';
         static $grp_names = array();
@@ -682,81 +711,6 @@ class Category
     public function getDscp()
     {
         return $this->title;
-    }
-
-
-    /**
-     * Delete product->category mappings when a product is deleted.
-     *
-     * @param   integer $prod_id    Product record ID
-     */
-    public static function deleteProduct($prod_id)
-    {
-        global $_TABLES;
-
-        $prod_id = (int)$prod_id;
-        DB_delete($_TABLES['shop.prodXcat'], 'product_id', $prod_id);
-    }
-
-
-    /**
-     * Clone the categories for a product to a new product.
-     *
-     * @param   integer $src    Source product ID
-     * @param   integer $dst    Destination product ID
-     * @return  boolean     True on success, False on error
-     */
-    public static function cloneProduct($src, $dst)
-    {
-        global $_TABLES;
-
-        $src = (int)$src;
-        $dst = (int)$dst;
-        // Clear target categories, the Home category is probably there.
-        DB_delete($_TABLES['shop.prodXcat'], 'product_id', $dst);
-        $sql = "INSERT INTO {$_TABLES['shop.prodXcat']} (product_id, cid)
-            SELECT $dst, cid FROM {$_TABLES['shop.prodXcat']}
-            WHERE product_id = $src";
-        DB_query($sql, 1);
-        return DB_error() ? false : true;
-    }
-
-
-    /**
-     * Get the zone rule ID for this category.
-     *
-     * @return  integer     Applicable rule ID
-     */
-    public function getRuleID()
-    {
-        return (int)$this->zone_rule;
-    }
-
-
-
-    /**
-     * Get the effective zone rule for this category by checking parents.
-     *
-     * @return  integer     Zone rule ID
-     */
-    public function getEffectiveZoneRule()
-    {
-        $retval = 0;
-        if ($this->getRuleID() > 0) {
-            $retval = $this->getRuleID();
-        } elseif ($this->getID() > 1) {
-            // Don't get parents of root category, not needed.
-            $Parents = $this->getParentTree();
-            foreach ($Parents as $Parent) {
-                // Look for rules in parent categories, stop at the
-                // first one foune.
-                if ($Parent->getRuleID() > 0) {
-                    $retval = $Parent->getRuleID();
-                    break;
-                }
-            }
-        }
-        return $retval;
     }
 
 

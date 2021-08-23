@@ -1,7 +1,9 @@
 {# begin {templatelocation} #}
 <div>
-{!if category_link}
-	{category_link}:
+{!if cat_img_url}
+	<a href="{site_url}/filemgmt/viewcat.php?cid={cid}">
+		<img src="{cat_img_url}" style="border:0px;width:{shotwidth}px;margin-right:3px;">
+	</a>
 {!else}
 {!endif}
 	<a href="{site_url}/filemgmt/viewcat.php?cid={cid}">

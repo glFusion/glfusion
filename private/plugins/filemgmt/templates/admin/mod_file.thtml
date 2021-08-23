@@ -72,9 +72,6 @@
                 <img class="uk-thumbnail uk-thumbnail-mini" src="{thumbnail}">&nbsp;&nbsp;<input class="uk-checkbox" type="checkbox" name="deletesnap">&nbsp;{lang_delete}<br>
 {!endif}
                 <input type="file" size="40" name="newfileshot">
-{!if thumbnail}
-
-{!endif}
 			</div>
 		</div>
 		<div class="uk-form-row uk-margin">

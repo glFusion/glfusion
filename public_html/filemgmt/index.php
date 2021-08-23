@@ -140,11 +140,12 @@ if ($lid > 0) {
 
                 if ( $_FM_CONF['useshots'] && $myrow['imgurl'] && $myrow['imgurl'] != "http://") {
                     $imgurl = $myts->makeTboxData4Edit($myrow['imgurl']);
-                    $category_image_link = '<a href="' . $_FM_CONF['url'] .'/viewcat.php?cid=' .$myrow['cid'] .'">';
-                    $category_image_link .= '<img src="' .$filemgmt_SnapCatURL.$imgurl .'" width="'.$_FM_CONF['shotwidth'].'" border="0" alt="'.$myts->makeTboxData4Show($myrow['title']).'" /></a>';
-                    $p->set_var('category_link',$category_image_link);
+                    $p->set_var(array(
+                        'cat_img_url' => $_FM_CONF['SnapCatURL'] . $imgurl,
+                        'shotwidth' => $_FM_CONF['shotwidth'],
+                    ) );
                 } else {
-                    $p->set_var('category_link','');
+                    $p->set_var('cat_img_url','');
                 }
 
                 $downloadsWaitingSubmission = Filemgmt\Download::getTotalByCategory($myrow['cid'], 0);
