@@ -96,7 +96,8 @@ class BrokenLink
             array(
                 'text' => _MD_EDIT,
                 'field' => 'edit',
-                'sort' => true,
+                'sort' => false,
+                'align' => 'center',
             ),
             array(
                 'text' => _MD_FILETITLE,
@@ -176,10 +177,13 @@ class BrokenLink
 
         switch($fieldname) {
         case 'edit':
-            $retval .= COM_createLink(
-                '<i class="uk-icon uk-icon-edit tooltip" title="Edit"></i>',
-                $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}"
-            );
+            $retval .= FieldList::edit(array(
+                'edit_url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
+                'attr' => array(
+                    'class' => 'tooltip',
+                    'title' => 'Edit File Record',
+                ),
+            ) );
             break;
 
         case 'date':
@@ -188,25 +192,25 @@ class BrokenLink
             break;
 
         case 'ignore':
-            $retval = COM_createLink(
-                '<i class="uk-icon-remove uk-text-warning"></i>',
-                $_FM_CONF['admin_url'] . '/index.php?ignoreBrokenLink=' . $A['lid'],
-                array(
+            $retval = FieldList::ignore(array(
+                'url' => $_FM_CONF['admin_url'] . "/index.php?ignoreBrokenLink={$A['lid']}",
+                'attr' => array(
                     'onclick' => "return confirm('Delete this broken file report?')",
-                )
-            );
+                    'title' => 'Ignore Report',
+                    'class' => 'tooltip',
+                ),
+            ) );
             break;
 
         case 'delete':
-            $retval .= COM_createLink(
-                '<i class="uk-icon uk-icon-remove uk-text-danger"></i>',
-                $_FM_CONF['admin_url'] . '/index.php?delBrokenLink=' . $A['lid'],
-                array(
-                    'onclick' => "return confirm('OK to delete?');",
+            $retval = FieldList::delete(array(
+                'url' => $_FM_CONF['admin_url'] . "/index.php?delBrokenLink={$A['lid']}",
+                'attr' => array(
+                    'onclick' => "return confirm('OK to delete');",
                     'title' => 'Delete Item',
                     'class' => 'tooltip',
-                )
-            );
+                ),
+            ) );
             break;
 
         default:

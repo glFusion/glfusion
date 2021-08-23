@@ -585,10 +585,13 @@ class Category
 
         switch($fieldname) {
         case 'edit':
-            $retval .= COM_createLink(
-                '<i class="uk-icon uk-icon-edit tooltip" title="Edit"></i>',
-                $_FM_CONF['admin_url'] . "/index.php?modCat={$A['cid']}"
-            );
+            $retval .= FieldList::edit(array(
+                'edit_url' => $_FM_CONF['admin_url'] . "/index.php?modCat={$A['cid']}",
+                'attr' => array(
+                    'class' => 'tooltip',
+                    'title' => 'Edit',
+                ),
+            ) );
             break;
 
         case 'grp_writeaccess':
@@ -619,17 +622,14 @@ class Category
             break;
 
         case 'delete':
-            //if (!self::isUsed($A['cid'])) {
-                $retval .= COM_createLink(
-                    '<i class="uk-icon uk-icon-remove uk-text-danger"></i>',
-                    'index.php?delCat=' . $A['cid'],
-                    array(
-                        'onclick' => "return confirm('OK to delete?');",
-                        'title' => 'Delete Item',
-                        'class' => 'tooltip',
-                    )
-                );
-            //}
+            $retval = FieldList::delete(array(
+                'url' => $_FM_CONF['admin_url'] . "/index.php?delCat={$A['cid']}",
+                'attr' => array(
+                    'onclick' => "return confirm('OK to delete');",
+                    'title' => 'Delete Item',
+                    'class' => 'tooltip',
+                ),
+            ) );
             break;
 
         case 'title':

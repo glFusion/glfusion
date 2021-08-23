@@ -1025,6 +1025,7 @@ class Download
                 'text' => $LANG_FM02['edit'],
                 'field' => 'edit',
                 'sort' => false,
+                'align' => 'center',
             ),
             array(
                 'text' => $LANG_FM02['file'],
@@ -1051,6 +1052,11 @@ class Download
                 'text' => $LANG_FM02['date'],
                 'field' => 'date',
                 'sort' => true,
+            ),
+            array(
+                'text' => 'Delete',
+                'field' => 'delete',
+                'align' => 'center',
             ),
         );
         $text_arr = array(
@@ -1209,10 +1215,13 @@ class Download
 
         switch($fieldname) {
         case 'edit':
-            $retval .= COM_createLink(
-                '<i class="uk-icon uk-icon-edit tooltip" title="Edit"></i>',
-                $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}"
-            );
+            $retval .= FieldList::edit(array(
+                'edit_url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
+                'attr' => array(
+                    'class' => 'tooltip',
+                    'title' => 'Edit',
+                ),
+            ) );
             break;
 
         case 'date':
@@ -1221,17 +1230,14 @@ class Download
             break;
 
         case 'delete':
-            if (!self::isUsed($A['cid'])) {
-                $retval .= COM_createLink(
-                    '<i class="uk-icon uk-icon-remove uk-text-danger"></i>',
-                    'index.php?delCat=' . $A['cid'],
-                    array(
-                        'onclick' => "return confirm('OK to delete?');",
-                        'title' => 'Delete Item',
-                        'class' => 'tooltip',
-                    )
-                );
-            }
+            $retval = FieldList::delete(array(
+                'url' => $_FM_CONF['admin_url'] . "/index.php?delDownload={$A['lid']}",
+                'attr' => array(
+                    'onclick' => "return confirm('OK to delete');",
+                    'title' => 'Delete Item',
+                    'class' => 'tooltip',
+                ),
+            ) );
             break;
 
         default:
