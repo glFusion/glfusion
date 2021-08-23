@@ -209,6 +209,8 @@ class Category
                     }
                 }
             }
+        } elseif (isset($A['deletesnap'])) {
+            $this->deleteImage();
         }
 
         // Insert or update the record, as appropriate, as long as a
@@ -276,9 +278,8 @@ class Category
      * Deletes a single image from disk.
      * $del_db is used to save a DB call if this is called from Save().
      *
-     * @param   boolean $del_db     True to update the database.
      */
-    public function deleteImage($del_db = true)
+    public function deleteImage()
     {
         global $_TABLES, $_FM_CONF;
 
@@ -288,11 +289,6 @@ class Category
         }
 
         $this->imgurl= '';
-        if ($del_db) {
-            DB_query("UPDATE {$_TABLES['filemgmt_cat']}
-                    SET imgurl = '{$this->imgurl}'
-                    WHERE cid = '$this->cid'");
-        }
     }
 
 
