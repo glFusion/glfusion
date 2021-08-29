@@ -175,9 +175,9 @@ function FM_getGroupList ($basegroup)
     return $checked;
 }
 
-$display = '';
+$content = '';
 
-if ( defined('DEMO_MODE') ) {
+if (defined('DEMO_MODE') ) {
     COM_setMsg('Uploads are disabled in demo mode', 'error');
     COM_refresh($_FM_CONF['url'] . '/index.php');
     exit;
@@ -189,6 +189,7 @@ if ( isset($_USER['uid']) ) {
     $uid = 1;
 }
 
+$eh = new ErrorHandler; //ErrorHandler object
 if (Filemgmt\Download::canSubmit()) {
     $groupsql = SEC_buildAccessSql();
     $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
@@ -202,20 +203,17 @@ if (Filemgmt\Download::canSubmit()) {
         exit;
     }
 
-    if ( isset($_POST['submit']) && SEC_checkToken()){
+    if ( isset($_POST['submit'])) && SEC_checkToken()){
 
         if (!COM_isAnonUser() ) {
             $submitter = (int) $_USER['uid'];
         } else {
             $submitter = 1;
         }
-        // Check if Title entered
-        if (!isset($_POST['title']) || $_POST["title"] == '') {
-            $eh->show("1001");
-        }
 
         $File = new Filemgmt\Download;
         $status = $File->Save($_POST);
+        $redirect = $_FM_CONF['url'] . '/index.php';    // default after-save
         switch($status) {
         case Status::UPL_NODEMO:
             COM_setMsg('Uploads are disabled in demo mode', 'error');
@@ -232,15 +230,24 @@ if (Filemgmt\Download::canSubmit()) {
         case Status::UPL_PENDING:
             COM_setMsg(_MD_RECEIVED . '<br />' . _MD_WHENAPPROVED, 'success');
             break;
+        case Status::UPL_MISSING:
+            // Message set in Download class for missing fields.
+            $content .= $File->asSubmission()->edit();
+            $redirect = '';
+            break;
         case Status::UPL_ERROR:
         default:
             COM_setMsg(_MD_ERRUPLOAD, 'error');
             break;
         }
-        COM_refresh($_FM_CONF['url'] . '/index.php');
+        if (!empty($redirect)) {
+            COM_refresh($redirect);
+        }
     } else {
 
-        $myts = new MyTextSanitizer; // MyTextSanitizer object
+        $File = new Filemgmt\Download;
+
+/*        $myts = new MyTextSanitizer; // MyTextSanitizer object
         $eh = new ErrorHandler; //ErrorHandler object
         $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
         $mytree->setGroupAccessFilter($_GROUPS);
@@ -271,16 +278,17 @@ if (Filemgmt\Download::canSubmit()) {
             'cat_select_options'=> $mytree->makeMySelBoxNoHeading("title", "title", 1, 0,"cid"),
             'uid'               => $uid,
         ));
+ */
+     //   $display .= Filemgmt\Menu::siteHeader();
+        $content .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
+        $content .= $File->asSubmission()->edit($_POST);
 
-        $display .= Filemgmt\Menu::siteHeader();
-        $display .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
+//        $T->parse('output', 'page');
+//        $display .= $T->finish($T->get_var('output'));
 
-        $T->parse('output', 'page');
-        $display .= $T->finish($T->get_var('output'));
-
-        $display .= COM_endBlock();
-        $display .= Filemgmt\Menu::siteFooter();
-        echo $display;
+        $content .= COM_endBlock();
+        //$display .= Filemgmt\Menu::siteFooter();
+        //echo $display;
     }
 
 } else {
@@ -288,3 +296,6 @@ if (Filemgmt\Download::canSubmit()) {
     COM_setMsg(_GL_ERRORNOUPLOAD, 'error');
     COM_refresh($_CONF['site_url'] . '/index.php');
 }
+echo Filemgmt\Menu::siteHeader();
+echo $content;
+echo Filemgmt\Menu::siteFooter();

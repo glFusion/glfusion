@@ -13,6 +13,7 @@
  * @filesource
  */
 namespace Filemgmt;
+use glFusion\FileSystem;
 use glFusion\Database\Database;
 use glFusion\Log\Log;
 use glFusion\Cache\Cache;
@@ -25,6 +26,8 @@ use Filemgmt\Models\Status;
  */
 class Download
 {
+    const PERMS = 0644;
+
     /** Downoad ID.
      * @var integer */
     private $lid = 0;
@@ -94,6 +97,10 @@ class Download
      * @var string */
     private $description = '';
 
+    /** Editing mode (submission, admin, moderation)
+     * @var string */
+    private $_editmode = 'submission';
+
 
     /**
      * Constructor.
@@ -140,6 +147,9 @@ class Download
         }
         if (isset($row['submitter'])) {
             $this->setSubmitter($row['submitter']);
+        }
+        if (isset($row['comments'])) {
+            $this->setComments($row['comments']);
         }
         $this->setCid($row['cid'])
              ->setTitle($row['title'])
@@ -561,6 +571,17 @@ class Download
 
 
     /**
+     * Get the file description.
+     *
+     * @return  string      File description
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+
+    /**
      * Save the current values to the database.
      *
      * @param  array   $A      Optional array of values from $_POST
@@ -568,8 +589,7 @@ class Download
      */
     public function save($A = array())
     {
-        global $_CONF, $_USER, $_TABLES, $_FM_CONF;
-        global $filemgmtFilePermissions;
+        global $_CONF, $_USER, $_TABLES, $_FM_CONF, $LANG_FILEMGMT;
 
         if (is_array($A)) {
             $this->setVars($A, false);
@@ -579,37 +599,52 @@ class Download
             return Status::UPL_NODEMO;
         }
 
-        // Be optimistic
-        $retval = Status::UPL_OK;
-        $errormsg = "";
+        $missing = array();
+        //$missing[] = 'Test message';
 
         $myts = new MyTextSanitizer;
-        $eh = new ErrorHandler;
 
-        // Check if Title blank
-        if ($this->title=="") {
-            $eh->show("1104");
+        // Check for missing required fields.
+        // The form should catch these, but just in case...
+        if ($this->title == "") {
+            $missing[] = $LANG_FILEMGMT['title'];
         }
-        // Check if Description blank
-        if ($this->description=="") {
-            $eh->show("1105");
+        if ($this->description == "") {
+            $missing[] = $LANG_FILEMGMT['description'];
         }
-        // Check if a file was uploaded
+        if ($this->cid == 0) {
+            $missing[] = $LANG_FILEMGMT['category'];
+        }
         if ($_FILES['newfile']['size'] == 0  && empty($this->url)) {
-            $eh->show("1017");
+            $missing[] = $LANG_FILEMGMT['no_file_uploaded'];
+        }
+        if (!empty($missing)) {
+            // If errors are found, set the error message and return.
+            $msg = $LANG_FILEMGMT['err_req_fields'];
+            $msg .= '<ul><li>' . implode('</li><li>', $missing) . '</li></ul>';
+            COM_setMsg($msg, 'error');
+            return Status::UPL_MISSING;
         }
 
-        if ( !empty($_POST['cid']) ) {
-            $cid = $_POST['cid'];
-        } else {
-            $cid = 0;
-            $eh->show("1110");
-        }
+        $Cat = new Category($this->cid);
+
+        FileSystem::mkDir($_FM_CONF['FileStore']);
 
         $upload = new UploadDownload();
-        $upload->setPerms('0644');
+        $upload->setPerms(self::PERMS);
         $upload->setFieldName('newfile');
-        $upload->setPath($_FM_CONF['FileStore']);
+        if ($Cat->canUpload()) {
+            $this->status = Status::APPROVED;
+            $retval = Status::UPL_OK;
+            $file_path = $_FM_CONF['FileStore'];
+            $snap_path = $_FM_CONF['SnapStore'];
+        } else {
+            $this->status = Status::SUBMISSION;
+            $retval = Status::UPL_PENDING;
+            $file_path = $_FM_CONF['FileStore_tmp'];
+            $snap_path = $_FM_CONF['SnapStore_tmp'];
+        }
+        $upload->setPath($file_path);
         $upload->setAllowAnyMimeType(true);     // allow any file type
         $upload->setMaxFileSize(100000000);
         $upload->setMaxDimensions(8192,8192);
@@ -654,10 +689,10 @@ class Download
 
         $upload = new UploadDownload();
         $upload->setFieldName('newfileshot');
-        $upload->setPerms('0644');
-        $upload->setPath($_FM_CONF['SnapStore']);
+        $upload->setPerms(self::PERMS);
+        $upload->setPath($snap_path);
         $upload->setAllowAnyMimeType(false);
-        $upload->setAllowedMimeTypes(
+        $upload->setAllowedMimeTypes(       // allow only images for snaps
             array(
                 'image/gif'   => array('.gif'),
                 'image/jpeg'  => array('.jpg', '.jpeg'),
@@ -691,9 +726,6 @@ class Download
         }
 
         if ($AddNewFile || $this->lid > 0) {
-            /*if ($AddNewFile) {
-                $chown = @chmod($_FM_CONF['FileStore'].$filename, $_FM_CONF['FilePermissions']);
-        }*/
             if (strlen($this->version) > 9) {
                 $this->version = substr($this->version,0,8);
             }
@@ -703,13 +735,6 @@ class Download
                     date = UNIX_TIMESTAMP(), ";
                 $sql3 = '';
                 // Determine write access to category for new uploads
-                $Cat = new Category($this->cid);
-                if ($Cat->canUpload()) {
-                    $this->status = Status::APPROVED;
-                } else {
-                    $this->status = Status::SUBMISSION;
-                    $retval = Status::UPL_PENDING;
-                }
             } else {
                 $sql1 = "UPDATE {$_TABLES['filemgmt_filedetail']} SET ";
                 $sql3 = " WHERE lid = {$this->lid} ";
@@ -742,7 +767,12 @@ class Download
                 ON DUPLICATE KEY UPDATE
                     description = '$desc'"
             );
-            PLG_itemSaved($this->lid, 'filemgmt');
+            if ($this->lid > 0) {
+                PLG_itemSaved($this->lid, 'filemgmt');
+                if ($this->status == Status::SUBMISSION) {
+                    Notifier::notifyAdmins($this);
+                }
+            }
             $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
             if (isset($duplicatefile) && $duplicatefile) {
                 $retval = Status::UPL_DUPFILE;
@@ -765,8 +795,14 @@ class Download
     {
         global $_TABLES, $_FM_CONF;
 
-        $tmpfile = $_FM_CONF['FileStore'] . $this->url;
-        $tmpsnap  = $_FM_CONF['SnapStore'] . $this->logourl;
+        if ($this->status == 0) {
+            // Deleting a submission
+            $tmpfile = $_FM_CONF['FileStore_tmp'] . $this->url;
+            $tmpsnap  = $_FM_CONF['SnapStore_tmp'] . $this->logourl;
+        } else {
+            $tmpfile = $_FM_CONF['FileStore'] . $this->url;
+            $tmpsnap  = $_FM_CONF['SnapStore'] . $this->logourl;
+        }
 
         DB_delete($_TABLES['filemgmt_filedetail'], 'lid', $this->lid);
         DB_delete($_TABLES['filemgmt_filedesc'], 'lid', $this->lid);
@@ -786,23 +822,50 @@ class Download
         if ($this->logourl != '') {
             $refs = DB_count($_TABLES['filemgmt_filedetail'], 'logourl', $this->logourl);
             if ($refs == 0 && is_file($tmpsnap)) {
-                @unlink($_FM_CONF['SnapStore'] . $this->logourl);
+                @unlink($tmpsnap);
             }
         }
 
-        PLG_itemDeleted($this->lid,'filemgmt');
+        if ($this->status == 1) {
+            PLG_itemDeleted($this->lid, 'filemgmt');
+        }
         $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
         return true;
     }
 
 
     /**
+     * Indicate that this file is being edited as a user submission.
+     *
+     * @reurn   object  $this
+     */
+    public function asSubmission()
+    {
+        $this->setStatus(0);
+        $this->_editmode = 'submit';
+        return $this;
+    }
+
+
+    /**
+     * Indicate that this file is being edited as a moderator to approve/delete.
+     *
+     * @return  object  $this
+     */
+    public function asModeration()
+    {
+        $this->_editmode = 'moderate';
+        return $this;
+    }
+
+
+    /**
      * Creates the edit form.
      *
-     * @param  integer $id Optional ID, current record used if zero
+     * @param  string   $action     Action indicator, currently moderate or none
      * @return string      HTML for edit form
      */
-    public function edit()
+    public function edit($post=array())
     {
         global $_CONF,$_FM_CONF, $_TABLES,$_USER, $_DB_name;
 
@@ -812,32 +875,51 @@ class Download
         $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
         $eh = new ErrorHandler;
 
-        $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates/admin');
-        $T->set_file(array(
-            'form' => 'mod_file.thtml',
-            'ratings' => 'vote_data.thtml',
-        ));
+        if ($this->_editmode == 'submit') {
+            $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates');
+            $T->set_file('form', 'upload.thtml');
+            $cancel_url = $_FM_CONF['url'] . '/index.php';
+            $lang_filetitle = _MD_FILETITLE;
+        } else {
+            // admin-level editing
+            $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates/admin');
+            $T->set_file(array(
+                'form' => 'mod_file.thtml',
+                'ratings' => 'vote_data.thtml',
+            ));
+            if ($this->_editmode == 'moderate') {
+                $cancel_url = $_CONF['site_url'] . '/moderation.php';
+            } else {
+                $cancel_url = $_FM_CONF['admin_url'] . '/index.php';
+            }
+            $lang_filetitle = _MD_REPLFILENAME;
+        }
+
         $T->set_var(array(
-            'lang_file_id' => _MD_FILEID,
+            'lang_file_id'  => _MD_FILEID,
+            'lang_filename' => _MD_DLFILENAME,
             'lang_filetitle' => _MD_FILETITLE,
-            'lang_dl_filename' => _MD_DLFILENAME,
-            'lang_replace_filename' => _MD_REPLFILENAME,
+            'lang_replfile' => _MD_REPLFILENAME,
             'lang_homepage' => _MD_HOMEPAGEC,
             'lang_filesize' => _MD_FILESIZEC,
-            'lang_bytes' => _MD_BYTES,
-            'lang_version' => _MD_VERSIONC,
+            'lang_bytes'    => _MD_BYTES,
+            'lang_version'  => _MD_VERSIONC,
             'lang_description' => _MD_DESCRIPTIONC,
             'lang_category' => _MD_CATEGORYC,
             'lang_screenshot' => _MD_SHOTIMAGE,
             'lang_comments' => _MD_COMMENTOPTION,
-            'lang_yes' => _MD_YES,
-            'lang_no' => _MD_NO,
-            'lang_owner' => _MD_OWNER,
+            'lang_yes'      => _MD_YES,
+            'lang_no'       => _MD_NO,
+            'lang_owner'    => _MD_OWNER,
             'lang_silent_edit' => _MD_SILENTEDIT,
-            'lang_submit' => _MD_SUBMIT,
-            'lang_delete' => _MD_DELETE,
-            'lang_cancel' => _MD_CANCEL,
+            'lang_submit'   => _MD_SUBMIT,
+            'lang_delete'   => _MD_DELETE,
+            'lang_cancel'   => _MD_CANCEL,
             'lang_hits'     => _MD_HITSC,
+            'token_name'    => CSRF_TOKEN,
+            'security_token' => SEC_createToken(),
+            'redirect'      => $this->_editmode,
+            'cancel_url'    => $cancel_url,
         ));
 
         $pathstring = "<a href=\"{$_FM_CONF['url']}/index.php\">"._MD_MAIN."</a>&nbsp;:&nbsp;";
@@ -861,21 +943,18 @@ class Download
             'logo_url'  => rawurldecode($myts->makeTboxData4Edit($this->logourl)),
             'description' => $myts->makeTareaData4Edit($this->description),
             'category'  => $this->cid,
-            'category_select' => $mytree->makeMySelBox("title", "title", $this->cid,0,"cid"),
+            //'category_select' => $mytree->makeMySelBox("title", "title", $this->cid,0,"cid"),
+            'category_select_options' => $mytree->makeMySelBoxOptions("title", "title", $this->cid,0,"cid"),
             'owner_select' =>  COM_buildOwnerList('submitter', $this->submitter),
             'hits' => $myts->makeTboxData4Edit($this->hits),
             'can_delete' => $this->lid > 0,
+            'cmt_chk_' . $this->comments => 'checked="checked"',
         ));
 
-        if (!empty($this->logourl) AND file_exists($_FM_CONF['SnapStore'].$this->logourl)) {
+        if (!empty($this->logourl) && file_exists($_FM_CONF['SnapStore'].$this->logourl)) {
             $T->set_var('thumbnail', $_FM_CONF['FileSnapURL'].$this->logourl);
         } else {
             $T->unset_var('thumbnail');
-        }
-        if ($this->comments) {
-            $T->set_var('comments_yes_checked',' checked="checked" ');
-        } else {
-            $T->set_var('comments_no_checked',' checked="checked" ');
         }
 
         if ($_FM_CONF['silent_edit_default']) {
@@ -956,18 +1035,78 @@ class Download
 
     /**
      * Mark this file as approved.
+     * Move file and snapshot from tmp directory to the main storage area.
      *
      * @return  object  $this
      */
     public function approve()
     {
-        global $_TABLES;
+        global $_TABLES, $_FM_CONF;
 
-        DB_query(
-            "UPDATE {$_TABLES['filemgmt_filedetail']}
-            SET status = 1
-            WHERE lid = {$this->lid}"
-        );
+        $AddNewFile = false;
+        /*$tmpnames = explode(';', $this->platform);
+        $tmpfilename = $tmpnames[0];
+        if ( isset($tmpnames[1]) ) {
+            $tmpshotname = $tmpnames[1];
+        } else {
+            $tmpshotname = '';
+        }*/
+        //$tmp = $_FM_CONF['FileStore_tmp'] . $tmpfilename;
+        $tmp = $_FM_CONF['FileStore_tmp'] . $this->url;
+        if (file_exists($tmp) && (is_file($tmp))) {
+            // if this temporary file was really uploaded?
+            $newfile = $_FM_CONF['FileStore'] . $this->url;
+            Log::write('system',Log::INFO, 'FileMgt Approve: File move from '.$tmp. ' to ' .$newfile );
+            $rename = @rename($tmp, $newfile);
+            Log::write('system',Log::INFO, 'FileMgt Approve: Results of rename is: '. $rename);
+            $chown = @chmod($newfile, self::PERMS);
+            if (!is_file($newfile)) {
+                Log::write('system',Log::ERROR, 'Filemgmt upload approve error: New file does not exist after move of tmp file: '.$newfile);
+                $AddNewFile = false;    // Set false again - in case it was set true above for actual file
+                ErrorHandler::show("1101");
+            } else {
+               $AddNewFile = true;
+            }
+        } else {
+            Log::write('system', Log::ERROR, 'Filemgmt upload approve error: Temporary file does not exist: '.$tmp);
+            $eh->show("1101");
+        }
+
+        $tmp = $_FM_CONF['SnapStore_tmp'] . $this->logourl;
+        if (file_exists($tmp) && (is_file($tmp))) {
+            // if this temporary file was really uploaded?
+            $newfile = $_FM_CONF['SnapStore'] . $this->logourl;
+            Log::write('system',Log::INFO, 'FileMgt Approve: File move from '.$tmp. ' to ' .$newfile );
+            $rename = @rename($tmp, $newfile);
+            Log::write('system',Log::INFO, 'FileMgt Approve: Results of rename is: '. $rename);
+            $chown = @chmod($newfile, self::PERMS);
+            if (!is_file($newfile)) {
+                Log::write('system',Log::ERROR, 'Filemgmt upload approve error: New file does not exist after move of tmp file: '.$newfile);
+                $AddNewFile = false;    // Set false again - in case it was set true above for actual file
+                $eh->show("1101");
+            } else {
+               $AddNewFile = true;
+            }
+        }
+        // No "else", a missing logourl is acceptable
+
+        if ($AddNewFile) {
+            // Finish processing if file movement was successful
+            DB_query(
+                "UPDATE {$_TABLES['filemgmt_filedetail']} SET
+                status = 1,
+                platform = ''
+                WHERE lid = {$this->lid}"
+            );
+
+            Cache::getInstance()->deleteItemsByTag('whatsnew');
+
+            // Send a email to submitter notifying them that file was approved
+            Notifier::sendApproval($this);
+
+            // Notify other plugins that a new file was added.
+            PLG_itemSaved($this->lid, 'filemgmt');
+        }
         return $this;
     }
 
@@ -1017,7 +1156,7 @@ class Download
         $filter = _MD_CATEGORYC .
             ': <select name="cat" onchange="this.form.submit()">' . LB .
             '<option value="0">' . _MD_ALL . '</option>' .
-            $mytree->makeMySelBoxNoHeading("title", "title", $cid, 0, "cat", 'this.form.submit();') .
+            $mytree->makeMySelBoxOptions("title", "title", $cid, 0, "cat", 'this.form.submit();') .
             '</select>' . LB;
 
         $header_arr = array(
@@ -1041,6 +1180,12 @@ class Download
                 'text' => $LANG_FM02['version'],
                 'field' => 'version',
                 'sort' => true,
+            ),
+            array(
+                'text' => 'Hits',
+                'field' => 'hits',
+                'sort' => true,
+                'align' => 'right',
             ),
             array(
                 'text' => $LANG_FM02['size'],
@@ -1216,7 +1361,7 @@ class Download
         switch($fieldname) {
         case 'edit':
             $retval .= FieldList::edit(array(
-                'edit_url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
+                'url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
                 'attr' => array(
                     'class' => 'tooltip',
                     'title' => 'Edit',
@@ -1231,7 +1376,7 @@ class Download
 
         case 'delete':
             $retval = FieldList::delete(array(
-                'url' => $_FM_CONF['admin_url'] . "/index.php?delDownload={$A['lid']}",
+                'delete_url' => $_FM_CONF['admin_url'] . "/index.php?delDownload={$A['lid']}",
                 'attr' => array(
                     'onclick' => "return confirm('OK to delete');",
                     'title' => 'Delete Item',

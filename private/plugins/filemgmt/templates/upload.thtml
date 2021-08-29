@@ -14,14 +14,14 @@
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="title">{lang_filetitle}</label>
 		<div class="uk-form-controls">
-			<input class="uk-input uk-form-width-large" type="text" id="title" name="title" maxlength="100">
+			<input class="uk-input uk-form-width-large required" required type="text" id="title" name="title" value="{title}">
 		</div>
 	</div>
 
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="newfile">{lang_filename}</label>
 		<div class="uk-form-controls">
-			<input class="uk-button" type="file" id="newfile" name="newfile" />
+			<input class="uk-button" type="file" required id="newfile" name="newfile" />
 		</div>
 	</div>
 
@@ -29,7 +29,7 @@
 		<label class="uk-form-label" for="cid">{lang_category}</label>
 		<div class="uk-form-controls">
 			<select class="uk-select uk-form-width-medium" name="cid">
-				{cat_select_options}
+				{category_select_options}
 			</select>
 			<span class="uk-text-small">{lang_approve}</span>
 		</div>
@@ -38,21 +38,21 @@
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="homepage">{lang_homepage}</label>
 		<div class="uk-form-controls">
-			<input class="uk-input" type="text" id="homepage" name="homepage" size="50" maxlength="100">
+			<input class="uk-input" type="text" id="homepage" name="homepage" value="{homepage}" />
 		</div>
 	</div>
 
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="version">{lang_version}</label>
 		<div class="uk-form-controls">
-			<input class="uk-input uk-form-width-small" type="text" id="version" name="version" />
+			<input class="uk-input uk-form-width-small" type="text" id="version" name="version" value="{version}" />
 		</div>
 	</div>
 
 	<div class="uk-form-row uk-margin">
-		<label class="uk-form-label" for="description">{lang_desc}</label>
+		<label class="uk-form-label" for="description">{lang_description}</label>
 		<div class="uk-form-controls">
-			<textarea class="uk-textarea" name="description" rows="6"></textarea>
+			<textarea class="uk-textarea required" required name="description" rows="6">{description}</textarea>
 		</div>
 	</div>
 
@@ -64,16 +64,18 @@
 	</div>
 
 	<div class="uk-form-row uk-margin">
-		<label class="uk-form-label" for="commentoption">{lang_commentoption}</label>
+		<label class="uk-form-label" for="commentoption">{lang_comments}</label>
 		<div class="uk-form-controls">
-			<input class="uk-radio" type="radio" name="commentoption" value="1" checked="checked" />&nbsp;{lang_yes}&nbsp;
-			<input class="uk-radio" type="radio" name="commentoption" value="0" />&nbsp;{lang_no}&nbsp;
+            <input class="uk-radio" type="radio" name="comments" value="1" {cmt_chk_1}>&nbsp;{lang_yes}
+            <input class="uk-radio" type="radio" name="comments" value="0" {cmt_chk_0}>&nbsp;{lang_no}
+			<!--<input class="uk-radio" type="radio" name="commentoption" value="1" checked="checked" />&nbsp;{lang_yes}&nbsp;
+			<input class="uk-radio" type="radio" name="commentoption" value="0" />&nbsp;{lang_no}&nbsp;-->
 		</div>
 	</div>
 
 	<div class="uk-align-center uk-text-center">
 		<button type="submit" id="submit" name="submit" class="uk-button uk-button-primary">{lang_submit}</button>
-		<button type="submit" id="cancel" name="cancel" class="uk-button uk-button-danger" onclick="javascript:history.go(-1)">{lang_cancel}</button>
+		<a href="{cancel_url}" class="uk-button uk-button-default">{lang_cancel}</a>
 	</div>
 </form>
 {# end {templatelocation} #}

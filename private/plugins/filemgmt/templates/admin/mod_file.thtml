@@ -2,8 +2,9 @@
 <div class="uk-panel uk-panel-box uk-margin-top">
     <div class="uk-panel-title">{path}</div>
     <form id="filemgmt_mod_file" class="uk-form uk-form-horizontal" method="post" enctype="multipart/form-data" action="{site_admin_url}/plugins/filemgmt/index.php">
-        <input type="hidden" name="op" value="modDownloadS" />
         <input type="hidden" name="lid" value="{lid}" />
+		<input type="hidden" name="redirect" value="{redirect}" />
+
 		<div class="uk-form-row uk-margin">
 			<label class="uk-form-label">{lang_file_id}</label>
 			<div class="uk-form-controls">
@@ -17,17 +18,25 @@
 			</div>
 		</div>
 		<div class="uk-form-row uk-margin">
-			<label class="uk-form-label">{lang_dl_filename}</label>
+			<label class="uk-form-label">{lang_filename}</label>
 			<div class="uk-form-controls">
 				{url}
 				<input type="hidden" name="url" value="{url}" />
 			</div>
 		</div>
 		<div class="uk-form-row uk-margin">
-			<label class="uk-form-label">{lang_replace_filename}</label>
+			<label class="uk-form-label">{lang_replfile}</label>
 			<div class="uk-form-controls">
-                <input type="file" name="newfile" size="50" maxlength="200">
-				</div>
+                <input type="file" name="newfile">
+			</div>
+		</div>
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_category}</label>
+			<div class="uk-form-controls">
+			<select class="uk-select uk-form-width-medium" name="cid">
+				{category_select_options}
+			</select>
+			</div>
 		</div>
 		<div class="uk-form-row uk-margin">
 			<label class="uk-form-label">{lang_homepage}</label>
@@ -38,13 +47,13 @@
 		<div class="uk-form-row uk-margin">
 			<label class="uk-form-label">{lang_version}</label>
 			<div class="uk-form-controls">
-				<input class="uk-input required uk-form-width-small" type="text" name="version" value="{version}">
+				<input class="uk-input uk-form-width-small" type="text" name="version" value="{version}">
 			</div>
 		</div>
 		<div class="uk-form-row uk-margin">
 			<label class="uk-form-label">{lang_filesize}</label>
 			<div class="uk-form-controls">
-				<input class="uk-input required uk-form-width-small" type="text" name="size" value="{filesize}">&nbsp;{lang_bytes}
+				<input class="uk-input uk-form-width-small" type="text" name="size" value="{filesize}">&nbsp;{lang_bytes}
 			</div>
 		</div>
 		<div class="uk-form-row uk-margin">
@@ -56,13 +65,7 @@
 		<div class="uk-form-row uk-margin">
 			<label class="uk-form-label">Hits</label>
 			<div class="uk-form-controls">
-                <input class="uk-input required uk-form-width-small" type="text" name="hits" value="{hits}">
-			</div>
-		</div>
-		<div class="uk-form-row uk-margin">
-			<label class="uk-form-label">{lang_category}</label>
-			<div class="uk-form-controls">
-            {category_select}
+                <input class="uk-input uk-form-width-small" type="text" name="hits" value="{hits}">
 			</div>
 		</div>
 		<div class="uk-form-row uk-margin">
@@ -77,8 +80,8 @@
 		<div class="uk-form-row uk-margin">
 			<label class="uk-form-label">{lang_comments}</label>
 			<div class="uk-form-controls">
-                <input class="uk-radio" type="radio" name="comments" value="1" {comments_yes_checked}>&nbsp;{lang_yes}
-                <input class="uk-radio" type="radio" name="comments" value="0" {comments_no_checked}>&nbsp;{lang_no}
+                <input class="uk-radio" type="radio" name="comments" value="1" {cmt_chk_1}>&nbsp;{lang_yes}&nbsp;&nbsp;
+                <input class="uk-radio" type="radio" name="comments" value="0" {cmt_chk_0}>&nbsp;{lang_no}
 			</div>
 		</div>
 		<div class="uk-form-row uk-margin">
@@ -95,7 +98,7 @@
 		</div>
 		<div class="uk-form-row uk-margin uk-margin-top">
 			<button class="uk-button uk-button-success" type="submit" name="saveDownload">{lang_submit}</button>
-			<button class="uk-button cancel" type="cancel" name="cancel">{lang_cancel}</button>
+			<a href="{cancel_url}" class="uk-button uk-button-default">{lang_cancel}</a>
 {!if can_delete}
             <a href="{site_admin_url}/plugins/filemgmt/index.php?delDownload={lid}" class="uk-button uk-button-danger uk-align-right" onclick='return confirm("Delete this file ?");'>Delete</a>
 {!endif}

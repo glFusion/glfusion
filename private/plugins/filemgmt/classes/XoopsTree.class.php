@@ -192,7 +192,10 @@ class XoopsTree
     }
 
 
-    public function makeMySelBoxNoHeading($title,$order="",$preset_id=0, $none=0, $sel_name="", $onchange="", $exclude='')
+    /**
+     * Create only the option elements for a selection field.
+     */
+    public function makeMySelBoxOptions($title,$order="",$preset_id=0, $none=0, $sel_name="", $onchange="", $exclude='')
     {
         $retval = '';
 
@@ -248,7 +251,7 @@ class XoopsTree
             $retval .= ' onchange="' . $onchange . ' "';
         }
         $retval .= ">\n";
-        $retval .= $this->makeMySelBoxNoHeading($title,$order,$preset_id, $none, $sel_name, $onchange,$exclude);
+        $retval .= $this->makeMySelBoxOptions($title,$order,$preset_id, $none, $sel_name, $onchange,$exclude);
         $retval .= "</select>\n";
         return $retval;
     }
