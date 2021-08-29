@@ -39,11 +39,11 @@ global $_DB_table_prefix, $_TABLES;
 
 // Plugin info
 
-$CONF_FM['pi_name']            = 'filemgmt';
-$CONF_FM['pi_display_name']    = 'FileMgmt';
-$CONF_FM['pi_version']         = '1.8.0';
-$CONF_FM['gl_version']         = '2.0.0';
-$CONF_FM['pi_url']             = 'https://www.glfusion.org/';
+$_FM_CONF['pi_name']            = 'filemgmt';
+$_FM_CONF['pi_display_name']    = 'FileMgmt';
+$_FM_CONF['pi_version']         = '1.9.0';
+$_FM_CONF['gl_version']         = '2.0.0';
+$_FM_CONF['pi_url']             = 'https://www.glfusion.org/';
 
 // Database Tables
 
@@ -53,4 +53,3 @@ $_TABLES['filemgmt_filedesc']    = $_DB_table_prefix . 'filemgmt_filedesc';
 $_TABLES['filemgmt_brokenlinks'] = $_DB_table_prefix . 'filemgmt_broken';
 $_TABLES['filemgmt_votedata']    = $_DB_table_prefix . 'filemgmt_votedata';
 $_TABLES['filemgmt_history']     = $_DB_table_prefix . 'filemgmt_downloadhistory';
-?>
