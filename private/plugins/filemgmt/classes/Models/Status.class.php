@@ -19,14 +19,15 @@ namespace Filemgmt\Models;
  */
 class Status
 {
-    const SUBMISSION= 0;
-    const APPROVED = 1;
+    const SUBMISSION= 0;    // file is awaiting submission
+    const APPROVED = 1;     // file is available for downloads
 
-    const OK = 0;
-    const UPL_OK = 0;
-    const UPL_DUPFILE = 1;
-    const UPL_DUPSNAP = 2;
-    const UPL_ERROR = 3;
-    const UPL_NODEMO = 4;
-    const UPL_PENDING = 5;
+    const OK = 0;           // generic OK status
+    const UPL_OK = 0;       // upload OK
+    const UPL_DUPFILE = 1;  // duplicate filename
+    const UPL_DUPSNAP = 2;  // duplicate snapshot image
+    const UPL_ERROR = 3;    // general upload error
+    const UPL_NODEMO = 4;   // uploads disabled in demo mode
+    const UPL_PENDING = 5;  // success, pending approval
+    const UPL_MISSING = 6;  // missing fields
 }
