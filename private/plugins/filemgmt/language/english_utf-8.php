@@ -123,6 +123,74 @@ $LANG_FILEMGMT = array(
     'no_comments'   => 'No new comments',
     'more'          => '<em>more ...</em>',
     'newly_uploaded' => 'Newly Uploaded',
+    'click_to_view' => 'Click here to view',
+    'no_file_uploaded' => 'No File Uploaded',
+    'description' => 'Description',
+    'category' => 'Category',
+    'err_req_fields' => 'Some required fields were not supplied',
+    'go_back' => 'Go Back',
+);
+
+$LANG_FILEMGMT_ERRORS = array(
+    "0001" =>"Could not connect to the forums database.",
+    "0002" => "The forum you selected does not exist. Please go back and try again.",
+    "0003" => "Password Incorrect.",
+    "0004" => "Could not query the topics database.",
+    "0005" => "Error getting messages from the database.",
+    "0006" => "Please enter the Nickname and the Password.",
+    "0007" => "You are not the Moderator of this forum therefore you can't perform this function.",
+    "0008" => "You did not enter the correct password, please go back and try again.",
+    "0009" => "Could not remove posts from the database.",
+    "0010" => "Could not move selected topic to selected forum. Please go back and try again.",
+    "0011" => "Could not lock the selected topic. Please go back and try again.",
+    "0012" => "Could not unlock the selected topic. Please go back and try again.",
+    "0013" => "Could not query the database. <BR>Error: ".DB_error()."",
+    "0014" => "No such user or post in the database.",
+    "0015" => "Search Engine was unable to query the forums database.",
+    "0016" => "That user does not exist. Please go back and search again.",
+    "0017" => "You must type a subject to post. You can't post an empty subject. Go back and enter the subject",
+    "0018" => "You must choose message icon to post. Go back and choose message icon.",
+    "0019" => "You must type a message to post. You can't post an empty message. Go back and enter a message.",
+    "0020" => "Could not enter data into the database. Please go back and try again.",
+    "0021" => "Can't delete the selected message.",
+    "0022" => "An error ocurred while querying the database.",
+    "0023" => "Selected message was not found in the forum database.",
+    "0024" => "You can't reply to that message. It wasn't sent to you.",
+    "0025" => "You can't post a reply to this topic, it has been locked. Contact the administrator if you have any question.",
+    "0026" => "The forum or topic you are attempting to post to does not exist. Please try again.",
+    "0027" => "You must enter your username and password. Go back and do so.",
+    "0028" => "You have entered an incorrect password. Go back and try again.",
+    "0029" => "Couldn't update post count.",
+    "0030" => "The forum you are attempting to post to does not exist. Please try again.",
+    "0031" => "Unknown Error",
+    "0035" => "You can't edit a post that's not yours.",
+    "0036" => "You do not have permission to edit this post.",
+    "0037" => "You did not supply the correct password or do not have permission to edit this post. Please go back and try again.",
+    "1001" => "Please enter value for Title.",
+    "1002" => "Please enter value for Phone.",
+    "1003" => "Please enter value for Summary.",
+    "1004" => "Please enter value for Address.",
+    "1005" => "Please enter value for City.",
+    "1006" => "Please enter value for State/Province.",
+    "1007" => "Please enter value for Zipcode.",
+    "1008" => "Please enter value for Description.",
+    "1009" => "Vote for the selected resource only once.<br>All votes are logged and reviewed.",
+    "1010" => "You cannot vote on the resource you submitted.<br>All votes are logged and reviewed.",
+    "1011" => "No rating selected - no vote tallied.",
+    "1013" => "Please enter a search query.",
+    "1016" => "Please enter value for Filename.",
+    "1017" => "The file was not uploaded - reported filesize of 0 bytes.",
+    "1101" => "Upload approval Error: The temporary file was not found. Check error.log",
+    "1102" => "Upload submit Error: The temporary filestore file was not created. Check error.log",
+    "1103" => "The download info you provided is already in the database!",
+    "1104" => "The download info was not complete - Need to enter a title for the new file",
+    "1105" => "The download info was not complete - Need to enter a description for the new file",
+    "1106" => "Upload Add Error: The new file was not created. Check error.log",
+    "1107" => "Upload Add Error: The temporary file was not found. Check error.log",
+    "1108" => "Duplicate file - already existing in filestore",
+    "1109" => "File type not allowed",
+    "1110" => "You must define and select a category for the uploaded file",
+    "9999" => "Unknown Error"
 );
 
 $LANG_FILEMGMT_AUTOTAG = array(
@@ -396,6 +464,7 @@ define("_MD_ERRORDESC","ERROR: You need to enter DESCRIPTION!");
 define("_MD_NEWDLADDED","New download added to the database.");
 define("_MD_NEWDLADDED_DUPFILE","Warning: Duplicate File. New download added to the database.");
 define("_MD_NEWDLADDED_DUPSNAP","Warning: Duplicate Snap. New download added to the database.");
+define("_MD_DLUPDATED", "File has been updated.");
 define("_MD_HELLO","Hello %s");
 define("_MD_WEAPPROVED","We approved your download submission to our downloads section. The file name is: ");
 define("_MD_THANKSSUBMIT","Thanks for your submission!");
