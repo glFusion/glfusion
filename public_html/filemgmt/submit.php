@@ -24,7 +24,6 @@ use \glFusion\FileSystem;
 use \glFusion\Log\Log;
 use Filemgmt\XoopsTree;
 use Filemgmt\MyTextSanitizer;
-use Filemgmt\ErrorHandler;
 use Filemgmt\Models\Status;
 
 function FM_notifyAdmins( $filename,$file_user_id,$description ) {
@@ -189,7 +188,6 @@ if ( isset($_USER['uid']) ) {
     $uid = 1;
 }
 
-$eh = new ErrorHandler; //ErrorHandler object
 if (Filemgmt\Download::canSubmit()) {
     $groupsql = SEC_buildAccessSql();
     $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
@@ -244,51 +242,11 @@ if (Filemgmt\Download::canSubmit()) {
             COM_refresh($redirect);
         }
     } else {
-
+        // Redisplay the form if there were validation errors
         $File = new Filemgmt\Download;
-
-/*        $myts = new MyTextSanitizer; // MyTextSanitizer object
-        $eh = new ErrorHandler; //ErrorHandler object
-        $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
-        $mytree->setGroupAccessFilter($_GROUPS);
-
-        $T = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
-        $T->set_file('page', 'upload.thtml');
-        $T->set_var(array(
-            'lang_submitnotice' => _MD_SUBMITONCE,
-            'lang_allpending'   => _MD_ALLPENDING,
-            'lang_dontabuse'    => _MD_DONTABUSE,
-            'lang_takedays'     => _MD_TAKEDAYS,
-            'lang_required'     => _MD_REQUIRED,
-            'lang_filetitle'    => _MD_FILETITLE,
-            'lang_filename'     => _MD_DLFILENAME,
-            'lang_category'     => _MD_CATEGORY,
-            'lang_approve'      => _MD_APPROVEREQ,
-            'lang_homepage'     => _MD_HOMEPAGEC,
-            'lang_version'      => _MD_VERSIONC,
-            'lang_desc'         => _MD_DESCRIPTIONC,
-            'lang_screenshot'   => _MD_SHOTIMAGE,
-            'lang_commentoption'=> _MD_COMMENTOPTION,
-            'lang_no'           => _MD_NO,
-            'lang_yes'          => _MD_YES,
-            'lang_submit'       => _MD_SUBMIT,
-            'lang_cancel'       => _MD_CANCEL,
-            'token_name'        => CSRF_TOKEN,
-            'security_token'    => SEC_createToken(),
-            'cat_select_options'=> $mytree->makeMySelBoxNoHeading("title", "title", 1, 0,"cid"),
-            'uid'               => $uid,
-        ));
- */
-     //   $display .= Filemgmt\Menu::siteHeader();
         $content .= COM_startBlock("<b>". _MD_UPLOADTITLE ."</b>");
         $content .= $File->asSubmission()->edit($_POST);
-
-//        $T->parse('output', 'page');
-//        $display .= $T->finish($T->get_var('output'));
-
         $content .= COM_endBlock();
-        //$display .= Filemgmt\Menu::siteFooter();
-        //echo $display;
     }
 
 } else {

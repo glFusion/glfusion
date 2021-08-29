@@ -655,7 +655,7 @@ class Download
             if ($upload->areErrors()) {
                 $errmsg = "Upload Error: " . $upload->printErrors(false);
                 Log::write('system',Log::ERROR, $errmsg);
-                $eh->show("1106");
+                $ErrorHandler::show("1106");
             } else {
                 $uploaded_file = $upload->getUploadedFiles()[0];
                 $this->size = (int)$uploaded_file['size'];
@@ -667,7 +667,7 @@ class Download
                 if (array_key_exists($fileExtension, $_FM_CONF['extensions_map'])) {
                     if ($_FM_CONF['extensions_map'][$fileExtension] == 'reject' ) {
                         Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$uploadfilename);
-                        $eh->show("1109");
+                        $ErrorHandler::show("1109");
                     } else {
                         $fileExtension = $_FM_CONF['extensions_map'][$fileExtension];
                         $pos = strrpos($url,'.') + 1;
@@ -717,7 +717,7 @@ class Download
             if ($upload->areErrors()) {
                 $errmsg = "Upload Error: " . $upload->printErrors(false);
                 Log::write('system',Log::ERROR, $errmsg);
-                $eh->show("1106");
+                $ErrorHandler::show("1106");
             } else {
                 $snapfilename = $myts->makeTboxData4Save($upload->getUploadedFiles()[0]['name']);
                 $this->logourl = $myts->makeTboxData4Save(rawurlencode($snapfilename));
@@ -873,7 +873,6 @@ class Download
         $totalvotes = '';
         $myts = new MyTextSanitizer;
         $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
-        $eh = new ErrorHandler;
 
         if ($this->_editmode == 'submit') {
             $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates');
@@ -1069,7 +1068,7 @@ class Download
             }
         } else {
             Log::write('system', Log::ERROR, 'Filemgmt upload approve error: Temporary file does not exist: '.$tmp);
-            $eh->show("1101");
+            $ErrorHandler::show("1101");
         }
 
         $tmp = $_FM_CONF['SnapStore_tmp'] . $this->logourl;
@@ -1083,7 +1082,7 @@ class Download
             if (!is_file($newfile)) {
                 Log::write('system',Log::ERROR, 'Filemgmt upload approve error: New file does not exist after move of tmp file: '.$newfile);
                 $AddNewFile = false;    // Set false again - in case it was set true above for actual file
-                $eh->show("1101");
+                $ErrorHandler::show("1101");
             } else {
                $AddNewFile = true;
             }

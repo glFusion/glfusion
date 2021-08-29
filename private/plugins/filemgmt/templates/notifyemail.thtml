@@ -13,7 +13,7 @@
 <p>{description}</p>
 {lang_uploaded_by} - {username}<br>
 <br>
-{url_moderate}
+<a href="{site_admin_url}/moderation.php">{lang_click_to_mod}</a>
 <br><br>
 <div style="font-size:smaller">
 {site_name}<br>

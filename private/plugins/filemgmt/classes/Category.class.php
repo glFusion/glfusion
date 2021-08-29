@@ -186,7 +186,7 @@ class Category
                     $errmsg = "Upload Error: " . $upload->printErrors(false);
                     $this->addError($errmsg);
                     Log::write('system',Log::ERROR, $errmsg);
-                    $eh->show("1106");
+                    ErrorHandler::show("1106");
                 } else {
                     $uploaded_file = $upload->getUploadedFiles()[0];
                     $this->size = (int)$uploaded_file['size'];
@@ -197,7 +197,7 @@ class Category
                     if (array_key_exists($fileExtension, $_FM_CONF['extensions_map'])) {
                         if ($_FM_CONF['extensions_map'][$fileExtension] == 'reject' ) {
                             Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$uploadfilename);
-                            $eh->show("1109");
+                            ErrorHandler::show("1109");
                         } else {
                             $fileExtension = $_FM_CONF['extensions_map'][$fileExtension];
                             $pos = strrpos($url,'.') + 1;
