@@ -59,7 +59,7 @@
 		<div class="uk-form-row uk-margin">
 			<label class="uk-form-label">{lang_description}</label>
 			<div class="uk-form-controls">
-				<textarea class="uk-form-width-large required" id="description" name="description" rows="10" cols="80">{description}</textarea>
+				<textarea class="uk-textarea uk-form-width-large required" id="description" name="description" rows="10" cols="80">{description}</textarea>
 			</div>
 		</div>
 		<div class="uk-form-row uk-margin">

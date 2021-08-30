@@ -871,14 +871,21 @@ class UploadDownload
 
     /**
      * Ensure that all mime-types are lower-case.
+     * Also strips leading `.` characters from extensions, and converts
+     * the extensions to an array if the old-style comma-separated string
+     * is supplied.
      *
      * @param   array   $arr    Original array
      * @return  array   Array of lower-case mimetype=>extensions
      */
     private static function _fixMimeArrayCase($arr)
     {
-        $arr = array_change_key_case($arr);
+        $arr = array_change_key_case($arr, CASE_LOWER);
         foreach ($arr as $key=>$data) {
+            if (is_string($data)) {
+                // Convert to array if extensions are a comma-separated list
+                $data = explode(',', $data);
+            }
             foreach ($data as $idx=>$ext) {
                 if (strpos($ext, '.') === 0) {
                     $data[$idx] = substr($ext, 1);
