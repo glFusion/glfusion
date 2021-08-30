@@ -1448,7 +1448,7 @@ class Download
         $T->set_var(array(
             'lid'       => $this->lid,
             'dtitle'    => $this->title,
-            'hits'      => $this->hits,
+            'hits'      => COM_numberFormat($this->hits),
             'file_description' => nl2br($this->description),
             'is_found' => true,
             'LANG_DLNOW' => _MD_DLNOW,
@@ -1469,7 +1469,7 @@ class Download
             'LANG_RATING' => $_FM_CONF['enable_rating'] ? _MD_RATINGC : '',
             'have_dlreport' => $this->hits > 0 && SEC_hasRights('filemgmt.edit'),
             'download_times' => sprintf(_MD_DLTIMES,$this->hits),
-            'download_count' => $this->hits,
+            'download_count' => COM_numberFormat($this->hits),
             'LANG_FILESIZE' => _MD_FILESIZE,
             'LANG_DOWNLOAD' => _MD_DOWNLOAD,
             'LANG_FILELINK' => _MD_FILELINK,
