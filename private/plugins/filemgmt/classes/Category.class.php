@@ -450,7 +450,7 @@ class Category
     {
         global $_GROUPS;
 
-        if (in_array($this->grp_writeaccess, $_GROUPS)) {
+        if (\Group::inGroup($this->grp_writeaccess)) {
             return true;
         } else {
             return false;
