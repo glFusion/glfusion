@@ -35,20 +35,21 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
+namespace Filemgmt;
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-class MyTextSanitizer {
+class MyTextSanitizer
+{
 
-
-    /*
-    * Constructor of this class
-    * Gets allowed html tags from admin config settings
-    * <br> should not be allowed since nl2br will be used
-    * when storing data
-    */
+    /**
+     * Constructor of this class.
+     * Gets allowed html tags from admin config settings
+     * <br> should not be allowed since nl2br will be used
+     * when storing data.
+     */
     function __construct(){
     }
 
@@ -97,7 +98,8 @@ class MyTextSanitizer {
         return($ret);
     }
 
-    function xoopsCodeDecode($text){
+    function xoopsCodeDecode($text)
+    {
         $patterns = array();
         $replacements = array();
         $patterns[] = "/\[url=(['\"]?)(http[s]?:\/\/[^\"']*)\\1](.*)\[\/url\]/sU";

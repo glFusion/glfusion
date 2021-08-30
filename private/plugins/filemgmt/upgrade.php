@@ -40,7 +40,7 @@ if (!defined ('GVERSION')) {
 */
 function filemgmt_upgrade()
 {
-    global $_TABLES,$_CONF,$_TABLES,$CONF_FM, $_DB_table_prefix;;
+    global $_TABLES,$_CONF,$_TABLES,$_FM_CONF, $_DB_table_prefix;;
 
     include $_CONF['path'].'/plugins/filemgmt/config.php';
     include $_CONF['path'].'/plugins/filemgmt/filemgmt.php';
@@ -120,9 +120,18 @@ function filemgmt_upgrade()
         case '1.7.9' :
             // no changes
 
+        case '1.8.0':
+            DB_query("ALTER TABLE {$_TABLES['filemgmt_filedesc']} DROP KEY (`lid`)");
+            DB_query("ALTER TABLE {$_TABLES['filemgmt_filedesc']} ADD PRIMARY KEY (`lid`)");
+
         default :
-            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$CONF_FM['pi_version']."',pi_gl_version = '".$CONF_FM['gl_version']."' WHERE pi_name = 'filemgmt'");
+            DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FM_CONF['pi_version']."',pi_gl_version = '".$_FM_CONF['gl_version']."' WHERE pi_name = 'filemgmt'");
             return true;
     }
+
+    // Update any configuration item changes
+    USES_lib_install();
+    global $_FM_DEFAULT;
+    require_once __DIR__ . '/install_defaults.php';
+    _update_config('filemgmt', $_FM_DEFAULT);
 }
-?>

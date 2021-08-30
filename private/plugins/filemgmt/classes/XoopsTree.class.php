@@ -35,31 +35,61 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
+namespace Filemgmt;
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-class XoopsTree{
+class XoopsTree
+{
+    /** Name of table with parent-child structure.
+     * @var string */
+    private $table;
 
-    var $table;     //table with parent-child structure
-    var $id;        //name of unique id for records in table $table
-    var $pid;       // name of parent id used in table $table
-    var $order;     //specifies the order of query results
-    var $title;     // name of a field in table $table which will be used when  selection box and paths are generated
-    var $db;
-    var $filtersql = '';     // Selected list of groups allowed access
+    /** Name of unique id field for records in table $table.
+     * @var integer */
+    public  $id;
 
-    //constructor of class XoopsTree
-    //sets the names of table, unique id, and parend id
-    function __construct($db_name,$table_name, $id_name, $pid_name){
+    /** Name of parent id field used in table $table.
+     * @var integer */
+    private $pid;
+
+    /** Specifies the order of query results.
+     * @var string */
+    private $order;
+
+    /** Name of a field which will be used for selection box and paths.
+     * @var string */
+    private $title;
+
+    /** Name of the database.
+     * @var string */
+    private $db;
+
+    /** Selected list of groups allowed access.
+     * @var string */
+    public $filtersql = '';
+
+
+    /**
+     * Constructor of class XoopsTree.
+     * Sets the names of table, unique id, and parend id.
+     *
+     * @param   string  $db_name    Database name
+     * @param   string  $table_name Table name
+     * @param   string  $id_name    Record ID field name
+     * @param   string  $pid_name   Parent ID field name
+     */
+    public function __construct($db_name,$table_name, $id_name, $pid_name)
+    {
         $this->db = $db_name;
         $this->table = $table_name;
         $this->id = $id_name;
         $this->pid = $pid_name;
     }
 
-    function setGroupAccessFilter($groups) {
+    public function setGroupAccessFilter($groups) {
         if (count($groups) == 1) {
             $this->filtersql = " AND grp_access = '" . current($groups) ."'";
         } else {
@@ -67,7 +97,7 @@ class XoopsTree{
         }
     }
 
-    function setGroupUploadAccessFilter($groups) {
+    public function setGroupUploadAccessFilter($groups) {
         if (count($groups) == 1) {
             $this->filtersql = " AND grp_writeaccess = '" . current($groups) ."'";
         } else {
@@ -76,7 +106,7 @@ class XoopsTree{
     }
 
     // returns an array of first child objects for a given id($sel_id)
-    function getFirstChild($sel_id, $order=""){
+    public function getFirstChild($sel_id, $order=""){
         $arr = array();
 
         if ( $order != "" ) {
@@ -95,7 +125,7 @@ class XoopsTree{
     }
 
     // returns an array of all FIRST child ids of a given id($sel_id)
-    function getFirstChildId($sel_id){
+    public function getFirstChildId($sel_id){
         $idarray =array();
         $result = DB_query("SELECT $this->id FROM $this->table WHERE $this->pid = '$sel_id'");
         $count  = DB_numRows($result);
@@ -109,16 +139,13 @@ class XoopsTree{
     }
 
     //returns an array of ALL child ids for a given id($sel_id)
-    function getAllChildId($sel_id,$order="",$idarray = array()){
+    public function getAllChildId($sel_id,$order="",$idarray = array()){
         //$sql = "SELECT ".$this->id." FROM ".$this->table." WHERE ".$this->pid."=".$sel_id."";
         if ( $order != "" ) {
             $result = DB_query("SELECT $this->id FROM $this->table WHERE $this->pid = '$sel_id' ORDER BY $order");
         } else {
             $result = DB_query("SELECT $this->id FROM $this->table WHERE $this->pid = '$sel_id'");
         }
-
-        //$result=$this->db->query($sql);
-        //$count = $this->db->getRowsNum($result);
 
         if ( DB_numRows($result) == 0 ) {
             return $idarray;
@@ -131,7 +158,8 @@ class XoopsTree{
     }
 
     //returns an array of ALL parent ids for a given id($sel_id)
-    function getAllParentId($sel_id,$order="",$idarray = array()){
+    public function getAllParentId($sel_id,$order="",$idarray = array())
+    {
         $sql = "SELECT $this->pid FROM $this->table WHERE $this->id = '$sel_id'";
         if ( $order != "" ) {
             $sql .= " ORDER BY $order";
@@ -148,7 +176,8 @@ class XoopsTree{
 
     //generates path from the root id to a given id($sel_id)
     // the path is delimetered with "/"
-    function getPathFromId($sel_id, $title, $path=""){
+    public function getPathFromId($sel_id, $title, $path="")
+    {
         $result = DB_query("SELECT $this->pid, $title FROM $this->table WHERE $this->id = '$sel_id'");
            if ( DB_numRows($result) == 0 ) {
             return $path;
@@ -162,98 +191,75 @@ class XoopsTree{
         return $path;
     }
 
-    function makeMySelBoxNoHeading($title,$order="",$preset_id=0, $none=0, $sel_name="", $onchange=""){
-    $retval = '';
 
-    if ( $sel_name == "" ) {
-        $sel_name = $this->id;
-    }
-    $myts = MyTextSanitizer::getInstance();
+    /**
+     * Create only the option elements for a selection field.
+     */
+    public function makeMySelBoxOptions($title,$order="",$preset_id=0, $none=0, $sel_name="", $onchange="", $exclude='')
+    {
+        $retval = '';
 
-    $sql = "SELECT $this->id, $title FROM $this->table WHERE $this->pid = 0 $this->filtersql ";
-    if ( $order != "" ) {
-        $sql .= " ORDER BY $order";
-    }
-    $result = DB_query($sql);
-    if ( $none ) {
-        $retval .= "<option value='0'>----</option>\n";
-    }
-    while ( list($catid, $name) = DB_fetchARRAY($result) ) {
-        if ( $catid == $preset_id ) {
-            $sel = " selected='selected'";
-        } else {
-            $sel = '';
+        if ( $sel_name == "" ) {
+            $sel_name = $this->id;
         }
-        $retval .= "<option value='$catid'$sel>$name</option>\n";
-        $sel = "";
-        $arr = $this->getChildTreeArray($catid);
-        foreach ( $arr as $option ) {
-            $option['prefix'] = str_replace(".","--",$option['prefix']);
-            $catpath = $option['prefix']."&nbsp;".$myts->makeTboxData4Show($option[$title]);
-            if ( $option[$this->id] == $preset_id ) {
+        $myts = MyTextSanitizer::getInstance();
+
+        $sql = "SELECT $this->id, $title FROM $this->table WHERE $this->pid = 0 $this->filtersql ";
+        if ( $order != "" ) {
+            $sql .= " ORDER BY $order";
+        }
+        $result = DB_query($sql);
+        if ( $none ) {
+            $retval .= "<option value='0'>----</option>\n";
+        }
+        while ( list($catid, $name) = DB_fetchARRAY($result) ) {
+            if ( $catid == $preset_id ) {
                 $sel = " selected='selected'";
+            } else {
+                $sel = '';
             }
-            $retval .= "<option value='".$option[$this->id]."'$sel>$catpath</option>\n";
+            $retval .= "<option value='$catid'$sel>$name</option>\n";
             $sel = "";
-        }
-    }
-
-    return $retval;
-    }
-    //makes a nicely ordered selection box
-    //$preset_id is used to specify a preselected item
-    //set $none to 1 to add a option with value 0
-    function makeMySelBox($title,$order="",$preset_id=0, $none=0, $sel_name="", $onchange="",$exclude=''){
-    if ( $sel_name == "" ) {
-        $sel_name = $this->id;
-    }
-    $myts = MyTextSanitizer::getInstance();
-    $retval = "<select name='".$sel_name."'";
-    if ( $onchange != "" ) {
-        echo " onchange='".$onchange."'";
-    }
-    $retval .= ">\n";
-    $sql = "SELECT $this->id, $title FROM $this->table WHERE $this->pid = 0 $this->filtersql ";
-    if ( $order != "" ) {
-        $sql .= " ORDER BY $order";
-    }
-    $result = DB_query($sql);
-    if ( $none ) {
-        $retval .= "<option value='0'>----</option>\n";
-    }
-
-    while ( list($catid, $name) = DB_fetchARRAY($result) ) {
-        if ( $catid == $exclude ) {
-            continue;
-        }
-        if ( $catid == $preset_id ) {
-            $sel = " selected='selected'";
-        } else {
-            $sel = '';
-        }
-        $retval .= "<option value='$catid'$sel>$name</option>\n";
-        $sel = "";
-        $arr = $this->getChildTreeArray($catid);
-        foreach ( $arr as $option ) {
-            if ( $option[$this->id] == $exclude ) {
-                continue;
+            $arr = $this->getChildTreeArray($catid);
+            foreach ( $arr as $option ) {
+                $option['prefix'] = str_replace(".","--",$option['prefix']);
+                $catpath = $option['prefix']."&nbsp;".$myts->makeTboxData4Show($option[$title]);
+                if ( $option[$this->id] == $preset_id ) {
+                    $sel = " selected='selected'";
+                }
+                $retval .= "<option value='".$option[$this->id]."'$sel>$catpath</option>\n";
+                $sel = "";
             }
-            $option['prefix'] = str_replace(".","--",$option['prefix']);
-            $catpath = $option['prefix']."&nbsp;".$myts->makeTboxData4Show($option[$title]);
-            if ( $option[$this->id] == $preset_id ) {
-                $sel = " selected='selected'";
-            }
-            $retval .= "<option value='".$option[$this->id]."'$sel>$catpath</option>\n";
-            $sel = "";
         }
+        return $retval;
     }
-    $retval .= "</select>\n";
 
-    return $retval;
+
+    /**
+     * Makes a nicely ordered selection box, including the "select" tags.
+     * $preset_id is used to specify a preselected item.
+     * set $none to 1 to add a option with value 0
+     */
+    public function makeMySelBox($title,$order="",$preset_id=0, $none=0, $sel_name="", $onchange="",$exclude='')
+    {
+        if ( $sel_name == "" ) {
+            $sel_name = $this->id;
+        }
+        $myts = MyTextSanitizer::getInstance();
+        $retval = "<select name='".$sel_name."'";
+        if ( $onchange != "" ) {
+            $retval .= ' onchange="' . $onchange . ' "';
+        }
+        $retval .= ">\n";
+        $retval .= $this->makeMySelBoxOptions($title,$order,$preset_id, $none, $sel_name, $onchange,$exclude);
+        $retval .= "</select>\n";
+        return $retval;
     }
+
 
     //generates nicely formatted linked path from the root id to a given id
-    function getNicePathFromId($sel_id, $title, $funcURL, $path=""){
+    public function getNicePathFromId($sel_id, $title, $funcURL, $path="")
+    {
         $sql = "SELECT $this->pid, $title FROM $this->table WHERE $this->id = '$sel_id'";
         $result = DB_query($sql);
         if ( DB_numROWS($result) == 0 ) {
@@ -276,7 +282,8 @@ class XoopsTree{
 
     //generates id path from the root id to a given id
     // the path is delimetered with "/"
-    function getIdPathFromId($sel_id, $path=""){
+    public function getIdPathFromId($sel_id, $path="")
+    {
         $result = $this->db->query("SELECT $this->pid FROM $this->table WHERE $this->id = '$sel_id'");
         if ( $this->db->getRowsNum($result) == 0 ) {
             return $path;
@@ -291,7 +298,8 @@ class XoopsTree{
     }
 
 
-    function getAllChild($sel_id=0,$order="",$parray = array()){
+    public function getAllChild($sel_id=0,$order="",$parray = array())
+    {
         $sql = "SELECT * FROM $this->table WHERE $this->pid = '$sel_id'";
         if ( $order != "" ) {
             $sql .= " ORDER BY $order";
@@ -308,7 +316,8 @@ class XoopsTree{
         return $parray;
     }
 
-    function getChildTreeArray($sel_id=0,$order="",$parray = array(),$r_prefix="") {
+    public function getChildTreeArray($sel_id=0,$order="",$parray = array(),$r_prefix="")
+    {
         $sql = "SELECT * FROM $this->table WHERE $this->pid = '$sel_id' $this->filtersql ";
         if ( $order != "" ) {
             $sql .= " ORDER BY $order";
@@ -327,4 +336,3 @@ class XoopsTree{
     }
 
 }
-?>
