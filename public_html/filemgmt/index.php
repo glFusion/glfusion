@@ -206,6 +206,7 @@ if ($lid > 0) {
         );
         $p->unset_var('no_files');
     } else {
+        $p->set_var('lang_no_files',_MD_NOFILES);
         $p->set_var('no_files',true);
     }
 
