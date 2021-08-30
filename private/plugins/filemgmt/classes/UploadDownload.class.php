@@ -157,7 +157,7 @@ class UploadDownload
         $nwarnings = $nwarnings + 1;
         $this->_warnings[$nwarnings] = $warningText;
         if ($this->loggingEnabled()) {
-            COM_errorLog($warningText, SHOP_LOG_WARNING);
+            COM_errorLog($warningText, FILEMGMT_LOG_WARNING);
         }
     }
 
@@ -173,7 +173,7 @@ class UploadDownload
         $nerrors = $nerrors + 1;
         $this->_errors[$nerrors] = $errorText;
         if ($this->loggingEnabled()) {
-            COM_errorLog($errorText, SHOP_LOG_ERROR);
+            COM_errorLog($errorText, FILEMGMT_LOG_ERROR);
         }
     }
 
@@ -189,7 +189,7 @@ class UploadDownload
         $nmsgs = $nmsgs + 1;
         $this->_debugMessages[$nmsgs] = $debugText;
         if ($this->loggingEnabled()) {
-            COM_errorLog($debugText, SHOP_LOG_DEBUG);
+            COM_errorLog($debugText, FILEMGMT_LOG_DEBUG);
         }
     }
 
@@ -335,7 +335,7 @@ class UploadDownload
         if ($this->_currentFile['size'] > $this->_maxFileSize) {
             COM_errorLog(
                 "Uploaded file: ".$this->_currentFile['name']." exceeds max file size of " . $this->_maxFileSize,
-                SHOP_LOG_WARNING
+                FILEMGMT_LOG_WARNING
             );
             return false;
         } else {

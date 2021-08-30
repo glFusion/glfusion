@@ -19,6 +19,10 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+define('FILEMGMT_LOG_ERROR', '1');
+define('FILEMGMT_LOG_WARNING', '1');
+define('FILEMGMT_LOG_DEBUG', '1');
+
 spl_autoload_register(function ($class)
 {
     // project-specific namespace prefix
@@ -59,6 +63,8 @@ if (is_file(__DIR__ . '/config.php')) {
     require_once __DIR__ . '/config.php';
 }
 
+$_FM_CONF['extensions_map'] = $_FMDOWNLOAD;
+
 if (empty($_FM_CONF['FileStore'])) {
     $_FM_CONF['FileStore'] = $_CONF['path_html'].'data/filemgmt/files/';
     $_FM_CONF['FileStoreURL'] = $_CONF['site_url'].'/data/filemgmt/files/';
@@ -93,7 +99,6 @@ include_once __DIR__ . '/language/' . $langfile;
 if (file_exists(__DIR__ . '/language/custom/' . $langfile)) {
     include_once __DIR__ . '/language/custom/' . $langfile;
 }
-
 
 /**
  * Returns the items for this plugin that should appear on the main menu.
