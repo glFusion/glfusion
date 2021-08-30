@@ -1426,6 +1426,12 @@ class Download
         static $mytree = NULL;
         $dt = new \Date($this->date);
 
+        $format = new \glFusion\Formatter();
+        $format->setNamespace('filemgmt');
+        $format->setAction('description');
+        $format->setType('text');
+        $format->setParseAutoTags(true);
+
         $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates');
         $T->set_file('record', 'filelisting_record.thtml');
 
@@ -1450,6 +1456,8 @@ class Download
             'dtitle'    => $this->title,
             'hits'      => COM_numberFormat($this->hits),
             'file_description' => nl2br($this->description),
+
+            'file_description' => $format->parse($this->description, true,7200),
             'is_found' => true,
             'LANG_DLNOW' => _MD_DLNOW,
             'LANG_SUBMITTEDBY' => _MD_SUBMITTEDBY,
