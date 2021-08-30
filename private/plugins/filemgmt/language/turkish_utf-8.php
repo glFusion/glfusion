@@ -184,6 +184,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Enable Ratings',
     'displayblocks'         => 'GlFusion Bloklarını Görüntüleme',
     'silent_edit_default'   => 'Silent Edit Default',
+    'extensions_map'        => 'İndirmeler için kullanılan uzantılar',
+    'EmailOption'           => 'Onay üzerine gönderen e-posta?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Ana Ayarlar'

@@ -184,6 +184,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Povolit hodnocení příspěvků',
     'displayblocks'         => 'Zobrazit bloky glFusion',
     'silent_edit_default'   => 'Silent Edit Default',
+    'extensions_map'        => 'Rozšíření používaná pro stahování',
+    'EmailOption'           => 'Odesílatel e -mailu po schválení?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Hlavní nastavení'

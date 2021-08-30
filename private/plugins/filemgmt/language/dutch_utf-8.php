@@ -184,6 +184,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Enable Ratings',
     'displayblocks'         => 'Display glFusion Blocks',
     'silent_edit_default'   => 'Silent Edit Default',
+    'extensions_map'        => 'Extensies die worden gebruikt voor downloads',
+    'EmailOption'           => 'Indiener e-mailen na goedkeuring?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Hoofd Instellingen'

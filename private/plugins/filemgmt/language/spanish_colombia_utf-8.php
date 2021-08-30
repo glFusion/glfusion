@@ -184,6 +184,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Habilitar Calificaciones',
     'displayblocks'         => 'Mostrar los Bloques glFusion',
     'silent_edit_default'   => 'Silent Edit Default',
+    'extensions_map'        => 'Extensiones utilizadas para descargas',
+    'EmailOption'           => '¿Remitente de correo electrónico después de la aprobación?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Main Settings'
