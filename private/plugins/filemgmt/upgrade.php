@@ -121,7 +121,7 @@ function filemgmt_upgrade()
             // no changes
 
         case '1.8.0':
-            DB_query("ALTER TABLE {$_TABLES['filemgmt_filedesc']} DROP KEY (`lid`)");
+            DB_query("ALTER TABLE {$_TABLES['filemgmt_filedesc']} DROP KEY `lid`", 1);
             DB_query("ALTER TABLE {$_TABLES['filemgmt_filedesc']} ADD PRIMARY KEY (`lid`)");
 
         default :
