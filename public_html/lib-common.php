@@ -669,6 +669,7 @@ if (file_exists($_CONF['path_layout'] . 'custom/functions.php') ) {
 }
 
 if (!isset($_SYSTEM['framework']) ) $_SYSTEM['framework'] = 'legacy';
+$TEMPLATE_OPTIONS['default_vars']['framework'] = $_SYSTEM['framework'];
 
 // ensure XHTML constant is defined to avoid problems elsewhere
 
