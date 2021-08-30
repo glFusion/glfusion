@@ -1,40 +1,25 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | viewcat.php                                                              |
-// |                                                                          |
-// | Displays downloads in a specific category                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// |                                                                          |
-// | Based on:                                                                |
-// | myPHPNUKE Web Portal System - http://myphpnuke.com/                      |
-// | PHP-NUKE Web Portal System - http://phpnuke.org/                         |
-// | Thatware - http://thatware.org/                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - FileMgmt Plugin
+*
+* Displays downloads in a specific category
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Lee Garner      lee AT leegarner DOT com
+*
+*  Based on prior work Copyright (C) 2004 by Consult4Hire Inc.
+*  Author:
+*  Blaine Lang          blaine AT portalparts DOT com
+*
+*  Based on:
+*    myPHPNUKE Web Portal System - http://myphpnuke.com/
+*    PHP-NUKE Web Portal System - http://phpnuke.org/
+*    Thatware - http://thatware.org/
+*/
 
 require_once '../lib-common.php';
 use \glFusion\Database\Database;
@@ -132,6 +117,8 @@ if ( $eor == 0 ) {
     $p->set_var('final_end_row','</tr>');
 }
 
+// removing the query for subcategories since if no category is passed, it redirects to index.php
+/*
 // Get a list of subcategories for this category
 try {
     $stmt = $db->conn->prepare("SELECT cid FROM {$_TABLES['filemgmt_cat']} WHERE pid = ?");
@@ -147,10 +134,11 @@ if ($stmt) {
     $results = $stmt->fetchAll(Database::ASSOCIATIVE);
 }
 $categories = $cid;
-foreach ($results as $A) {
-    $categories .= ",{$A['cid']}";
-}
-
+//foreach ($results as $A) {
+//    $categories .= ",{$A['cid']}";
+//}
+*/
+$categories = $cid;
 try {
     $stmt = $db->conn->prepare(
         "SELECT COUNT(*) as num_rows FROM {$_TABLES['filemgmt_filedetail']} a
