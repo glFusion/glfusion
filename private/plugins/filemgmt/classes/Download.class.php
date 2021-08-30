@@ -1449,7 +1449,7 @@ class Download
             'lid'       => $this->lid,
             'dtitle'    => $this->title,
             'hits'      => $this->hits,
-            'file_description' => $this->description,
+            'file_description' => nl2br($this->description),
             'is_found' => true,
             'LANG_DLNOW' => _MD_DLNOW,
             'LANG_SUBMITTEDBY' => _MD_SUBMITTEDBY,
@@ -1668,7 +1668,7 @@ class Download
                 $voted = 0;
             } else {
                 $FM_ratedIds = RATING_getRatedIds('filemgmt');
-                if (@in_array($lid,$FM_ratedIds)) {
+                if (@in_array($this->lid,$FM_ratedIds)) {
                     $static = true;
                     $voted = 1;
                 } else {
