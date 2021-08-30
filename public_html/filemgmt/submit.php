@@ -201,7 +201,7 @@ if (Filemgmt\Download::canSubmit()) {
         exit;
     }
 
-    if ( isset($_POST['submit'])) && SEC_checkToken()){
+    if ( isset($_POST['submit']) && SEC_checkToken() ){
 
         if (!COM_isAnonUser() ) {
             $submitter = (int) $_USER['uid'];
