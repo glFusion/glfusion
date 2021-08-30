@@ -182,6 +182,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Bewertungen aktivieren',
     'displayblocks'         => 'glFusion Blöcke anzeigen',
     'silent_edit_default'   => 'Standart für "Stilles Bearbeiten"',
+    'extensions_map'        => 'Für Downloads verwendete Erweiterungen',
+    'EmailOption'           => 'E-Mail-Absender nach Genehmigung?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Haupteinstellungen'

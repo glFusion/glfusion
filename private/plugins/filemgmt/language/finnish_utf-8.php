@@ -184,6 +184,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Enable Ratings',
     'displayblocks'         => 'Näytä glFusion Lohkot',
     'silent_edit_default'   => 'Silent Edit Default',
+    'extensions_map'        => 'Latauksissa käytetyt laajennukset',
+    'EmailOption'           => 'Lähetä sähköpostia lähettäjälle hyväksynnän jälkeen?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Pää Asetukset'

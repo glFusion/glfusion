@@ -31,7 +31,11 @@ class Notifier
 
         // Fake successful return if notifications are disabled,
         // or if the submitter is anonymous.
-        if (isset($_FM_CONF['EmailOption']) || $File->getSubmitter() < 2) {
+        if (
+            $File->getSubmitter() < 2 || 
+            !isset($_FM_CONF['EmailOption']) ||
+            !$_FM_CONF['EmailOption']
+        ) {
             return true;
         }
 
