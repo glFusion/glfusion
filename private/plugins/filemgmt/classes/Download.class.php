@@ -13,12 +13,12 @@
  * @filesource
  */
 namespace Filemgmt;
+
 use glFusion\FileSystem;
 use glFusion\Database\Database;
 use glFusion\Log\Log;
 use glFusion\Cache\Cache;
 use Filemgmt\Models\Status;
-
 
 /**
  * Class for downloadable items.
@@ -201,7 +201,7 @@ class Download
                 array(Database::INTEGER)
             );
         } catch(Throwable $e) {
-            // Ignore errors or failed attempts
+            return false;
         }
         $data = $stmt->fetchAll(Database::ASSOCIATIVE);
         $stmt->closeCursor();
@@ -219,7 +219,7 @@ class Download
 
 
     /**
-     * Get all file downloads, subject to an opional query string and limit.
+     * Get all file downloads, subject to an optional query string and limit.
      *
      * @param   string  $where  Optional WHERE clause, not including keyword
      * @param   string  $limit  Optionsl LIMIT clause, not including keyword
@@ -244,7 +244,7 @@ class Download
         try {
             $stmt = $db->conn->executeQuery($sql);
         } catch(Throwable $e) {
-            // Ignore errors or failed attempts
+            return array();
         }
         return $stmt->fetchAll(Database::ASSOCIATIVE);
     }
@@ -599,6 +599,8 @@ class Download
             return Status::UPL_NODEMO;
         }
 
+        $AddNewFile = false;
+
         $missing = array();
         //$missing[] = 'Test message';
 
@@ -615,7 +617,8 @@ class Download
         if ($this->cid == 0) {
             $missing[] = $LANG_FILEMGMT['category'];
         }
-        if ($_FILES['newfile']['size'] == 0  && empty($this->url)) {
+
+        if ((int) $this->lid != 0 && $_FILES['newfile']['size'] == 0  && empty($this->url)) {
             $missing[] = $LANG_FILEMGMT['no_file_uploaded'];
         }
         if (!empty($missing)) {
@@ -628,11 +631,6 @@ class Download
 
         $Cat = new Category($this->cid);
 
-        FileSystem::mkDir($_FM_CONF['FileStore']);
-
-        $upload = new UploadDownload();
-        $upload->setPerms(self::PERMS);
-        $upload->setFieldName('newfile');
         if ($Cat->canUpload()) {
             $this->status = Status::APPROVED;
             $retval = Status::UPL_OK;
@@ -644,47 +642,75 @@ class Download
             $file_path = $_FM_CONF['FileStore_tmp'];
             $snap_path = $_FM_CONF['SnapStore_tmp'];
         }
-        $upload->setPath($file_path);
-        $upload->setAllowAnyMimeType(true);     // allow any file type
-        $upload->setMaxFileSize(100000000);
-        $upload->setMaxDimensions(8192,8192);
 
-        $AddNewFile = false;
-        if ($upload->numFiles() > 0) {
-            $upload->uploadFiles();
-            if ($upload->areErrors()) {
-                $errmsg = "Upload Error: " . $upload->printErrors(false);
-                Log::write('system',Log::ERROR, $errmsg);
-                $ErrorHandler::show("1106");
-            } else {
-                $uploaded_file = $upload->getUploadedFiles()[0];
-                $this->size = (int)$uploaded_file['size'];
-                $filename = $uploaded_file['name'];
-                $this->url = rawurlencode($filename);
+// only want to do this for replacement files or new files...
 
-                $pos = strrpos($filename,'.') + 1;
-                $fileExtension = strtolower(substr($filename, $pos));
-                if (array_key_exists($fileExtension, $_FM_CONF['extensions_map'])) {
-                    if ($_FM_CONF['extensions_map'][$fileExtension] == 'reject' ) {
-                        Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$uploadfilename);
-                        $ErrorHandler::show("1109");
-                    } else {
-                        $fileExtension = $_FM_CONF['extensions_map'][$fileExtension];
-                        $pos = strrpos($url,'.') + 1;
-                        $this->url = strtolower(substr($this->url, 0,$pos)) . $fileExtension;
+// we have a file to upload - so we need to process it.
+//        if ($_FILES['newfile']['size'] != 0  && empty($this->url)) {
+        if ($_FILES['newfile']['size'] != 0) {
+            FileSystem::mkDir($_FM_CONF['FileStore']);
+            FileSystem::mkDir($_FM_CONF['SnapStore']);
 
-                        $pos2 = strrpos($filename,'.') + 1;
-                        $filename = substr($filename,0,$pos2) . $fileExtension;
+            $upload = new UploadDownload();
+            $upload->setPerms(self::PERMS);
+            $upload->setFieldName('newfile');
+
+
+            if ( FileSystem::mkDir($file_path) === false ) {
+                Log::write('system',Log::ERROR,'FileMgmt: Unable to create ' . $file_path. ' ');
+                ErrorHandler::show("1106");
+            }
+
+            $upload->setPath($file_path);
+            $upload->setAllowAnyMimeType(true);     // allow any file type
+            $upload->setMaxFileSize(100000000);
+            $upload->setMaxDimensions(8192,8192);
+
+            $AddNewFile = false;
+            if ($upload->numFiles() > 0) {
+                $upload->uploadFiles();
+                if ($upload->areErrors()) {
+                    $errmsg = "Upload Error: " . $upload->printErrors(false);
+                    Log::write('system',Log::ERROR, $errmsg);
+                    ErrorHandler::show("1106");
+                } else {
+                    $uploaded_file = $upload->getUploadedFiles()[0];
+                    $this->size = (int)$uploaded_file['size'];
+                    $filename = $uploaded_file['name'];
+                    $this->url = rawurlencode($filename);
+
+                    $pos = strrpos($filename,'.') + 1;
+                    $fileExtension = strtolower(substr($filename, $pos));
+                    if (array_key_exists($fileExtension, $_FM_CONF['extensions_map'])) {
+                        if ($_FM_CONF['extensions_map'][$fileExtension] == 'reject' ) {
+                            Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$uploadfilename);
+                            ErrorHandler::show("1109");
+                        } else {
+                            $fileExtension = $_FM_CONF['extensions_map'][$fileExtension];
+                            $pos = strrpos($url,'.') + 1;
+                            $this->url = strtolower(substr($this->url, 0,$pos)) . $fileExtension;
+
+                            $pos2 = strrpos($filename,'.') + 1;
+                            $filename = substr($filename,0,$pos2) . $fileExtension;
+                        }
                     }
+                    $AddNewFile = true;
                 }
+            }
+
+            if ($upload->numFiles() == 0 && !$upload->areErrors() && !empty($fileurl)) {
+                $this-setUrl($fileurl);
+                $size = 0;
                 $AddNewFile = true;
             }
         }
+// end of new file upload
 
-        if ($upload->numFiles() == 0 && !$upload->areErrors() && !empty($fileurl)) {
-            $this-setUrl($fileurl);
-            $size = 0;
-            $AddNewFile = true;
+// start of new file screen shot
+
+        if ( FileSystem::mkDir($snap_path) === false ) {
+            Log::write('system',Log::ERROR,'FileMgmt: Unable to create ' . $snap_path. ' ');
+            ErrorHandler::show("1106");
         }
 
         $upload = new UploadDownload();
@@ -717,13 +743,14 @@ class Download
             if ($upload->areErrors()) {
                 $errmsg = "Upload Error: " . $upload->printErrors(false);
                 Log::write('system',Log::ERROR, $errmsg);
-                $ErrorHandler::show("1106");
+                ErrorHandler::show("1106");
             } else {
                 $snapfilename = $myts->makeTboxData4Save($upload->getUploadedFiles()[0]['name']);
                 $this->logourl = $myts->makeTboxData4Save(rawurlencode($snapfilename));
                 $AddNewFile = true;
             }
         }
+// end of the file shot
 
         if ($AddNewFile || $this->lid > 0) {
             if (strlen($this->version) > 9) {
@@ -731,12 +758,12 @@ class Download
             }
 
             if ($this->lid == 0) {
-                $sql1 = "INSERT INTO {$_TABLES['filemgmt_filedetail']} SET
+                $sql1 = "INSERT INTO `{$_TABLES['filemgmt_filedetail']}` SET
                     date = UNIX_TIMESTAMP(), ";
                 $sql3 = '';
                 // Determine write access to category for new uploads
             } else {
-                $sql1 = "UPDATE {$_TABLES['filemgmt_filedetail']} SET ";
+                $sql1 = "UPDATE `{$_TABLES['filemgmt_filedetail']}` SET ";
                 $sql3 = " WHERE lid = {$this->lid} ";
             }
             $sql2 = "cid = {$this->cid},
@@ -760,6 +787,7 @@ class Download
 
             // Update the description table
             $desc = DB_escapeString($this->description);
+
             DB_query(
                 "INSERT INTO {$_TABLES['filemgmt_filedesc']} SET
                     lid = {$this->lid},
@@ -767,6 +795,7 @@ class Download
                 ON DUPLICATE KEY UPDATE
                     description = '$desc'"
             );
+
             if ($this->lid > 0) {
                 PLG_itemSaved($this->lid, 'filemgmt');
                 if ($this->status == Status::SUBMISSION) {
@@ -783,6 +812,7 @@ class Download
             // Could not upload the file
             $retval = Status::UPL_ERROR;
         }
+// need to check the retval from calling function.
         return $retval;
 
     }   // function save()
@@ -898,7 +928,7 @@ class Download
             'lang_file_id'  => _MD_FILEID,
             'lang_filename' => _MD_DLFILENAME,
             'lang_filetitle' => _MD_FILETITLE,
-            'lang_replfile' => _MD_REPLFILENAME,
+            'lang_replfile' => (($this->lid === 0) ? 'File' : _MD_REPLFILENAME),
             'lang_homepage' => _MD_HOMEPAGEC,
             'lang_filesize' => _MD_FILESIZEC,
             'lang_bytes'    => _MD_BYTES,
@@ -920,6 +950,11 @@ class Download
             'redirect'      => $this->_editmode,
             'cancel_url'    => $cancel_url,
         ));
+        if ($this->lid === 0) {
+            $T->set_var('newfile',true);
+        } else {
+            $T->unset_var('newfile');
+        }
 
         $pathstring = "<a href=\"{$_FM_CONF['url']}/index.php\">"._MD_MAIN."</a>&nbsp;:&nbsp;";
         $nicepath = $mytree->getNicePathFromId($this->cid, "title", "{$_FM_CONF['url']}/viewcat.php");
@@ -1068,7 +1103,7 @@ class Download
             }
         } else {
             Log::write('system', Log::ERROR, 'Filemgmt upload approve error: Temporary file does not exist: '.$tmp);
-            $ErrorHandler::show("1101");
+            ErrorHandler::show("1101");
         }
 
         $tmp = $_FM_CONF['SnapStore_tmp'] . $this->logourl;
@@ -1082,7 +1117,7 @@ class Download
             if (!is_file($newfile)) {
                 Log::write('system',Log::ERROR, 'Filemgmt upload approve error: New file does not exist after move of tmp file: '.$newfile);
                 $AddNewFile = false;    // Set false again - in case it was set true above for actual file
-                $ErrorHandler::show("1101");
+                ErrorHandler::show("1101");
             } else {
                $AddNewFile = true;
             }
@@ -1301,20 +1336,7 @@ class Download
 
         $content = '';
         $query_arr = array(
-            'table' => 'shop.products',
-            'sql'   => $sql,
-            'query_fields' => array(),
-            'default_filter' => '',
-        );
-        $filter = '';
-        $options = '';
-        $text_arr = array(
-            'has_extras' => false,
-            'form_url' => $_FM_CONF['url'] . "/downloadhistory.php?lid={$this->lid}",
-        );
-
-        $query_arr = array(
-            'table' => 'shop.products',
+            'table' => 'filemgmt_history',
             'sql'   => $sql,
             'query_fields' => array(),
             'default_filter' => '',
@@ -1706,5 +1728,4 @@ class Download
         }
         return $count;
     }
-
 }
