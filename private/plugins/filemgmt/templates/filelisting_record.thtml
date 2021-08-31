@@ -67,10 +67,10 @@
 		</li>
 	</ul>
 
-	<div uk-grid class="uk-grid uk-width-1-1 uk-grid-width-small-1-2 uk-child-width-1-1@s uk-child-width-1-2@m uk-text-center" style="font-size:smaller;margin-top:5px;">
+	<div uk-grid class="uk-grid uk-width-1-1 uk-grid-width-1-2 uk-child-width-1-2 uk-text-center" style="font-size:smaller;margin-top:5px;">
 		<div style="text-align:center !important;" class="fm-rating">{rating_bar}</div>
 		<div style="padding-top:10px;">
-			<ul uk-grid class="uk-grid uk-grid-width-medium-1-5 uk-child-width-1-5 uk-text-center" style="font-size:smaller;margin-left:20px;">
+			<ul uk-grid class="uk-grid uk-grid-width-1-5 uk-child-width-1-5 uk-text-center" style="font-size:smaller;margin-left:20px;">
 				<li>
 {!if show_comments}
 					<a href="{site_url}/filemgmt/index.php?id={lid}#comments" class="tooltip" title="{comment_tooltip}"><i class="uk-icon uk-icon-comment uk-icon-medium""></i></a>
@@ -79,6 +79,9 @@
 				<li>
 					<a href="{site_url}/filemgmt/visit.php?lid={lid}" rel="nofollow"><i class="uk-icon-cloud-download uk-icon-medium tooltip"
 					title="{LANG_DOWNLOAD}"></i></a>
+				</li>
+				<li>
+					<a href="{site_url}/filemgmt/index.php?id={lid}" rel="nofollow"><i class="uk-icon uk-icon-external-link uk-icon-medium tooltip" title="{LANG_FILELINK}"></i></a>
 				</li>
 				<li>
 					<a href="{site_url}/filemgmt/brokenfile.php?lid={lid}" rel="nofollow"><i class="uk-icon-chain-broken uk-icon-medium tooltip" title="{LANG_REPORTBROKEN}"></i></a>
