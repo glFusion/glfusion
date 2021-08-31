@@ -204,9 +204,9 @@ if (Filemgmt\Download::canSubmit()) {
     if ( isset($_POST['submit']) && SEC_checkToken() ){
 
         if (!COM_isAnonUser() ) {
-            $submitter = (int) $_USER['uid'];
+            $_POST['submitter'] = (int) $_USER['uid'];
         } else {
-            $submitter = 1;
+            $_POST['submitter'] = 1;
         }
 
         $File = new Filemgmt\Download;
