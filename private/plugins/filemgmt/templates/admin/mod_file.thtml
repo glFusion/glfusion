@@ -4,6 +4,7 @@
     <form id="filemgmt_mod_file" class="uk-form uk-form-horizontal" method="post" enctype="multipart/form-data" action="{site_admin_url}/plugins/filemgmt/index.php">
         <input type="hidden" name="lid" value="{lid}" />
 		<input type="hidden" name="redirect" value="{redirect}" />
+		<input type="hidden" name="redirect_url" value="{redirect_url}" />
 {!if !newfile}
 		<div class="uk-form-row uk-margin">
 			<label class="uk-form-label">{lang_file_id}</label>

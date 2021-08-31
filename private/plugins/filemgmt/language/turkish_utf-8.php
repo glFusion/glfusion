@@ -129,6 +129,7 @@ $LANG_FILEMGMT = array(
     'category' => 'Category',
     'err_req_fields' => 'Some required fields were not supplied',
     'go_back' => 'Go Back',
+    'err_demomode' => 'Uploads are disabled in demo mode',
 );
 
 $LANG_FILEMGMT_ERRORS = array(

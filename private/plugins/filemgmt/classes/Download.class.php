@@ -781,13 +781,13 @@ class Download
                 comments = {$this->comments}";
             $sql = $sql1 . $sql2 . $sql3;
             DB_query($sql);
+
             if ($this->lid == 0) {
                 $this->lid = DB_insertID();
             }
 
             // Update the description table
             $desc = DB_escapeString($this->description);
-
             DB_query(
                 "INSERT INTO {$_TABLES['filemgmt_filedesc']} SET
                     lid = {$this->lid},
@@ -796,17 +796,20 @@ class Download
                     description = '$desc'"
             );
 
-            if ($this->lid > 0) {
+            if ($this->status == Status::SUBMISSION) {
+                Notifier::notifyAdmins($this);
+            } else {
                 PLG_itemSaved($this->lid, 'filemgmt');
-                if ($this->status == Status::SUBMISSION) {
-                    Notifier::notifyAdmins($this);
-                }
             }
+
             $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
             if (isset($duplicatefile) && $duplicatefile) {
                 $retval = Status::UPL_DUPFILE;
             } elseif (isset($duplicatesnap) && $duplicatesnap) {
                 $retval = Status::UPL_DUPSNAP;
+            } elseif (!$AddNewFile) {
+                // no new file uploaded during editing
+                $retval = Status::UPL_UPDATED;
             }
         } else {
             // Could not upload the file
@@ -892,7 +895,7 @@ class Download
     /**
      * Creates the edit form.
      *
-     * @param  string   $action     Action indicator, currently moderate or none
+     * @param  array    $post   Array of values to pre-fill, e.g. $_POST
      * @return string      HTML for edit form
      */
     public function edit($post=array())
@@ -949,6 +952,7 @@ class Download
             'security_token' => SEC_createToken(),
             'redirect'      => $this->_editmode,
             'cancel_url'    => $cancel_url,
+            'redirect_url'  => $_SERVER['HTTP_REFERER'],
         ));
         if ($this->lid === 0) {
             $T->set_var('newfile',true);

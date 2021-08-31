@@ -30,4 +30,5 @@ class Status
     const UPL_NODEMO = 4;   // uploads disabled in demo mode
     const UPL_PENDING = 5;  // success, pending approval
     const UPL_MISSING = 6;  // missing fields
+    const UPL_UPDATED = 7;  // file updated, no new file uploaded
 }
