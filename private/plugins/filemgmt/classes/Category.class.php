@@ -488,11 +488,11 @@ class Category
             ON cat.pid = parent.cid";
 
         $header_arr = array(
-            array(
-                'text'  => 'ID',
-                'field' => 'cid',
-                'sort'  => true,
-            ),
+//            array(
+//                'text'  => 'ID',
+//                'field' => 'cid',
+//                'sort'  => true,
+//            ),
             array(
                 'text'  => $LANG_ADMIN['edit'],
                 'field' => 'edit',
@@ -586,7 +586,7 @@ class Category
         switch($fieldname) {
         case 'edit':
             $retval .= FieldList::edit(array(
-                'edit_url' => $_FM_CONF['admin_url'] . "/index.php?modCat={$A['cid']}",
+                'url' => $_FM_CONF['admin_url'] . "/index.php?modCat={$A['cid']}",
                 'attr' => array(
                     'class' => 'tooltip',
                     'title' => 'Edit',
@@ -623,11 +623,10 @@ class Category
 
         case 'delete':
             $retval = FieldList::delete(array(
-                'url' => $_FM_CONF['admin_url'] . "/index.php?delCat={$A['cid']}",
+                'delete_url' => $_FM_CONF['admin_url'] . "/index.php?delCat={$A['cid']}",
                 'attr' => array(
-                    'onclick' => "return confirm('OK to delete');",
-                    'title' => 'Delete Item',
-                    'class' => 'tooltip',
+                    'onclick' => "return confirm('This deletes this category, all sub-categories and all files contained in the cateogory / sub-category. Are you sure you want to continue?');",
+                    'title' => 'Delete Category',
                 ),
             ) );
             break;
