@@ -18,7 +18,9 @@ use glFusion\FileSystem;
 use glFusion\Database\Database;
 use glFusion\Log\Log;
 use glFusion\Cache\Cache;
+use glFusion\FieldList;
 use Filemgmt\Models\Status;
+
 
 /**
  * Class for downloadable items.
@@ -953,6 +955,7 @@ class Download
             'redirect'      => $this->_editmode,
             'cancel_url'    => $cancel_url,
             'redirect_url'  => $_SERVER['HTTP_REFERER'],
+            'lang_approve'  => _MD_APPROVEREQ,
         ));
         if ($this->lid === 0) {
             $T->set_var('newfile',true);
@@ -970,6 +973,29 @@ class Download
         }
         $pathstring .= "<a href=\"{$_FM_CONF['url']}/index.php?id={$this->lid}\">{$hdr_title}</a>";
 
+        $categorySelectHTML = '';
+        $rootCats = Category::getChildren(0, true);
+        foreach ($rootCats as $cid=>$Cat) {
+            $categorySelectHTML .= '<option value="'.$cid.'">' . $Cat->getName();
+            if (!$Cat->canUpload()) {
+                $categorySelectHTML .= " *";
+            }
+            $categorySelectHTML .= "</option>\n";
+            $arr = $mytree->getChildTreeArray($cid);
+            foreach ($arr as $option) {
+                $Cat = new Category($option);
+                $option['prefix'] = str_replace(".","--",$option['prefix']);
+                $catpath = $option['prefix']."&nbsp;".$myts->makeTboxData4Show($Cat->getName());
+                $categorySelectHTML .= '<option value="'.$Cat->getID() . '">';
+                if (!$Cat->canUpload()) {
+                    $categorySelectHTML .= "$catpath *";
+                } else {
+                    $categorySelectHTML .= $catpath;
+                }
+                $categorySelectHTML .= "</option>\n";
+            }
+        }
+
         $T->set_var(array(
             'lid'   => $this->lid,
             'title' => $this->title,
@@ -981,8 +1007,7 @@ class Download
             'logo_url'  => rawurldecode($myts->makeTboxData4Edit($this->logourl)),
             'description' => $myts->makeTareaData4Edit($this->description),
             'category'  => $this->cid,
-            //'category_select' => $mytree->makeMySelBox("title", "title", $this->cid,0,"cid"),
-            'category_select_options' => $mytree->makeMySelBoxOptions("title", "title", $this->cid,0,"cid"),
+            'category_select_options' => $categorySelectHTML,
             'owner_select' =>  COM_buildOwnerList('submitter', $this->submitter),
             'hits' => $myts->makeTboxData4Edit($this->hits),
             'can_delete' => $this->lid > 0,
