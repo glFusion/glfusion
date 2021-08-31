@@ -37,7 +37,6 @@ if (!SEC_hasRights ('env.admin')) {
 function _checkEnvironment()
 {
     global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG_ENVCHK,
-           $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
            $_FF_CONF, $_MG_CONF, $_DB_dbms,$_DB, $_CP_CONF, $_FM_CONF;
 
     $retval = '';
@@ -746,7 +745,7 @@ function _phpOutOfDate()
 }
 
 function _isWritable($path) {
-//if (empty($path)) return true;
+
     if ($path[strlen($path)-1]=='/') {
         FileSystem::mkDir($path);
         return ($path.uniqid(mt_rand()).'.tmp');

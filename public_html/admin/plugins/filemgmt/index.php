@@ -35,7 +35,7 @@ $expected = array(
     'ignoreBrokenLink', 'delBrokenLink',
     // Views to display
     'modCat', 'categoryConfigAdmin',
-    'modDownload', 'newfileConfigAdmin', 'listNewDownloads', 'files',
+    'modDownload', 'moderate','newfileConfigAdmin', 'listNewDownloads', 'files',
     'listBrokenLinks', 'reportBrokenLink',
     // Check "op" last
     'op'
@@ -55,6 +55,13 @@ if ($op == 'op') {
     // legacy support
     $op = $opval;
 }
+if ($op == 'moderate') {
+    $op = 'modDownload';
+    $opval = (int) $_GET['lid'];
+}
+
+//https://dev.glfusion.org/admin/plugins/filemgmt/index.php?modDownload=729
+//https://dev.glfusion.org/admin/plugins/filemgmt/index.php?moderate=x&lid=728
 
 $display = '';
 if (!SEC_hasRights('filemgmt.edit')) {

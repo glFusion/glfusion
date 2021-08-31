@@ -1426,7 +1426,7 @@ function plugin_moderationvalues_filemgmt()
     return array (
         'lid',
         $_TABLES['filemgmt_filedetail'],
-        '',
+        "lid,status",
         '',
     );
 }
@@ -1451,6 +1451,23 @@ function plugin_moderationapprove_filemgmt($lid)
 function plugin_moderationdelete_filemgmt($lid)
 {
     Filemgmt\Download::getInstance($lid)->delete();
+}
+
+/**
+* Counts the items that are submitted
+*
+* @return   int     number of items in submission queue
+*
+*/
+function plugin_submissioncount_filemgmt()
+{
+    global $_TABLES;
+
+    $retval = 0;
+
+    $retval = DB_count ($_TABLES['filemgmt_filedetail'],'status',0);
+
+    return $retval;
 }
 
 

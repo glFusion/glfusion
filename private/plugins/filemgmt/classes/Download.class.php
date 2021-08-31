@@ -1260,6 +1260,7 @@ class Download
                 'text' => $LANG_FM02['date'],
                 'field' => 'date',
                 'sort' => true,
+                'align' => 'right',
             ),
             array(
                 'text' => 'Delete',
@@ -1433,6 +1434,14 @@ class Download
                     'class' => 'tooltip',
                 ),
             ) );
+            break;
+
+        case 'hits' :
+            $retval = COM_numberFormat($fieldvalue);
+            break;
+
+        case 'size' :
+            $retval = self::prettySize($fieldvalue);
             break;
 
         default:
@@ -1638,10 +1647,10 @@ class Download
     public static function prettySize($size)
     {
         if ($size > 1048576) {      // > 1 MB
-            $mysize = sprintf('%01.2f', $size/1048573) . " MB";
+            $mysize = sprintf('%01.2f', $size/1048573) . " mb";
         }
         elseif ($size >= 1024) {    // > 1 KB
-            $mysize = sprintf('%01.2f' , $size/1024) . " KB";
+            $mysize = sprintf('%01.2f' , $size/1024) . " kb";
         }
         else {
             $mysize = sprintf(_MD_NUMBYTES, $size);
@@ -1764,5 +1773,29 @@ class Download
             $count += $thing;
         }
         return $count;
+    }
+
+    private function _buildOwnerList($fieldName,$owner_id=2)
+    {
+        global $_TABLES, $_CONF;
+
+        $db = Database::getInstance();
+
+        $stmt = $db->conn->executeQuery("SELECT * FROM `{$_TABLES['users']}` WHERE status=3 ORDER BY username ASC");
+        $T = new \Template($_CONF['path_layout'] . '/fields');
+        $T->set_file('selection', 'selection.thtml');
+        $T->set_var('var_name', $fieldName);
+        $options = '';
+        while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
+            $options .= '<option value="' . $row['uid'] . '"';
+            if ($owner_id == $row['uid']) {
+                $options .= ' selected="selected"';
+            }
+            $options .= '>' . COM_getDisplayName($row['uid']) . '</opton>' . LB;
+        }
+        $T->set_var('option_list', $options);
+        $T->parse('output', 'selection');
+        $owner_select = $T->finish($T->get_var('output'));
+        return $owner_select;
     }
 }
