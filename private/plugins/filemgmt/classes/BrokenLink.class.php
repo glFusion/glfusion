@@ -47,8 +47,9 @@ class BrokenLink
 
         $lid = (int)$lid;
         self::ignore($lid);
-        DB_delete($_TABLES['filemgmt_filedetail'], 'lid', $lid);
-        PLG_itemDeleted($lid, 'filemgmt');
+
+        $dl = new Download($lid);
+        $dl->delete();
     }
 
 
@@ -180,7 +181,6 @@ class BrokenLink
             $retval .= FieldList::edit(array(
                 'edit_url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
                 'attr' => array(
-                    'class' => 'tooltip',
                     'title' => 'Edit File Record',
                 ),
             ) );
@@ -197,18 +197,16 @@ class BrokenLink
                 'attr' => array(
                     'onclick' => "return confirm('Delete this broken file report?')",
                     'title' => 'Ignore Report',
-                    'class' => 'tooltip',
                 ),
             ) );
             break;
 
         case 'delete':
             $retval = FieldList::delete(array(
-                'url' => $_FM_CONF['admin_url'] . "/index.php?delBrokenLink={$A['lid']}",
+                'delete_url' => $_FM_CONF['admin_url'] . "/index.php?delBrokenLink=".(int)$A['lid'],
                 'attr' => array(
-                    'onclick' => "return confirm('OK to delete');",
+                    'onclick' => "return confirm('This will delete the file from FileMgmt.  Are you sure you want to remove the file?');",
                     'title' => 'Delete Item',
-                    'class' => 'tooltip',
                 ),
             ) );
             break;
