@@ -665,6 +665,29 @@ class Category
     }
 
 
+    public static function getChildren($pid=0, $checkAccess=true)
+    {
+        global $_TABLES, $_GROUPS;
+
+        $retval = array();
+        $pid = (int)$pid;
+        $sql = "SELECT * FROM {$_TABLES['filemgmt_cat']} WHERE pid = $pid ";
+        if ($checkAccess) {
+            if (count($_GROUPS) == 1) {
+                $sql .= " AND grp_access = '" . current($_GROUPS) ."' ";
+            } else {
+                $sql .= " AND grp_access IN (" . implode(',',array_values($_GROUPS)) .") ";
+            }
+        }
+        $sql .= "ORDER BY cid";
+        $result = DB_query($sql);
+        while ($A = DB_fetchArray($result, false)) {
+            $retval[$A['cid']] = new self($A);
+        }
+        return $retval;
+    }
+
+
     /**
      * Get the record ID for a category.
      *
