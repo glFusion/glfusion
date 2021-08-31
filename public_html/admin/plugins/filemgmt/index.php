@@ -92,13 +92,16 @@ case "saveDownload":
     $status = Filemgmt\Download::getInstance($_POST['lid'])->Save($_POST);
     switch ($status) {
     case Status::UPL_NODEMO:
-        COM_setMsg('Uploads are disabled in demo mode', 'error');
+        COM_setMsg($LANG_FILEMGMT['err_demomode'], 'error');
         break;
     case Status::UPL_DUPFILE:
         COM_setMsg(_MD_NEWDLADDED_DUPFILE, 'error');
         break;
     case Status::UPL_DUPSNAP:
         COM_setMsg(_MD_NEWDLADDED_DUPSNAP, 'error');
+        break;
+    case Status::UPL_UPDATED:
+        COM_setMsg(_MD_DLUPDATED);
         break;
     case Status::OK:
         COM_setMsg(_MD_NEWDLADDED);
@@ -108,7 +111,11 @@ case "saveDownload":
         COM_setMsg(_MD_ERRUPLOAD, 'error');
         break;
     }
-    COM_refresh($_FM_CONF['admin_url'] . '/index.php');
+    if (isset($_POST['redirect_url'])) {
+        COM_refresh($_POST['redirect_url']);
+    } else {
+        COM_refresh($_FM_CONF['admin_url'] . '/index.php');
+    }
     break;
 case "listBrokenLinks":
     $content .= Filemgmt\BrokenLink::adminList();
