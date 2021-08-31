@@ -22,7 +22,7 @@
 		<div>
 {!if is_found}
 			<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow">
-				<i class="uk-icon-cloud-download uk-icon-medium tooltip" title="{LANG_DLNOW}" alt="{LANG_DLNOW}"></i></a>&nbsp;<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow" title="{download_title}">
+				<i class="uk-icon-cloud-download uk-icon-medium" data-uk-tooltip="{delay:500}" title="{LANG_DLNOW}" title="{LANG_DLNOW}" alt="{LANG_DLNOW}"></i></a>&nbsp;<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow" title="{download_title}">
 				{dtitle}
 			</a>
 {!else}
