@@ -539,12 +539,13 @@ function FEED_newFeed()
                 . FEED_edit(0, 'article')
                 . COM_siteFooter ();
     } else {
-        $selection = '<select name="type">' . LB;
+        //$selection = '<select name="type">' . LB;
+        $selection = '';
         foreach ($availableFeeds as $p) {
             $selection .= '<option value="' . $p . '">' . ucwords ($p)
                        . '</option>' . LB;
         }
-        $selection .= '</select>' . LB;
+        //$selection .= '</select>' . LB;
 
         $menu_arr = array (
                         array('url' => $_CONF['site_admin_url'].'/syndication.php',
