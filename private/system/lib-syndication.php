@@ -573,6 +573,12 @@ function SYND_updateFeediCal( $A )
 
         $vCalendar = new \Eluceo\iCal\Component\Calendar($_CONF['site_url']);
         $vCalendar->setMethod('PUBLISH');
+        if (!empty($A['title'])) {
+            $vCalendar->setName($A['title']);
+        }
+        if (!empty($A['description'])) {
+            $vCalendar->setDescription($A['description']);
+        }
 
         if ( !empty( $A['filename'] )) {
             $filename = $A['filename'];
