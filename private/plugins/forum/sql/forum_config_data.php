@@ -126,6 +126,18 @@ $forumConfigData = array(
     ),
 
     array(
+        'name' => 'likes_prf_limit',
+        'default_value' => 20,
+        'type' => 'text',
+        'subgroup' => 0,
+        'fieldset' => 0,
+        'selection_array' => 0,
+        'sort' => 75,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
         'name' => 'allow_memberlist',
         'default_value' => false,
         'type' => 'select',

@@ -1016,7 +1016,7 @@ $LANG_confignames['forum'] = array(
     'geshi_line_style' => 'GeSHi styl numeru linii',
     'geshi_code_style' => 'GeSHi styl bloku kodu',
     'geshi_header_style' => 'GeSHi styl bloku nagłówka',
-
+    'likes_prf_limit' => 'Maksymalna liczba polubień do wyświetlenia w profilach',
 );
 
 $LANG_configsubgroups['forum'] = array(

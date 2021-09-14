@@ -1016,7 +1016,7 @@ $LANG_confignames['forum'] = array(
     'geshi_code_style' => 'GeSHi Code Block Style',
     'geshi_header_style' => 'GeSHi Header Block Style',
     'exit_type' => 'Exit Type',
-
+    'likes_prf_limit' => 'Maximum number of Likes to show in profiles',
 );
 
 $LANG_configsubgroups['forum'] = array(
