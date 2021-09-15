@@ -131,7 +131,7 @@ function FEED_getArticleFeeds()
  */
 function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG33, $LANG01, $_IMAGE_TYPE;
 
     $retval = '';
     $enabled = ($A['is_enabled'] == 1) ? true : false;
@@ -150,6 +150,18 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 )
             );
             break;
+
+        case 'refresh':
+            $retval = FieldList::refresh(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/syndication.php?refresh=x&amp;fid=' . $A['fid']. '&amp;' . CSRF_TOKEN . '=' . $token,
+                    'attr' => array(
+                        'title'   => $LANG01[39],
+                    ),
+                )
+            );
+            break;
+
         case 'delete':
             $retval = FieldList::delete(
                 array(
@@ -200,7 +212,13 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if ($A['header_tid'] == 'all') {
                 $tid = $LANG33[43];
             } elseif ($A['header_tid'] == 'none') {
-                $tid = $LANG33[44];
+                $tid = PLG_callFunctionForOnePlugin(
+                    'plugin_getfeedtopic_' . $A['type'],
+                    array(1=>$A['topic'])
+                );
+                if (empty($tid)) {
+                    $tid = $LANG33[44];
+                }
             } else {
                 $tid = DB_getItem ($_TABLES['topics'], 'topic',
                                       "tid = '".DB_escapeString($A['header_tid'])."'");
@@ -228,7 +246,7 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
 function FEED_list()
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $LANG01, $_IMAGE_TYPE;
 
     USES_lib_admin();
 
@@ -243,6 +261,7 @@ function FEED_list()
                     array('text' => $LANG_ADMIN['topic'], 'field' => 'header_tid', 'sort' => true, 'align' => 'center'),
                     array('text' => $LANG33[18], 'field' => 'updated', 'sort' => true, 'align' => 'center'),
                     array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
+                    array('text' => $LANG01[39], 'field' => 'refresh', 'sort' => false, 'align' => 'center'),
                     array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true, 'align' => 'center')
     );
 
@@ -688,7 +707,7 @@ function FEED_delete($fid)
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('create', 'edit', 'save', 'delete', 'cancel');
+$expected = array('create', 'edit', 'save', 'delete', 'cancel', 'refresh');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -750,6 +769,11 @@ switch ($action) {
             Log::write('system',Log::ERROR,"User {$_USER['username']} tried to delete feed $fid and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
+        break;
+
+    case 'refresh':
+        SYND_updateFeed($fid);
+        COM_refresh($_CONF['site_admin_url'] . '/syndication.php');
         break;
 
     default:
