@@ -1031,6 +1031,8 @@ function glfusion_200()
             }
         }
         DB_query("ALTER TABLE {$_TABLES['ff_topic']} ADD `lastedited` VARCHAR(12) NULL DEFAULT NULL AFTER `lastupdated`;",1);
+        // Add configurable limit for likes shown in profile
+        $c->add('likes_prf_limit','20','text',0,0,NULL,75,TRUE, 'forum');
     }
 
     // modify story table
