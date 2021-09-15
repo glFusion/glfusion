@@ -571,7 +571,10 @@ function SYND_updateFeediCal( $A )
     if ( $A['is_enabled'] == 1 ) {
         $format = explode( '-', $A['format'] );
 
-        $vCalendar = new \Eluceo\iCal\Component\Calendar($_CONF['site_url']);
+        $vCalendar = new \Eluceo\iCal\Component\Calendar(
+            $_CONF['site_url'] . '//NONSGML ' . $A['title'] . '//' . strtoupper($_CONF['iso_lang'])
+        );
+
         $vCalendar->setMethod('PUBLISH');
         if (!empty($A['title'])) {
             $vCalendar->setName($A['title']);
@@ -579,7 +582,6 @@ function SYND_updateFeediCal( $A )
         if (!empty($A['description'])) {
             $vCalendar->setDescription($A['description']);
         }
-
         if ( !empty( $A['filename'] )) {
             $filename = $A['filename'];
         } else {
