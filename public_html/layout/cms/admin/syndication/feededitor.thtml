@@ -30,7 +30,9 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="topic">{lang_topic}</label>
 		<div class="uk-form-controls">
+			<select name="topic">
 			{feed_topic}
+			</select>
 		</div>
 	</div>
 	<div class="uk-form-row">
@@ -46,13 +48,18 @@
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="format">{lang_format}</label>
 		<div class="uk-form-controls">
+			<select name="format">
 			{feed_format}
+			</select>
 		</div>
 	</div>
 	<div class="uk-form-row">
 		<label class="uk-form-label" for="limits">{lang_limits}</label>
 		<div class="uk-form-controls">
-			<input type="text" class="uk-form-width-small" maxlength="5" id="limits" name="limits" value="{feed_limits}"> {feed_limits_what}
+			<input type="text" class="uk-input uk-form-width-small" maxlength="5" id="limits" name="limits" value="{feed_limits}">
+			<select name="limits_in">
+			{feed_limits_what}
+			</select>
 			<div class="uk-form-help-block uk-margin-small-left">
 				<span class="uk-text-muted uk-text-small">{$LANG_ADMIN[remaining_chars]}<span id="limits-count" class="uk-text-muted uk-text-small"></span></span>
 			</div>

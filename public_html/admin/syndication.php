@@ -427,7 +427,8 @@ function FEED_edit($fid = 0, $type = '')
     $feed_template->set_var ('feed_updated', $nicedate[0]);
 
     $formats = FEED_findFormats();
-    $selection = '<select name="format">' . LB;
+    //$selection = '<select name="format">' . LB;
+    $selection = '';
     foreach ($formats as $f) {
         // if one changes this format below ('name-version'), also change parsing
         // in COM_siteHeader. It uses explode( "-" , $string )
@@ -439,7 +440,7 @@ function FEED_edit($fid = 0, $type = '')
         $selection .= '>' . ucwords ($f['name'] . ' ' . $f['version'])
                    . '</option>' . LB;
     }
-    $selection .= '</select>' . LB;
+    //$selection .= '</select>' . LB;
     $feed_template->set_var ('feed_format', $selection);
 
     $limits = $A['limits'];
@@ -448,7 +449,8 @@ function FEED_edit($fid = 0, $type = '')
         $limits = substr ($A['limits'], 0, -1);
         $hours = true;
     }
-    $selection = '<select name="limits_in">' . LB;
+    //$selection = '<select name="limits_in">' . LB;
+    $selection = '';
     $selection .= '<option value="0"';
     if (!$hours) {
         $selection .= ' selected="selected"';
@@ -459,7 +461,7 @@ function FEED_edit($fid = 0, $type = '')
         $selection .= ' selected="selected"';
     }
     $selection .= '>' . $LANG33[35] . '</option>' . LB;
-    $selection .= '</select>' . LB;
+    //$selection .= '</select>' . LB;
     $feed_template->set_var ('feed_limits', $limits);
     $feed_template->set_var ('feed_limits_what', $selection);
 
@@ -479,7 +481,8 @@ function FEED_edit($fid = 0, $type = '')
         }
         $options = PLG_getFeedNames($A['type']);
     }
-    $selection = '<select name="topic">' . LB;
+    //$selection = '<select name="topic">' . LB;
+    $selection = '';
     foreach ($options as $o) {
         $selection .= '<option value="' . $o['id'] . '"';
         if ($A['topic'] == $o['id']) {
@@ -487,7 +490,7 @@ function FEED_edit($fid = 0, $type = '')
         }
         $selection .= '>' . $o['name'] . '</option>' . LB;
     }
-    $selection .= '</select>' . LB;
+    //$selection .= '</select>' . LB;
     $feed_template->set_var ('feed_topic', $selection);
 
     if ($A['is_enabled'] == 1) {
@@ -536,12 +539,13 @@ function FEED_newFeed()
                 . FEED_edit(0, 'article')
                 . COM_siteFooter ();
     } else {
-        $selection = '<select name="type">' . LB;
+        //$selection = '<select name="type">' . LB;
+        $selection = '';
         foreach ($availableFeeds as $p) {
             $selection .= '<option value="' . $p . '">' . ucwords ($p)
                        . '</option>' . LB;
         }
-        $selection .= '</select>' . LB;
+        //$selection .= '</select>' . LB;
 
         $menu_arr = array (
                         array('url' => $_CONF['site_admin_url'].'/syndication.php',
