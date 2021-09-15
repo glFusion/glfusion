@@ -10,7 +10,7 @@
 				<input type="hidden" name="{token_name}" value="{token_value}">
 				<input type="hidden" name="mode" value="tfa">
 				<div class="uk-form-row">
-					<input class="uk-width-1-1 uk-form-large" type="text" placeholder="{lang_auth_code}" id="tfacode" name="tfacode" value="" required autofocus>
+					<input class="uk-width-1-1 uk-form-large" type="text" placeholder="{lang_auth_code}" id="tfacode" name="tfacode" value="" autocomplete="off" required autofocus>
 				</div>
 				<div class="uk-form-row uk-margin">
 					<button type="submit" id="loginbutton" class="uk-width-1-1 uk-button uk-button-success uk-button-large">{lang_verify}</button>

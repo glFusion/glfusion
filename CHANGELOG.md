@@ -17,6 +17,7 @@
 - Code error in SpamX logging for SFS checks
 - fusionrescue code cleanup - improved hanlding of configuration items with array values
 - Fixed HTML issue in logo-graphic.thtml (removed errant quote)
+- Disabled autocomplete for TOTP (2FA) code input fields
 
 ## v1.7.9 (March 13, 2021)
 
