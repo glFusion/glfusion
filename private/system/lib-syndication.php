@@ -510,8 +510,10 @@ function SYND_updateFeed( $fid )
         $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
 
         $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1], $A);
-
-        if ( is_array($content) ) {
+        if ($content === NULL) {
+            // Special NULL return if the plugin handles its own feed writing
+            return;
+        } elseif ( is_array($content) ) {
             foreach ( $content AS $feedItem ) {
                 $item = new FeedItem();
 
