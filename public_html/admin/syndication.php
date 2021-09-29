@@ -85,6 +85,8 @@ function FEED_findFormats()
     $formats[] = array('name'=>'ATOM','version'=>'0.3');
     $formats[] = array('name'=>'ATOM','version'=>'1.0');
     $formats[] = array('name'=>'ICS','version'=>'1.0');
+    $formats[] = array('name'=>'Custom', 'version'=>'1.0');
+    $formats[] = array('name'=>'XML','version'=>'1.0');
 
     sort ($formats);
 
@@ -335,6 +337,7 @@ function FEED_edit($fid = 0, $type = '')
         $fid = $A['fid'];
         $editMode = true;
     }
+
     if ($fid == 0) {
         if (!empty ($type)) { // set defaults
             $A['fid'] = $fid;
@@ -445,7 +448,9 @@ function FEED_edit($fid = 0, $type = '')
     $nicedate = COM_getUserDateTimeFormat ($A['date']);
     $feed_template->set_var ('feed_updated', $nicedate[0]);
 
-    $formats = FEED_findFormats();
+    //$formats = FEED_findFormats();
+    $formats = \glFusion\Syndication\Feed::findFormats($A['type']);
+
     //$selection = '<select name="format">' . LB;
     $selection = '';
     foreach ($formats as $f) {

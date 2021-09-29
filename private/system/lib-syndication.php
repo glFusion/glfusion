@@ -473,16 +473,20 @@ function SYND_updateFeed( $fid )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
+    $Feed = glFusion\Syndication\Feed::getById($fid);
+    $Feed->Generate();
+    return;
+
     $db = Database::getInstance();
 
     $A = $db->conn->fetchAssoc("SELECT * FROM {$_TABLES['syndication']} WHERE fid = ?",array($fid),array(Database::STRING));
     if ( $A !== false && $A['is_enabled'] == 1 ) {
-        $format = explode( '-', $A['format'] );
 
         if ($A['format'] == 'ICS-1.0') {
             return SYND_updateFeediCal( $A );
         }
 
+        $format = explode( '-', $A['format'] );
         $rss = new UniversalFeedCreator();
         if ( $A['content_length'] > 1 ) {
             $rss->descriptionTruncSize = $A['content_length'];
