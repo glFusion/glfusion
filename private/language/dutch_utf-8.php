@@ -2765,6 +2765,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Zet Ingezonden Reacties in Wachtrij',
     'passwordspeedlimit' => 'Snelheidslimiet Wachtwoord',
     'login_attempts' => 'Max. aantal Aanmeldings Pogingen',
+    'login_landing' => 'Bestemmingspagina inloggen',
     'login_speedlimit' => 'Snelheidslimiet van Aanmelden',
     'user_html' => 'Gebruiker HTML',
     'admin_html' => 'Beheerder HTML',

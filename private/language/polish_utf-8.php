@@ -2769,6 +2769,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Przesyłanie komentarzy do kolejki',
     'passwordspeedlimit' => 'Limit',
     'login_attempts' => 'Ilość prób logowania',
+    'login_landing' => 'Strona docelowa logowania',
     'login_speedlimit' => 'Ograniczenie czasu logowania',
     'user_html' => 'HTML użytkownika',
     'admin_html' => 'Admin HTML',

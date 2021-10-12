@@ -2765,6 +2765,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Moderation von Kommentaren',
     'passwordspeedlimit' => 'Passwort Wartezeit in Sek.',
     'login_attempts' => 'Max. Anmeldeversuche',
+    'login_landing' => 'Login-Landingpage',
     'login_speedlimit' => 'Anmeldung Wartezeit in Sek.',
     'user_html' => 'Erlaubtes Benutzer HTML',
     'admin_html' => 'Erlaubtes Admin HTML',

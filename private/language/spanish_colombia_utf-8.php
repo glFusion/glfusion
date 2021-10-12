@@ -2765,6 +2765,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Cola de Comentario enviados',
     'passwordspeedlimit' => 'Espera para reenvío de Contraseña',
     'login_attempts' => 'Máximo de intentos de Autenticación',
+    'login_landing' => 'Página de inicio de sesión',
     'login_speedlimit' => 'Espera después intentos fallidos de Autenticación',
     'user_html' => 'User HTML',
     'admin_html' => 'Admin HTML',
