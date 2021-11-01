@@ -258,15 +258,23 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
     } elseif ($uniqueid > 0) {
         $topictemplate->set_var('attachments',_ff_showattachments((int) $uniqueid));
     }
-    if ( SEC_inGroup('Root') && isset($showtopic['ip']) ) {
-        if( !empty( $_CONF['ip_lookup'] )) {
-            $iplink = '<a href="'.str_replace( '*', $showtopic['ip'], $_CONF['ip_lookup'] ) . '" target="_blank" rel="noopener noreferrer">'.$showtopic['ip'].'</a>';
-            $topictemplate->set_var('ipaddress',$iplink);
+    if ( SEC_inGroup('Root')) {
+        if (isset($showtopic['ip']) ) {
+            if( !empty( $_CONF['ip_lookup'] )) {
+                $iplink = '<a href="'.str_replace( '*', $showtopic['ip'], $_CONF['ip_lookup'] ) . '" target="_blank" rel="noopener noreferrer">'.$showtopic['ip'].'</a>';
+                $topictemplate->set_var('ipaddress',$iplink);
+            } else {
+                $topictemplate->set_var('ipaddress',$showtopic['ip']);
+            }
         } else {
-            $topictemplate->set_var('ipaddress',$showtopic['ip']);
+            $topictemplate->set_var('ipaddress','');
         }
-    } else {
-        $topictemplate->set_var('ipaddress','');
+        if ($_FF_CONF['enable_warnings']) {
+            $warn_level = \Forum\Modules\Warning\Warning::getUserPercent($showtopic['uid']);
+            if ($warn_level > 0) {
+                $topictemplate->set_var('warn_level', $warn_level);
+            }
+        }
     }
     $can_voteup = false;
     $can_votedn = false;

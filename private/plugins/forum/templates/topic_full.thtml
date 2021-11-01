@@ -333,6 +333,10 @@
 {!if ipaddress}
 										<div>{ipaddress}</div>
 {!endif}
+
+{!if warn_level}
+										<div class="uk-text-danger">Warning Level: {warn_level}%</div>
+{!endif}
 									</div>
 								</div>
 							</div>
