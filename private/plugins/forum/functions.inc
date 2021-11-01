@@ -51,6 +51,9 @@ if ( isset($_PLUGIN_INFO['forum']) ) {
 } else {
     $pi_version = $_FF_CONF['pi_version'];
 }
+if (is_file(__DIR__ . '/config.php')) {
+    include_once __DIR__ . '/config.php';
+}
 
 $ff_config = config::get_instance();
 $_FF_FORUM = $ff_config->get_config('forum');
@@ -118,12 +121,31 @@ if ( empty( $LANG_CHARSET )) {
 
 spl_autoload_register(function ($class)
 {
-    if (strpos($class, 'Forum\\') === 0) {
-        $class = str_replace('Forum\\', '', $class);
-        $path = __DIR__ . '/classes/' . strtolower($class) . '.class.php';
-        if (file_exists($path)) {
-            include $path;
-        }
+    // project-specific namespace prefix
+    $prefix = 'Forum\\';
+
+    // does the class use the namespace prefix?
+    $len = strlen($prefix);
+    if (strncmp($prefix, $class, $len) !== 0) {
+        // no, move to the next registered autoloader
+        return;
+    }
+
+    // base directory for the namespace prefix
+    $base_dir = __DIR__ . '/classes/';
+
+    // get the relative class name
+    $relative_class = substr($class, $len);
+
+    // replace the namespace prefix with the base directory, replace namespace
+    // separators with directory separators in the relative class name, append
+    // with .php
+    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.class.php';
+    $file = strtolower($file);
+
+    // if the file exists, require it
+    if (file_exists($file)) {
+        require $file;
     }
 });
 
