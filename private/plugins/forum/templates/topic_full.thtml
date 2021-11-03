@@ -435,6 +435,11 @@
 															<button name="modfunction" value="unlocktopic"><i class="uk-icon uk-icon-unlock"></i>&nbsp;{$LANG_GF03['unlock_topic']}</button>
 														</li>
 {!endif}
+{!if mod_warn}
+														<li>
+															<button name="modfunction" value="warnuser"><i class="uk-icon uk-icon-exclamation-triangle"></i>&nbsp;Warn User</button>
+														</li>
+{!endif}
 													</ul>
 												</div>
 											</div>

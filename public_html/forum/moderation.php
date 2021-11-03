@@ -921,6 +921,17 @@ if ($forum_id == 0) {
             echo COM_refresh($_CONF['site_url']."/forum/viewtopic.php?showtopic=$topic_id");
             break;
 
+        case 'warnuser':
+            if ( !forum_modPermission($forum_id,$_USER['uid'],'mod_edit') ) {
+                moderator_error(ACCESS_DENIED);
+            }
+            if ( $topic_id == 0 ) {
+                moderator_error(ERROR_TOPIC_ID);
+            }
+            $uid = DB_getItem($_TABLES['ff_topic'], 'uid', "id={$topic_id}");
+            COM_refresh($_CONF['site_admin_url'] . "/plugins/forum/warnings.php?warnuser=$uid&topic_id=$topic_id");
+            break;
+
         default :
             $pageBody .= _ff_alertMessage($LANG_GF02['msg71'],'','',true);
             break;
