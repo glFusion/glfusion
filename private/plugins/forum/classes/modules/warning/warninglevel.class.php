@@ -13,14 +13,10 @@
 namespace Forum\Modules\Warning;
 use glFusion\Database\Database;
 use glFusion\FieldList;
+use Forum\Status;
 
 class WarningLevel
 {
-    const SECONDS_YEAR = 31104000;
-    const SECONDS_MONTH = 2592000;
-    const SECONDS_WEEK = 604800;
-    const SECONDS_DAY = 86400;
-
     /** Prefix record ID.
      * @var integer */
     private $wl_id = 0;
@@ -33,20 +29,21 @@ class WarningLevel
      * @var integer */
     private $wl_duration = 604800;
 
-    /** Action to be taken. See the $actions var.
+    /** Number of periods making up the duration.
+     * @var integer */
+    private $wl_duration_qty = 1;
+
+    /** Type of duration perod, e.g. "day", "week", etc.
+     * @var string */
+    private $wl_duration_period = 'day';
+
+    /** Action to be taken. See the Actions class.
      * @var integer */
     private $wl_action = 0;
 
     /** Array of action information
      * @var array */
     private $wl_other = array('type' => 0);
-
-    private static $actions = array(
-        0 => 'none',
-        1 => 'ban_user',
-        2 => 'suspend_user',
-        3 => 'moderate_user',
-    );
 
 
     /**
@@ -103,14 +100,17 @@ class WarningLevel
 
         $this->wl_id = (int)$A['wl_id'];
         $this->wl_pct = (int)$A['wl_pct'];
-        if ($from_db) {
+        $this->wl_action = (int)$A['wl_action'];
+        $this->wl_duration_num = (int)$A['wl_duration_num'];
+        $this->wl_duration_period = $A['wl_duration_period'];
+        $this->wl_duration = Dates::dscpToSeconds($A['wl_duration_num'], $A['wl_duration_period']);
+        /*if ($from_db) {
             // Extracting json-encoded strings
             $this->wl_duration = (int)$A['wl_duration'];
         } else {
-            // Forums and Groups are supplied as simple arrays from the form
-            //$this->warn_groups = $A['warn_groups'];
-            //$this->warn_forums = $A['warn_forums'];
-        }
+            // Forums and Groups are supplied as simple arrays from the form:q
+            $this->wl_duration = Dates::dscpToSeconds($A['wl_duration_num'], $A['wl_duration_type']);
+        }*/
         return $this;
     }
 
@@ -164,6 +164,23 @@ class WarningLevel
 
 
     /**
+     * Get the duration of the action in seconds.
+     *
+     * @return  integer     Seconds
+     */
+    public function getDuration() : int
+    {
+        return (int)$this->wl_duration;
+    }
+
+
+    public function getAction() : int
+    {
+        return (int)$this->wl_action;
+    }
+
+
+    /**
      * Get an instance of a warning level
      * Caches locally since the same prefix may be requested many times
      * for a single page load.
@@ -180,6 +197,25 @@ class WarningLevel
             $cache[$id] = new self($id);
         }
         return $cache[$id];
+    }
+
+
+    public static function getByPercent(float $pct) : self
+    {
+        global $_TABLES;
+
+        $sql = "SELECT * FROM {$_TABLES['ff_warninglevels']}
+            WHERE wl_pct <= $pct
+            ORDER BY wl_pct
+            LIMIT 1";
+        $res = DB_query($sql);
+        if ($res && DB_numRows($res) == 1) {
+            $A = DB_fetchArray($res, false);
+            $retval = new self($A);
+        } else {
+            $retval = new self;
+        }
+        return $retval;
     }
 
 
@@ -210,14 +246,13 @@ class WarningLevel
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warnings/');
         $T->set_file('editform', 'warninglevel.thtml');
 
-        $wl_duration = self::secondsToDscp($this->wl_duration);
         $T->set_var(array(
             'wl_id'     => $this->wl_id,
             'wl_duration'    => $this->wl_duration,
             'wl_pct' => $this->wl_pct,
             'action_sel_' . $this->wl_action => 'selected="selected"',
-            'wl_duration_num' => $wl_duration['num'],
-            'sel_' . $wl_duration['dscp'] => 'selected="selected"',
+            'wl_duration_num' => $this->wl_duration_num,
+            'sel_' . $this->wl_duration_period => 'selected="selected"',
         ) );
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
@@ -333,11 +368,11 @@ class WarningLevel
             break;
 
         case 'wl_action':
-            $retval .= self::$actions[$fieldvalue];
+            $retval .= Status::getDscp($fieldvalue);
             break;
 
         case 'wl_duration':
-            $retval = "For $fieldvalue seconds";
+            $retval .= 'For ' . Dates::secondsToDscp($fieldvalue);
             break;
 
         default:
@@ -362,63 +397,40 @@ class WarningLevel
             $this->setVars($A, false);
         }
 
-        // Strip paragraph tags added by the advanced editor
-        $this->warn_html = strip_tags($this->warn_html, '<span><em><strong><u>');
-
         if ($this->wl_id > 0) {
             $sql1 = "UPDATE {$_TABLES['ff_warninglevels']} SET ";
-            $sql3 = "WHERE wl_id = {$this->wl_id}";
+            $sql3 = " WHERE wl_id = {$this->wl_id}";
         } else {
             $sql1 = "INSERT INTO {$_TABLES['ff_warninglevels']} SET ";
             $sql3 = '';
         }
 
-        $json_groups = DB_escapeString(json_encode($this->warn_groups));
-        $json_forums = DB_escapeString(json_encode($this->warn_forums));
-        $sql2 = "wl_pct = '" . (int)$this->wl_pct . "',
-                wl_action = '" . DB_escapeString(@serialize($this->wl_action)) . "'";
+        $sql2 = "wl_pct = " . (int)$this->wl_pct . ",
+            wl_duration = " . (int)$this->wl_duration . ",
+            wl_duration_num = " . (int)$this->wl_duration_num . ",
+            wl_duration_period = '" . DB_escapeString($this->wl_duration_period) . "',
+            wl_action = " . (int)$this->wl_action;
         $sql = $sql1 . $sql2 . $sql3;
         DB_query($sql);
         if (DB_error())  {
             return false;
         } else {
-            self::reOrder();
             return true;
         }
     }
 
 
-    /**
-     * Get the descriptive elements for a number of seconds.
-     * For example, 86400 returns array(1, 'day').
-     *
-     * @param   integer $seconds    Number of seconds
-     * @return  array   Array of (number, descrption)
-     */
-    public static function secondsToDscp(int $seconds) : array
+    public static function takeAction(int $uid)
     {
-        if ($seconds >= self::SECONDS_YEAR) {   // 1 year
-            $retval = array(
-                'num' => (int)($seconds / self::SECONDS_YEAR),
-                'dscp' => 'year',
-            );
-        } elseif ($seconds >= self::SECONDS_MONTH) {  // 30 days
-            $retval = array(
-                'num' => (int)($seconds / self::SECONDS_MONTH),
-                'dscp' => 'month',
-            );
-        } elseif ($seconds >= self::SECONDS_WEEK) {   // 7 days
-            $retval = array(
-                'num' => (int)($seconds / self::SECONDS_WEEK),
-                'dscp' => 'month',
-            );
-        } elseif ($seconds >= self::SECONDS_DAY) {   // 7 days
-            $retval = array(
-                'num' => (int)($seconds / self::SECONDS_DAY),
-                'dscp' => 'month',
-            );
+        $percent = Warning::getUserPercent($uid);
+        $WL = self::getByPercent($percent);
+        if ($WL->getID() < 1) {
+            // No matching warninglevel record found.
+            return false;
         }
-        return $retval;
+        $expiration = time() + $WL->getDuration();
+
+                
     }
 
 }

@@ -30,7 +30,16 @@ class WarningType
 
     /** Number of seconds before this warning type expires.
      * @var integer */
-    private $wl_expires = 0;
+    private $wt_expires_seconds = 0;
+
+    /** Number of periods making up the duration.
+     * @var integer */
+    private $wt_expires_qty = 1;
+
+    /** Type of duration perod, e.g. "day", "week", etc.
+     * @var string */
+    private $wt_expires_period = 'day';
+
 
 
     /**
@@ -52,7 +61,7 @@ class WarningType
 
 
     /**
-     * Read a single level record into an instantiated object.
+     * Read a single warning type record into an instantiated object.
      *
      * @param   integer $id     Warning leve record ID.
      * @return  boolean     True on success, False on error or not found
@@ -88,14 +97,9 @@ class WarningType
         $this->wt_id = (int)$A['wt_id'];
         $this->wt_dscp = $A['wt_dscp'];
         $this->wt_points = (int)$A['wt_points'];
-        if ($from_db) {
-            // Extracting json-encoded strings
-            $this->wt_expires = (int)$A['wt_expires'];
-        } else {
-            // Forums and Groups are supplied as simple arrays from the form
-            //$this->warn_groups = $A['warn_groups'];
-            //$this->warn_forums = $A['warn_forums'];
-        }
+        $this->wt_expires_qty = (int)$A['wt_expires_qty'];
+        $this->wt_expires_period = $A['wt_expires_period'];
+        $this->wt_expires_seconds = Dates::dscpToSeconds($this->wt_expires_qty, $this->wt_expires_period);
         return $this;
     }
 
@@ -130,9 +134,9 @@ class WarningType
     }
 
 
-    public function getExpires() : int
+    public function getExpirationSeconds() : int
     {
-        return (int)$this->wt_expires;
+        return (int)$this->wt_expires_seconds;
     }
 
 
@@ -161,12 +165,12 @@ class WarningType
 
 
     /**
-     * Get an instance of a warning level
+     * Get an instance of a warning type.
      * Caches locally since the same prefix may be requested many times
      * for a single page load.
      *
-     * @param   int     $id     Warning level record ID
-     * @return  object  Warning Level object
+     * @param   int     $id     Warning type record ID
+     * @return  object  Warning Type object
      */
     public static function getInstance(int $id) : self
     {
@@ -203,7 +207,7 @@ class WarningType
 
 
     /**
-     * Delete a single warning level record.
+     * Delete a single warning type record.
      *
      * @param   integer $wt_id  Record ID of prefix to remove
      */
@@ -211,7 +215,7 @@ class WarningType
     {
         global $_TABLES;
 
-        DB_delete($_TABLES['ff_warninglevels'], 'wt_id', $wt_id);
+        DB_delete($_TABLES['ff_warningtypes'], 'wt_id', $wt_id);
     }
 
 
@@ -227,16 +231,14 @@ class WarningType
         $db = Database::getInstance();
 
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warnings/');
-        $T->set_file('editform', 'warninglevel.thtml');
+        $T->set_file('editform', 'warningtype.thtml');
 
-        $wl_duration = self::secondsToDscp($this->wl_duration);
         $T->set_var(array(
             'wt_id'     => $this->wt_id,
-            'wl_duration'    => $this->wl_duration,
-            'wl_pct' => $this->wl_pct,
-            'action_sel_' . $this->wl_action => 'selected="selected"',
-            'wl_duration_num' => $wl_duration['num'],
-            'sel_' . $wl_duration['dscp'] => 'selected="selected"',
+            'wt_points' => $this->wt_points,
+            'wt_dscp'   => $this->wt_dscp,
+            'wt_expires_qty' => $this->wt_expires_qty,
+            'sel_' . $this->wt_expires_period => 'selected="selected"',
         ) );
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
@@ -264,22 +266,28 @@ class WarningType
                 'align' => 'center',
             ),
             array(
-                'text'  => 'Percent',
-                'field' => 'wl_pct',
+                'text'  => 'ID',
+                'field' => 'wt_id',
+                'align' => 'left',
+                'sort'  => true,
+            ),
+            array(
+                'text'  => 'Description',
+                'field' => 'wt_dscp',
+                'sort'  => false,
+                'align' => 'left',
+            ),
+            array(
+                'text'  => 'Points',
+                'field' => 'wt_points',
                 'align' => 'right',
                 'sort'  => true,
             ),
             array(
-                'text'  => 'Action',
-                'field' => 'wl_action',
-                'sort'  => false,
+                'text'  => 'Expires After',
+                'field' => 'wt_expires',
                 'align' => 'left',
-            ),
-            array(
-                'text'  => 'Length',
-                'field' => 'wl_duration',
                 'sort'  => false,
-                'align' => 'left',
             ),
             array(
                 'text'  => $LANG_ADMIN['delete'],
@@ -290,11 +298,10 @@ class WarningType
         );
 
         $options = array('chkdelete' => 'true', 'chkfield' => 'wt_id');
-        $defsort_arr = array('field' => '', 'direction' => 'asc');
+        $defsort_arr = array('field' => 'wt_points', 'direction' => 'asc');
         $query_arr = array(
-            'table' => 'ff_warninglevels',
-            'sql' => "SELECT * FROM {$_TABLES['ff_warninglevels']}
-                ORDER BY wl_pct ASC",
+            'table' => 'ff_warningtypes',
+            'sql' => "SELECT * FROM {$_TABLES['ff_warningtypes']}",
             'query_fields' => array(),
         );
         $text_arr = array(
@@ -330,15 +337,14 @@ class WarningType
         case 'edit':
             $retval = FieldList::edit(
                 array(
-                    'url' => $base_url . '?editlevel=' .$A['wt_id'],
+                    'url' => $base_url . '?edittype=' .$A['wt_id'],
                 )
             );
             break;
-
         case 'delete':
             $retval = FieldList::delete(
                 array(
-                    'delete_url' => $base_url.'?deletelevel='.$A['wt_id'],
+                    'delete_url' => $base_url.'?deletetype='.$A['wt_id'],
                     'attr' => array(
                         'title'   => $LANG_ADMIN['delete'],
                         'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');"
@@ -347,16 +353,8 @@ class WarningType
             );
             break;
 
-        case 'wl_pct':
-            $retval .= (int)$fieldvalue;
-            break;
-
-        case 'wl_action':
-            $retval .= self::$actions[$fieldvalue];
-            break;
-
-        case 'wl_duration':
-            $retval = "For $fieldvalue seconds";
+        case 'wt_expires':
+            $retval .= $A['wt_expires_qty'] . ' ' . ucfirst($A['wt_expires_period']) . '(s)';
             break;
 
         default:
@@ -381,63 +379,26 @@ class WarningType
             $this->setVars($A, false);
         }
 
-        // Strip paragraph tags added by the advanced editor
-        $this->warn_html = strip_tags($this->warn_html, '<span><em><strong><u>');
-
         if ($this->wt_id > 0) {
-            $sql1 = "UPDATE {$_TABLES['ff_warninglevels']} SET ";
-            $sql3 = "WHERE wt_id = {$this->wt_id}";
+            $sql1 = "UPDATE {$_TABLES['ff_warningtypes']} SET ";
+            $sql3 = " WHERE wt_id = {$this->wt_id}";
         } else {
-            $sql1 = "INSERT INTO {$_TABLES['ff_warninglevels']} SET ";
+            $sql1 = "INSERT INTO {$_TABLES['ff_warningtypes']} SET ";
             $sql3 = '';
         }
 
-        $json_groups = DB_escapeString(json_encode($this->warn_groups));
-        $json_forums = DB_escapeString(json_encode($this->warn_forums));
-        $sql2 = "wl_pct = '" . (int)$this->wl_pct . "',
-                wl_action = '" . DB_escapeString(@serialize($this->wl_action)) . "'";
+        $sql2 = "wt_points = " . (int)$this->wt_points . ",
+            wt_expires_seconds = " . (int)$this->wt_expires_seconds . ",
+            wt_expires_qty = " . (int)$this->wt_expires_qty . ",
+            wt_expires_period = '" . DB_escapeString($this->wt_expires_period) . "',
+            wt_dscp = '" . DB_escapeString($this->wt_dscp) . "'";
         $sql = $sql1 . $sql2 . $sql3;
         DB_query($sql);
         if (DB_error())  {
             return false;
         } else {
-            self::reOrder();
             return true;
         }
-    }
-
-
-    /**
-     * Get the descriptive elements for a number of seconds.
-     * For example, 86400 returns array(1, 'day').
-     *
-     * @param   integer $seconds    Number of seconds
-     * @return  array   Array of (number, descrption)
-     */
-    public static function secondsToDscp(int $seconds) : array
-    {
-        if ($seconds >= self::SECONDS_YEAR) {   // 1 year
-            $retval = array(
-                'num' => (int)($seconds / self::SECONDS_YEAR),
-                'dscp' => 'year',
-            );
-        } elseif ($seconds >= self::SECONDS_MONTH) {  // 30 days
-            $retval = array(
-                'num' => (int)($seconds / self::SECONDS_MONTH),
-                'dscp' => 'month',
-            );
-        } elseif ($seconds >= self::SECONDS_WEEK) {   // 7 days
-            $retval = array(
-                'num' => (int)($seconds / self::SECONDS_WEEK),
-                'dscp' => 'month',
-            );
-        } elseif ($seconds >= self::SECONDS_DAY) {   // 7 days
-            $retval = array(
-                'num' => (int)($seconds / self::SECONDS_DAY),
-                'dscp' => 'month',
-            );
-        }
-        return $retval;
     }
 
 }

@@ -13,10 +13,13 @@
 namespace Forum\Modules\Warning;
 use glFusion\Database\Database;
 use glFusion\FieldList;
+use Forum\UserInfo;
+use Forum\Status;
+
 
 class Warning
 {
-    /** Prefix record ID.
+    /** Warning record ID.
      * @var integer */
     private $w_id = 0;
 
@@ -30,11 +33,19 @@ class Warning
 
     /** Forum topic ID that generated the warning.
      * @var integer */
-    private $topic_id = 0;
+    private $w_topic_id = 0;
 
     /** Timestamp when the warning was issued.
      * @var integer */
     private $ts = 0;
+
+    /** Short description of the warning.
+     * @var string */
+    private $w_dscp = '';
+
+    /** Points assigned to this warning, from the WarningType.
+     * @var integer */
+    private $w_points = 0;
 
     /** Timestamp when the warning expires.
      * @var integer */
@@ -54,13 +65,17 @@ class Warning
 
     /** General comments about the warning.
      * @var string */
-    private $notes = '';
+    private $w_notes = '';
+
+    /** Warning Type object related to this Warning.
+     * @var object */
+    private $_WT = NULL;
 
 
     /**
      * Constructor.
      * Sets the field values from the supplied array, or reads the record
-     * if $A is a prefix record ID.
+     * if $A is a warning record ID.
      *
      * @param   mixed   $A  Array of properties or group ID
      */
@@ -88,7 +103,7 @@ class Warning
         global $_TABLES;
 
         $sql = "SELECT * FROM {$_TABLES['ff_warnings']}
-                WHERE w_id=" . $id;
+                WHERE w_id=" . $w_id;
         //echo $sql;die;
         $res = DB_query($sql);
         if ($res && DB_numRows($res) == 1) {
@@ -101,21 +116,23 @@ class Warning
     }
 
 
-    public static function getUserWarnings(int $uid) : array
+    public static function getUserPercent(int $uid) : float
     {
+        global $_FF_CONF;
+
+        $points = self::getUserPoints($uid);
+        return round(($points / (int)$_FF_CONF['warning_max_points']) * 100, 2);
     }
 
 
-    public static function getUserPercent(int $uid) : int
+    public static function getUserPoints(int $uid) : int
     {
         global $_TABLES;
 
-        $sql = "SELECT sum(wt.wt_points) AS totalpoints
+        $sql = "SELECT sum(w.w_points) AS totalpoints
             FROM {$_TABLES['ff_warnings']} w
-            LEFT JOIN {$_TABLES['ff_warningtypes']} wt
-            ON wt.wt_id = w.wt_id
             WHERE w.w_uid = $uid
-            AND w.expires > UNIX_TIMESTAMP()
+            AND w.w_expires > UNIX_TIMESTAMP()
             AND w.revoked_date = 0";
         $res = DB_query($sql);
         if ($res && DB_numRows($res) == 1) {
@@ -124,6 +141,47 @@ class Warning
         } else {
             return 0;
         }
+    }
+
+
+    /**
+     * Get the current restriction in effect for a user.
+     * Restrictions are checked in descending order of severity in case
+     * there are multiple in effect.
+     *
+     * @param   integer $uid    User ID
+     * @return  integer     Current restrition
+     */
+    public static function getUserStatus(int $uid) : int
+    {
+        global $_TABLES;
+
+        $retval = Status::NONE;
+        $U = UserInfo::getInstance($uid);
+        if ($U->isBanned()) {
+            $retval = Status::BAN;
+        } elseif ($U->isSuspended()) {
+            $retval = Status::SUSPEND;
+        } elseif ($U->isModerated()) {
+            $retval = Status::MODERATE;
+        }
+
+/*        $uid = (int)$uid;
+        $sql = "SELECT * FROM {$_TABLES['ff_userinfo']} WHERE uid = $uid";
+        $res = DB_query($sql);
+        if ($res && DB_numRows($res) == 1) {
+            $A = DB_fetchArray($res, false);
+            $now = time();
+            if ($A['ban_expires'] > $now) {
+                $retval = Status::BAN;
+            } elseif ($A['suspend_expires'] > $now) {
+                $retval = Status::SUSPEND;
+            } elseif ($A['moderate_expires'] > $now) {
+                $retval = Status::MODERATE;
+            }
+        }
+ */
+        return $retval;
     }
 
 
@@ -140,12 +198,12 @@ class Warning
         $this->w_id = (int)$A['w_id'];
         $this->w_uid = (int)$A['w_uid'];
         $this->wt_id = (int)$A['wt_id'];
-        $this->topic_id = (int)$A['topic_id'];
+        $this->w_topic_id = (int)$A['w_topic_id'];
         $this->w_dscp = $A['w_dscp'];
-        $this->notes = $A['notes'];
+        $this->w_notes = $A['w_notes'];
         if ($from_db) {
             // Extracting json-encoded strings
-            $this->expires = $A['expires'];
+            $this->w_expires = $A['w_expires'];
         } else {
             // Forums and Groups are supplied as simple arrays from the form
         }
@@ -181,13 +239,13 @@ class Warning
 
     public function withTopicId(int $id) : self
     {
-        $this->topic_id = (int)$id;
+        $this->w_topic_id = (int)$id;
         return $this;
     }
 
 
     /**
-     * Get the prefix record ID.
+     * Get the warning record ID.
      *
      * @return  integer     Record ID
      */
@@ -211,7 +269,7 @@ class Warning
 
 
     /**
-     * Get the prefix title.
+     * Get the warning title.
      *
      * @return  string      Title string
      */
@@ -222,12 +280,12 @@ class Warning
 
 
     /**
-     * Get an instance of a prefix.
-     * Caches locally since the same prefix may be requested many times
+     * Get an instance of a warning.
+     * Caches locally since the same warning may be requested many times
      * for a single page load.
      *
-     * @param   int     $w_id     Prefix record ID
-     * @return  object  Prefix object
+     * @param   int     $w_id     Warning record ID
+     * @return  object  Warning object
      */
     public static function getInstance(int $w_id) : self
     {
@@ -241,12 +299,20 @@ class Warning
     }
 
 
-    public static function getAll($uid, $forum)
+    public static function getAll($uid, $activeonly=true)
     {
         global $_TABLES;
 
+        $uid = (int)$uid;
         $retval = array();
-        $sql = "SELECT * FROM {$_TABLES['ff_prefixes']}";
+        $sql = "SELECT * FROM {$_TABLES['ff_warnings']} WHERE 1=1";
+        if ($uid > 1) {
+            $sql .= " AND w_uid = $uid";
+        }
+        if ($activeonly) {
+            $sql .= " AND w_expires > UNIX_TIMESTAMP()";
+        }
+        $sql .= " ORDER BY w_expires DESC";
         $res = DB_query($sql);
         if ($res) {
             while ($A = DB_fetchArray($res, false)) {
@@ -258,30 +324,18 @@ class Warning
 
 
     /**
-     * Delete a single prefix record and update the related topics.
+     * Delete a single warning record.
+     * Does not change any user restrictions that have been set.
      *
-     * @param   integer $w_id  Record ID of prefix to remove
+     * @param   integer $w_id  Record ID of warning to remove
      */
     public static function Delete(int $w_id) : void
     {
         global $_TABLES;
 
-        DB_query("UPDATE {$_TABLES['ff_topic']}
-            SET prefix = 0
-            WHERE prefix = $w_id");
-        DB_delete($_TABLES['ff_prefixes'], 'w_id', $w_id);
+        DB_delete($_TABLES['ff_warnings'], 'w_id', $w_id);
     }
 
-
-    /**
-     * Get the final HTML to display the prefix.
-     *
-     * @return string  HTML for prefix
-     */
-    public function getHTML()
-    {
-        return '<span class="ff-prefix-global">' . $this->warn_html . '</span>';
-    }
 
     /**
      * Creates the edit form.
@@ -292,8 +346,6 @@ class Warning
     {
         global $_TABLES, $_CONF;
 
-        $db = Database::getInstance();
-
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warnings/');
         $T->set_file('editform', 'editwarning.thtml');
 
@@ -301,8 +353,11 @@ class Warning
             'w_id'      => $this->w_id,
             'uid'       => $this->w_uid,
             'username'  => COM_getDisplayName($this->w_uid),
-            'subject'   => DB_getItem($_TABLES['ff_topic'], 'subject', "id = {$this->topic_id}"),
-            'topic_id'  => $this->topic_id,
+            'subject'   => DB_getItem($_TABLES['ff_topic'], 'subject', "id = {$this->w_topic_id}"),
+            'topic_id'  => $this->w_topic_id,
+            'dscp'      => $this->w_dscp,
+            'notes'     => $this->w_notes,
+            'can_revoke' => $this->wt_id > 0,
          ) );
         $Types = WarningType::getAvailable();
         $T->set_block('editform', 'WarningTypes', 'wt');
@@ -310,6 +365,7 @@ class Warning
             $T->set_var(array(
                 'wt_id' => $WT->getID(),
                 'wt_dscp' => $WT->getDscp(),
+                'selected' => $WT->getID() == $this->wt_id ? 'checked="checked"' : '',
             ) );
             $T->parse('wt', 'WarningTypes', true);
         }
@@ -321,41 +377,58 @@ class Warning
     /**
      * Create the list.
      */
-    public static function adminList()
+    public static function adminList(int $uid=0, bool $activeonly=true)
     {
         global $LANG_ADMIN, $_TABLES, $_CONF, $_USER, $LANG_GF01, $LANG_GF93;
 
         USES_lib_admin();
 
-        $uid = (int)$_USER['uid'];
+        $uid = (int)$uid;
         $retval = '';
-        $retval .= '<script src="' .
-            $_CONF['site_url'].'/forum/javascript/ajax_toggle.js"></script>';
         $form_arr = array();
 
         $header_arr = array(
+            array(
+                'text'  => 'Description',
+                'field' => 'wt_dscp',
+                'sort'  => true,
+                'align' => 'left',
+            ),
+            array(
+                'text'  => 'Points',
+                'field' => 'w_points',
+                'sort'  => true,
+                'align' => 'left',
+            ),
+            array(
+                'text'  => 'Issued',
+                'field' => 'ts',
+                'sort'  => true,
+                'align' => 'left',
+            ),
+            array(
+                'text'  => 'Expires',
+                'field' => 'w_expires',
+                'sort'  => true,
+                'align' => 'left',
+            ),
+            array(
+                'text'  => 'Issued By',
+                'field' => 'w_issued_by',
+                'sort'  => true,
+                'align' => 'left',
+            ),
+            array(
+                'text'  => 'status',
+                'field' => 'status',
+                'sort'  => false,
+                'align' => 'left',
+            ),
             array(
                 'text'  => $LANG_ADMIN['edit'],
                 'field' => 'edit',
                 'sort'  => false,
                 'align' => 'center',
-            ),
-            array(
-                'text'  => 'Prefix',
-                'field' => 'warn_title',
-                'sort'  => true,
-                'align' => 'left',
-            ),
-            array(
-                'text'  => $LANG_ADMIN['enabled'],
-                'field' => 'warn_enabled',
-                'align' => 'center',
-                'sort'  => false,
-            ),
-            array(
-                'text'  => $LANG_GF93['order'],
-                'field' => 'warn_order',
-                'sort'  => false,
             ),
             array(
                 'text'  => $LANG_ADMIN['delete'],
@@ -365,94 +438,73 @@ class Warning
             ),
         );
 
+        if ($uid < 2) {
+            array_unshift($header_arr, array(
+                'text'  => 'User Name',
+                'field' => 'w_uid',
+                'sort'  => true,
+                'align' => 'left',
+            ) );
+        }
+
         $options = array('chkdelete' => 'true', 'chkfield' => 'w_id');
-        $defsort_arr = array('field' => '', 'direction' => 'asc');
-        $query_arr = array('table' => 'ff_badges',
-            'sql' => "SELECT * FROM {$_TABLES['ff_prefixes']}
-                    ORDER BY warn_order ASC",
-            'query_fields' => array('warn_title'),
-        );
-        $extras = array(
-            'max_orderby' => (int)DB_getItem(
-                $_TABLES['ff_prefixes'],
-                'MAX(warn_order)',
-                "1=1"
-            ),
+        $defsort_arr = array('field' => 'w_expires', 'direction' => 'ASC');
+        $sql = "SELECT w.*, wt.wt_dscp FROM {$_TABLES['ff_warnings']} w
+            LEFT JOIN {$_TABLES['ff_warningtypes']} wt
+            ON wt.wt_id = w.wt_id WHERE 1=1";
+        if ($uid > 1) {
+            $sql .= " AND w_uid = $uid";
+        }
+        if ($activeonly) {
+            $sql .= " AND w_expires > UNIX_TIMESTAMP()";
+        }
+        $query_arr = array('table' => 'ff_warnings',
+            'sql' => $sql,
+            'query_fields' => array('w_dscp'),
         );
         $text_arr = array(
             //'has_extras' => true,
-            'form_url' => $_CONF['site_admin_url'] . '/plugins/forum/prefixes.php',
+            'form_url' => $_CONF['site_admin_url'] . '/plugins/forum/warnings.php?log=' . $uid,
         );
 
         $retval .= ADMIN_list(
-            'badges', array(__CLASS__, 'getAdminField'), $header_arr,
-            $text_arr, $query_arr, $defsort_arr, '', $extras, $options, $form_arr
+            'warnings_user_admlist',
+            array(__CLASS__, 'getAdminField'), $header_arr,
+            $text_arr, $query_arr, $defsort_arr, '', '', $options, $form_arr
         );
         return $retval;
     }
 
 
     /**
-     *   Get the correct display for a single field in the banner admin list
+     * Get the correct display for a single field in the warning list.
      *
-     *   @param  string  $fieldname  Field variable name
-     *   @param  string  $fieldvalue Value of the current field
-     *   @param  array   $A          Array of all field names and values
-     *   @param  array   $icon_arr   Array of system icons
-     *   @return string              HTML for field display within the list cell
+     * @param  string  $fieldname  Field variable name
+     * @param  string  $fieldvalue Value of the current field
+     * @param  array   $A          Array of all field names and values
+     * @param  array   $icon_arr   Array of system icons
+     * @return string              HTML for field display within the list cell
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr, $extra=array())
     {
         global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $LANG_GF01;
 
         $retval = '';
-        $base_url = $_CONF['site_admin_url'] . '/plugins/forum/prefixes.php';
+        $base_url = $_CONF['site_admin_url'] . '/plugins/forum/warnings.php';
 
         switch($fieldname) {
         case 'edit':
             $retval = FieldList::edit(
                 array(
-                    'url' => $base_url . '?edit=x&amp;w_id=' .$A['w_id'],
+                    'url' => $base_url . '?editwarning=' .$A['w_id'],
                 )
             );
             break;
 
-        case 'warn_order':
-            if ($fieldvalue > 10) {
-                $retval .= FieldList::up(
-                    array(
-                        'url' => $base_url . '?move=up&w_id=' . $A['w_id'],
-                    )
-                );
-            } else {
-                $retval .= '<i class="uk-icon uk-icon-justify">&nbsp;</i>';
-            }
-            if ($fieldvalue < $extra['max_orderby']) {
-                $retval .= FieldList::down(
-                    array(
-                        'url' => $base_url . '?move=down&w_id=' . $A['w_id'],
-                    )
-                );
-            } else {
-                $retval .= '<i class="uk-icon uk-icon-justify">&nbsp;</i>';
-            }
-            break;
-
-        case 'warn_enabled':
-            if ($fieldvalue == 1) {
-                $switch = 'checked="checked"';
-            } else {
-                $switch = '';
-            }
-            $retval .= "<input type=\"checkbox\" $switch value=\"1\" name=\"warn_ena_check\"
-                id=\"togena{$A['w_id']}\"
-                onclick='forum_ajaxtoggle(this, \"{$A['w_id']}\",\"warn_enabled\",\"prefix\");' />\n";
-            break;
-
         case 'delete':
-            $retval = FieldList::delete(
+            $retval .= FieldList::delete(
                 array(
-                    'delete_url' => $base_url.'?w_id='.$A['w_id'].'&delete',
+                    'delete_url' => $base_url.'?deletewarning=' . $A['w_id'],
                     'attr' => array(
                         'title'   => $LANG_ADMIN['delete'],
                         'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');"
@@ -461,16 +513,42 @@ class Warning
             );
             break;
 
-        case 'warn_title':
-            if (empty($A['warn_html'])) {
-                $retval = $fieldvalue;
-            } else {
-                $retval = '<span class="ff-prefix-global">' . $A['warn_html'] . '</span>';
+        case 'w_issued_by':
+            $retval .= COM_getDisplayName($fieldvalue);
+            break;
+
+        case 'ts':
+            $dt = new \Date($fieldvalue, $_CONF['timezone']);
+            $retval .= $dt->toMySql(true);
+            break;
+
+        case 'w_expires':
+            $dt = new \Date($fieldvalue, $_CONF['timezone']);
+            $retval .= $dt->toMySql(true);
+            if ($fieldvalue < time()) {
+                $retval = '<span style="background-color:lightgrey;">' . $retval . '</span>';
             }
             break;
 
+        case 'status':
+            if ($A['revoked_by'] > 0) {
+                $retval .= 'Revoked by ' . COM_getDisplayName($A['revoked_by']);
+            } elseif ($A['w_expires'] < time()) {
+                $retval .= 'Expired';
+            } else {
+                $retval .= 'Active';
+            }
+            break;
+
+        case 'w_uid':
+            $retval .= COM_createLink(
+                COM_getDisplayName($A['w_uid']),
+                $_CONF['site_admin_url'] . '/plugins/forum/warnings.php?log=' . $A['w_uid'],
+            );
+            break;
+
         default:
-            $retval = $fieldvalue;
+            $retval .= $fieldvalue;
             break;
         }
         return $retval;
@@ -478,7 +556,7 @@ class Warning
 
 
     /**
-     * Save a prefix from the edit form.
+     * Save a warning from the edit form.
      *
      * @param   array   $A      Array of fields, e.g. $_POST
      * @return  string      Error messages, empty string on success
@@ -491,34 +569,71 @@ class Warning
             $this->setVars($A, false);
         }
 
+        $this->_WT = WarningType::getInstance($this->wt_id);
+        $points = $this->_WT->getPoints();
         if ($this->w_id > 0) {
-            $expires = $this->expires;  // using existing value
+            $expires = $this->w_expires;  // using existing value
             $sql1 = "UPDATE {$_TABLES['ff_warnings']} SET ";
             $sql3 = "WHERE w_id = {$this->w_id}";
         } else {
-            $expires = time() + WarningType::getInstance($this->wt_id)->getExpires();
+            $expires = time() + $this->_WT->getDuration();
             $sql1 = "INSERT INTO {$_TABLES['ff_warnings']} SET ";
             $sql3 = '';
         }
 
         $sql2 = "w_uid = '" . (int)$this->w_uid . "',
                 wt_id = '{$this->wt_id}',
-                topic_id = {$this->topic_id},
+                w_topic_id = {$this->w_topic_id},
                 ts = UNIX_TIMESTAMP(),
-                expires = {$expires},
+                w_points = $points,
+                w_expires = {$expires},
                 revoked_date = {$this->revoked_date},
                 revoked_by = {$this->revoked_by},
                 revoked_reason = '" . DB_escapeString($this->revoked_reason) . "',
                 w_dscp = '" . DB_escapeString($this->w_dscp) . "',
-                notes = '" . DB_escapeString($this->notes) . "'";
+                w_notes = '" . DB_escapeString($this->w_notes) . "'";
         $sql = $sql1 . $sql2 . $sql3;
         DB_query($sql);
         if (DB_error())  {
             return false;
         } else {
+            // Take action, if necessary
+            $this->takeAction();
             return true;
         }
     }
+
+
+    /**
+     * Execute the action based on the current warning level.
+     *
+     * @return  boolean     True on success, False on error
+     */
+    public function takeAction() : bool
+    {
+        global $_TABLES;
+
+        if ($this->_WT === NULL) {
+            $this->_WT = WarningType::getInstance($this->wt_id);
+        }
+        $percent = self::getUserPercent($this->w_uid);
+        $WL = WarningLevel::getByPercent($percent);
+        if ($WL->getID() < 1) {
+            // No matching warninglevel record found.
+            return false;
+        }
+        $expiration = time() + $WL->getDuration();
+        if ($WL->getAction() > 0) {
+            $field = Status::getKey($WL->getAction()) . '_expires';
+            $sql = "UPDATE {$_TABLES['ff_userinfo']}
+                SET $field = $expiration
+                WHERE uid = {$this->w_uid}";
+            COM_errorLog("updating user: $sql");
+            return true;
+        }
+        return false;
+    }
+
 
 }
 
