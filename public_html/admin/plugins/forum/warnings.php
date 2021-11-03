@@ -6,6 +6,11 @@ require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 
 USES_forum_functions();
+USES_forum_admin();
+use Forum\Modules\Warning\WarningLevel;
+use Forum\Modules\Warning\WarningType;
+use Forum\Modules\Warning\Warning;
+use Forum\Status;
 
 if (!SEC_hasRights('forum.edit')) {
     COM_404();
@@ -14,10 +19,14 @@ if (!SEC_hasRights('forum.edit')) {
 $action = 'listlevels';
 
 $expected = array(
-    'save', 'deletelevel', 'cancel', 'savewarning', 
+    // Actions
+    'save', 'deletelevel', 'cancel', 'savewarning', 'savetype', 'savelevel',
     // Views
-    'editlevel', 'listlevels', 'warnuser',
+    'editlevel', 'edittype', 'listlevels', 'listtypes', 'warnuser',
+    'editwarning',
+    'log',
 );
+
 foreach ($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -30,8 +39,6 @@ foreach ($expected as $provided) {
     }
 }
 
-// Prefix ID can come from $_POST or $_GET
-//$wl_id = isset($_REQUEST['wl_id']) ? (int)$_REQUEST['pfx_id'] : 0;
 $self = $_CONF['site_admin_url'] . '/plugins/forum/warnings.php';
 $content = '';
 switch ($action) {
@@ -42,14 +49,19 @@ case 'warnuser':
         COM_setMsg('No topic specified');
         COM_refresh($self);
     }
-    $W = new Forum\Modules\Warning\Warning;
+    $W = new Warning;
     $content .= $W->withUid($actionval)
       ->withTopicId($topic_id)
       ->Edit();
     break;
 
+case 'editwarning':
+    $W = Warning::getInstance($actionval);
+    $content .= $W->Edit();
+    break;
+
 case 'savewarning':
-    $W = new Forum\Modules\Warning\Warning($_POST['w_id']);
+    $W = new Warning($_POST['w_id']);
     $W->Save($_POST);
     break;
 
@@ -72,35 +84,74 @@ case 'edit':
     $content = $P->Edit();
     break;
 
-case 'save':
-    $P = new Forum\Prefix($_POST['pfx_id']);
-    if ($P->Save($_POST)) {
+case 'savelevel':
+    $WL = WarningLevel::getInstance($_POST['wl_id']);
+    if ($WL->Save($_POST)) {
         COM_setMsg($LANG_GF92['setsavemsg']);
     } else {
         COM_setMsg('An error occurred', 'error');
     }
-    echo COM_refresh($self);
+    echo COM_refresh($self . '?listlevels');
+    exit;
+    break;
+
+case 'savetype':
+    $WT = WarningType::getInstance($_POST['wt_id']);
+    if ($WT->Save($_POST)) {
+        COM_setMsg($LANG_GF92['setsavemsg']);
+    } else {
+        COM_setMsg('An error occurred', 'error');
+    }
+    echo COM_refresh($self . '?listtypes');
     exit;
     break;
 
 case 'listtypes':
+    $content .= WarningType::adminList();
+    break;
+
+case 'edittype':
+    $WT = WarningType::getInstance((int)$actionval);
+    $content .= $WT->Edit();
     break;
 
 case 'editlevel':
-    $WL = Forum\Modules\Warning\WarningLevel::getInstance($actionval);
+    $WL = WarningLevel::getInstance((int)$actionval);
     $content .= $WL->Edit();
+    break;
+
+case 'log':
+    $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warnings');
+    $T->set_file('log', 'log.thtml');
+    if ($actionval > 1) {
+        $points = Warning::getUserPoints($actionval);
+        $status = Forum\UserInfo::getInstance($actionval)->getForumStatus();
+        $sev = Status::getSeverity($status);
+        $T->set_var(array(
+            'username' => COM_getDisplayName($actionval),
+            'points' => $points,
+            'percent' => Warning::getUserPercent($actionval),
+            'status' => $status,
+            'status_cls' => $sev['severity'],
+            'status_msg' => $sev['message'],
+        ) );
+    }
+    $T->set_var('admin_list', Warning::adminList((int)$actionval, false));
+    $T->parse('output', 'log');
+    $content .= $T->finish($T->get_var('output'));
     break;
 
 case 'listlevels':
 default:
     $content .= '<p>[ <a href="' . $_CONF['site_admin_url'] .
     '/plugins/forum/warnings.php?editlevel">'.$LANG_GF01['create_new'].'</a> ]</p>';
-    $content .= Forum\Modules\Warning\WarningLevel::adminList();
+    $content .= WarningLevel::adminList();
     break;
 }
 
 $display = FF_siteHeader();
-//$display .= FF_navbar($navbarMenu, $LANG_GF01['prefixes']);
+$display .= FF_navbar($navbarMenu, 'Warnings');
+$display .= Forum\Menu::adminWarnings($action);
 $display .= $content;
 $display .= FF_siteFooter();
 echo $display;
