@@ -269,7 +269,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
         } else {
             $topictemplate->set_var('ipaddress','');
         }
-        if ($_FF_CONF['enable_warnings']) {
+        if ($_FF_CONF['warning_enabled']) {
             $warn_level = \Forum\Modules\Warning\Warning::getUserPercent($showtopic['uid']);
             if ($warn_level > 0) {
                 $topictemplate->set_var('warn_level', $warn_level);
@@ -373,6 +373,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
             'mod_ban'       => $mod_perms['mod_ban'],
             'mod_lock'      => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] == 0),
             'mod_unlock'    => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] != 0),
+            'mod_warn'      => ($mod_perms['mod_edit']),
             'has_mod_perms' => Forum\Moderator::hasPerm($showtopic['forum']),
             'topic_parent_id' => $showtopic['pid'],
     ));
