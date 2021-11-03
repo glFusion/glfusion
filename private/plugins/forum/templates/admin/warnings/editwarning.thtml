@@ -1,0 +1,66 @@
+{# begin {templatelocation} #}
+<form uk-form action="{site_admin_url}/plugins/forum/warnings.php" method="post"
+	class="uk-form uk-form-horizontal">
+	<input type="hidden" name="w_id" value="{w_id}" />
+	<input type="hidden" name="w_uid" value="{uid}" />
+	<input type="hidden" name="w_topic_id" value="{topic_id}" />
+
+	<div class="uk-form-row">
+		<label class="uk-form-label">User Name</label>
+		<div class="uk-form-controls">
+			{username}
+		</div>
+	</div>
+
+	<div class="uk-form-row">
+		<label class="uk-form-label">Topic</label>
+		<div class="uk-form-controls">
+			{subject}
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="wt_id">Warning Type</label>
+		<div class="uk-form-controls">
+<!-- BEGIN WarningTypes -->
+				<input required class="uk-radio" type="radio" name="wt_id" value="{wt_id}" {selected} />&nbsp;{wt_dscp}<br />
+<!-- END WarningTypes -->
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label">Description</label>
+		<div class="uk-form-controls">
+			<textarea name="w_dscp">{dscp}</textarea>
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label">Administrative Notes</label>
+		<div class="uk-form-controls">
+			<textarea name="w_notes">{notes}</textarea>
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="notify">Notify User</label>
+		<div class="uk-form-controls">
+			<input class="uk-checkbox" type="checkbox" name="notify" value="1" />
+			Send a private message to the user?
+		</div>
+	</div>
+
+	<div class="uk-form-row" align="center">
+		<div class="uk-form-controls">
+			<button type="submit" class="uk-button uk-button-success" name="savewarning" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
+			<button type="reset" class="uk-button">{$LANG_GF01['reset']}</button>
+			<button type="submit" class="uk-button uk-button-primary" name="cancel" value="{$LANG_ADMIN['cancel']}">{$LANG_ADMIN['cancel']}</button>
+{!if can_revoke}
+			<button type="submit" class="uk-button uk-button-danger" name="delete" value="{$LANG_ADMIN['delete']}"
+			onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');" style="float:right;">{$LANG_ADMIN['delete']}</button>
+{!endif}
+		</div>
+	</div>
+
+</form>
+{# end {templatelocation} #}
