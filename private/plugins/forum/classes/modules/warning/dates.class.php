@@ -51,6 +51,13 @@ class Dates
     }
 
 
+    /**
+     * Create a text description of a timestamp.
+     * Example:  "1 month, 2 weeks, 3 days"
+     *
+     * @param   integer $seconds    Timestamp value
+     * @return  string      Descriptive text
+     */
     public static function secondsToDscp(int $seconds) : string
     {
         $parts = array();
@@ -80,6 +87,27 @@ class Dates
             $seconds = self::$durations['month'];
         }
         return $seconds;
+    }
+
+
+    /**
+     * Create the option elements for a selection list of periods.
+     *
+     * @param   string|null $sel    Currently-selected option
+     * @return  string      Option list of periods
+     */
+    public static function getOptionList(?string $sel='day') : string
+    {
+        $durations = array_reverse(self::$durations);
+        $retval = '';
+        foreach ($durations as $key=>$seconds) {
+            $retval .= '<option value="' . $key . '"';
+            if ($sel == $key) {
+                $retval .= ' selected="selected"';
+            }
+            $retval .= '>' . ucfirst($key) . '</option>' . LB;
+        }
+        return $retval;
     }
 
 }
