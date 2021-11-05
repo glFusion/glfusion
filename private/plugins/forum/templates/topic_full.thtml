@@ -335,7 +335,11 @@
 {!endif}
 
 {!if warn_level}
-										<div class="uk-text-danger">Warning Level: {warn_level}%</div>
+										<div>
+											<a class="uk-text-danger" href="{site_admin_url}/plugins/forum/warnings.php?log={topic_uid}">
+												Warning Level: {warn_level}%
+											</a>
+										</div>
 {!endif}
 									</div>
 								</div>
