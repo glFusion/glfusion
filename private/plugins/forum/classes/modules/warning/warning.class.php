@@ -391,7 +391,7 @@ class Warning
     {
         global $_TABLES, $_CONF;
 
-        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warnings/');
+        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('editform', 'viewwarning.thtml');
 
         $T->set_var(array(
@@ -421,7 +421,7 @@ class Warning
     {
         global $_TABLES, $_CONF;
 
-        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warnings/');
+        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('editform', 'editwarning.thtml');
 
         $T->set_var(array(

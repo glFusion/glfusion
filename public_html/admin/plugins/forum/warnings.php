@@ -116,6 +116,10 @@ case 'savetype':
     break;
 
 case 'listtypes':
+    $content .= '<p>[ ' . COM_createLink(
+            $LANG_GF01['create_new'],
+            $_CONF['site_admin_url'] . '/plugins/forum/warnings.php?edittype',
+        ) . ' ]</p>';
     $content .= WarningType::adminList();
     break;
 
@@ -130,7 +134,7 @@ case 'editlevel':
     break;
 
 case 'log':
-    $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warnings');
+    $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
     $T->set_file('log', 'log.thtml');
     if ($actionval > 1) {
         $points = Warning::getUserPoints($actionval);

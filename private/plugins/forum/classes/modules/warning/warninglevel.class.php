@@ -101,15 +101,15 @@ class WarningLevel
         $this->wl_id = (int)$A['wl_id'];
         $this->wl_pct = (int)$A['wl_pct'];
         $this->wl_action = (int)$A['wl_action'];
-        $this->wl_duration_num = (int)$A['wl_duration_num'];
+        $this->wl_duration_qty = (int)$A['wl_duration_qty'];
         $this->wl_duration_period = $A['wl_duration_period'];
-        $this->wl_duration = Dates::dscpToSeconds($A['wl_duration_num'], $A['wl_duration_period']);
+        $this->wl_duration = Dates::dscpToSeconds($A['wl_duration_qty'], $A['wl_duration_period']);
         /*if ($from_db) {
             // Extracting json-encoded strings
             $this->wl_duration = (int)$A['wl_duration'];
         } else {
             // Forums and Groups are supplied as simple arrays from the form:q
-            $this->wl_duration = Dates::dscpToSeconds($A['wl_duration_num'], $A['wl_duration_type']);
+            $this->wl_duration = Dates::dscpToSeconds($A['wl_duration_qty'], $A['wl_duration_type']);
         }*/
         return $this;
     }
@@ -206,7 +206,7 @@ class WarningLevel
 
         $sql = "SELECT * FROM {$_TABLES['ff_warninglevels']}
             WHERE wl_pct <= $pct
-            ORDER BY wl_pct
+            ORDER BY wl_pct DESC
             LIMIT 1";
         $res = DB_query($sql);
         if ($res && DB_numRows($res) == 1) {
@@ -243,16 +243,16 @@ class WarningLevel
 
         $db = Database::getInstance();
 
-        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warnings/');
+        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('editform', 'warninglevel.thtml');
-
         $T->set_var(array(
             'wl_id'     => $this->wl_id,
             'wl_duration'    => $this->wl_duration,
             'wl_pct' => $this->wl_pct,
-            'action_sel_' . $this->wl_action => 'selected="selected"',
-            'wl_duration_num' => $this->wl_duration_num,
-            'sel_' . $this->wl_duration_period => 'selected="selected"',
+            'wl_duration_qty' => $this->wl_duration_qty,
+            'period_sel_' . $this->wl_duration_period => 'selected="selected"',
+            'period_options' => Dates::getOptionList($this->wl_duration_period),
+            'action_options' => Status::getOptionList($this->wl_action),
         ) );
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
@@ -407,7 +407,7 @@ class WarningLevel
 
         $sql2 = "wl_pct = " . (int)$this->wl_pct . ",
             wl_duration = " . (int)$this->wl_duration . ",
-            wl_duration_num = " . (int)$this->wl_duration_num . ",
+            wl_duration_qty = " . (int)$this->wl_duration_qty . ",
             wl_duration_period = '" . DB_escapeString($this->wl_duration_period) . "',
             wl_action = " . (int)$this->wl_action;
         $sql = $sql1 . $sql2 . $sql3;

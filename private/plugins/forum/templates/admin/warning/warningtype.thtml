@@ -1,6 +1,5 @@
 {# begin {templatelocation} #}
 <form uk-form action="{site_admin_url}/plugins/forum/warnings.php" method="post"
-	enctype="multipart/form-data"
 	class="uk-form uk-form-horizontal">
 	<input type="hidden" name="wt_id" value="{wt_id}" />
 
@@ -14,7 +13,7 @@
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="wt_dscp">Description</label>
 		<div class="uk-form-controls">
-			<input class="uk-input uk-form-width-large" id="wt_dscp" name="wt_dscp" value="{wt_dscp}" />
+			<input required class="uk-input uk-form-width-large" id="wt_dscp" name="wt_dscp" value="{wt_dscp}" />
 		</div>
 	</div>
 

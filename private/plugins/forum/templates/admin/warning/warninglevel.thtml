@@ -1,6 +1,5 @@
 {# begin {templatelocation} #}
 <form uk-form action="{site_admin_url}/plugins/forum/warnings.php" method="post"
-	enctype="multipart/form-data"
 	class="uk-form uk-form-horizontal">
 	<input type="hidden" name="wl_id" value="{wl_id}" />
 
@@ -15,9 +14,7 @@
 		<label class="uk-form-label" for="pfx_groups">Action</label>
 		<div class="uk-form-controls">
 			<select id="wl_action" name="wl_action">
-				<option value="1" {action_sel_1}>Ban</option>
-				<option value="2" {action_sel_2}>Suspend</option>
-				<option value="3" {action_sel_3}>Moderate</option>
+				{action_options}
 			</select>
 		</div>
 	</div>
@@ -25,12 +22,9 @@
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="pfx_groups">Duration</label>
 		<div class="uk-form-controls">
-			<input class="uk-input uk-form-width-small" type="text" id="wl_duration_num" name="wl_duration_num" value="{wl_duration_num}" />
+			<input class="uk-input uk-form-width-small" type="text" id="wl_duration_qty" name="wl_duration_qty" value="{wl_duration_qty}" />
 			<select id="wl_duration_period" name="wl_duration_period">
-				<option value="day" {sel_day}>Day(s)</option>
-				<option value="week" {sel_week}>Week(s)</option>
-				<option value="month" {sel_month}>Month(s)</option>
-				<option value="year" {sel_year}>Month(s)</option>
+				{period_options}
 			</select>
 		</div>
 	</div>

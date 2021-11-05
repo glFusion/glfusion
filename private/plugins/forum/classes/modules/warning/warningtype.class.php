@@ -230,7 +230,7 @@ class WarningType
 
         $db = Database::getInstance();
 
-        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warnings/');
+        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('editform', 'warningtype.thtml');
 
         $T->set_var(array(
