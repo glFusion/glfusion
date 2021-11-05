@@ -12,7 +12,6 @@
  */
 namespace Forum;
 
-
 class UserInfo
 {
     /** User ID.
@@ -59,6 +58,10 @@ class UserInfo
      * @var array() */
     private static $cache = array();
 
+
+    private $suspend_expires = 0;
+    private $ban_expires = 0;
+    private $moderate_expires = 0;
 
     /**
      * Constructor.
@@ -173,8 +176,7 @@ class UserInfo
      */
     public function isBanned() : bool
     {
-        return false;
-        return self::_isActive($this->suspension_expires);
+        return self::_isActive($this->ban_expires);
     }
 
 
@@ -186,8 +188,7 @@ class UserInfo
      */
     public function isModerated() : bool
     {
-        return false;
-        return self::_isActive($this->moderation_expires);
+        return self::_isActive($this->moderate_expires);
     }
 
 
@@ -199,27 +200,61 @@ class UserInfo
      */
     public function isSuspended() : bool
     {
-        return false;
-        return self::_isActive($this->suspension_expires);
+        return self::_isActive($this->suspend_expires);
     }
 
 
-    public function getForumStatus()
+    public function getForumStatus() : array
     {
-        $percent = Modules\Warning\Warning::getUserPercent($this->uid);
-        $WL = Modules\Warning\WarningLevel::getByPercent($percent);
-        return $WL->getAction();
+        global $_CONF;
 
+        $retval = array(
+            'status' => 0,
+            'expires' => 0,
+            'severity' => '',
+            'message' => 'No Restriction',
+        );
         if ($this->isBanned()) {
-            $retval = Status::BAN;
+            $status = Status::BAN;
+            $exp = $this->ban_expires;
+            $retval = array(
+                'status' => Status::BAN,
+                'expires' => $this->ban_expires,
+                'severity' => 'danger',
+                'message' => 'User is banned from the forum',
+            );
         } elseif ($this->isSuspended()) {
-            $retval = Status::SUSPEND;
+            $status = Status::SUSPEND;
+            $exp = $this->suspend_expires;
+            $retval = array(
+                'status' => Status::SUSPEND,
+                'expires' => $this->suspend_expires,
+                'severity' => 'warning',
+                'message' => 'User\'s posting privilege is suspended',
+            );
         } elseif ($this->isModerated()) {
-            $retval = Status::MODERATE;
-        } else {
-            $retval = Status::NONE;
+            $status = Status::MODERATE;
+            $exp = $this->moderate_expires;
+            $retval = array(
+                'status' => Status::MODERATE,
+                'expires' => $this->moderate_expires,
+                'severity' => 'warning',
+                'message' => 'User\'s posts must be moderated',
+            );
+        /*} else {
+            $status = Status::NONE;
+            $exp = 0;*/
         }
+        if ($retval['expires'] > time()) {
+            $dt = new \Date($retval['expires'], $_CONF['timezone']);
+            $retval['message'] .= ' until ' . $dt->toMySQL(true);
+        }
+
         return $retval;
+        /*return array(
+            'status' => $status,
+            'expires' => $exp,
+        );*/
     }
 
 
@@ -233,6 +268,22 @@ class UserInfo
         global $_TABLES;
 
         DB_delete($_TABLES['ff_userinfo'], 'uid', (int)$uid);
+    }
+
+
+    public function getAdminProfileBlock()
+    {
+        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
+        $T->set_file('adm_block', 'user_profile.thtml');
+        foreach (array('ban', 'suspend', 'moderate') as $key) {
+            $property = $key . '_expires';
+            if ($this->$property > 0) {
+                $dt = new \Date($this->$property, $_CONF['timezone']);
+                $T->set_var($property, $dt->format('Y-m-d H:i'));
+            }
+        }
+        $T->parse('output', 'adm_block');
+        return $T->finish($T->get_var('output'));
     }
 
 }
