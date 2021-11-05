@@ -71,6 +71,10 @@ class Warning
      * @var object */
     private $_WT = NULL;
 
+    /** Return URL for redirect after saving or cancelling.
+     * @var string */
+    private $_return_url = '';
+
 
     /**
      * Constructor.
@@ -116,6 +120,12 @@ class Warning
     }
 
 
+    /**
+     * Get the current warning percentage for a user.
+     *
+     * @param   integer $uid    User ID
+     * @return  float       Percentage of maximum warning points
+     */
     public static function getUserPercent(int $uid) : float
     {
         global $_FF_CONF;
@@ -125,6 +135,12 @@ class Warning
     }
 
 
+    /**
+     * Get the raw number of current warning points for a user.
+     *
+     * @param   integer $uid    User ID
+     * @return  integer     Number of currently-active warning points
+     */
     public static function getUserPoints(int $uid) : int
     {
         global $_TABLES;
@@ -165,22 +181,6 @@ class Warning
         } elseif ($U->isModerated()) {
             $retval = Status::MODERATE;
         }
-
-/*        $uid = (int)$uid;
-        $sql = "SELECT * FROM {$_TABLES['ff_userinfo']} WHERE uid = $uid";
-        $res = DB_query($sql);
-        if ($res && DB_numRows($res) == 1) {
-            $A = DB_fetchArray($res, false);
-            $now = time();
-            if ($A['ban_expires'] > $now) {
-                $retval = Status::BAN;
-            } elseif ($A['suspend_expires'] > $now) {
-                $retval = Status::SUSPEND;
-            } elseif ($A['moderate_expires'] > $now) {
-                $retval = Status::MODERATE;
-            }
-        }
- */
         return $retval;
     }
 
@@ -201,6 +201,9 @@ class Warning
         $this->w_topic_id = (int)$A['w_topic_id'];
         $this->w_dscp = $A['w_dscp'];
         $this->w_notes = $A['w_notes'];
+        $this->revoked_by = (int)$A['revoked_by'];
+        $this->revoked_date = (int)$A['revoked_date'];
+        $this->revoked_reason = $A['revoked_reason'];
         if ($from_db) {
             // Extracting json-encoded strings
             $this->w_expires = $A['w_expires'];
@@ -244,6 +247,13 @@ class Warning
     }
 
 
+    public function withReturnUrl(string $url) : self
+    {
+        $this->_return_url = $url;
+        return $this;
+    }
+
+
     /**
      * Get the warning record ID.
      *
@@ -264,6 +274,19 @@ class Warning
     public function withDscp(string $dscp) : self
     {
         $this->w_dscp = $dscp;
+        return $this;
+    }
+
+
+    /**
+     * Set the reason for revoking the warning.
+     *
+     * @param   string  $text   Reason for revoking
+     * @return  object  $this
+     */
+    public function withRevokedReason(string $text) : self
+    {
+        $this->revoked_reason = $text;
         return $this;
     }
 
@@ -338,6 +361,58 @@ class Warning
 
 
     /**
+     * Revoke a warning.
+     *
+     * @return  bool    True on success, False on error
+     */
+    public function Revoke()
+    {
+        global $_TABLES, $_USER;
+
+        $uid = (int)$_USER['uid'];
+        $reason = DB_escapeString($this->revoked_reason);
+        $dt = time();
+        $sql = "UPDATE {$_TABLES['ff_warnings']} SET
+            revoked_date = $dt,
+            revoked_reason = '$reason',
+            revoked_by = $uid
+            WHERE w_id = {$this->w_id}";
+        DB_query($sql);
+        return DB_error() ? false : true;
+    }
+
+
+    /**
+     * Creates the form to view and revoke.
+     *
+     * @return  string      HTML for edit form
+     */
+    public function adminView()
+    {
+        global $_TABLES, $_CONF;
+
+        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warnings/');
+        $T->set_file('editform', 'viewwarning.thtml');
+
+        $T->set_var(array(
+            'w_id'      => $this->w_id,
+            'uid'       => $this->w_uid,
+            'username'  => COM_getDisplayName($this->w_uid),
+            'subject'   => DB_getItem($_TABLES['ff_topic'], 'subject', "id = {$this->w_topic_id}"),
+            'topic_id'  => $this->w_topic_id,
+            'dscp'      => $this->w_dscp,
+            'notes'     => $this->w_notes,
+            'warningtype' => WarningType::getInstance($this->wt_id)->getDscp(),
+            'revoked_reason' => $this->revoked_reason,
+            'return_url' => $this->_return_url,
+        ) );
+        $T->parse('output','editform');
+        return $T->finish($T->get_var('output'));
+    }
+
+
+
+    /**
      * Creates the edit form.
      *
      * @return  string      HTML for edit form
@@ -376,8 +451,10 @@ class Warning
 
     /**
      * Create the list.
+     *
+     * @return  string      HTML for admim list
      */
-    public static function adminList(int $uid=0, bool $activeonly=true)
+    public static function adminList(int $uid=0, bool $activeonly=true) : string
     {
         global $LANG_ADMIN, $_TABLES, $_CONF, $_USER, $LANG_GF01, $LANG_GF93;
 
@@ -496,7 +573,7 @@ class Warning
         case 'edit':
             $retval = FieldList::edit(
                 array(
-                    'url' => $base_url . '?editwarning=' .$A['w_id'],
+                    'url' => $base_url . '?viewwarning=' .$A['w_id'],
                 )
             );
             break;
@@ -576,7 +653,7 @@ class Warning
             $sql1 = "UPDATE {$_TABLES['ff_warnings']} SET ";
             $sql3 = "WHERE w_id = {$this->w_id}";
         } else {
-            $expires = time() + $this->_WT->getDuration();
+            $expires = time() + $this->_WT->getExpirationSeconds();
             $sql1 = "INSERT INTO {$_TABLES['ff_warnings']} SET ";
             $sql3 = '';
         }
@@ -634,6 +711,10 @@ class Warning
         return false;
     }
 
+
+    private function _notifyUser()
+    {
+    }
 
 }
 

@@ -21,9 +21,10 @@ $action = 'listlevels';
 $expected = array(
     // Actions
     'save', 'deletelevel', 'cancel', 'savewarning', 'savetype', 'savelevel',
+    'revokewarning',
     // Views
     'editlevel', 'edittype', 'listlevels', 'listtypes', 'warnuser',
-    'editwarning',
+    'viewwarning',
     'log',
 );
 
@@ -51,8 +52,9 @@ case 'warnuser':
     }
     $W = new Warning;
     $content .= $W->withUid($actionval)
-      ->withTopicId($topic_id)
-      ->Edit();
+                  ->withTopicId($topic_id)
+                  ->withReturnUrl($_SERVER['HTTP_REFERER'])
+                  ->Edit();
     break;
 
 case 'editwarning':
@@ -65,9 +67,15 @@ case 'savewarning':
     $W->Save($_POST);
     break;
 
-case 'delete':
-    Forum\Prefix::Delete($pfx_id);
-    echo COM_refresh($self);
+case 'revokewarning':
+    $content = Warning::getInstance((int)$_POST['w_id'])
+        ->withRevokedReason($_POST['revoked_reason'])
+        ->Revoke();
+    if (isset($_POST['redirect_url']) && !empty($_POST['redirect_url'])) {
+        COM_refresh($_POST['redirect_url']);
+    } else {
+        COM_refresh($self . '?log');
+    }
     break;
 
 case 'delitem':
@@ -79,9 +87,10 @@ case 'delitem':
     echo COM_refresh($self);
     break;
 
-case 'edit':
-    $P = new \Forum\Prefix($pfx_id);
-    $content = $P->Edit();
+case 'viewwarning':
+    $content .= Warning::getInstance($actionval)
+        ->withReturnUrl($_SERVER['HTTP_REFERER'])
+        ->adminView();
     break;
 
 case 'savelevel':
@@ -126,14 +135,13 @@ case 'log':
     if ($actionval > 1) {
         $points = Warning::getUserPoints($actionval);
         $status = Forum\UserInfo::getInstance($actionval)->getForumStatus();
-        $sev = Status::getSeverity($status);
         $T->set_var(array(
             'username' => COM_getDisplayName($actionval),
             'points' => $points,
             'percent' => Warning::getUserPercent($actionval),
             'status' => $status,
-            'status_cls' => $sev['severity'],
-            'status_msg' => $sev['message'],
+            'status_cls' => $status['severity'],
+            'status_msg' => $status['message'],
         ) );
     }
     $T->set_var('admin_list', Warning::adminList((int)$actionval, false));

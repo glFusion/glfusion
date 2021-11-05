@@ -44,6 +44,9 @@ class Status
     );
 
 
+    private $status = 0;
+    private $expiration = 0;
+
     /**
      * Get a descriptive string related to the action.
      * Used to index into language files.
@@ -80,28 +83,53 @@ class Status
 
     public static function getSeverity($key) : array
     {
-        if (!is_integer($key)) {
-            var_dump(debug_backtrace(0));die;
-        }
+        global $_CONF;
+
         $retval = array(
             'severity' => '',
             'message' => 'No restriction',
         );
+        if (isset($key['expires']) && $key['expires'] > time()) {
+            $dt = new \Date($key['expires'], $_CONF['timezone']);
+            $dt_str = ' until ' . $dt->toMySQL(true);
+        } else {
+            $dt_str = '';
+        }
         if ($key >= self::BAN) {
             $retval = array(
                 'severity' => 'danger',
-                'message' => 'User is banned from the forum.',
+                'message' => 'User is banned from the forum' . $dt_str,
             );
         } elseif ($key >= self::SUSPEND) {
             $retval = array(
                 'severity' => 'warning',
-                'message' => 'User\'s posting permission is suspended.',
+                'message' => 'User\'s posting permission is suspended' . $dt_str,
             );
         } elseif ($key >= self::MODERATE) {
             $retval = array(
                 'severity' => 'warning',
-                'message' => 'User\'s forum posts are moderated.',
+                'message' => 'User\'s forum posts are moderated' . $dt_str,
             );
+        }
+        return $retval;
+    }
+
+
+    /**
+     * Get the option elements for a selection list.
+     *
+     * @param   integer $sel    Currently-selected option
+     * @return  string      HTML for options
+     */
+    public static function getOptionList(?int $sel=0) : string
+    {
+        $retval = '';
+        foreach (self::$keys as $key=>$tag) {
+            $retval .= '<option value="' . $key . '"';
+            if ($sel == $key) {
+                $retval .= ' selected="selected"';
+            }
+            $retval .= '>' . ucfirst($tag) . '</option>' . LB;
         }
         return $retval;
     }
