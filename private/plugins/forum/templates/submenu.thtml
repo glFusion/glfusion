@@ -1,0 +1,16 @@
+{# begin {templatelocation} #}
+<ul class="uk-subnav uk-subnav-pill">
+<!-- BEGIN menuItems -->
+{!if active}
+    <li class="uk-active">
+{!else}
+    <li>
+{!endif}
+        {url}
+    </li>
+<!-- END menuItems -->
+</ul>
+{!if help}
+<div class="uk-alert">{help}</div>
+{!endif}
+{# end {templatelocation} #}
