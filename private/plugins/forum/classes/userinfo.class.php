@@ -273,6 +273,8 @@ class UserInfo
 
     public function getAdminProfileBlock()
     {
+        global $_CONF;
+
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('adm_block', 'user_profile.thtml');
         foreach (array('ban', 'suspend', 'moderate') as $key) {
