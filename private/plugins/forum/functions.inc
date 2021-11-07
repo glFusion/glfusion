@@ -1392,7 +1392,10 @@ function plugin_profileedit_forum($uid,$panel,$fieldset)
         $usersettings->set_var('wysiwyg_select','');
     }
 
-    if ($_FF_CONF['warning_enabled'] && SEC_inGroup('root')) {
+    if (
+        Forum\Modules\Warning\Warning::featureEnabled()
+        && SEC_inGroup('root')
+    ) {
         $usersettings->set_var(
             'warning_admin',
             Forum\UserInfo::getInstance($uid)->getAdminProfileBlock()

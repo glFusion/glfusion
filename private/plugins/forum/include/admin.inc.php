@@ -37,7 +37,7 @@ $navbarMenu = array(
     $LANG_GF06['11']  => $_CONF['site_admin_url'] .'/plugins/forum/badges.php',
     $LANG_GF06['12']  => $_CONF['site_admin_url'] .'/plugins/forum/ranks.php',
 );
-if ( $_FF_CONF['warning_enabled'] ) {
+if (\Forum\Modules\Warning\Warning::featureEnabled()) {
     $navbarMenu['Warnings'] = $_CONF['site_admin_url'] .'/plugins/forum/warnings.php';
 }
 if ( $_FF_CONF['enable_user_rating_system'] ) {
@@ -61,7 +61,7 @@ function FF_adminNav( $selected = '' )
         $LANG_GF06['11']  => $_CONF['site_admin_url'] .'/plugins/forum/badges.php',
         $LANG_GF06['12']  => $_CONF['site_admin_url'] .'/plugins/forum/ranks.php',
     );
-    if ( $_FF_CONF['warning_enabled'] ) {
+    if (Forum\Modules\Warning\Warning::featureEnabled()) {
         $navbarMenu['Warnings'] = $_CONF['site_admin_url'] .'/plugins/forum/warnings.php';
     }
     if ( $_FF_CONF['enable_user_rating_system'] ) {

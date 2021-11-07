@@ -121,6 +121,20 @@ class Warning
 
 
     /**
+     * Check if the warning feature is enabled.
+     * This abstracts the config variable.
+     *
+     * @return  boolean     True if enabled, False if not
+     */
+    public static function featureEnabled() : bool
+    {
+        global $_FF_CONF;
+
+        return (isset($_FF_CONF['warning_enabled']) && $_FF_CONF['warning_enabled']);
+    }
+
+
+    /**
      * Get the current warning percentage for a user.
      *
      * @param   integer $uid    User ID
@@ -602,7 +616,7 @@ class Warning
         case 'w_expires':
             $dt = new \Date($fieldvalue, $_CONF['timezone']);
             $retval .= $dt->toMySql(true);
-            if ($fieldvalue < time()) {
+            if ($fieldvalue < time() || $A['revoked_by'] > 0) {
                 $retval = '<span style="background-color:lightgrey;">' . $retval . '</span>';
             }
             break;
