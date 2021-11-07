@@ -36,7 +36,7 @@
 			<button type="reset" class="uk-button">{$LANG_GF01['reset']}</button>
 			<button type="submit" class="uk-button uk-button-danger" name="deletetype" value="{$LANG_ADMIN['delete']}"
 			onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');">{$LANG_ADMIN['delete']}</button>
-			<button type="submit" class="uk-button uk-button-primary" name="cancel" value="{$LANG_ADMIN['cancel']}">{$LANG_ADMIN['cancel']}</button>
+			<a class="uk-button uk-button-primary" href="{site_admin_url}/plugins/forum/warnings.php?listtypes">{$LANG_ADMIN['cancel']}</a>
 		</div>
 	</div>
 
