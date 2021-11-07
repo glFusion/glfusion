@@ -124,13 +124,11 @@ case 'listtypes':
     break;
 
 case 'edittype':
-    $WT = WarningType::getInstance((int)$actionval);
-    $content .= $WT->Edit();
+    $content .= WarningType::getInstance((int)$actionval)->Edit();
     break;
 
 case 'editlevel':
-    $WL = WarningLevel::getInstance((int)$actionval);
-    $content .= $WL->Edit();
+    $content .= WarningLevel::getInstance((int)$actionval)->Edit();
     break;
 
 case 'log':
@@ -140,6 +138,7 @@ case 'log':
         $points = Warning::getUserPoints($actionval);
         $status = Forum\UserInfo::getInstance($actionval)->getForumStatus();
         $T->set_var(array(
+            'uid' => $actionval,
             'username' => COM_getDisplayName($actionval),
             'points' => $points,
             'percent' => Warning::getUserPercent($actionval),
