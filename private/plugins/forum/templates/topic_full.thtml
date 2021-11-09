@@ -337,7 +337,7 @@
 {!if warn_level}
 										<div>
 											<a class="uk-text-danger" href="{site_admin_url}/plugins/forum/warnings.php?log={topic_uid}">
-												Warning Level: {warn_level}%
+												{$LANG_GF01['warning_level']}: {warn_level}%
 											</a>
 										</div>
 {!endif}

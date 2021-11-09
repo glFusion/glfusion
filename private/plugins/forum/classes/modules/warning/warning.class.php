@@ -408,6 +408,7 @@ class Warning
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('editform', 'viewwarning.thtml');
 
+        $dt = new \Date($this->w_expires, $_CONF['timezone']);
         $T->set_var(array(
             'w_id'      => $this->w_id,
             'uid'       => $this->w_uid,
@@ -419,6 +420,7 @@ class Warning
             'warningtype' => WarningType::getInstance($this->wt_id)->getDscp(),
             'revoked_reason' => $this->revoked_reason,
             'return_url' => $this->_return_url,
+            'expiration' => $dt->format('Y-m-d H:i', true),
         ) );
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
@@ -480,37 +482,37 @@ class Warning
 
         $header_arr = array(
             array(
-                'text'  => 'Description',
+                'text'  => $LANG_GF01['dscp'],
                 'field' => 'wt_dscp',
                 'sort'  => true,
                 'align' => 'left',
             ),
             array(
-                'text'  => 'Points',
+                'text'  => $LANG_GF01['points'],
                 'field' => 'w_points',
                 'sort'  => true,
                 'align' => 'left',
             ),
             array(
-                'text'  => 'Issued',
+                'text'  => $LANG_GF01['issued'],
                 'field' => 'ts',
                 'sort'  => true,
                 'align' => 'left',
             ),
             array(
-                'text'  => 'Expires',
+                'text'  => $LANG_GF01['expires'],
                 'field' => 'w_expires',
                 'sort'  => true,
                 'align' => 'left',
             ),
             array(
-                'text'  => 'Issued By',
+                'text'  => $LANG_GF01['issued_by'],
                 'field' => 'w_issued_by',
                 'sort'  => true,
                 'align' => 'left',
             ),
             array(
-                'text'  => 'status',
+                'text'  => $LANG_GF01['status'],
                 'field' => 'status',
                 'sort'  => false,
                 'align' => 'left',
@@ -531,7 +533,7 @@ class Warning
 
         if ($uid < 2) {
             array_unshift($header_arr, array(
-                'text'  => 'User Name',
+                'text'  => $LANG_GF01['username'],
                 'field' => 'w_uid',
                 'sort'  => true,
                 'align' => 'left',
@@ -540,9 +542,13 @@ class Warning
 
         $options = array('chkdelete' => 'true', 'chkfield' => 'w_id');
         $defsort_arr = array('field' => 'w_expires', 'direction' => 'ASC');
-        $sql = "SELECT w.*, wt.wt_dscp FROM {$_TABLES['ff_warnings']} w
+        $sql = "SELECT w.*, wt.wt_dscp, u.username, u.fullname
+            FROM {$_TABLES['ff_warnings']} w
             LEFT JOIN {$_TABLES['ff_warningtypes']} wt
-            ON wt.wt_id = w.wt_id WHERE 1=1";
+            ON wt.wt_id = w.wt_id
+            LEFT JOIN {$_TABLES['users']} u
+            ON u.uid = w.w_uid
+            WHERE 1=1";
         if ($uid > 1) {
             $sql .= " AND w_uid = $uid";
         }
@@ -551,10 +557,10 @@ class Warning
         }
         $query_arr = array('table' => 'ff_warnings',
             'sql' => $sql,
-            'query_fields' => array('w_dscp'),
+            'query_fields' => array('w_dscp', 'fullname', 'username'),
         );
         $text_arr = array(
-            //'has_extras' => true,
+            'has_extras' => true,
             'form_url' => $_CONF['site_admin_url'] . '/plugins/forum/warnings.php?log=' . $uid,
         );
 
@@ -605,7 +611,7 @@ class Warning
             break;
 
         case 'w_issued_by':
-            $retval .= COM_getDisplayName($fieldvalue);
+            $retval .= COM_getDisplayName($fieldvalue, $A['username'], $A['fullname']);
             break;
 
         case 'ts':
@@ -623,11 +629,11 @@ class Warning
 
         case 'status':
             if ($A['revoked_by'] > 0) {
-                $retval .= 'Revoked by ' . COM_getDisplayName($A['revoked_by']);
+                $retval .= $LANG_GF01['revoked_by'] . ' '  . COM_getDisplayName($A['revoked_by']);
             } elseif ($A['w_expires'] < time()) {
-                $retval .= 'Expired';
+                $retval .= $LANG_GF01['expired'];
             } else {
-                $retval .= 'Active';
+                $retval .= $LANG_GF01['active'];
             }
             break;
 

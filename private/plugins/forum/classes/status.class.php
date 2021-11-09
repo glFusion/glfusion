@@ -83,11 +83,11 @@ class Status
 
     public static function getSeverity($key) : array
     {
-        global $_CONF;
+        global $_CONF, $LANG_GF01;
 
         $retval = array(
             'severity' => '',
-            'message' => 'No restriction',
+            'message' => $LANG_GF01['no_restriction'],
         );
         if (isset($key['expires']) && $key['expires'] > time()) {
             $dt = new \Date($key['expires'], $_CONF['timezone']);
@@ -98,17 +98,17 @@ class Status
         if ($key >= self::BAN) {
             $retval = array(
                 'severity' => 'danger',
-                'message' => 'User is banned from the forum' . $dt_str,
+                'message' => $LANG_GF01['user_banned'] . $dt_str,
             );
         } elseif ($key >= self::SUSPEND) {
             $retval = array(
                 'severity' => 'warning',
-                'message' => 'User\'s posting permission is suspended' . $dt_str,
+                'message' => $LANG_GF01['user_suspended'] . $dt_str,
             );
         } elseif ($key >= self::MODERATE) {
             $retval = array(
                 'severity' => 'warning',
-                'message' => 'User\'s forum posts are moderated' . $dt_str,
+                'message' => $LANG_GF01['user_moderated'] . $dt_str,
             );
         }
         return $retval;

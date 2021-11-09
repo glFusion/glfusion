@@ -20,194 +20,6 @@ namespace Forum;
  */
 class Menu
 {
-    /**
-     * Create the user menu.
-     *
-     * @param   string  $view   View being shown, so set the help text
-     * @return  string      Administrator menu
-     */
-    public static function User($view='')
-    {
-        global $_CONF, $LANG_SHOP;
-
-        USES_lib_admin();
-
-        $hdr_txt = SHOP_getVar($LANG_SHOP, 'user_hdr_' . $view);
-        $menu_arr = array(
-            array(
-                'url'  => SHOP_URL . '/index.php',
-                'text' => $LANG_SHOP['back_to_catalog'],
-            ),
-            array(
-                'url'  => COM_buildUrl(SHOP_URL . '/account.php?mode=orderhist'),
-                'text' => $LANG_SHOP['purchase_history'],
-                'active' => $view == 'orderhist' ? true : false,
-            ),
-            array(
-                'url' => COM_buildUrl(SHOP_URL . '/account.php?mode=addresses'),
-                'text' => $LANG_SHOP['addresses'],
-                'active' => $view == 'addresses' ? true : false,
-            ),
-        );
-
-        // Show the Gift Cards menu item only if enabled.
-        if (Config::get('gc_enabled')) {
-            $active = $view == 'couponlog' ? true : false;
-            $menu_arr[] = array(
-                'url'  => COM_buildUrl(SHOP_URL . '/account.php?mode=couponlog'),
-                'text' => $LANG_SHOP['gc_activity'],
-                'active' => $active,
-                'link_admin' => plugin_ismoderator_forum(),
-            );
-        }
-
-        // Show the Affiliate Sales item only if enabled.
-        if (Config::get('aff_enabled')) {
-            $menu_arr[] = array(
-                'url' => COM_buildUrl(SHOP_URL . '/affiliate.php'),
-                'text' => $LANG_SHOP['affiliates'],
-                'active' => $view == 'affiliate' ? true : false,
-            );
-        }
-        
-        return \ADMIN_createMenu($menu_arr, $hdr_txt);
-    }
-
-
-    /**
-     * Create the administrator menu.
-     *
-     * @param   string  $view   View being shown, so set the help text
-     * @return  string      Administrator menu
-     */
-    public static function Admin($view='')
-    {
-        global $_CONF, $LANG_ADMIN, $LANG_SHOP;
-
-        USES_lib_admin();
-        if (isset($LANG_SHOP['admin_hdr_' . $view]) &&
-            !empty($LANG_SHOP['admin_hdr_' . $view])) {
-            $hdr_txt = $LANG_SHOP['admin_hdr_' . $view];
-        } else {
-            $hdr_txt = '';
-        }
-
-        $menu_arr = array(
-            array(
-                'url' => SHOP_ADMIN_URL . '/index.php?products',
-                'text' => $LANG_SHOP['catalog'],
-                'active' => $view == 'products' ? true : false,
-            ),
-            array(
-                'url' => SHOP_ADMIN_URL . '/orders.php',
-                'text' => $LANG_SHOP['orders'],
-                'active' => $view == 'orders' || $view == 'shipments' ? true : false,
-            ),
-            array(
-                'url'  => SHOP_ADMIN_URL . '/index.php?shipping=x',
-                'text' => $LANG_SHOP['shipping'],
-                'active' => $view == 'shipping' ? true : false,
-            ),
-            array(
-                'url'  => SHOP_ADMIN_URL . '/gateways.php',
-                'text' => $LANG_SHOP['gateways'],
-                'active' => $view == 'gwadmin' ? true : false,
-            ),
-            array(
-                'url'  => SHOP_ADMIN_URL . '/index.php?wfadmin=x',
-                'text' => $LANG_SHOP['mnu_wfadmin'],
-                'active' => $view == 'wfadmin' ? true : false,
-            ),
-            array(
-                'url'  => SHOP_ADMIN_URL . '/report.php',
-                'text' => $LANG_SHOP['reports'],
-                'active' => $view == 'reports' ? true : false,
-            ),
-            array(
-                'url'  => SHOP_ADMIN_URL . '/regions.php',
-                'text' => $LANG_SHOP['regions'],
-                'active' => $view == 'regions' ? true : false,
-            ),
-            array(
-                'url'  => SHOP_ADMIN_URL . '/index.php?other=x',
-                'text' => $LANG_SHOP['other_func'],
-                'active' => $view == 'other' ? true : false,
-            ),
-        );
-        if (Config::get('aff_enabled')) {
-            $menu_arr[] = array(
-                'url' => SHOP_ADMIN_URL . '/affiliates.php',
-                'text' => $LANG_SHOP['affiliates'],
-                'active' => $view == 'affiliates' ? true : false,
-            );
-        }
-        $menu_arr[] = array(
-            'url'  => $_CONF['site_admin_url'],
-            'text' => $LANG_ADMIN['admin_home'],
-        );
-
-        $T = new Template;
-        $T->set_file('title', 'forum_title.thtml');
-        $T->set_var(array(
-            'title' => $LANG_SHOP['admin_title'] . ' (' . Config::get('pi_version') . ')',
-            'link_store' => true,
-            'icon'  => plugin_geticon_forum(),
-            'is_admin' => true,
-            'link_catalog' => true,
-        ) );
-        $todo_arr = self::AdminTodo();
-        if (!empty($todo_arr)) {
-            $todo_list = '';
-            foreach ($todo_arr as $item_todo) {
-                $todo_list .= "<li>$item_todo</li>" . LB;
-            }
-            $T->set_var('todo', '<ul>' . $todo_list . '</ul>');
-        }
-        $retval = $T->parse('', 'title');
-        $retval .= \ADMIN_createMenu(
-            $menu_arr,
-            $hdr_txt,
-            plugin_geticon_forum()
-        );
-        return $retval;
-    }
-
-
-    /**
-     * Create the administrator sub-menu for the Region option.
-     *
-     * @param   string  $view   View being shown, so set the help text
-     * @return  string      Administrator menu
-     */
-    public static function adminRegions($view='')
-    {
-        global $LANG_SHOP;
-
-        $menu_arr = array(
-            array(
-                'url'  => SHOP_ADMIN_URL . '/regions.php?regions',
-                'text' => $LANG_SHOP['regions'],
-                'active' => $view == 'regions' ? true : false,
-            ),
-            array(
-                'url'  => SHOP_ADMIN_URL . '/regions.php?countries',
-                'text' => $LANG_SHOP['countries'],
-                'active' => $view == 'countries' ? true : false,
-            ),
-            array(
-                'url'  => SHOP_ADMIN_URL . '/regions.php?states',
-                'text' => $LANG_SHOP['states'],
-                'active' => $view == 'states' ? true : false,
-            ),
-            array(
-                'url'  => SHOP_ADMIN_URL . '/rules.php',
-                'text' => $LANG_SHOP['rules'],
-                'active' => $view == 'rules' ? true : false,
-            ),
-        );
-        return self::_makeSubMenu($menu_arr);
-    }
-
 
     /**
      * Create the administrator sub-menu for the Catalog option.
@@ -217,22 +29,22 @@ class Menu
      */
     public static function adminWarnings($view='')
     {
-        global $_CONF;
+        global $_CONF, $LANG_GF01;
 
         $menu_arr = array(
             array(
                 'url'  => $_CONF['site_admin_url'] . '/plugins/forum/warnings.php?listlevels',
-                'text' => 'Warning Levels',
+                'text' => $LANG_GF01['warning_levels'],
                 'active' => $view == 'listlevels' ? true : false,
             ),
             array(
                 'url' => $_CONF['site_admin_url'] . '/plugins/forum/warnings.php?listtypes',
-                'text' => 'Warning Types',
+                'text' => $LANG_GF01['warning_types'],
                 'active' => $view == 'listtypes' ? true : false,
             ),
             array(
                 'url' => $_CONF['site_admin_url'] . '/plugins/forum/warnings.php?log',
-                'text' => 'Log',
+                'text' => $LANG_GF01['log'],
                 'active' => $view == 'log' ? true : false,
             ),
         );

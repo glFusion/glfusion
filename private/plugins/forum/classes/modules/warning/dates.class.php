@@ -63,9 +63,7 @@ class Dates
         $parts = array();
         $arr = self::secondsToParts($seconds);
         foreach ($arr as $period=>$num) {
-            if ($num > 0) {
-                $parts[] = $num . ' ' . ucfirst($period) . '(s)';
-            }
+            $parts[] = $num . ' ' . self::getDscp($num, $period);
         }
         return implode(', ', $parts);
     }
@@ -98,6 +96,8 @@ class Dates
      */
     public static function getOptionList(?string $sel='day') : string
     {
+        global $LANG_GF01;
+
         $durations = array_reverse(self::$durations);
         $retval = '';
         foreach ($durations as $key=>$seconds) {
@@ -105,9 +105,22 @@ class Dates
             if ($sel == $key) {
                 $retval .= ' selected="selected"';
             }
-            $retval .= '>' . ucfirst($key) . '</option>' . LB;
+            $retval .= '>' . $LANG_GF01[$key] . '</option>' . LB;
         }
         return $retval;
+    }
+
+
+
+    public static function getDscp(int $num, string $period) : string
+    {
+        global $LANG_GF01;
+
+        $retval = '';
+        if ($num > 1) {
+            $retval = $period .= 's';
+        }
+        return $LANG_GF01[$period];
     }
 
 }

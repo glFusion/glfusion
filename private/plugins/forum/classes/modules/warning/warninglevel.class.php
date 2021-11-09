@@ -239,7 +239,7 @@ class WarningLevel
      */
     public function Edit()
     {
-        global $_TABLES, $_CONF;
+        global $_TABLES, $_CONF, $LANG_GF01;
 
         $db = Database::getInstance();
 
@@ -253,6 +253,7 @@ class WarningLevel
             'period_sel_' . $this->wl_duration_period => 'selected="selected"',
             'period_options' => Dates::getOptionList($this->wl_duration_period),
             'action_options' => Status::getOptionList($this->wl_action),
+            'lang_edit' => $this->wl_id > 0 ? $LANG_GF01['EDIT'] : $LANG_GF01['create_new'],
         ) );
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
@@ -280,19 +281,19 @@ class WarningLevel
                 'align' => 'center',
             ),
             array(
-                'text'  => 'Percent',
+                'text'  => $LANG_GF01['percent'],
                 'field' => 'wl_pct',
                 'align' => 'right',
                 'sort'  => true,
             ),
             array(
-                'text'  => 'Action',
+                'text'  => $LANG_GF01['action'],
                 'field' => 'wl_action',
                 'sort'  => false,
                 'align' => 'left',
             ),
             array(
-                'text'  => 'Length',
+                'text'  => $LANG_GF01['expires_after'],
                 'field' => 'wl_duration',
                 'sort'  => false,
                 'align' => 'left',
@@ -372,7 +373,7 @@ class WarningLevel
             break;
 
         case 'wl_duration':
-            $retval .= 'For ' . Dates::secondsToDscp($fieldvalue);
+            $retval .= $A['wl_duration_qty'] . ' ' . Dates::getDscp($A['wl_duration_qty'], $A['wl_duration_period']);
             break;
 
         default:

@@ -226,7 +226,7 @@ class WarningType
      */
     public function Edit()
     {
-        global $_TABLES, $_CONF;
+        global $_TABLES, $_CONF, $LANG_GF01;
 
         $db = Database::getInstance();
 
@@ -239,6 +239,7 @@ class WarningType
             'wt_dscp'   => $this->wt_dscp,
             'wt_expires_qty' => $this->wt_expires_qty,
             'sel_' . $this->wt_expires_period => 'selected="selected"',
+            'lang_edit' => $this->wt_id > 0 ? $LANG_GF01['EDIT'] : $LANG_GF01['create_new'],
         ) );
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
@@ -272,19 +273,19 @@ class WarningType
                 'sort'  => true,
             ),
             array(
-                'text'  => 'Description',
+                'text'  => $LANG_GF01['dscp'],
                 'field' => 'wt_dscp',
                 'sort'  => false,
                 'align' => 'left',
             ),
             array(
-                'text'  => 'Points',
+                'text'  => $LANG_GF01['points'],
                 'field' => 'wt_points',
                 'align' => 'right',
                 'sort'  => true,
             ),
             array(
-                'text'  => 'Expires After',
+                'text'  => $LANG_GF01['expires_after'],
                 'field' => 'wt_expires',
                 'align' => 'left',
                 'sort'  => false,
@@ -354,7 +355,7 @@ class WarningType
             break;
 
         case 'wt_expires':
-            $retval .= $A['wt_expires_qty'] . ' ' . ucfirst($A['wt_expires_period']) . '(s)';
+            $retval .= $A['wt_expires_qty'] . ' ' . Dates::getDscp($A['wt_expires_qty'], $A['wt_expires_period']);
             break;
 
         default:
