@@ -117,9 +117,10 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
                 'LANG_edit' => ''));
     }
 
-//    if ( $query != '' ) {
-//        $showtopic['subject'] = COM_highlightQuery($showtopic['subject'],$query);
-//    }
+    if ( $query != '' ) {
+        $disp_subject = COM_highlightQuery($disp_subject,$query);
+        $showtopic['comment'] = COM_highlightQuery($showtopic['comment'], $this->_query);
+    }
 
     if ($showtopic['pid'] == 0) {
         $replytopicid = $showtopic['id'];

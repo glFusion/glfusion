@@ -176,7 +176,7 @@
 							<div class="uk-width-medium-8-10 uk-width-small-10-10" style="padding-right:10px;">
 								<div class="uk-align-leftXX uk-text-left uk-text-large uk-margin-bottom-remove uk-text-truncate">
 									<a href="{site_url}/forum/viewtopic.php?showtopic={topic_id}" title="{subject}" {tooltip}>{prefix}
-										<span itemprop="headline">{subject}</span>
+										<span itemprop="headline">{disp_subject}</span>
 									</a>
 								</div>
 							<div class="forum_author_line uk-margin-bottom">
