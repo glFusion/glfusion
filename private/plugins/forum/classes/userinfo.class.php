@@ -58,17 +58,33 @@ class UserInfo
      * @var array() */
     private static $cache = array();
 
-
+    /** Timestamp when the posting suspension expires.
+     * @var integer */
     private $suspend_expires = 0;
+
+    /** Timestamp when the forum ban expires.
+     * @var integer */
     private $ban_expires = 0;
+
+    /** Timestamp when the post moderation requirement expires.
+     * @var integer */
     private $moderate_expires = 0;
+
+    /** The status text to be shown to the user if banned, suspended, etc.
+     * @var string */
+    private $_user_status_msg = '';
+
+    /** Flag to indicate that the user's IP address is banned.
+     * @var boolean */
+    private $_is_banned_ip = false;
+
 
     /**
      * Constructor.
      * Sets the field values from the supplied array, or reads the record
-     * if $A is a badge ID.
+     * if $A is a user ID.
      *
-     * @param   mixed   $A  Array of properties or group ID
+     * @param   mixed   $A  Array of properties or usr ID
      */
     public function __construct($A='')
     {
@@ -82,14 +98,23 @@ class UserInfo
 
 
     /**
-     * Read a single badge record into an instantiated object.
+     * Read a single user record into the object.
      *
-     * @param   integer $fb_id  Badge record ID
+     * @param   integer $uid    User record ID
      * @return  boolean     True on success, False on error or not found
      */
     public function Read(int $uid) : bool
     {
         global $_TABLES;
+
+        $status = DB_count(
+            $_TABLES['ff_banned_ip'],
+            'host_ip',
+            DB_escapeString($_SERVER['REAL_ADDR'])
+        );
+        if ($status > 0) {
+            $this->_is_banned_ip = true;
+        }
 
         $sql = "SELECT * FROM {$_TABLES['ff_userinfo']}
                 WHERE uid = " . (int)$uid;
@@ -121,6 +146,12 @@ class UserInfo
     }
 
 
+    /**
+     * Get an instance of a user record.
+     *
+     * @param   integer $uid    User ID
+     * @return  object  UserInfo object
+     */
     public static function getInstance(int $uid) : self
     {
         static $cache = array();
@@ -133,19 +164,30 @@ class UserInfo
     }
 
 
+    /**
+     * Get the user's record ID.
+     *
+     * @return  integer     User ID
+     */
+    public function getUid() : int
+    {
+        return (int)$this->uid;
+    }
+
+
     public function getBanExpiration() : int
     {
-        return 0;
+        return (int)$this->ban_expires;
     }
 
     public function getModerationExpiration() : int
     {
-        return 0;
+        return (int)$this->moderate_expires;
     }
 
     public function getSuspensionExpiration() : int
     {
-        return 0;
+        return (int)$this->supend_expires;
     }
 
 
@@ -156,10 +198,17 @@ class UserInfo
      * @param   integer $ts     Timestamp to check
      * @return  boolean     True if not expired, False otherwise
      */
-    private static function _isActive($ts) : bool
+    private function _isActive($ts) : bool
     {
-        if ($ts == -1 || $ts > time()) {
-            // Never expires, or expires in the future
+        global $_CONF;
+
+        if ($ts == -1) {
+            // Never expires
+            return true;
+        } elseif ($ts > time()) {
+            // Expires in the future
+            $dt = new \Date($ts, $_CONF['timezone']);
+            $this->_user_expires_msg = ' until ' . $dt->format($_CONF['date']);
             return true;
         } else {
             // Expired or never set
@@ -176,7 +225,14 @@ class UserInfo
      */
     public function isBanned() : bool
     {
-        return self::_isActive($this->ban_expires);
+        global $LANG_GF02;
+
+        $status = $this->_is_banned_ip || $this->_isActive($this->ban_expires);
+        if ($status) {
+            $this->_user_status_msg = 'Sorry, you have been banned from the forum' .
+                $this->_user_expires_msg . '.';
+        }
+        return $status;
     }
 
 
@@ -188,7 +244,7 @@ class UserInfo
      */
     public function isModerated() : bool
     {
-        return self::_isActive($this->moderate_expires);
+        return $this->_isActive($this->moderate_expires);
     }
 
 
@@ -200,10 +256,40 @@ class UserInfo
      */
     public function isSuspended() : bool
     {
-        return self::_isActive($this->suspend_expires);
+        $status = $this->_isActive($this->suspend_expires);
+        if ($status) {
+            $this->_user_status_msg = 'Sorry, You have suspended from making entries' .
+                $this->_user_expires_msg . '.';
+        }
+        return $status;
     }
 
 
+    /**
+     * Get the message text to show the user regarding bans and suspensions.
+     *
+     * @param   boolean $format     True to format the message in an alert
+     * @return  string      HTML to show the user
+     */
+    public function getUserStatusMsg(?bool $format=false) : string
+    {
+        global $_CONF, $LANG_GF02;
+
+        $display = $this->_user_status_msg;
+        if ($format) {
+            $display = '<div class="uk-alert uk-alert-danger">' . $display . '<br />' .
+                sprintf ($LANG_GF02['msg15'],$_CONF['site_mail']) .
+                '</div>';
+        }
+        return $display;
+    }
+
+
+    /**
+     * Returns an array of format status information for the user.
+     *
+     * @return  array       Array of status info
+     */
     public function getForumStatus() : array
     {
         global $_CONF;
@@ -259,7 +345,7 @@ class UserInfo
 
 
     /**
-     * Delete a single badge record. Does not delete the image.
+     * Delete a single user record.
      *
      * @param   integer $uid    User ID
      */
@@ -271,7 +357,12 @@ class UserInfo
     }
 
 
-    public function getAdminProfileBlock()
+    /**
+     * Get user information to be shown to administrators in the profile block.
+     *
+     * @return  string      HTML to add to the profile block
+     */
+    public function getAdminProfileBlock() : string
     {
         global $_CONF;
 
