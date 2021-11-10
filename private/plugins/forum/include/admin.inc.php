@@ -47,7 +47,7 @@ if ( $_FF_CONF['enable_user_rating_system'] ) {
 
 function FF_adminNav( $selected = '' )
 {
-    global $_CONF, $_FF_CONF, $LANG_GF06, $LANG_ADMIN;
+    global $_CONF, $_FF_CONF, $LANG_GF01, $LANG_GF06, $LANG_ADMIN;
 
     $menu_arr = array();
 
