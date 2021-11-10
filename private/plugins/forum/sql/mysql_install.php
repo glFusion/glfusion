@@ -99,6 +99,7 @@ $_SQL['ff_topic'] = "CREATE TABLE {$_TABLES['ff_topic']} (
   moved tinyint(1) NOT NULL default '0',
   locked tinyint(1) NOT NULL default '0',
   status int(10) unsigned NOT NULL default '0',
+  approved tinyint(1) unsigned NOT NULL default '1',
   PRIMARY KEY  (id),
   KEY `forum_idx` (`forum`),
   KEY `idxtopicuid` (`uid`),
@@ -192,6 +193,9 @@ $_SQL['ff_userinfo'] = "CREATE TABLE {$_TABLES['ff_userinfo']} (
   `interests` varchar(255) NOT NULL default '',
   `occupation` varchar(255) NOT NULL default '',
   `signature` mediumtext,
+  `ban_expires` int(11) NOT NULL default '0',
+  `suspend_expires` int(11) NOT NULL default '0',
+  `moderate_expires` int(11) NOT NULL default '0',
   PRIMARY KEY  (`uid`)
 ) ENGINE=MyISAM COMMENT='Forum Extra User Profile Information';";
 
@@ -275,6 +279,54 @@ $_SQL['ff_likes_assoc'] = "CREATE TABLE `{$_TABLES['ff_likes_assoc']}` (
   KEY `poster_id` (`poster_id`)
 ) ENGINE=MyISAM;";
 
+#
+# Table structures for table 'forum_warnings'
+#
+$_SQL['ff_warnings'] = "CREATE TABLE `{$_TABLES['ff_warnings']}` (
+  `w_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `w_uid` int(11) unsigned NOT NULL DEFAULT 0,
+  `wt_id` int(11) unsigned NOT NULL DEFAULT 0,
+  `w_topic_id` int(1) unsigned NOT NULL DEFAULT 0,
+  `w_dscp` varchar(120) NOT NULL DEFAULT '',
+  `ts` int(11) unsigned NOT NULL DEFAULT 0,
+  `w_points` int(5) unsigned NOT NULL DEFAULT 0,
+  `w_expires` int(11) unsigned NOT NULL DEFAULT 0,
+  `w_issued_by` int(11) unsigned NOT NULL DEFAULT 0,
+  `revoked_date` int(11) unsigned NOT NULL DEFAULT 0,
+  `revoked_by` int(11) unsigned NOT NULL DEFAULT 0,
+  `revoked_reason` varchar(255) NOT NULL DEFAULT '',
+  `w_notes` text NOT NULL DEFAULT '',
+  PRIMARY KEY (`w_id`),
+  KEY `uid_expires` (`w_uid`,`w_expires`)
+) ENGINE=MyISAM;";
+
+#
+# Table structures for table 'forum_warnings'
+#
+$_SQL['ff_warningtypes'] = "CREATE TABLE `{$_TABLES['ff_warningtypes']}` (
+  `wt_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `wt_dscp` varchar(120) NOT NULL DEFAULT '',
+  `wt_points` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `wt_expires_seconds` int(10) unsigned NOT NULL DEFAULT 86400,
+  `wt_expires_qty` int(5) unsigned NOT NULL DEFAULT 1,
+  `wt_expires_period` varchar(7) NOT NULL DEFAULT 'day',
+  PRIMARY KEY (`wt_id`)
+) ENGINE=MyISAM;";
+
+#
+# Table structures for table 'forum_warnings'
+#
+$_SQL['ff_warninglevels'] = "CREATE TABLE `{$_TABLES['ff_warninglevels']}` (
+  `wl_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `wl_pct` int(3) unsigned NOT NULL DEFAULT 0,
+  `wl_action` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `wl_duration` int(11) unsigned NOT NULL DEFAULT 86400,
+  `wl_duration_qty` int(5) unsigned NOT NULL DEFAULT 1,
+  `wl_duration_period` varchar(7) NOT NULL DEFAULT 'day',
+  `wl_other` varchar(255) NOT NULL DEFAULT 'a:0{}',
+  PRIMARY KEY (`wl_id`)
+) ENGINE=MyISAM;";
+
 $_SQL['d1'] = "INSERT INTO {$_TABLES['ff_categories']} (`cat_order`, `cat_name`, `cat_dscp`, `id`) VALUES (0,'General','General News and Discussions',1);";
 $_SQL['d2'] = "INSERT INTO {$_TABLES['ff_forums']} (`forum_order`, `forum_name`, `forum_dscp`, `forum_id`, `forum_cat`, `grp_id`, `use_attachment_grpid`, `is_hidden`, `is_readonly`, `no_newposts`, `topic_count`, `post_count`, `last_post_rec`) VALUES (0,'News and Announcements','Site News and Special Announcements',1,1,2,1,0,1,0,1,1,1);";
 $_SQL['d3'] = "INSERT INTO {$_TABLES['ff_moderators']} (`mod_id`, `mod_uid`, `mod_groupid`, `mod_username`, `mod_forum`, `mod_delete`, `mod_ban`, `mod_edit`, `mod_move`, `mod_stick`) VALUES (1,2,0,'Admin','1',1,1,1,1,1);";
@@ -284,5 +336,15 @@ $_SQL['d5'] = "INSERT INTO {$_TABLES['ff_badges']} (`fb_id`, `fb_grp`, `fb_order
 (2, '1_site', 10, 1, 1, 'img', 'siteadmin_badge.png', 'Site Admin');";
 $_SQL['d6'] = "INSERT INTO {$_TABLES['ff_ranks']} VALUES
     (1, 'Newbie'), (15, 'Junior'), (35, 'Chatty'), (70, 'Regular Member'), (120, 'Active Member');";
+
+// Seed the warning types and levels
+$_SQL['d7'] = "INSERT INTO `{$_TABLES['ff_warningtypes']}` VALUES
+    (1,'Spam',20,2592000,1,'month'),
+    (2,'Inappropriate',30,2592000,1,'month'),
+    (3,'Harrassing Members',45,5184000,2,'month');";
+$_SQL['d8'] = "INSERT INTO `{$_TABLES['ff_warninglevels']}` VALUES
+    (1,20,1,604800,1,'week',''),
+    (2,60,2,5184000,2,'month','a:0{}'),
+    (3,85,15,3888000,45,'day','a:0{}');";
 
 ?>

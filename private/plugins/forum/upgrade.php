@@ -280,8 +280,50 @@ function forum_upgrade() {
             // no changes to db schema
 
         case '3.4.3' :
-            // no changes to db schema
-
+            DB_query("CREATE TABLE `{$_TABLES['ff_warnings']}` (
+                `w_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `w_uid` int(11) unsigned NOT NULL DEFAULT 0,
+                `wt_id` int(11) unsigned NOT NULL DEFAULT 0,
+                `w_topic_id` int(1) unsigned NOT NULL DEFAULT 0,
+                `w_dscp` varchar(120) NOT NULL DEFAULT '',
+                `ts` int(11) unsigned NOT NULL DEFAULT 0,
+                `w_points` int(5) unsigned NOT NULL DEFAULT 0,
+                `w_expires` int(11) unsigned NOT NULL DEFAULT 0,
+                `w_issued_by` int(11) unsigned NOT NULL DEFAULT 0,
+                `revoked_date` int(11) unsigned NOT NULL DEFAULT 0,
+                `revoked_by` int(11) unsigned NOT NULL DEFAULT 0,
+                `revoked_reason` varchar(255) NOT NULL DEFAULT '',
+                `w_notes` text NOT NULL DEFAULT '',
+                PRIMARY KEY (`w_id`),
+                KEY `uid_expires` (`w_uid`,`w_expires`)
+                ) ENGINE=MyISAM;");
+            DB_query("CREATE TABLE `{$_TABLES['ff_warningtypes']}` (
+                `wt_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `wt_dscp` varchar(120) NOT NULL DEFAULT '',
+                `wt_points` smallint(5) unsigned NOT NULL DEFAULT 0,
+                `wt_expires_seconds` int(10) unsigned NOT NULL DEFAULT 86400,
+                `wt_expires_qty` int(5) unsigned NOT NULL DEFAULT 1,
+                `wt_expires_period` varchar(7) NOT NULL DEFAULT 'day',
+                PRIMARY KEY (`wt_id`)
+                ) ENGINE=MyISAM;");
+            DB_query("CREATE TABLE `{$_TABLES['ff_warninglevels']}` (
+                `wl_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `wl_pct` int(3) unsigned NOT NULL DEFAULT 0,
+                `wl_action` smallint(5) unsigned NOT NULL DEFAULT 0,
+                `wl_duration` int(11) unsigned NOT NULL DEFAULT 86400,
+                `wl_duration_qty` int(5) unsigned NOT NULL DEFAULT 1,
+                `wl_duration_period` varchar(7) NOT NULL DEFAULT 'day',
+                `wl_other` varchar(255) NOT NULL DEFAULT 'a:0{}',
+                PRIMARY KEY (`wl_id`)
+                ) ENGINE=MyISAM;");
+            DB_query("ALTER TABLE {$_TABLES['ff_userinfo']}
+               ADD `ban_expires` int(11) NOT NULL DEFAULT  0");
+            DB_query("ALTER TABLE {$_TABLES['ff_userinfo']}
+                ADD `suspend_expires` int(11) NOT NULL DEFAULT 0");
+            DB_query("ALTER TABLE {$_TABLES['ff_userinfo']}
+                ADD `moderate_expires` int(11) NOT NULL DEFAULT 0");
+            DB_query("ALTER TABLE {$_TABLES['ff_topic']}
+                ADD `approved` tinyint(1) unsigned NOT NULL DEFAULT 1");
         default :
             forum_update_config();
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);

@@ -2,9 +2,9 @@
 
 $_FF_CONF['enable_prefixes'] = 1;
 
-$_TABLES['ff_warninglevels'] = 'gl_forum_warninglevels';
-$_TABLES['ff_warningtypes'] = 'gl_forum_warningtypes';
-$_TABLES['ff_warnings'] = 'gl_forum_warnings';
+//$_TABLES['ff_warninglevels'] = 'gl_forum_warninglevels';
+//$_TABLES['ff_warningtypes'] = 'gl_forum_warningtypes';
+//$_TABLES['ff_warnings'] = 'gl_forum_warnings';
 $_FF_CONF['warning_enabled'] = 1;
 $_FF_CONF['warning_max_points'] = 100;
 
