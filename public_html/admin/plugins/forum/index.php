@@ -50,6 +50,10 @@ if (!SEC_hasRights('forum.edit')) {
 USES_forum_functions();
 USES_forum_admin();
 
+if (isset($_GET['moderate'])) {
+    echo COM_refresh($_CONF['site_url'] . '/forum/createtopic.php?mode=edittopic&id=' . $_GET['id']);
+}
+
 function forum_admin_list()
 {
     global $_TABLES, $LANG_ADMIN, $LANG_GF00,$LANG_GF91, $LANG_GF06, $_CONF, $_FF_CONF;

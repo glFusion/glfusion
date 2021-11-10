@@ -748,13 +748,13 @@ function forum_chkUsercanPost() {
         exit;
     }
 
-    // Check if IP of user has been banned
-    $isBanned = DB_count($_TABLES['ff_banned_ip'],'host_ip',DB_escapeString($_SERVER['REAL_ADDR']));
-    if ( $isBanned > 0 ) {
+    // Check if the user has been suspended or banned
+    $U = Forum\UserInfo::getInstance($_USER['uid']);
+    if ($U->isBanned() || $U->isSuspended()) {
         $display .= FF_siteHeader();
         $display .= COM_startBlock($LANG_GF00['access_denied']);
-        $display .= $LANG_GF02['msg14'];
-        $display .= sprintf ($LANG_GF02['msg15'],$_CONF['site_mail']);
+        //$display .= $LANG_GF02['msg14'];
+        $display .= $U->getUserStatusMsg(true);
         $display .= COM_endBlock();
         $display .= FF_siteFooter();
         echo $display;
@@ -763,11 +763,17 @@ function forum_chkUsercanPost() {
 }
 
 function forum_chkUsercanAccess($secure=false) {
-    global $_CONF, $_FF_CONF, $LANG_GF01, $LANG_GF02;
+    global $_CONF, $_FF_CONF, $LANG_GF01, $LANG_GF02, $_USER;
 
     $display = '';
-
-    if ($_FF_CONF['registration_required'] && COM_isAnonUser() ) {
+    $U = Forum\UserInfo::getInstance($_USER['uid']);
+    if ($U->isBanned()) {
+        $display  = FF_siteHeader();
+        $display .= $U->getUserStatusMsg(true);
+        $display .= FF_siteFooter();
+        echo $display;
+        exit;
+    } elseif ($_FF_CONF['registration_required'] && COM_isAnonUser() ) {
         $display  = FF_siteHeader();
         $display .= SEC_loginRequiredForm();
         $display .= FF_siteFooter();
@@ -2387,4 +2393,86 @@ function plugin_privacy_export_forum_DISABLED($uid,$email='',$username='',$ip=''
     return $retval;
 }
 
-?>
+
+/**
+ * Get the plugin object to use for the submissions list.
+ *
+ * @param   string  $token      Security token
+ * @return  object      Plugin object
+ */
+function plugin_itemlist_forum($token='')
+{
+    global $_TABLES, $LANG29;
+
+    if (SEC_hasRights('forum.edit')) {
+        $plugin = new Plugin();
+        $plugin->submissionlabel = 'Forum Submissions';
+        $plugin->submissionhelpfile = '';
+        $plugin->getsubmissionssql = "SELECT id,t.subject,FROM_UNIXTIME(t.date) AS day, t.name"
+            . " FROM {$_TABLES['ff_topic']} t"
+            . " WHERE approved = 0"
+            . " ORDER BY date ASC";
+        $plugin->addSubmissionHeading('Subject');
+        $plugin->addSubmissionHeading('Date');
+        $plugin->addSubmissionHeading('User Name');
+        $plugin->addSubmissionHeading($LANG29[46]);
+        return $plugin;
+    }
+}
+
+
+/**
+ * Returns list of moderation values.
+ *
+ * The array returned contains (in order): the row 'id' label, main plugin
+ * table, moderation fields (comma seperated), and plugin submission table
+ *
+ * This plugin has no submission table, so the moderation fields and
+ * submission table entries are not used.
+ *
+ * @return  array   Returns array of useful moderation values
+ */
+function plugin_moderationvalues_forum()
+{
+    global $_TABLES;
+
+    return array(
+        'id',
+        $_TABLES['ff_topic'],
+        '',
+        '',
+    );
+}
+
+
+/**
+ * Performs plugin exclusive work for items approved by moderation.
+ * This plugin does not use a submissions table so the approval status
+ * is set here.
+ *
+ * @param   string  $id         ID of the forum post
+ * @return  string              Empty string.
+ */
+function plugin_moderationapprove_forum($id, $owner_id=0)
+{
+    global $_TABLES;
+
+    $sql = "UPDATE {$_TABLES['ff_topic']} SET approved=1 WHERE id = " . (int)$id;
+    DB_query($sql);
+    return '';
+}
+
+
+/**
+ * Performs plugin exclusive work for items deleted by moderation.
+ * There is no submission table, so the record deletion happens here.
+ *
+ * @param   string  $id     ID of the ad deleted.
+ * @return  string          Any wanted HTML output
+ */
+function plugin_moderationdelete_forum($id)
+{
+    global $_TABLES;
+
+    DB_delete($_TABLES['ff_topic'], 'id', (int)$id);
+}
