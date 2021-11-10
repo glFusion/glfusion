@@ -273,6 +273,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
             $warn_level = \Forum\Modules\Warning\Warning::getUserPercent($showtopic['uid']);
             if ($warn_level > 0) {
                 $topictemplate->set_var('warn_level', $warn_level);
+            } else {
+                $topictemplate->clear_var('warn_level');
             }
         }
     }
