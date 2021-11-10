@@ -112,7 +112,7 @@ class Warning
         $res = DB_query($sql);
         if ($res && DB_numRows($res) == 1) {
             $A = DB_fetchArray($res, false);
-            $this->setVars($A);
+            $this->setVars($A, true);
             return true;
         } else {
             return false;
@@ -215,14 +215,14 @@ class Warning
         $this->w_topic_id = (int)$A['w_topic_id'];
         $this->w_dscp = $A['w_dscp'];
         $this->w_notes = $A['w_notes'];
-        $this->revoked_by = (int)$A['revoked_by'];
-        $this->revoked_date = (int)$A['revoked_date'];
-        $this->revoked_reason = $A['revoked_reason'];
+
         if ($from_db) {
-            // Extracting json-encoded strings
-            $this->w_expires = $A['w_expires'];
-        } else {
-            // Forums and Groups are supplied as simple arrays from the form
+            // These are only found in the database, the matching fields
+            // are created automatically from forms.
+            $this->w_expires = (int)$A['w_expires'];
+            $this->revoked_by = (int)$A['revoked_by'];
+            $this->revoked_date = (int)$A['revoked_date'];
+            $this->revoked_reason = (int)$A['revoked_reason'];
         }
         return $this;
     }
