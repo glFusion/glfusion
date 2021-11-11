@@ -708,7 +708,12 @@ class Warning
      */
     public function takeAction() : bool
     {
-        global $_TABLES;
+        global $_TABLES, $LANG_GF01;
+
+        if ($this->w_uid < 2) {
+            // Can only act on logged-in users.
+            return false;
+        }
 
         if ($this->_WT === NULL) {
             $this->_WT = WarningType::getInstance($this->wt_id);
@@ -719,14 +724,32 @@ class Warning
             // No matching warninglevel record found.
             return false;
         }
-        $expiration = time() + $WL->getDuration();
+
         if ($WL->getAction() > 0) {
-            $field = Status::getKey($WL->getAction()) . '_expires';
-            $sql = "UPDATE {$_TABLES['ff_userinfo']}
-                SET $field = $expiration
-                WHERE uid = {$this->w_uid}";
-            COM_errorLog("updating user: $sql");
-            return true;
+            $status = $WL->getAction();
+            if ($status == Status::SITE_BAN) {
+                // Update the users table with a permanent site ban.
+                $sql = "UPDATE {$_TABLES['users']}
+                    SET status = " . USER_ACCOUNT_DISABLED .
+                    " WHERE uid = {$this->w_uid}";
+            } else {
+                $expiration = time() + $WL->getDuration();
+                $field = Status::getKey($status) . '_expires';
+                $sql = "UPDATE {$_TABLES['ff_userinfo']}
+                    SET $field = $expiration
+                    WHERE uid = {$this->w_uid}";
+            }
+            DB_query($sql, 1);
+            if (DB_error()) {
+                COM_errorLog("SQL Error: $sql");
+                return false;
+            } else {
+                COM_errorLog(
+                    "User {$this->w_uid} forum status updated: " .
+                    $LANG_GF01[Status::getKey($status)]
+                );
+                return true;
+            }
         }
         return false;
     }

@@ -44,5 +44,9 @@ $LANG_GFXX = array(
     'admin_notes' => 'Administrative Notes',
     'revoke_reason' => 'Reason for Revocation',
     'revoke' => 'Revoke',
+    'forum_ban' => 'Forum Ban',
+    'site_ban' => 'Site Ban',
+    'suspend' => 'Suspend Posting',
+    'moderate' => 'Moderate Posts',
 );
 $LANG_GF01 = array_merge($LANG_GF01, $LANG_GFXX);

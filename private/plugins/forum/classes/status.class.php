@@ -35,17 +35,23 @@ class Status
      */
     public const BAN = 15;
 
+    /** User is banned from the entire site permanently.
+     */
+    public const SITE_BAN = 127;
+
     /** Put the action keys and strings in an array for easy access.
      * @var array */
     private static $keys = array(
         self::MODERATE => 'moderate',
         self::SUSPEND  => 'suspend',
-        self::BAN => 'ban',
+        self::BAN => 'forum_ban',
+        self::SITE_BAN => 'site_ban',
     );
 
 
     private $status = 0;
     private $expiration = 0;
+
 
     /**
      * Get a descriptive string related to the action.
@@ -56,8 +62,10 @@ class Status
      */
     public static function getDscp(int $key) : string
     {
+        global $LANG_GF01;
+
         if ($key > 0 && isset(self::$keys[$key])) {
-            return self::$keys[$key] . '_user';
+            return $LANG_GF01[self::$keys[$key]];
         } else {
             return 'none';
         }
@@ -123,13 +131,15 @@ class Status
      */
     public static function getOptionList(?int $sel=0) : string
     {
+        global $LANG_GF01;
+
         $retval = '';
         foreach (self::$keys as $key=>$tag) {
             $retval .= '<option value="' . $key . '"';
             if ($sel == $key) {
                 $retval .= ' selected="selected"';
             }
-            $retval .= '>' . ucfirst($tag) . '</option>' . LB;
+            $retval .= '>' . $LANG_GF01[$tag] . '</option>' . LB;
         }
         return $retval;
     }
