@@ -119,7 +119,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
 
     if ( $query != '' ) {
         $disp_subject = COM_highlightQuery($disp_subject,$query);
-        $showtopic['comment'] = COM_highlightQuery($showtopic['comment'], $this->_query);
+        $showtopic['comment'] = COM_highlightQuery($showtopic['comment'], $query);
     }
 
     if ($showtopic['pid'] == 0) {
