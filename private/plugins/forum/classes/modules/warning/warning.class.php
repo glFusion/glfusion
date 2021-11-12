@@ -280,6 +280,17 @@ class Warning
 
 
     /**
+     * Get the topic ID. Usually used for redirects after saving.
+     *
+     * @return  integer     Topic ID
+     */
+    public function getTopicId() : int
+    {
+        return (int)$this->w_topic_id;
+    }
+
+
+    /**
      * Set the title string.
      *
      * @param   string  $dscp   New title string

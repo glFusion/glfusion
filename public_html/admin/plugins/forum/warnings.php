@@ -65,6 +65,10 @@ case 'editwarning':
 case 'savewarning':
     $W = new Warning($_POST['w_id']);
     $W->Save($_POST);
+    echo COM_refresh(
+        $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' .
+        $W->getTopicId() . '#' . $W->getTopicId()
+    );
     break;
 
 case 'revokewarning':

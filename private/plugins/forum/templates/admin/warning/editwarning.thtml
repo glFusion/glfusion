@@ -54,7 +54,7 @@
 		<div class="uk-form-controls">
 			<button type="submit" class="uk-button uk-button-success" name="savewarning" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
 			<button type="reset" class="uk-button">{$LANG_GF01['reset']}</button>
-			<a class="uk-button uk-button-primary" name="cancel" href="{return_url}">{$LANG_ADMIN['cancel']}</a>
+			<a class="uk-button uk-button-primary" name="cancel" href="{site_url}/forum/viewtopic.php?showtopic={topic_id}#{topic_id}">{$LANG_ADMIN['cancel']}</a>
 {!if can_revoke}
 			<button type="submit" class="uk-button uk-button-danger" name="delete" value="{$LANG_ADMIN['delete']}"
 			onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');" style="float:right;">{$LANG_ADMIN['delete']}</button>
