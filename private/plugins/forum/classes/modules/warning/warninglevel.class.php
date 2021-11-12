@@ -1,6 +1,6 @@
 <?php
 /**
- * Class to handle forum warning system.
+ * Class to handle forum warning levels.
  *
  * @author      Lee Garner <lee@leegarner.com>
  * @copyright   Copyright (c) 2021 Lee Garner <lee@leegarner.com>
@@ -15,6 +15,11 @@ use glFusion\Database\Database;
 use glFusion\FieldList;
 use Forum\Status;
 
+
+/**
+ * Warning Level management class.
+ * @package glfusion
+ */
 class WarningLevel
 {
     /** Prefix record ID.
@@ -49,7 +54,7 @@ class WarningLevel
     /**
      * Constructor.
      * Sets the field values from the supplied array, or reads the record
-     * if $A is a prefix record ID.
+     * if $A is a warning level record ID.
      *
      * @param   mixed   $A  Array of properties or group ID
      */
@@ -182,7 +187,7 @@ class WarningLevel
 
     /**
      * Get an instance of a warning level
-     * Caches locally since the same prefix may be requested many times
+     * Caches locally since the same level may be requested many times
      * for a single page load.
      *
      * @param   int     $id     Warning level record ID
@@ -222,7 +227,7 @@ class WarningLevel
     /**
      * Delete a single warning level record.
      *
-     * @param   integer $wl_id  Record ID of prefix to remove
+     * @param   integer $wl_id  Record ID of level to remove
      */
     public static function Delete(int $wl_id) : void
     {
@@ -385,7 +390,7 @@ class WarningLevel
 
 
     /**
-     * Save a prefix from the edit form.
+     * Save a warning level from the edit form.
      *
      * @param   array   $A      Array of fields, e.g. $_POST
      * @return  string      Error messages, empty string on success
@@ -418,20 +423,6 @@ class WarningLevel
         } else {
             return true;
         }
-    }
-
-
-    public static function takeAction(int $uid)
-    {
-        $percent = Warning::getUserPercent($uid);
-        $WL = self::getByPercent($percent);
-        if ($WL->getID() < 1) {
-            // No matching warninglevel record found.
-            return false;
-        }
-        $expiration = time() + $WL->getDuration();
-
-                
     }
 
 }
