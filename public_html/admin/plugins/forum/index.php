@@ -51,7 +51,7 @@ USES_forum_functions();
 USES_forum_admin();
 
 if (isset($_GET['moderate'])) {
-    echo COM_refresh($_CONF['site_url'] . '/forum/createtopic.php?mode=moderatetopic&id=' . $_GET['id']);
+    echo COM_refresh($_CONF['site_url'] . '/forum/createtopic.php?mode=moderateedit&id=' . $_GET['id']);
 }
 
 function forum_admin_list()
