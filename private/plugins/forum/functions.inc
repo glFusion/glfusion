@@ -1456,19 +1456,29 @@ function plugin_profilesave_forum($uid = 0 )
         topic_order='".DB_escapeString($topic_order)."',
         use_wysiwyg_editor=".(int)$wysiwyg_editor." WHERE uid=".(int)$uid);
 
-
+    // Update forum userinfo table if fields are set.
+    $ff_userinfo = array();
     if ( isset($_POST['signature'] ) ){
-        $signature = $_POST['signature'];
-
-        // see if user already has a preference record...
-        // Get user specific settings from database
-        $result = DB_query("SELECT * FROM {$_TABLES['ff_userinfo']} WHERE uid=".(int) $uid);
-        $nrows = DB_numRows($result);
-        if ($nrows == 0) {
-            // Insert a new blank record. Defaults are set in SQL Defintion for table.
-            DB_query("INSERT INTO {$_TABLES['ff_userinfo']} (uid,rating,signature) VALUES (".(int)$uid.",0,'')");
+        $ff_userinfo[] = "signature = '" . DB_escapeString($_POST['signature']) . "'";
+    }
+    foreach (array('ban_expires', 'suspend_expires', 'moderate_expires') as $fld) {
+        if (isset($_POST[$fld])) {
+            if (empty($_POST[$fld])) {
+                $val = 0;
+            } else {
+                $dt = new \Date($_POST[$fld], $_CONF['timezone']);
+                $val = $dt->toUnix();
+            }
+            $ff_userinfo[] = "$fld = $val";
         }
-        $sql = "UPDATE {$_TABLES['ff_userinfo']} SET signature='".DB_escapeString($signature)."' WHERE uid=".$uid;
+    }
+    if (!empty($ff_userinfo)) {
+        $ff_userinfo = implode(', ', $ff_userinfo);
+        $sql = "INSERT INTO {$_TABLES['ff_userinfo']} SET
+            uid = $uid,
+            $ff_userinfo
+            ON DUPLICATE KEY UPDATE
+            $ff_userinfo";
         DB_query($sql);
     }
 }
