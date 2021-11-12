@@ -307,7 +307,6 @@ $_SQL['ff_warningtypes'] = "CREATE TABLE `{$_TABLES['ff_warningtypes']}` (
   `wt_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `wt_dscp` varchar(120) NOT NULL DEFAULT '',
   `wt_points` smallint(5) unsigned NOT NULL DEFAULT 0,
-  `wt_expires_seconds` int(10) unsigned NOT NULL DEFAULT 86400,
   `wt_expires_qty` int(5) unsigned NOT NULL DEFAULT 1,
   `wt_expires_period` varchar(7) NOT NULL DEFAULT 'day',
   PRIMARY KEY (`wt_id`)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Class to handle forum warning system.
+ * Class to handle forum warning types such as "spam", etc.
  *
  * @author      Lee Garner <lee@leegarner.com>
  * @copyright   Copyright (c) 2021 Lee Garner <lee@leegarner.com>
@@ -14,6 +14,11 @@ namespace Forum\Modules\Warning;
 use glFusion\Database\Database;
 use glFusion\FieldList;
 
+
+/**
+ * Warning type management
+ * @package glfusion
+ */
 class WarningType
 {
     /** Record ID.
@@ -28,10 +33,6 @@ class WarningType
      * @var integer */
     private $wt_points = 0;
 
-    /** Number of seconds before this warning type expires.
-     * @var integer */
-    private $wt_expires_seconds = 0;
-
     /** Number of periods making up the duration.
      * @var integer */
     private $wt_expires_qty = 1;
@@ -40,12 +41,16 @@ class WarningType
      * @var string */
     private $wt_expires_period = 'day';
 
+    /** Number of seconds before this warning type expires.
+     * Calculated from qty and period.
+     * @var integer */
+    private $_wt_expires_seconds = 0;
 
 
     /**
      * Constructor.
      * Sets the field values from the supplied array, or reads the record
-     * if $A is a prefix record ID.
+     * if $A is a warning type record ID.
      *
      * @param   mixed   $A  Array of properties or group ID
      */
@@ -72,7 +77,6 @@ class WarningType
 
         $sql = "SELECT * FROM {$_TABLES['ff_warningtypes']}
                 WHERE wt_id=" . $id;
-        //echo $sql;die;
         $res = DB_query($sql);
         if ($res && DB_numRows($res) == 1) {
             $A = DB_fetchArray($res, false);
@@ -99,7 +103,7 @@ class WarningType
         $this->wt_points = (int)$A['wt_points'];
         $this->wt_expires_qty = (int)$A['wt_expires_qty'];
         $this->wt_expires_period = $A['wt_expires_period'];
-        $this->wt_expires_seconds = Dates::dscpToSeconds($this->wt_expires_qty, $this->wt_expires_period);
+        $this->_wt_expires_seconds = Dates::dscpToSeconds($this->wt_expires_qty, $this->wt_expires_period);
         return $this;
     }
 
@@ -128,15 +132,25 @@ class WarningType
     }
 
 
+    /**
+     * Get the text description.
+     *
+     * @return  string      Description
+     */
     public function getDscp() : string
     {
         return $this->wt_dscp;
     }
 
 
+    /**
+     * Get the number of seconds for this type's duration.
+     *
+     * @return  integer     Number of seconds
+     */
     public function getExpirationSeconds() : int
     {
-        return (int)$this->wt_expires_seconds;
+        return (int)$this->_wt_expires_seconds;
     }
 
 
@@ -166,7 +180,7 @@ class WarningType
 
     /**
      * Get an instance of a warning type.
-     * Caches locally since the same prefix may be requested many times
+     * Caches locally since the same type may be requested many times
      * for a single page load.
      *
      * @param   int     $id     Warning type record ID
@@ -209,7 +223,7 @@ class WarningType
     /**
      * Delete a single warning type record.
      *
-     * @param   integer $wt_id  Record ID of prefix to remove
+     * @param   integer $wt_id  Record ID of type to remove
      */
     public static function Delete(int $wt_id) : void
     {
@@ -319,13 +333,13 @@ class WarningType
 
 
     /**
-     *   Get the correct display for a single field in the banner admin list
+     * Get the correct display for a single field in the banner admin list
      *
-     *   @param  string  $fieldname  Field variable name
-     *   @param  string  $fieldvalue Value of the current field
-     *   @param  array   $A          Array of all field names and values
-     *   @param  array   $icon_arr   Array of system icons
-     *   @return string              HTML for field display within the list cell
+     * @param   string  $fieldname  Field variable name
+     * @param   string  $fieldvalue Value of the current field
+     * @param   array   $A          Array of all field names and values
+     * @param   array   $icon_arr   Array of system icons
+     * @return  string              HTML for field display within the list cell
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr, $extra=array())
     {
@@ -367,7 +381,7 @@ class WarningType
 
 
     /**
-     * Save a prefix from the edit form.
+     * Save a warning type from the edit form.
      *
      * @param   array   $A      Array of fields, e.g. $_POST
      * @return  string      Error messages, empty string on success
@@ -389,7 +403,6 @@ class WarningType
         }
 
         $sql2 = "wt_points = " . (int)$this->wt_points . ",
-            wt_expires_seconds = " . (int)$this->wt_expires_seconds . ",
             wt_expires_qty = " . (int)$this->wt_expires_qty . ",
             wt_expires_period = '" . DB_escapeString($this->wt_expires_period) . "',
             wt_dscp = '" . DB_escapeString($this->wt_dscp) . "'";
