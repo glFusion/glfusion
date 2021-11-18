@@ -37,63 +37,46 @@
 // +--------------------------------------------------------------------------+
 
 require_once '../lib-common.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
-include_once $_CONF['path'] .'plugins/filemgmt/include/functions.php';
 
 $lid = 0;
-if ( isset($_REQUEST['lid'])) {
+if (isset($_REQUEST['lid'])) {
     $lid = COM_applyFilter($_REQUEST['lid'],true);
 }
 if ($lid == 0) {
-    echo COM_refresh($_CONF['site_url'] .'/filemgmt/index.php');
+    COM_refresh($_FM_CONF['url'] .'/index.php');
     exit;
 }
 
-if ( isset($_POST['submit']) ) {
-    if( !$FilemgmtUser ) {
-        $sender = 0;
-    } else {
-        $sender = $uid;
-    }
+$reported_count = 0;
+if (isset($_POST['saveBrokenReport']) && SEC_hasRights('filemgmt.user')) {
+    $sender = (int)$_USER['uid'];
     $ip = $_SERVER['REMOTE_ADDR'];
-    if ( $sender != 0 ) {
+    if ( $sender != 1 ) {
         // Check if REG user is trying to report twice.
-        $result=DB_query("SELECT COUNT(*) FROM {$_TABLES['filemgmt_brokenlinks']} WHERE lid='".DB_escapeString($lid)."' AND sender='".intval($sender)."'");
-        list ($count)=DB_fetchARRAY($result);
-        if ( $count > 0 ) {
-            redirect_header("index.php",2,_MD_ALREADYREPORTED);
-            exit();
-        }
+        $reported_count = DB_count($_TABLES['filemgmt_brokenlinks'], 'lid', $lid);
     } else {
         // Check if the sender is trying to vote more than once.
-        $result=DB_query("SELECT COUNT(*) FROM {$_TABLES['filemgmt_brokenlinks']} WHERE lid='".DB_escapeString($lid)."' AND ip='".DB_escapeString($ip)."'");
-        list ($count)=DB_fetchARRAY($result);
-        if ( $count > 0 ) {
-            redirect_header("index.php",2,_MD_ALREADYREPORTED);
-            exit();
-        }
+        $reported_count = DB_count(
+            $_TABLES['filemgmt_brokenlinks'],
+            array('lid', 'ip'),
+            array($lid, DB_escapeString($ip))
+        );
     }
-    DB_query("INSERT INTO {$_TABLES['filemgmt_brokenlinks']} (lid, sender, ip) VALUES ('".DB_escapeString($lid)."', '".DB_escapeString($sender)."', '".DB_escapeString($ip)."')") or die('');
-    redirect_header("index.php",2,_MD_THANKSFORINFO);
-    exit();
-
+    if ($reported_count > 0 ) {
+        COM_setMsg(_MD_ALREADYREPORTED);
+    } else {
+        DB_query(
+            "INSERT INTO {$_TABLES['filemgmt_brokenlinks']}
+            (lid, sender, ip)
+            VALUES
+            ($lid, $sender, '" . DB_escapeString($ip) . "')"
+        ) or die('');
+        COM_setMsg(_MD_THANKSFORINFO);
+    }
+    COM_refresh($_FM_CONF['url'] . '/index.php');
 } else {
-    $display = FM_siteHeader();
-    $display .= COM_startBlock(_MD_REPORTBROKEN);
-    $T = new Template($_CONF['path'] . '/plugins/filemgmt/templates/');
-    $T->set_file('form', 'brokenfile.thtml');
-    $T->set_var(array(
-        'lid' => $lid,
-        'lang_reportbroken' => _MD_REPORTBROKEN,
-        'lang_thanksforhelp' => _MD_THANKSFORHELP,
-        'lang_forsecurity' => _MD_FORSECURITY,
-        'lang_cancel' => _MD_CANCEL,
-    ) );
-    $T->parse('output', 'form');
-    $display .= $T->finish($T->get_var('output'));
-    $display .= COM_endBlock();
-    $display .= FM_siteFooter();
+    $display = Filemgmt\Menu::siteHeader();
+    $display .= Filemgmt\BrokenLink::showForm($lid);
+    $display .= Filemgmt\Menu::siteFooter();
     echo $display;
 }
-
-?>

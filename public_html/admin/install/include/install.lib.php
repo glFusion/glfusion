@@ -2314,7 +2314,7 @@ function INST_errorLog( $logpath, $logentry)
     if ( !empty( $logentry )) {
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
 
-        $logfile = $logpath . 'error.log';
+        $logfile = $logpath . 'system.log';
         if ( !$file = fopen( $logfile, 'a' )) {
             return;
         } else {

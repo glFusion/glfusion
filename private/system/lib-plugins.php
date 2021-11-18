@@ -2336,10 +2336,11 @@ function PLG_getFeedNames($plugin)
 * @param    string   update_data   information for later up-to-date checks
 * @param    string   feedType      The type of feed (RSS/Atom etc)
 * @param    string   feedVersion   The version info of the feed.
+* @param    array    $A            The full feed record from the syndication table
 * @return   array                  content of feed
 *
 */
-function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $feedVersion)
+function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $feedVersion, $A=array())
 {
     global $_PLUGINS;
 
@@ -2348,7 +2349,7 @@ function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $f
     if ($plugin == 'custom') {
         $function = 'CUSTOM_getfeedcontent';
         if (function_exists($function)) {
-            $content = $function($feed, $link, $update_data, $feedType, $feedVersion);
+            $content = $function($feed, $link, $update_data, $feedType, $feedVersion, $A);
         }
     } else {
         $pluginTypes = array_merge(array('article','comment'), $_PLUGINS);
@@ -2356,7 +2357,7 @@ function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $f
         if (in_array ($plugin, $pluginTypes)) {
             $function = 'plugin_getfeedcontent_' . $plugin;
             if (function_exists ($function)) {
-                $content = $function ($feed, $link, $update_data, $feedType, $feedVersion);
+                $content = $function ($feed, $link, $update_data, $feedType, $feedVersion, $A);
             }
         }
     }

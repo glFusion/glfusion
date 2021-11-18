@@ -1,29 +1,45 @@
 {# begin {templatelocation} #}
+<ul uk-grid class="uk-grid">
+	<li>
+		{LANG_SORTBY}&nbsp;&nbsp;{LANG_TITLE}&nbsp;(
+		<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=title&dir=asc"><i class="uk-icon-arrow-up uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_TITLE} Ascending" alt="{LANG_SORTBY} {LANG_TITLE} Ascending"></i>
+		</a>
+		<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=title&dir=desc">
+			<i class="uk-icon-arrow-down uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_TITLE} Descending" alt="{LANG_SORTBY} {LANG_TITLE} Descending"></i>
+		</a>
+			)
+	</li>
+	<li>
+			{LANG_DATE}&nbsp;(
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=date&dir=asc"><i class="uk-icon-arrow-up uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_DATE} Ascending" alt="{LANG_SORTBY} {LANG_DATE} Ascending"></i></a>
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=date&dir=desc">
+				<i class="uk-icon-arrow-down uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_DATE} Descending" alt="{LANG_SORTBY} {LANG_DATE} Descending"></i>
+			</a>
+			)
+	</li>
+	<li>
+			{LANG_RATING}&nbsp;(
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=rating&dir=asc"><i class="uk-icon-arrow-up uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_RATING} Ascending" alt="{LANG_SORTBY} {LANG_RATING} Ascending"></i></a>
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=rating&dir=desc">
+				<i class="uk-icon-arrow-down uk-icon-small tooltipo" title="{LANG_SORTBY} {LANG_RATING} Descending" alt="{LANG_SORTBY} {LANG_RATING} Descending"></i>
+			</a>
+			)
+	</li>
 
-  <tr>
-    <td colspan="2" class="uk-text-small uk-text-center">
-
-      {LANG_SORTBY}&nbsp;&nbsp;{LANG_TITLE}&nbsp;(<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=titleA"><img src="{site_url}/filemgmt/images/up.gif" border="0" align="middle" alt="{LANG_SORTBY} {LANG_TITLE} Ascending" /></a>
-      <a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=titleD">
-
-      <img src="{site_url}/filemgmt/images/down.gif" border="0" align="middle" alt="{LANG_SORTBY} {LANG_TITLE} Descending" /></a>)&nbsp;
-
-      {LANG_DATE}&nbsp;(<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=dateA"><img src="{site_url}/filemgmt/images/up.gif" border="0" align="middle" alt="{LANG_SORTBY} {LANG_DATE} Ascending" /></a>
-      <a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=dateD">
-      <img src="{site_url}/filemgmt/images/down.gif" border="0" align="middle" alt="{LANG_SORTBY} {LANG_DATE} Descending" /></a>)&nbsp;
-
-      {LANG_RATING}&nbsp;(<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=ratingA"><img src="{site_url}/filemgmt/images/up.gif" border="0" align="middle" alt="{LANG_SORTBY} {LANG_RATING} Ascending" /></a>
-      <a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=ratingD">
-      <img src="{site_url}/filemgmt/images/down.gif" border="0" align="middle" alt="{LANG_SORTBY} {LANG_RATING} Descending" /></a>)&nbsp;
-
-      {LANG_POPULARITY}&nbsp;(<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=hitsA"><img src="{site_url}/filemgmt/images/up.gif" border="0" align="middle" alt="{LANG_SORTBY} {LANG_POPULARITY} Ascending" /></a>
-      <a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=hitsD">
-      <img src="{site_url}/filemgmt/images/down.gif" border="0" align="middle" alt="{LANG_SORTBY} {LANG_POPULARITY} Descending" /></a>)
-    </td>
-
-  </tr>
-  <tr>
-      <td colspan="2" class="uk-text-small uk-text-center" style="text-align:center;font-weight:bold;">{LANG_CURSORTBY}&nbsp;{orderbyTrans}</td>
-  </tr>
-
+	<li>
+			{LANG_POPULARITY}&nbsp;(
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=hits&dir=asc">
+				<i class="uk-icon-arrow-up uk-icon-small uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_POPULARITY} Ascending" alt="{LANG_SORTBY} {LANG_POPULARITY} Ascending"></i>
+			</a>
+			<a href="{site_url}/filemgmt/viewcat.php?cid={cid}&amp;orderby=hits&dir=desc">
+				<i class="uk-icon-arrow-down uk-icon-small tooltip" title="{LANG_SORTBY} {LANG_POPULARITY} Descending" alt="{LANG_SORTBY} {LANG_POPULARITY} Descending"></i>
+			</a>
+			)
+	</li>
+</ul>
+<ul uk-grid class="uk-grid">
+	<li>
+		{LANG_CURSORTBY}&nbsp;{orderbyTrans}
+	</li>
+</ul>
 {# end {templatelocation} #}

@@ -121,7 +121,29 @@ $LANG_FILEMGMT = array(
     'all_html_allowed' => 'Le code HTML est autorisé',
     'no_new_files'  => 'Pas de nouveaux fichiers',
     'no_comments'   => 'Pas de nouveaux commentaires',
-    'more'          => '<em>d`autre ...</em>'
+    'more'          => '<em>d`autre ...</em>',
+    'newly_uploaded' => 'Newly Uploaded',
+    'click_to_view' => 'Click here to view',
+    'no_file_uploaded' => 'No File Uploaded',
+    'description' => 'Description',
+    'category' => 'Category',
+    'err_req_fields' => 'Some required fields were not supplied',
+    'go_back' => 'Go Back',
+    'err_demomode' => 'Uploads are disabled in demo mode',
+);
+
+$LANG_FILEMGMT_ERRORS = array(
+    "1101" => "Upload approval Error: The temporary file was not found. Check error.log",
+    "1102" => "Upload submit Error: The temporary filestore file was not created. Check error.log",
+    "1103" => "The download info you provided is already in the database!",
+    "1104" => "The download info was not complete - Need to enter a title for the new file",
+    "1105" => "The download info was not complete - Need to enter a description for the new file",
+    "1106" => "Upload Add Error: The new file was not created. Check error.log",
+    "1107" => "Upload Add Error: The temporary file was not found. Check error.log",
+    "1108" => "Duplicate file - already existing in filestore",
+    "1109" => "File type not allowed",
+    "1110" => "You must define and select a category for the uploaded file",
+    "9999" => "Unknown Error"
 );
 
 $LANG_FILEMGMT_AUTOTAG = array(
@@ -163,6 +185,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Activer Évaluations',
     'displayblocks'         => 'Afficher glFusion Blocs',
     'silent_edit_default'   => 'Silencieux sur Modifier',
+    'extensions_map'        => 'Extensions utilisées pour les téléchargements',
+    'EmailOption'           => 'Envoyer un e-mail après approbation?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Paramètres Principaux'

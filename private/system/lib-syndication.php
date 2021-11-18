@@ -509,7 +509,7 @@ function SYND_updateFeed( $fid )
         $rss->syndicationURL = SYND_getFeedUrl( $filename );
         $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
 
-        $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1]);
+        $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1], $A);
 
         if ( is_array($content) ) {
             foreach ( $content AS $feedItem ) {
@@ -531,6 +531,7 @@ function SYND_updateFeed( $fid )
                 $rss->addItem($item);
             }
         }
+
         if (empty($link)) {
             $link = $_CONF['site_url'];
         }
@@ -571,6 +572,13 @@ function SYND_updateFeediCal( $A )
         $format = explode( '-', $A['format'] );
 
         $vCalendar = new \Eluceo\iCal\Component\Calendar($_CONF['site_url']);
+        $vCalendar->setMethod('PUBLISH');
+        if (!empty($A['title'])) {
+            $vCalendar->setName($A['title']);
+        }
+        if (!empty($A['description'])) {
+            $vCalendar->setDescription($A['description']);
+        }
 
         if ( !empty( $A['filename'] )) {
             $filename = $A['filename'];
@@ -580,7 +588,7 @@ function SYND_updateFeediCal( $A )
 //            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
         }
 
-        $content = PLG_getFeedContent($A['type'], $A['fid'], $link, $data, $format[0], $format[1]);
+        $content = PLG_getFeedContent($A['type'], $A['fid'], $link, $data, $format[0], $format[1], $A);
 
         if ( is_array($content) ) {
             foreach ( $content AS $feedItem ) {
@@ -593,6 +601,11 @@ function SYND_updateFeediCal( $A )
                         case 'date' :
                             $date = is_numeric($value) ? date('c', $value) : $value;
                             $vEvent->setCreated(new \DateTime($date));
+                            break;
+
+                        case 'modified' :
+                            $date = is_numeric($value) ? date('c', $value) : $value;
+                            $vEvent->setModified(new \DateTime($date));
                             break;
 
                         case 'title' :
@@ -625,6 +638,14 @@ function SYND_updateFeediCal( $A )
 
                         case 'allday' :
                             $vEvent->setNoTime($value);
+                            break;
+
+                        case 'status' :
+                            $vEvent->setStatus($value);
+                            break;
+
+                        case 'sequence':
+                            $vEvent->setSequence($value);
                             break;
 
                         case 'rrule' :

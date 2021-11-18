@@ -37,8 +37,7 @@ if (!SEC_hasRights ('env.admin')) {
 function _checkEnvironment()
 {
     global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG_ENVCHK,
-           $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
-           $_FF_CONF, $_MG_CONF, $_DB_dbms,$_DB, $_CP_CONF;
+           $_FF_CONF, $_MG_CONF, $_DB_dbms,$_DB, $_CP_CONF, $_FM_CONF;
 
     $retval = '';
     $permError = 0;
@@ -572,12 +571,12 @@ function _checkEnvironment()
     }
 
     $fm_file_list = array(
-                        $filemgmt_FileStore,
-                        $filemgmt_FileStore.'tmp/',
-                        $filemgmt_SnapStore,
-                        $filemgmt_SnapStore.'tmp/',
-                        $filemgmt_SnapCat,
-                        $filemgmt_SnapCat.'tmp/',
+                        $_FM_CONF['FileStore'],
+                        $_FM_CONF['FileStore'].'tmp/',
+                        $_FM_CONF['SnapStore'],
+                        $_FM_CONF['SnapStore'].'tmp/',
+                        $_FM_CONF['SnapCat'],
+                        $_FM_CONF['SnapCat'].'tmp/',
                     );
 
     $forum_file_list = array(
@@ -746,9 +745,10 @@ function _phpOutOfDate()
 }
 
 function _isWritable($path) {
+
     if ($path[strlen($path)-1]=='/') {
         FileSystem::mkDir($path);
-        return _isWritable($path.uniqid(mt_rand()).'.tmp');
+        return ($path.uniqid(mt_rand()).'.tmp');
     }
 
     if (@file_exists($path)) {

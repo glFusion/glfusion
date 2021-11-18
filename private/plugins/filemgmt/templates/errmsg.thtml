@@ -1,0 +1,8 @@
+{# begin {templatelocation} #}
+<h2>{$LANG_FILEMGMT['plugin_name']}</h2>
+<div class="uk-width-1-1 uk-alert uk-alert-danger">
+<p>
+	Error Code: {e_code}<br />
+	{e_message}
+</p>
+<a href="{url}">{$LANG_FILEMGMT['go_back']}</a>

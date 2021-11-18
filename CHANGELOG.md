@@ -53,6 +53,7 @@
 - Replaced all old style Cache calls to new Cache class interface
 - FileMgmt Admin screens now adhere to glFusion UI standards
 - Password is required to change any user profile fields
+- Disabled autocomplete for TOTP (2FA) code input fields
 
 ### Depreciated
 

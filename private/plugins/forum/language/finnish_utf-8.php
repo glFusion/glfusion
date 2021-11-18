@@ -1015,7 +1015,7 @@ $LANG_confignames['forum'] = array(
     'geshi_line_style' => 'GeSHi Line Number Style',
     'geshi_code_style' => 'GeSHi Code Block Style',
     'geshi_header_style' => 'GeSHi Header Block Style',
-
+    'likes_prf_limit' => 'Profiileissa näytettävien tykkäysten enimmäismäärä',
 );
 
 $LANG_configsubgroups['forum'] = array(

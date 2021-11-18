@@ -2,9 +2,9 @@
 // +--------------------------------------------------------------------------+
 // | FileMgmt Plugin - glFusion CMS                                           |
 // +--------------------------------------------------------------------------+
-// | header.php                                                               |
+// | errorhandler.php                                                         |
 // |                                                                          |
-// | Header / Footer                                                          |
+// | Displays error box and code                                              |
 // +--------------------------------------------------------------------------+
 // | Copyright (C) 2008-2015 by the following authors:                        |
 // |                                                                          |
@@ -35,93 +35,45 @@
 // | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
 // |                                                                          |
 // +--------------------------------------------------------------------------+
+namespace Filemgmt;
 
-// this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-if (!in_array('filemgmt', $_PLUGINS)) {
-    COM_404();
-    exit;
-}
-
-$FilemgmtUser  = false;
-$FilemgmtAdmin = false;
-
-if ( (COM_isAnonUser()) && $mydownloads_publicpriv != 1 )  {
-    $FilemgmtUser = false;
-} else {
-    $FilemgmtUser = true;
-}
-if (SEC_hasRights("filemgmt.edit")) {
-    $FilemgmtAdmin = true;
-}
-if (!COM_isAnonUser() ) {
-    $uid=$_USER['uid'];
-} else {
-    $uid=1;    // Set to annonymous User ID
-}
-
-if ((!$FilemgmtUser) && (!$FilemgmtAdmin)) {
-    $display = FM_siteHeader();
-    $display .= SEC_loginRequiredForm();
-    $display .= FM_siteFooter();
-    echo $display;
-    exit;
-}
-
-function OpenTable($width="99%") {
- $retval .= "&nbsp;<table width='".$width."' border='0' cellspacing='1' cellpadding='0'><tr><td valign='top'>\n";
- $retval .= "<table width='100%' border='0' cellspacing='1' cellpadding='8'><tr><td valign='top'>\n";
- return $retval;
-}
-
-function CloseTable() {
- $retval = "</td></tr></table></td></tr></table>\n";
- return $retval;
-}
-
-function FM_siteHeader($title='', $meta='')
+class ErrorHandler
 {
-    global $_FM_CONF;
+    public static function show($e_code, $pages=1)
+    {
+        global $_CONF, $LANG_FILEMGMT_ERRORS;
 
-    $retval = '';
+        // determine the destination of this request
+        $destination = COM_getCurrentURL();
 
-    switch( $_FM_CONF['displayblocks'] ) {
-        case 0 : // left only
-        case 2 :
-            $retval .= COM_siteHeader('menu',$title,$meta);
-            break;
-        case 1 : // right only
-        case 3 :
-            $retval .= COM_siteHeader('none',$title,$meta);
-            break;
-        default :
-            $retval .= COM_siteHeader('menu',$title,$meta);
-            break;
+        // validate the destination is not blank and is part of our site...
+        if ( $destination == '' ) {
+            $destination = $_CONF['site_url'] . '/filemgmt/index.php';
+        }
+        if ( substr($destination, 0,strlen($_CONF['site_url'])) != $_CONF['site_url']) {
+            $destination = $_CONF['site_url'] . '/filemgmt/index.php';
+        }
+
+        if (!array_key_exists($e_code, $LANG_FILEMGMT_ERRORS)) {
+            $e_code = '9999';
+        }
+        $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates');
+        $T->set_file('message', 'errmsg.thtml');
+        $T->set_var(array(
+            'e_code' => $e_code,
+            'e_message' => $LANG_FILEMGMT_ERRORS[$e_code],
+            'url' => $destination,
+        ) );
+        $T->parse('output', 'message');
+
+        $display  = Menu::siteHeader('menu');
+        $display .= $T->finish($T->get_var('output'));
+        $display .= Menu::siteFooter();
+        echo $display;
+        die("");
     }
-    return $retval;
 }
-
-function FM_siteFooter() {
-    global $_CONF, $_FM_CONF;
-
-    $retval = '';
-
-    switch( $_FM_CONF['displayblocks'] ) {
-        case 0 : // left only
-        case 3 : // none
-            $retval .= COM_siteFooter();
-            break;
-        case 1 : // right only
-        case 2 : // left and right
-            $retval .= COM_siteFooter( true );
-            break;
-        default :
-            $retval .= COM_siteFooter();
-            break;
-    }
-    return $retval;
-}
-?>

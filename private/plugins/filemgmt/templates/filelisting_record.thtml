@@ -1,67 +1,103 @@
 {# begin {templatelocation} #}
-<tr class="pluginRow{cssid}">
-  <td>
-    <table style="width:100%;border:1px solid #afafaf;padding:5px;">
-      <tr>
-        <td class="uk-width-2-4" colspan="2" ><b>{LANG_CATEGORY}</b>{category_path}</td>
-        <td class="uk-width-2-4 uk-text-right">{LANG_SUBMITTEDBY}{submitter_name}</td>
-      </tr>
-      <tr>
-        <td colspan="3" style="width:500px;">
-        	<b>
-{!if is_found}
-        		<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow">
-              <img src="{site_url}/filemgmt/images/download.gif" title="{LANG_DLNOW}" alt="{LANG_DLNOW}" />
-            </a>&nbsp;
-            <a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow" title="{download_title}">
-            	{dtitle}
-            </a>
+<div class="fm_record">
+	<ul uk-grid class="uk-grid uk-grid-collapse uk-width-1-1 uk-grid-width-1-1 uk-grid-width-medium-1-2 uk-child-width-1-1@s uk-child-width-1-2@s fm_category">
+		<li><b>{LANG_CATEGORY}</b>
+<!-- BEGIN catPathElements -->
+{!if first_element}
 {!else}
-            	{dtitle}
+			<i class="uk-icon uk-icon-arrow-right uk-text-primary"></i>
 {!endif}
-          </b>
-          &nbsp;&nbsp;&nbsp;{image_newdownload}{image_popular}
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3">{file_description}</td>
-      </tr>
-      <tr>
-        <td style="width:15%;display:{show_snapshoticon};">
-          {!if snapshot_url}
-              <a href="{snapshot_url}" rel="lightbox" data-uk-lightbox rel="nofollow" target="_blank" title="{LANG_CLICK2SEE}">{snapshot_icon}{LANG_SCREENSHOT}</a>
-          {!else}
-              &nbsp;
-          {!endif}
-        </td>
+			{path_element}
+<!-- END catPathElements -->
+		</li>
+		<li style="text-align:right;">{LANG_SUBMITTEDBY}
+{!if submitter_link}
+			<a href="{site_url}/users.php?mode=profile&amp;uid={submitter}">{submitter_name}</a>
+{!else}
+			{submitter_name}
+{!endif}
+		</li>
+	</ul>
+	<div class="" style="font-weight:bold;">
+		<div>
+{!if is_found}
+			<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow">
+				<i class="uk-icon-cloud-download uk-icon-medium" data-uk-tooltip="{delay:500}" title="{LANG_DLNOW}" title="{LANG_DLNOW}" alt="{LANG_DLNOW}"></i></a>&nbsp;<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow" title="{download_title}">
+				{dtitle}
+			</a>
+{!else}
+			{dtitle}
+{!endif}
+{!if is_newdownload}
+			<div class="uk-badge uk-badge-notification tooltip" title="{lang_new_title}" style="margin-left:10px;">{lang_new}</div>
+{!endif}
+{!if is_popular}
+			<div class="uk-badge uk-badge-notification uk-badge-danger tooltip" title="{lang_popular}" style="margin-left:10px;">{lang_pop}</div>
+{!endif}
+			{image_newdownload}{image_popular}
+		 </div>
+	</div>
+	<div class="uk-width-1-1">
+		{file_description}
+	</div>
 
-        <td style="width:15%;display:{show_snapshoticon_na};">{LANG_MD_SCREENSHOT_NA}</td>
+	<ul uk-grid class="uk-grid uk-grid-collapse uk-width-1-1 uk-grid-width-1-2 uk-grid-width-medium-1-5 uk-child-width-1-2@s uk-child-width-1-5@m " style="margin-top:5px;">
+		<li><b>{LANG_VERSION}:</b>&nbsp;{version}</li>
 
-        <td style="width:85%;" class="uk-text-right" colspan="2"><b>{LANG_VERSION}:</b>&nbsp;
-          {version}&nbsp;&nbsp;<b>{LANG_SUBMITDATE}:</b>&nbsp;{datetime}&nbsp;&nbsp;&nbsp;<b>{LANG_RATING}</b>{rating}{votestring}&nbsp;
-          {begin_dlreport_link}<img src="{site_url}/filemgmt/images/counter.gif" style="width:14px;height:14px;vertical-align:middle;" title="{download_times}" alt="{download_times}" />{end_dlreport_link}&nbsp;{download_count}&nbsp;&nbsp;
-          <img src="{site_url}/filemgmt/images/size.gif" style="width:14px;height:14px;vertical-align:middle;" title="{LANG_FILESIZE}" alt="{LANG_FILESIZE}" />&nbsp;
-          {file_size}&nbsp;&nbsp;<a href="{homepage_url}" target="_blank" rel="nofollow"><img src="{site_url}/filemgmt/images/home.gif" style="width:14px;height:14;vertical-align:middle;" title="{LANG_HOMEPAGE}:{homepage}" alt="{LANG_HOMEPAGE}:{homepage}" /></a>
-        </td>
-      </tr>
+		<li><b>{LANG_SUBMITDATE}:</b>&nbsp;{datetime}</li>
 
-      <tr>
-        <td style="width:35%;" style="text-align:center;" class="uk-text-center"><div style="text-align:center !important;" class="fm-rating">{rating_bar}</div></td>
-        <td colspan="2" class="uk-text-right">
+		<!--<li><i class="uk-icon uk-icon-bar-chart"></i>&nbsp;{rating}{votestring}</li>-->
+
+		<li>
+{!if have_dlreport}
+		    <a href="{site_url}/filemgmt/downloadhistory.php?lid={lid}" target="_blank">
+{!endif}
+				<i class="uk-icon-floppy-o tooltip" title="{download_times}" alt="{download_times}"></i>&nbsp;{download_count}
+{!if have_dlreport}
+</a>
+{!endif}
+		</li>
+
+		<li><i class="uk-icon-info-circle tooltip" title="{LANG_FILESIZE}" alt="{LANG_FILESIZE}"></i>&nbsp;{file_size}</li>
+
+		<li uk-lightbox>
+{!if logourl}
+			<a href="{snapshot_url}" data-uk-lightbox rel="nofollow" target="_blank" class="tooltip" title="{LANG_CLICK2SEE}"><i class="uk-icon uk-icon-file-image-o"></i></a>
+{!endif}
+		</li>
+	</ul>
+
+	<div uk-grid class="uk-grid uk-width-1-1 uk-grid-width-1-2 uk-child-width-1-2 uk-text-center" style="font-size:smaller;margin-top:5px;">
+		<div style="text-align:center !important;" class="fm-rating">{rating_bar}</div>
+		<div style="padding-top:10px;">
+			<ul uk-grid data-uk-grid-margin="0px;" class="uk-grid uk-grid-width-1-3 uk-grid-width-medium-1-6 uk-child-width-1-3 uk-child-width-1-6@m uk-text-center" style="font-size:smaller;margin-left:20px;">
+				<li>
 {!if show_comments}
-          {comment_link}&nbsp;|&nbsp;
+					<a href="{site_url}/filemgmt/index.php?id={lid}#comments" class="tooltip" title="{comment_tooltip}"><i class="uk-icon uk-icon-comment uk-icon-medium""></i></a>
 {!endif}
-{!if is_found}
-          <a href="{site_url}/filemgmt/visit.php?lid={lid}" rel="nofollow">{LANG_DOWNLOAD}</a>&nbsp;|&nbsp;
-{!else}
-					{$LANG_FM00[not_found]}&nbsp;|&nbsp;
+				</li>
+				<li>
+					<a href="{site_url}/filemgmt/visit.php?lid={lid}" rel="nofollow"><i class="uk-icon-cloud-download uk-icon-medium tooltip"
+					title="{LANG_DOWNLOAD}"></i></a>
+				</li>
+				<li>
+					<a href="{site_url}/filemgmt/index.php?id={lid}" rel="nofollow"><i class="uk-icon uk-icon-external-link uk-icon-medium tooltip" title="{LANG_FILELINK}"></i></a>
+				</li>
+				<li>
+					<a href="{site_url}/filemgmt/brokenfile.php?lid={lid}" rel="nofollow"><i class="uk-icon-chain-broken uk-icon-medium tooltip" title="{LANG_REPORTBROKEN}"></i></a>
+				</li>
+				<li>
+{!if homepage_url}
+					<a href="{homepage_url}" target="_blank" rel="nofollow"><i class="uk-icon-home uk-icon-medium tooltip" title="{LANG_HOMEPAGE}:{homepage}" alt="{LANG_HOMEPAGE}:{homepage}"></i></a>
 {!endif}
-          <a href="{site_url}/filemgmt/index.php?id={lid}" rel="nofollow">{LANG_FILELINK}</a>&nbsp;|&nbsp;
-          <a href="{site_url}/filemgmt/brokenfile.php?lid={lid}" rel="nofollow">{LANG_REPORTBROKEN}</a>
-          <span style="display:{show_editlink};">&nbsp;|&nbsp;<a href="{site_admin_url}/plugins/filemgmt/index.php?lid={lid}&amp;op=modDownload" rel="nofollow">{LANG_EDIT}</a></span>
-        </td>
-      </tr>
-    </table>
-  </td>
-</tr>
+				</li>
+				<li>
+{!if LANG_EDIT}
+					<a href="{site_admin_url}/plugins/filemgmt/index.php?modDownload={lid}" rel="nofollow"><i class="uk-icon-edit uk-icon-medium tooltip" title="{LANG_EDIT}"></i></a>
+{!endif}
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
 {# end {templatelocation} #}

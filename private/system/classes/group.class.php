@@ -142,7 +142,6 @@ class Group
         }
 
         $data = $stmt->fetchAll(Database::ASSOCIATIVE);
-
         $stmt->closeCursor();
         if (count($data) < 1) {
             $data = array();
@@ -203,7 +202,6 @@ class Group
         // Not in cache? First get directly-assigned memberships, then
         // all inherited ones.
         $groups = self::getAssigned($uid);
-
         $cTotalGroups = count($groups);
 //        Log::write('system',Log::DEBUG,sprintf("%s::%s got %d assigned groups.",__CLASS__,__FUNCTION__,$cTotalGroups));
 
@@ -247,13 +245,10 @@ class Group
             }
         }
         $groups['All Users'] = 2;
-        if (!COM_isAnonUser()) {
+        if ($uid > 1) {
             $groups['Logged-in Users'] = 13;
         }
 
-        if (count($groups) == 0) {
-            $groups = array('All Users' => 2);
-        }
         ksort($groups);
         $runonce[$uid] = $groups;
         Cache::getInstance()->set($cache_key, $groups, array('groups', 'user_' . $uid));

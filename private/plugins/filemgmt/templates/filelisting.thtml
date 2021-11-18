@@ -1,42 +1,35 @@
 {# begin {templatelocation} #}
-
-
-<table style="width:100%;">
-
-  <tr>
-    <td colspan="2">{category_path_link}</td>
-  </tr>
-
-{!if category_records}
- <tr>
-   <td colspan="2">
-     {category_records}
-   </td>
- </tr>
+{!if back_to_list}
+<div class="uk-width-1-1 uk-margin" style="margin-bottom:10px;">
+	<a class="uk-button uk-button-primary" style="float:right;margin-bottom:10px;" href="{site_url}/filemgmt/index.php">Back to Listing</a>
+</div>
 {!endif}
-
+{!if category_path_link}
+<div>{category_path_link}</div>
+{!endif}
+{!if category_records}
+<div>{category_records}</div>
+{!endif}
 {sort_menu}
+<div uk-grid class="uk-grid uk-grid-width-1-2 uk-child-width-1-2">
+	<div>
+		{listing_heading}
+	</div>
+{!if can_submit}
+	<div style="text-align:right">
+		<a href="{site_url}/filemgmt/submit.php" class="uk-button uk-button-success">{$LANG_FILEMGMT['usermenu3']}</a>
+	</div>
+{!endif}
+</div>
 
-  <tr>
-    <td colspan="2" style="width:100%;text-align:left;">
-      {listing_heading}
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2">
-      <table style="width:100%;">
-        {filelisting_records}
-      </table>
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" style="padding:10px;">{page_navigation}</td>
-  </tr>
-
-</table>
-<br />
-{comment_records}
-
+<div class="uk-width-1-1 uk-margin" style="clear:both;margin-top:10px;">
+<!-- BEGIN fileRecords -->
+	{filelisting_record}
+<!-- END fileRecords -->
+{!if no_files}
+    <div class="uk-alert uk-alert-primary">{lang_no_files}</div>
+{!endif}
+</div>
+<div>{page_navigation}</div>
+<div>{comment_records}</div>
 {# end {templatelocation} #}

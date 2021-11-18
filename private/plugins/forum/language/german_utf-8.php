@@ -1015,7 +1015,7 @@ $LANG_confignames['forum'] = array(
     'geshi_line_style' => 'GeSHi Zeilennummern Style',
     'geshi_code_style' => 'GeSHi Code Block Stil',
     'geshi_header_style' => 'GeSHi Header Block Stil',
-
+    'likes_prf_limit' => 'Maximale Anzahl von Likes, die in Profilen angezeigt werden',
 );
 
 $LANG_configsubgroups['forum'] = array(
