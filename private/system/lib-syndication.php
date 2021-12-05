@@ -473,16 +473,20 @@ function SYND_updateFeed( $fid )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
+    $Feed = glFusion\Syndication\Feed::getById($fid);
+    $Feed->Generate();
+    return;
+
     $db = Database::getInstance();
 
     $A = $db->conn->fetchAssoc("SELECT * FROM {$_TABLES['syndication']} WHERE fid = ?",array($fid),array(Database::STRING));
     if ( $A !== false && $A['is_enabled'] == 1 ) {
-        $format = explode( '-', $A['format'] );
 
         if ($A['format'] == 'ICS-1.0') {
             return SYND_updateFeediCal( $A );
         }
 
+        $format = explode( '-', $A['format'] );
         $rss = new UniversalFeedCreator();
         if ( $A['content_length'] > 1 ) {
             $rss->descriptionTruncSize = $A['content_length'];
@@ -510,8 +514,10 @@ function SYND_updateFeed( $fid )
         $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
 
         $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1], $A);
-
-        if ( is_array($content) ) {
+        if ($content === NULL) {
+            // Special NULL return if the plugin handles its own feed writing
+            return;
+        } elseif ( is_array($content) ) {
             foreach ( $content AS $feedItem ) {
                 $item = new FeedItem();
 
@@ -571,7 +577,10 @@ function SYND_updateFeediCal( $A )
     if ( $A['is_enabled'] == 1 ) {
         $format = explode( '-', $A['format'] );
 
-        $vCalendar = new \Eluceo\iCal\Component\Calendar($_CONF['site_url']);
+        $vCalendar = new \Eluceo\iCal\Component\Calendar(
+            $_CONF['site_url'] . '//NONSGML ' . $A['title'] . '//' . strtoupper($_CONF['iso_lang'])
+        );
+
         $vCalendar->setMethod('PUBLISH');
         if (!empty($A['title'])) {
             $vCalendar->setName($A['title']);
@@ -579,7 +588,6 @@ function SYND_updateFeediCal( $A )
         if (!empty($A['description'])) {
             $vCalendar->setDescription($A['description']);
         }
-
         if ( !empty( $A['filename'] )) {
             $filename = $A['filename'];
         } else {
