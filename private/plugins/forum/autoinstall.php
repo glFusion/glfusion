@@ -150,7 +150,7 @@ function plugin_autouninstall_forum ()
 {
     $out = array (
         /* give the name of the tables, without $_TABLES[] */
-        'tables' => array('ff_topic','ff_categories','ff_forums','ff_settings','ff_moderators','ff_banned_ip', 'ff_log', 'ff_userprefs','ff_userinfo','ff_attachments','ff_bookmarks','ff_rating_assoc', 'ff_badges', 'ff_ranks', 'ff_likes_assoc'),
+        'tables' => array('ff_topic','ff_categories','ff_forums','ff_moderators','ff_banned_ip', 'ff_log', 'ff_userprefs','ff_userinfo','ff_attachments','ff_bookmarks','ff_rating_assoc', 'ff_badges', 'ff_ranks', 'ff_likes_assoc'),
         /* give the full name of the group, as in the db */
         'groups' => array('forum Admin'),
         /* give the full name of the feature, as in the db */
