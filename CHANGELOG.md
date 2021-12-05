@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Implemented Login Landing configuration option - set custom page to navigate after loggging in (cygnus8929)
 - Updated CKEditor to v4.16.1
 - Minimum supported PHP version bumped to PHP v5.6.0
 
