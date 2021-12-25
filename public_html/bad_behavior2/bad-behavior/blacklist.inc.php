@@ -178,7 +178,12 @@ function bb2_blacklist($settings,$package) {
 	    $bb2_spambots = array_merge($bb2_spambots,$_CONF['bb2_spambots']);
 	}
 	if ( isset($_CONF['bb2_spambots_regex'] ) && is_array($_CONF['bb2_spambots_regex'] ) ) {
-	    $bb2_spambots_regex = array_merge($bb2_spambots_regex,$_CONF['bb2_spambots_regex']);
+		$cfg_bb2_spambots_regex = array();
+		foreach($_CONF['bb2_spambots_regex'] AS $regex) {
+			$cfg_bb2_spambots_regex[] = '/'.preg_quote($regex,'/').'/';
+		}
+	    $bb2_spambots_regex = array_merge($bb2_spambots_regex,$cfg_bb2_spambots_regex);
+//	    $bb2_spambots_regex = array_merge($bb2_spambots_regex,$_CONF['bb2_spambots_regex']);
 	}
 	if ( isset($_CONF['bb2_spambots_url'] ) && is_array($_CONF['bb2_spambots_url'] ) ) {
 	    $bb2_spambots_url = array_merge($bb2_spambots_url,$_CONF['bb2_spambots_url']);
