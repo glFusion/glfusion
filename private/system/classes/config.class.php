@@ -229,7 +229,7 @@ class config
             $db->_errorlog("SQL Error: " . $e->getMessage());
         }
         if ($name != 'theme')  {
-            $this->config_array[$group][$name] = $value;
+            $this->config_array[$group][$name] = @unserialize($value);
             $this->_post_configuration();
             $this->_writeIntoCache();
             $this->_purgeCache();

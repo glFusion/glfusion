@@ -178,7 +178,6 @@ class Social
             $_SOCIAL = $cfg->get_config('social_internal');
 
             if ( isset($_SOCIAL['social_site_extra'])) {
-//                $T->set_var('extra',@unserialize($_SOCIAL['social_site_extra']));
                 $T->set_var('extra',$_SOCIAL['social_site_extra']);
             }
         }
