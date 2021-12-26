@@ -6,7 +6,7 @@
 // |                                                                          |
 // | glFusion BB2 Ban administration.                                         |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2016-2017 by the following authors:                        |
+// | Copyright (C) 2016-2021 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // +--------------------------------------------------------------------------+
@@ -315,6 +315,9 @@ function BB2_blacklist_entry($msg = '')
         'lang_info'                 => $LANG_BAD_BEHAVIOR['enter_ip_info'],
         'lang_submit'               => $LANG_BAD_BEHAVIOR['submit'],
         'lang_cancel'               => $LANG_BAD_BEHAVIOR['cancel'],
+        'sec_token'      => CSRF_TOKEN,
+        'token'          => SEC_createToken(),
+
     ));
 
     $T->parse('output', 'entry');
@@ -410,6 +413,8 @@ function BB2_blacklist_edit($msg = '')
         'lang_info'                     => $LANG_BAD_BEHAVIOR['enter_ip_info'],
         'lang_submit'                   => $LANG_BAD_BEHAVIOR['submit'],
         'lang_cancel'                   => $LANG_BAD_BEHAVIOR['cancel'],
+        'sec_token'      => CSRF_TOKEN,
+        'token'          => SEC_createToken(),
     ));
 
     $T->parse('output', 'entry');
@@ -426,6 +431,10 @@ function BB2_process_blacklist($editsave = 0)
     $errors = 0;
 
     $reason = '';
+
+    if ( !SEC_checkToken()) {
+        return BB2_blacklist_list();
+    }
 
     if ( $editsave == true ) {
         if ( !isset($_POST['id'])) {
