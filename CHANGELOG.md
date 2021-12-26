@@ -5,7 +5,7 @@
 ### Changed
 
 - Implemented Login Landing configuration option - set custom page to navigate after loggging in (cygnus8929)
-- Updated CKEditor to v4.16.1
+- Updated CKEditor to v4.17.1
 - Minimum supported PHP version bumped to PHP v5.6.0
 
 ### Fixed
@@ -22,6 +22,15 @@
 - fusionrescue code cleanup - improved hanlding of configuration items with array values
 - Fixed HTML issue in logo-graphic.thtml (removed errant quote)
 - Disabled autocomplete for TOTP (2FA) code input fields
+
+### Updates
+
+- Upgrading ezyang/htmlpurifier (v4.13.0 => v4.14.0)
+- Upgrading james-heinrich/getid3 (v1.9.20 => v1.9.21)
+- Upgrading phpclasses/oauth-api (1.0.110 => 1.0.113)
+- Upgrading phpxmlrpc/phpxmlrpc (4.5.2 => 4.6.0)
+- Upgrading robthree/twofactorauth (1.8.0 => 1.8.1)
+- Upgrading simplepie/simplepie (1.5.6 => 1.5.8)
 
 ## v1.7.9 (March 13, 2021)
 
