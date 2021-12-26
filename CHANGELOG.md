@@ -10,6 +10,9 @@
 
 ### Fixed
 
+- BB2 regex check for User Agent fails due to regex delimiters
+- CSRF protection on BB2 blacklist entries
+- Anonymous comments could impersonate (use the same username) as an existing user - Topsec_bunney reported
 - 404 errors were always logged regardless of configuration setting
 - Subtitle's on stories did not handle quotes properly
 - User notifications were being sent to the no-reply address instead of the site address
