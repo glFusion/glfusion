@@ -1223,6 +1223,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
                         $A[$key] = $_POST[$key];
                     } else if ($key == 'username') {
                         $A[$key] = @htmlspecialchars(COM_checkWords(strip_tags($_POST[$key])),ENT_QUOTES,COM_getEncodingt());
+                        $A[$key] = USER_uniqueUsername($A[$key]);
                     } else {
                         $A[$key] = COM_applyFilter($_POST[$key]);
                     }
