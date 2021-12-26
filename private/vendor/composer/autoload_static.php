@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
 {
     public static $files = array (
-        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         'fdc0e9724ddc47859c8bf0c1ea0a623a' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/constants.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -188,9 +188,11 @@ class ComposerStaticInit9b80ed771292a3b6ed07027fef7a1468
         'getid3_svg' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.graphic.svg.php',
         'getid3_swf' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio-video.swf.php',
         'getid3_szip' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.archive.szip.php',
+        'getid3_tag_nikon_nctg' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.tag.nikon-nctg.php',
         'getid3_tak' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio.tak.php',
         'getid3_tar' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.archive.tar.php',
         'getid3_tiff' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.graphic.tiff.php',
+        'getid3_torrent' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.misc.torrent.php',
         'getid3_ts' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio-video.ts.php',
         'getid3_tta' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio.tta.php',
         'getid3_voc' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio.voc.php',

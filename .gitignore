@@ -54,6 +54,7 @@ private/plugins/mediagallery/config.php
 public_html/mediagallery/mediaobjects/tn/
 public_html/mediagallery/mediaobjects/orig/
 public_html/mediagallery/mediaobjects/disp/
+public_html/mediagallery/watermarks/
 private/plugins/mediagallery/uploads/
 
 # Forum
@@ -69,6 +70,12 @@ public_html/filemgmt_data/category_snaps/
 private/plugins/agenda/
 public_html/agenda/
 public_html/admin/plugins/agenda/
+
+# glFusion2Check Plugin
+private/plugins/glfusion2check/
+public_html/glfusion2check/
+public_html/admin/plugins/glfusion2check/
+
 
 # DokuWiki Integration
 private/plugins/dokuwiki/
@@ -155,3 +162,25 @@ public_html/layout/equinox/
 #
 # Put additional local excludes here...
 #
+# FAQ Plugin
+private/plugins/faq/
+public_html/faq/
+public_html/admin/plugins/faq/
+
+# Indexer Plugin
+private/plugins/indexer/
+public_html/indexer/
+public_html/admin/plugins/indexer/
+
+private/plugins/lglib/
+public_html/lglib/
+public_html/admin/plugins/lglib/
+
+private/plugins/evlist/
+public_html/evlist/
+public_html/admin/plugins/evlist/
+
+private/plugins/referral/
+public_html/referral/
+public_html/admin/plugins/referral
+
