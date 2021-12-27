@@ -27,7 +27,7 @@
 	{filelisting_record}
 <!-- END fileRecords -->
 {!if no_files}
-    <div class="uk-alert uk-alert-primary">{lang_no_files}</div>
+    <div class="uk-alert uk-alert-primary">{lang_nofiles}</div>
 {!endif}
 </div>
 <div>{page_navigation}</div>
