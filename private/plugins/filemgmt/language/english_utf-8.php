@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -37,8 +37,8 @@ $LANG_FM00 = array (
     'editor'            => 'Plugin Editor',
     'warning'           => 'De-Install Warning',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
-    'WhatsNewLabel'    => 'Files',
-    'WhatsNewPeriod'   => ' last %s days',
+    'WhatsNewLabel'     => 'Files',
+    'WhatsNewPeriod'    => ' last %s days',
     'new_upload'        => 'New File submitted at ',
     'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
     'details'           => 'File Details',
@@ -64,48 +64,48 @@ $LANG_FM02 = array(
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "New Page",
-    'adminhome' => "Admin Home",
-    'plugin_name' => "File Management",
-    'searchlabel' => "File Listing",
-    'searchlabel_results' => "File Listing Results",
-    'downloads' => "Downloads",
-    'report' => "Top Downloads",
-    'usermenu1' => "Downloads",
-    'usermenu2' => "&nbsp;&nbsp;Top Rated",
-    'usermenu3' => "Upload a file",
-    'admin_menu' => "Filemgmt Admin",
-    'writtenby' => "Written By",
-    'date' => "Last Updated",
-    'title' => "Title",
-    'content' => "Content",
-    'hits' => "Hits",
-    'Filelisting' => "File Listing",
-    'DownloadReport' => "Download History for single file",
-    'StatsMsg1' => "Top Ten Accessed Files in Repository",
-    'StatsMsg2' => "It appears there are no files defined for the filemgmt plugin on this site or no one has ever accessed them.",
-    'usealtheader' => "Use Alt. Header",
-    'url' => "URL",
-    'edit' => "Edit",
-    'lastupdated' => "Last Updated",
-    'pageformat' => "Page Format",
-    'leftrightblocks' => "Left & Right Blocks",
-    'blankpage' => "Blank Page",
-    'noblocks' => "No Blocks",
-    'leftblocks' => "Left Blocks",
-    'addtomenu' => 'Add To Menu',
-    'label' => 'Label',
-    'nofiles' => 'Number of files in our repository (Downloads)',
-    'save' => 'save',
-    'preview' => 'preview',
-    'delete' => 'delete',
-    'cancel' => 'cancel',
-    'access_denied' => 'Access Denied',
-    'invalid_install' => 'Someone has tried to illegally access the File Management install/uninstall page.  User id: ',
-    'start_install' => 'Attempting to install the Filemgmt Plugin',
-    'start_dbcreate' => 'Attempting to create tables for Filemgmt plugin',
-    'install_skip' => '... skipped as per filemgmt.cfg',
-    'access_denied_msg' => 'You are illegally trying access the File Mgmt administration pages.  Please note that all attempts to illegally access this page are logged',
+    'newpage'               => "New Page",
+    'adminhome'             => "Admin Home",
+    'plugin_name'           => "File Management",
+    'searchlabel'           => "File Listing",
+    'searchlabel_results'   => "File Listing Results",
+    'downloads'             => "Downloads",
+    'report'                => "Top Downloads",
+    'usermenu1'             => "Downloads",
+    'usermenu2'             => "&nbsp;&nbsp;Top Rated",
+    'usermenu3'             => "Upload a file",
+    'admin_menu'            => "Filemgmt Admin",
+    'writtenby'             => "Written By",
+    'date'                  => "Last Updated",
+    'title'                 => "Title",
+    'content'               => "Content",
+    'hits'                  => "Hits",
+    'Filelisting'           => "File Listing",
+    'DownloadReport'        => "Download History for single file",
+    'StatsMsg1'             => "Top Ten Accessed Files in Repository",
+    'StatsMsg2'             => "It appears there are no files defined for the filemgmt plugin on this site or no one has ever accessed them.",
+    'usealtheader'          => "Use Alt. Header",
+    'url'                   => "URL",
+    'edit'                  => "Edit",
+    'lastupdated'           => "Last Updated",
+    'pageformat'            => "Page Format",
+    'leftrightblocks'       => "Left & Right Blocks",
+    'blankpage'             => "Blank Page",
+    'noblocks'              => "No Blocks",
+    'leftblocks'            => "Left Blocks",
+    'addtomenu'             => 'Add To Menu',
+    'label'                 => 'Label',
+    'nofiles'               => 'Number of files in our repository (Downloads)',
+    'save'                  => 'Save',
+    'preview'               => 'Preview',
+    'delete'                => 'Delete',
+    'cancel'                => 'Cancel',
+    'access_denied'         => 'Access Denied',
+    'invalid_install'       => 'Someone has tried to illegally access the File Management install/uninstall page.  User id: ',
+    'start_install'         => 'Attempting to install the Filemgmt Plugin',
+    'start_dbcreate'        => 'Attempting to create tables for Filemgmt plugin',
+    'install_skip'          => '... skipped as per filemgmt.cfg',
+    'access_denied_msg'     => 'You are illegally trying access the File Mgmt administration pages.  Please note that all attempts to illegally access this page are logged',
     'installation_complete' => 'Installation Complete',
     'installation_complete_msg' => 'The data structures for the File Mgmt plugin for glFusion have been successfully installed into your database!  If you ever need to uninstall this plugin, please read the README document that came with this plugin.',
     'installation_failed' => 'Installation Failed',
@@ -130,6 +130,14 @@ $LANG_FILEMGMT = array(
     'err_req_fields' => 'Some required fields were not supplied',
     'go_back' => 'Go Back',
     'err_demomode' => 'Uploads are disabled in demo mode',
+    'edit_category' => 'Edit Category',
+    'create_category' => 'Create Category',
+    'can_view' => 'Can View',
+    'can_upload' => 'Can Upload',
+    'delete_category' => 'Delete Category',
+    'new_category'      => 'New Category',
+    'new_file'          => 'New File',
+    'remote_ip'         => 'Remote IP',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
@@ -403,7 +411,7 @@ define("_MD_NOMODREQ","No Download Modification Request.");
 define("_MD_DBUPDATED","Database Updated Successfully!");
 define("_MD_MODREQDELETED","Modification Request Deleted.");
 define("_MD_IMGURLMAIN",'Image<div style="font-size:8pt;">Image height will be resized to 50px</div>');
-define("_MD_PARENT","Parent Category:");
+define("_MD_PARENT","Parent Category");
 define("_MD_SAVE","Save Changes");
 define("_MD_CATDELETED","Category Deleted.");
 define("_MD_WARNING","WARNING: Are you sure you want to delete this Category and ALL its Files and Comments?");
