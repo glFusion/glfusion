@@ -1292,6 +1292,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type = '',$mode = '',$po
 //   since we really want the raw data
 //   we can do the filtering on display or edit below
                 $A[$key] = @htmlspecialchars(COM_checkWords(strip_tags($_POST[$key])),ENT_QUOTES,COM_getEncodingt());
+                $A[$key] = USER_uniqueUsername($A[$key]);
             } else {
                 $A[$key] = COM_applyFilter($_POST[$key]);
             }
@@ -1435,7 +1436,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type = '',$mode = '',$po
         $comment_template->set_var('uid', 1);
 
         if ( isset($A['username'])) {
-            $name = $A['username'];
+            $name = USER_uniqueUsername($A['username']);
         } else {
             $name = $LANG03[24]; //anonymous user
         }
@@ -1566,6 +1567,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     if ( COM_isAnonUser() ) {
         if (isset($_POST['username']) ) {
             $uname = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt(),true);
+            $uname = USER_uniqueUsername($uname);
         } else {
             $uname = '';
         }
