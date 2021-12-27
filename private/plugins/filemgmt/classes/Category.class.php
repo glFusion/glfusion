@@ -13,6 +13,7 @@
  */
 namespace Filemgmt;
 
+use \glFusion\Database\Database;
 
 /**
  * Class for product categories.
@@ -267,6 +268,29 @@ class Category
             return false;
         }
 
+        $db = Database::getInstance();
+
+        // delete all files in this category
+
+        try {
+            $stmt = $db->conn->prepare(
+                "SELECT a.lid FROM {$_TABLES['filemgmt_filedetail']} a
+                LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid
+                WHERE a.cid = $this->cid AND status > 0"
+            );
+            $stmt->execute();
+            $records = $stmt->fetchAll(Database::ASSOCIATIVE);
+        } catch(Throwable $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            exit;
+        }
+
+        foreach($records AS $rec) {
+            \Filemgmt\Download::getInstance($rec['lid'])->delete();
+        }
+
         $this->deleteImage(false);
         DB_delete($_TABLES['filemgmt_cat'], 'cid', $this->cid);
         $this->cid = 0;
@@ -300,7 +324,7 @@ class Category
      */
     public function edit()
     {
-        global $_TABLES, $_CONF, $_SYSTEM, $_FM_CONF;
+        global $_TABLES, $_CONF, $_SYSTEM, $_FM_CONF, $LANG_FILEMGMT;
 
         $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates/admin');
         $T->set_file('category', 'category_form.thtml');
@@ -310,10 +334,10 @@ class Category
         // Otherwise, we're creating a new item.  Also set the $not and $items
         // values to be used in the parent category selection accordingly.
         if ($id > 0) {
-            $retval = COM_startBlock('Edit Category' . ': ' . $this->title);
+            $retval = COM_startBlock($LANG_FILEMGMT['edit_category'] . ': ' . $this->title);
             $T->set_var('cid', $id);
         } else {
-            $retval = COM_startBlock('Create Category');
+            $retval = COM_startBlock($LANG_FILEMGMT['create_category']);
             $T->set_var('cid', '');
         }
 
@@ -322,8 +346,8 @@ class Category
             'title'         => $this->title,
             'old_parent'    => $this->pid,
             'old_grp'       => $this->grp_access,
-            'grp_access_options' => SEC_getGroupDropdown($this->grp_access, 3, 'grp_access'),
-            'grp_writeaccess_options' => SEC_getGroupDropdown($this->grp_writeaccess, 3, 'grp_writeaccess'),
+            'grp_access_options'        => SEC_getGroupDropdownAll($this->grp_access, 3, 'grp_access'),
+            'grp_writeaccess_options'   => SEC_getGroupDropdownAll($this->grp_writeaccess, 3, 'grp_writeaccess'),
             'pid_options'   => COM_optionList(
                 $_TABLES['filemgmt_cat'],
                 'cid,title',
@@ -331,9 +355,9 @@ class Category
                 1//,
                 //"cid = {$this->pid}"
             ),
-            'lang_save' => 'Save',
-            'lang_delete' => 'Delete',
-            'lang_cancel' => 'Cancel',
+            'lang_save'     => $LANG_FILEMGMT['save'],
+            'lang_delete'   => $LANG_FILEMGMT['delete'],
+            'lang_cancel'   => $LANG_FILEMGMT['cancel'],
         ) );
         if (!empty($this->imgurl) && is_file($_FM_CONF['SnapCat'].$this->imgurl)) {
             $T->set_var('thumbnail', $_FM_CONF['SnapCatURL'] . $this->imgurl);
@@ -347,7 +371,6 @@ class Category
         $retval .= $T->finish($T->get_var('output'));
         $retval .= COM_endBlock();
         return $retval;
-
     }
 
 
@@ -477,7 +500,7 @@ class Category
      */
     public static function adminList($cid=0)
     {
-        global $_CONF, $_FM_CONF, $_TABLES, $_USER, $LANG_ADMIN;
+        global $_CONF, $_FM_CONF, $_TABLES, $_USER, $LANG_ADMIN, $LANG_FILEMGMT;
 
         USES_lib_admin();
 
@@ -488,11 +511,6 @@ class Category
             ON cat.pid = parent.cid";
 
         $header_arr = array(
-//            array(
-//                'text'  => 'ID',
-//                'field' => 'cid',
-//                'sort'  => true,
-//            ),
             array(
                 'text'  => $LANG_ADMIN['edit'],
                 'field' => 'edit',
@@ -500,27 +518,27 @@ class Category
                 'align' => 'center',
             ),
             array(
-                'text'  => 'Title',
+                'text'  => _MD_TITLE,
                 'field' => 'title',
                 'sort'  => true,
             ),
             array(
-                'text'  => 'Parent',
+                'text'  => _MD_PARENT,
                 'field' => 'pid',
                 'sort'  => false,
             ),
             array(
-                'text'  => 'Can View',
+                'text'  => $LANG_FILEMGMT['can_view'],
                 'field' => 'grp_access',
                 'sort'  => false,
             ),
             array(
-                'text'  => 'Can upload',
+                'text'  => $LANG_FILEMGMT['can_upload'],
                 'field' => 'grp_writeaccess',
                 'sort'  => false,
             ),
             array(
-                'text'  => 'Delete',
+                'text'  => $LANG_FILEMGMT['delete'],
                 'field' => 'delete',
                 'sort' => false,
                 'align' => 'center',
@@ -534,7 +552,7 @@ class Category
 
         $display .= COM_startBlock('', '', COM_getBlockTemplate('_admin_block', 'header'));
         $display .= COM_createLink(
-            'New Item',
+            $LANG_FILEMGMT['new_category'],
             $_FM_CONF['admin_url'] . '/index.php?modCat=0',
             array(
                 'class' => 'uk-button uk-button-success',
@@ -577,7 +595,7 @@ class Category
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_TABLES, $LANG_ADMIN, $_FM_CONF;
+        global $_TABLES, $LANG_ADMIN, $LANG_FILEMGMT, $_FM_CONF;
 
         $retval = '';
         static $grp_names = array();
@@ -625,8 +643,8 @@ class Category
             $retval = FieldList::delete(array(
                 'delete_url' => $_FM_CONF['admin_url'] . "/index.php?delCat={$A['cid']}",
                 'attr' => array(
-                    'onclick' => "return confirm('This deletes this category, all sub-categories and all files contained in the cateogory / sub-category. Are you sure you want to continue?');",
-                    'title' => 'Delete Category',
+                    'onclick' => "return confirm('"._MD_WARNING."');",
+                    'title' => $LANG_FILEMGMT['delete_category'],
                 ),
             ) );
             break;
@@ -766,5 +784,4 @@ class Category
         }
         return $retval;
     }
-
 }
