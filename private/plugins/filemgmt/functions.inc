@@ -75,7 +75,7 @@ if (empty($_FM_CONF['SnapStore'])) {
 }
 if (empty($_FM_CONF['SnapCat'])) {
     $_FM_CONF['SnapCat'] = $_CONF['path_html'].'data/filemgmt/category_snaps/';
-    $_FM_CONF['SnapCatURLURL'] = $_CONF['site_url'].'/data/filemgmt/category_snaps/';
+    $_FM_CONF['SnapCatURL'] = $_CONF['site_url'].'/data/filemgmt/category_snaps/';
 }
 
 // Common plugin-specific URLs
@@ -220,8 +220,11 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode)
 function plugin_commentapproved_filemgmt($cid,$type,$sid)
 {
     global $_TABLES;
-    $comments = CMT_getCount('filemgmt', $sid);
-    DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($sid));
+
+    if (SEC_hasRights('filemgmt.edit,comment.admin','OR')) {
+        $comments = CMT_getCount('filemgmt', $sid);
+        DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($sid));
+    }
 }
 
 function plugin_editcomment_filemgmt($cid,$id)
@@ -1423,12 +1426,14 @@ function plugin_moderationvalues_filemgmt()
 {
     global $_TABLES;
 
-    return array (
-        'lid',
-        $_TABLES['filemgmt_filedetail'],
-        "lid,status",
-        '',
-    );
+    if (SEC_hasRights('filemgmt.edit')) {
+        return array (
+            'lid',
+            $_TABLES['filemgmt_filedetail'],
+            "lid,status",
+            '',
+        );
+    }
 }
 
 
@@ -1439,7 +1444,9 @@ function plugin_moderationvalues_filemgmt()
  */
 function plugin_moderationapprove_filemgmt($lid)
 {
-    Filemgmt\Download::getInstance($lid)->approve();
+    if (SEC_hasRights('filemgmt.edit')) {
+        Filemgmt\Download::getInstance($lid)->approve();
+    }
 }
 
 
@@ -1450,7 +1457,9 @@ function plugin_moderationapprove_filemgmt($lid)
  */
 function plugin_moderationdelete_filemgmt($lid)
 {
-    Filemgmt\Download::getInstance($lid)->delete();
+    if (SEC_hasRights('filemgmt.edit')) {
+        Filemgmt\Download::getInstance($lid)->delete();
+    }
 }
 
 /**
@@ -1465,7 +1474,9 @@ function plugin_submissioncount_filemgmt()
 
     $retval = 0;
 
-    $retval = DB_count ($_TABLES['filemgmt_filedetail'],'status',0);
+    if (SEC_hasRights('filemgmt.edit')) {
+        $retval = DB_count ($_TABLES['filemgmt_filedetail'],'status',0);
+    }
 
     return $retval;
 }
