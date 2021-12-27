@@ -21,7 +21,7 @@
 	<input type="hidden" name="type" value="{type}">
 	<input type="hidden" id="sectoken" name="{token_name}" value="{CSRF_TOKEN}">
 	<input type="hidden" name="uid" value="{uid}">
-	<input type="hidden" name="title" value="{title}">
+
 {!if username_disabled}
   <input type="hidden" name="username" value="{username}">
 {!else}

@@ -365,7 +365,7 @@ function handleEditSubmit()
     }
 
     $comment    = CMT_prepareText($comment, $postmode,true,$cid);
-    $title      = COM_checkWords (strip_tags ($_POST['title']));
+//    $title      = COM_checkWords (strip_tags ($_POST['title']));
 
     if (!empty ($title) && !empty ($comment)) {
         COM_updateSpeedlimit ('comment');
@@ -551,7 +551,7 @@ if ( isset($_POST['cancel'] ) ) {
     $sid     = isset($_POST['sid']) ? COM_sanitizeID(COM_applyFilter ($_POST['sid'])) : '';
     $pid     = isset($_POST['pid']) ? COM_applyFilter ($_POST['pid'],true) : 0;
     $postmode = isset($_POST['postmode']) ? COM_applyFilter($_POST['postmode']) : 'text';
-    $title   = isset($_POST['title']) ? strip_tags ($_POST['title']) : '';
+//    $title   = isset($_POST['title']) ? strip_tags ($_POST['title']) : '';
     $mode    = isset($_POST['mode']) ? COM_applyFilter($_POST['mode']) : '';
 
     $modedit = isset($_POST['modedit']) ? COM_applyFilter($_POST['modedit']) : '';
@@ -606,7 +606,6 @@ if ( isset($_POST['cancel'] ) ) {
             $sid     = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
             $pid     = COM_applyFilter ($_POST['pid'],true);
             $postmode = COM_applyFilter($_POST['postmode']);
-            $title   = strip_tags ($_POST['title']);
             $mode    = COM_applyFilter($_POST['mode']);
 
             if ( $type != 'article' ) {
@@ -730,7 +729,7 @@ if ( isset($_POST['cancel'] ) ) {
             } else {
                 $sid   = isset($_REQUEST['sid']) ? COM_sanitizeID(COM_applyFilter ($_REQUEST['sid'])) : '';
                 $type  = isset($_REQUEST['type']) ? COM_applyFilter ($_REQUEST['type']) : '';
-                $title = isset($_REQUEST['title']) ? strip_tags($_REQUEST['title']) : '';
+                $title = '';
                 $postmode = $_CONF['comment_postmode'];
                 $pid = isset($_REQUEST['pid']) ? COM_applyFilter($_REQUEST['pid'],true) : 0;
 
@@ -747,6 +746,8 @@ if ( isset($_POST['cancel'] ) ) {
                                                 "sid = '".DB_escapeString($sid)."'"
                                                 . COM_getPermSQL('AND')
                                                 . COM_getTopicSQL('AND'));
+                        } else {
+                            $title = PLG_getItemInfo($type,$sid,'title');
                         }
                         // CMT_commentForm expects non-htmlspecial chars for title...
                         $title = str_replace ( '&amp;', '&', $title );

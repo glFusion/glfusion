@@ -708,8 +708,7 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
         if( $ccode == 0 &&
          ($_CONF['commentsloginrequired'] == 0 || !COM_isAnonUser())) {
             $reply_link = $_CONF['site_url'] . '/comment.php?sid=' . $A['sid']
-                        . '&amp;pid=' . $A['cid'] . '&amp;title='
-                        . urlencode($A['title']) . '&amp;type=' . $A['type']
+                        . '&amp;pid=' . $A['cid'] . '&amp;type=' . $A['type']
                         . '#comment_entry';
             $template->set_var('reply_link',$reply_link);
             $template->set_var('lang_reply',$LANG01[43]);
@@ -1201,7 +1200,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
             $edit_comment    = $filter->editableText($comment);
 
             $filter->setPostmode('text');
-//            $title = $filter->displayText($title);
+            $title = $filter->displayText($title);
 //            $title = $filter->editableText($title);
             $filter->setPostmode($postmode);
 
