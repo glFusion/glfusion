@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Removed title processing from comment entry - defaults to the items title that is being commmented on.
 - Implemented Login Landing configuration option - set custom page to navigate after loggging in (cygnus8929)
 - Updated CKEditor to v4.17.1
 - Minimum supported PHP version bumped to PHP v5.6.0
@@ -52,6 +53,7 @@
 
 ### Fixed
 
+- FileMgmt comment was not using proper file id to update comment count
 - PHP v8 Compatibility Updates
 - Story post hour was incorrectly calculated
 - Post action messages where not being properly displayed. For example, save a group membership and the confirmation message did not display.
