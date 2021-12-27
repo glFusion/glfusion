@@ -21,7 +21,6 @@ use glFusion\Cache\Cache;
 use glFusion\FieldList;
 use Filemgmt\Models\Status;
 
-
 /**
  * Class for downloadable items.
  * @package filemgmt
@@ -902,7 +901,7 @@ class Download
      */
     public function edit($post=array())
     {
-        global $_CONF,$_FM_CONF, $_TABLES,$_USER, $_DB_name;
+        global $_CONF,$_FM_CONF, $_TABLES,$_USER, $_DB_name, $LANG_FILEMGMT;
 
         $display = '';
         $totalvotes = '';
@@ -969,14 +968,19 @@ class Download
         if ($this->lid > 0) {
             $hdr_title = $this->title;
         } else {
-            $hdr_title = 'New File';
+            $hdr_title = $LANG_FILEMGMT['new_file'];
         }
         $pathstring .= "<a href=\"{$_FM_CONF['url']}/index.php?id={$this->lid}\">{$hdr_title}</a>";
 
         $categorySelectHTML = '';
         $rootCats = Category::getChildren(0, true);
         foreach ($rootCats as $cid=>$Cat) {
-            $categorySelectHTML .= '<option value="'.$cid.'">' . $Cat->getName();
+            $categorySelectHTML .= '<option value="'.$cid.'"';
+            if ($cid == $this->cid) {
+                $categorySelectHTML .= ' selected="selected" ';
+            }
+            $categorySelectHTML .= '>' . $Cat->getName();
+
             if (!$Cat->canUpload()) {
                 $categorySelectHTML .= " *";
             }
@@ -986,7 +990,12 @@ class Download
                 $Cat = new Category($option);
                 $option['prefix'] = str_replace(".","--",$option['prefix']);
                 $catpath = $option['prefix']."&nbsp;".$myts->makeTboxData4Show($Cat->getName());
-                $categorySelectHTML .= '<option value="'.$Cat->getID() . '">';
+                $categorySelectHTML .= '<option value="'.$Cat->getID() . '"';
+                if ($Cat->getID() == $this->cid) {
+                    $categorySelectHTML .= ' selected="selected" ';
+                }
+                $categorySelectHTML .= '>';
+
                 if (!$Cat->canUpload()) {
                     $categorySelectHTML .= "$catpath *";
                 } else {
@@ -1207,7 +1216,7 @@ class Download
      */
     public static function adminList($cid=0, $status = -1)
     {
-        global $_FM_CONF, $LANG_FM02, $_TABLES, $LANG_ADMIN, $_DB_name;
+        global $_FM_CONF, $LANG_FM02, $_TABLES, $LANG_ADMIN, $LANG_FILEMGMT, $_DB_name;
 
         USES_lib_admin();
 
@@ -1245,7 +1254,7 @@ class Download
                 'sort' => true,
             ),
             array(
-                'text' => 'Hits',
+                'text' => $LANG_FILEMGMT['hits'],
                 'field' => 'hits',
                 'sort' => true,
                 'align' => 'right',
@@ -1263,7 +1272,7 @@ class Download
                 'align' => 'right',
             ),
             array(
-                'text' => 'Delete',
+                'text' => $LANG_FILEMGMT['delete'],
                 'field' => 'delete',
                 'align' => 'center',
             ),
@@ -1333,7 +1342,7 @@ class Download
      */
     public function getDownloadHistory()
     {
-        global $_TABLES, $_FM_CONF;
+        global $_TABLES, $_FM_CONF, $LANG_FILEMGMT;
 
         USES_lib_admin();
 
@@ -1344,17 +1353,17 @@ class Download
             WHERE fh.lid = {$this->lid}";
         $header_arr = array(
             array(
-                'text'  => 'Date',
+                'text'  => _MD_DATE,
                 'field' => 'date',
                 'sort'  => true,
             ),
             array(
-                'text'  => 'User',
+                'text'  => _MD_USER,
                 'field' => 'username',
                 'sort'  => false,
             ),
             array(
-                'text'  => 'Remote IP',
+                'text'  => $LANG_FILEMGMT['remote_ip'],
                 'field' => 'remote_ip',
                 'sort'  => false,
             ),
@@ -1414,8 +1423,7 @@ class Download
             $retval .= FieldList::edit(array(
                 'url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
                 'attr' => array(
-                    'class' => 'tooltip',
-                    'title' => 'Edit',
+                    'title' => _MD_EDIT,
                 ),
             ) );
             break;
@@ -1430,8 +1438,7 @@ class Download
                 'delete_url' => $_FM_CONF['admin_url'] . "/index.php?delDownload={$A['lid']}",
                 'attr' => array(
                     'onclick' => "return confirm('OK to delete');",
-                    'title' => 'Delete Item',
-                    'class' => 'tooltip',
+                    'title' => _MD_DELETE,
                 ),
             ) );
             break;
