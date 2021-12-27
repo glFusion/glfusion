@@ -323,7 +323,7 @@ function FEED_list()
 * @return   string           HTML for the feed editor
 *
 */
-function FEED_edit($fid = 0, $type = '')
+function FEED_edit($fid = 0, $type = '', $A = array())
 {
     global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $MESSAGE,$_IMAGE_TYPE;
 
@@ -338,7 +338,7 @@ function FEED_edit($fid = 0, $type = '')
         $editMode = true;
     }
 
-    if ($fid == 0) {
+    if ($fid == 0 && empty($A)) {
         if (!empty ($type)) { // set defaults
             $A['fid'] = $fid;
             $A['type'] = $type;
@@ -360,6 +360,15 @@ function FEED_edit($fid = 0, $type = '')
         } else {
             return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php');
         }
+    } else {
+        // Fields coming from $_POST after an error. Some need massaging.
+        $A['limits'] = (int)$A['limits'];   // sanitize entry or hour number
+        if (isset($A['limits_in']) && $A['limits_in'] == 1) {
+            $A['limits'] .= 'h';
+        } else {
+            $A['limits_in'] = 0;
+        }
+        $A['date'] = time();
     }
 
     $retval = '';
@@ -618,11 +627,14 @@ function FEED_save($A)
     } else {
         $A['is_enabled'] = 0;
     }
-    if (empty ($A['title']) || empty ($A['description']) ||
-            empty ($A['filename'])) {
+    if (
+        empty ($A['title']) ||
+        empty ($A['description']) ||
+        empty ($A['filename'])
+    ) {
         $retval = COM_siteHeader ('menu', $LANG33[38])
                 . COM_showMessageText($LANG33[39],$LANG33[38],true,'error')
-                . FEED_edit($A['fid'], $A['type'])
+                . FEED_edit($A['fid'], $A['type'], $A)
                 . COM_siteFooter ();
         return $retval;
     }
