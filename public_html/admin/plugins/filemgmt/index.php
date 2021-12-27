@@ -152,7 +152,14 @@ case "delVote":
     exit;
     break;
 case "delCat":
-    delCat();
+    if(Filemgmt\Category::getInstance($opval)->delete()) {
+        COM_setMsg(_MD_CATDELETED);
+    } else {
+        COM_setMsg('Error :: Unable to delete category');
+    }
+    COM_refresh("{$_FM_CONF['admin_url']}/index.php");
+
+//    delCat();
     break;
 case 'modCat':
     $content .= Filemgmt\Category::getInstance($opval)->edit();
@@ -167,7 +174,7 @@ case 'modDownload':
     $content .= Filemgmt\Download::getInstance($opval)->edit();
     break;
 case "modDownloadS":
-    echo "here";die;
+//    echo "here";die;
     modDownloadS();
     break;
 case "delDownload":
