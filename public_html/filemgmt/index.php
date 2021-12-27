@@ -37,7 +37,6 @@ $FM_ratedIds = RATING_getRatedIds('filemgmt');
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
-    //'records'          =>     'filelisting_record.thtml',
     'category'         =>     'filelisting_category.thtml'
 ) );
 
@@ -82,7 +81,6 @@ if ($lid > 0) {
     $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
     $p->set_file(array (
         'page'             =>     'filelisting.thtml',
-        //'records'          =>     'filelisting_record.thtml',
         'category'         =>     'filelisting_category.thtml',
     ));
 
@@ -145,7 +143,7 @@ if ($lid > 0) {
                 $chcount = 0;
                 foreach($arr as $ele) {
                     $chtitle=$myts->makeTboxData4Show($ele['title']);
-                    if ($chcount >= $numSubCategories2Show){
+                    if ($numSubCategories2Show > 0 && $chcount >= $numSubCategories2Show){
                         $subcategories .= "...";
                         break;
                     }
