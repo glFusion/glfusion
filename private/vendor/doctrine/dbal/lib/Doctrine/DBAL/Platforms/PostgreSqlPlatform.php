@@ -14,6 +14,7 @@ use Doctrine\DBAL\Types\BinaryType;
 use Doctrine\DBAL\Types\BlobType;
 use Doctrine\DBAL\Types\IntegerType;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\Deprecations\Deprecation;
 use UnexpectedValueException;
 
 use function array_diff;
@@ -35,6 +36,8 @@ use function trim;
 
 /**
  * PostgreSqlPlatform.
+ *
+ * @deprecated Use PostgreSQL 9.4 or newer
  *
  * @todo   Rename: PostgreSQLPlatform
  */
@@ -208,9 +211,17 @@ class PostgreSqlPlatform extends AbstractPlatform
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated
      */
     public function prefersSequences()
     {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/4229',
+            'AbstractPlatform::prefersSequences() is deprecated without replacement and removed in DBAL 3.0'
+        );
+
         return true;
     }
 
@@ -440,6 +451,8 @@ SQL
      *
      * This is useful to force DROP DATABASE operations which could fail because of active connections.
      *
+     * @deprecated
+     *
      * @param string $database The name of the database to disallow new connections for.
      *
      * @return string
@@ -453,6 +466,8 @@ SQL
      * Returns the SQL statement for closing currently active connections on the given database.
      *
      * This is useful to force DROP DATABASE operations which could fail because of active connections.
+     *
+     * @deprecated
      *
      * @param string $database The name of the database to close currently active connections for.
      *
@@ -897,12 +912,15 @@ SQL
 
         return $this->doConvertBooleans(
             $item,
-            static function ($boolean) {
-                if ($boolean === null) {
+            /**
+             * @param mixed $value
+             */
+            static function ($value) {
+                if ($value === null) {
                     return 'NULL';
                 }
 
-                return $boolean === true ? 'true' : 'false';
+                return $value === true ? 'true' : 'false';
             }
         );
     }
@@ -918,8 +936,11 @@ SQL
 
         return $this->doConvertBooleans(
             $item,
-            static function ($boolean) {
-                return $boolean === null ? null : (int) $boolean;
+            /**
+             * @param mixed $value
+             */
+            static function ($value) {
+                return $value === null ? null : (int) $value;
             }
         );
     }
@@ -929,7 +950,7 @@ SQL
      */
     public function convertFromBoolean($item)
     {
-        if (in_array(strtolower($item), $this->booleanLiterals['false'], true)) {
+        if ($item !== null && in_array(strtolower($item), $this->booleanLiterals['false'], true)) {
             return false;
         }
 
@@ -1088,6 +1109,8 @@ SQL
      * {@inheritDoc}
      *
      * PostgreSQL returns all column names in SQL result sets in lowercase.
+     *
+     * @deprecated
      */
     public function getSQLResultCasing($column)
     {
