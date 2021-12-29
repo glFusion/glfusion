@@ -27,7 +27,7 @@ use Filemgmt\Models\Status;
  */
 class Download
 {
-    const PERMS = 0644;
+    const PERMS = '0644';
 
     /** Downoad ID.
      * @var integer */
@@ -262,7 +262,7 @@ class Download
         global $_FM_CONF;
 
         $interval = 86400 * (int)$_FM_CONF['whatsnewperioddays'];
-        return self::getAll("date > UNIX_TIMESTAMP() - $interval ORDER BY date DESC", 15);
+        return self::getAll("status = 1 AND date > UNIX_TIMESTAMP() - $interval ORDER BY date DESC", 15);
     }
 
 
@@ -317,6 +317,17 @@ class Download
     {
         $this->cid = (int)$id;
         return $this;
+    }
+
+    /**
+     * Get the category ID for this download.
+     *
+     * @return  object  $this->cid
+     */
+    public function getCid()
+    {
+        return $this->cid;
+
     }
 
 
@@ -656,7 +667,6 @@ class Download
             $upload->setPerms(self::PERMS);
             $upload->setFieldName('newfile');
 
-
             if ( FileSystem::mkDir($file_path) === false ) {
                 Log::write('system',Log::ERROR,'FileMgmt: Unable to create ' . $file_path. ' ');
                 ErrorHandler::show("1106");
@@ -729,14 +739,11 @@ class Download
             )
         );
 
-        if (
-            isset($_CONF['debug_image_upload']) &&
-            $_CONF['debug_image_upload']
-        ) {
+        if (isset($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {
             $upload->setLogFile($_CONF['path'] . 'logs/error.log');
             $upload->setDebug(true);
         }
-        $upload->setMaxDimensions(640,480);
+        $upload->setMaxDimensions(2048,2048);
         $upload->setAutomaticResize(true);
         $upload->setMaxFileSize(100000000);
         $upload->uploadFiles();
@@ -750,6 +757,8 @@ class Download
                 $this->logourl = $myts->makeTboxData4Save(rawurlencode($snapfilename));
                 $AddNewFile = true;
             }
+        } elseif (isset($A['deletesnap'])) {
+            $this->deleteImage();
         }
 // end of the file shot
 
@@ -767,6 +776,7 @@ class Download
                 $sql1 = "UPDATE `{$_TABLES['filemgmt_filedetail']}` SET ";
                 $sql3 = " WHERE lid = {$this->lid} ";
             }
+
             $sql2 = "cid = {$this->cid},
                 title = '" . DB_escapeString($this->title) . "',
                 url = '" . DB_escapeString($this->url) . "',
@@ -780,6 +790,11 @@ class Download
                 rating = {$this->rating},
                 votes = {$this->votes},
                 comments = {$this->comments}";
+
+            if (!isset($A['silentedit']) && $this->lid <> 0) {
+                $sql2 .= ",date = UNIX_TIMESTAMP() ";
+            }
+
             $sql = $sql1 . $sql2 . $sql3;
             DB_query($sql);
 
@@ -1023,7 +1038,7 @@ class Download
             'cmt_chk_' . $this->comments => 'checked="checked"',
         ));
 
-        if (!empty($this->logourl) && file_exists($_FM_CONF['SnapStore'].$this->logourl)) {
+        if (!empty($this->logourl)) {//  && file_exists($_FM_CONF['SnapStore'].$this->logourl)) {
             $T->set_var('thumbnail', $_FM_CONF['FileSnapURL'].$this->logourl);
         } else {
             $T->unset_var('thumbnail');
@@ -1088,7 +1103,7 @@ class Download
      */
     public function canRead($groups = NULL)
     {
-        return $this->lid > 0 && Category::getInstance($this->cid)->canRead($groups);
+        return $this->lid > 0 && Category::getInstance($this->cid)->canRead($groups) && (SEC_hasRights('filemgmt.edit') || $this->status == 1);
     }
 
 
@@ -1102,6 +1117,23 @@ class Download
         global $_FM_CONF;
 
         return (SEC_hasRights("filemgmt.upload") || $_FM_CONF['uploadselect']);
+    }
+
+    /**
+     * Deletes a single image from disk.
+     * $del_db is used to save a DB call if this is called from Save().
+     *
+     */
+    public function deleteImage()
+    {
+        global $_TABLES, $_FM_CONF;
+
+        $filename = $this->logourl;
+        if (is_file("{$_FM_CONF['SnapStore']}/{$filename}")) {
+            @unlink("{$_FM_CONF['SnapStore']}/{$filename}");
+        }
+
+        $this->logourl= '';
     }
 
 
@@ -1131,7 +1163,7 @@ class Download
             Log::write('system',Log::INFO, 'FileMgt Approve: File move from '.$tmp. ' to ' .$newfile );
             $rename = @rename($tmp, $newfile);
             Log::write('system',Log::INFO, 'FileMgt Approve: Results of rename is: '. $rename);
-            $chown = @chmod($newfile, self::PERMS);
+            $chown = @chmod($newfile, octdec(self::PERMS));
             if (!is_file($newfile)) {
                 Log::write('system',Log::ERROR, 'Filemgmt upload approve error: New file does not exist after move of tmp file: '.$newfile);
                 $AddNewFile = false;    // Set false again - in case it was set true above for actual file
@@ -1466,7 +1498,7 @@ class Download
      */
     public function showListingRecord()
     {
-        global $_CONF, $_FM_CONF, $_TABLES, $LANG01, $LANG_FILEMGMT;
+        global $_CONF, $_FM_CONF, $_TABLES, $LANG01, $LANG_FILEMGMT, $LANG_FM00;
 
         static $mytree = NULL;
         $dt = new \Date($this->date);
@@ -1501,7 +1533,6 @@ class Download
             'dtitle'    => $this->title,
             'hits'      => COM_numberFormat($this->hits),
             'file_description' => nl2br($this->description),
-
             'file_description' => $format->parse($this->description, true,7200),
             'is_found' => true,
             'LANG_DLNOW' => _MD_DLNOW,
@@ -1515,7 +1546,8 @@ class Download
             'votestring' => ($this->rating > 0) ? sprintf(_MD_NUMVOTES, $this->votes) : '',
             'logourl'   => $this->logourl,
             'snapshot_url' => $_FM_CONF['FileSnapURL'] . $this->logourl,
-            'LANG_VERSION' =>  _MD_VERSION,
+            'LANG_VER' =>  _MD_VERSION,
+            'LANG_VERSION' => _MD_VERSIONC,
             'LANG_SUBMITDATE' => _MD_SUBMITDATE,
             'datetime'  => $dt->format('M.d.Y', true),
             'version'   => $this->version,
@@ -1525,6 +1557,7 @@ class Download
             'download_count' => COM_numberFormat($this->hits),
             'LANG_FILESIZE' => _MD_FILESIZE,
             'LANG_DOWNLOAD' => _MD_DOWNLOAD,
+            'LANG_DOWNLOADS' => $LANG_FILEMGMT['downloads'],
             'LANG_FILELINK' => _MD_FILELINK,
             'LANG_RATETHISFILE' => _MD_RATETHISFILE,
             'LANG_REPORTBROKEN' => _MD_REPORTBROKEN,
@@ -1539,6 +1572,7 @@ class Download
             'lang_new'  => _MD_NEW,
             'lang_new_title' => $LANG_FILEMGMT['newly_uploaded'],
             'lang_popular' => _MD_POPULAR,
+            'lang_not_found' => $LANG_FM00['not_found'],
         ) );
 
         // Check if this is a local or remotely-hosted file.
