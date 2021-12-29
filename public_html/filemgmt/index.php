@@ -74,6 +74,15 @@ if ($lid > 0) {
     $p->set_var('filelisting_record', $File->showListingRecord());
     $p->parse('fRecord', 'fileRecords');
 
+    $cid = $File->getCid();
+
+    $pathstring = "<li><a href='{$_FM_CONF['url']}/index.php'>"._MD_MAIN."</a></li>";
+    $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_FM_CONF['url']}/viewcat.php");
+    $pathstring .= $nicepath;
+
+    $p->set_var('category_path_link',$pathstring);
+
+
     $p->parse('output', 'page');
     $display .= $p->finish ($p->get_var('output'));
 } else {
@@ -143,8 +152,10 @@ if ($lid > 0) {
                 $chcount = 0;
                 foreach($arr as $ele) {
                     $chtitle=$myts->makeTboxData4Show($ele['title']);
-                    if ($numSubCategories2Show > 0 && $chcount >= $numSubCategories2Show){
-                        $subcategories .= "...";
+                    if ($chcount >= $numSubCategories2Show) {
+                        if ($numSubCategories2Show != 0) {
+                            $subcategories .= "...";
+                        }
                         break;
                     }
                     if ($space>0) {
