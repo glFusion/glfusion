@@ -359,7 +359,9 @@ class Category
             'lang_delete'   => $LANG_FILEMGMT['delete'],
             'lang_cancel'   => $LANG_FILEMGMT['cancel'],
         ) );
-        if (!empty($this->imgurl) && is_file($_FM_CONF['SnapCat'].$this->imgurl)) {
+
+//        if (!empty($this->imgurl) && is_file($_FM_CONF['SnapCat'].$this->imgurl)) {
+        if (!empty($this->imgurl)) {
             $T->set_var('thumbnail', $_FM_CONF['SnapCatURL'] . $this->imgurl);
         } else {
             $T->unset_var('thumbnail');
@@ -653,6 +655,9 @@ class Category
             $retval = strip_tags($fieldvalue);
             if (utf8_strlen($retval) > 80) {
                 $retval = substr($retval, 0, 80 ) . '...';
+            }
+            if (!empty($A['imgurl'])) {
+                $retval .= '&nbsp;<i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-image"></i>';
             }
             break;
 
