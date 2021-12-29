@@ -201,7 +201,7 @@ case "newfileConfigAdmin":
     $content .= Filemgmt\Download::getInstance(0)->edit();
     break;
 case "listNewDownloads":
-    $content .= Filemgmt\Download::adminList(0, 0);
+    $content .= Filemgmt\Download::adminList(0, 1);
     break;
 case 'files':
 default:
@@ -212,7 +212,7 @@ default:
     } else {
         $cat = 0;
     }
-    $content .= Filemgmt\Download::adminList($cat);
+    $content .= Filemgmt\Download::adminList($cat,1);
     break;
 }
 
