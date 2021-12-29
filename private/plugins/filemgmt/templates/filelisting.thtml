@@ -1,35 +1,78 @@
 {# begin {templatelocation} #}
-{!if back_to_list}
-<div class="uk-width-1-1 uk-margin" style="margin-bottom:10px;">
-	<a class="uk-button uk-button-primary" style="float:right;margin-bottom:10px;" href="{site_url}/filemgmt/index.php">Back to Listing</a>
-</div>
-{!endif}
-{!if category_path_link}
-<div>{category_path_link}</div>
-{!endif}
-{!if category_records}
-<div>{category_records}</div>
-{!endif}
-{sort_menu}
-<div uk-grid class="uk-grid uk-grid-width-1-2 uk-child-width-1-2">
-	<div>
-		{listing_heading}
-	</div>
-{!if can_submit}
-	<div style="text-align:right">
-		<a href="{site_url}/filemgmt/submit.php" class="uk-button uk-button-success">{$LANG_FILEMGMT['usermenu3']}</a>
-	</div>
-{!endif}
+<div class="uk-panel">
+	<div class="uk-panel-title uk-text-bold uk-text-large">{$LANG_FILEMGMT[usermenu1]}</div>
 </div>
 
-<div class="uk-width-1-1 uk-margin" style="clear:both;margin-top:10px;">
+<div class="uk-panel uk-panel-box">
+	<div class="uk-grid uk-margin-bottom-small">
+		<div class="uk-width-medium-1-1">
+{!if back_to_listxx}
+			<a class="uk-button uk-button-primary" style="float:right" href="{site_url}/filemgmt/index.php">{$$LANG_FILEMGMT[back_to_listing]}</a>
+{!endif}
+
+{!if category_path_link}
+			<div class="uk-margin-bottom">
+				<ul class="uk-breadcrumb uk-margin-remove" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+					{category_path_link}
+				</ul>
+			</div>
+{!endif}
+
+{!if category_records}
+  {!if viewcat}
+			{category_records}
+  {!else}
+			<div class="uk-margin-small">
+				<ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-3 uk-text-left">
+					{category_records}
+				</ul>
+			</div>
+  {!endif}
+{!endif}
+		</div>
+	</div>
+</div>
+
+<div class="uk-panel uk-panel-box uk-margin-top">
+
+	<div class="uk-clearfix"></div>
+{!if listing_heading}
+{!else}
+	<div class="uk-align-left uk-text-left uk-margin-remove">
+		<span class="uk-text-large uk-text-bold">{$LANG_FILEMGMT[searchlabel]}</span>
+	</div>
+{!endif}
+	<div class="uk-align-right uk-text-right uk-margin-remove">
+		{sort_menu}
+	</div>
+
+	<div class="uk-clearfix"></div>
+
+	<div uk-grid class="uk-grid uk-grid-width-1-2 uk-child-width-1-2">
+		<div>
+			<h2>{listing_heading}</h2>
+		</div>
+{!if can_submit}
+		<div style="text-align:right">
+			<a href="{site_url}/filemgmt/submit.php" class="uk-button uk-button-success">{$LANG_FILEMGMT['usermenu3']}</a>
+		</div>
+{!endif}
+	</div>
+
+	<div class="uk-clearfix"></div>
+
 <!-- BEGIN fileRecords -->
-	{filelisting_record}
+		{filelisting_record}
 <!-- END fileRecords -->
 {!if no_files}
-    <div class="uk-alert uk-alert-primary">{lang_nofiles}</div>
+	    <div class="uk-alert uk-alert-primary">{lang_nofiles}</div>
 {!endif}
+
+
 </div>
-<div>{page_navigation}</div>
+
+<div class="uk-margin-top">{page_navigation}</div>
+
 <div>{comment_records}</div>
+
 {# end {templatelocation} #}

@@ -130,6 +130,15 @@ $LANG_FILEMGMT = array(
     'err_req_fields' => 'Some required fields were not supplied',
     'go_back' => 'Go Back',
     'err_demomode' => 'Uploads are disabled in demo mode',
+    'edit_category'         => 'Edit Category',
+    'create_category'       => 'Create Category',
+    'can_view'              => 'Can View',
+    'can_upload'            => 'Can Upload',
+    'delete_category'       => 'Delete Category',
+    'new_category'          => 'New Category',
+    'new_file'              => 'New File',
+    'remote_ip'             => 'Remote IP',
+    'back_to_listing'       => 'Back To Listing',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
@@ -229,6 +238,7 @@ define("_MD_SEARCH","Recherche");
 define("_MD_MAIN","Réseau de distribution");
 define("_MD_SUBMITFILE","Envoyer un fichier");
 define("_MD_POPULAR","Populaire");
+define("_MD_POP", "Pop");   // abbrevision for listing badge
 define("_MD_NEW","Nouveau");
 define("_MD_TOPRATED","Les mieux notés");
 
@@ -417,6 +427,7 @@ define("_MD_ERRORDESC","ERREUR: Vous devez saisir DESCRIPTION!");
 define("_MD_NEWDLADDED","Nouveau téléchargement ajouté à la base de données.");
 define("_MD_NEWDLADDED_DUPFILE","Attention: Dupliquer Déposer. Nouveau téléchargement ajouté à la base de données.");
 define("_MD_NEWDLADDED_DUPSNAP","Attention: Dupliquer Snap. Nouveau téléchargement ajouté à la base de données.");
+define("_MD_DLUPDATED", "File has been updated.");
 define("_MD_HELLO","Bonjour %s");
 define("_MD_WEAPPROVED","Nous avons approuvé le téléchargement soumission à notre section de téléchargements. Le nom du fichier est: ");
 define("_MD_THANKSSUBMIT","Merci pour votre présentation!");

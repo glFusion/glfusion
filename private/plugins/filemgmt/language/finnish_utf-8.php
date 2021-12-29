@@ -130,6 +130,15 @@ $LANG_FILEMGMT = array(
     'err_req_fields' => 'Some required fields were not supplied',
     'go_back' => 'Go Back',
     'err_demomode' => 'Uploads are disabled in demo mode',
+    'edit_category'         => 'Edit Category',
+    'create_category'       => 'Create Category',
+    'can_view'              => 'Can View',
+    'can_upload'            => 'Can Upload',
+    'delete_category'       => 'Delete Category',
+    'new_category'          => 'New Category',
+    'new_file'              => 'New File',
+    'remote_ip'             => 'Remote IP',
+    'back_to_listing'       => 'Back To Listing',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
@@ -229,6 +238,7 @@ define("_MD_SEARCH","Etsi");
 define("_MD_MAIN","Main");
 define("_MD_SUBMITFILE","Submit File");
 define("_MD_POPULAR","Popular");
+define("_MD_POP", "Pop");   // abbrevision for listing badge
 define("_MD_NEW","New");
 define("_MD_TOPRATED","Top Rated");
 
@@ -417,6 +427,7 @@ define("_MD_ERRORDESC","ERROR: You need to enter DESCRIPTION!");
 define("_MD_NEWDLADDED","New download added to the database.");
 define("_MD_NEWDLADDED_DUPFILE","Warning: Duplicate File. New download added to the database.");
 define("_MD_NEWDLADDED_DUPSNAP","Warning: Duplicate Snap. New download added to the database.");
+define("_MD_DLUPDATED", "File has been updated.");
 define("_MD_HELLO","Hello %s");
 define("_MD_WEAPPROVED","We approved your download submission to our downloads section. The file name is: ");
 define("_MD_THANKSSUBMIT","Thanks for your submission!");

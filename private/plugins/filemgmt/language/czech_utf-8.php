@@ -130,6 +130,15 @@ $LANG_FILEMGMT = array(
     'err_req_fields' => 'Some required fields were not supplied',
     'go_back' => 'Go Back',
     'err_demomode' => 'Uploads are disabled in demo mode',
+    'edit_category'         => 'Edit Category',
+    'create_category'       => 'Create Category',
+    'can_view'              => 'Can View',
+    'can_upload'            => 'Can Upload',
+    'delete_category'       => 'Delete Category',
+    'new_category'          => 'New Category',
+    'new_file'              => 'New File',
+    'remote_ip'             => 'Remote IP',
+    'back_to_listing'       => 'Back To Listing',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
@@ -229,6 +238,7 @@ define("_MD_SEARCH","Hledej");
 define("_MD_MAIN","Hlavní");
 define("_MD_SUBMITFILE","Pošli soubor");
 define("_MD_POPULAR","Oblíbený");
+define("_MD_POP", "Pop");   // abbrevision for listing badge
 define("_MD_NEW","Nový");
 define("_MD_TOPRATED","Nejvyšší hodnocení");
 
@@ -417,6 +427,7 @@ define("_MD_ERRORDESC","CHYBA: Je třeba zadat POPIS!");
 define("_MD_NEWDLADDED","Nové stažení bylo přidáno do databáze.");
 define("_MD_NEWDLADDED_DUPFILE","Pozor: Duplikovaný Soubor. New download added to the database.");
 define("_MD_NEWDLADDED_DUPSNAP","Varování: Duplicitní Snap. Přidán nový soubor pro stažení do databáze.");
+define("_MD_DLUPDATED", "File has been updated.");
 define("_MD_HELLO","Ahoj %s");
 define("_MD_WEAPPROVED","Schválili jsme váš příspěvek do naší sekce ke stažení. Název souboru je: ");
 define("_MD_THANKSSUBMIT","Díky za váš příspěvek!");
