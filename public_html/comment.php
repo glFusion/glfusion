@@ -915,7 +915,7 @@ if ( isset($_POST['cancel'] ) ) {
     }
 }
 
-echo COM_siteHeader('menu',$pageTitle);
+echo COM_siteHeader('none',$pageTitle);
 echo $pageBody;
 echo COM_siteFooter();
 ?>
