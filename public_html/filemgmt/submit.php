@@ -223,7 +223,8 @@ if (Filemgmt\Download::canSubmit()) {
             COM_setMsg(_MD_NEWDLADDED_DUPSNAP, 'error');
             break;
         case Status::OK:
-            COM_setMsg(_MD_NEWDLADDED);
+        case Status::UPL_OK;
+            COM_setMsg(_MD_NEWDLADDED,'info',1);
             break;
         case Status::UPL_PENDING:
             COM_setMsg(_MD_RECEIVED . '<br />' . _MD_WHENAPPROVED, 'success');
@@ -238,6 +239,7 @@ if (Filemgmt\Download::canSubmit()) {
             COM_setMsg(_MD_ERRUPLOAD, 'error');
             break;
         }
+
         if (!empty($redirect)) {
             COM_refresh($redirect);
         }
