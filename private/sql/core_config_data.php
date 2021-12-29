@@ -2114,6 +2114,17 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'disallow_usernames',
+    	'default_value' => 'root,admin,system,manager,service',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 5,
+    	'selection_array' => NULL,
+    	'sort' => 90,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'fs_submission',
     	'default_value' => NULL,
     	'type' => 'fieldset',
