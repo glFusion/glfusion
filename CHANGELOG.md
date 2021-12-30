@@ -6,8 +6,7 @@
 
 - Removed title processing from comment entry - defaults to the items title that is being commmented on.
 - Implemented Login Landing configuration option - set custom page to navigate after loggging in (cygnus8929)
-- Updated CKEditor to v4.17.1
-- Minimum supported PHP version bumped to PHP v5.6.0
+- Minimum supported PHP version bumped to PHP v5.6.0 - Recommended bumped to PHP v7.4+
 
 ### Fixed
 
@@ -26,6 +25,7 @@
 
 ### Updates
 
+- Updated CKEditor to v4.17.1
 - Upgrading ezyang/htmlpurifier (v4.13.0 => v4.14.0)
 - Upgrading james-heinrich/getid3 (v1.9.20 => v1.9.21)
 - Upgrading phpclasses/oauth-api (1.0.110 => 1.0.113)

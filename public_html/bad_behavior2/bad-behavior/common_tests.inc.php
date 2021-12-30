@@ -27,6 +27,9 @@ function bb2_cookies($settings, $package)
 	// First-gen Amazon Kindle is broken; Amazon has been notified 9/24/08
 	// NOTE: RFC 2965 is obsoleted by RFC 6265. Current software MUST NOT
 	// use Cookie2 or $Version in Cookie.
+	if (!isset($package['headers_mixed']['Cookie'])) {
+		return false;
+	}
 	if (@strpos($package['headers_mixed']['Cookie'], '$Version=0') !== FALSE && !array_key_exists('Cookie2', $package['headers_mixed']) && strpos($package['headers_mixed']['User-Agent'], "Kindle/") === FALSE) {
 		return '6c502ff1';
 	}

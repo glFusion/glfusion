@@ -758,7 +758,7 @@ function INST_checkEnvironment($dbconfig_path='')
     } else {
         $T->set_var('status','<span class="uk-text-success">'.phpversion().'</span>');
     }
-    $T->set_var('recommended','7.0+');
+    $T->set_var('recommended','7.4+');
     $T->set_var('notes',$LANG_INSTALL['php_req_version']);
     $T->parse('env','envs',true);
 

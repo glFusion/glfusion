@@ -1111,7 +1111,7 @@ function CMT_getCount($type, $sid, $queued = 0)
 * @return   string  HTML for comment form
 *
 */
-function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
+function CMT_commentForm($title,$comment,$sid,$pid='0',$type='',$mode='',$postmode='')
 {
     global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS, $LANG_ADMIN;
 
