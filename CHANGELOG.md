@@ -10,6 +10,7 @@
 
 ### Fixed
 
+- Potential XSS Reflected Vulnerability reported by nu11secu1ty
 - BB2 regex check for User Agent fails due to regex delimiters
 - CSRF protection on BB2 blacklist entries
 - Anonymous comments could impersonate (use the same username) as an existing user - Topsec_bunney reported
