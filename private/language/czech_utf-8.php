@@ -143,7 +143,7 @@ $LANG01 = array(
     127 => 'Stálý odkaz',
     129 => 'Konfigurace',
     130 => 'Webové služby',			// depreciated
-    131 => 'Features',
+    131 => 'Vlastnosti',
     500 => 'Prosím nezapomeň osdtrait adresář admin/install/ po instalaci nebo po upgradu!',
     501 => 'Root ladění je povoleno',
     502 => 'Povoleno- žádné selhání SQL',
@@ -397,7 +397,7 @@ $LANG04 = array(
     159 => 'Tento email byl generován automaticky. Prosím, neodpovídej na něj.',
     160 => 'Online',
     161 => 'Síla hesla',
-    162 => 'Uživatelské jméno musí obsahovat alespoň %s znaků, nesmí obsahovat neplatné znaky ( < > " %% & * / \ ) nebo znaky emoji',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
     163 => 'Vzdálený uživatel',
     164 => 'Uživatelské jméno vzdáleného přístupu',
     165 => 'Vzdálená služba',
@@ -1462,8 +1462,8 @@ $MESSAGE = array(
     116 => "Soubory pluginu a související adresáře byly úspěšně odstraněny.",
     117 => "Vzdálený účet byl odpojen od vašeho místního účtu.",
     118 => 'Odpojení vzdáleného účtu selhalo - aktuální heslo nebylo zadáno nebo se neshoduje.',
-    119 => 'The feature was successfully saved.',
-    120 => 'There was an error saving the feature.',
+    119 => 'Funkce byla úspěšně uložena.',
+    120 => 'Při ukládání nastavení došlo k chybě.',
     200 => 'Bohužel na tuto stránku nemáte přístup. Prosím všimněte se, že neoprávněné pokusy o přístup jsou logovány.',
     500 => 'Cache šablon byla úspěšně vyčištěna',
     501 => 'Bezpečnostní token je neplatný - Časový limit relace.',
@@ -1577,10 +1577,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'Bezpečnostní token vypršel. Zkontrolujte vaši relaci níže.',
     'token_expired_footer' => 'Platnost bezpečnostního tokenu pro tuto operaci vypršela, prosím znovu potvrďte',
     'validation_failed' => 'Ověření se nezdařilo - opakujte akci.',
-    'feature_id' => 'Feature ID',
-    'feature_name' => 'Feature Name',
-    'avail_groups' => 'Available Groups',
-    'incl_groups' => 'Included Groups',
+    'feature_id' => 'ID Funkce',
+    'feature_name' => 'Název funkce',
+    'avail_groups' => 'Dostupné skupiny',
+    'incl_groups' => 'Zahrnuté skupiny',
 );
 
 ###############################################################################
@@ -1681,7 +1681,7 @@ $LANG_DB_ADMIN = array(
     'edit'                => 'Editovat',
     'cancel'              => 'Zrušit',
     'seconds'             => 's',
-    'plugin_table_column' => 'Plugin :: Table -> Column',
+    'plugin_table_column' => 'Plugin :: Tabulka -> Sloupec',
 
 );
 
@@ -1984,11 +1984,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Vaše relace vyprší kvůli neaktivitě. Vyberte OK pro obnovení relace.',
     'reset' => 'Obnovení',
     'remaining_chars' => 'Zbývající znaky ',
-    'feature_admin' => 'Feature Administration',
-    'feature_editor' => 'Feature Editor',
-    'feature_list' => 'Feature List',
-    'core_only' => 'Show Only Core Features',
-    'assigned_groups' => 'Assigned Groups',
+    'feature_admin' => 'Administrace funkcí',
+    'feature_editor' => 'Editor funkcí',
+    'feature_list' => 'Seznam funkcí',
+    'core_only' => 'Zobrazit pouze základní funkce',
+    'assigned_groups' => 'Přiřazené skupiny',
 );
 
 ###############################################################################
@@ -2895,6 +2895,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'Administrace článků',
     'log_level' => 'Log Level',
     'enable_admin_actions' => 'Enable Admin Logging',
+    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
 );
 
 $LANG_configsubgroups['Core'] = array(

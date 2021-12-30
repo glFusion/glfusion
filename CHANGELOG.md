@@ -4,10 +4,11 @@
 
 ### Internal development changes
 
-- glFusion v2 requires PHP v7.3 or later
+- glFusion v2 requires PHP v7.4 or later
 
 ### Added
 
+- Disallowed names - you can now set user names that are not allowed on the site for both registration and anonymous names
 - Turkish Translation
 - New Feature Administration - see what feature / rights are associated to each group
 - Forum plugin - select exit type - whether to show Page Not Found or Login Page when user does not have permissions to view a topic

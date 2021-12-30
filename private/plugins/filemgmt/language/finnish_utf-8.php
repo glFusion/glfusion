@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -37,8 +37,8 @@ $LANG_FM00 = array (
     'editor'            => 'Laajennusten muokkain',
     'warning'           => 'De-Install Warning',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
-    'WhatsNewLabel'    => 'Files',
-    'WhatsNewPeriod'   => ' last %s days',
+    'WhatsNewLabel'     => 'Files',
+    'WhatsNewPeriod'    => ' last %s days',
     'new_upload'        => 'New File submitted at ',
     'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
     'details'           => 'File Details',
@@ -64,72 +64,72 @@ $LANG_FM02 = array(
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "New Page",
-    'adminhome' => "Yll&auml;pidon sivu",
-    'plugin_name' => "File Management",
-    'searchlabel' => "File Listing",
-    'searchlabel_results' => "File Listing Results",
-    'downloads' => "Downloads",
-    'report' => "Top Downloads",
-    'usermenu1' => "Downloads",
-    'usermenu2' => "&nbsp;&nbsp;Top Rated",
-    'usermenu3' => "Upload a file",
-    'admin_menu' => "Filemgmt Admin",
-    'writtenby' => "Written By",
-    'date' => "viimeksi p&auml;ivitetty",
-    'title' => "Otsikko",
-    'content' => "Sis&auml;lt&ouml;",
-    'hits' => "Lukukertoja",
-    'Filelisting' => "File Listing",
-    'DownloadReport' => "Download History for single file",
-    'StatsMsg1' => "Top Ten Accessed Files in Repository",
-    'StatsMsg2' => "It appears there are no files defined for the filemgmt plugin on this site or no one has ever accessed them.",
-    'usealtheader' => "Use Alt. Header",
-    'url' => "URL",
-    'edit' => "Muokkaa",
-    'lastupdated' => "viimeksi p&auml;ivitetty",
-    'pageformat' => "Page Format",
-    'leftrightblocks' => "Left & Right Blocks",
-    'blankpage' => "Blank Page",
-    'noblocks' => "Ei laatikoita",
-    'leftblocks' => "Left Blocks",
-    'addtomenu' => 'Add To Menu',
-    'label' => 'Label',
-    'nofiles' => 'Number of files in our repository (Downloads)',
-    'save' => 'tallenna',
-    'preview' => 'esikatselu',
-    'delete' => 'poista',
-    'cancel' => 'peruuta',
-    'access_denied' => 'P&auml;&auml;sy kielletty',
-    'invalid_install' => 'Someone has tried to illegally access the File Management install/uninstall page.  User id: ',
-    'start_install' => 'Attempting to install the Filemgmt Plugin',
-    'start_dbcreate' => 'Attempting to create tables for Filemgmt plugin',
-    'install_skip' => '... skipped as per filemgmt.cfg',
-    'access_denied_msg' => 'You are illegally trying access the File Mgmt administration pages.  Please note that all attempts to illegally access this page are logged',
+    'newpage'               => "New Page",
+    'adminhome'             => "Yll&auml;pidon sivu",
+    'plugin_name'           => "File Management",
+    'searchlabel'           => "File Listing",
+    'searchlabel_results'   => "File Listing Results",
+    'downloads'             => "Downloads",
+    'report'                => "Top Downloads",
+    'usermenu1'             => "Downloads",
+    'usermenu2'             => "&nbsp;&nbsp;Top Rated",
+    'usermenu3'             => "Upload a file",
+    'admin_menu'            => "Filemgmt Admin",
+    'writtenby'             => "Written By",
+    'date'                  => "viimeksi p&auml;ivitetty",
+    'title'                 => "Otsikko",
+    'content'               => "Sis&auml;lt&ouml;",
+    'hits'                  => "Lukukertoja",
+    'Filelisting'           => "File Listing",
+    'DownloadReport'        => "Download History for single file",
+    'StatsMsg1'             => "Top Ten Accessed Files in Repository",
+    'StatsMsg2'             => "It appears there are no files defined for the filemgmt plugin on this site or no one has ever accessed them.",
+    'usealtheader'          => "Use Alt. Header",
+    'url'                   => "URL",
+    'edit'                  => "Muokkaa",
+    'lastupdated'           => "viimeksi p&auml;ivitetty",
+    'pageformat'            => "Page Format",
+    'leftrightblocks'       => "Left & Right Blocks",
+    'blankpage'             => "Blank Page",
+    'noblocks'              => "Ei laatikoita",
+    'leftblocks'            => "Left Blocks",
+    'addtomenu'             => 'Add To Menu',
+    'label'                 => 'Label',
+    'nofiles'               => 'Number of files in our repository (Downloads)',
+    'save'                  => 'Tallenna',
+    'preview'               => 'Esikatselu',
+    'delete'                => 'Poista',
+    'cancel'                => 'Peruuta',
+    'access_denied'         => 'P&auml;&auml;sy kielletty',
+    'invalid_install'       => 'Someone has tried to illegally access the File Management install/uninstall page.  User id: ',
+    'start_install'         => 'Attempting to install the Filemgmt Plugin',
+    'start_dbcreate'        => 'Attempting to create tables for Filemgmt plugin',
+    'install_skip'          => '... skipped as per filemgmt.cfg',
+    'access_denied_msg'     => 'You are illegally trying access the File Mgmt administration pages.  Please note that all attempts to illegally access this page are logged',
     'installation_complete' => 'Installation Complete',
     'installation_complete_msg' => 'The data structures for the File Mgmt plugin for glFusion have been successfully installed into your database!  If you ever need to uninstall this plugin, please read the README document that came with this plugin.',
-    'installation_failed' => 'Installation Failed',
+    'installation_failed'   => 'Installation Failed',
     'installation_failed_msg' => 'The installation of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
-    'system_locked' => 'System Locked',
-    'system_locked_msg' => 'The File Mgmt plugin has already been installed and is locked.  If you are trying to uninstall this plugin, please read the README document that shipped with this plugin',
-    'uninstall_complete' => 'Uninstall Complete',
+    'system_locked'         => 'System Locked',
+    'system_locked_msg'     => 'The File Mgmt plugin has already been installed and is locked.  If you are trying to uninstall this plugin, please read the README document that shipped with this plugin',
+    'uninstall_complete'    => 'Uninstall Complete',
     'uninstall_complete_msg' => 'The datastructures for the File Mgmt plugin have been successfully removed from your glFusion database<br><br>You will need to manually remove all files in your file repository.',
-    'uninstall_failed' => 'Uninstall Failed.',
-    'uninstall_failed_msg' => 'The uninstall of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
-    'install_noop' => 'Plugin Install',
-    'install_noop_msg' => 'The filemgmt plugin install executed but there was nothing to do.<br><br>Check your plugin install.cfg file.',
-    'all_html_allowed' => 'HTML sallittu',
-    'no_new_files'  => 'No new files',
-    'no_comments'   => 'No new comments',
-    'more'          => '<em>more ...</em>',
-    'newly_uploaded' => 'Newly Uploaded',
-    'click_to_view' => 'Click here to view',
-    'no_file_uploaded' => 'No File Uploaded',
-    'description' => 'Description',
-    'category' => 'Category',
-    'err_req_fields' => 'Some required fields were not supplied',
-    'go_back' => 'Go Back',
-    'err_demomode' => 'Uploads are disabled in demo mode',
+    'uninstall_failed'      => 'Uninstall Failed.',
+    'uninstall_failed_msg'  => 'The uninstall of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
+    'install_noop'          => 'Plugin Install',
+    'install_noop_msg'      => 'The filemgmt plugin install executed but there was nothing to do.<br><br>Check your plugin install.cfg file.',
+    'all_html_allowed'      => 'HTML sallittu',
+    'no_new_files'          => 'No new files',
+    'no_comments'           => 'No new comments',
+    'more'                  => '<em>more ...</em>',
+    'newly_uploaded'        => 'Newly Uploaded',
+    'click_to_view'         => 'Click here to view',
+    'no_file_uploaded'      => 'No File Uploaded',
+    'description'           => 'Kuvaus',
+    'category'              => 'Category',
+    'err_req_fields'        => 'Some required fields were not supplied',
+    'go_back'               => 'Go Back',
+    'err_demomode'          => 'Uploads are disabled in demo mode',
     'edit_category'         => 'Edit Category',
     'create_category'       => 'Create Category',
     'can_view'              => 'Can View',
@@ -194,8 +194,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Enable Ratings',
     'displayblocks'         => 'Näytä glFusion Lohkot',
     'silent_edit_default'   => 'Silent Edit Default',
-    'extensions_map'        => 'Latauksissa käytetyt laajennukset',
-    'EmailOption'           => 'Lähetä sähköpostia lähettäjälle hyväksynnän jälkeen?',
+    'extensions_map'        => 'Extensions used for downloads',
+    'EmailOption'           => 'Email submitter upon approval?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Pää Asetukset'
@@ -315,7 +315,7 @@ define("_MD_INTFILEAT","Interesting Download File at %s"); // %s is your site na
 define("_MD_INTFILEFOUND","Here is an interesting download file I have found at %s"); // %s is your site name
 
 define("_MD_RECEIVED","We received your download information. Thanks!");
-define("_MD_WHENAPPROVED","You'll receive an E-mail when it's approved.");
+define("_MD_WHENAPPROVED","You&apos;ll receive an E-mail when it&apos;s approved.");
 define("_MD_SUBMITONCE","Submit your file/script only once.");
 define("_MD_APPROVED", "Your file has been approved");
 define("_MD_ALLPENDING","All file/script information are posted pending verification.");
@@ -412,7 +412,7 @@ define("_MD_NOMODREQ","No Download Modification Request.");
 define("_MD_DBUPDATED","Database Updated Successfully!");
 define("_MD_MODREQDELETED","Modification Request Deleted.");
 define("_MD_IMGURLMAIN",'Image<div style="font-size:8pt;">Image height will be resized to 50px</div>');
-define("_MD_PARENT","Parent Category:");
+define("_MD_PARENT","Parent Category");
 define("_MD_SAVE","Tallenna muutolset");
 define("_MD_CATDELETED","Category Deleted.");
 define("_MD_WARNING","WARNING: Are you sure you want to delete this Category and ALL its Files and Comments?");
@@ -473,4 +473,3 @@ define("_MD_COMMENTSWANTED","Comments are appreciated");
 define("_MD_CLICK2SEE","Click to see: ");
 define("_MD_CLICK2DL","Click to download: ");
 define("_MD_ORDERBY","Order By: ");
-?>

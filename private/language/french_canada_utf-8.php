@@ -397,7 +397,7 @@ $LANG04 = array(
     159 => 'Ce courriel a été généré automatiquement. S`il vous plaît ne pas répondre à cet email.',
     160 => 'En Ligne',
     161 => 'Mot de passe Force',
-    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
     163 => 'Utilisateur Distant',
     164 => 'Nom d`Utilisateur à distance',
     165 => 'Remote Service',
@@ -2895,6 +2895,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'L`Administration de l`Histoire',
     'log_level' => 'Log Level',
     'enable_admin_actions' => 'Enable Admin Logging',
+    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
 );
 
 $LANG_configsubgroups['Core'] = array(
