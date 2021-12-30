@@ -32,6 +32,8 @@
 
 ### Changed
 
+- FileMgmt Plugin internals reworked - improved template use, layout and overall code improvements (Lee)
+- Syndication System internals reworked - improved overall code and modernized (Lee)
 - Allow embedded [img] tag inside [url] tag in BBcode formatter
 - Removed 'most' HTML from the code base and moved to templates
 - Consolidate dynamic data under a single directory (actually two - private/data and public_html/data)
@@ -75,6 +77,7 @@
 
 ### Fixed
 
+- Potential XSS Reflected Vulnerability reported by nu11secu1ty
 - Media Gallery Media Manage and Caption screens did not honor album sort order
 - Back button on Group Admin would re-submit the form
 - PHP v8 Compatibility Fixes
