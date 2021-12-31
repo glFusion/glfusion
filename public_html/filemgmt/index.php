@@ -109,6 +109,14 @@ if ($lid > 0) {
     $result = DB_query($sql);
     $nrows = DB_numRows($result);
 
+    if ($nrows > 2) {
+        $columns = 3;
+    } elseif ($nrows > 1) {
+        $columns = 2;
+    } elseif ($nrows > 0) {
+        $columns = 1;
+    }
+    $p->set_var('columns',$columns);    
     // Need to use a SQL stmt that does a join on groups user has access to  - for file count
     $sql  = "SELECT count(*)  FROM {$_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid WHERE status > 0 ";
