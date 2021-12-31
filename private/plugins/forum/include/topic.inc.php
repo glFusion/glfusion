@@ -76,6 +76,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
     }
 
     $Poster = \Forum\User::getInstance($showtopic['uid']);
+    $isModerator = Forum\Moderator::hasPerm($showtopic['forum']);
 
     list($user_level, $user_levelname) = \Forum\Rank::getRank($Poster->posts, $Poster->adminLevel($showtopic['forum']));
 
@@ -270,15 +271,19 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
         } else {
             $topictemplate->set_var('ipaddress','');
         }
-        if (Forum\Modules\Warning\Warning::featureEnabled()) {
-            $warn_level = \Forum\Modules\Warning\Warning::getUserPercent($showtopic['uid']);
-            if ($warn_level > 0) {
-                $topictemplate->set_var('warn_level', $warn_level);
-            } else {
-                $topictemplate->clear_var('warn_level');
-            }
-        }
     }
+
+    if ($isModerator && Forum\Modules\Warning\Warning::featureEnabled()) {
+        $warn_level = \Forum\Modules\Warning\Warning::getUserPercent($showtopic['uid']);
+        if ($warn_level > 0) {
+            $topictemplate->set_var('warn_level', $warn_level);
+        } else {
+            $topictemplate->clear_var('warn_level');
+        }
+    } else {
+        $topictemplate->clear_var('warn_level');
+    }
+
     $can_voteup = false;
     $can_votedn = false;
     $vote_language = '';
@@ -377,7 +382,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
             'mod_lock'      => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] == 0),
             'mod_unlock'    => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] != 0),
             'mod_warn'      => ($mod_perms['mod_edit']),
-            'has_mod_perms' => Forum\Moderator::hasPerm($showtopic['forum']),
+            'has_mod_perms' => $isModerator,
             'topic_parent_id' => $showtopic['pid'],
     ));
 
