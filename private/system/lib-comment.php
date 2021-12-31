@@ -1490,6 +1490,9 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     if ( COM_isAnonUser() ) {
         if (isset($_POST['username']) ) {
             $uname = $_POST['username'];
+// we are setting $name to be used later (to update anonymous username field after saving comment)
+            $name = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt(),true);
+            $name = USER_uniqueUsername($name);
         } else {
             $uname = '';
         }
@@ -1576,7 +1579,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         $cid = DB_insertId();
         //set Anonymous user name if present
         if (isset($_POST['username']) ) {
-            $name = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt());
+            //use the $name set earlier
             DB_change($_TABLES['comments'],'name',DB_escapeString($name),'cid',(int) $cid);
         }
         DB_unlockTable ($_TABLES['comments']);
