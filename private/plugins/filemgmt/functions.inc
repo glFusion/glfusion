@@ -223,6 +223,7 @@ function plugin_commentapproved_filemgmt($cid,$type,$sid)
 {
     global $_TABLES;
     $comments = CMT_getCount('filemgmt', $sid);
+    $sid = (int) substr($sid,7);
     DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($sid));
 }
 
