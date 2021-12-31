@@ -116,7 +116,7 @@ if ($lid > 0) {
     } elseif ($nrows > 0) {
         $columns = 1;
     }
-    $p->set_var('columns',$columns);    
+    $p->set_var('columns',$columns);
     // Need to use a SQL stmt that does a join on groups user has access to  - for file count
     $sql  = "SELECT count(*)  FROM {$_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid WHERE status > 0 ";
