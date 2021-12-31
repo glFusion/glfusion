@@ -130,7 +130,7 @@ class Warning
     {
         global $_FF_CONF;
 
-        return (isset($_FF_CONF['warning_enabled']) && $_FF_CONF['warning_enabled']);
+        return (isset($_FF_CONF['enable_warnings']) && $_FF_CONF['enable_warnings']);
     }
 
 
@@ -707,7 +707,25 @@ class Warning
         } else {
             // Take action, if necessary
             $this->takeAction();
+            // Notify the user, if selected
+            $this->notifyUser((int)$A['notify']);
             return true;
+        }
+    }
+
+
+    /**
+     * Notify the user being warned.
+     *
+     * @param   integer $type   Type of notification (1=PM, 2=Email)
+     */
+    private function notifyUser(int $type) : void
+    {
+        switch ($type) {
+        case 1:         // Notify via the PM plugin
+            break;
+        case 2:         // NOtify via Email
+            break;
         }
     }
 

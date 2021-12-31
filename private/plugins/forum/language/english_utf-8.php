@@ -1017,6 +1017,8 @@ $LANG_confignames['forum'] = array(
     'geshi_header_style' => 'GeSHi Header Block Style',
     'exit_type' => 'Exit Type',
     'likes_prf_limit' => 'Maximum number of Likes to show in profiles',
+    'enable_warnings' => 'Enable Warning System',
+    'warning_max_points' => 'Maximum points (to calculate warning level)',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1029,7 +1031,8 @@ $LANG_fs['forum'] = array(
     'ff_centerblock' => 'Centerblock Settings',
     'ff_latest_post_block' => 'Latest Posts Block Settings',
     'ff_rank_settings' => 'Rank Settings',
-    'ff_attachments_settings' => 'Attachment Settings'
+    'ff_attachments_settings' => 'Attachment Settings',
+    'ff_features' => 'Features',
 );
 
 $LANG_configSelect['forum'] = array(
