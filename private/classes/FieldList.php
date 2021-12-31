@@ -116,6 +116,31 @@ class FieldList
         return $t->finish($t->get_var('output'));
     }
 
+    public static function refresh($args)
+    {
+        $t = self::init();
+        $t->set_block('field','field-refresh');
+
+        if (isset($args['url'])) {
+            $t->set_var('refresh_url',$args['url']);
+        } else {
+            $t->set_var('refresh_url','#');
+        }
+
+        if (isset($args['attr']) && is_array($args['attr'])) {
+            $t->set_block('field-refresh','attr','attributes');
+            foreach($args['attr'] AS $name => $value) {
+                $t->set_var(array(
+                    'name' => $name,
+                    'value' => $value)
+                );
+                $t->parse('attributes','attr',true);
+            }
+        }
+        $t->parse('output','field-refresh',true);
+        return $t->finish($t->get_var('output'));
+    }
+
     public static function approveButton($args)
     {
         $t = self::init();

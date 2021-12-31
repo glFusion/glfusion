@@ -2765,6 +2765,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Queue Comment Submissions',
     'passwordspeedlimit' => 'Password Speed Limit',
     'login_attempts' => 'Max. Login Attempts',
+    'login_landing' => 'Login Landing Page',
     'login_speedlimit' => 'Login Speed Limit',
     'user_html' => 'User HTML',
     'admin_html' => 'Admin HTML',

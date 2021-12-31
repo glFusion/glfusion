@@ -2150,6 +2150,9 @@ function SEC_loginForm($use_options = array())
 
         // action
         'form_action' => $_CONF['site_url'].'/users.php',
+
+        // landing page after successful login
+        'login_landing' => '',
     );
 
     $options = array_merge($default_options, $use_options);
@@ -2220,10 +2223,16 @@ function SEC_loginForm($use_options = array())
             $services .= $loginform->finish($loginform->get_var('output'));
         }
     }
+
+    if ($options['login_landing']) {
+        $options['hidden_fields'] .= '<input type="hidden" name="login_landing" value="' .
+            $options['login_landing'] . '" />' . LB;
+    }
+
     if (! empty($options['hidden_fields'])) {
         // allow caller to (ab)use {services} for hidden fields
         $services .= $options['hidden_fields'];
-        $loginform->set_var('hidden_fields',$options['hidden_fields']);
+        //$loginform->set_var('hidden_fields',$options['hidden_fields']);
     }
     $loginform->set_var('services', $services);
 

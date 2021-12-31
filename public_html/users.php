@@ -1011,6 +1011,11 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
         'hide_forgotpw_link' => $hide_forgotpw_link,
         'form_action'        => $_CONF['site_url'].'/users.php',
     );
+    if (isset($_POST['login_landing'])) {
+        $options['login_landing'] = $_POST['login_landing'];
+    } elseif (isset($_GET['landing'])) {
+        $options['login_landing'] = $_GET['landing'];
+    }
 
     if ($statusmode == USER_ACCOUNT_DISABLED) {
         $options['title']   = $LANG04[114]; // account disabled
@@ -1856,6 +1861,16 @@ switch ($mode) {
             COM_resetSpeedlimit('login');
 
             // we are now fully logged in, let's see if there is someplace we need to go....
+            // First, check for a landing page supplied by the form or global config
+            foreach (array($_POST, $_CONF) as $A) {
+                if (isset($A['login_landing']) && !empty($A['login_landing'])) {
+                    if ($A['login_landing'][0] != '/') {
+                        $A['login_landing'] = '/' . $A['login_landing'];
+                    }
+                    COM_refresh($_CONF['site_url'] . $A['login_landing']);
+                }
+            }
+
             if ( SESS_isSet('login_referer') ) {
                 $_SERVER['HTTP_REFERER'] = SESS_getVar('login_referer');
                 SESS_unSet('login_referer');

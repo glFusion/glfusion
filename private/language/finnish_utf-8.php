@@ -2765,6 +2765,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Kommenttien Lähetysjono',
     'passwordspeedlimit' => 'Salasana Nopeusrajoitus',
     'login_attempts' => 'Max. Kirjautumis Yrityksiä',
+    'login_landing' => 'Kirjautumisen aloitussivu',
     'login_speedlimit' => 'Kirjautumis Nopeusrajoitus',
     'user_html' => 'Käyttäjä HTML',
     'admin_html' => 'Admin HTML',
