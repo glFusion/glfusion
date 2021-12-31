@@ -1,6 +1,6 @@
 <?php
 /**
- * Administer forum thread prefixes.
+ * Administer forum warnings.
  */
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';

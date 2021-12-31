@@ -31,14 +31,14 @@
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label">Description</label>
 		<div class="uk-form-controls">
-			<textarea name="w_dscp">{dscp}</textarea>
+			<textarea class="uk-width-1-1" name="w_dscp">{dscp}</textarea>
 		</div>
 	</div>
 
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label">Administrative Notes</label>
 		<div class="uk-form-controls">
-			<textarea name="w_notes">{notes}</textarea>
+			<textarea class="uk-width-1-1" name="w_notes">{notes}</textarea>
 		</div>
 	</div>
 
