@@ -310,6 +310,9 @@ class database
                     $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
                 }
             } else {
+                if (defined ('DVLP_DEBUG') || $this->_verbose) {
+                    $this->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
+                }
                 trigger_error($this->dbError($sql), E_USER_ERROR);
             }
         }
