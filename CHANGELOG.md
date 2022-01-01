@@ -1,6 +1,6 @@
 # glFusion CMS Long Term Support ChangeLog
 
-## v1.7.10 (Unreleased)
+## v1.7.10 (January 1, 2022)
 
 ### Changed
 
