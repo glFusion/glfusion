@@ -29,6 +29,9 @@
 			<div class="uk-form-controls">
 				{url}
 				<input type="hidden" name="url" value="{url}" />
+{!if file_missing}
+				<span class="uk-text-danger uk-text-bold uk-margin-left">File Missing</span>
+{!endif}
 			</div>
 		</div>
 {!endif}
