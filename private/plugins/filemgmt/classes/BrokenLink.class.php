@@ -175,15 +175,15 @@ class BrokenLink
         if ($dt === NULL) {
             $dt = new \Date('now', $_USER['tzid']);
         }
-
         switch($fieldname) {
         case 'edit':
-            $retval .= FieldList::edit(array(
-                'edit_url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
+            $retval = FieldList::edit(array(
+                'url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
                 'attr' => array(
                     'title' => 'Edit File Record',
                 ),
             ) );
+
             break;
 
         case 'date':
