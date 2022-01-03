@@ -1019,6 +1019,11 @@ class Download
                 $categorySelectHTML .= "</option>\n";
             }
         }
+        if (!file_exists($_FM_CONF['FileStore'].$this->url)) {
+            $T->set_var('file_missing',true);
+        } else {
+            $T->unset_var('file_missing');
+        }
 
         $T->set_var(array(
             'lid'   => $this->lid,
@@ -1032,7 +1037,7 @@ class Download
             'description' => $myts->makeTareaData4Edit($this->description),
             'category'  => $this->cid,
             'category_select_options' => $categorySelectHTML,
-            'owner_select' =>  COM_buildOwnerList('submitter', $this->submitter),
+            'owner_select' =>  COM_buildOwnerList('submitter', $this->submitter,true),
             'hits' => $myts->makeTboxData4Edit($this->hits),
             'can_delete' => $this->lid > 0,
             'cmt_chk_' . $this->comments => 'checked="checked"',
