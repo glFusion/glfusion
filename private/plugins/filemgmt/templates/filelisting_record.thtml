@@ -20,23 +20,23 @@
 	</ul>
 	<div class="uk-text-bold uk-margin">
 {!if is_found}
-			<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow">
-				<i class="uk-icon-download uk-icon-small" data-uk-tooltip="{delay:500}" title="{LANG_DLNOW}" title="{LANG_DLNOW}" alt="{LANG_DLNOW}"></i></a>&nbsp;<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow" title="{download_title}">
-				<span class="uk-text-large uk-text-bold">{dtitle}</span>
-			</a>
-{!else}
+		<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow">
+			<i class="uk-icon-download uk-icon-small" data-uk-tooltip="{delay:500}" title="{LANG_DLNOW}" title="{LANG_DLNOW}" alt="{LANG_DLNOW}"></i></a>&nbsp;<a href="{site_url}/filemgmt/visit.php?lid={lid}" target="_blank" rel="nofollow" title="{download_title}">
 			<span class="uk-text-large uk-text-bold">{dtitle}</span>
+		</a>
+{!else}
+		<span class="uk-text-large uk-text-bold">{dtitle}</span>
 {!endif}
 {!if is_newdownload}
-			<div class="uk-badge uk-badge-notification" data-uk-tooltip="{delay:500}" title="{lang_new_title}" style="margin-left:10px;">{lang_new}</div>
+		<div class="uk-badge uk-badge-notification" data-uk-tooltip="{delay:500}" title="{lang_new_title}" style="margin-left:10px;">{lang_new}</div>
 {!endif}
 {!if is_popular}
-			<div class="uk-badge uk-badge-notification uk-badge-danger" data-uk-tooltip="{delay:500}" title="{lang_popular}" style="margin-left:10px;">{lang_pop}</div>
+		<div class="uk-badge uk-badge-notification uk-badge-danger" data-uk-tooltip="{delay:500}" title="{lang_popular}" style="margin-left:10px;">{lang_pop}</div>
 {!endif}
-			{image_newdownload}{image_popular}
+		{image_newdownload}{image_popular}
 	</div>
 
-	<div class="uk-grid">
+	<div class="uk-grid uk-margin-bottom">
 		<div class="uk-width-medium-8-10 uk-width-small-10-10" style="padding-right:10px;">
 {!if logourl}
 			<div class="uk-thumbnail uk-thumbnail-mini uk-align-left">
@@ -48,50 +48,57 @@
 
 			{file_description}
 
-		</div>
-		<div class="uk-width-medium-2-10  uk-align-center uk-text-center" style="border-left:1px solid #ccc;">
+			<div class="uk-clearfix"></div>
 
-			<div class="">
-				<div style="text-align:left;margin-top:5px;">
+		</div> {# end of uk-width-medium-8-10 #}
 
-					<div><span class="uk-text-bold">{LANG_VERSION}:</span> {version}</div>
-					<div><span class="uk-text-bold">{LANG_SUBMITDATE}:</span> {datetime}</div>
-					<div>
-						<span class="uk-text-bold">{LANG_DOWNLOADS}: </span>
+		<div class="uk-width-medium-2-10 uk-text-left" style="border-left:1px solid #ccc;">
+
+			<div><span class="uk-text-bold">{LANG_VERSION}:</span> {version}</div>
+			<div><span class="uk-text-bold">{LANG_SUBMITDATE}:</span> {datetime}</div>
+			<div>
+				<span class="uk-text-bold">{LANG_DOWNLOADS}: </span>
 {!if have_dlreport}
-						<a href="{site_url}/filemgmt/downloadhistory.php?lid={lid}" target="_blank">
+				<a href="{site_url}/filemgmt/downloadhistory.php?lid={lid}" target="_blank">
 {!endif}
-							{download_count}
+					{download_count}
 {!if have_dlreport}
-						</a>
+				</a>
 {!endif}
-					</div>
-					<div><span class="uk-text-bold">{LANG_FILESIZE}:</span> {file_size}</div>
-				</div>
 			</div>
-		</div>
-	</div>
-
-	<div class="uk-align-left uk-text-left uk-margin-top">
-		<div style="text-align:center !important;" class="fm-rating">{rating_bar}</div>
-	</div>
-
-	<div class="uk-align-right uk-text-right uk-margin-top">
+			<div><span class="uk-text-bold">{LANG_FILESIZE}:</span> {file_size}</div>
 {!if show_comments}
-		<span style="padding-right:5px;padding-left:5px"><a href="{site_url}/filemgmt/index.php?id={lid}#comments" rel="nofollow">{comment_tooltip}</a></span> |
+			<div><span class="uk-text-bold">{LANG_COMMENTS}</span>&nbsp;<a href="{site_url}/filemgmt/index.php?id={lid}#comments" rel="nofollow">{comment_count}</a></div>
 {!endif}
-{!if is_found}
-		<span style="padding-right:5px;padding-left:5px"><a href="{site_url}/filemgmt/visit.php?lid={lid}" rel="nofollow">{LANG_DOWNLOAD}</a></span>
-{!else}
-		<span style="padding-right:5px;padding-left:5px">{lang_not_found}</span>
-{!endif}
-		| <span style="padding-right:5px;padding-left:5px"><a href="{site_url}/filemgmt/index.php?id={lid}" rel="nofollow">{LANG_FILELINK}</a></span>
-		| <span style="padding-right:5px;padding-left:5px"><a href="{site_url}/filemgmt/brokenfile.php?lid={lid}" rel="nofollow">{LANG_REPORTBROKEN}</a></span>
-{!if LANG_EDIT}
-		| <span style="padding-right:5px;padding-left:5px"><a href="{site_admin_url}/plugins/filemgmt/index.php?modDownload={lid}" rel="nofollow">{LANG_EDIT}</a></span>
-{!endif}
+		</div> {# end of uk-width-medium-2-10 #}
+	</div> {# end of grid #}
 
-	</div>
+	<div class="uk-margin-remove"> {# begin rater / file links #}
+
+		<div class="uk-align-left uk-text-left uk-margin-remove">
+			<div style="text-align:center !important;" class="fm-rating">{rating_bar}</div>
+		</div>
+
+		<div class="uk-align-right uk-text-right uk-margin-top">
+{!if is_found}
+			<span style="padding-right:5px;padding-left:5px"><a href="{site_url}/filemgmt/visit.php?lid={lid}" rel="nofollow" title="{LANG_DOWNLOAD}">{LANG_DOWNLOAD}</a></span>
+{!else}
+			<span style="padding-right:5px;padding-left:5px">{lang_not_found}</span>
+{!endif}
+			| <span style="padding-right:5px;padding-left:5px"><a href="{site_url}/filemgmt/index.php?id={lid}" rel="nofollow" title="{LANG_FILELINK}">{LANG_FILELINK}</a></span>
+			| <span style="padding-right:5px;padding-left:5px"><a href="{site_url}/filemgmt/brokenfile.php?lid={lid}" rel="nofollow">{LANG_REPORTBROKEN}</a></span>
+{!if LANG_EDIT}
+			| <span style="padding-right:5px;padding-left:5px"><a href="{site_admin_url}/plugins/filemgmt/index.php?modDownload={lid}" rel="nofollow">{LANG_EDIT}</a></span>
+{!endif}
+		</div>
+{# end File Icons #}
+
+	</div> {# end of rater / file links #}
+
+	<div class="uk-clearfix"></div>
+
+</div> {# end of fm_record #}
+
 <div class="uk-clearfix"></div>
-</div>
+
 {# end {templatelocation} #}

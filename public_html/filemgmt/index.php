@@ -93,9 +93,10 @@ if ($lid > 0) {
         'category'         =>     'filelisting_category.thtml',
     ));
 
-    $p->set_var ('imgset',$_CONF['layout_url'] . '/nexflow/images');
-    $p->set_var ('tablewidth', $_FM_CONF['shotwidth'] + 10);
+    $p->set_var('imgset',$_CONF['layout_url'] . '/nexflow/images');
+    $p->set_var('tablewidth', $_FM_CONF['shotwidth'] + 10);
     $p->set_var('can_submit', Filemgmt\Download::canSubmit());
+    $p->set_var('lang_categories',_MD_CATEGORIES);
 
     $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
     if ($page < 1) {

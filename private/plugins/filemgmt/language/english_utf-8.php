@@ -258,7 +258,7 @@ define("_MD_NOSHOTS","No Thumbnails Available");
 define("_MD_EDITTHISDL","Edit This Download");
 
 define("_MD_LISTINGHEADING","<b>File Listing: There are %s files in our database</b>");
-define("_MD_LATESTLISTING","<b>Latest Listing:</b>");
+define("_MD_LATESTLISTING","Latest Listing");
 define("_MD_DESCRIPTIONC","Description:");
 define("_MD_EMAILC","Email: ");
 define("_MD_CATEGORYC","Category: ");

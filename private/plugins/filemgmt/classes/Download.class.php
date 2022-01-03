@@ -1532,7 +1532,7 @@ class Download
             'lid'       => $this->lid,
             'dtitle'    => $this->title,
             'hits'      => COM_numberFormat($this->hits),
-            'file_description' => nl2br($this->description),
+//            'file_description' => nl2br($this->description),
             'file_description' => $format->parse($this->description, true,7200),
             'is_found' => true,
             'LANG_DLNOW' => _MD_DLNOW,
@@ -1563,6 +1563,7 @@ class Download
             'LANG_REPORTBROKEN' => _MD_REPORTBROKEN,
             'LANG_HOMEPAGE' => _MD_HOMEPAGE,
             'LANG_CATEGORY' => _MD_CATEGORYC,
+            'LANG_COMMENTS' => _MD_COMMENTSC,
             'category_path' => $path,
             'submitter_name' => COM_getDisplayName($this->submitter),
             'submitter_link' => $this->submitter > 1,
@@ -1618,6 +1619,7 @@ class Download
             $T->set_var('comment_link',$comment_link['link_with_count']);
             $T->set_var('comment_tooltip', $comment_link['comment_count']);
             $T->set_var('show_comments','true');
+            $T->set_var('comment_count', $commentCount);
         } else {
             $T->set_var('show_comments','none');
             $T->unset_var('show_comments');

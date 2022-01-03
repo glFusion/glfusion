@@ -4,14 +4,18 @@
 </div>
 
 <div class="uk-panel uk-panel-box">
+{!if lang_categories}
+	<h3 class="uk-text-bold uk-margin-bottom">{lang_categories}</h3>
+{!endif}
 	<div class="uk-grid uk-margin-bottom-small">
 		<div class="uk-width-medium-1-1">
-{!if back_to_listxx}
-			<a class="uk-button uk-button-primary" style="float:right" href="{site_url}/filemgmt/index.php">{$$LANG_FILEMGMT[back_to_listing]}</a>
-{!endif}
 
 {!if category_path_link}
+  {!if category_records}
 			<div class="uk-margin-bottom">
+  {!else}
+			<div class="">
+  {!endif}				
 				<ul class="uk-breadcrumb uk-margin-remove" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
 					{category_path_link}
 				</ul>
@@ -62,7 +66,7 @@
 
 	<div uk-grid class="uk-grid uk-grid-width-1-2 uk-child-width-1-2">
 		<div>
-			<h2>{listing_heading}</h2>
+			<h2 class="uk-text-bold">{listing_heading}</h2>
 		</div>
 {!if can_submit}
 		<div style="text-align:right">
