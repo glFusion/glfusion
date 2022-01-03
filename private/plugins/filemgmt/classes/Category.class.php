@@ -333,12 +333,14 @@ class Category
         // If we have a nonzero category ID, then we edit the existing record.
         // Otherwise, we're creating a new item.  Also set the $not and $items
         // values to be used in the parent category selection accordingly.
+
+        $retval = '';
         if ($id > 0) {
-            $retval = COM_startBlock($LANG_FILEMGMT['edit_category'] . ': ' . $this->title);
             $T->set_var('cid', $id);
+            $T->set_var('panel_title', $LANG_FILEMGMT['edit_category'] . ': ' . $this->title);
         } else {
-            $retval = COM_startBlock($LANG_FILEMGMT['create_category']);
             $T->set_var('cid', '');
+            $T->set_var('panel_title', $LANG_FILEMGMT['create_category']);
         }
 
         $T->set_var(array(
@@ -358,6 +360,12 @@ class Category
             'lang_save'     => $LANG_FILEMGMT['save'],
             'lang_delete'   => $LANG_FILEMGMT['delete'],
             'lang_cancel'   => $LANG_FILEMGMT['cancel'],
+            'lang_delete_warning' => _MD_WARNING,
+            'lang_title' => _MD_TITLEC,
+            'lang_view_access' => _MD_CATSEC,
+            'lang_upload_access' => _MD_UPLOADSEC,
+            'lang_category_snap' => _MD_ADDCATEGORYSNAP,
+            'lang_parent_category' => _MD_PARENT,
         ) );
 
 //        if (!empty($this->imgurl) && is_file($_FM_CONF['SnapCat'].$this->imgurl)) {
@@ -371,7 +379,6 @@ class Category
         //}
         $T->parse('output', 'category');
         $retval .= $T->finish($T->get_var('output'));
-        $retval .= COM_endBlock();
         return $retval;
     }
 
@@ -529,6 +536,14 @@ class Category
                 'field' => 'pid',
                 'sort'  => false,
             ),
+/*
+            array(
+                'text' => 'Files',
+                'field' => 'file_count',
+                'sort' => false,
+                'align' => 'center'
+            ),
+*/
             array(
                 'text'  => $LANG_FILEMGMT['can_view'],
                 'field' => 'grp_access',
@@ -609,7 +624,7 @@ class Category
                 'url' => $_FM_CONF['admin_url'] . "/index.php?modCat={$A['cid']}",
                 'attr' => array(
                     'class' => 'tooltip',
-                    'title' => 'Edit',
+                    'title' => _MD_EDIT,
                 ),
             ) );
             break;
@@ -659,6 +674,15 @@ class Category
             if (!empty($A['imgurl'])) {
                 $retval .= '&nbsp;<i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-image"></i>';
             }
+            $catId = (int) $A['cid'];
+            $fc = DB_count($_TABLES['filemgmt_filedetail'],array('cid','status'),array($catId,1));
+            $retval .= ' ('.$fc.')';
+            break;
+
+        case 'file_count' :
+            $catId = (int) $A['cid'];
+            $fc = DB_count($_TABLES['filemgmt_filedetail'],array('cid','status'),array($catId,1));
+            $retval = $fc;
             break;
 
         default:
