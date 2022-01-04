@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | mediamanage.php                                                          |
-// |                                                                          |
-// | Media Management administration routines                                 |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Media Management Administrative Routines
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -34,6 +19,8 @@ if (!defined ('GVERSION')) {
 
 require_once $_CONF['path'] . 'plugins/mediagallery/include/sort.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
+
+use \glFusion\Log\Log;
 
 function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
     global $album_selectbox, $MG_albums, $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST, $_DB_dbms;
@@ -63,7 +50,7 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
 
     // -- Get Album Cover Info..
     if ( $MG_albums[$album_id]->access != 3) {
-        COM_errorLog("Someone has tried to illegally edit media in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,"Media Gallery: Someone has tried to edit media without the proper permissions.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -84,23 +71,16 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
     $row = DB_fetchArray($result);
     $totalAlbumItems = $row['totalitems'];
 
-    if ( $_DB_dbms == "mssql" ) {
-        $sql = "SELECT *,CAST(media_desc AS TEXT) AS media_desc FROM " .
-                $_TABLES['mg_media_albums'] .
-                " as ma INNER JOIN " .
-                $_TABLES['mg_media'] .
-                " as m ON ma.media_id=m.media_id" .
-                " WHERE ma.album_id=" . intval($album_id) .
-                " ORDER BY ma.media_order DESC LIMIT " . $begin . "," . $end;
-    } else {
-        $sql = "SELECT * FROM " .
-                $_TABLES['mg_media_albums'] .
-                " as ma INNER JOIN " .
-                $_TABLES['mg_media'] .
-                " as m ON ma.media_id=m.media_id" .
-                " WHERE ma.album_id=" . intval($album_id) .
-                " ORDER BY ma.media_order DESC LIMIT " . $begin . "," . $end;
-    }
+    $orderBy = MG_getSortOrder($album_id,0);
+
+    $sql = "SELECT * FROM " .
+            $_TABLES['mg_media_albums'] .
+            " as ma INNER JOIN " .
+            $_TABLES['mg_media'] .
+            " as m ON ma.media_id=m.media_id" .
+            " WHERE ma.album_id=" . intval($album_id) .
+            $orderBy . " LIMIT " . $begin . "," . $end;
+
 
     $result = DB_query( $sql );
     $nRows = DB_numRows( $result );
@@ -235,8 +215,8 @@ function MG_imageAdmin( $album_id, $page, $actionURL = '' ) {
                 } else {
                     $width = 100;
                     $height = 100;
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
-                    $pThumbnail = $_MG_CONF['path_mediaobjects'] . 'placeholder.svg';
+                    $thumbnail = $_MG_CONF['assets_url'] . '/placeholder.svg';
+                    $pThumbnail = $_MG_CONF['path_assets'] . 'placeholder.svg';
                 }
 
                 $cat_select = '<select name="cat_id[]">';
@@ -339,12 +319,13 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
     $result = DB_query($sql);
     $row = DB_fetchArray($result);
     if ( DB_error() != 0 )  {
-        echo COM_errorLog("Media Gallery - Error retrieving album cover.");
+        echo "Media Gallery - Error retrieving album cover.";
+        Log::write('system',Log::ERROR,"Media Gallery - Error retrieving album cover.");
     }
     $access = SEC_hasAccess ($row['owner_id'],$row['group_id'],$row['perm_owner'],$row['perm_group'],$row['perm_members'],$row['perm_anon']);
 
     if ( $access != 3 && !SEC_hasRights('mediagallery.admin') ) {
-        COM_errorLog("Someone has tried to illegally manage (save) Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING, "Media Gallery: Someone has tried to manage (save) a media item without the proper permissions.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDR']);
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -437,7 +418,7 @@ function MG_saveMedia( $album_id, $actionURL = '' ) {
             $sql = "UPDATE " . $_TABLES['mg_albums'] . " SET album_cover = '" . DB_escapeString($cover) . "', album_cover_filename='" . $coverFilename . "' WHERE album_id = " . intval($album_id);
             DB_query($sql);
             if ( DB_error() != 0 )  {
-                echo COM_errorLog("Error setting album cover");
+                echo "Error setting album cover";
             }
         }
     }
@@ -484,9 +465,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         'admin'         =>  'mediaedit.thtml',
         'asf_options'   =>  'edit_asf_options.thtml',
         'mp3_options'   =>  'edit_mp3_options.thtml',
-        'swf_options'   =>  'edit_swf_options.thtml',
         'mov_options'   =>  'edit_mov_options.thtml',
-        'flv_options'   =>  'edit_flv_options.thtml',
     ));
     $T->set_var('album_id',$album_id);
 
@@ -523,7 +502,7 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
     $row    = DB_fetchArray($result);
 
     if ( $MG_albums[$album_id]->access != 3 && !SEC_inGroup($MG_albums[$album_id]->mod_group_id) && $row['media_user_id'] != $_USER['uid'] ) {
-        COM_errorLog("Someone has tried to illegally sort albums in Media Gallery.  User id: {$_USER['uid']}, Username: {$_USER['username']}, IP: $REMOTE_ADDR",1);
+        Log::write('system',Log::WARNING,"Media Gallery: Someone has tried to edit a media item without the proper permissions.  User id: ".$_USER['uid'].", IP: ".$_SERVER['REAL_ADDR']);
         return(MG_genericError( $LANG_MG00['access_denied_msg'] ));
     }
 
@@ -609,14 +588,14 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         case 1 :
             switch ( $row['mime_type'] ) {
 		        case 'video/x-flv' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/flv.png';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flv.png');
+                    $thumbnail = $_MG_CONF['assets_url'] . '/flv.png';
+                    $size      = @getimagesize($_MG_CONF['path_assets'] . 'flv.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
         		case 'application/x-shockwave-flash' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/flash.png';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'flash.png');
+                    $thumbnail = $_MG_CONF['assets_url'] . '/flash.png';
+                    $size      = @getimagesize($_MG_CONF['path_assets'] . 'flash.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
@@ -624,8 +603,8 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         		case 'video/x-mpeg' :
         		case 'video/x-mpeq2a' :
         			if ( $_MG_CONF['use_wmp_mpeg'] == 1 ) {
-                    	$thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
-                    	$size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.png');
+                    	$thumbnail = $_MG_CONF['assets_url'] . '/wmp.png';
+                    	$size      = @getimagesize($_MG_CONF['path_assets'] . 'wmp.png');
                     	$preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     	$preview_end = "</a>";
             			break;
@@ -634,8 +613,8 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         		case 'video/quicktime' :
         		case 'video/x-qtc' :
 		        case 'audio/mpeg' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/quicktime.png';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'quicktime.png');
+                    $thumbnail = $_MG_CONF['assets_url'] . '/quicktime.png';
+                    $size      = @getimagesize($_MG_CONF['path_assets'] . 'quicktime.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
@@ -651,22 +630,22 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
 		        case 'application/x-troff-msvideo' :
 		        case 'application/x-ms-wmz' :
 		        case 'application/x-ms-wmd' :
-                    $thumbnail = $_MG_CONF['mediaobjects_url'] . '/wmp.png';
-                    $size      = @getimagesize($_MG_CONF['path_mediaobjects'] . 'wmp.png');
+                    $thumbnail = $_MG_CONF['assets_url'] . '/wmp.png';
+                    $size      = @getimagesize($_MG_CONF['path_assets'] . 'wmp.png');
                     $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',415,540)\">";
                     $preview_end = "</a>";
                     break;
                 default :
-                    $thumbnail      = $_MG_CONF['mediaobjects_url'] . '/video.png';
-                    $size           = @getimagesize($_MG_CONF['path_mediaobjects'] . 'video.png');
+                    $thumbnail      = $_MG_CONF['assets_url'] . '/video.png';
+                    $size           = @getimagesize($_MG_CONF['path_assets'] . 'video.png');
                     break;
             }
             $rotate_right   = '';
             $rotate_left    = '';
             break;
         case 2 :
-            $thumbnail      = $_MG_CONF['mediaobjects_url'] . '/audio.png';
-            $size           = @getimagesize($_MG_CONF['path_mediaobjects'] . 'audio.png');
+            $thumbnail      = $_MG_CONF['assets_url'] . '/audio.png';
+            $size           = @getimagesize($_MG_CONF['path_assets'] . 'audio.png');
             $preview   = "<a href=\"javascript:showVideo('" . $_MG_CONF['site_url'] . "/video.php?n=" . $row['media_id'] . ($mqueue ? "&amp;s=q" :'') . "',325,330)\">";
             $preview_end = "</a>";
             $rotate_right   = '';
@@ -675,24 +654,24 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         case 4 :
         	switch ( $row['mime_type'] ) {
 		        case 'application/zip' :
-                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/zip.png';
-                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'zip.png');
+                    $thumbnail  = $_MG_CONF['assets_url'] . '/zip.png';
+                    $size       = @getimagesize($_MG_CONF['path_assets'] . 'zip.png');
                     break;
                 case 'application/pdf' :
-                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/pdf.png';
-                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'pdf.png');
+                    $thumbnail  = $_MG_CONF['assets_url'] . '/pdf.png';
+                    $size       = @getimagesize($_MG_CONF['path_assets'] . 'pdf.png');
                     break;
                 default :
-                    $thumbnail  = $_MG_CONF['mediaobjects_url'] . '/generic.png';
-                    $size       = @getimagesize($_MG_CONF['path_mediaobjects'] . 'generic.png');
+                    $thumbnail  = $_MG_CONF['assets_url'] . '/generic.png';
+                    $size       = @getimagesize($_MG_CONF['path_assets'] . 'generic.png');
                     break;
             }
             $rotate_right   = '';
             $rotate_left    = '';
             break;
         case 5 :
-        	$thumbnail = $_MG_CONF['mediaobjects_url'] . '/remote.png';
-        	$size	   = @getimagesize($_MG_CONF['path_mediaobjects'] . 'remote.png');
+        	$thumbnail = $_MG_CONF['assets_url'] . '/remote.png';
+        	$size	   = @getimagesize($_MG_CONF['path_assets'] . 'remote.png');
         	$rotate_left  = '';
         	$rotate_right = '';
         	break;
@@ -854,101 +833,6 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
         $T->parse('playback_options','mp3_options');
     }
 
-
-    if ( $row['mime_type'] == 'application/x-shockwave-flash' || $row['mime_type'] == 'video/x-flv' ) {
-        // pull defaults, then override...
-        $playback_options['play']   = $_MG_CONF['swf_play'];
-        $playback_options['menu']   = $_MG_CONF['swf_menu'];
-        $playback_options['quality']= $_MG_CONF['swf_quality'];
-        $playback_options['height'] = $_MG_CONF['swf_height'];
-        $playback_options['width']  = $_MG_CONF['swf_width'];
-        $playback_options['loop']   = $_MG_CONF['swf_loop'];
-        $playback_options['scale']  = $_MG_CONF['swf_scale'];
-        $playback_options['wmode']  = $_MG_CONF['swf_wmode'];
-        $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-        $playback_options['bgcolor'] = $_MG_CONF['swf_bgcolor'];
-        $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-
-        $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($row['media_id']) . "'");
-        $poNumRows = DB_numRows($poResult);
-        for ($i=0; $i < $poNumRows; $i++ ) {
-            $poRow = DB_fetchArray($poResult);
-            $playback_options[$poRow['option_name']] = $poRow['option_value'];
-        }
-        $quality_select = '<select name="quality">';
-        $quality_select .= '<option value="low" '  . ($playback_options['quality'] == 'low' ? ' selected="selected"' : '') . '>' . $LANG_MG07['low'] . '</option>';
-        $quality_select .= '<option value="high" ' . ($playback_options['quality'] == 'high' ? ' selected="selected"' : '') . '>' . $LANG_MG07['high'] . '</option>';
-        $quality_select .= '</select>';
-
-        $scale_select = '<select name="scale">';
-        $scale_select .= '<option value="showall" '  . ($playback_options['scale'] == 'showall'  ? ' selected="selected"' : '') . '>' . $LANG_MG07['showall'] . '</option>';
-        $scale_select .= '<option value="noborder" ' . ($playback_options['scale'] == 'noborder' ? ' selected="selected"' : '') . '>' . $LANG_MG07['noborder'] . '</option>';
-        $scale_select .= '<option value="exactfit" ' . ($playback_options['scale'] == 'exactfit' ? ' selected="selected"' : '') . '>' . $LANG_MG07['exactfit'] . '</option>';
-        $scale_select .= '</select>';
-
-        $wmode_select = '<select name="wmode">';
-        $wmode_select .= '<option value="window" '      . ($playback_options['wmode'] == 'window'      ? ' selected="selected"' : '') . '>' . $LANG_MG07['window'] . '</option>';
-        $wmode_select .= '<option value="opaque" '      . ($playback_options['wmode'] == 'opaque'      ? ' selected="selected"' : '') . '>' . $LANG_MG07['opaque'] . '</option>';
-        $wmode_select .= '<option value="transparent" ' . ($playback_options['wmode'] == 'transparent' ? ' selected="selected"' : '') . '>' . $LANG_MG07['transparent'] . '</option>';
-        $wmode_select .= '</select>';
-
-        $asa_select = '<select name="allowscriptaccess">';
-        $asa_select .= '<option value="always" '      . ($playback_options['allowscriptaccess'] == 'always'      ? ' selected="selected"' : '') . '>' . $LANG_MG07['always'] . '</option>';
-        $asa_select .= '<option value="sameDomain" '  . ($playback_options['allowscriptaccess'] == 'sameDomain'  ? ' selected="selected"' : '') . '>' . $LANG_MG07['sameDomain'] . '</option>';
-        $asa_select .= '<option value="never" '       . ($playback_options['allowscriptaccess'] == 'never'       ? ' selected="selected"' : '') . '>' . $LANG_MG07['never'] . '</option>';
-        $asa_select .= '</select>';
-
-        $T->set_var(array(
-            'play_enabled'              => $playback_options['play'] ? ' checked="checked"' : '',
-            'play_disabled'             => $playback_options['play'] ? '' : ' checked="checked"',
-            'menu_enabled'              => $playback_options['menu'] ? ' checked="checked"' : '',
-            'menu_disabled'             => $playback_options['menu'] ? '' : ' checked="checked"',
-            'loop_enabled'              => $playback_options['loop'] ? ' checked="checked"' : '',
-            'loop_disabled'             => $playback_options['loop'] ? '' : ' checked="checked"',
-            'quality_select'            => $quality_select,
-            'scale_select'              => $scale_select,
-            'wmode_select'              => $wmode_select,
-            'asa_select'                => $asa_select,
-            'flashvars'                 => isset($playback_options['flashvars']) ? $playback_options['flashvars'] : '',
-            'height'                    => $playback_options['height'],
-            'width'                     => $playback_options['width'],
-            'bgcolor'                   => $playback_options['bgcolor'],
-            'swf_version'               => $playback_options['swf_version'],
-            'lang_playback_options'     => $LANG_MG07['playback_options'],
-            'lang_option'               => $LANG_MG07['option'],
-            'lang_description'          => $LANG_MG07['description'],
-            'lang_on'                   => $LANG_MG07['on'],
-            'lang_off'                  => $LANG_MG07['off'],
-            'lang_height'               => $LANG_MG07['height'],
-            'lang_width'                => $LANG_MG07['width'],
-            'lang_height_help'          => $LANG_MG07['height_help'],
-            'lang_width_help'           => $LANG_MG07['width_help'],
-            'lang_auto_start'           => $LANG_MG07['auto_start'],
-            'lang_auto_start_help'      => $LANG_MG07['auto_start_help'],
-            'lang_menu'                 => $LANG_MG07['menu'],
-            'lang_menu_help'            => $LANG_MG07['menu_help'],
-            'lang_scale'                => $LANG_MG07['scale'],
-            'lang_swf_scale_help'       => $LANG_MG07['swf_scale_help'],
-            'lang_wmode'                => $LANG_MG07['wmode'],
-            'lang_wmode_help'           => $LANG_MG07['wmode_help'],
-            'lang_loop'                 => $LANG_MG07['loop'],
-            'lang_loop_help'            => $LANG_MG07['loop_help'],
-            'lang_quality'              => $LANG_MG07['quality'],
-            'lang_quality_help'         => $LANG_MG07['quality_help'],
-            'lang_flash_vars'           => $LANG_MG07['flash_vars'],
-            'lang_asa'                  => $LANG_MG07['asa'],
-            'lang_asa_help'             => $LANG_MG07['asa_help'],
-            'lang_bgcolor'              => $LANG_MG07['bgcolor'],
-            'lang_bgcolor_help'         => $LANG_MG07['bgcolor_help'],
-            'lang_swf_version_help'     => $LANG_MG07['swf_version_help'],
-        ));
-    	if ( $row['mime_type'] == 'application/x-shockwave-flash' ) {
-	        $T->parse('playback_options','swf_options');
-        } else {
-	        $T->parse('playback_options','flv_options');
-        }
-    }
-
     if ( $row['media_mime_ext'] == 'mov' || $row['media_mime_ext'] == 'mp4' || $row['mime_type'] == 'video/quicktime' || $row['mime_type'] == 'video/mpeg') {
         // pull defaults, then override...
         $playback_options['autoref']    = $_MG_CONF['mov_autoref'];
@@ -1014,6 +898,11 @@ function MG_mediaEdit( $album_id, $media_id, $actionURL='', $mqueue=0, $view=0, 
             'lang_bgcolor_help'     => $LANG_MG07['bgcolor_help'],
         ));
         $T->parse('playback_options','mov_options');
+    }
+
+    if ($size === false) {
+        $size = array(0,0);
+        $thumbnail = $_MG_CONF['mediaobjects_url'] . '/missing.png';
     }
 
     $T->set_var(array(
@@ -1228,7 +1117,7 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
 	    $file = $repfilename['tmp_name'];
 
         list($rc,$msg) = MG_getFile( $file, $filename, $album_id,'','',1,0,'',0,'','',0,0,$media_id );
-        COM_errorLog($msg);
+        Log::write('system',Log::INFO, $msg);
     }
 
     // see if we had an attached thumbnail before...
@@ -1324,7 +1213,7 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
 
     DB_query($sql);
     if ( DB_error() != 0 ) {
-        echo COM_errorLog("Media Gallery: ERROR Updating image in media database");
+        echo "Media Gallery: ERROR Updating image in media database";
     }
     PLG_itemSaved($media_id,'mediagallery');
     $media_id_db = DB_escapeString($media_id);
@@ -1371,7 +1260,6 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
         $playback_option['wmode']       = isset($_POST['wmode']) ? DB_escapeString(COM_applyFilter($_POST['wmode'])) : '';
         $playback_option['allowscriptaccess'] = isset($_POST['allowscriptaccess']) ? DB_escapeString(COM_applyFilter($_POST['allowscriptaccess'])) : '';
         $playback_option['bgcolor']     = isset($_POST['bgcolor']) ? DB_escapeString(COM_applyFilter($_POST['bgcolor'])) : '';
-        $playback_option['swf_version'] = isset($_POST['swf_version']) ? COM_applyFilter($_POST['swf_version'],true) : 9;
 
         DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id_db','play',              {$playback_option['play']}");
         if ( $playback_option['menu'] != '' ) {
@@ -1386,7 +1274,6 @@ function MG_saveMediaEdit( $album_id, $media_id, $actionURL ) {
         DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id_db','loop',             '{$playback_option['loop']}'");
         DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id_db','allowscriptaccess','{$playback_option['allowscriptaccess']}'");
         DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id_db','bgcolor',          '{$playback_option['bgcolor']}'");
-        DB_save($_TABLES['mg_playback_options'], 'media_id,option_name,option_value',"'$media_id','swf_version',      '{$playback_option['swf_version']}'");
     }
 
     if (isset($_POST['autoplay'])) {    //quicktime

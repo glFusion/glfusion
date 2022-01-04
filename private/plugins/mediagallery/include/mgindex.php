@@ -1,31 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | mgindex.php                                                              |
-// |                                                                          |
-// | Main index page for Media Gallery                                        |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Main index page
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -232,7 +217,7 @@ function MG_index() {
 
         for ( $i = $begin; $i < ($begin+$items_per_page ); $i += $_MG_CONF['album_display_columns']) {
             for ($j = $i; $j < ($i + $_MG_CONF['album_display_columns']); $j++) {
-                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                 if ($j >= $nrows) {
                     $k = ($i+$_MG_CONF['album_display_columns']) - $j;
                     $m = $k % $_MG_CONF['album_display_columns'];
@@ -288,7 +273,7 @@ function MG_index() {
                         $filename = $MG_albums[$achild[$indexCounter]]->findCover();
 
                         if ( $filename == '' ) {
-                            $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                            $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                             $media_size = array(200,200);
                         } else {
                             if ( substr($filename,0,3) == 'tn_' ) {
@@ -316,7 +301,7 @@ function MG_index() {
                     $album_last_update[0] = "";
                     $filename = $MG_albums[$achild[$indexCounter]]->findCover();
                     if ( $filename == '' ) {
-                        $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                        $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                         $media_size = array(200,200);
                     } else {
                         foreach ($_MG_CONF['validExtensions'] as $ext ) {
@@ -351,7 +336,7 @@ function MG_index() {
                 // a little fail safe here to make sure we don't show empty boxes...
 
                 if ( $media_size === false || $media_size[0] == 0 || $media_size[1] == 0 ) {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                     $media_size = array(200,200);
                 }
 

@@ -58,6 +58,10 @@
 				{lang_doc_alert2}
 			</div>
 
+			{glfusion_v2_header}
+			{glfusion_v2_notes}
+			{permission_error}
+
 		</div>
 	</div>
 </form>

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Eric Warren     eric AT glfusion DOT org
 *
@@ -24,10 +24,10 @@ if (!defined('LB')) {
     define('LB', "\n");
 }
 if (!defined('SUPPORTED_PHP_VER')) {
-    define('SUPPORTED_PHP_VER', '7.1.0');
+    define('SUPPORTED_PHP_VER', '7.3.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
-    define('SUPPORTED_MYSQL_VER', '5.6.0');
+    define('SUPPORTED_MYSQL_VER', '5.5.0');
 }
 
 if (empty($LANG_DIRECTION)) {
@@ -46,7 +46,7 @@ if ($LANG_DIRECTION == 'rtl') {
 // +---------------------------------------------------------------------------+
 
 if (!function_exists('INST_stripslashes') ) {
-    if (get_magic_quotes_gpc() == 1) {
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc() == 1) {
         function INST_stripslashes($text) {
             return stripslashes($text);
         }
@@ -258,7 +258,7 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
     $config->load_baseconfig();
     $config->initConfig();
     $_CONF = $config->get_config('Core');
-
+/*
     if (! file_exists($_CONF['path_log'] . 'error.log')) {
         $config->set('path_log', $path . 'logs/');
     }
@@ -289,13 +289,23 @@ function INST_fixPathsAndUrls($path, $path_html, $site_url, $site_admin_url)
         }
     }
     if (! file_exists($_CONF['path_images'] . 'articles')) {
-        $config->set('path_images', $path_html . 'images/');
+        $config->set('path_images', $path_html . 'data/images/');
     }
+*/
+/*
     if (substr($_CONF['rdf_file'], strlen($path_html)) != $path_html) {
         // this may not be correct but neither was the old value apparently ...
         $config->set('rdf_file', $path_html . 'backend/glfusion.rss');
     }
-
+*/
+/*
+    if (substr($_CONF['rdf_file'], strlen($path_html)) == $path_html) {
+        $config->set('rdf_file', 'glfusion.rss');
+    }
+    if (substr($_CONF['path_rss'], strlen($path_html)) != $path_html) {
+        $config->set('path_rss',$_CONF['path_html'].'backend/');
+    }
+*/
     if (! empty($site_url) && ($_CONF['site_url'] != $site_url)) {
         $config->set('site_url', $site_url);
 
@@ -1174,7 +1184,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_DATA = array();
 
             $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('fb', 'facebook', 'Facebook', 'facebook', 'http://www.facebook.com/sharer.php?s=100', 1);";
-            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('gg', 'google-plus', 'Google+', 'google-plus', 'https://plus.google.com/share?url', 1);";
+//            $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('gg', 'google-plus', 'Google+', 'google-plus', 'https://plus.google.com/share?url', 1);";
             $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('li', 'linkedin', 'LinkedIn', 'linkedin', 'http://www.linkedin.com', 1);";
             $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('lj', 'livejournal', 'Live Journal', 'pencil', 'http://www.livejournal.com', 1);";
             $_DATA[] = "INSERT INTO `{$_TABLES['social_share']}` (`id`, `name`, `display_name`, `icon`, `url`, `enabled`) VALUES('mr', 'mail-ru', 'Mail.ru', 'at', 'http://mail-ru.com', 1);";
@@ -1188,7 +1198,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(2, 'http://facebook.com/%%u', 1, 'facebook', 'facebook', 'Facebook');";
             $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(3, 'http://pinterest.com/%%u', 1, 'pinterest-p', 'pinterest', 'Pinterest');";
             $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(4, 'http://youtube.com/%%u', 1, 'youtube', 'youtube', 'Youtube');";
-            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(5, 'http://plus.google.com/+%%u', 1, 'google-plus', 'google-plus', 'Google+');";
+//            $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(5, 'http://plus.google.com/+%%u', 1, 'google-plus', 'google-plus', 'Google+');";
             $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(6, 'http://linkedin.com/in/%%u', 1, 'linkedin', 'linkedin', 'LinkedIn');";
             $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(7, 'http://linkedin.com/company/%%u', 1, 'linkedin-square', 'linkedin-co', 'LinkedIn (Company)');";
             $_DATA[] = "INSERT INTO {$_TABLES['social_follow_services']} (`ssid`, `url`, `enabled`, `icon`, `service_name`, `display_name`) VALUES(8, 'http://github.com/%%u', 1, 'github', 'github', 'GitHub');";
@@ -1583,6 +1593,33 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             DB_query("DELETE FROM `{$_TABLES['plugins']}` WHERE pi_name='commentfeeds'",1);
 
+            $newCapabilities = array(
+                array('ft_name' => 'system.root',   'ft_desc' => 'Allows Root Access'),
+                array('ft_name' => 'actions.admin', 'ft_desc' => 'Ability to view Admin Actions'),
+                array('ft_name' => 'cache.admin',   'ft_desc' => 'Ability to clear caches'),
+                array('ft_name' => 'config.admin',  'ft_desc' => 'Ability to configuration glFusion'),
+                array('ft_name' => 'database.admin','ft_desc' => 'Ability to perform Database Administration'),
+                array('ft_name' => 'env.admin',     'ft_desc' => 'Ability to view Environment Check'),
+                array('ft_name' => 'logview.admin', 'ft_desc' => 'Ability to view / clear glFusion Logs'),
+                array('ft_name' => 'upgrade.admin', 'ft_desc' => 'Ability to run Upgrade Check')
+            );
+
+            foreach($newCapabilities AS $feature) {
+                $admin_ft_id = 0;
+                $group_id = 0;
+
+                $tmp_admin_ft_id = DB_getItem ($_TABLES['features'], 'ft_id',"ft_name = '{$feature['ft_name']}'");
+                if (empty ($tmp_admin_ft_id)) {
+                    DB_query("INSERT INTO {$_TABLES['features']} (ft_name, ft_descr, ft_gl_core) VALUES ('{$feature['ft_name']}','{$feature['ft_desc']}',1)",1);
+                    $admin_ft_id  = DB_insertId();
+                    DB_query("INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES ('{$admin_ft_id}',1)",1);
+                }
+            }
+
+            // clean up the group assignment table
+            DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id='2'",1);
+            DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id='13'",1);
+
             $current_fusion_version = '2.0.0';
 
         default:
@@ -1826,7 +1863,10 @@ function INST_pluginAutoInstall( $plugin )
 
 
 function INST_isWritable($path) {
-    if ($path{strlen($path)-1}=='/') {
+    if (empty($path)) {
+        return false;
+    }
+    if ($path[strlen($path)-1]=='/') {
         if ( !is_dir($path)) {
             return false;
         }
@@ -2110,7 +2150,7 @@ function INST_pluginExists($plugin)
 
 function INST_return_bytes($val) {
     $val = trim($val);
-    $last = strtolower($val{strlen($val)-1});
+    $last = strtolower($val[strlen($val)-1]);
     switch($last) {
         // The 'G' modifier is available since PHP 5.1.0
         case 'g':
@@ -2274,7 +2314,7 @@ function INST_errorLog( $logpath, $logentry)
     if ( !empty( $logentry )) {
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
 
-        $logfile = $logpath . 'error.log';
+        $logfile = $logpath . 'system.log';
         if ( !$file = fopen( $logfile, 'a' )) {
             return;
         } else {
@@ -2355,6 +2395,30 @@ function INST_addConfigItem($data = array() )
         ."'{$Qargs[9]}')";  // default value
 
     DB_query($sql);
+}
+
+/**
+ * Create a directory
+ *
+ * @param    string $target Directory to create
+ * @param    bool           True on success, false on fail
+ */
+function INST_mkDir($target)
+{
+    if (@is_dir($target) || empty($target)) {
+        return true; // already exists
+    }
+
+    if (@file_exists($target) && !@is_dir($target)) {
+        return false;   // file exists - cannot create directory with same name
+    }
+
+    if (INST_mkDir(substr($target,0,strrpos($target,'/')))) {
+        $ret = @mkdir($target,0755);
+        @chmod($target, 0755);
+        return (bool) $ret;
+    }
+    return true;
 }
 
 ?>

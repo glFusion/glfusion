@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -148,7 +148,7 @@ $LANG_INSTALL = array(
     'use_utf8'                  => 'Use UTF-8',
     'welcome_help'              => 'Welcome to the glFusion CMS Installation Wizard. You can install a new glFusion site, upgrade an existing glFusion site.<br /><br />Please select the language for the wizard, and the task to perform, then press <strong>Next</strong>.',
     'wizard_version'            => 'v%s Installation Wizard',
-    'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />For a new install, this is the directory that contains the <strong>db-config.php.dist</strong> file, or for an upgrade, and existing <strong>db-config.php</strong> file.<br /><br />Directory Examples:<br />/home/www/glfusion/private/<br />c:/www/glfusion/private/<br /><br /><strong>Hint:</strong> From a security perspective, the most desirable location for the private/ directory is outside of the web root.  The web root is the directory that is served by your web host that relates to the root url of your site (http://www.yoursite.com/).<br /><br />It appears that the absolute path to your <strong>public_html/</strong> <i>(not <strong>private/</strong>)</i> directory is:<br /><br />%s<br /><br />We suggest that you place your private/ directory somewhere outside of the web root, if your web host allows this.<br /><br />If your web host does not allow for placement of files outside of the web root, please follow the instructions on <a href="https://www.glfusion.org/wiki/glfusion:install:pathsetting" target="_blank">Installing the private/ directory in the public web space</a> at the glFusion Documentation Wiki.<br /><br /><strong>Advanced Settings</strong> allow you to override some of the default paths.  Generally you do not need to modify or specify these paths, the system will determine them automatically.',
+    'system_path_prompt'        => 'Enter the full, absolute path on your server to glFusion\'s <strong>private/</strong> directory.<br /><br />For a new install, this is the directory that contains the <strong>db-config.php.dist</strong> file, or for an upgrade, and existing <strong>db-config.php</strong> file.<br /><br />Directory Examples:<br />/home/www/glfusion/private/<br />c:/www/glfusion/private/<br /><br /><strong>Hint:</strong> From a security perspective, the most desirable location for the private/ directory is outside of the web root.  The web root is the directory that is served by your web host that relates to the root url of your site (http://www.yoursite.com/).<br /><br />It appears that the absolute path to your <strong>public_html/</strong> <i>(not <strong>private/</strong>)</i> directory is:<br /><br />%s<br /><br />We suggest that you place your private/ directory somewhere outside of the web root, if your web host allows this.<br /><br />If your web host does not allow for placement of files outside of the web root, please follow the instructions on <a href="https://www.glfusion.org/wiki/glfusion:install:pathsetting" target="_blank">Installing the private/ directory in the public web space</a> at the glFusion Documentation Wiki.',
     'advanced_settings'         => 'Advanced Settings',
     'log_path'                  => 'Logs Path',
     'lang_path'                 => 'Language Path',
@@ -231,6 +231,9 @@ $LANG_INSTALL = array(
     'all_ext_present'           => 'All required and optional PHP extensions are properly installed.',
     'short_open_tags'           => 'PHP\'s <b>short_open_tag</b> should be off.',
     'max_execution_time'        => 'glFusion recommends the PHP default value of 30 seconds as a minimum, but plugin uploads and other operations may take longer than this depending upon your hosting environment.  If safe_mode (above) is Off, you may be able to increase this by modifying the value of <b>max_execution_time</b> in your php.ini file.',
+    'glfusion_v2_header'        => 'glFusion v2 Upgrade Requirements',
+    'glfusion_v2_notes'         => 'glFusion v2.0 has changed the locations of serveral files, as a result, your site must have a private/data/ directory and a public_html/data/ directory that is writeable by the webserver.',
+    'data_dir_error'            => 'The path <strong>%s</strong> does not have the proper permissions to allow the web server to write to this location. Please correct this error before proceeding.',
 );
 
 // +---------------------------------------------------------------------------+

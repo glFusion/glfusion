@@ -1,34 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Links Plugin - glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// |                                                                          |
-// | glFusion Links Plugin administration page.                               |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs        - tony AT tonybibbs DOT com                   |
-// |          Mark Limburg      - mlimburg AT users DOT sourceforge DOT net   |
-// |          Jason Whittenburg - jwhitten AT securitygeeks DOT com           |
-// |          Dirk Haun         - dirk AT haun-online DOT de                  |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Links Plugin
+*
+* Links Administration Page
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2012-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs         tony AT tonybibbs DOT com
+*  Mark Limburg       mlimburg AT users.sourceforge DOT net
+*  Jason Whittenburg  jwhitten AT securitygeeks DOT com
+*  Dirk Haun          dirk AT haun-online DOT de
+*
+*/
 
 /**
  * glFusion links administration page.
@@ -49,6 +37,8 @@
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
+
+use \glFusion\Log\Log;
 
 // Uncomment the lines below if you need to debug the HTTP variables being passed
 // to the script.  This will sometimes cause errors but it will allow you to see
@@ -176,7 +166,7 @@ function LINK_edit($action, $lid = '')
                 'text' => $LANG_LINKS_ADMIN[50]),
         array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
             'text' => $LANG_LINKS_ADMIN[26]),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
                 'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -379,7 +369,8 @@ function LINK_save($lid, $old_lid, $cid, $categorydd, $url, $description, $title
         }
     } else { // missing fields
         $retval .= COM_siteHeader('menu', $LANG_LINKS_ADMIN[1]);
-        $retval .= COM_errorLog($LANG_LINKS_ADMIN[10],2);
+        $retval .= $LANG_LINKS_ADMIN[10];
+        Log::write('system',Log::ERROR, $LANG_LINKS_ADMIN[10]);
         if (DB_count ($_TABLES['links'], 'lid', $old_lid) > 0) {
             $retval .= LINK_edit('edit', $old_lid);
         } else {
@@ -431,7 +422,7 @@ function LINK_list($validate)
                   'text' => $LANG_LINKS_ADMIN[50]),
             array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
               'text' => $LANG_LINKS_ADMIN[26],'active'=>true),
-           array('url' => $_CONF['site_admin_url'],
+           array('url' => $_CONF['site_admin_url'].'/index.php',
                  'text' => $LANG_ADMIN['admin_home'])
         );
         $dovalidate_url = $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=validate' . '&amp;'.CSRF_TOKEN.'='.$token;
@@ -460,7 +451,7 @@ function LINK_list($validate)
                   'text' => $LANG_LINKS_ADMIN[50]),
             array('url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?validate=enabled',
               'text' => $LANG_LINKS_ADMIN[26]),
-            array('url' => $_CONF['site_admin_url'],
+            array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
         );
         $validate_link = '';
@@ -537,7 +528,7 @@ function LINK_delete($lid, $type = '')
             COM_accessLog("User {$_USER['username']} tried to illegally delete link submission $lid.");
         }
     } else {
-        COM_errorLog("User {$_USER['username']} tried to illegally delete link $lid of type $type.");
+        Log::write('system',Log::ERROR,'User '.$_USER['username'].' tried to delete link '.$lid.' of type '.$type);
     }
 
     return COM_refresh($_CONF['site_admin_url'] . '/plugins/links/index.php');
@@ -609,7 +600,7 @@ switch ($action) {
 
     case 'delete':
         if (!isset ($lid) || empty ($lid)) {
-            COM_errorLog ('User ' . $_USER['username'] . ' attempted to delete link, lid is null');
+            Log::write('system',Log::ERROR,'User ' . $_USER['username'] . ' attempted to delete link, lid is null');
             $display .= COM_refresh ($_CONF['site_admin_url'] . '/plugins/links/index.php');
         } elseif (SEC_checkToken()) {
             $display .= LINK_delete($lid, $type);

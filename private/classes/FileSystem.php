@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2018 by the following authors:
+*  Copyright (C) 2017-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -69,12 +69,9 @@ class FileSystem
             return false;   // file exists - cannot create directory with same name
         }
 
-        if (self::mkDir(substr($target,0,strrpos($target,'/')))) {
-            $ret = @mkdir($target,0755);
-            @chmod($target, 0755);
-            return (bool) $ret;
-        }
-        return true;
+        $ret = @mkdir($target,0755,true);
+        @chmod($target, 0755);
+        return (bool) $ret;
     }
 
     /**

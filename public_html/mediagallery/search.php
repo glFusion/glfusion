@@ -1,33 +1,20 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | search.php                                                               |
-// |                                                                          |
-// | Media Gallery search implementation                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Media Gallery Search
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../lib-common.php';
+
+use \glFusion\Log\Log;
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -434,7 +421,9 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 					$default_thumbnail = 'remote.png';
 				}
 				break;
-
+        default :
+            $default_thumbnail = 'generic.png';
+            break;
     }
 
     if ( $M['media_tn_attached'] == 1 ) {
@@ -447,14 +436,13 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
             }
         }
         if ( $media_thumbnail_file == '' ) {
-            $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
-            $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
         }
     } else {
-        $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
-        $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+        $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+        $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
     }
-
 
     $resolution_x = 0;
     $resolution_y = 0;
@@ -499,24 +487,6 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	            $resolution_y = $new_y;
             } else { // must be a video...
 	            // set the default playback options...
-	            $playback_options['play']    = $_MG_CONF['swf_play'];
-	            $playback_options['menu']    = $_MG_CONF['swf_menu'];
-	            $playback_options['quality'] = $_MG_CONF['swf_quality'];
-	            $playback_options['height']  = $_MG_CONF['swf_height'];
-	            $playback_options['width']   = $_MG_CONF['swf_width'];
-	            $playback_options['loop']    = $_MG_CONF['swf_loop'];
-	            $playback_options['scale']   = $_MG_CONF['swf_scale'];
-	            $playback_options['wmode']   = $_MG_CONF['swf_wmode'];
-	            $playback_options['allowscriptaccess'] = $_MG_CONF['swf_allowscriptaccess'];
-	            $playback_options['bgcolor']    = $_MG_CONF['swf_bgcolor'];
-	            $playback_options['swf_version'] = $_MG_CONF['swf_version'];
-	            $playback_options['flashvars']   = $_MG_CONF['swf_flashvars'];
-
-	            $poResult = DB_query("SELECT * FROM {$_TABLES['mg_playback_options']} WHERE media_id='" . DB_escapeString($M['media_id']) . "'");
-	            while ( $poRow = DB_fetchArray($poResult) ) {
-	                $playback_options[$poRow['option_name']] = $poRow['option_value'];
-	            }
-
 	            if ( isset($M['media_resolution_x']) && $M['media_resolution_x'] > 0 ) {
 	                $resolution_x = $M['media_resolution_x'];
 	                $resolution_y = $M['media_resolution_y'];
@@ -547,8 +517,8 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	                    $resolution_y = $M['media_resolution_y'];
 	                }
 	            }
-	            $resolution_x = $playback_options['width'];
-	            $resolution_y = $playback_options['height'];
+	            $resolution_x = 480;
+	            $resolution_y = 320;
 	            if ( $resolution_x < 1 || $resolution_y < 1 ) {
 	                $resolution_x = 480;
 	                $resolution_y = 320;
@@ -556,16 +526,6 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 	                $resolution_x = $resolution_x + 40;
 	                $resolution_y = $resolution_y + 40;
 	            }
-            	if ( $M['mime_type'] == 'video/x-flv' && $_MG_CONF['use_flowplayer'] != 1) {
-            	    $resolution_x = $resolution_x + 60;
-	            	if ( $resolution_x < 590 ) {
-		            	$resolution_x = 590;
-	            	}
-	            	$resolution_y = $resolution_y + 80;
-	            	if ( $resolution_y < 500 ) {
-	            	    $resolution_y = 500;
-	                }
-            	}
             	if ( $M['media_type'] == 5 ) {
 	            	$resolution_x = 460;
 	            	$resolution_y = 380;
@@ -973,7 +933,7 @@ if (($mode == $LANG_MG01['search'] && !empty ($LANG_MG01['search'])) || $mode ==
             VALUES ('$sort_id',$sort_user,'$sqltmp',$numresults,$sort_datetime,'$referer','$keywords')";
     $result = DB_query($sql);
     if ( DB_error() ) {
-        COM_errorLog("Media Gallery: Error placing sort query into database");
+        Log::write('system',Log::ERROR,"Media Gallery: Error placing sort query into database");
     }
 
     $sort_purge = time() - 3660; // 43200;

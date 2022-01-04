@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2015-2018 by the following authors:
+*  Copyright (C) 2015-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -375,7 +375,6 @@ function SI_get_site()
     if ( isset($_SOCIAL['social_site_extra'])) {
         $extra = $_SOCIAL['social_site_extra'];
     }
-
     $T = new Template($_CONF['path_layout'] . 'admin/social');
     $T->set_file('page','site_social.thtml');
 

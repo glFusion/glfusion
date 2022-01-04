@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2019 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -24,6 +24,7 @@ require_once 'lib-common.php';
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Social\Social;
+use \glFusion\Log\Log;
 
 USES_lib_user();
 
@@ -48,9 +49,6 @@ function edituser()
             array($_USER['uid'],$_USER['uid'],$_USER['uid']),
             array(Database::INTEGER,Database::INTEGER,Database::INTEGER)
     );
-
-//    $result = DB_query("SELECT fullname,cookietimeout,email,homepage,sig,emailstories,about,location,pgpkey,photo,remoteservice,account_type FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']} WHERE {$_TABLES['users']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']} AND {$_TABLES['userinfo']}.uid=".(int)$_USER['uid']);
-//    $A = DB_fetchArray ($result);
 
     $preferences = new Template ($_CONF['path_layout'] . 'preferences');
     $preferences->set_file (array ('profile'            => 'profile.thtml',
@@ -227,11 +225,9 @@ function edituser()
         $preferences->set_var ('username_option', '');
     }
 
-    $selection = '<select id="cooktime" name="cooktime">' . LB;
-    $selection .= COM_optionList ($_TABLES['cookiecodes'], 'cc_value,cc_descr',
-                                  $A['cookietimeout'], 0);
-    $selection .= '</select>';
-    $preferences->set_var ('cooktime_selector', $selection);
+    $preferences->set_var ('cooktime_selector',
+        COM_optionList ($_TABLES['cookiecodes'], 'cc_value,cc_descr', $A['cookietimeout'], 0)
+    );
 
     $preferences->set_var ('email_value', htmlspecialchars ($A['email']));
     $preferences->set_var ('homepage_value',
@@ -242,18 +238,7 @@ function edituser()
 
     if ($_CONF['allow_user_photo'] == 1) {
         $photo = USER_getPhoto ($_USER['uid'], $A['photo'], $A['email'], -1);
-        if (empty ($photo)) {
-            $preferences->set_var ('display_photo', '');
-        } else {
-            if (empty ($A['photo'])) { // external avatar
-                $photo = '<br />' . $photo;
-            } else { // uploaded photo - add delete option
-                $photo = '<br />' . $photo . '<br />' . $LANG04[79]
-                       . '&nbsp;<input type="checkbox" name="delete_photo" />'
-                       . LB;
-            }
-            $preferences->set_var ('display_photo', $photo);
-        }
+        $preferences->set_var('display_photo', $photo);
         $preferences->parse ('userphoto_option', 'photo', true);
     } else {
         $preferences->set_var ('userphoto_option', '');
@@ -420,24 +405,21 @@ function confirmAccountDelete ($form_reqid)
             array(Database::STRING,Database::INTEGER)
     );
 
-//    DB_change ($_TABLES['users'], 'pwrequestid', "$reqid",'uid', (int)$_USER['uid']);
-
     $retval = '';
 
     $retval .= COM_siteHeader ('menu', $LANG04[97]);
-    $retval .= COM_startBlock ($LANG04[97], '',
-                               COM_getBlockTemplate ('_msg_block', 'header'));
-    $retval .= '<p>' . $LANG04[98] . '</p>' . LB;
-    $retval .= '<form class="uk-form" action="' . $_CONF['site_url']
-            . '/usersettings.php" method="post"><div>' . LB;
-    $retval .= '<p align="center"><button type="submit" class="uk-button uk-button-danger" name="btnsubmit" value="'.$LANG04[96].'">'.$LANG04[96].'</button></p>'.LB;
-    $retval .= '<input type="hidden" name="mode" value="deleteconfirmed" />' . LB;
-    $retval .= '<input type="hidden" name="account_id" value="' . $reqid
-            . '" />' . LB;
-    $retval .= '</div></form>' . LB;
+    $retval .= COM_startBlock(
+        $LANG04[97],
+        '',
+        COM_getBlockTemplate ('_msg_block', 'header')
+    );
+    $T = new Template($CONF['path_layout'] . '/preferences');
+    $T->set_file('form', 'conf_del_account.thtml');
+    $T->set_var('reqid', $reqid);
+    $T->parse('output', 'form');
+    $retval .= $T->finish($T->get_var('output'));
     $retval .= COM_endBlock (COM_getBlockTemplate ('_msg_block', 'footer'));
     $retval .= COM_siteFooter ();
-
     return $retval;
 }
 
@@ -493,9 +475,6 @@ function editpreferences()
             array($_USER['uid'],$_USER['uid']),
             array(Database::INTEGER,Database::INTEGER)
     );
-//    $result = DB_query("SELECT noicons,willing,dfid,tzid,noboxes,maxstories,tids,aids,boxes,emailfromadmin,emailfromuser,showonline,search_result_format FROM {$_TABLES['userprefs']},{$_TABLES['userindex']} WHERE {$_TABLES['userindex']}.uid = {$_USER['uid']} AND {$_TABLES['userprefs']}.uid = {$_USER['uid']}");
-
-//    $A = DB_fetchArray($result);
 
     if ( $A['tzid'] == '' ) {
         $A['tzid'] = $_CONF['timezone'];
@@ -626,30 +605,25 @@ function editpreferences()
             $similarLang = $tmp[0];
         }
 
-        $selection = '<select id="language" name="language">' . LB;
-
+        $options = '';
         foreach ($language as $langFile => $langName) {
-            $selection .= '<option value="' . $langFile . '"';
-            if (($langFile == $userlang) || (($has_valid_language == 0) &&
-                    (strpos ($langFile, $similarLang) === 0))) {
-                $selection .= ' selected="selected"';
+            $options .= '<option value="' . $langFile . '"';
+            if (
+                $langFile == $userlang ||
+                ($has_valid_language == 0 && strpos($langFile, $similarLang) === 0)
+            ) {
+                $options .= ' selected="selected"';
                 $has_valid_language = 1;
-            } else if ($userlang == $langFile) {
-                $selection .= ' selected="selected"';
             }
-
-            $selection .= '>' . $langName . '</option>' . LB;
+            $options .= '>' . $langName . '</option>' . LB;
         }
-        $selection .= '</select>';
-        $preferences->set_var ('language_selector', $selection);
+        $preferences->set_var('language_options', $options);
         $preferences->parse ('language_selection', 'language', true);
     } else {
         $preferences->set_var ('language_selection', '');
     }
 
     if ($_CONF['allow_user_themes'] == 1) {
-        $selection = '<select id="theme" name="theme">' . LB;
-
         if (empty ($_USER['theme'])) {
             $usertheme = $_CONF['theme'];
         } else {
@@ -660,11 +634,8 @@ function editpreferences()
         usort ($themeFiles,
                function ($a,$b) { return strcasecmp($a,$b); } );
 
+        $options = '';
         foreach ($themeFiles as $theme) {
-            $selection .= '<option value="' . $theme . '"';
-            if ($usertheme == $theme) {
-                $selection .= ' selected="selected"';
-            }
             $words = explode ('_', $theme);
             $bwords = array ();
             foreach ($words as $th) {
@@ -675,19 +646,20 @@ function editpreferences()
                     $bwords[] = $th;
                 }
             }
-            $selection .= '>' . implode (' ', $bwords) . '</option>' . LB;
+            $options .= '<option value="' . $theme . '"';
+            if ($usertheme == $theme) {
+                $options .= ' selected="selected"';
+            }
+            $options .= '>' . implode(' ', $bwords) . '</option>' . LB;
         }
-        $selection .= '</select>';
-        $preferences->set_var ('theme_selector', $selection);
+        $preferences->set_var('theme_options', $options);
         $preferences->parse ('theme_selection', 'theme', true);
     } else {
         $preferences->set_var ('theme_selection', '');
     }
 
     // Timezone
-    $selection = Date::getTimeZoneDropDown($A['tzid'],array('id' => 'tzid', 'name' => 'tzid'));
-
-    $preferences->set_var('timezone_selector', $selection);
+    $preferences->set_var('timezone_options', Date::getTimeZoneOptions($A['tzid']));
     $preferences->set_var('lang_timezone', $LANG04[158]);
 
     if ($A['noicons'] == '1') {
@@ -703,10 +675,8 @@ function editpreferences()
     }
 
     $preferences->set_var ('maxstories_value', $A['maxstories']);
-    $selection = '<select id="dfid" name="dfid">' . LB
-               . COM_optionList ($_TABLES['dateformats'], 'dfid,description',
-                                 $A['dfid']) . '</select>';
-    $preferences->set_var ('dateformat_selector', $selection);
+    $selection = COM_optionList ($_TABLES['dateformats'], 'dfid,description', $A['dfid']);
+    $preferences->set_var ('dateformat_options', $selection);
     $preferences->set_var('plugin_layout_display',PLG_profileEdit($_USER['uid'],'layout','display'));
 
     if (isset($LANG_configSelect['Core'])) {
@@ -715,14 +685,15 @@ function editpreferences()
     } else {
         $cfgSelect = array_flip($LANG_configselects['Core'][18]);
     }
-
-    $search_result_select  = '<select name="search_result_format" id="search_result_format">'.LB;
+    $options = '';
     foreach ($cfgSelect AS $type => $name ) {
-        $search_result_select .= '<option value="'. $type . '"' . ($A['search_result_format'] == $type ? 'selected="selected"' : '') . '>'.$name.'</option>'.LB;
+        $options .= '<option value="' . $type . '"';
+        if ($type == $A['search_result_format']) {
+            $options .= ' selected="selected"';
+        }
+        $options .= '>' . $name . '</option>' . LB;
     }
-    $search_result_select .= '</select>';
-
-    $preferences->set_var('search_result_select',$search_result_select);
+    $preferences->set_var('search_format_options', $options);
     $preferences->set_var('lang_search_format',$LANG_confignames['Core']['search_show_type']);
 
     $preferences->parse ('display_block', 'display', true);
@@ -786,14 +757,13 @@ function editpreferences()
     if ( $_CONF['hide_exclude_content'] != 1 ) {
         $permissions = $db->getPermSQL ('');
         $preferences->set_var ('exclude_topic_checklist',
-                COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $A['tids'], 'topics'));
-
+            COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $A['tids'], 'topics'));
         if (($_CONF['contributedbyline'] == 1) && ($_CONF['hide_author_exclusion'] == 0)) {
             $preferences->set_var ('lang_authors', $LANG04[56]);
 
-$sql = "SELECT DISTINCT story.uid, users.username,users.fullname
-        FROM `{$_TABLES['stories']}` story, `{$_TABLES['users']}` users
-        WHERE story.uid = users.uid";
+            $sql = "SELECT DISTINCT story.uid, users.username,users.fullname
+                    FROM `{$_TABLES['stories']}` story, `{$_TABLES['users']}` users
+                    WHERE story.uid = users.uid";
 
             if ($_CONF['show_fullname'] == 1) {
                 $sql .= ' ORDER BY users.fullname';
@@ -801,22 +771,19 @@ $sql = "SELECT DISTINCT story.uid, users.username,users.fullname
                 $sql .= ' ORDER BY users.username';
             }
 
-$stmt = $db->conn->query($sql);
+            $stmt = $db->conn->query($sql);
 
-//            $query = DB_query ($sql);
-//            $nrows = DB_numRows ($query );
             $authors = explode (' ', $A['aids']);
 
             $selauthors = '';
+            $preferences->set_block('exclude', 'ExcludeAuthors', 'EA');
             while ($B = $stmt->fetch(Database::ASSOCIATIVE)) {
-//            for( $i = 0; $i < $nrows; $i++ ) {
-//                $B = DB_fetchArray ($query);
-                $selauthors .= '<option value="' . $B['uid'] . '"';
-                if (in_array (sprintf ('%d', $B['uid']), $authors)) {
-                   $selauthors .= ' selected';
-                }
-                $selauthors .= '>' . COM_getDisplayName ($B['uid'], $B['username'],$B['fullname'])
-                            . '</option>' . LB;
+                $preferences->set_var(array(
+                    'value' => $B['uid'],
+                    'name' => COM_getDisplayName ($B['uid'], $B['username'],$B['fullname']),
+                    'selected' => in_array (sprintf ('%d', $B['uid']), $authors),
+                ) );
+                $preferences->parse('EA', 'ExcludeAuthors', true);
             }
 
             if ($db->getCount($_TABLES['topics']) > 10) {
@@ -824,7 +791,7 @@ $stmt = $db->conn->query($sql);
             } else {
                 $Selboxsize = 15;
             }
-            $preferences->set_var ('exclude_author_checklist', '<select name="selauthors[]" multiple="multiple" size="'. $Selboxsize. '">' . $selauthors . '</select>');
+            $preferences->set_var('ea_selboxsize', $Selboxsize);
         } else {
             $preferences->set_var ('lang_authors', '');
             $preferences->set_var ('exclude_author_checklist', '');
@@ -852,7 +819,6 @@ $stmt = $db->conn->query($sql);
     } else {
         $preferences->set_var('digest_block', '');
     }
-
 
     if ( $_CONF['hide_exclude_content'] != 1 ) {
         // boxes block
@@ -894,17 +860,14 @@ $stmt = $db->conn->query($sql);
     if (empty ($A['commentorder'])) $A['commentorder'] = 0;
     if (empty ($A['commentlimit'])) $A['commentlimit'] = 100;
 
-    $selection = '<select id="commentmode" name="commentmode">';
-    $selection .= COM_optionList ($_TABLES['commentmodes'], 'mode,name',
-                                  $A['commentmode']);
-    $selection .= '</select>';
-    $preferences->set_var ('displaymode_selector', $selection);
+    $preferences->set_var ('displaymode_selector',
+        COM_optionList ($_TABLES['commentmodes'], 'mode,name', $A['commentmode'])
+    );
 
-    $selection = '<select id="commentorder" name="commentorder">';
-    $selection .= COM_optionList ($_TABLES['sortcodes'], 'code,name',
-                                  $A['commentorder']);
-    $selection .= '</select>';
-    $preferences->set_var ('sortorder_selector', $selection);
+    $preferences->set_var ('sortorder_selector',
+        COM_optionList ($_TABLES['sortcodes'], 'code,name', $A['commentorder'])
+    );
+
     $preferences->set_var ('commentlimit_value', $A['commentlimit']);
     $preferences->set_var('plugin_layout_comment',PLG_profileEdit($_USER['uid'],'layout','comment'));
     $preferences->parse ('comment_block', 'comment', true);
@@ -1027,11 +990,9 @@ function handlePhotoUpload ($delete_photo = '')
         $upload->uploadFiles ();
 
         if ($upload->areErrors ()) {
-            $display = COM_siteHeader ('menu', $LANG24[30]);
-            $display .= COM_showMessageText($upload->printErrors (false),$LANG24[30],true,'error');
-            $display .= COM_siteFooter ();
-            echo $display;
-            exit; // don't return
+            COM_setMsg( $upload->printErrors(false), 'error', 1 );
+            Log::write('system',Log::DEBUG, "usersettings.php - upload new user image: " . $upload->printErrors(false));
+            return '';
         }
     } else if (!$delete_photo && !empty ($curphoto)) {
         $filename = $curphoto;
@@ -1050,16 +1011,12 @@ function saveuser($A)
 {
     global $_CONF, $_TABLES, $_USER, $LANG04, $LANG24, $MESSAGE, $_US_VERBOSE;
 
-    if ($_US_VERBOSE) {
-        COM_errorLog('**** Inside saveuser in usersettings.php ****', 1);
-    }
-
     $db = Database::getInstance();
 
     $reqid = DB_getItem ($_TABLES['users'], 'pwrequestid',"uid = " . (int) $_USER['uid']);
     if ($reqid != $A['uid']) {
         DB_change ($_TABLES['users'], 'pwrequestid', "NULL", 'uid', (int) $_USER['uid']);
-        COM_accessLog ("An attempt was made to illegally change the account information of user {$_USER['uid']}.");
+        COM_accessLog ("An attempt was made to change the account information without a proper password for user {$_USER['uid']}.");
 
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
@@ -1247,7 +1204,7 @@ function saveuser($A)
         }
 
         if ($_US_VERBOSE) {
-            COM_errorLog('cooktime = ' . $A['cooktime'],1);
+            Log::write('system',Log::DEBUG,'usersettings.php: cooktime = ' . $A['cooktime']);
         }
 
         if ($A['cooktime'] <= 0) {
@@ -1363,7 +1320,7 @@ function saveuser($A)
 
                 if ($msg != 5) {
                     $msg = 114; // Account saved but re-synch failed.
-                    COM_errorLog($MESSAGE[$msg]);
+                    Log::write('system',Log::ERROR,$MESSAGE[$msg]);
                 }
             }
         }
@@ -1372,9 +1329,6 @@ function saveuser($A)
 
         $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
 
-        if ($_US_VERBOSE) {
-            COM_errorLog('**** Leaving saveuser in usersettings.php ****', 1);
-        }
         if ( $msg == 5 ) {
             COM_setMsg($MESSAGE[$msg],'info');
         } else {
@@ -1724,17 +1678,34 @@ function savepreferences($A)
         }
     }
 
-    $TIDS  = @array_values($A['topics']);
-    $AIDS  = @array_values($A['selauthors']);
-    $BOXES = @array_values($A['blocks']);
-    $ETIDS = @array_values($A['dgtopics']);
+    $TIDS = array();
+    $AIDS = array();
+    $BOXES = array();
+    $ETIDS = array();
+    $AETIDS = array();
+
+    if (isset($A['topics']) && is_array($A['topics'])) {
+        $TIDS  = @array_values($A['topics']);
+    }
+    if (isset($A['selauthors']) && is_array($A['selauthors'])) {
+        $AIDS  = @array_values($A['selauthors']);
+    }
+    if (isset($A['blocks']) && is_array($A['blocks'])) {
+        $BOXES = @array_values($A['blocks']);
+    }
+    if (isset($A['dgtopics']) && is_array($A['dgtopics'])) {
+        $ETIDS = @array_values($A['dgtopics']); 
+    }
     $allowed_etids = USER_buildTopicList ();
-    $AETIDS = explode (' ', $allowed_etids);
+    if (!is_array($allowed_etids)) {
+        $AETIDS = explode (' ', $allowed_etids);
+    }
 
     $tids = '';
     if (is_array($TIDS) && sizeof ($TIDS) > 0) {
         $tids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $TIDS)));
     }
+
     $aids = '';
     if (is_array($AIDS) && sizeof ($AIDS) > 0) {
         foreach ($AIDS as $key => $val) {
@@ -1837,10 +1808,12 @@ function savepreferences($A)
 
     DB_save($_TABLES['usercomment'],'uid,commentmode,commentorder,commentlimit',"{$_USER['uid']},'{$A['commentmode']}','{$A['commentorder']}',".(int) $A['commentlimit']);
 
-    $subscription_deletes  = @array_values($A['subdelete']);
-    if ( is_array($subscription_deletes) ) {
-        foreach ( $subscription_deletes AS $subid ) {
-            DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
+    if (isset($A['subdelete']) && is_array($A['subdelete'])) {
+        $subscription_deletes  = @array_values($A['subdelete']);
+        if ( is_array($subscription_deletes) ) {
+            foreach ( $subscription_deletes AS $subid ) {
+                DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
+            }
         }
     }
     $c = Cache::getInstance()->deleteItemsByTags(array('story','menu','userdata'));
@@ -1866,14 +1839,16 @@ $display = '';
 if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     switch ($mode) {
     case 'saveuser':
+        // validate the password is correct.
+        $account_type = DB_getItem ($_TABLES['users'], 'account_type', "uid = {$_USER['uid']}");
+        $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
+        $current_password = DB_getItem($_TABLES['users'], 'passwd',"uid = {$_USER['uid']}");
+        if (empty($_POST['passwd']) || !SEC_check_hash($_POST['passwd'],$current_password)) {
+            COM_setMsg($MESSAGE[83],'error');
+            return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+        }
         savepreferences ($_POST);
         $display .= saveuser($_POST);
-        break;
-
-    case 'savepreferences':
-        savepreferences ($_POST);
-        COM_setMsg( $MESSAGE[6], 'info',false );
-        $display .= COM_refresh ($_CONF['site_url'].'/usersettings.php?mode=preferences');
         break;
 
     case 'confirmdelete':
@@ -1881,7 +1856,6 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
             $accountId = COM_applyFilter ($_POST['account_id']);
 
             $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
-//            if (!empty ($accountId) && !empty($_POST['current_password']) && SEC_check_hash(trim($_POST['current_password']),$current_password)) {
             if (!empty ($accountId)) {
                 $display .= confirmAccountDelete ($accountId);
             } else {
@@ -1925,10 +1899,6 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
             } else {
                 $query = array_merge($_GET, $_POST);
                 $service = $query['oauth_login'];
-                // COM_errorLog("-------------------------------------------------------------------------");
-                // COM_errorLog("usersettings.php?mode=resynch&oauth_login={$service}");
-                // COM_errorLog("-------------------------------------------------------------------------");
-
                 $consumer = new OAuthConsumer($service);
 
                 if($service == 'oauth.facebook') {
@@ -1936,7 +1906,7 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
                     $oauth_userinfo = $consumer->refresh_userinfo();
                     if (empty($oauth_userinfo)) {
                         $msg = 114; // Account saved but re-synch failed.
-                        COM_errorLog($MESSAGE[$msg]);
+                        Log::write('system',Log::ERROR,$MESSAGE[$msg]);
                     } else {
                         $consumer->resyncUserData($oauth_userinfo);
                     }
@@ -1944,11 +1914,8 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
                     // other OAuth services are more complex
                     // setup what we need to callback and authenticate
                     $callback_query_string = $consumer->getCallback_query_string();
-                    // COM_errorLog("callback_query_string={$callback_query_string}");
                     $cancel_query_string = $consumer->getCancel_query_string();
-                    // COM_errorLog("cancel_query_string={$cancel_query_string}");
                     $callback_url = $_CONF['site_url'] . '/usersettings.php?mode=synch&oauth_login=' . $service;
-                    // COM_errorLog("callback_url={$callback_url}");
 
                     // authenticate with the remote service
                     if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
@@ -1974,7 +1941,7 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
                 $display = COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $_USER['uid']);
             } else {
                 COM_setMsg( $MESSAGE[$msg], 'error',true );
-                COM_errorLog($MESSAGE[$msg]);
+                Log::write('system',Log::ERROR,$MESSAGE[$msg]);
                 $display = COM_refresh ($_CONF['site_url'] . '/usersettings.php');
             }
             break;

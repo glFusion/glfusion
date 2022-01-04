@@ -1852,6 +1852,32 @@ function plugin_getconfigelementhelp_calendar($type, $option, $doclang = 'englis
     return array($retval,0);
 }
 
+function plugin_getContentTableInfo_calendar()
+{
+    global $_DB_table_prefix;
+
+    $contentItems = array(
+            $_DB_table_prefix.'events' => array(
+                'plugin' => 'calendar',
+                'primary_key' => 'eid',
+                'columns' => array(
+                    'title',
+                    'description'
+                )
+            ),
+            $_DB_table_prefix.'personal_events' => array(
+                'plugin' => 'calendar',
+                'primary_key' => 'eid',
+                'columns' => array(
+                    'title',
+                    'description'
+                )
+            )
+    );
+
+    return $contentItems;
+}
+
 /**
 * Creates a dropdown list of all the event types
 *

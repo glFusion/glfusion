@@ -130,7 +130,7 @@ function FF_ForumHeader($forum,$showtopic) {
     $navbar->parse ('output', 'topicheader');
     $retval .= $navbar->finish($navbar->get_var('output'));
 
-    if (($forum != '') || ($showtopic != '')) {
+    if (($forum != 0) || ($showtopic != 0)) {
         if ($showtopic != '') {
             $forum_id = DB_getItem($_TABLES['ff_topic'],'forum',"id=".(int) $showtopic);
             $grp_id = DB_getItem($_TABLES['ff_forums'],'grp_id',"forum_id=".(int) $forum_id);
@@ -139,6 +139,13 @@ function FF_ForumHeader($forum,$showtopic) {
         }
         $groupname = _ff_getGroup($grp_id);
         if (!SEC_inGroup($groupname)) {
+            if (isset($_FF_CONF['exit_type']) && $_FF_CONF['exit_type'] === 'login') {
+                $display  = FF_siteHeader();
+                $display .= SEC_loginRequiredForm();
+                $display .= FF_siteFooter();
+                echo $display;
+                exit;
+            }
             echo COM_404();
             exit;
         }

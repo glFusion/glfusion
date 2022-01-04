@@ -9,7 +9,7 @@
 // | Bad Behavior - detects and blocks unwanted Web accesses                  |
 // | Copyright (C) 2005-2017 Michael Hampton                                  |
 // +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
+// | Copyright (C) 2008-2021 by the following authors:                        |
 // |                                                                          |
 // | Mark R. Evans          mark AT glfusion DOT org                          |
 // |                                                                          |
@@ -105,7 +105,7 @@ function _bb_listEntries ($page = 1, $msg = '')
               'text' => $LANG_BAD_BEHAVIOR['blacklist']),
         array('url' => $_CONF['site_admin_url'].'/plugins/bad_behavior2/whitelist.php',
               'text' => $LANG_BAD_BEHAVIOR['whitelist']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -311,7 +311,7 @@ function _bb_viewEntry ($id, $page = 1)
               'text' => $LANG_BAD_BEHAVIOR['block_title_list']),
         array('url' => $returnURL,
               'text' => $LANG_BAD_BEHAVIOR['back_to_search']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -392,7 +392,7 @@ function searchList()
     $menu_arr = array (
         array('url' => $_CONF['site_admin_url'] . '/plugins/bad_behavior2/index.php?mode=list',
               'text' => 'Log Entries'),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 

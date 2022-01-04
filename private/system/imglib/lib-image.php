@@ -1,36 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-image.php                                                            |
-// |                                                                          |
-// | glFusion media handling library.                                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-//
+/**
+* glFusion CMS
+*
+* glFusion Media Handling
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 /*
  * Include the proper graphics support package
@@ -64,7 +50,7 @@ function UTL_exec($cmd) {
     $status="";
     $results=array();
     if ($_CONF['debug_image_upload'] ) {
-        COM_errorLog(sprintf("UTL_exec: Executing: %s",$cmd));
+        Log::write('system',Log::ERROR,sprintf("UTL_exec: Executing: %s",$cmd));
     }
     $debugfile = $_CONF['path'] . 'logs/debug.log';
     exec($cmd, $results, $status);
@@ -78,7 +64,7 @@ function UTL_execWrapper($cmd) {
     if ( $status == 0 ) {
         return true;
     } else {
-        COM_errorLog("UTL_execWrapper: Failed Command: " . $cmd);
+        Log::write('system',Log::ERROR,"UTL_execWrapper: Failed Command: " . $cmd);
         return false;
     }
 }
@@ -165,7 +151,7 @@ function IMG_resizeImage($srcImage, $destImage, $dImageHeight, $dImageWidth, $mi
         fclose($fp);
         $imgwidth = base_convert(bin2hex(strrev(substr($data,12,2))),16,10);
         $imgheight = base_convert(bin2hex(strrev(substr($data,12,2))),16,10);
-        COM_errorLog("TGA resolution: height: " . $imgheight . " width: " . $imgwidth);
+        Log::write('system',Log::INFO,"TGA resolution: height: " . $imgheight . " width: " . $imgwidth);
     }
 
     if ( $imgwidth > $imgheight ) {
@@ -184,7 +170,7 @@ function IMG_resizeImage($srcImage, $destImage, $dImageHeight, $dImageWidth, $mi
     if ( ( $newheight > $imgheight) && ($newwidth > $imgwidth ) )  {
         if ( $srcImage != $destImage) {
             $rc = copy($srcImage, $destImage);
-            COM_errorLog("IMG_resizeImage: Original (" . $srcImage . ") is smaller than target, original copied to target image (" . $destImage . ".");
+            Log::write('system',Log::INFO,"IMG_resizeImage: Original (" . $srcImage . ") is smaller than target, original copied to target image (" . $destImage . ".");
         }
         return array(true,'Original is smaller than target, original copied to target image.');
     }
@@ -202,7 +188,7 @@ function IMG_resizeImage($srcImage, $destImage, $dImageHeight, $dImageWidth, $mi
     if ( $_CONF['jhead_enabled'] == 1 ) {
         $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $srcImage.'.bu' . " " . $destImage);
         @unlink($srcImage.'.bu');
-        COM_errorLog("IMG_resizeImage: jhead returned " . $rc );
+        Log::write('system',Log::INFO,"IMG_resizeImage: jhead returned " . $rc );
     }
 
     return array(true,'Image successfully resized');
@@ -235,7 +221,7 @@ function IMG_rotateImage( $srcImage, $direction ) {
                 break;
 
             default :
-                COM_errorLog("IMG_rotateImage: Invalid direction passed to rotate, must be left or right");
+                Log::write('system',Log::ERROR,"IMG_rotateImage: Invalid direction passed to rotate, must be left or right");
                 return array(false,'Invalid direction passed to rotate, must be left or right');
         }
         $tmpImage   = $srcImage . '.rt';
@@ -255,7 +241,7 @@ function IMG_rotateImage( $srcImage, $direction ) {
         }
         if ( $_CONF['jhead_enabled'] == 1 ) {
             $rc = UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -te " . $srcImage . " " . $tmpImage);
-            COM_errorLog("IMG_rotateImage: jhead returned " . $rc );
+            Log::write('system',Log::INFO,"IMG_rotateImage: jhead returned " . $rc );
         }
         $rc = @copy($tmpImage, $srcImage);
         @unlink($tmpImage);
@@ -276,7 +262,7 @@ function IMG_convertImageFormat ( $srcImage, $destImage, $destFormat, $deleteOri
     $newSrc = $srcImage;
 
     if ($_CONF['debug_image_upload'] ) {
-        COM_errorLog("IMG_convertImageFormat: Entering IMG_convertImageFormat()");
+        Log::write('system',Log::DEBUG,"IMG_convertImageFormat: Entering IMG_convertImageFormat()");
     }
 
     $metaData = array();
@@ -294,7 +280,7 @@ function IMG_convertImageFormat ( $srcImage, $destImage, $destFormat, $deleteOri
          $mimeType != 'application/photoshop' &&
          $mimeType != 'application/psd' &&
          $mimeType != 'image/tiff' ) {
-        COM_errorLog("IMG_convertImageFormat: Error - unable to retrieve srcImage resolution");
+        Log::write('system',Log::ERROR,"IMG_convertImageFormat: Error - unable to retrieve srcImage resolution");
         return array(false,'Unable to determine source image resolution');
     }
 
@@ -321,14 +307,14 @@ function IMG_watermarkImage( $origImage, $watermarkImage, $opacity, $location ) 
     global $_MG_CONF, $_CONF;
 
     if ( $_CONF['debug_image_upload'] ) {
-        COM_errorLog("IMG_watermarkImage: Entering IMG_watermarkImage()");
+        Log::write('system',Log::DEBUG,"IMG_watermarkImage: Entering IMG_watermarkImage()");
     }
 
     $mType = IMG_getMediaMetaData($origImage);
     $mimeType = $mType['mime_type'];
 
     if ( isset($_MG_CONF['watermark_types']) && !in_array($mimeType,$_MG_CONF['watermark_types']) ) {
-        COM_errorLog("IMG_watermarkImage: Media type is not in allowed watermark types (config.php)");
+        Log::write('system',Log::WARNING,"IMG_watermarkImage: Media type is not in allowed watermark types (config.php)");
         return false;
     }
 

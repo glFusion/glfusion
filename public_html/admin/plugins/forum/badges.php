@@ -29,8 +29,11 @@
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
+
 USES_forum_functions();
 USES_forum_admin();
+
+use \glFusion\FieldList;
 
 if (!SEC_hasRights('forum.edit')) {
     COM_404();
@@ -186,7 +189,7 @@ function FF_badge_AdminList()
 */
 function FF_getAdminField_badges($fieldname, $fieldvalue, $A, $icon_arr)
 {
-    global $_CONF, $LANG_ACCESS, $LANG_GF01;
+    global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $LANG_GF01;
 
     $retval = '';
 
@@ -194,20 +197,23 @@ function FF_getAdminField_badges($fieldname, $fieldvalue, $A, $icon_arr)
 
     switch($fieldname) {
     case 'edit':
-        $retval = COM_createLink(
-                '<i class="uk-icon uk-icon-edit"></i>',
-                $base_url . '?edit=x&amp;fb_id=' .$A['fb_id']
-                );
+        $retval = FieldList::edit(
+            array(
+                'url' => $base_url . '?edit=x&amp;fb_id=' .$A['fb_id'],
+            )
+        );
         break;
 
     case 'fb_order':
-        $retval .= COM_createLink(
-            '<i class="uk-icon uk-icon-arrow-up"></i>',
-            $base_url . '?move=up&fb_id=' . $A['fb_id']
+        $retval .= FieldList::up(
+            array(
+                'url' => $base_url . '?move=up&fb_id=' . $A['fb_id'],
+            )
         );
-        $retval .= '&nbsp;' . COM_createLink(
-            '<i class="uk-icon uk-icon-arrow-down"></i>',
-            $base_url . '?move=down&fb_id=' . $A['fb_id']
+        $retval .= FieldList::down(
+            array(
+                'url' => $base_url . '?move=down&fb_id=' . $A['fb_id'],
+            )
         );
         break;
 
@@ -224,11 +230,15 @@ function FF_getAdminField_badges($fieldname, $fieldvalue, $A, $icon_arr)
         break;
 
     case 'delete':
-        $retval = COM_createLink('<i class="uk-icon uk-icon-trash" style="color:red;"></i>',
-                "$base_url?fb_id={$A['fb_id']}&delete",
-                array(
-                     'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');",
-                ) );
+        $retval = FieldList::delete(
+            array(
+                'delete_url' => $base_url.'?fb_id='.$A['fb_id'].'&delete',
+                'attr' => array(
+                    'title'   => $LANG_ADMIN['delete'],
+                    'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');"
+                ),
+            )
+        );
         break;
 
     case 'fb_data':

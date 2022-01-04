@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2003-2008 by the following authors:
@@ -21,6 +21,7 @@ require_once 'auth.inc.php';
 
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 $display = '';
 
@@ -84,6 +85,8 @@ function FEED_findFormats()
     $formats[] = array('name'=>'ATOM','version'=>'0.3');
     $formats[] = array('name'=>'ATOM','version'=>'1.0');
     $formats[] = array('name'=>'ICS','version'=>'1.0');
+    $formats[] = array('name'=>'Custom', 'version'=>'1.0');
+    $formats[] = array('name'=>'XML','version'=>'1.0');
 
     sort ($formats);
 
@@ -130,7 +133,7 @@ function FEED_getArticleFeeds()
  */
 function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 {
-    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
+    global $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG33, $LANG01, $_IMAGE_TYPE;
 
     $retval = '';
     $enabled = ($A['is_enabled'] == 1) ? true : false;
@@ -140,17 +143,37 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     switch($fieldname) {
 
         case 'edit':
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'],
-                $_CONF['site_admin_url'] . '/syndication.php?edit=x&amp;fid=' . $A['fid'], $attr );
+            $retval = FieldList::edit(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x&amp;fid=' . $A['fid'],
+                    'attr' => array(
+                        'title' => $LANG_ADMIN['edit']
+                    )
+                )
+            );
+            break;
+
+        case 'refresh':
+            $retval = FieldList::refresh(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/syndication.php?refresh=x&amp;fid=' . $A['fid']. '&amp;' . CSRF_TOKEN . '=' . $token,
+                    'attr' => array(
+                        'title'   => $LANG01[39],
+                    ),
+                )
+            );
             break;
 
         case 'delete':
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return confirm(\'' . $LANG33[56] . '\');"';
-            $retval = COM_createLink($icon_arr['delete'],
-                $_CONF['site_admin_url'] . '/syndication.php?delete=x&amp;fid=' . $A['fid']
-                . '&amp;' . CSRF_TOKEN . '=' . $token, $attr );
+            $retval = FieldList::delete(
+                array(
+                    'delete_url' => $_CONF['site_admin_url'] . '/syndication.php?delete=x&amp;fid=' . $A['fid']. '&amp;' . CSRF_TOKEN . '=' . $token,
+                    'attr' => array(
+                        'title'   => $LANG_ADMIN['delete'],
+                        'onclick' => 'return confirm(\'' . $LANG33[56] . '\');"'
+                    ),
+                )
+            );
             break;
 
         case 'type':
@@ -191,7 +214,13 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if ($A['header_tid'] == 'all') {
                 $tid = $LANG33[43];
             } elseif ($A['header_tid'] == 'none') {
-                $tid = $LANG33[44];
+                $tid = PLG_callFunctionForOnePlugin(
+                    'plugin_getfeedtopic_' . $A['type'],
+                    array(1=>$A['topic'])
+                );
+                if (empty($tid)) {
+                    $tid = $LANG33[44];
+                }
             } else {
                 $tid = DB_getItem ($_TABLES['topics'], 'topic',
                                       "tid = '".DB_escapeString($A['header_tid'])."'");
@@ -219,7 +248,7 @@ function FEED_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
 function FEED_list()
 {
-    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG_ADMIN, $LANG33, $LANG01, $_IMAGE_TYPE;
 
     USES_lib_admin();
 
@@ -234,6 +263,7 @@ function FEED_list()
                     array('text' => $LANG_ADMIN['topic'], 'field' => 'header_tid', 'sort' => true, 'align' => 'center'),
                     array('text' => $LANG33[18], 'field' => 'updated', 'sort' => true, 'align' => 'center'),
                     array('text' => $LANG_ADMIN['delete'], 'field' => 'delete', 'sort' => false, 'align' => 'center'),
+                    array('text' => $LANG01[39], 'field' => 'refresh', 'sort' => false, 'align' => 'center'),
                     array('text' => $LANG_ADMIN['enabled'], 'field' => 'is_enabled', 'sort' => true, 'align' => 'center')
     );
 
@@ -244,7 +274,7 @@ function FEED_list()
                           'text' => $LANG33[57],'active' =>true),
                     array('url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x',
                           'text' => $LANG_ADMIN['create_new']),
-                    array('url' => $_CONF['site_admin_url'],
+                    array('url' => $_CONF['site_admin_url'].'/index.php',
                           'text' => $LANG_ADMIN['admin_home'])
     );
     $retval .= COM_startBlock($LANG33[10], '',
@@ -293,7 +323,7 @@ function FEED_list()
 * @return   string           HTML for the feed editor
 *
 */
-function FEED_edit($fid = 0, $type = '')
+function FEED_edit($fid = 0, $type = '', $A = array())
 {
     global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $MESSAGE,$_IMAGE_TYPE;
 
@@ -307,7 +337,8 @@ function FEED_edit($fid = 0, $type = '')
         $fid = $A['fid'];
         $editMode = true;
     }
-    if ($fid == 0) {
+
+    if ($fid == 0 && empty($A)) {
         if (!empty ($type)) { // set defaults
             $A['fid'] = $fid;
             $A['type'] = $type;
@@ -329,6 +360,15 @@ function FEED_edit($fid = 0, $type = '')
         } else {
             return COM_refresh ($_CONF['site_admin_url'] . '/syndication.php');
         }
+    } else {
+        // Fields coming from $_POST after an error. Some need massaging.
+        $A['limits'] = (int)$A['limits'];   // sanitize entry or hour number
+        if (isset($A['limits_in']) && $A['limits_in'] == 1) {
+            $A['limits'] .= 'h';
+        } else {
+            $A['limits_in'] = 0;
+        }
+        $A['date'] = time();
     }
 
     $retval = '';
@@ -344,7 +384,7 @@ function FEED_edit($fid = 0, $type = '')
                           'text' => $LANG33[57]),
                     array('url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x',
                           'text' => $lang_create_edit,'active'=>true),
-                    array('url' => $_CONF['site_admin_url'],
+                    array('url' => $_CONF['site_admin_url'].'/index.php',
                           'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -417,8 +457,11 @@ function FEED_edit($fid = 0, $type = '')
     $nicedate = COM_getUserDateTimeFormat ($A['date']);
     $feed_template->set_var ('feed_updated', $nicedate[0]);
 
-    $formats = FEED_findFormats();
-    $selection = '<select name="format">' . LB;
+    //$formats = FEED_findFormats();
+    $formats = \glFusion\Syndication\Feed::findFormats($A['type']);
+
+    //$selection = '<select name="format">' . LB;
+    $selection = '';
     foreach ($formats as $f) {
         // if one changes this format below ('name-version'), also change parsing
         // in COM_siteHeader. It uses explode( "-" , $string )
@@ -430,7 +473,7 @@ function FEED_edit($fid = 0, $type = '')
         $selection .= '>' . ucwords ($f['name'] . ' ' . $f['version'])
                    . '</option>' . LB;
     }
-    $selection .= '</select>' . LB;
+    //$selection .= '</select>' . LB;
     $feed_template->set_var ('feed_format', $selection);
 
     $limits = $A['limits'];
@@ -439,7 +482,8 @@ function FEED_edit($fid = 0, $type = '')
         $limits = substr ($A['limits'], 0, -1);
         $hours = true;
     }
-    $selection = '<select name="limits_in">' . LB;
+    //$selection = '<select name="limits_in">' . LB;
+    $selection = '';
     $selection .= '<option value="0"';
     if (!$hours) {
         $selection .= ' selected="selected"';
@@ -450,7 +494,7 @@ function FEED_edit($fid = 0, $type = '')
         $selection .= ' selected="selected"';
     }
     $selection .= '>' . $LANG33[35] . '</option>' . LB;
-    $selection .= '</select>' . LB;
+    //$selection .= '</select>' . LB;
     $feed_template->set_var ('feed_limits', $limits);
     $feed_template->set_var ('feed_limits_what', $selection);
 
@@ -470,7 +514,8 @@ function FEED_edit($fid = 0, $type = '')
         }
         $options = PLG_getFeedNames($A['type']);
     }
-    $selection = '<select name="topic">' . LB;
+    //$selection = '<select name="topic">' . LB;
+    $selection = '';
     foreach ($options as $o) {
         $selection .= '<option value="' . $o['id'] . '"';
         if ($A['topic'] == $o['id']) {
@@ -478,7 +523,7 @@ function FEED_edit($fid = 0, $type = '')
         }
         $selection .= '>' . $o['name'] . '</option>' . LB;
     }
-    $selection .= '</select>' . LB;
+    //$selection .= '</select>' . LB;
     $feed_template->set_var ('feed_topic', $selection);
 
     if ($A['is_enabled'] == 1) {
@@ -527,19 +572,20 @@ function FEED_newFeed()
                 . FEED_edit(0, 'article')
                 . COM_siteFooter ();
     } else {
-        $selection = '<select name="type">' . LB;
+        //$selection = '<select name="type">' . LB;
+        $selection = '';
         foreach ($availableFeeds as $p) {
             $selection .= '<option value="' . $p . '">' . ucwords ($p)
                        . '</option>' . LB;
         }
-        $selection .= '</select>' . LB;
+        //$selection .= '</select>' . LB;
 
         $menu_arr = array (
                         array('url' => $_CONF['site_admin_url'].'/syndication.php',
                               'text' => $LANG33[57]),
                     array('url' => $_CONF['site_admin_url'] . '/syndication.php?edit=x',
                           'text' => $LANG_ADMIN['create_new'],'active' => true),
-                        array('url' => $_CONF['site_admin_url'],
+                        array('url' => $_CONF['site_admin_url'].'/index.php',
                               'text' => $LANG_ADMIN['admin_home'])
         );
 
@@ -581,11 +627,14 @@ function FEED_save($A)
     } else {
         $A['is_enabled'] = 0;
     }
-    if (empty ($A['title']) || empty ($A['description']) ||
-            empty ($A['filename'])) {
+    if (
+        empty ($A['title']) ||
+        empty ($A['description']) ||
+        empty ($A['filename'])
+    ) {
         $retval = COM_siteHeader ('menu', $LANG33[38])
                 . COM_showMessageText($LANG33[39],$LANG33[38],true,'error')
-                . FEED_edit($A['fid'], $A['type'])
+                . FEED_edit($A['fid'], $A['type'], $A)
                 . COM_siteFooter ();
         return $retval;
     }
@@ -675,7 +724,7 @@ function FEED_delete($fid)
 // MAIN ========================================================================
 
 $action = '';
-$expected = array('create', 'edit', 'save', 'delete', 'cancel');
+$expected = array('create', 'edit', 'save', 'delete', 'cancel', 'refresh');
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -737,6 +786,11 @@ switch ($action) {
             Log::write('system',Log::ERROR,"User {$_USER['username']} tried to delete feed $fid and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');
         }
+        break;
+
+    case 'refresh':
+        SYND_updateFeed($fid);
+        COM_refresh($_CONF['site_admin_url'] . '/syndication.php');
         break;
 
     default:

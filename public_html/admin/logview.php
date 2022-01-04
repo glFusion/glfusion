@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008
@@ -24,6 +24,16 @@ use \glFusion\Log\Log;
 define('MAX_LOG_SIZE',262144); // 256kb
 
 USES_lib_admin();
+
+// Make sure user has access to this page
+if (!SEC_hasRights('log.admin')) {
+    Log::logAccessViolation('Log View');
+    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_showMessageText($MESSAGE[37], $MESSAGE[30], true,'error');
+    $display .= COM_siteFooter ();
+    echo $display;
+    exit;
+}
 
 $availableLogs = array();
 $info = Log::getLogs();
@@ -76,7 +86,7 @@ if ( isset($_POST['clearlog']) ) {
 $pageBody = '';
 
 $menu_arr = array (
-    array('url' => $_CONF['site_admin_url'],
+    array('url' => $_CONF['site_admin_url'].'/index.php',
           'text' => $LANG_ADMIN['admin_home'])
 );
 

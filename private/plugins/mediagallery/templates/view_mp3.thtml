@@ -1,0 +1,15 @@
+{# begin {templatelocation} #}
+<div class="uk-responsive-width uk-responsive-height" style="width:{width}px;margin:0 auto;">
+  <audio class="uk-responsive-width" height="{height}" width="{width}"
+{!if thumbnail}
+  poster="{thumbnail}"
+{!endif}
+{!if autoplay_text}
+    autoplay="{autoplay}"
+{!endif}
+    controls="controls" preload="auto">
+    <!-- MP4 for Safari, IE9, iPhone, iPad, Android, and Windows Phone 7 -->
+    <source type="{mime_type}" src="{movie}" />
+</audio>
+</div>
+{# end {templatelocation} #}

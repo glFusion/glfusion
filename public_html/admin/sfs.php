@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2018 by the following authors:
+*  Copyright (C) 2014-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -16,11 +16,23 @@ require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
 use \glFusion\Cache\Cache;
+use \glFusion\Log\Log;
 
 // comment out for production
 //define('DVLP_VERSION', 'Y');
 
 USES_lib_admin();
+
+// Make sure user has access to this page
+if (!SEC_hasRights('user.edit')) {
+    Log::logAccessViolation('SFS User Administration');
+    $display .= COM_siteHeader ('menu', $MESSAGE[30]);
+    $display .= COM_showMessageText($MESSAGE[37], $MESSAGE[30], true,'error');
+    $display .= COM_siteFooter ();
+    echo $display;
+    exit;
+}
+
 
 // MAIN
 if (isset($_GET['mode']) && ($_GET['mode'] == 'logout')) {
@@ -150,7 +162,7 @@ function SFS_adminList()
     $retval = COM_startBlock($block_title, '', COM_getBlockTemplate('_admin_block', 'header'));
 
     $menu_arr = array (
-         array('url' => $_CONF['site_admin_url'], 'text' => $LANG_ADMIN['admin_home']),
+         array('url' => $_CONF['site_admin_url'].'/index.php', 'text' => $LANG_ADMIN['admin_home']),
     );
 
     $retval .= ADMIN_createMenu($menu_arr, $LANG_SFS['instructions'],

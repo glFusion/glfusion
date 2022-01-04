@@ -74,7 +74,7 @@ function initMenu($menuname, $skipCache=false) {
     try {
         $menuRow = $db->conn->fetchAssoc("SELECT * FROM `{$_TABLES['menu']}`
                         WHERE menu_active=1 AND menu_name=?", array($menuname),array(Database::STRING));
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $menuRow = false;
     }
     if ( $menuRow ) {

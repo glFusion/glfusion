@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -26,6 +26,7 @@ use \glFusion\Log\Log;
 use \glFusion\Article\Article;
 use \glFusion\Database\Database;
 use \glFusion\Admin\AdminAction;
+use \glFusion\FieldList;
 
 $display = '';
 
@@ -83,8 +84,9 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 $retval = $access;
             } else if ($access == $LANG_ACCESS['edit']) {
                 if ($fieldname == 'edit') {
-                    $retval = COM_createLink($icon_arr['edit'],
-                        "{$_CONF['site_admin_url']}/story.php?edit=x&amp;sid={$A['sid']}");
+                    $retval = FieldList::edit(array(
+                        'url' => $_CONF['site_admin_url'].'/story.php?edit=x&amp;sid='.$A['sid'],
+                    ));
                 }
             }
             break;
@@ -109,8 +111,9 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if ($fieldname == 'access') {
                 $retval = $access;
             } else if ($access == $LANG_ACCESS['copy']) {
-                $retval = COM_createLink($icon_arr['copy'],
-                    $_CONF['site_admin_url'].'/story.php?clone=x&amp;sid='.urlencode($A['sid']));
+                $retval = FieldList::copy(array(
+                    'url' => $_CONF['site_admin_url'].'/story.php?clone=x&amp;sid='.urlencode($A['sid']),
+                ));
             }
             break;
 
@@ -148,11 +151,15 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case "draft_flag":
-            $retval = ($A['draft_flag'] == 1) ? $icon_arr['check'] : '';
+            if ($A['draft_flag'] == 1) {
+                $retval = FieldList::checkmark(array('active'=>true));
+            }
             break;
 
         case "featured":
-            $retval = ($A['featured'] == 1) ? $icon_arr['check'] : '';
+            if ($A['featured']) {
+                $retval = FieldList::checkmark(array('active'=>true));
+            }
             break;
 
         case 'username':
@@ -170,25 +177,25 @@ function STORY_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             return $dt->format($_CONF['daytime'],true);
 
         case "ping":
-            $pingico = '<img src="' . $_CONF['layout_url'] . '/images/sendping.'
-                     . $_IMAGE_TYPE . '" alt="' . $LANG24[21] . '" title="'
-                     . $LANG24[21] . '"/>';
             if (($A['draft_flag'] == 0) && ($A['unixdate'] < time())) {
-                $url = $_CONF['site_admin_url']
-                     . '/trackback.php?mode=sendall&amp;id=' . $A['sid'];
-                $retval = COM_createLink($pingico, $url);
+                $retval = FieldList::ping(array(
+                    'url' => $_CONF['site_admin_url'].'/trackback.php?mode=sendall&amp;id=' . $A['sid']
+                ));
             } else {
                 $retval = '';
             }
             break;
 
         case 'delete':
-            $retval = '';
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return confirm(\'' . $LANG24[89] .'\');';
-            $retval .= COM_createLink($icon_arr['delete'],
-                $_CONF['site_admin_url'] . '/story.php'
-                . '?deletestory=x&amp;sid=' . $A['sid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            $retval = FieldList::delete(
+                array(
+                    'delete_url' => $_CONF['site_admin_url'] . '/story.php'.'?deletestory=x&amp;sid=' . $A['sid'] . '&amp;' . CSRF_TOKEN . '=' . $token,
+                    'attr' => array(
+                        'title' => $LANG_ADMIN['delete'],
+                        'onclick' => 'return confirm(\'' . $LANG24[89] .'\');',
+                    )
+                )
+            );
             break;
 
         default:
@@ -223,7 +230,7 @@ function STORY_global($errorMsg = '')
               'text' => $LANG_ADMIN['create_new']),
         array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
                       'text' => $LANG24[111],'active'=>true),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']),
     );
 
@@ -488,8 +495,8 @@ function STORY_list()
             $excludetopics .= ') ';
         }
     } else {
-        $excludetopics = " tid = ".$db->conn->quote($current_topic)
-                            . ' OR alternate_tid = '.$db->conn->quote($current_topic) . ' ';
+        $excludetopics = " (tid = ".$db->conn->quote($current_topic)
+                            . ' OR alternate_tid = '.$db->conn->quote($current_topic) . ') ';
         $seltopics = COM_topicList ('tid,topic,sortnum', $current_topic, 2, true);
     }
 
@@ -531,7 +538,7 @@ function STORY_list()
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
                       'text' => $LANG24[111]);
         }
-        $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']);
 
     $form->set_var('block_start',COM_startBlock($LANG24[22], '',
@@ -677,7 +684,7 @@ function STORY_save()
             array(Database::STRING)
         );
     }
-    Cache::getInstance()->deleteItemsByTag('story_'.$article->get('sid'));
+    Cache::getInstance()->clear();
 
     AdminAction::write('system','article_save',
         sprintf($LANG_ADM_ACTIONS['article_save'],$article->get('sid'),$article->getDisplayItem('title')));
@@ -707,7 +714,7 @@ function STORY_adminMenu($action)
             $menu_arr[] = array('url' => $_CONF['site_admin_url'] . '/story.php?global=x',
                       'text' => $LANG24[111]);
         }
-        $menu_arr[] = array('url' => $_CONF['site_admin_url'],
+        $menu_arr[] = array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home']);
 
     $retval = ADMIN_createMenu($menu_arr, $LANG24[92],$_CONF['layout_url'] . '/images/icons/story.' . $_IMAGE_TYPE);
@@ -878,6 +885,7 @@ switch ($action) {
         } else if (SEC_checkToken()) {
             $rc = Article::delete($sid);
             if ($rc === true) {
+                Cache::getInstance()->clear();
                 COM_setMsg($MESSAGE[10],'info',false);
             }
         } else {

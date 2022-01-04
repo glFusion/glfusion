@@ -33,6 +33,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
+use \glFusion\Log\Log;
+
 /**
  * LDAP Remote Authentication class
  *
@@ -50,7 +52,7 @@ class LDAP
         $hex = '';
 
         for ($i = 0; $i < strlen($ascii); $i++) {
-            $byte = strtolower(dechex(ord($ascii{$i})));
+            $byte = strtolower(dechex(ord($ascii[$i])));
             $byte = str_repeat('0', 2 - strlen($byte)) . $byte;
             $hex .= $byte;
         }
@@ -68,7 +70,7 @@ class LDAP
         $link_identifier = ldap_connect($_LDAP_CONF['servers'][$_LDAP_CONF['server_num']]['host']);
 
         if ($link_identifier === false) {
-            COM_errorLog("Can't connect to LDAP server "
+            Log::write('system',Log::ERROR,"Can't connect to LDAP server "
                 . $_LDAP_CONF['servers'][$_LDAP_CONF['server_num']]['host']);
             return false;
         } else {
@@ -78,7 +80,7 @@ class LDAP
                 $_LDAP_CONF['servers'][$_LDAP_CONF['server_num']]['bind_dn'],
                 $_LDAP_CONF['servers'][$_LDAP_CONF['server_num']]['password']);
             if (!$connected) {
-                COM_errorLog("Can't bind to LDAP directory: "
+                Log::write('system',Log::ERROR,"Can't bind to LDAP directory: "
                              . ldap_error($link_identifier));
                 return false;
             }

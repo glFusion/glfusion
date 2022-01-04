@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2016-2018 by the following authors:
+*  Copyright (C) 2016-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -322,7 +322,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'rdf_file',
-    	'default_value' => '',
+    	'default_value' => 'site.rss',
     	'type' => 'text',
     	'subgroup' => 0,
     	'fieldset' => 2,
@@ -376,96 +376,7 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
 
-    // path fieldset - site tab
 
-    array(
-    	'name' => 'fs_paths',
-    	'default_value' => NULL,
-    	'type' => 'fieldset',
-    	'subgroup' => 0,
-    	'fieldset' => 3,
-    	'selection_array' => NULL,
-    	'sort' => 0,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'path_html',
-    	'default_value' => '',
-    	'type' => 'text',
-    	'subgroup' => 0,
-    	'fieldset' => 3,
-    	'selection_array' => NULL,
-    	'sort' => 10,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'path_log',
-    	'default_value' => '',
-    	'type' => 'text',
-    	'subgroup' => 0,
-    	'fieldset' => 3,
-    	'selection_array' => NULL,
-    	'sort' => 20,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'path_language',
-    	'default_value' => '',
-    	'type' => 'text',
-    	'subgroup' => 0,
-    	'fieldset' => 3,
-    	'selection_array' => NULL,
-    	'sort' => 30,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'backup_path',
-    	'default_value' => '',
-    	'type' => 'text',
-    	'subgroup' => 0,
-    	'fieldset' => 3,
-    	'selection_array' => NULL,
-    	'sort' => 40,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'path_data',
-    	'default_value' => '',
-    	'type' => 'text',
-    	'subgroup' => 0,
-    	'fieldset' => 3,
-    	'selection_array' => NULL,
-    	'sort' => 50,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'path_images',
-    	'default_value' => '',
-    	'type' => 'text',
-    	'subgroup' => 0,
-    	'fieldset' => 3,
-    	'selection_array' => NULL,
-    	'sort' => 60,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'path_themes',
-    	'default_value' => '',
-    	'type' => 'text',
-    	'subgroup' => 0,
-    	'fieldset' => 3,
-    	'selection_array' => NULL,
-    	'sort' => 70,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
 
     // search fieldset - site tab
 
@@ -2093,6 +2004,17 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'login_landing',
+    	'default_value' => '/index.php',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 4,
+    	'selection_array' => NULL,
+    	'sort' => 140,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'fs_user_submission',
     	'default_value' => NULL,
     	'type' => 'fieldset',
@@ -2188,6 +2110,17 @@ $coreConfigData = array(
     	'fieldset' => 5,
     	'selection_array' => NULL,
     	'sort' => 80,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'disallow_usernames',
+    	'default_value' => 'root,admin,system,manager,service',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 5,
+    	'selection_array' => NULL,
+    	'sort' => 90,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
@@ -3306,72 +3239,6 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'fs_debug',
-    	'default_value' => NULL,
-    	'type' => 'fieldset',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => NULL,
-    	'sort' => 0,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'rootdebug',
-    	'default_value' => '',
-    	'type' => 'select',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => 1,
-    	'sort' => 10,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'enable_404_logging',
-    	'default_value' => 1,
-    	'type' => 'select',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => 0,
-    	'sort' => 20,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'debug_oauth',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => 0,
-    	'sort' => 30,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'debug_html_filter',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => 0,
-    	'sort' => 40,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'enable_admin_actions',
-    	'default_value' => 1,
-    	'type' => 'select',
-    	'subgroup' => 7,
-    	'fieldset' => 3,
-    	'selection_array' => 0,
-    	'sort' => 50,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
     	'name' => 'fs_daily_digest',
     	'default_value' => NULL,
     	'type' => 'fieldset',
@@ -3549,7 +3416,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'ip_lookup',
-    	'default_value' => 'https://www.ultratools.com/tools/ipWhoisLookupResult?ipAddress=*',
+    	'default_value' => 'https://whatismyipaddress.com/ip/*',
     	'type' => 'text',
     	'subgroup' => 7,
     	'fieldset' => 7,
@@ -3800,11 +3667,180 @@ $coreConfigData = array(
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+// create new section 'Advanced Configuration'
+array(
+	'name' => 'sg_advanced',
+	'default_value' => NULL,
+	'type' => 'subgroup',
+	'subgroup' => 9,
+	'fieldset' => 0,
+	'selection_array' => NULL,
+	'sort' => 0,
+	'set' => TRUE,
+	'group' => 'Core'
+),
+
+    // path fieldset - site tab
+
     array(
+    	'name' => 'fs_paths',
+    	'default_value' => NULL,
+    	'type' => 'fieldset',
+    	'subgroup' => 9,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 0,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'path_log',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 20,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'path_language',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 30,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'backup_path',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 40,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'path_data',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 50,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'path_images',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 60,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'path_themes',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 70,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'path_rss',
+    	'default_value' => '',
+    	'type' => 'text',
+    	'subgroup' => 9,
+    	'fieldset' => 1,
+    	'selection_array' => NULL,
+    	'sort' => 80,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+	array(
+		'name' => 'fs_debug',
+		'default_value' => NULL,
+		'type' => 'fieldset',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => NULL,
+		'sort' => 0,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
+		'name' => 'rootdebug',
+		'default_value' => '',
+		'type' => 'select',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => 1,
+		'sort' => 10,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
+		'name' => 'enable_404_logging',
+		'default_value' => 1,
+		'type' => 'select',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => 0,
+		'sort' => 20,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
+		'name' => 'debug_oauth',
+		'default_value' => 0,
+		'type' => 'select',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => 0,
+		'sort' => 30,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
+		'name' => 'debug_html_filter',
+		'default_value' => 0,
+		'type' => 'select',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => 0,
+		'sort' => 40,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
+		'name' => 'enable_admin_actions',
+		'default_value' => 1,
+		'type' => 'select',
+		'subgroup' => 9,
+		'fieldset' => 2,
+		'selection_array' => 0,
+		'sort' => 50,
+		'set' => TRUE,
+		'group' => 'Core'
+	),
+	array(
         'name' => 'sg_cache',
         'default_value' => NULL,
         'type' => 'subgroup',
-        'subgroup' => 9,
+        'subgroup' => 10,
         'fieldset' => 0,
         'selection_array' => NULL,
         'sort' => 0,
@@ -3815,7 +3851,7 @@ $coreConfigData = array(
         'name' => 'fs_cache_template',
         'default_value' => NULL,
         'type' => 'fieldset',
-        'subgroup' => 9,
+        'subgroup' => 10,
         'fieldset' => 1,
         'selection_array' => NULL,
         'sort' => 0,
@@ -3827,7 +3863,7 @@ $coreConfigData = array(
         'name' => 'cache_templates',
         'default_value' => '1',
         'type' => 'select',
-        'subgroup' => 9,
+        'subgroup' => 10,
         'fieldset' => 1,
         'selection_array' => 0,
         'sort' => 10,
@@ -3838,7 +3874,7 @@ $coreConfigData = array(
     	'name' => 'fs_cache_backend',
     	'default_value' => NULL,
     	'type' => 'fieldset',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 0,
@@ -3849,7 +3885,7 @@ $coreConfigData = array(
     	'name' => 'cache_driver',
     	'default_value' => 'files',
     	'type' => 'select',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => 0,
     	'sort' => 10,
@@ -3860,7 +3896,7 @@ $coreConfigData = array(
     	'name' => 'cache_timeout',
     	'default_value' => '5',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 20,
@@ -3872,7 +3908,7 @@ $coreConfigData = array(
     	'name' => 'cache_redis_info',
     	'default_value' => '',
     	'type' => 'fset',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 30,
@@ -3883,7 +3919,7 @@ $coreConfigData = array(
     	'name' => 'cache_redis_host',
     	'default_value' => '127.0.0.1',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 40,
@@ -3894,7 +3930,7 @@ $coreConfigData = array(
     	'name' => 'cache_redis_port',
     	'default_value' => '6379',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 50,
@@ -3905,7 +3941,7 @@ $coreConfigData = array(
     	'name' => 'cache_redis_socket',
     	'default_value' => '',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 60,
@@ -3916,7 +3952,7 @@ $coreConfigData = array(
     	'name' => 'cache_redis_password',
     	'default_value' => '',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 70,
@@ -3927,7 +3963,7 @@ $coreConfigData = array(
     	'name' => 'cache_redis_database',
     	'default_value' => '0',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 80,
@@ -3940,7 +3976,7 @@ $coreConfigData = array(
     	'name' => 'cache_memcached_info',
     	'default_value' => '',
     	'type' => 'fset',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 90,
@@ -3952,7 +3988,7 @@ $coreConfigData = array(
     	'name' => 'cache_memcached_host',
     	'default_value' => '127.0.0.1',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 100,
@@ -3963,7 +3999,7 @@ $coreConfigData = array(
     	'name' => 'cache_memcached_port',
     	'default_value' => '11211',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 110,
@@ -3975,7 +4011,7 @@ $coreConfigData = array(
     	'name' => 'cache_memcached_socket',
     	'default_value' => '',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 120,
@@ -3986,7 +4022,7 @@ $coreConfigData = array(
     	'name' => 'cache_memcached_username',
     	'default_value' => '',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 130,
@@ -3998,12 +4034,17 @@ $coreConfigData = array(
     	'name' => 'cache_memcached_password',
     	'default_value' => '',
     	'type' => 'text',
-    	'subgroup' => 9,
+    	'subgroup' => 10,
     	'fieldset' => 2,
     	'selection_array' => NULL,
     	'sort' => 140,
     	'set' => TRUE,
     	'group' => 'Core'
     ),
+
+	//  move debugging to advanced tab
+
+
+
 );
 ?>

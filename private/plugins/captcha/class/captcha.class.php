@@ -1,34 +1,19 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | CAPTCHA Plugin - glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | captcha.class.php                                                        |
-// |                                                                          |
-// | main CAPTCHA processing, generates CAPTCHA image / tokens                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Orignal Author of captcha.class.php                                      |
-// |    Pascal Rehfeldt <Pascal@Pascal-Rehfeldt.com>                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - CAPTCHA Plugin
+*
+* CAPTCHA Class
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Orignal Author of captcha.class.php
+*    Pascal Rehfeldt <Pascal@Pascal-Rehfeldt.com>
+*
+*/
 
 namespace Captcha;
 
@@ -37,8 +22,9 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-global $_CONF, $_CP_CONF;
+use \glFusion\Log\Log;
 
+global $_CONF, $_CP_CONF;
 
 class captcha {
     var $Length;
@@ -200,7 +186,7 @@ class captcha {
             case 0 :
                 if ( $this->gfxformat != 'png' && $this->gfxformat != 'jpg') {
                     header('Content-type: image/gif');
-                    COM_errorLog("CAPTCHA: No valid gfxFormat specified");
+                    Log::write('system',Log::ERROR,'CAPTCHA: No valid gfxFormat specified');
                     $errormgr = new cperror;
                     $errormgr->addError('');
                     $errormgr->displayError();

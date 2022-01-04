@@ -1,17 +1,23 @@
 {# begin {templatelocation} #}
-  <tr>
-{!if category_link}
-    <td>{category_link}</td>
-    <td style="vertical-align:top;text-align:left;" class="uk-text-left">
+		<li>
+			<span class="uk-text-medium">
+{!if cat_img_url}
+				<a href="{site_url}/filemgmt/viewcat.php?cid={cid}">
+					<img src="{cat_img_url}" class="uk-thumbnail uk-thumbnail-mini" style="border:0px;width:{shotwidth}px;margin-right:3px;">
+				</a>
 {!else}
-    <td colspan="2" style="vertical-align:top;text-align:left;" class="uk-text-left">
+				<a href="{site_url}/filemgmt/viewcat.php?cid={cid}">
+					<i class="uk-icon uk-icon-folder-o uk-icon-small uk-text-center" style="border:0px;width:{shotwidth}px;margin-right:3px;"></i>
+				</a>
 {!endif}
-      <a href="{site_url}/filemgmt/viewcat.php?cid={cid}">
-        <b>{category_name}</b>
-      </a>&nbsp;{num_files}&nbsp;{files_waiting_submission}<br />
+				<a href="{site_url}/filemgmt/viewcat.php?cid={cid}">{category_name}</a>&nbsp;({num_files})
+{!if files_waiting_submission}
+				({files_waiting_submission})
+{!endif}
+			</span>
 
-      {subcategories}
-
-    </td>
-  </tr>
+			<div class="uk-margin-large-left" style="margin-left:20%;">
+				{subcategories}
+			</div>
+		</li>
 {# end {templatelocation} #}

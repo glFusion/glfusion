@@ -1,35 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | mediagallery.php                                                         |
-// |                                                                          |
-// | CKeditor plugin to allow easy insertion of Media Gallery auto tags.      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2006-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - CKEditor Plugin
+*
+* Media Gallery Auto Tag Plugin
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2006-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/init.php';
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classMedia.php';
+
+use \glFusion\Log\Log;
 
 $mb_base_path = '/ckeditor/plugins/mediagallery';
 
@@ -188,7 +175,7 @@ if ($album_id == 0 ) {
 
 if ( !isset($MG_albums[$album_id]->id) ) {
     $display = MG_popupHeader();
-    COM_errorLog("Media Gallery Error - User attempted to view an album that does not exist.");
+    Log::write('system',Log::ERROR,'CKEditor / Media Gallery Plugin - User attempted to view an album that does not exist.');
     $display .= COM_startBlock ($LANG_mgMB['error_header'], '',COM_getBlockTemplate ('_admin_block', 'header'));
 	$T = new Template($_CONF['path'].'plugins/ckeditor/templates/mediagallery');
     $T->set_file('error','error.thtml');

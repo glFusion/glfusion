@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2010-2018 by the following authors:
+*  Copyright (C) 2010-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -21,7 +21,7 @@ USES_lib_admin();
 
 $display = '';
 
-if (!SEC_inGroup ('Root')) {
+if (!SEC_hasRights ('upgrade.admin')) {
     Log::logAccessViolation('Version Checker');
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_showMessageText($MESSAGE[200],$MESSAGE[30],true,'error')
@@ -47,7 +47,7 @@ function _displayVersionData()
     $menu_arr = array (
         array('url'  => $_CONF['site_admin_url'].'/vercheck.php',
               'text' => $LANG_UPGRADE['recheck']),
-        array('url'  => $_CONF['site_admin_url'],
+        array('url'  => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 

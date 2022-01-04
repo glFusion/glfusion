@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2011-2019 by the following authors:
+*  Copyright (C) 2011-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -21,6 +21,7 @@
 require_once 'lib-common.php';
 
 use \glFusion\Article\Article;
+use \glFusion\Log\Log;
 
 /**
 * Mails the contents of the contact form to that user
@@ -110,7 +111,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
             if (!empty ($msg)) {
                 $subject = @htmlspecialchars($subject,ENT_QUOTES,COM_getEncodingt());
                 $retval .= COM_siteHeader ('menu', '')
-                        . COM_errorLog ($msg, 2)
+                        . $msg
                         . contactform ($uid, $subject, $message)
                         . COM_siteFooter ();
 
@@ -156,7 +157,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
             $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
             $subject = @htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
             $retval .= COM_siteHeader ('menu', $LANG04[81])
-                    . COM_errorLog ($LANG08[3], 2)
+                    . $LANG08[3]
                     . contactform ($uid, $subject, $message)
                     . COM_siteFooter ();
         }
@@ -165,7 +166,7 @@ function contactemail($uid,$author,$authoremail,$subject,$message,$html=0)
         $subject = substr ($subject, 0, strcspn ($subject, "\r\n"));
         $subject = @htmlspecialchars (trim ($subject), ENT_QUOTES,COM_getEncodingt());
         $retval .= COM_siteHeader ('menu', $LANG04[81])
-                . COM_errorLog ($LANG08[4], 2)
+                . $LANG08[4]
                 . contactform ($uid, $subject, $message)
                 . COM_siteFooter ();
     }
@@ -756,7 +757,7 @@ switch ($what) {
                     $msg = PLG_itemPreSave ('emailstory', $shortmessage);
                     if (!empty ($msg)) {
                         $display .= COM_siteHeader ('menu', '')
-                                 . COM_errorLog ($msg, 2)
+                                 . $msg
                                  . mailstoryform ($sid, COM_applyFilter($_POST['to']), COM_applyFilter($_POST['toemail']),
                                                   COM_applyFilter($_POST['from']), COM_applyFilter($_POST['fromemail']),
                                                   $shortmessage)

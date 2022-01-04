@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -35,8 +35,8 @@ $LANG_FM00 = array (
     'editor'            => 'Plugin-Editor',
     'warning'           => 'Warnung! Plugin ist noch akiviert',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Erweiterung ist installiert und aktiviert.<br>Deaktiviere diese zuerst, wenn du sie deinstallieren möchtest.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Erweiterungs-Editor</a></div',
-    'WhatsNewLabel'    => 'Dateien',
-    'WhatsNewPeriod'   => ' der letzen %s Tage',
+    'WhatsNewLabel'     => 'Dateien',
+    'WhatsNewPeriod'    => ' der letzen %s Tage',
     'new_upload'        => 'Neue Datei eingesendet am ',
     'new_upload_body'   => 'Ein neuer Datei-Upload wurde der Warteschlange hinzugefügt am ',
     'details'           => 'Datei-Details',
@@ -62,64 +62,95 @@ $LANG_FM02 = array(
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "Neue Seite",
-    'adminhome' => "Kommandozentrale",
-    'plugin_name' => "Datei Verwaltung",
-    'searchlabel' => "Datei-Suche",
-    'searchlabel_results' => "Ergebnis Datei-Suche",
-    'downloads' => "Meine Downloads",
-    'report' => "Top-Downloads",
-    'usermenu1' => "Meine Downloads",
-    'usermenu2' => "&nbsp;&nbsp;Top-Bewertet",
-    'usermenu3' => "Datei hochladen",
-    'admin_menu' => "Filemgmt-Admin",
-    'writtenby' => "Geschrieben von",
-    'date' => "Zuletzt aktualisiert",
-    'title' => "Titel",
-    'content' => "Inhalt",
-    'hits' => "Aufrufe",
-    'Filelisting' => "Dateiauflistung",
-    'DownloadReport' => "Download-Verlauf für einzelne Datei",
-    'StatsMsg1' => "Top 10 der beliebtesten Downloads",
-    'StatsMsg2' => "Es wurde noch nichts heruntergeladen.",
-    'usealtheader' => "Alternativen Header verwenden",
-    'url' => "URL",
-    'edit' => "Bearbeiten",
-    'lastupdated' => "Zuletzt aktualisiert",
-    'pageformat' => "Seitenformat",
-    'leftrightblocks' => "Linke & rechte Blöcke",
-    'blankpage' => "Leere Seite",
-    'noblocks' => "Keine Blöcke",
-    'leftblocks' => "Linke Blöcke",
-    'addtomenu' => 'Im Menü eintragen',
-    'label' => 'Beschriftung',
-    'nofiles' => 'Dateien im Downloadbereich (Heruntergeladen)',
-    'save' => 'Speichern',
-    'preview' => 'Vorschau',
-    'delete' => 'Löschen',
-    'cancel' => 'Abbruch',
-    'access_denied' => 'Zugriff verweigert',
-    'invalid_install' => 'Jemand hat versucht, auf die FileMgmt-Administration zuzugreifen.  Benutzer-ID: ',
-    'start_install' => 'Es wird versucht das FileMgmt-Plugin zu installieren',
-    'start_dbcreate' => 'Es wird versucht Tabellen für das FileMgmt-Plugin zu erstellen',
-    'install_skip' => '... übersprungen entsprechend der "filemgmt.cfg"',
-    'access_denied_msg' => 'Leider hast Du keinen Zugriff auf die FileMgmt-Administrationsseite. Bitte beachte, dass alle nicht autorisierten Zugriffe protokolliert werden.',
+    'newpage'               => "Neue Seite",
+    'adminhome'             => "Kommandozentrale",
+    'plugin_name'           => "Datei Verwaltung",
+    'searchlabel'           => "Datei-Suche",
+    'searchlabel_results'   => "Ergebnis Datei-Suche",
+    'downloads'             => "Meine Downloads",
+    'report'                => "Top-Downloads",
+    'usermenu1'             => "Meine Downloads",
+    'usermenu2'             => "&nbsp;&nbsp;Top-Bewertet",
+    'usermenu3'             => "Datei hochladen",
+    'admin_menu'            => "Filemgmt-Admin",
+    'writtenby'             => "Geschrieben von",
+    'date'                  => "Zuletzt aktualisiert",
+    'title'                 => "Titel",
+    'content'               => "Inhalt",
+    'hits'                  => "Aufrufe",
+    'Filelisting'           => "Dateiauflistung",
+    'DownloadReport'        => "Download-Verlauf für einzelne Datei",
+    'StatsMsg1'             => "Top 10 der beliebtesten Downloads",
+    'StatsMsg2'             => "Es wurde noch nichts heruntergeladen.",
+    'usealtheader'          => "Alternativen Header verwenden",
+    'url'                   => "URL",
+    'edit'                  => "Bearbeiten",
+    'lastupdated'           => "Zuletzt aktualisiert",
+    'pageformat'            => "Seitenformat",
+    'leftrightblocks'       => "Linke & rechte Blöcke",
+    'blankpage'             => "Leere Seite",
+    'noblocks'              => "Keine Blöcke",
+    'leftblocks'            => "Linke Blöcke",
+    'addtomenu'             => 'Im Menü eintragen',
+    'label'                 => 'Beschriftung',
+    'nofiles'               => 'Dateien im Downloadbereich (Heruntergeladen)',
+    'save'                  => 'Speichern',
+    'preview'               => 'Vorschau',
+    'delete'                => 'Löschen',
+    'cancel'                => 'Abbrechen',
+    'access_denied'         => 'Zugriff verweigert',
+    'invalid_install'       => 'Jemand hat versucht, auf die FileMgmt-Administration zuzugreifen.  Benutzer-ID: ',
+    'start_install'         => 'Es wird versucht das FileMgmt-Plugin zu installieren',
+    'start_dbcreate'        => 'Es wird versucht Tabellen für das FileMgmt-Plugin zu erstellen',
+    'install_skip'          => '... übersprungen entsprechend der "filemgmt.cfg"',
+    'access_denied_msg'     => 'Leider hast Du keinen Zugriff auf die FileMgmt-Administrationsseite. Bitte beachte, dass alle nicht autorisierten Zugriffe protokolliert werden.',
     'installation_complete' => 'Installation komplett',
     'installation_complete_msg' => 'Die Datenstrukturen für das FileMgmt-Plugin wurden erfolgreich in Deiner Datenbank erstellt!  Solltest Du das Plugin deinstallieren, dann schau in das README Dokument, dass zu diesem Plugin gehört.',
-    'installation_failed' => 'Installation fehlgeschlagen',
+    'installation_failed'   => 'Installation fehlgeschlagen',
     'installation_failed_msg' => 'Installation fehlgeschlagen! Überprüfe die Datei "error.log" für weitere Informationen.',
-    'system_locked' => 'System gesperrt',
-    'system_locked_msg' => 'Das FileMgmt-Plugin wurde schon installiert und ist gesperrt.  Versuchst Du das Plugin zu deinstallieren, dann schau in das README Dokument, dass zu diesem Plugin gehört',
-    'uninstall_complete' => 'Deinstallation komplett',
+    'system_locked'         => 'System gesperrt',
+    'system_locked_msg'     => 'Das FileMgmt-Plugin wurde schon installiert und ist gesperrt.  Versuchst Du das Plugin zu deinstallieren, dann schau in das README Dokument, dass zu diesem Plugin gehört',
+    'uninstall_complete'    => 'Deinstallation komplett',
     'uninstall_complete_msg' => 'Die Datenstrukturen für das FileMgmt-Plugin wurden erfolgreich von Deiner Datenbank entfernt.<br><br>Du mußt alle Dateien manuell aus Deiner Datei-Repository entfernen.',
-    'uninstall_failed' => 'Deinstallation fehlgeschlagen.',
-    'uninstall_failed_msg' => 'Deinstallation fehlgeschlagen! Überprüfe die Datei "error.log" für weitere Informationen.',
-    'install_noop' => 'Plugin-Installation',
-    'install_noop_msg' => 'Die FileMgmt-Plugin-Installation wurde ausgeführt, aber es gab nichts zu tun.<br><br>Überprüfe die Datei "install.cfg" des Plugins.',
-    'all_html_allowed' => 'HTML ist erlaubt',
-    'no_new_files'  => 'Keine neuen Dateien',
-    'no_comments'   => 'Keine neuen Kommentare',
-    'more'          => '<em>mehr ...</em>'
+    'uninstall_failed'      => 'Deinstallation fehlgeschlagen.',
+    'uninstall_failed_msg'  => 'Deinstallation fehlgeschlagen! Überprüfe die Datei "error.log" für weitere Informationen.',
+    'install_noop'          => 'Plugin-Installation',
+    'install_noop_msg'      => 'Die FileMgmt-Plugin-Installation wurde ausgeführt, aber es gab nichts zu tun.<br><br>Überprüfe die Datei "install.cfg" des Plugins.',
+    'all_html_allowed'      => 'HTML ist erlaubt',
+    'no_new_files'          => 'Keine neuen Dateien',
+    'no_comments'           => 'Keine neuen Kommentare',
+    'more'                  => '<em>mehr ...</em>',
+    'newly_uploaded'        => 'Newly Uploaded',
+    'click_to_view'         => 'Click here to view',
+    'no_file_uploaded'      => 'No File Uploaded',
+    'description'           => 'Beschreibung',
+    'category'              => 'Kategorie',
+    'err_req_fields'        => 'Some required fields were not supplied',
+    'go_back'               => 'Zurück',
+    'err_demomode'          => 'Uploads are disabled in demo mode',
+    'edit_category'         => 'Kategorie bearbeiten',
+    'create_category'       => 'Kategorie erstellen',
+    'can_view'              => 'Can View',
+    'can_upload'            => 'Can Upload',
+    'delete_category'       => 'Delete Category',
+    'new_category'          => 'New Category',
+    'new_file'              => 'New File',
+    'remote_ip'             => 'Benutzer IP',
+    'back_to_listing'       => 'Back To Listing',
+);
+
+$LANG_FILEMGMT_ERRORS = array(
+    "1101" => "Upload approval Error: The temporary file was not found. Check error.log",
+    "1102" => "Upload submit Error: The temporary filestore file was not created. Check error.log",
+    "1103" => "The download info you provided is already in the database!",
+    "1104" => "The download info was not complete - Need to enter a title for the new file",
+    "1105" => "The download info was not complete - Need to enter a description for the new file",
+    "1106" => "Upload Add Error: The new file was not created. Check error.log",
+    "1107" => "Upload Add Error: The temporary file was not found. Check error.log",
+    "1108" => "Duplicate file - already existing in filestore",
+    "1109" => "File type not allowed",
+    "1110" => "You must define and select a category for the uploaded file",
+    "9999" => "Unknown Error"
 );
 
 $LANG_FILEMGMT_AUTOTAG = array(
@@ -161,6 +192,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Bewertungen aktivieren',
     'displayblocks'         => 'glFusion Blöcke anzeigen',
     'silent_edit_default'   => 'Standart für "Stilles Bearbeiten"',
+    'extensions_map'        => 'Extensions used for downloads',
+    'EmailOption'           => 'Email submitter upon approval?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Haupteinstellungen'
@@ -203,6 +236,7 @@ define("_MD_SEARCH","Suche");
 define("_MD_MAIN","Hauptmenü");
 define("_MD_SUBMITFILE","Datei einsenden");
 define("_MD_POPULAR","Beliebt");
+define("_MD_POP", "Pop");   // abbrevision for listing badge
 define("_MD_NEW","Neu");
 define("_MD_TOPRATED","Top bewertet");
 
@@ -391,6 +425,7 @@ define("_MD_ERRORDESC","FEHLER: Du mußt eine BESCHREIBUNG eingeben!");
 define("_MD_NEWDLADDED","Neuer Download der Datenbank hinzugefügt.");
 define("_MD_NEWDLADDED_DUPFILE","Warnung: Doppelte Datei. Neuer Download der Datenbank hinzugefügt.");
 define("_MD_NEWDLADDED_DUPSNAP","Warnung: Doppetes Snap. Neuer Download der Datenbank hinzugefügt.");
+define("_MD_DLUPDATED", "File has been updated.");
 define("_MD_HELLO","Hallo %s");
 define("_MD_WEAPPROVED","Wir haben Deine Download-Einsendung in unserer Download-Bereich bestätigt. Der Dateiname lautet: ");
 define("_MD_THANKSSUBMIT","Danke für Deine Einsendung!");
@@ -436,4 +471,3 @@ define("_MD_COMMENTSWANTED","Kommentare sind willkommen");
 define("_MD_CLICK2SEE","Klicken zum Anschauen: ");
 define("_MD_CLICK2DL","Klicken zum Downloaden: ");
 define("_MD_ORDERBY","Sortiert nach: ");
-?>

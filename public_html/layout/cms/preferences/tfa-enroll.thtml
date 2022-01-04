@@ -20,7 +20,7 @@
 
 <div class="uk-form-row">
 	<label >{lang_auth_code}</label>
-	<input type="text" id="twofactorverify" name="twofactorverify" autofocus>&nbsp;
+	<input type="text" id="twofactorverify" name="twofactorverify" autocomplete="off" autofocus>&nbsp;
 	<button id="tfa-verify" class="uk-button uk-button-success">{lang_verify}</button>
 	<input type="hidden" id="tfasecret" name="tfasecret" value="{tfa-secret}">
 	<input type="hidden" id="{token_name}" name="{token_name}" value="{token_value}">

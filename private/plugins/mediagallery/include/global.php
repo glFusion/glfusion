@@ -1,37 +1,24 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | global.php                                                               |
-// |                                                                          |
-// | Global album edit/perm administration routines                           |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Global album edit / perm administration
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 require_once $_CONF['path'] . 'plugins/mediagallery/include/classFrame.php';
+
+use \glFusion\Log\Log;
 
 /**
 * Global album attribute editor
@@ -151,7 +138,7 @@ function MG_saveGlobalAlbumPerm() {
     global $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST;
 
     if (!SEC_hasRights('mediagallery.admin')) {
-        COM_errorLog("Media Gallery user attempted to edit global album attributes without proper accss.");
+        Log::write('system',Log::WARNING, 'Media Gallery: User attempted to edit global album attributes without proper accss.');
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -445,13 +432,10 @@ function MG_globalAlbumAttributeEditor($adminMenu=0) {
         'lang_mp3'              => $LANG_MG01['mp3'],
         'lang_ogg'              => $LANG_MG01['ogg'],
         'lang_asf'              => $LANG_MG01['asf'],
-        'lang_swf'              => $LANG_MG01['swf'],
         'lang_mov'              => $LANG_MG01['mov'],
         'lang_mp4'              => $LANG_MG01['mp4'],
         'lang_mpg'              => $LANG_MG01['mpg'],
         'lang_zip'              => $LANG_MG01['zip'],
-        'lang_flv'              => $LANG_MG01['flv'],
-        'lang_rflv'             => $LANG_MG01['rflv'],
         'lang_emb'              => $LANG_MG01['emb'],
         'lang_other'            => $LANG_MG01['other'],
         'lang_allowed_formats'  => $LANG_MG01['allowed_media_formats'],
@@ -537,7 +521,7 @@ function MG_saveGlobalAlbumAttr() {
     global $_USER, $_CONF, $_TABLES, $_MG_CONF, $LANG_MG00, $LANG_MG01, $_POST;
 
     if (!SEC_hasRights('mediagallery.admin')) {
-        COM_errorLog("Media Gallery user attempted to edit global album attributes without proper accss.");
+        Log::write('system',Log::WARNING, 'Media Gallery: User attempted to edit global album attributes without proper accss.');
         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
@@ -596,16 +580,13 @@ function MG_saveGlobalAlbumAttr() {
     $format_mp3                 = isset($_POST['format_mp3']) ? COM_applyFilter($_POST['format_mp3'],true) : 0;
     $format_ogg                 = isset($_POST['format_ogg']) ? COM_applyFilter($_POST['format_ogg'],true) : 0;
     $format_asf                 = isset($_POST['format_asf']) ? COM_applyFilter($_POST['format_asf'],true) : 0;
-    $format_swf                 = isset($_POST['format_swf']) ? COM_applyFilter($_POST['format_swf'],true) : 0;
     $format_mov                 = isset($_POST['format_mov']) ? COM_applyFilter($_POST['format_mov'],true) : 0;
     $format_mp4                 = isset($_POST['format_mp4']) ? COM_applyFilter($_POST['format_mp4'],true) : 0;
     $format_mpg                 = isset($_POST['format_mpg']) ? COM_applyFilter($_POST['format_mpg'],true) : 0;
     $format_zip                 = isset($_POST['format_zip']) ? COM_applyFilter($_POST['format_zip'],true) : 0;
     $format_other               = isset($_POST['format_other']) ? COM_applyFilter($_POST['format_other'],true) : 0;
-    $format_flv                 = isset($_POST['format_flv']) ? COM_applyFilter($_POST['format_flv'],true) : 0;
-    $format_rflv                = isset($_POST['format_rflv']) ? COM_applyFilter($_POST['format_rflv'],true) : 0;
     $format_emb                 = isset($_POST['format_emb']) ? COM_applyFilter($_POST['format_emb'],true) : 0;
-    $valid_formats = ($format_jpg + $format_png + $format_tif + $format_gif + $format_bmp + $format_tga + $format_psd + $format_mp3 + $format_ogg + $format_asf + $format_swf + $format_mov + $format_mp4 + $format_mpg + $format_zip + $format_other + $format_flv + $format_rflv + $format_emb);
+    $valid_formats = ($format_jpg + $format_png + $format_tif + $format_gif + $format_bmp + $format_tga + $format_psd + $format_mp3 + $format_ogg + $format_asf + $format_mov + $format_mp4 + $format_mpg + $format_zip + $format_other + $format_emb);
 
     $comment_active         = isset($_POST['comment_active']) ? COM_applyFilter($_POST['comment_active'],true) : 0;
     $exif_active            = isset($_POST['exif_active']) ? COM_applyFilter($_POST['exif_active'],true) : 0;

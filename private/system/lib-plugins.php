@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2009 by the following authors:
@@ -265,7 +265,7 @@ function PLG_uninstall ($type)
             Log::write('system',Log::INFO,"Dropping table {$_TABLES[$remvars['tables'][$i]]}");
             try {
                 $db->conn->query("DROP TABLE `{$_TABLES[$remvars['tables'][$i]]}`");
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 Log::write('system',Log::ERROR,"ERROR: Dropping of Table: {$_TABLES[$remvars['tables'][$i]]} failed.");
             }
             Log::write('system',Log::INFO,'...completed');
@@ -276,7 +276,7 @@ function PLG_uninstall ($type)
             Log::write('system',Log::INFO,"Removing variable {$remvars['vars'][$i]}");
             try {
                 $db->conn->delete($_TABLES['vars'], array('name' => $remvars['vars'][$i]));
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 Log::write('system',Log::ERROR,"ERROR: Removing variable {$remvars['vars'][$i]} from VARS table failed");
             }
             Log::write('system',Log::INFO,'...completed');
@@ -289,14 +289,14 @@ function PLG_uninstall ($type)
                 Log::write('system',Log::INFO,"Attempting to remove the {$remvars['groups'][$i]} group");
                 try {
                     $db->conn->delete($_TABLES['groups'], array('grp_id' => $grp_id));
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     Log::write('system',Log::ERROR,"ERROR: Removing group {$remvars['groups'][$i]} from GROUPS table failed");
                 }
                 Log::write('system',Log::INFO,'...completed');
                 Log::write('system',Log::INFO,"Attempting to remove the {$remvars['groups'][$i]} group from all groups.");
                 try {
                     $db->conn->delete($_TABLES['group_assignments'], array('ug_main_grp_id' => $grp_id));
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     Log::write('system',Log::ERROR,"ERROR: Removing group {$remvars['groups'][$i]} from GROUP ASSIGNMENTS table failed");
                 }
                 Log::write('system',Log::INFO,'...completed');
@@ -335,7 +335,7 @@ function PLG_uninstall ($type)
         if ($stmt !== false && $stmt !==NULL) {
             Log::write('system',Log::INFO,'removing feed files');
             while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
-                $fullpath = SYND_getFeedPath( $A[0] );
+                $fullpath = SYND_getFeedPath( $A['filename'] );
                 if ( file_exists( $fullpath ) ) {
                     unlink ($fullpath);
                     Log::write('system',Log::INFO,"Removed Feed File: $fullpath");
@@ -1446,7 +1446,7 @@ function PLG_moveUser($originalUID, $destinationUID)
                 Database::INTEGER
             )
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error moving user comments: ' . $e->getMessage());
     }
 
@@ -1464,7 +1464,7 @@ function PLG_moveUser($originalUID, $destinationUID)
                 Database::INTEGER
             )
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error moving user rating votes: ' . $e->getMessage());
     }
 
@@ -2336,10 +2336,11 @@ function PLG_getFeedNames($plugin)
 * @param    string   update_data   information for later up-to-date checks
 * @param    string   feedType      The type of feed (RSS/Atom etc)
 * @param    string   feedVersion   The version info of the feed.
+* @param    array    $A            The full feed record from the syndication table
 * @return   array                  content of feed
 *
 */
-function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $feedVersion)
+function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $feedVersion, $A=array())
 {
     global $_PLUGINS;
 
@@ -2348,7 +2349,7 @@ function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $f
     if ($plugin == 'custom') {
         $function = 'CUSTOM_getfeedcontent';
         if (function_exists($function)) {
-            $content = $function($feed, $link, $update_data, $feedType, $feedVersion);
+            $content = $function($feed, $link, $update_data, $feedType, $feedVersion, $A);
         }
     } else {
         $pluginTypes = array_merge(array('article','comment'), $_PLUGINS);
@@ -2356,7 +2357,7 @@ function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $f
         if (in_array ($plugin, $pluginTypes)) {
             $function = 'plugin_getfeedcontent_' . $plugin;
             if (function_exists ($function)) {
-                $content = $function ($feed, $link, $update_data, $feedType, $feedVersion);
+                $content = $function ($feed, $link, $update_data, $feedType, $feedVersion, $A);
             }
         }
     }
@@ -3818,6 +3819,48 @@ function PLG_privacyExport($uid=0,$email='',$username='',$ip='')
         }
     }
     return $output;
+}
+
+
+/**
+* Get Plugin Content Info
+*
+*   plugins should return an array of the following:
+*
+* array(
+*   array(
+*       'table_name' => 'gl_stories',
+*       'primary_key' => 'id',
+*       'columns'    => array(
+*           'title',
+*           'subtitle',
+*           'introtext',
+*           'bodytext'
+*       )
+*   )
+* );
+*
+*
+* @return   array()
+*
+*/
+function PLG_getContentTableInfo()
+{
+    global $_PLUGINS;
+
+    $itemList = array();
+    $totalItemList = array();
+
+    foreach ($_PLUGINS AS $plugin) {
+        $function = 'plugin_getContentTableInfo_'.$plugin;
+        if (function_exists($function)) {
+            $itemList = $function();
+            if (is_array($itemList) && count($itemList) > 0) {
+                $totalItemList = array_merge($itemList,$totalItemList);
+            }
+        }
+    }
+    return $totalItemList;
 }
 
 /*

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -471,7 +471,7 @@ function _checkVersion()
  */
 function _phpUpToDate()
 {
-    // supported version is 7.2 or greater until Nov 30, 2020
+    // supported version is 7.3 or greater until 6 Dec 2021
 
     $uptodate = false;
 
@@ -483,7 +483,7 @@ function _phpUpToDate()
             $uptodate = false;
             break;
         case '7' :
-            if ( $phpv[1] >= 2 ) {
+            if ( $phpv[1] >= 3 ) {
                 $uptodate = true;
             }
             break;
@@ -544,7 +544,7 @@ function _doSiteConfigUpgrade() {
     if ( empty($_CONF['db_charset'])) {
         try {
             $stmt = $db->conn->query("SELECT @@character_set_database");
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $stmt = false;
         }
         if ($stmt) {
@@ -615,7 +615,7 @@ function _doSiteConfigUpgrade() {
     $T->parse('output','page');
     $siteconfig_data = $T->finish($T->get_var('output'));
 
-    $siteconfig_path = $_CONF['path_html'] . 'siteconfig.php';
+    $siteconfig_path = $_CONF['path_html'] . 'data/siteconfig.php';
     if (is_writable($siteconfig_path)) {
         $siteconfig_file = fopen($siteconfig_path, 'w');
         if (fwrite($siteconfig_file, $siteconfig_data)) {

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2015-2019 by the following authors:
+*  Copyright (C) 2015-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -23,6 +23,15 @@ $obsoletePrivateDir = array(
     'plugins/commentfeeds/',
     'vendor/geshi/',
     'vendor/phpmailer/.github/',
+
+    'vendor/eluceo/ical/src/Eluceo/iCal/Component',
+    'vendor/eluceo/ical/src/Eluceo/iCal/Property',
+    'vendor/eluceo/ical/src/Eluceo/iCal/Util',
+
+    'vendor/geshi/',
+
+    'plugins/mediagallery/templates/themes/simpleviewer',
+
 // 1.7.0
     'vendor/pear/',
     'system/classes/XML/',
@@ -83,6 +92,33 @@ $obsoletePrivateFiles = array(
     'system/lib-story.php',
     'system/classes/story.class.php',
     'system/lib-social.php',
+
+    'vendor/eluceo/ical/CHANGELOG.md',
+    'vendor/eluceo/ical/phpunit.xml.dist',
+    'vendor/eluceo/ical/README.md',
+    'vendor/eluceo/ical/UPGRADE.md',
+
+    'vendor/robthree/twofactorauth/lib/Providers/Qr/BaconQrCodeProvider.php',
+    'vendor/robthree/twofactorauth/lib/Providers/Qr/EndroidQrCodeProvider.php',
+    'vendor/robthree/twofactorauth/lib/Providers/Qr/EndroidQrCodeWithLogoProvider.php',
+
+    'vendor/README',
+    'composer.json.PHPCLASSES',
+
+    'plugins/mediagallery/templates/edit_flv_options.thtml',
+    'plugins/mediagallery/templates/edit_swf_options.thtml',
+    'plugins/mediagallery/templates/flvfp.thtml',
+    'plugins/mediagallery/templates/flvmg.thtml',
+    'plugins/mediagallery/templates/fsat.thtml',
+    'plugins/mediagallery/templates/fslideshow.thtml',
+    'plugins/mediagallery/templates/mp3_swf.thtml',
+    'plugins/mediagallery/templates/swfobject.thtml',
+    'plugins/mediagallery/templates/view_flv_light.thtml',
+    'plugins/mediagallery/templates/view_flv_light_stream.thtml',
+    'plugins/mediagallery/templates/view_mp3_swf.thtml',
+    'plugins/mediagallery/config.php.dist',
+    'plugins/mediagallery/staticpage.txt',
+
 // 1.7.0
     'system/classes/filter.class.php',
     'system/classes/output.class.php',
@@ -179,6 +215,63 @@ $obsoletePrivateFiles = array(
 );
 
 $obsoletePublicFiles = array(
+
+// 2.0.0
+
+    'ckeditor/plugins/codemirror/js/beautify-html.js',
+    'ckeditor/plugins/codemirror/theme/ayu-dark.css',
+    'ckeditor/plugins/codemirror/theme/ayu-mirage.css',
+    'ckeditor/plugins/codemirror/theme/material-darker.css',
+    'ckeditor/plugins/codemirror/theme/material-ocean.css',
+    'ckeditor/plugins/codemirror/theme/material-palenight.css',
+    'ckeditor/plugins/codemirror/theme/moxer.css',
+
+    'layout/cms/admin/story/storyeditor.thtml',
+
+    'mediagallery/js/swfobject.js',
+    'mediagallery/mediaobjects/audio.png',
+    'mediagallery/mediaobjects/empty.png',
+    'mediagallery/mediaobjects/flash.png',
+    'mediagallery/mediaobjects/flv.png',
+    'mediagallery/mediaobjects/generic.png',
+    'mediagallery/mediaobjects/googlevideo.png',
+    'mediagallery/mediaobjects/mediagallery.gif',
+    'mediagallery/mediaobjects/missing.png',
+    'mediagallery/mediaobjects/pdf.png',
+    'mediagallery/mediaobjects/placeholder.svg',
+    'mediagallery/mediaobjects/placeholder_audio.svg',
+    'mediagallery/mediaobjects/placeholder_audio_w.svg',
+    'mediagallery/mediaobjects/placeholder_flash.svg',
+    'mediagallery/mediaobjects/placeholder_flash_w.svg',
+    'mediagallery/mediaobjects/placeholder_flv.svg',
+    'mediagallery/mediaobjects/placeholder_flv_w.svg',
+    'mediagallery/mediaobjects/placeholder_missing.svg',
+    'mediagallery/mediaobjects/placeholder_pdf.svg',
+    'mediagallery/mediaobjects/placeholder_quicktime.svg',
+    'mediagallery/mediaobjects/placeholder_video.svg',
+    'mediagallery/mediaobjects/placeholder_video_w.svg',
+    'mediagallery/mediaobjects/placeholder_viemo_w.svg',
+    'mediagallery/mediaobjects/placeholder_vimeo.svg',
+    'mediagallery/mediaobjects/placeholder_zip.svg',
+    'mediagallery/mediaobjects/quicktime.png',
+    'mediagallery/mediaobjects/remote.png',
+    'mediagallery/mediaobjects/speaker.svg',
+    'mediagallery/mediaobjects/video.png',
+    'mediagallery/mediaobjects/wmp.png',
+    'mediagallery/mediaobjects/youtube.png',
+    'mediagallery/mediaobjects/zip.png',
+    'mediagallery/watermarks/blank.png',
+    'mediagallery/fslideshow.php',
+
+    'mediagallery/players/expressinstall.swf',
+    'mediagallery/players/FlowPlayer.swf',
+    'mediagallery/players/MGflv.swf',
+    'mediagallery/players/MGmp3.swf',
+    'mediagallery/players/minislideshow.swf',
+    'mediagallery/players/player.swf',
+    'mediagallery/players/slideshow.swf',
+    'mediagallery/players/sviewer.swf',
+
 // 1.7.5
     'admin/refresh.php',
     'bad_behavior2/bad-behavior/screener.inc.php',

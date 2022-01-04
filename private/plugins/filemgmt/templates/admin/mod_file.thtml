@@ -1,0 +1,141 @@
+{# begin {templatelocation} #}
+<div class="uk-panel uk-panel-box uk-margin-top">
+
+	<div class="uk-text-bold uk-text-large">
+		{title}
+	</div>
+
+    <form id="filemgmt_mod_file" class="uk-form uk-form-horizontal" method="post" enctype="multipart/form-data" action="{site_admin_url}/plugins/filemgmt/index.php">
+        <input type="hidden" name="lid" value="{lid}" />
+		<input type="hidden" name="redirect" value="{redirect}" />
+		<input type="hidden" name="redirect_url" value="{redirect_url}" />
+{!if !newfile}
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_file_id}</label>
+			<div class="uk-form-controls">
+				<strong>{lid}</strong>
+			</div>
+		</div>
+{!endif}
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_filetitle}</label>
+			<div class="uk-form-controls">
+				<input class="uk-input required uk-form-width-large" type="text" name="title" value="{title}">
+			</div>
+		</div>
+{!if !newfile}
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_filename}</label>
+			<div class="uk-form-controls">
+				{url}
+				<input type="hidden" name="url" value="{url}" />
+			</div>
+		</div>
+{!endif}
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_replfile}</label>
+			<div class="uk-form-controls">
+                <input type="file" name="newfile">
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_category}</label>
+			<div class="uk-form-controls">
+			<select class="uk-select uk-form-width-medium" name="cid">
+				{category_select_options}
+			</select>
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_homepage}</label>
+			<div class="uk-form-controls">
+				<input class="uk-input uk-form-width-large" type="text" name="homepage" value="{homepage}">
+			</div>
+		</div>
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_version}</label>
+			<div class="uk-form-controls">
+				<input class="uk-input uk-form-width-small" type="text" name="version" value="{version}">
+			</div>
+		</div>
+{!if !newfile}
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_filesize}</label>
+			<div class="uk-form-controls">
+				<input class="uk-input uk-form-width-small" type="text" name="size" value="{filesize}">&nbsp;{lang_bytes}
+			</div>
+		</div>
+{!endif}
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_description}</label>
+			<div class="uk-form-controls">
+				<textarea class="uk-textarea uk-form-width-extralarge required" id="description" name="description" rows="10" cols="80">{description}</textarea>
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">Hits</label>
+			<div class="uk-form-controls">
+                <input class="uk-input uk-form-width-small" type="text" name="hits" value="{hits}">
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_screenshot}</label>
+			<div class="uk-form-controls">
+{!if thumbnail}
+                <img class="uk-thumbnail uk-thumbnail-mini" src="{thumbnail}">&nbsp;&nbsp;<input class="uk-checkbox" type="checkbox" name="deletesnap">&nbsp;{lang_delete}<br>
+{!endif}
+                <input type="file" size="40" name="newfileshot">
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_comments}</label>
+			<div class="uk-form-controls">
+                <input class="uk-radio" type="radio" name="comments" value="1" {cmt_chk_1}>&nbsp;{lang_yes}&nbsp;&nbsp;
+                <input class="uk-radio" type="radio" name="comments" value="0" {cmt_chk_0}>&nbsp;{lang_no}
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_owner}</label>
+			<div class="uk-form-controls">
+                {owner_select}
+			</div>
+		</div>
+{!if !newfile}
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{lang_silent_edit}</label>
+			<div class="uk-form-controls">
+                <input class="uk-checkbox" type="checkbox" name="silentedit" value="1"  {silent_edit_checked}>
+			</div>
+		</div>
+{!endif}
+		<div class="uk-form-row uk-margin uk-margin-top">
+			<button class="uk-button uk-button-success" type="submit" name="saveDownload">{lang_submit}</button>
+			<a href="{cancel_url}" class="uk-button uk-button-default">{lang_cancel}</a>
+{!if can_delete}
+            <a href="{site_admin_url}/plugins/filemgmt/index.php?delDownload={lid}" class="uk-button uk-button-danger uk-align-right" onclick='return confirm("Delete this file ?");'>Delete</a>
+{!endif}
+		</div>
+	</form>
+{rating_votes}
+</div>
+<script>
+	$( "#filemgmt_mod_file" ).validate({
+		errorElement: "div",
+		errorClass: "uk-text-danger",
+		rules: {
+			testurl: {
+				url: true
+			},
+			errorPlacement: function(error, element) {
+				error.insertAfter(element);
+			}
+		}
+	});
+</script>
+{# end {templatelocation} #}

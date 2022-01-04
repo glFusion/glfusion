@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2020 by the following authors:
+*  Copyright (C) 2017-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2003-2010 by the following authors:
@@ -473,16 +473,20 @@ function SYND_updateFeed( $fid )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
+    $Feed = glFusion\Syndication\Feed::getById($fid);
+    $Feed->Generate();
+    return;
+
     $db = Database::getInstance();
 
     $A = $db->conn->fetchAssoc("SELECT * FROM {$_TABLES['syndication']} WHERE fid = ?",array($fid),array(Database::STRING));
     if ( $A !== false && $A['is_enabled'] == 1 ) {
-        $format = explode( '-', $A['format'] );
 
         if ($A['format'] == 'ICS-1.0') {
             return SYND_updateFeediCal( $A );
         }
 
+        $format = explode( '-', $A['format'] );
         $rss = new UniversalFeedCreator();
         if ( $A['content_length'] > 1 ) {
             $rss->descriptionTruncSize = $A['content_length'];
@@ -504,15 +508,16 @@ function SYND_updateFeed( $fid )
         if ( !empty( $A['filename'] )) {
             $filename = $A['filename'];
         } else {
-            $pos = strrpos( $_CONF['rdf_file'], '/' );
-            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
+            $filename = 'site.rss';
         }
         $rss->syndicationURL = SYND_getFeedUrl( $filename );
         $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
 
-        $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1]);
-
-        if ( is_array($content) ) {
+        $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1], $A);
+        if ($content === NULL) {
+            // Special NULL return if the plugin handles its own feed writing
+            return;
+        } elseif ( is_array($content) ) {
             foreach ( $content AS $feedItem ) {
                 $item = new FeedItem();
 
@@ -532,6 +537,7 @@ function SYND_updateFeed( $fid )
                 $rss->addItem($item);
             }
         }
+
         if (empty($link)) {
             $link = $_CONF['site_url'];
         }
@@ -571,16 +577,26 @@ function SYND_updateFeediCal( $A )
     if ( $A['is_enabled'] == 1 ) {
         $format = explode( '-', $A['format'] );
 
-        $vCalendar = new \Eluceo\iCal\Component\Calendar($_CONF['site_url']);
+        $vCalendar = new \Eluceo\iCal\Component\Calendar(
+            $_CONF['site_url'] . '//NONSGML ' . $A['title'] . '//' . strtoupper($_CONF['iso_lang'])
+        );
 
+        $vCalendar->setMethod('PUBLISH');
+        if (!empty($A['title'])) {
+            $vCalendar->setName($A['title']);
+        }
+        if (!empty($A['description'])) {
+            $vCalendar->setDescription($A['description']);
+        }
         if ( !empty( $A['filename'] )) {
             $filename = $A['filename'];
         } else {
-            $pos = strrpos( $_CONF['rdf_file'], '/' );
-            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
+            $filename = 'glfusion.rss';
+//            $pos = strrpos( $_CONF['rdf_file'], '/' );
+//            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
         }
 
-        $content = PLG_getFeedContent($A['type'], $A['fid'], $link, $data, $format[0], $format[1]);
+        $content = PLG_getFeedContent($A['type'], $A['fid'], $link, $data, $format[0], $format[1], $A);
 
         if ( is_array($content) ) {
             foreach ( $content AS $feedItem ) {
@@ -593,6 +609,11 @@ function SYND_updateFeediCal( $A )
                         case 'date' :
                             $date = is_numeric($value) ? date('c', $value) : $value;
                             $vEvent->setCreated(new \DateTime($date));
+                            break;
+
+                        case 'modified' :
+                            $date = is_numeric($value) ? date('c', $value) : $value;
+                            $vEvent->setModified(new \DateTime($date));
                             break;
 
                         case 'title' :
@@ -625,6 +646,14 @@ function SYND_updateFeediCal( $A )
 
                         case 'allday' :
                             $vEvent->setNoTime($value);
+                            break;
+
+                        case 'status' :
+                            $vEvent->setStatus($value);
+                            break;
+
+                        case 'sequence':
+                            $vEvent->setSequence($value);
                             break;
 
                         case 'rrule' :
@@ -730,10 +759,7 @@ function SYND_getFeedPath( $feedfile = '' )
 {
     global $_CONF;
 
-    $feedpath = $_CONF['rdf_file'];
-    $pos = strrpos( $feedpath, '/' );
-    $feed = substr( $feedpath, 0, $pos + 1 );
-    $feed .= $feedfile;
+    $feed = $_CONF['path_rss'] . $feedfile;
 
     return $feed;
 }

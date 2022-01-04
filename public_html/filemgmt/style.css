@@ -12,3 +12,9 @@
  margin:0 auto;
  padding:1px;
 }
+div.fm_record {
+	border:solid 1px;
+	padding:5px;
+	border-radius:5px;
+	margin-top:10px;
+}

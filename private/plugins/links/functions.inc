@@ -1,42 +1,32 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Links Plugin - glFusion CMS                                              |
-// +--------------------------------------------------------------------------+
-// | functions.inc                                                            |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2012-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// | Authors: Tony Bibbs         - tony AT tonybibbs DOT com                  |
-// |          Mark Limburg       - mlimburg AT users.sourceforge DOT net      |
-// |          Jason Whittenburg  - jwhitten AT securitygeeks DOT com          |
-// |          Dirk Haun          - dirk AT haun-online DOT de                 |
-// |          Trinity Bays       - trinity93 AT gmail DOT com                 |
-// |          Oliver Spiesshofer - oliver AT spiesshofer DOT com              |
-// |          Euan McKay         - info AT heatherengineering DOT com         |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Links Plugin
+*
+* glFusion Plugin APIs
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2012-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs         tony AT tonybibbs DOT com
+*  Mark Limburg       mlimburg AT users.sourceforge DOT net
+*  Jason Whittenburg  jwhitten AT securitygeeks DOT com
+*  Dirk Haun          dirk AT haun-online DOT de
+*  Trinity Bays       trinity93 AT gmail DOT com
+*  Oliver Spiesshofer oliver AT spiesshofer DOT com
+*  Euan McKay         info AT heatherengineering DOT com
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 $plugin_path = $_CONF['path'] . 'plugins/links/';
 
@@ -643,7 +633,7 @@ function plugin_upgrade_links()
         return links_upgrade();
     } else {
         // upgrades are done by the install script - return a generic error
-        COM_errorLog("Links plugin upgrade function not implemented");
+        Log::write('system',Log::ERROR, 'Links plugin upgrade function not implemented');
         return 3001;
     }
 }
@@ -1060,11 +1050,14 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
 
             case 'edit':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['edit'];
-                    $retval = COM_createLink(
-                        $icon_arr['edit'],
-                        $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x&amp;lid=' . $A['lid'],
-                        $attr);
+                    $retval = FieldList::edit(
+                        array(
+                            'url' => $_CONF['site_admin_url'] . '/plugins/links/index.php?edit=x&amp;lid=' . $A['lid'],
+                            'attr' => array(
+                                'title' => $LANG_ADMIN['edit']
+                            )
+                        )
+                    );
                 }
                 break;
 
@@ -1111,11 +1104,15 @@ function plugin_getListField_links($fieldname, $fieldvalue, $A, $icon_arr, $toke
 
             case 'delete':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return confirm('" . $LANG_LINKS_ADMIN[63] . "');";
-                    $retval = COM_createLink($icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/plugins/links/index.php'
-                        . '?delete=x&amp;lid=' . $A['lid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                    $retval = FieldList::delete(
+                        array(
+                            'delete_url' => $_CONF['site_admin_url'] . '/plugins/links/index.php'.'?delete=x&amp;lid='.$A['lid'].'&amp;'.CSRF_TOKEN.'='.$token,
+                            'attr' => array(
+                                'title'   => $LANG_ADMIN['delete'],
+                                'onclick' => "return confirm('" . $LANG_LINKS_ADMIN[63] . "');"
+                            ),
+                        )
+                    );
                 }
                 break;
 
@@ -1141,24 +1138,29 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
     if ($access > 0) {
 
         switch($fieldname) {
-
             case 'edit':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['edit'];
-                    $retval = COM_createLink(
-                        $icon_arr['edit'],
-                        $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;cid=' . urlencode($A['cid']),
-                        $attr);
+                    $retval = FieldList::edit(
+                        array(
+                            'url' => $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;cid=' . urlencode($A['cid']),
+                            'attr' => array(
+                                'title' => $LANG_ADMIN['edit']
+                            )
+                        )
+                    );
+
                 }
                 break;
-
             case 'addchild':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_LINKS_ADMIN[44];
-                    $retval .= COM_createLink(
-                        $icon_arr['addchild'],
-                        $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;pid=' . urlencode($A['cid']),
-                        $attr);
+                    $retval = FieldList::copy(
+                        array(
+                            'url' => $_CONF['site_admin_url'] . '/plugins/links/category.php?edit=x&amp;pid=' . urlencode($A['cid']),
+                            'attr' => array(
+                                'title' => $LANG_LINKS_ADMIN[44]
+                            )
+                        )
+                    );
                 }
                 break;
 
@@ -1187,15 +1189,6 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                 $retval = "<span style=\"padding-left:{$indent}px;\">$cat</span>";
                 break;
 
-            case 'addchild';
-                if ($access == 3) {
-                    $retval = COM_createLink(
-                        $icon_arr['addchild'],
-                        "{$_CONF['site_admin_url']}/plugins/links/category.php?edit=x&amp;pid=" . urlencode($A['cid'])
-                    );
-                }
-                break;
-
             case 'tid';
                 if ($A['tid'] == 'all') {
                     $retval = $LANG_LINKS_ADMIN[35];
@@ -1210,11 +1203,15 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
 
             case 'delete':
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = "return confirm('" . $LANG_LINKS_ADMIN[64] . "');";
-                    $retval = COM_createLink($icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/plugins/links/category.php'
-                        . '?delete=x&amp;cid=' . $A['cid'] . '&amp;' . CSRF_TOKEN . '=' . SEC_createToken(), $attr);
+                    $retval = FieldList::delete(
+                        array(
+                            'delete_url' => $_CONF['site_admin_url'] . '/plugins/links/category.php'.'?delete=x&amp;cid='.$A['cid'].'&amp;'.CSRF_TOKEN.'='.SEC_createToken(),
+                            'attr' => array(
+                                'title'   => $LANG_ADMIN['delete'],
+                                'onclick' => "return confirm('" . $LANG_LINKS_ADMIN[64] . "');"
+                            ),
+                        )
+                    );
                 }
                 break;
 
@@ -1223,7 +1220,6 @@ function plugin_getListField_categories($fieldname, $fieldvalue, $A, $icon_arr)
                 break;
         }
     }
-
     return $retval;
 }
 
@@ -1462,6 +1458,24 @@ function plugin_getiteminfo_links($lid, $what, $uid = 0, $options = array())
     }
 
     return $retval;
+}
+
+function plugin_getContentTableInfo_links()
+{
+    global $_DB_table_prefix;
+
+    $contentItems = array(
+            $_DB_table_prefix.'links' => array(
+                'plugin' => 'links',
+                'primary_key' => 'lid',
+                'columns' => array(
+                    'description',
+                    'title'
+                )
+            )
+    );
+
+    return $contentItems;
 }
 
 

@@ -1,36 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | classAlbum.php                                                           |
-// |                                                                          |
-// | Album class                                                              |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Album Class
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 class mgAlbum {
     var $id;
@@ -238,6 +225,9 @@ class mgAlbum {
         $this->enable_rating    = $album['enable_rating'];
         $this->playback_type    = $album['playback_type'];
         $this->tn_attached      = $album['tn_attached'];
+        if ($album['enable_slideshow'] == 3 || $album['enable_slideshow'] == 4) {
+            $album['enable_slideshow'] = 1;
+        }
         $this->enable_slideshow = $album['enable_slideshow'];
         $this->enable_random    = $album['enable_random'];
         $this->enable_shutterfly = 0; //$album['enable_shutterfly'];
@@ -319,7 +309,7 @@ class mgAlbum {
             $aid = 1;
         }
         if ( $aid == 0 ) {
-            COM_errorLog("MediaGallery: Error - Returned 0 as album_id");
+            Log::write('system',Log::ERROR,'MediaGallery: Error - Returned 0 as album_id');
             $aid = 1;
         }
         return $aid;
@@ -945,13 +935,13 @@ class mgAlbum {
                 }
                 $album_last_update  = MG_getUserDateTimeFormat($this->last_update);
                 if ($mediasize == false ) {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                     $mediasize = array($this->tnWidth,$this->tnHeight);
                 }
             } else {
                 $filename = $this->findCover();
                 if ( $filename == '' || $filename == NULL || $filename == " ") {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                     $mediasize = array($this->tnWidth,$this->tnHeight);
                 } else {
                     $mediasize = false;
@@ -963,7 +953,7 @@ class mgAlbum {
                         }
                     }
                     if ($mediasize == false ) {
-                        $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                        $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                         $mediasize = array($this->tnWidth,$this->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
                     }
                 }
@@ -987,7 +977,7 @@ class mgAlbum {
         } else {  // nothing in the album yet...
             $filename = $this->findCover();
             if ( $filename == '' ) {
-                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                 $mediasize = array($this->tnWidth,$this->tnHeight);
             } else {
                 $mediasize = false;
@@ -999,7 +989,7 @@ class mgAlbum {
                     }
                 }
                 if ($mediasize == false ) {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                     $mediasize = array($this->tnWidth,$this->tnHeight); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
                 }
             }
@@ -1017,7 +1007,7 @@ class mgAlbum {
                 }
             }
             if ($mediasize == false ) {
-                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                 $mediasize = array($this->tnWidth,$this->tnHeight); //@getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
             }
         }

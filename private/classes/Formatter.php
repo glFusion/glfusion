@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2019 by the following authors:
+*  Copyright (C) 2017-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -599,6 +599,8 @@ class Formatter
         $url = '';
         $linktext = '';
         $target = '';
+        $embeddedImage = false;
+        $key = rand();
 
         if (!isset ($attributes['default'])) {
             if (stristr($content,'http')) {
@@ -610,10 +612,20 @@ class Formatter
             }
         } else if (stristr($attributes['default'],'http')) {
             $url = strip_tags($attributes['default']);
-    //        $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt());
+            foreach($node_object->_children AS $node) {
+                if (isset($node->_name) && $node->_name === 'img') {
+                    $content = str_replace('<img src=','##bbcodeprotector'.$key.'##',$content);
+                    $embeddedImage = true;
+                }
+            }
+//            $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt());
             $linktext = strip_tags($content);
+            if ($embeddedImage === true) {
+                $linktext = str_replace('##bbcodeprotector'.$key.'##','<img src=',$linktext);
+            }
         } else {
             $url = 'http://'.strip_tags($attributes['default']);
+//            $linktext = strip_tags($content);
             $linktext = @htmlspecialchars ($content,ENT_QUOTES,COM_getEncodingt(),true);
         }
 
@@ -663,6 +675,7 @@ class Formatter
                 return true;
             }
         }
+
         if (!in_array('img',$this->bbcodeBlackList)) {
             if (isset($attributes['h']) AND isset ($attributes['w'])) {
                 $dim = 'width=' . (int) $attributes['w'] . ' height=' . (int) $attributes['h'];

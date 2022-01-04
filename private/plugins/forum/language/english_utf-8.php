@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by:
@@ -1015,7 +1015,8 @@ $LANG_confignames['forum'] = array(
     'geshi_line_style' => 'GeSHi Line Number Style',
     'geshi_code_style' => 'GeSHi Code Block Style',
     'geshi_header_style' => 'GeSHi Header Block Style',
-
+    'exit_type' => 'Exit Type',
+    'likes_prf_limit' => 'Maximum number of Likes to show in profiles',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1038,7 +1039,8 @@ $LANG_configSelect['forum'] = array(
     3 => array('noblocks'=>'No Blocks', 'leftblocks'=>'Left Blocks', 'rightblocks'=>'Right Blocks', 'allblocks'=>'Right / Left Blocks'),
     4 => array('blockmenu'=>'Block Menu', 'navbar'=>'Nav Bar', 'none'=>'None'),
     5 => array('DESC'=>'Descending', 'ASC'=>'Ascending'),
-    6 => array(1=>'Checked', 0=>'Unchecked')
+    6 => array(1=>'Checked', 0=>'Unchecked'),
+    7 => array('login' => 'Login Page', '404' => 'Page Not Found')
 );
 
 ?>

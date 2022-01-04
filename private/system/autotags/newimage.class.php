@@ -2,7 +2,7 @@
 /**
  * @package    glFusion CMS
  *
- * @copyright   Copyright (C) 2014-2018 by the following authors
+ * @copyright   Copyright (C) 2014-2021 by the following authors
  *              Mark R. Evans          mark AT glfusion DOT org
  *
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -21,7 +21,7 @@ class autotag_newimage extends BaseAutotag {
         $this->description = $_AUTOTAGS['newimage']['description'];
     }
 
-    function parse($p1, $p2='', $fulltag)
+    function parse($p1, $p2='', $fulltag='')
     {
         global $_CONF, $_MG_CONF, $_TABLES, $_USER, $LANG_MG03, $_PLUGINS, $MG_albums, $_DB_dbms, $mg_installed_version;
 

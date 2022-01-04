@@ -1,0 +1,10 @@
+{# begin {templatelocation} #}
+<form name="change" action="{site_url}/switchlang.php" method="get">
+	<input type="hidden" name="oldlang" value="{langid}"/>
+    <select onchange="change.submit()" name="lang">
+<!-- BEGIN langOpts -->
+		<option value="{value}" {!if selected}selected="selected"{!endif}>{name}</option>
+<!-- END langOpts -->
+	</select>
+</form>
+{# end {templatelocation} #}

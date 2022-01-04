@@ -89,7 +89,7 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
               'text' => $LANG_ADMIN['admin_users']),
         array('url' => $_CONF['site_admin_url'] . '/group.php',
               'text' => $LANG_ADMIN['admin_groups']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
     $instructions = ($usermode) ? $LANG31[28] : $LANG31[19];
@@ -133,7 +133,7 @@ function MAIL_displayForm( $uid=0, $grp_id=0, $from='', $replyto='', $subject=''
         // build group options select, allow for possibility grp_id has been supplied
         $group_options = '';
 
-        $stmt = $db->conn->query("SELECT grp_id, grp_name FROM `{$_TABLES['groups']}` WHERE grp_name <> 'All Users'");
+        $stmt = $db->conn->query("SELECT grp_id, grp_name FROM `{$_TABLES['groups']}` WHERE grp_name <> 'Logged-in Users' AND grp_name <> 'Non-Logged-in Users'");
         while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
             $groups[$A['grp_id']] = ucwords ($A['grp_name']);
         }
@@ -250,31 +250,44 @@ function MAIL_sendMessages($vars)
     } else {
         $groupList = implode (',', USER_getChildGroups((int) COM_applyFilter($vars['to_group'],true)));
 
-
         $groupArray = USER_getChildGroups((int) COM_applyFilter($vars['to_group'],true));
 
         // and now mail it
         if (isset ($vars['overstyr'])) {
+            if ($vars['to_group'] == 2 || $vars['to_group'] == 13) {
+                $sql = "SELECT DISTINCT username, fullname, email
+                FROM `{$_TABLES['users']}` AS u
+                WHERE uid > 1 AND u.status = 3
+                  AND ((u.email is not null) AND (u.email != ''))";
+                $stmt = $db->conn->prepare($sql);
 
+            } else {
+                $sql = "SELECT DISTINCT username, fullname, email
+                FROM `{$_TABLES['users']}` AS u,`{$_TABLES['group_assignments']}` AS ga
+                WHERE uid > 1 AND u.status = 3
+                  AND ((u.email is not null) AND (u.email != ''))
+                  AND u.uid = ga.ug_uid
+                  AND ga.ug_main_grp_id IN (?)";
+                $stmt = $db->conn->prepare($sql);
+                $stmt->bindValue(1,$groupList,Database::PARAM_INT_ARRAY);
+            }
 
-            $sql = "SELECT DISTINCT username, fullname, email
-                    FROM `{$_TABLES['users']}` AS u,`{$_TABLES['group_assignments']}` AS ga
-                    WHERE uid > 1 AND u.status = 3
-                      AND ((u.email is not null) AND (u.email != ''))
-                      AND u.uid = ga.ug_uid
-                      AND ga.ug_main_grp_id IN (?)";
-
-            $stmt = $db->conn->prepare($sql);
-            $stmt->bindValue(1,$groupList,Database::PARAM_INT_ARRAY);
         } else {
+            if ($vars['to_group'] == 2 || $vars['to_group'] == 13) {
+                $sql = "SELECT DISTINCT username, fullname, email, emailfromadmin
+                    FROM `{$_TABLES['users']}` AS u,`{$_TABLES['userprefs']}` AS up
+                    WHERE u.uid > 1 AND u.status = 3 AND ((u.email is not null) and (u.email != ''))";
+                $stmt = $db->conn->prepare($sql);
 
-            $sql = "SELECT DISTINCT username, fullname, email, emailfromadmin
-                    FROM `{$_TABLES['users']}` AS u,`{$_TABLES['userprefs']}` AS up,`{$_TABLES['group_assignments']}` AS ga
-                    WHERE u.uid > 1 AND u.status = 3 AND ((u.email is not null) and (u.email != ''))
-                      AND u.uid = up.uid AND up.emailfromadmin = 1
-                      AND ug_uid = u.uid AND ga.ug_main_grp_id IN (?)";
-            $stmt = $db->conn->prepare($sql);
-            $stmt->bindValue(1,$groupList,Database::PARAM_INT_ARRAY);
+            } else {
+                $sql = "SELECT DISTINCT username, fullname, email, emailfromadmin
+                        FROM `{$_TABLES['users']}` AS u,`{$_TABLES['userprefs']}` AS up,`{$_TABLES['group_assignments']}` AS ga
+                        WHERE u.uid > 1 AND u.status = 3 AND ((u.email is not null) and (u.email != ''))
+                        AND u.uid = up.uid AND up.emailfromadmin = 1
+                        AND ug_uid = u.uid AND ga.ug_main_grp_id IN (?)";
+                $stmt = $db->conn->prepare($sql);
+                $stmt->bindValue(1,$groupList,Database::PARAM_INT_ARRAY);
+            }
         }
 
         $stmt->execute();

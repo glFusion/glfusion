@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -24,6 +24,7 @@ require_once 'auth.inc.php';
 
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 if (!SEC_hasRights('topic.edit')) {
     Log::logAccessViolation('Topic Administration');
@@ -53,7 +54,7 @@ function TOPIC_menu($action = '', $title = '')
               'text' => $LANG_ADMIN['topic_list'],'active'=> ($action == '' || $action == 'list') ? true : false ),
         array('url' => $_CONF['site_admin_url'] . '/topic.php?edit=x',
               'text' => $lang_create_or_edit,'active'=> ($action == 'edit') ? true : false),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -78,7 +79,7 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $extra)
 {
     global $_CONF, $LANG_ADMIN, $LANG27, $_IMAGE_TYPE;
 
-    $retval = false;
+    $retval = '';
     $token = $extra['token'];
     $topic_count = $extra['topic_count'];
 
@@ -90,9 +91,12 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $extra)
             case 'edit':
                 $retval = '';
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['edit'];
-                    $retval .= COM_createLink($icon_arr['edit'],
-                        $_CONF['site_admin_url'] . '/topic.php?edit=x&amp;tid=' . $A['tid'], $attr);
+                    $retval .= FieldList::edit(array(
+                        'url' => $_CONF['site_admin_url'] . '/topic.php?edit=x&amp;tid=' . $A['tid'],
+                        'attr' => array(
+                            'title' => $LANG_ADMIN['edit']
+                        )
+                    ));
                 }
                 break;
 
@@ -122,21 +126,13 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $extra)
 
             case 'sortnum':
                 if ($fieldvalue > 10) {
-                    $retval .= COM_createLink(
-                        '<img src="' . $_CONF['layout_url'] .
-                        '/images/up.png" height="16" width="16" border="0" />',
-                        $_CONF['site_admin_url'] . '/topic.php?move=up&tid=' . $A['tid']
-                    );
+                    $retval .= FieldList::up(array('url'=>$_CONF['site_admin_url'] . '/topic.php?move=up&tid=' . $A['tid']));
                 } else {
                     $retval .= '<img src="' . $_CONF['layout_url'] .
                         '/images/blank.gif" height="16" width="16" border="0" />';
                 }
                 if ($fieldvalue < $topic_count) {
-                    $retval .= COM_createLink(
-                        '<img src="' . $_CONF['layout_url'] .
-                            '/images/down.png" height="16" width="16" border="0" />',
-                        $_CONF['site_admin_url'] . '/topic.php?move=down&tid=' . $A['tid']
-                        );
+                    $retval .= FieldList::down(array('url'=>$_CONF['site_admin_url'] . '/topic.php?move=down&tid=' . $A['tid']));
                 } else {
                     $retval .= '<img src="' . $_CONF['layout_url'] .
                         '/images/blank.gif" height="16" width="16" border="0" />';
@@ -145,7 +141,9 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $extra)
 
             case 'is_default':
             case 'archive_flag':
-                $retval = ($fieldvalue != 0) ? $icon_arr['check'] : '';
+                if (intval($fieldvalue) != 0) {
+                    $retval = FieldList::checkmark(array('active'=>true));
+                }
                 break;
 
             case 'move':
@@ -172,11 +170,13 @@ function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $extra)
             case 'delete':
                 $retval = '';
                 if ($access == 3) {
-                    $attr['title'] = $LANG_ADMIN['delete'];
-                    $attr['onclick'] = 'return doubleconfirm(\'' . $LANG27[40] . '\',\'' . $LANG27[6] . ' ' . $LANG27[56] . '\');';
-                    $retval .= COM_createLink($icon_arr['delete'],
-                        $_CONF['site_admin_url'] . '/topic.php'
-                        . '?delete=x&amp;tid=' . $A['tid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                    $retval .= FieldList::delete(array(
+                        'delete_url' => $_CONF['site_admin_url'] . '/topic.php'.'?delete=x&amp;tid='.$A['tid'].'&amp;'.CSRF_TOKEN.'='.$token,
+                        'attr' => array(
+                            'title' => $LANG_ADMIN['delete'],
+                            'onclick' => 'return doubleconfirm(\'' . $LANG27[40] . '\',\'' . $LANG27[6] . ' ' . $LANG27[56] . '\');',
+                        )
+                    ));
                 }
                 break;
 

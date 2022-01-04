@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
 <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin-bottom">
-	<input type="radio" name="cover" value="-2"><label class="uk-form-label">{lang_reset_cover}</label>
+	<input type="radio" name="cover" value="-2">&nbsp;&nbsp;<label class="uk-form-label">{lang_reset_cover}</label>
 </div>
 
 <!-- BEGIN ImageRow -->

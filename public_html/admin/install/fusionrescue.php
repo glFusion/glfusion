@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -16,17 +16,18 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 define('GVERSION','2.0.0');
 
-if ( !file_exists('../../siteconfig.php')) die('Unable to locate siteconfig.php');
+if ( !file_exists('../../data/siteconfig.php')) die('Unable to locate siteconfig.php');
 
-require_once '../../siteconfig.php';
+require_once '../../data/siteconfig.php';
 
 $_SYSTEM['no_fail_sql'] = true;
 
-if ( !file_exists($_CONF['path'].'db-config.php')) die('Unable to located db-config.php');
+if ( !file_exists($_CONF['path'].'data/db-config.php')) die('Unable to located db-config.php');
 
 use \glFusion\Database\Database;
+use \glFusion\Cache\Cache;
 
-require_once $_CONF['path'].'db-config.php';
+require_once $_CONF['path'].'data/db-config.php';
 $dbpass = $_DB_pass;
 
 require_once $_CONF['path'] . 'classes/Autoload.php';
@@ -39,7 +40,7 @@ require_once $_CONF['path'].'system/db-init.php';
 
 $self = basename(__FILE__);
 
-$rescueFields = array('path_html','site_url','site_admin_url','rdf_file','cache_templates','path_log','path_language','backup_path','path_data','rdf_file','path_images','have_pear','path_pear','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter','maintenance_mode','bb2_enabled','cache_driver','enable_twofactor');
+$rescueFields = array('path_html','site_url','site_admin_url','cache_templates','path_rss','path_log','path_language','backup_path','path_data','rdf_file','path_images','theme','path_themes','allow_user_themes','language','cookie_path','cookiedomain','cookiesecure','user_login_method','path_to_mogrify','path_to_netpbm','custom_registration','rootdebug','debug_oauth','debug_html_filter','maintenance_mode','bb2_enabled','cache_driver','enable_twofactor');
 
 /* Constants for account stats */
 define('USER_ACCOUNT_DISABLED', 0); // Account is banned/disabled
@@ -53,14 +54,17 @@ define('LOCAL_USER',1);
 define('REMOTE_USER',2);
 
 function FR_stripslashes( $text ) {
-    if( get_magic_quotes_gpc() == 1 ) {
-        return( stripslashes( $text ));
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+        if( get_magic_quotes_gpc() == 1 ) {
+            return( stripslashes( $text ));
+        }
     }
     return( $text );
 }
 
 function rescue_path_html_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -75,6 +79,7 @@ function rescue_path_html_validate( $value ) {
 
 function rescue_path_log_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -89,6 +94,7 @@ function rescue_path_log_validate( $value ) {
 
 function rescue_path_language_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -103,6 +109,7 @@ function rescue_path_language_validate( $value ) {
 
 function rescue_backup_path_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -117,6 +124,7 @@ function rescue_backup_path_validate( $value ) {
 
 function rescue_path_data_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -131,6 +139,7 @@ function rescue_path_data_validate( $value ) {
 
 function rescue_path_images_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -143,8 +152,9 @@ function rescue_path_images_validate( $value ) {
 *
 */
 
-function rescue_path_pear_validate( $value ) {
+function rescue_path_rss( $value ) {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -160,6 +170,7 @@ function rescue_path_pear_validate( $value ) {
 
 function rescue_path_themes_validate( $value ) {
     $value = trim($value);
+    if (empty($value)) return $value;
     if ( $value[strlen($value)-1] != '/' ) {
         return $value . '/';
     }
@@ -558,7 +569,7 @@ function repairDatabase() {
             }
             try {
                 $stmt = $db->conn->executeQuery("REPAIR TABLE `{$table}`");
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 $retval[] = "Repair failed for " . $table;
             }
         }
@@ -699,19 +710,40 @@ function getNewPaths( $group = 'Core') {
                 </div>
             ';
         } elseif ( $configDetail[$option]['type'] == '@select' ) {
-            $retval .= '
-                <div class="uk-form-row">
-                <label class="uk-form-label">'.$option.'</label>
-                <div class="uk-form-controls">
-                &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
-                <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+            if ($option !== 'user_login_method') {
+                $unserializedValue = @unserialize($value);
+                if (!is_array($unserializedValue)) {
+                    $retval .= '
+                        <div class="uk-form-row">
+                        <label class="uk-form-label">'.$option.'</label>
+                        <div class="uk-form-controls">
+                        &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                        <input class="uk-form-width-large" type="hidden" name="cfgvalue[' . $option . ']" value="' . @unserialize($value) . '" />
+                    ';
+                    $retval .= '
+                        </select>
+                        </div>
+                        </div>
+                    ';
+                }
+            } else {
+                $ua_array = unserialize($value);
 
-            ';
-            $retval .= '
-                </select>
-                </div>
-                </div>
-            ';
+                foreach($ua_array AS $op => $val) {
+                    $retval .= '
+                        <div class="uk-form-row">
+                        <label class="uk-form-label">'.$option.'['.$op.']</label>
+                        <div class="uk-form-controls">
+                        &nbsp;&nbsp;<input type="checkbox" name="default[' . $option . ']" value="1" />&nbsp;&nbsp;
+                        <select name="cfgvalue[' . $option . ']['.$op.']">
+                        <option ' . ( $val == 0 ? ' selected="selected"' : '') . ' value="0">False</option>
+                        <option ' . ( $val == 1 ? ' selected="selected"' : '') . ' value="1">True</option>
+                        </select>
+                        </div>
+                        </div>
+                    ';
+                }
+            }
 
         }  else {
             $item = @unserialize($value);
@@ -787,7 +819,7 @@ function saveNewPaths( $group='Core' ) {
                     SET value=? WHERE name=? AND group_name=?";
             try {
                 $stmt = $db->conn->executeUpdate($sql,array($default[$option],$option,$group));
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 $retval[] = 'Error Resetting ' . $option;
                 $stmt = false;
             }
@@ -813,7 +845,41 @@ function saveNewPaths( $group='Core' ) {
                                     $group
                                 )
                     );
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
+                    $retval[] = 'Error saving ' . $option;
+                    $stmt = false;
+                }
+                if ($stmt !== false) {
+                    $retval[] = 'Saving ' . $option;
+                    $changed++;
+                }
+            } else if ($option == 'user_login_method') {
+                $methods = array('standard', '3rdparty', 'oauth');
+                $methods_disabled = 0;
+                foreach ($methods as $m) {
+                    if (isset($value[$m]) && $value[$m] == 0) {
+                        $methods_disabled++;
+                        $value[$m] = (int) 0;
+                    } else {
+                        $value[$m] = (int) 1;
+                    }
+                }
+                if ($methods_disabled == count($methods)) {
+                    // just to make sure people don't lock themselves out of their site
+                    $value['standard'] = true;
+                }
+                $sql = "UPDATE `" . $_DB_table_prefix . "conf_values`
+                        SET value=? WHERE name=? AND group_name=?";
+                try {
+                    $stmt = $db->conn->executeUpdate(
+                                $sql,
+                                array(
+                                    serialize($value),
+                                    $option,
+                                    $group
+                                )
+                    );
+                } catch(Throwable $e) {
                     $retval[] = 'Error saving ' . $option;
                     $stmt = false;
                 }
@@ -829,8 +895,10 @@ function saveNewPaths( $group='Core' ) {
     } else {
         @unlink($cfgvalue['path_data'] .'$$$config$$$.cache');
         @unlink($config['path_data'] .'$$$config$$$.cache');
-        @unlink($cfgvalue['path_data'] .'layout_cache/$$$config$$$.cache');
-        @unlink($config['path_data'] .'layout_cache/$$$config$$$.cache');
+        @unlink($cfgvalue['path_data'] .'cache/$$$config$$$.cache');
+        @unlink($config['path_data'] .'cache/$$$config$$$.cache');
+        $c = Cache::getInstance();
+        $c->clear();
     }
 
     return $retval;

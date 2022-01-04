@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Link bezpośredni',
     129 => 'Konfiguracja',
     130 => 'Webservices',			// depreciated
+    131 => 'Features',
     500 => 'Prosimy o usuniecie katalogu admin / install / po zainstalowaniu lub aktualizacji witryny!',
     501 => 'Root Debug jest włączony',
     502 => 'Brak błędu SQL jest włączony',
@@ -398,7 +399,7 @@ $LANG04 = array(
     159 => 'Ten e-mail został wygenerowany automatycznie. Prosimy nie odpowiadać na ten e-mail.',
     160 => 'Dostępny',
     161 => 'Siła hasła',
-    162 => 'Nazwa użytkownika musi mieć co najmniej  znaków, nie może zawierać nieprawidłowych znaków ( < > " % & * / \ )lub znaki emoji',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
     163 => 'Użytkownik zdalny',
     164 => 'Zdalna nazwa użytkownika',
     165 => 'Usługa zdalna',
@@ -1463,6 +1464,8 @@ $MESSAGE = array(
     116 => "Pliki wtyczki i powiązane katalogi zostały pomyślnie usunięte.",
     117 => "Zdalne konto zostało odłączone od twojego konta lokalnego.",
     118 => 'Odłączenie zdalnego konta nie powiodło się - bieżące hasło nie zostało wprowadzone lub nie pasowało.',
+    119 => 'The feature was successfully saved.',
+    120 => 'There was an error saving the feature.',
     200 => 'Niestety, nie masz dostępu do tej strony. Pamiętaj, że wszystkie próby uzyskania dostępu do nieautoryzowanych funkcji są rejestrowane.',
     500 => 'Pamięć szablonów cache została pomyślnie wyczyszczona',
     501 => 'Token bezpieczeństwa jest nieważny - możliwe przekroczenie limitu czasu sesji.',
@@ -1576,6 +1579,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'Token bezpieczeństwa wygasł. Sprawdź swoją sesję poniżej.',
     'token_expired_footer' => 'Token bezpieczeństwa dla tej operacji wygasł. Ponownie sprawdź poprawność',
     'validation_failed' => 'Sprawdzanie poprawności nie powiodło się - proszę spróbować ponownie.',
+    'feature_id' => 'Feature ID',
+    'feature_name' => 'Feature Name',
+    'avail_groups' => 'Available Groups',
+    'incl_groups' => 'Included Groups',
 );
 
 ###############################################################################
@@ -1653,6 +1660,31 @@ $LANG_DB_ADMIN = array(
     'overall_progress'    => 'Ogólny postęp',
     'no_backups_found'    => 'Nie znaleziono plików kopii zapasowych',
     'error_msg'           => 'Wystąpiły poniższe błędy',
+    'missing_required'    => 'Please Fill Out All Required Fields',
+    'time'                => 'Czas',
+    'table'               => 'Table',
+    'changes_found'       => 'Changes Found',
+    'rows_updated'        => 'Rows Updated',
+    'sr_title'            => 'Search and Replace',
+    'search_for'          => 'Szukaj w',
+    'replace_with'        => 'Replace With',
+    'tables_to_search'    => 'Tables to search',
+    'search'              => 'Szukaj',
+    'remove'              => 'Usunąć',
+    'case'                => 'Case-Insensitive',
+    'dry_run'             => 'Dry Run',
+    'available_tables'    => 'Available Tables',
+    'execute'             => 'Execute',
+    'sr_warning_banner'   => 'Ensure you have a recent backup of your database!  The Search / Replace feature does not have an undo option, so be careful to ensure the changes you make are correct.',
+    'dry_run_complete'    => 'Review the Dry Run results above. Validate the replacements are correct. If you are satisfied with the results, you can execute the Search and Replace by selecting the Execute button below.',
+    'sr_parameters'       => 'Search and Replace Parameters',
+    'sr_warning_1'        => 'Are you sure you want to perform the search / replace?',
+    'sr_warning_2'        => 'You do have a good backup, right?',
+    'edit'                => 'Edycja',
+    'cancel'              => 'Anuluj',
+    'seconds'             => 'sekundy',
+    'plugin_table_column' => 'Plugin :: Table -> Column',
+
 );
 
 ###############################################################################
@@ -1954,6 +1986,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Twoja sesja niedługo wygaśnie. Wybierz ok, aby odświeżyć sesję.',
     'reset' => 'Resetuj',
     'remaining_chars' => 'Pozostało znaków ',
+    'feature_admin' => 'Feature Administration',
+    'feature_editor' => 'Feature Editor',
+    'feature_list' => 'Feature List',
+    'core_only' => 'Show Only Core Features',
+    'assigned_groups' => 'Assigned Groups',
 );
 
 ###############################################################################
@@ -2697,7 +2734,8 @@ $LANG_confignames['Core'] = array(
     'show_right_blocks' => 'Pokaz bloki',
     'showfirstasfeatured' => 'Wyróżnij artykuł',
     'backend' => 'Włącz Feeds',
-    'rdf_file' => 'Syndication folder',
+    'rdf_file' => 'Main RSS File',
+    'path_rss' => 'Path to store RSS feeds',
     'rdf_limit' => 'Feed Limit',
     'rdf_storytext' => 'Długość artykułów w Feed',
     'rdf_language' => 'Język kanału',
@@ -2731,6 +2769,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Przesyłanie komentarzy do kolejki',
     'passwordspeedlimit' => 'Limit',
     'login_attempts' => 'Ilość prób logowania',
+    'login_landing' => 'Strona docelowa logowania',
     'login_speedlimit' => 'Ograniczenie czasu logowania',
     'user_html' => 'HTML użytkownika',
     'admin_html' => 'Admin HTML',
@@ -2860,6 +2899,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'Artykuły',
     'log_level' => 'Log Level',
     'enable_admin_actions' => 'Enable Admin Logging',
+    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2873,6 +2913,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Inne',
     'sg_spam' => 'Ochrona przed spamem / botami',
     'sg_cache' => 'Caching',
+    'sg_advanced' => 'Zaawansowane ustawienia',
 );
 
 $LANG_fs['Core'] = array(

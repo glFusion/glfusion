@@ -1,100 +1,87 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | viewcat.php                                                              |
-// |                                                                          |
-// | Displays downloads in a specific category                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008 by the following authors:                             |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// |                                                                          |
-// | Based on:                                                                |
-// | myPHPNUKE Web Portal System - http://myphpnuke.com/                      |
-// | PHP-NUKE Web Portal System - http://phpnuke.org/                         |
-// | Thatware - http://thatware.org/                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - FileMgmt Plugin
+*
+* Displays downloads in a specific category
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Lee Garner      lee AT leegarner DOT com
+*
+*  Based on prior work Copyright (C) 2004 by Consult4Hire Inc.
+*  Author:
+*  Blaine Lang          blaine AT portalparts DOT com
+*
+*  Based on:
+*    myPHPNUKE Web Portal System - http://myphpnuke.com/
+*    PHP-NUKE Web Portal System - http://phpnuke.org/
+*    Thatware - http://thatware.org/
+*/
 
 require_once '../lib-common.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/xoopstree.php';
-include_once $_CONF['path'].'plugins/filemgmt/include/textsanitizer.php';
+use \glFusion\Database\Database;
 
-$_GROUPS = SEC_getUserGroups( $uid );       // List of groups user is a member of
+$display = '';
 $numCategoriesPerRow  = 6;
 
-$myts = new MyTextSanitizer;
-$mytree = new XoopsTree('',$_TABLES['filemgmt_cat'],'cid','pid');
+$myts = new Filemgmt\MyTextSanitizer;
+$mytree = new Filemgmt\XoopsTree('',$_TABLES['filemgmt_cat'],'cid','pid');
 $mytree->setGroupAccessFilter($_GROUPS);
+$db = Database::getInstance();
 
-$page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
+$page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 1;
+if ($page < 1) {
+    $page = 1;
+}
 $cid  = isset($_GET['cid']) ? COM_applyFilter($_GET['cid'],true) : 0;
-$orderby  = isset($_GET['orderby']) ? @html_entity_decode(COM_applyFilter($_GET['orderby'],false)) : '';
+$orderby  = isset($_GET['orderby']) ? @html_entity_decode(COM_applyFilter($_GET['orderby'],false)) : 'date';
+if (!in_array($orderby, array('date', 'title', 'hits', 'rating'))) {
+    $orderby = 'date';
+}
+if (isset($_GET['dir'])) {
+    $sortdir = trim(rtrim($_GET['dir'])) == 'asc' ? ' asc' : ' desc';
+} else {
+    $sortdir = 'desc';
+}
 
-$groupsql = filemgmt_buildAccessSql();
-$sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE cid='".intval($cid)."' $groupsql";
-list($category_rows) = DB_fetchArray( DB_query($sql));
-if ($cid == 0 OR $category_rows == 0) {
-    echo COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
+$groupsql = SEC_buildAccessSql();
+try {
+    $category_rows = $db->conn->fetchColumn("SELECT COUNT(*) AS num_rows FROM {$_TABLES['filemgmt_cat']} WHERE cid = $cid $groupsql");
+} catch(Throwable $e) {
+    if (defined('DVLP_DEBUG')) {
+        throw($e);
+    }
+    exit;
+}
+if ($cid == 0 || $category_rows == 0) {
+    echo COM_refresh($_FM_CONF['url'] . '/index.php');
     exit;
 }
 
-$FM_ratedIds = array();
-$FM_ratedIds = RATING_getRatedIds('filemgmt');
-
-
-$display = FM_siteHeader($LANG_FILEMGMT['usermenu1']);
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
-    'records'          =>     'filelisting_record.thtml',
+    //'records'          =>     'filelisting_record.thtml',
     'category'         =>     'filelisting_subcategory.thtml',
     'sortmenu'         =>     'sortmenu.thtml'));
 
-$p->set_var ('tablewidth', $mydownloads_shotwidth+10);
+$p->set_var ('tablewidth', $_FM_CONF['shotwidth'] + 10);
 $p->set_var('block_header', COM_startBlock(_MD_CATEGORYTITLE));
 $p->set_var('block_footer', COM_endBlock());
+$p->set_var('viewcat',true);
 
 $trimDescription=true;    // Set to false if you do not want to auto trim the description and insert the <more..> link
 
-if (!isset($page) || $page == 0) {
-    // If no page sent then assume the first.
-    $page = 1;
-}
-$show = $mydownloads_perpage;
+$show = (int)$_FM_CONF['perpage'];
 $offset = ($page - 1) * $show;
 
-if(isset($orderby) && $orderby != "") {
-    $orderby = convertorderbyin($orderby);
-} else {
-    $orderby = "date DESC";
-}
-
-$pathstring = "<a href='index.php'>"._MD_MAIN."</a>&nbsp;:&nbsp;";
-$nicepath = $mytree->getNicePathFromId($cid, "title", "{$_CONF['site_url']}/filemgmt/viewcat.php");
+$pathstring = "<li><a href='{$_FM_CONF['url']}/index.php'>"._MD_MAIN."</a></li>";
+$nicepath = $mytree->getNicePathFromId($cid, "title", "{$_FM_CONF['url']}/viewcat.php");
 $pathstring .= $nicepath;
+
 $p->set_var('category_path_link',$pathstring);
 $p->set_var('cid',$cid);
 
@@ -109,8 +96,8 @@ foreach($arr as $ele) {
     $totalfiles = 0;
     //debugbreak();
     $chtitle=$myts->makeTboxData4Show($ele['title']);
-    $totalfiles = $totalfiles + getTotalItems($ele['cid'], 1);
-    $subcategories = '<a href="' .$_CONF['site_url'] .'/filemgmt/viewcat.php?cid=' .$ele['cid'] .'">' .$chtitle .'</a>&nbsp;('.$totalfiles.')&nbsp;&nbsp;';
+    $totalfiles = $totalfiles + Filemgmt\Download::getTotalByCategory($ele['cid'], 1);
+    $subcategories = '<a href="' .$_FM_CONF['url'] .'/viewcat.php?cid=' .$ele['cid'] .'">' .$chtitle .'</a>&nbsp;('.$totalfiles.')&nbsp;&nbsp;';
     $p->set_var('subcategories',$subcategories);
     if ($count == $numCategoriesPerRow) {
         $p->set_var('end_of_row','</tr>');
@@ -131,36 +118,117 @@ if ( $eor == 0 ) {
     $p->set_var('final_end_row','</tr>');
 }
 
-// Get a list of subcategories for this category
-$query = DB_query("SELECT cid from  {$_TABLES['filemgmt_cat']} where pid='".intval($cid)."'");
-$categories = $cid;
-while( list($category) = DB_fetchArray($query)) {
-    $categories = $categories . ",$category";
-}
-$sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} a ";
-$sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
-//$sql .= "WHERE a.cid in ($categories) AND status > 0 $groupsql";
-$sql .= "WHERE a.cid=".intval($cid)." AND status > 0 $groupsql";
-list($maxrows) = DB_fetchArray(DB_query($sql));
-$numpages = ceil($maxrows / $show);
-
+// removing the query for subcategories since if no category is passed, it redirects to index.php
 /*
-$sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_filedetail']} a ";
-$sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid ";
-$sql .= "WHERE a.cid = $cid AND status > 0 $groupsql";
-list($maxrows) = DB_fetchArray(DB_query($sql));
-$numpages = ceil($maxrows / $show);
+// Get a list of subcategories for this category
+try {
+    $stmt = $db->conn->prepare("SELECT cid FROM {$_TABLES['filemgmt_cat']} WHERE pid = ?");
+    $stmt->bindParam(1, $cid, Database::INTEGER);
+    $stmt->execute();
+} catch(Throwable $e) {
+    if (defined('DVLP_DEBUG')) {
+        throw($e);
+    }
+    exit;
+}
+if ($stmt) {
+    $results = $stmt->fetchAll(Database::ASSOCIATIVE);
+}
+$categories = $cid;
+//foreach ($results as $A) {
+//    $categories .= ",{$A['cid']}";
+//}
 */
+$categories = $cid;
+try {
+    $stmt = $db->conn->prepare(
+        "SELECT COUNT(*) as num_rows FROM {$_TABLES['filemgmt_filedetail']} a
+        LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid
+        WHERE a.cid IN ($categories) AND status > 0 $groupsql"
+    );
+    $stmt->execute();
+    $maxrows = $stmt->fetchColumn();
+} catch(Throwable $e) {
+    if (defined('DVLP_DEBUG')) {
+        throw($e);
+    }
+    exit;
+}
+$numpages = ceil($maxrows / $show);
 
 if($maxrows > 0) {
-    $sql  = "SELECT a.lid, a.cid, a.title, a.url, a.homepage, a.version, a.size, a.submitter, a.logourl, a.status, a.date, a.hits, a.rating, a.votes, a.comments, b.description ";
-    $sql .= "FROM {$_TABLES['filemgmt_filedetail']} a ";
-    $sql .= "LEFT JOIN  {$_TABLES['filemgmt_filedesc']} b on a.lid=b.lid ";
-    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} c ON a.cid=c.cid ";
-    $sql .= "WHERE a.cid='".intval($cid)."' AND a.status > 0 $groupsql ORDER BY {$orderby} LIMIT $offset, $show";
-    $result = DB_query($sql);
+    try {
+        $stmt = $db->conn->prepare(
+            "SELECT a.*, b.description
+                FROM {$_TABLES['filemgmt_filedetail']} a
+                LEFT JOIN  {$_TABLES['filemgmt_filedesc']} b on a.lid=b.lid
+                LEFT JOIN {$_TABLES['filemgmt_cat']} c ON a.cid=c.cid
+                WHERE a.cid IN ($categories)
+                AND a.status > 0 $groupsql
+                ORDER BY a.$orderby $sortdir
+                LIMIT :offset, :show"
+        );
+        $stmt->bindParam('offset', $offset, Database::INTEGER);
+        $stmt->bindParam('show', $show, Database::INTEGER);
+        $stmt->execute();
+        $records = $stmt->fetchAll(Database::ASSOCIATIVE);
+    } catch(Throwable $e) {
+        if (defined('DVLP_DEBUG')) {
+            throw($e);
+        }
+        exit;
+    }
 
-    $numrows = DB_numROWS($result);
+    $p->unset_var('sortByPop');
+    $p->unset_var('sortByTitle');
+    $p->unset_var('sortByDate');
+    $p->unset_var('sortByRating');
+    $p->unset_var('sortbyasc');
+    $p->unset_var('sortbydesc');
+    $p->unset_var('newdir');
+    $p->unset_var('orderbyTrans');
+
+    $sortdir = trim(rtrim($sortdir));
+
+    switch ($orderby) {
+    case 'hits':
+        $orderbyTrans = $sortdir == 'asc' ? _MD_POPULARITYLTOM : _MD_POPULARITYMTOL;
+        $p->set_var('sortByPop',true);
+        break;
+    case 'title':
+        $orderbyTrans = $sortdir == 'asc' ? _MD_TITLEATOZ : _MD_TITLEZTOA;
+        $p->set_var('sortByTitle','title');
+        break;
+    case 'date':
+        $orderbyTrans = $sortdir == 'asc' ? _MD_DATEOLD : _MD_DATENEW;
+        $p->set_var('sortByDate','date');
+        break;
+    case 'rating':
+        $orderbyTrans = $sortdir == 'asc' ? _MD_RATINGLTOH : _MD_RATINGHTOL;
+        $p->set_var('sortByRating',true);
+        break;
+    default:
+        $orderbyTrans = _MD_TITLEATOZ;
+        $p->set_var('sortByTitle','title');
+        break;
+    }
+    switch(trim(rtrim($sortdir))) {
+        case 'asc' :
+            $p->set_var('sortbyasc','asc');
+            $p->unset_var('sortbydesc');
+            $p->set_var('newdir','desc');
+            break;
+        case 'desc' :
+            $p->set_var('sortbydesc','desc');
+            $p->unset_var('sortbyasc');
+            $p->set_var('newdir','asc');
+            break;
+        default :
+            $p->set_var('sortbydesc','desc');
+            $p->unset_var('sortbyasc');
+            $p->set_var('newdir','asc');
+            break;
+    }
 
     //if 2 or more items in result, show the sort menu
     if($maxrows > 1){
@@ -170,43 +238,28 @@ if($maxrows > 0) {
         $p->set_var('LANG_RATING',_MD_RATING);
         $p->set_var('LANG_POPULARITY',_MD_POPULARITY);
         $p->set_var('LANG_CURSORTBY',_MD_CURSORTBY);
-        $p->set_var('orderbyTrans',$orderbyTrans = convertorderbytrans($orderby));
-        $p->parse ('sort_menu', 'sortmenu');
+        $p->set_var('orderbyTrans',$orderbyTrans);
+
+        $p->parse('sort_menu', 'sortmenu');
     }
+
     $cssid = 1;
-    for ($x = 1; $x <= $numrows; $x++) {
-        list($lid, $cid, $dtitle, $url, $homepage, $version, $size, $submitter, $logourl, $status, $time, $hits, $rating, $votes, $comments, $description) = DB_fetchArray($result);
-        $rating = number_format($rating, 2);
-        $dtitle = $myts->makeTboxData4Show($dtitle);
-        $url = $myts->makeTboxData4Show($url);
-        $homepage = $myts->makeTboxData4Show($homepage);
-        $version = $myts->makeTboxData4Show($version);
-        $size = $myts->makeTboxData4Show($size);
-        $logourl = $myts->makeTboxData4Show($logourl);
-        $datetime = formatTimestamp($time);
-        $description = PLG_replaceTags($myts->makeTareaData4Show($description,0)); //no html
-        $result2 = DB_query("SELECT username,fullname,photo  FROM {$_TABLES['users']} WHERE uid = $submitter");
-        list ($submitter_name,$submitter_fullname,$photo) = DB_fetchARRAY($result2);
-        $submitter_name = COM_getDisplayName ($submitter, $submitter_name, $submitter_fullname);
-        include $_CONF['path'] .'plugins/filemgmt/include/dlformat.php';
-        $p->set_var('cssid',$cssid);
-        $p->parse ('filelisting_records', 'records',true);
-        $cssid = ($cssid == 2) ? 1 : 2;
-
-        // Print Google-like paging navigation
-        $base_url = $_CONF['site_url'] . '/filemgmt/viewcat.php?cid='.$cid.'&amp;orderby='.convertorderbyout($orderby);
-        $p->set_var('page_navigation', COM_printPageNavigation($base_url,$page, $numpages));
+    $p->set_block('page', 'fileRecords', 'fRecord');
+    foreach ($records as $A) {
+        $D = new Filemgmt\Download($A);
+        $p->set_var('filelisting_record', $D->showListingRecord());
+        $p->parse('fRecord', 'fileRecords', true);
     }
 
-    $p->parse ('output', 'page');
-    $display .= $p->finish ($p->get_var('output'));
+    $base_url = $_FM_CONF['url'] . "/viewcat.php?cid=".$cid."&amp;orderby=".$orderby."&amp;dir=".trim(rtrim($sortdir));
+    $p->set_var('page_navigation', COM_printPageNavigation($base_url,$page, $numpages));
 }  else {
-    $p->set_var('filelisting_records','<tr><td><div class="pluginAlert" style="width:500px;padding:10px;margin:10px;border:1px dashed #CCC;">'._MD_NOFILES.'</div></td></tr>');
-    $p->parse ('output', 'page');
-    $display .= $p->finish ($p->get_var('output'));
+    $p->set_var('no_files', true);
+    $p->set_var('lang_nofiles', _MD_NOFILES);
 }
+$p->parse ('output', 'page');
+$display .= $p->finish ($p->get_var('output'));
 
-$display .= FM_siteFooter();
+echo Filemgmt\Menu::siteHeader($LANG_FILEMGMT['usermenu1']);
 echo $display;
-
-?>
+echo Filemgmt\Menu::siteFooter();

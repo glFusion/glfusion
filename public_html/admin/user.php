@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -30,6 +30,7 @@ use \glFusion\Cache\Cache;
 use \glFusion\Social\Social;
 use \glFusion\Admin\AdminAction;
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 USES_lib_user();
 USES_lib_admin();
@@ -269,7 +270,7 @@ function USER_edit($uid = '', $msg = '')
               'text' => $LANG28[54]),
         array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
               'text' => $LANG28[95]),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -296,10 +297,7 @@ function USER_edit($uid = '', $msg = '')
     }
 
     if (!empty($uid) && ($uid != $_USER['uid']) && SEC_hasRights('user.delete')) {
-        $delbutton = '<input type="submit" value="' . $LANG_ADMIN['delete'] . '" name="delete"%s />';
-        $jsconfirm = ' onclick="return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');"';
-        $userform->set_var('delete_option',sprintf ($delbutton, $jsconfirm));
-        $userform->set_var('delete_option_no_confirmation',sprintf ($delbutton, ''));
+        $userform->set_var('delete_option', true);
     }
 
     $userform->set_var('gltoken_name', CSRF_TOKEN);
@@ -445,12 +443,10 @@ function USER_accountPanel($U,$newuser = 0)
         $userform->set_var('remote_user_disabled',' disabled="disabled"');
     }
 
-
-    $selection  = '<select id="cooktime" name="cooktime">' . LB;
-    $selection .= COM_optionList($_TABLES['cookiecodes'],'cc_value,cc_descr',$U['cookietimeout'], 0);
-    $selection .= '</select>';
-
-    $userform->set_var('cooktime_selector', $selection);
+    $userform->set_var(
+        'cooktime_options',
+        COM_optionList($_TABLES['cookiecodes'],'cc_value,cc_descr',$U['cookietimeout'], 0)
+    );
     $userform->set_var('email_value', @htmlspecialchars ($U['email'],ENT_NOQUOTES,COM_getEncodingt()));
 
     $statusarray = array(USER_ACCOUNT_AWAITING_ACTIVATION   => $LANG28[43],
@@ -481,18 +477,20 @@ function USER_accountPanel($U,$newuser = 0)
         $statusarray[USER_ACCOUNT_AWAITING_APPROVAL] = $LANG28[44];
     }
     asort($statusarray);
-    $statusselect = '<select name="userstatus" id="userstatus">';
+    $options = '';
     foreach ($statusarray as $key => $value) {
-        $statusselect .= '<option value="' . $key . '"';
+        $options .= '<option value="' . $key . '"';
         if ($key == $U['status']) {
-            $statusselect .= ' selected="selected"';
+            $options .= ' selected="selected"';
         }
-        $statusselect .= '>' . $value . '</option>' . LB;
+        $options .= '>' . $value . '</option>' . LB;
     }
-    $statusselect .= '</select><input type="hidden" name="oldstatus" value="'.$U['status'] . '"/>';
-    $userform->set_var('user_status', $statusselect);
+    $userform->set_var('user_status_options', $options);
 
-    if ( isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] && isset($U['tfa_enabled']) && $U['tfa_enabled']) {
+    if (
+        isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] &&
+        isset($U['tfa_enabled']) && $U['tfa_enabled']
+    ) {
         $userform->set_var('twofactor',true);
         $userform->set_var(array(
             'lang_two_factor' => $LANG_TFA['two_factor'],
@@ -586,11 +584,6 @@ function USER_groupPanel($U, $newuser = 0)
         $userform->set_var('group_options', $groupoptions);
 
         $userform->parse('group_edit', 'groupedit', true);
-    } else {
-        // user doesn't have the rights to edit a user's groups so set to -1
-        // so we know not to handle the groups array when we save
-        $userform->set_var('group_edit',
-                '<input type="hidden" name="groups" value="-1" />');
     }
     $retval = $userform->finish ($userform->parse ('output', 'user'));
     return $retval;
@@ -649,14 +642,10 @@ function USER_userinfoPanel($U, $newuser = 0)
     if ($_CONF['allow_user_photo'] == 1) {
         if ( !empty($uid) && $uid > 1 ) {
             $photo = USER_getPhoto ($uid, $U['photo'], $U['email'], -1);
-            if (empty ($photo)) {
-                $userform->set_var('display_photo', '');
-            } else {
-                if (empty ($U['photo'])) { // external avatar
-                    $photo = '<br/>' . $photo;
-                } else { // uploaded photo - add delete option
-                    $photo = '<br/>' . $photo . '<br/>' . $LANG04[79]
-                           . '&nbsp;<input type="checkbox" name="delete_photo"/>'.LB;
+            if (!empty($photo)) {
+                $userform->set_var('display_photo', $photo);
+                if (!empty($U['photo'])) {
+                    $userform->set_var('lang_delete', $LANG04[79]);
                 }
                 $userform->set_var('display_photo', $photo);
             }
@@ -763,27 +752,29 @@ function USER_layoutPanel($U, $newuser = 0)
         }
 
         // build language select
-        $selection = '<select id="language" name="language">' . LB;
+        $options = '';
         foreach ($language as $langFile => $langName) {
-            $selection .= '<option value="' . $langFile . '"';
-            if (($langFile == $userlang) || (($has_valid_language == 0) &&
-                    (strpos ($langFile, $similarLang) === 0))) {
-                $selection .= ' selected="selected"';
+            $options .= '<option value="' . $langFile . '"';
+            if (
+                ($langFile == $userlang) ||
+                (
+                    ($has_valid_language == 0) && (strpos ($langFile, $similarLang) === 0)
+                )
+            ) {
+                $options .= ' selected="selected"';
                 $has_valid_language = 1;
             } else if ($userlang == $langFile) {
-                $selection .= ' selected="selected"';
+                $options .= ' selected="selected"';
             }
 
-            $selection .= '>' . $langName . '</option>' . LB;
+            $options .= '>' . $langName . '</option>' . LB;
         }
-        $selection .= '</select>';
-
-        $userform->set_var('language_selector', $selection);
+        $userform->set_var('language_options', $options);
     } else {
-        $userform->set_var('language_selector', $_CONF['language']);
+        $userform->set_var('language_name', $_CONF['language']);
     }
+
     if ($_CONF['allow_user_themes'] == 1) {
-        $selection = '<select id="theme" name="theme">' . LB;
         if (empty ($U['theme'])) {
             $usertheme = $_CONF['theme'];
         } else {
@@ -792,10 +783,11 @@ function USER_layoutPanel($U, $newuser = 0)
         $themeFiles = COM_getThemes ();
         usort ($themeFiles,function ($a,$b) { return strcasecmp($a,$b); } );
 
+        $options = '';
         foreach ($themeFiles as $theme) {
-            $selection .= '<option value="' . $theme . '"';
+            $options .= '<option value="' . $theme . '"';
             if ($usertheme == $theme) {
-                $selection .= ' selected="selected"';
+                $options .= ' selected="selected"';
             }
             $words = explode ('_', $theme);
             $bwords = array ();
@@ -807,13 +799,13 @@ function USER_layoutPanel($U, $newuser = 0)
                     $bwords[] = $th;
                 }
             }
-            $selection .= '>' . implode (' ', $bwords) . '</option>' . LB;
+            $options .= '>' . implode (' ', $bwords) . '</option>' . LB;
         }
-        $selection .= '</select>';
-        $userform->set_var('theme_selector', $selection);
+        $userform->set_var('theme_options', $options);
     } else {
-        $userform->set_var('theme_selector',$_CONF['theme']);
+        $userform->set_var('theme_name', $_CONF['theme']);
     }
+
     if ($U['noicons'] == '1') {
         $userform->set_var('noicons_checked', 'checked="checked"');
     } else {
@@ -835,27 +827,29 @@ function USER_layoutPanel($U, $newuser = 0)
     } else {
         $timezone = $_CONF['timezone'];
     }
-    $selection = Date::getTimeZoneDropDown($timezone,
-            array('id' => 'tzid', 'name' => 'tzid'));
+    $userform->set_var('timezone_options', Date::getTimeZoneOptions($timezone));
 
-    $userform->set_var('timezone_selector', $selection);
-
-    $selection = '<select id="dfid" name="dfid">' . LB
+    /*$selection = '<select id="dfid" name="dfid">' . LB
                . COM_optionList ($_TABLES['dateformats'], 'dfid,description',
-                                 $U['dfid']) . '</select>';
-    $userform->set_var('dateformat_selector', $selection);
-    $search_result_select  = '<select name="search_result_format" id="search_result_format">'.LB;
+               $U['dfid']) . '</select>';*/
+    $userform->set_var(
+        'dateformat_options',
+        COM_optionList ($_TABLES['dateformats'], 'dfid,description', $U['dfid'])
+    );
+
     if (isset($LANG_configSelect['Core'])) {
         $cfgSelect = $LANG_configSelect['Core'][18];
 
     } else {
         $cfgSelect = array_flip($LANG_configselects['Core'][18]);
     }
+    $options = '';
     foreach ($cfgSelect AS $type => $name ) {
-        $search_result_select .= '<option value="'. $type . '"' . ($U['search_result_format'] == $type ? 'selected="selected"' : '') . '>'.$name.'</option>'.LB;
+        $options .= '<option value="'. $type . '"' .
+            ($U['search_result_format'] == $type ? 'selected="selected"' : '') .
+            '>'.$name.'</option>'.LB;
     }
-    $search_result_select .= '</select>';
-    $userform->set_var('search_result_select',$search_result_select);
+    $userform->set_var('search_result_options',$options);
 
     if (!empty($uid) && $uid > 1 ) {
         $userform->set_var('plugin_layout_display',PLG_profileEdit($uid,'layout','display'));
@@ -876,18 +870,17 @@ function USER_layoutPanel($U, $newuser = 0)
         $C['commentorder'] = 0;
         $C['commentlimit'] = 100;
     }
+    $userform->set_var(
+        'displaymode_options',
+        COM_optionList ($_TABLES['commentmodes'], 'mode,name', $C['commentmode'])
+    );
 
-    $selection = '<select id="commentmode" name="commentmode">';
-    $selection .= COM_optionList ($_TABLES['commentmodes'], 'mode,name',
-                                  $C['commentmode']);
-    $selection .= '</select>';
-    $userform->set_var('displaymode_selector', $selection);
 
-    $selection = '<select id="commentorder" name="commentorder">';
-    $selection .= COM_optionList ($_TABLES['sortcodes'], 'code,name',
-                                  $C['commentorder']);
-    $selection .= '</select>';
-    $userform->set_var('sortorder_selector', $selection);
+    $userform->set_var(
+        'sortorder_options',
+        COM_optionList ($_TABLES['sortcodes'], 'code,name', $C['commentorder'])
+    );
+
     $userform->set_var('commentlimit_value', $U['commentlimit']);
     if (!empty($uid) && $uid > 1 ) {
         $userform->set_var('plugin_layout_comment',PLG_profileEdit($uid,'layout','comment'));
@@ -1124,7 +1117,7 @@ function USER_groupSelectList( $sel_grp_id = 0 )
     $rows = DB_numRows( $result );
     for( $i = 1; $i <= $rows; $i++ )  {
         $A = DB_fetchArray ($result);
-        if ($A['grp_id'] <> 13) { // don't offer Logged-In users as an option
+        if ($A['grp_name'] <> 'Logged-in Users' && $A['grp_name'] <> 'Non-Logged-in Users') { // don't offer Logged-In users as an option
             $retval .= '<option value="' . $A['grp_id'] . '"';
             if ($sel_grp_id == $A['grp_id']) {
                 $retval .= ' selected="selected"';
@@ -1172,7 +1165,8 @@ function USER_getGroupListField($fieldname, $fieldvalue, $A, $icon_arr, $al_sele
             if (($A['grp_name'] == 'All Users') ||
                 ($A['grp_name'] == 'Logged-in Users') ||
                 ($A['grp_name'] == 'Non-Logged-in Users') ||
-                ($A['grp_name'] == 'Remote Users')) {
+                ($A['grp_name'] == 'Remote Users')
+            ) {
                 $retval = '<input type="checkbox" disabled="disabled"'
                         . $checked . '/>'
                         . '<input type="hidden" name="groups[]" value="'
@@ -1213,29 +1207,39 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
     switch ($fieldname) {
         case 'edit':
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'],
-                "{$_CONF['site_admin_url']}/user.php?edit=x&amp;uid={$A['uid']}", $attr);
+            $args['attr'] = array('title' => $LANG_ADMIN['edit']);
+            $args['url'] = $_CONF['site_admin_url'].'/user.php?edit=x&amp;uid='.$A['uid'];
+            $retval = FieldList::edit($args);
             break;
 
         case 'username':
             $attr['title'] = $LANG28[108];
             $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
-            $retval = COM_createLink($icon_arr['user'], $url, $attr);
+            $retval = FieldList::editusers(
+                array(
+                    'url' => $url,
+                    'attr' => $attr,
+                )
+            );
             $retval .= '&nbsp;&nbsp;';
-            $attr['style'] = 'vertical-align:top;';
             $retval .= COM_createLink($fieldvalue, $url, $attr);
+            if (SEC_inGroup('Root',$A['uid'])) {
+                $retval .= '&nbsp;' . FieldList::rootUser(array(
+                    'attr' => array(
+                        'title' => 'Root User',
+                    )
+                ));
+            }
+
+            $photoico = '';
+            if (!empty ($A['photo'])) {
+                $retval .= '&nbsp;&nbsp;' . FieldList::userPhoto();
+
+            }
             break;
 
         case 'fullname':
-            $photoico = '';
-            if (!empty ($A['photo'])) {
-                $photoico = "&nbsp;<img src=\"{$_CONF['layout_url']}/images/smallcamera."
-                          . $_IMAGE_TYPE . '" alt="{$LANG04[77]}"' . '/>';
-            } else {
-                $photoico = '';
-            }
-            $retval = COM_truncate($fieldvalue, 24, ' ...', true) . $photoico;
+            $retval = COM_truncate($fieldvalue, 24, ' ...', true);
             break;
 
         case 'status':
@@ -1295,10 +1299,12 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
         case 'phantom_date':
 
         case 'offline_months':
+            $fieldvalue = intval($fieldvalue);
             $retval = COM_numberFormat(round($fieldvalue / 2592000));
             break;
 
         case 'online_hours':
+            $fieldvalue = intval($fieldvalue);
             $retval = COM_numberFormat(round($fieldvalue / 3600, 3));
             break;
 
@@ -1313,25 +1319,29 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'email':
             if (COM_isEmail($fieldvalue)) {
-                $url = 'mailto:' . $fieldvalue;
-                $retval = '<a href="' . $url . '" title="' . $LANG28[111] . '">' .
-                        $icon_arr['mail'] . '</a>&nbsp;&nbsp;';
+                $url = 'mailto:'.$fieldvalue;
+                $retval = FieldList::email(array(
+                    'url' => 'mailto: ' . $fieldvalue . '&nbsp;&nbsp;',
+                ));
+                $attr['title'] = $LANG28[99];
+                $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
+                $retval .= COM_createLink($fieldvalue, $url, $attr);
             } else {
-                $retval = $icon_arr['mail'] . '&nbsp;&nbsp;';
+                $retval .= $fieldvalue; //COM_createLink($fieldvalue, $url, $attr);
             }
-            $attr['title'] = $LANG28[99];
-            $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
-            $attr['style'] = 'vertical-align:top;';
-            $retval .= COM_createLink($fieldvalue, $url, $attr);
             break;
 
         case 'delete':
             $retval = '';
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');';
-            $retval .= COM_createLink($icon_arr['delete'],
-                $_CONF['site_admin_url'] . '/user.php'
-                . '?delete=x&amp;uid=' . $A['uid'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            $args = array();
+            $args['attr'] = array(
+                'title' => $LANG_ADMIN['delete'],
+                'onclick' => 'return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');',
+            );
+            $args['url'] = $_CONF['site_admin_url'] . '/user.php'
+                    . '?delete=x&amp;uid=' . $A['uid'] . '&amp;' . CSRF_TOKEN . '=' . $token;
+
+            $retval = FieldList::delete($args);
             break;
 
         default:
@@ -1412,7 +1422,7 @@ function USER_list($grp_id)
               'text' => $LANG28[54]),
         array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
               'text' => $LANG28[95]),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -1443,8 +1453,7 @@ function USER_list($grp_id)
         $_CONF['user_login_method']['3rdparty']) {
         $select_userinfo .= ',remoteservice';
     }
-
-    if ($grp_id > 0) {
+    if ($grp_id > 0 && ($grp_id != 2 && $grp_id != 13)) {
         $groups = USER_getGroupList ($grp_id);
         $text_arr['form_url'] .= '?grp_id=' . $grp_id;
         $groupList = implode (',', $groups);
@@ -1760,13 +1769,30 @@ function USER_save($uid)
         DB_query($sql);
 
         // userindex table
+        $TIDS = array();
+        $AIDS = array();
+        $BOXES = array();
+        $ETIDS = array();
+        $AETIDS = array();
+        $allowed_etids = array();
 
-        $TIDS  = @array_values($_POST['topics']);
-        $AIDS  = @array_values($_POST['selauthors']);
-        $BOXES = @array_values($_POST['blocks']);
-        $ETIDS = @array_values($_POST['dgtopics']);
+        if (isset($_POST['topics']) && is_array($_POST['topics'])) {
+            $TIDS  = @array_values($_POST['topics']);
+        }
+//        $TIDS  = @array_values($_POST['topics']);
+        if (isset($_POST['selauthors']) && is_array($_POST['selauthors'])) {
+            $AIDS  = @array_values($_POST['selauthors']);
+        }
+        if (isset($_POST['blocks']) && is_array($_POST['blocks'])) {
+            $BOXES = @array_values($_POST['blocks']);
+        }
+        if (isset($_POST['dgtopics']) && is_array($_POST['dgtopics'])) {
+            $ETIDS = @array_values($_POST['dgtopics']);
+        }
         $allowed_etids = USER_buildTopicList ();
-        $AETIDS = explode (' ', $allowed_etids);
+        if (is_array($allowed_etids)) {
+            $AETIDS = explode (' ', $allowed_etids);
+        }
 
         $tids = '';
         if (is_array($TIDS) && sizeof ($TIDS) > 0) {
@@ -1854,7 +1880,7 @@ function USER_save($uid)
             $whereGroup = 'ug_main_grp_id IN ('
                         . implode (',', $UserAdminGroups) . ')';
             DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE (ug_uid = $uid) AND " . $whereGroup);
-
+/* --- May 2021 - no longer add users to All Users or Logged-In User groups
             // make sure to add user to All Users and Logged-in Users groups
             $allUsers = DB_getItem ($_TABLES['groups'], 'grp_id',
                                     "grp_name = 'All Users'");
@@ -1866,12 +1892,11 @@ function USER_save($uid)
             if (!in_array ($logUsers, $groups)) {
                 $groups[] = $logUsers;
             }
-
+*/
             foreach ($groups as $userGroup) {
                 if (in_array ($userGroup, $UserAdminGroups) || SEC_inGroup(1)) {
                     if ($_USER_VERBOSE) {
-                        Log::write('system',Log::DEBUG,"adding group_assignment " . $userGroup
-                                      . " for $username");
+                        Log::write('system',Log::DEBUG,"adding group_assignment ".$userGroup." for $username");
                     }
                     $sql = "INSERT INTO {$_TABLES['group_assignments']} (ug_main_grp_id, ug_uid) VALUES ($userGroup, $uid)";
                     DB_query ($sql);
@@ -1880,7 +1905,10 @@ function USER_save($uid)
         }
 
         // subscriptions
-        $subscription_deletes  = @array_values($_POST['subdelete']);
+        $subscription_deletes = array();
+        if (isset($_POST['subdelete']) && is_array($_POST['subdelete'])) {
+            $subscription_deletes  = @array_values($_POST['subdelete']);
+        }
         if ( is_array($subscription_deletes) ) {
             foreach ( $subscription_deletes AS $subid ) {
                 DB_delete($_TABLES['subscriptions'],'sub_id',(int) $subid);
@@ -2104,17 +2132,23 @@ function USER_batchAdmin()
         'default_filter' => "AND $filter_sql {$_TABLES['users']}.uid > 1"
     );
 
-    $actions = '<input name="delbutton" type="image" src="'
-        . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
-        . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
-        . '" onclick="return doubleconfirm(\'' . $LANG28[73] . '\',\'' . $LANG28[110] . '\');"'
-        . '/>&nbsp;' . $LANG_ADMIN['delete'];
+    $actions = FieldList::deleteButton(array(
+        'name' => 'delbutton',
+        'text' => $LANG01[124],
+        'attr' => array(
+            'title' => $LANG01[124],
+            'onclick' => 'return doubleconfirm(\'' . $LANG28[73] . '\',\'' . $LANG28[110] . '\');'
+        )
+    ));
     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-    $actions .= '<input name="reminder" type="image" src="'
-        . $_CONF['layout_url'] . '/images/admin/mail.' . $_IMAGE_TYPE
-        . '" style="vertical-align:bottom;" title="' . $LANG28[78]
-        . '" onclick="return confirm(\'' . $LANG28[100] . '\');"'
-        . '/>&nbsp;' . $LANG28[77];
+    $actions .= FieldList::emailButton(array(
+        'name' => 'reminder',
+        'text' => $LANG28[78],
+        'attr' => array(
+            'title' => $LANG28[78],
+            'onclick' => 'return confirm(\'' . $LANG28[100] . '\');'
+        )
+    ));
 
     $options = array('chkselect' => true, 'chkfield' => 'uid', 'chkactions' => $actions);
 
@@ -2129,7 +2163,7 @@ function USER_batchAdmin()
               'text' => $LANG28[54],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
               'text' => $LANG28[95]),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -2424,18 +2458,15 @@ function USER_import()
 {
     global $_CONF, $LANG28;
 
-    $token = SEC_createToken();
-    $retval = '<form class="uk-form" action="' . $_CONF['site_admin_url']
-            . '/user.php" method="post" enctype="multipart/form-data"><div>'
-            . $LANG28[29]
-            . ': <input type="file" dir="ltr" name="importfile" size="40"'
-            . '/>'
-            . '<input type="hidden" name="importexec" value="x" />'
-            . '<button class="uk-button uk-button-primary" type="submit" name="submit" value="' . $LANG28[30]
-            . '"' . '/>'.$LANG28[30].'</button><input type="hidden" name="' . CSRF_TOKEN
-            . "\" value=\"{$token}\"" . '/></div></form>';
-
-    return $retval;
+    $T = new Template($_CONF['path_layout'] . '/admin/user');
+    $T->set_file('import', 'batchimport.thtml');
+    $T->set_var(array(
+        'token' => SEC_createToken(),
+        'lang_submit' => $LANG28[30],
+        'lang_path' => $LANG28[29],
+        'csrf_token' => CSRF_TOKEN,
+    ) );
+    return $T->finish($T->parse('output', 'import'));
 }
 
 /**
@@ -2662,7 +2693,7 @@ switch($action) {
                   'text' => $LANG28[54]),
             array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
                   'text' => $LANG28[95]),
-            array('url' => $_CONF['site_admin_url'],
+            array('url' => $_CONF['site_admin_url'].'/index.php',
                   'text' => $LANG_ADMIN['admin_home'])
         );
         $display .= COM_startBlock ($LANG28[24], '',

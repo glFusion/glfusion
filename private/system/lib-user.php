@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2020 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -57,7 +57,7 @@ function USER_deleteAccount($uid)
                                 "SELECT COUNT(DISTINCT {$_TABLES['users']}.uid) AS count
                                     FROM `{$_TABLES['users']}`,`{$_TABLES['group_assignments']}`
                                     WHERE {$_TABLES['users']}.uid > 1 AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid
-                                        AND ({$_TABLES['group_assignments']}.ug_main_grp_id = ?",
+                                        AND ({$_TABLES['group_assignments']}.ug_main_grp_id = ?)",
                                 array($rootgrp),
                                 0,
                                 array(Database::STRING)
@@ -499,7 +499,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
         try {
             $db->conn->insert($_TABLES['users'],$fields,$types);
             $db->conn->commit();
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             Log::write('system',Log::ERROR,"Error inserting user into USERS table :: " . $e->getMessage());
             $db->conn->rollBack();
             return null;
@@ -521,6 +521,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
             $db->conn->rollBack();
             return NULL;
         }
+/* - May 2021 - no longer need to assign users to these groups
 
         // Add user to Logged-in group (i.e. members) and the All Users group
         $loggedInUsersGrp = $db->getItem ($_TABLES['groups'], 'grp_id',
@@ -553,11 +554,11 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
                               )
             );
             $db->conn->commit();
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->conn->rollBack();
             return null;
         }
-
+*/
         // any default groups?
         $stmt = $db->conn->query("SELECT grp_id FROM `{$_TABLES['groups']}` WHERE grp_default=1");
         $grpDefaults = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -667,7 +668,7 @@ function USER_sendNotification ($username, $email, $uid, $mode='inactive')
     $mailsubject = $_CONF['site_name'] . ' ' . $LANG29[40];
 
     $to = array();
-    $to   = COM_formatEmailAddress( '',$_CONF['noreply_mail'] );
+    $to   = COM_formatEmailAddress( '',$_CONF['site_mail']);
     COM_mail ($to, $mailsubject, $mailbody);
 }
 
@@ -767,7 +768,7 @@ function USER_getPhoto ($uid = 0, $photo = '', $email = '', $width = 0, $fullURL
 
         if (empty($img) || $img == '' ) {
             if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
-                $img = $_CONF['site_url'] . '/images/userphotos/default.jpg';
+                $img = $_CONF['site_url'] . '/assets/image/default.jpg';
             } else {
                 $img = $_CONF['default_photo'];
             }
@@ -969,7 +970,7 @@ function USER_emailMatches ($email, $domain_list)
 */
 function USER_uniqueUsername($username)
 {
-    global $_TABLES;
+    global $_TABLES, $_CONF;
 
     $db = Database::getInstance();
 
@@ -977,8 +978,17 @@ function USER_uniqueUsername($username)
         return CUSTOM_uniqueUsername($username);
     }
 
+    if (isset($_CONF['disallow_usernames']) && !empty($_CONF['disallow_usernames'])) {
+        $disallowedName = explode(',',$_CONF['disallow_usernames']);
+        foreach ($disallowedName AS $name) {
+            if ( strcasecmp($name,$username) == 0) {
+                $username = 'AnonymousUser';
+            }
+        }
+    }
+
     if (empty($username)) {
-        $username = 'User';
+        $username = 'AnonymousUser';
     }
 
     $try = $username;
@@ -1032,6 +1042,16 @@ function USER_validateUsername($username, $existing_user = 0)
 	if ( preg_match('/' . $regex . '/u', $username)) {
 	    return false;
 	}
+
+    if (isset($_CONF['disallow_usernames']) && !empty($_CONF['disallow_usernames'])) {
+        $disallowedName = explode(',',$_CONF['disallow_usernames']);
+        foreach ($disallowedName AS $name) {
+            if ( strcasecmp($name,$username) == 0) {
+                return false;
+            }
+        }
+    }
+
 	return true;
 }
 

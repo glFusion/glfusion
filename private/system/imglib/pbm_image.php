@@ -1,35 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | pbm_image.php                                                            |
-// |                                                                          |
-// | NetPBM Graphic Library interface                                         |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* NetPBM Graphics Interface
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $dImageHeight, $dImageWidth, $mimeType) {
     global $_CONF;
@@ -37,7 +24,7 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
     $JpegQuality = 85;
 
     if ( $_CONF['debug_image_upload'] ) {
-        COM_errorLog("IMG_resizeImage: Resizing using NetPBM src = " . $srcImage . " mimetype = " . $mimeType);
+        Log::write('system',Log::INFO,"IMG_resizeImage: Resizing using NetPBM src = " . $srcImage . " mimetype = " . $mimeType);
     }
     // determine which program to use, pamscale or pnmscale...
     if ( file_exists( $_CONF['path_to_netpbm'] . "pamscale" ) ) {
@@ -54,7 +41,7 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
                 UTL_execWrapper('"' . $_CONF['path_to_jhead'] . "/jhead" . '"' . " -v -te " . $srcImage . " " . $destImage);
             }
             if ( $rc != true ) {
-                COM_errorLog("IMG_resizeImage: Unable to resize image - NetPBM failed.");
+                Log::write('system',Log::ERROR,"IMG_resizeImage: Unable to resize image - NetPBM failed.");
                 return array(false,'Unable to resize image - NetPBM failed.');
             }
             break;
@@ -65,13 +52,13 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
             }
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/bmptopnm" . '" ' . $srcImage . " | " . '"' . $_CONF['path_to_netpbm'] . "/" . $pamscale . '"' . " -xsize " . $dImageWidth . " -ysize " . $dImageHeight . " | " . '"' . $_CONF['path_to_netpbm'] . "/ppmtobmp" .'" > ' . $destImage);
             if ( $rc != true ) {
-                COM_errorLog("IMG_resizeImage: Unable to resize image - NetPBM failed.");
+                Log::write('system',Log::ERROR,"IMG_resizeImage: Unable to resize image - NetPBM failed.");
                 return array(false,'Unable to resize image - NetPBM failed.');
             }
             break;
         case 'image/gif' :
             if ( !file_exists($_CONF['path_to_netpbm'] . "/pamtogif") ) {
-                COM_errorLog("IMG_resizeImage: NetPBM installation does have have pamtogif binary.");
+                Log::write('system',Log::WARNING,"IMG_resizeImage: NetPBM installation does have have pamtogif binary.");
                 return array(false,'NetPBM installation does have have pamtogif binary.');
             }
             if ( ( $dImageHeight > $sImageHeight) && ($dImageWidth > $sImageWidth )) {
@@ -80,7 +67,7 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
             }
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/giftopnm" . '" ' . $srcImage . " | " . '"' . $_CONF['path_to_netpbm'] . "/" . $pamscale . '"' . " -xsize " . $dImageWidth . " -ysize " . $dImageHeight . " | " . '"' . $_CONF['path_to_netpbm'] . "/pamtogif" . '" > ' . $destImage);
             if ( $rc != true ) {
-                COM_errorLog("IMG_resizeImage: Unable to resize image - NetPBM failed.");
+                Log::write('system',Log::ERROR,"IMG_resizeImage: Unable to resize image - NetPBM failed.");
                 @unlink($destImage);
                 return array(false,'Unable to resize image - NetPBM failed.');
             }
@@ -92,7 +79,7 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
             }
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/pngtopnm" . '" ' . $srcImage . " | " . '"' . $_CONF['path_to_netpbm'] . "/" . $pamscale . '"' . " -xsize " . $dImageWidth . " -ysize " . $dImageHeight . " | " . '"' . $_CONF['path_to_netpbm'] . "/pnmtopng" . '" > ' . $destImage);
             if ( $rc != true ) {
-                COM_errorLog("IMG_resizeImage: Unable to resize image - NetPBM failed.");
+                Log::write('system',Log::ERROR,"IMG_resizeImage: Unable to resize image - NetPBM failed.");
                 return array(false,'Unable to resize image - NetPBM failed.');
             }
             break;
@@ -103,13 +90,13 @@ function _img_resizeImage($srcImage, $destImage, $sImageHeight, $sImageWidth, $d
             }
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/tifftopnm" . '" ' . $srcImage . " | " . '"' . $_CONF['path_to_netpbm'] . "/" . $pamscale . '"' . " -xsize " . $dImageWidth . " -ysize " . $dImageHeight . " | " . '"' . $_CONF['path_to_netpbm'] . "/pnmtotiff" . '" > ' . $destImage);
             if ( $rc != true ) {
-                COM_errorLog("IMG_resizeImage: Unable to resize image - NetPBM failed.");
+                Log::write('system',Log::ERROR,"IMG_resizeImage: Unable to resize image - NetPBM failed.");
                 return array(false,'Unable to resize image - NetPBM failed.');
             }
             break;
         case 'image/x-targa' :
         case 'image/tga' :
-                COM_errorLog("IMG_resizeImage: TGA files not supported by NetPBM");
+                Log::write('system',Log::WARNING,"IMG_resizeImage: TGA files not supported by NetPBM");
                 return array(false,'TGA format not supported by NetPBM');
                 break;
     }
@@ -133,7 +120,7 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
             $NP_rotate = "180";
             break;
         default :
-            COM_errorLog("IMG_rotateImage: Invalid direction passed to rotate, must be left or right");
+            Log::write('system',Log::ERROR,"IMG_rotateImage: Invalid direction passed to rotate, must be left or right");
             return array(false,'Invalid direction passed to rotate, must be left or right');
     }
 
@@ -170,7 +157,7 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
         case 'image/png' :
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/pngtopnm" . '" ' . $srcImage . " | " . '"' . $_CONF['path_to_netpbm'] . $pamflip . '" -r' . $NP_rotate . " > " . $srcImage . ".PNM");
             if ( $rc != true ) {
-                COM_errorLog("IMG_rotateImage: Error executing pngtopnm (NetPBM)");
+                Log::write('system',Log::ERROR,"IMG_rotateImage: Error executing pngtopnm (NetPBM)");
                 return array(false,'Error executing pngtopnm (NetPBM)');
             }
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/pnmtopng" . '"' . " " . $srcImage . ".PNM > " . $tmpImage);
@@ -179,7 +166,7 @@ function _img_RotateImage($srcImage, $direction,$mimeType) {
             @unlink($tmpImage);
             break;
         default:
-            COM_errorLog("IMG_roateImage: NetPBM only support JPG, BMP, GIF or PNG");
+            Log::write('system',Log::WARNING,"IMG_roateImage: NetPBM only support JPG, BMP, GIF or PNG");
             return array(false,'NetPBM only supports JPG, BMP, GIF or PNG');
     }
 
@@ -190,7 +177,7 @@ function _img_convertImageFormat($srcImage,$destImage,$destFormat,$mimeType) {
     global $_CONF;
 
     if ( $_CONF['debug_image_upload'] ) {
-        COM_errorLog("IMG_convertImageFormat: Converting using NetPBM src = " . $srcImage . " mimetype = " . $mimeType);
+        Log::write('system',Log::INFO,"IMG_convertImageFormat: Converting using NetPBM src = " . $srcImage . " mimetype = " . $mimeType);
     }
     // determine which program to use, pamscale or pnmscale...
     if ( file_exists( $_CONF['path_to_netpbm'] . "pamscale" ) ) {
@@ -220,7 +207,7 @@ function _img_convertImageFormat($srcImage,$destImage,$destFormat,$mimeType) {
             $cvtFrom = '/tgatoppm';
             break;
         default :
-            COM_errorLog("IMG_convertImageFormat: NetPBM only supports JPG, BMP, GIF, PNG, TIFF, and TGA source images.");
+            Log::write('system',Log::WARNING,"IMG_convertImageFormat: NetPBM only supports JPG, BMP, GIF, PNG, TIFF, and TGA source images.");
             return array(false,'NetPBM only supports JPG, BMP, GIF, PNG, TIFF and TGA formats.');
     }
     switch ( $destFormat ) {
@@ -241,7 +228,7 @@ function _img_convertImageFormat($srcImage,$destImage,$destFormat,$mimeType) {
             $cvtTo = '/pnmtotiff';
             break;
         default :
-            COM_errorLog("IMG_convertImageFormat: NetPBM only supports JPG, BMP, GIF, PNG, and TIFF destination formats.");
+            Log::write('system',Log::WARNING,"IMG_convertImageFormat: NetPBM only supports JPG, BMP, GIF, PNG, and TIFF destination formats.");
             return array(false,'NetPBM only supports JPG, BMP, GIF, PNG, TIFF and TGA formats.');
     }
     $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . $cvtFrom . '" ' . $srcImage . " | " . '"' . $_CONF['path_to_netpbm'] . $cvtTo . '" > ' . $destImage);
@@ -250,7 +237,7 @@ function _img_convertImageFormat($srcImage,$destImage,$destFormat,$mimeType) {
             @unlink($srcImage);
         }
     } else {
-        COM_errorLog("IMG_convertImageFormat: NetPBM returned an error converting image.");
+        Log::write('system',Log::ERROR,"IMG_convertImageFormat: NetPBM returned an error converting image.");
         return array(false,'NetPBM returned an error when converting image.');
     }
     return array(true,'');
@@ -260,7 +247,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
     global $_CONF;
 
     if ( $_CONF['debug_image_upload'] ) {
-        COM_errorLog("IMG_watermarkImage: Using NetPBM to watermark image.");
+        Log::write('system',Log::INFO,"IMG_watermarkImage: Using NetPBM to watermark image.");
     }
     $errors = 0;
     $newSrc  = $origImage . '.tmp';
@@ -277,24 +264,24 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
         case "png":
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/pngtopnm" . '" ' . $watermarkImage . ' > ' . $overlay);
             if ( $rc != true ) {
-                COM_errorLog("IMG_watermarkImage: Unable to apply watermark, error executing pngtopnm (NetPBM) rc = " . $rc);
+                Log::write('system',Log::ERROR,"IMG_watermarkImage: Unable to apply watermark, error executing pngtopnm (NetPBM) rc = " . $rc);
                 return array(false,'Error executing pngtopnm (NetPBM)');
             }
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/pngtopnm" . '" -alpha ' . $watermarkImage . ' > ' . $alpha);
             if ( $rc != 1 ) {
-                COM_errorLog("IMG_watermarkImage: Unable to apply watermark, error executing pngtopnm (alpha mask) (NetPBM)");
+                Log::write('system',Log::ERROR,"IMG_watermarkImage: Unable to apply watermark, error executing pngtopnm (alpha mask) (NetPBM)");
                 return array(false,'Error executing pngtopnm (alpha mask) (NetPBM)');
             }
             break;
         case "jpg":
             $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/jpegtopnm" . '" ' . $watermarkImage . '" > ' . $overlay);
             if ( $rc != 1 ) {
-                COM_errorLog("IMG_watermarkImage: Unable to apply watermark, error executing jpegtopnm (NetPBM)");
+                Log::write('system',Log::ERROR,"IMG_watermarkImage: Unable to apply watermark, error executing jpegtopnm (NetPBM)");
                 return array(false,'Error executing jpegtopnm');
             }
             break;
         default :
-            COM_errorLog("IMG_watermarkImage: Unable to apply watermark, unrecognized filetype for watermark image (NetPBM)");
+            Log::write('system',Log::ERROR,"IMG_watermarkImage: Unable to apply watermark, unrecognized filetype for watermark image (NetPBM)");
             return array(false,'Unrecognized file type for watermark image');
     }
     switch ( $mimeType ) {
@@ -317,15 +304,15 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
             break;
         case 'image/x-targa' :
         case 'image/tga' :
-            COM_errorLog("IMG_watermark: TGA files not supported by NetPBM");
+            Log::write('system',Log::WARNING,"IMG_watermark: TGA files not supported by NetPBM");
             return array(false,'TGA files not supported by NetPBM');
         default :
-            COM_errorLog("IMG_watermark: NetPBM only support JPG, PNG,GIF, and BMP image types.");
+            Log::write('system',Log::WARNING,"IMG_watermark: NetPBM only support JPG, PNG,GIF, and BMP image types.");
             return array(false,'NetPBM only supports JPG, PNG, GIF, and BMP image formats');
     }
     $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . $toPNM . '" ' . $origImage . ' > ' . $origImagePNM);
     if ( $rc != 1 ) {
-        COM_errorLog("IMG_watermarkImage: Unable to apply watermark, error creating pnm image (NetPBM)");
+        Log::write('system',Log::ERROR,"IMG_watermarkImage: Unable to apply watermark, error creating pnm image (NetPBM)");
         return array(false,'Error creating pnm image (NetPBM)');
     }
 
@@ -385,7 +372,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
             $wmAlignY = ($srcSize[1] - $overlaySize[1]);
             break;
         default:
-            COM_errorLog("IMG_watermarkImage: Unknown watermark location: " . $location);
+            Log::write('system',Log::ERROR,"IMG_watermarkImage: Unknown watermark location: " . $location);
             return array(false,'Invalid watermark position');
             break;
     }
@@ -397,12 +384,12 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
     $args .= $overlay;
     $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . "/pnmcomp" . '" '  . $args . ' ' . $origImagePNM . " > " . $IntFile);
     if ( $rc != 1 ) {
-        COM_errorLog("IMG_watermarkImage: Unable to apply watermark, error executing pamcomp (NetPBM)");
+        Log::write('system',Log::ERROR,"IMG_watermarkImage: Unable to apply watermark, error executing pamcomp (NetPBM)");
         return array(false,'Error executing pamcomp (NetPBM)');
     }
     $rc = UTL_execWrapper('"' . $_CONF['path_to_netpbm'] . $fromPNM . '"  ' . $IntFile . ' > ' . $newSrc);
     if ( $rc != 1 ) {
-        COM_errorLog("IMG_watermarkImage: Unable to apply watermark, error executing " . $fromPNM . " (NetPBM)");
+        Log::write('system',Log::ERROR,"IMG_watermarkImage: Unable to apply watermark, error executing " . $fromPNM . " (NetPBM)");
         return array(false,'Error executing ' . $fromPNM . ' (NetPBM)');
     }
 
@@ -416,7 +403,7 @@ function _img_watermarkImage($origImage, $watermarkImage, $opacity, $location, $
     @unlink($overlay);
     @unlink($origImagePNM);
     @unlink($IntFile);
-    COM_errorLog("IMG_watermarkImage: Watermark successfully applied (NetPBM)");
+    Log::write('system',Log::INFO,"IMG_watermarkImage: Watermark successfully applied (NetPBM)");
     return array(true,'');
 }
 ?>

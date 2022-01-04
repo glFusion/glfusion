@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Dauerhafter Link',
     129 => 'Konfiguration',
     130 => 'Webservices',			// depreciated
+    131 => 'Funktionen',
     500 => 'Bitte nach der Installation oder der Aktualisierung das ../pfad/zu/glfusion/admin/install Verzeichnis löschen!',
     501 => 'Root Debug ist eingeschaltet',
     502 => 'No fail SQL ist eingeschaltet',
@@ -396,7 +397,7 @@ $LANG04 = array(
     159 => 'Diese E-Mail wurde automatisch generiert. Bitte nicht auf diese E-Mail antworten.',
     160 => 'Online',
     161 => 'Passwortstärke',
-    162 => 'Der Benutzername muss aus  Zeichen bestehen. Nicht erlaubt sind: ( < > " % & * / \ ) ',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
     163 => 'Remote Benutzer',
     164 => 'Remote Benutzername',
     165 => 'Remote Service',
@@ -1461,6 +1462,8 @@ $MESSAGE = array(
     116 => "Die Dateien des Plugins und verwandte Verzeichnisse wurden erfolgreich entfernt.",
     117 => "Das Remote-Konto wurde aus Deinem Lokalen-Konto entfernt.",
     118 => 'Entfernen des Remot-Kontos fehlgeschlagen - das eingegebene Passwort stimmt nicht überein.',
+    119 => 'Die Funktion wurde erfolgreich gespeichert.',
+    120 => 'Beim Speichern der Funktion ist ein Fehler aufgetreten.',
     200 => 'Leider hast Du keinen Zugriff auf diese Seite. Bitte beachte, dass alle nicht autorisierten Zugriffe protokolliert werden.',
     500 => 'Der Template-Cache wurde erfolgreich geleert',
     501 => 'Security Token ist ungültig - Möglicherweise ist die Sitzung abgelaufen.',
@@ -1574,6 +1577,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'Die Anmeldung ist abgelaufen. Bitte bestätige Deine Sitzung erneut.',
     'token_expired_footer' => 'Die Anmeldung für diese Anfrage ist abgelaufen. Bitte bestätige Deine Sitzung erneut.',
     'validation_failed' => 'Validierung fehlgeschlagen - Bitte versuche es nochmal.',
+    'feature_id' => 'Funktions-ID',
+    'feature_name' => 'Funktionsname',
+    'avail_groups' => 'Verfügbare Gruppen',
+    'incl_groups' => 'Eingeschlossene Gruppen',
 );
 
 ###############################################################################
@@ -1651,6 +1658,31 @@ $LANG_DB_ADMIN = array(
     'overall_progress'    => 'Gesamt-Fortschritt',
     'no_backups_found'    => 'Keine Backup-Dateien gefunden',
     'error_msg'           => 'Die folgenden Fehler sind aufgetreten',
+    'missing_required'    => 'Bitte füllen Sie alle erforderlichen Felder aus',
+    'time'                => 'Uhrzeit',
+    'table'               => 'Tabelle',
+    'changes_found'       => 'Änderungen gefunden',
+    'rows_updated'        => 'Zeilen aktualisiert',
+    'sr_title'            => 'Suchen und Ersetzen',
+    'search_for'          => 'Suche nach',
+    'replace_with'        => 'Ersetzen durch',
+    'tables_to_search'    => 'Zu durchsuchende Tabellen',
+    'search'              => 'Suchen',
+    'remove'              => 'Löschen',
+    'case'                => 'Groß-/Kleinschreibung ignorieren',
+    'dry_run'             => 'Probelauf',
+    'available_tables'    => 'Verfügbare Tabellen',
+    'execute'             => 'Ausführen',
+    'sr_warning_banner'   => 'Stellen Sie sicher, dass Sie ein aktuelles Backup Ihrer Datenbank haben! Die Funktion Suchen / Ersetzen hat keine Rückgängig-Option, also achten Sie darauf, dass die von Ihnen vorgenommenen Änderungen korrekt sind.',
+    'dry_run_complete'    => 'Überprüfen Sie ob die Ergebnisse des Probelaufs korrekt sind. Wenn Sie mit den Ergebnissen zufrieden sind, können Sie die Änderungen übernehmen indem Sie unten den Knopf Ausführen auswählen.',
+    'sr_parameters'       => 'Suchen und Ersetzen Parameter',
+    'sr_warning_1'        => 'Sind Sie sicher, dass Sie die Suchen und Ersetzen durchführen möchten?',
+    'sr_warning_2'        => 'Haben Sie auch wirklich ein aktuelles Backup?',
+    'edit'                => 'Bearbeiten',
+    'cancel'              => 'Abbrechen',
+    'seconds'             => 'Sekunden',
+    'plugin_table_column' => 'Plugin :: Tabelle -> Spalte',
+
 );
 
 ###############################################################################
@@ -1952,6 +1984,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Deine Sitzung wird in Kürze wegen Inaktivität ablaufen. Bitte drücke "OK" um die Sitzung wieder zu aktualisieren.',
     'reset' => 'Zurücksetzen',
     'remaining_chars' => 'Verbleibende Zeichen ',
+    'feature_admin' => 'Funktion Administration',
+    'feature_editor' => 'Funktion Editor',
+    'feature_list' => 'Liste der Funktionen',
+    'core_only' => 'Nur Kernfunktionen anzeigen',
+    'assigned_groups' => 'Zugewiesene Gruppen',
 );
 
 ###############################################################################
@@ -2693,7 +2730,8 @@ $LANG_confignames['Core'] = array(
     'show_right_blocks' => 'Immer rechte Blöcke anzeigen',
     'showfirstasfeatured' => 'Ersten Artikel als Hauptartikel',
     'backend' => 'Feed einschalten',
-    'rdf_file' => 'Ausgabe-Unterverzeichnis',
+    'rdf_file' => 'Haupt-RSS-Datei',
+    'path_rss' => 'Pfad zum Speichern von RSS-Feeds',
     'rdf_limit' => 'Feed-Limit',
     'rdf_storytext' => 'Artikellänge',
     'rdf_language' => 'Sprache',
@@ -2727,6 +2765,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Moderation von Kommentaren',
     'passwordspeedlimit' => 'Passwort Wartezeit in Sek.',
     'login_attempts' => 'Max. Anmeldeversuche',
+    'login_landing' => 'Login Landing Page',
     'login_speedlimit' => 'Anmeldung Wartezeit in Sek.',
     'user_html' => 'Erlaubtes Benutzer HTML',
     'admin_html' => 'Erlaubtes Admin HTML',
@@ -2836,10 +2875,10 @@ $LANG_confignames['Core'] = array(
     'story_sort_by' => 'Artikel-Liste Sortierfeld',
     'story_sort_dir' => 'Artikel-Liste Sortierrichtung',
     'cache_driver' => 'Cache-Treiber',
-    'cache_redis_host' => 'Redis Cache Server',
-    'cache_redis_port' => 'Redis Cache Server Port',
-    'cache_memcached_host' => 'Memcache(d) Cache Server',
-    'cache_memcached_port' => 'Memcached(d) Cache Server Port',
+    'cache_redis_host' => 'Redis-Cache-Server',
+    'cache_redis_port' => 'Redis-Cache-Server-Port',
+    'cache_memcached_host' => 'Memcache(d) Cache-Server',
+    'cache_memcached_port' => 'Memcached(d) Cache-Server-Port',
     'cache_timeout' => 'Verbindungs-Timeout',
     'cache_redis_socket' => 'Pfad / Dateiname zu Redis Socket',
     'cache_redis_password' => 'Redis-Passwort',
@@ -2856,6 +2895,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'Artikel-Verwaltung',
     'log_level' => 'Log-Level',
     'enable_admin_actions' => 'Admin-Logging aktivieren',
+    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2869,6 +2909,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Vermischtes &amp; Rechte',
     'sg_spam' => 'Spam / Bot Schutz',
     'sg_cache' => 'Caching',
+    'sg_advanced' => 'Weitere Einstellungen',
 );
 
 $LANG_fs['Core'] = array(

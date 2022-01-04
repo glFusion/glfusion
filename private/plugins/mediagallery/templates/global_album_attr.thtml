@@ -253,9 +253,6 @@
                                 <input type="checkbox" name="format_asf" value="512">
                                 &nbsp;&nbsp;<span style="font-weight:bold">{lang_asf}</span>
                                 <br>
-                                <input type="checkbox" name="format_swf" value="1024">
-                                &nbsp;&nbsp;<span style="font-weight:bold">{lang_swf}</span>
-                                <br>
                                 <input type="checkbox" name="format_mov" value="2048">
                                 &nbsp;&nbsp;<span style="font-weight:bold">{lang_mov}</span>
                                 <br>
@@ -264,12 +261,6 @@
                                 <br>
                                 <input type="checkbox" name="format_mpg" value="8192">
                                 &nbsp;&nbsp;<span style="font-weight:bold">{lang_mpg}</span>
-                                <br>
-                                <input type="checkbox" name="format_flv" value="131072">
-                                &nbsp;&nbsp;<span style="font-weight:bold">{lang_flv}</span>
-                                <br>
-                                <input type="checkbox" name="format_rflv" value="262144">
-                                &nbsp;&nbsp;<span style="font-weight:bold">{lang_rflv}</span>
                                 <br>
                                 <input type="checkbox" name="format_emb" value="524288">
                                 &nbsp;&nbsp;<span style="font-weight:bold">{lang_emb}</span><br>

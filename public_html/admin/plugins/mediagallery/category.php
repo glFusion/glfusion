@@ -1,41 +1,29 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin for glFusion CMS                                    |
-// +--------------------------------------------------------------------------+
-// | Administer Media Gallery categories.                                     |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2005-2016 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-//
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Media Gallery Category Maintenance
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
 require_once $_MG_CONF['path_admin'] . 'navigation.php';
+
+use \glFusion\Log\Log;
 
 $display = '';
 
 // Only let admin users access this page
 if (!SEC_hasRights('mediagallery.config')) {
     // Someone is trying to illegally access this page
-    COM_errorLog("Someone has tried to illegally access the Media Gallery Configuration page.  User id: {$_USER['uid']}, Username: {$_USER['username']}",1);
+    Log::write('system',Log::ERROR,'Someone has tried to access the Media Gallery Configuration page.  User id: '.$_USER['uid'].', Username: '.$_USER['username']);
     $display  = COM_siteHeader();
     $display .= COM_showMessageText($LANG_MG00['access_denied_msg'],$LANG_MG00['access_denied'],true,'error');
     $display .= COM_siteFooter(true);
@@ -64,7 +52,7 @@ function MG_editCategory( $cat_id, $mode ) {
             $A['cat_id'] = 1;
         }
         if ( $A['cat_id'] == 0 ) {
-            COM_errorLog("Media Gallery Error - Returned 0 as cat_id");
+            Log::write('system',Log::ERROR,'Media Gallery Category Administration: cat_id returned 0');
             $A['cat_id'] = 1;
         }
         $A['cat_name'] = '';
@@ -155,8 +143,8 @@ function MG_saveCategory( $cat_id ) {
     $A['cat_name'] = substr($A['cat_name'],0,254);
 
     if ( $A['cat_id'] == 0 ) {
-        COM_errorLog("Media Gallery Internal Error - cat_id = 0 - Contact support@glfusion.org  ");
-        return(MG_genericError($LANG_MG00['access_denied_msg']));
+        Log::write('system',Log::ERROR,'Media Gallery Category Administration: Internal Error - cat_id = 0 - Contact support@glfusion.org');
+         return(MG_genericError($LANG_MG00['access_denied_msg']));
     }
 
     DB_save($_TABLES['mg_category'],"cat_id,cat_name,cat_description,cat_order","'{$A['cat_id']}','{$A['cat_name']}','{$A['cat_description']}',{$A['cat_order']}");
@@ -174,13 +162,13 @@ function MG_batchDeleteCategory( ) {
         $sql = "DELETE FROM {$_TABLES['mg_category']} WHERE cat_id='" . COM_applyFilter($_POST['sel'][$i],true) . "'";
         $result = DB_query($sql);
         if ( DB_error() ) {
-            COM_errorLog("Media Gallery: Error removing category");
+            Log::write('system',Log::ERROR,'Media Gallery Category Administration: DB error removing category from category table');
         }
         // now remove it from all the media items...
         $sql = "UPDATE {$_TABLES['mg_media']} SET media_category=0 WHERE media_category=" . COM_applyFilter($_POST['sel'][$i],true);
         $result = DB_query($sql);
         if ( DB_error() ) {
-            COM_errorLog("Media Gallery: Error removing category from media table");
+            Log::write('system',Log::ERROR,'Media Gallery Category Administration: DB error removing category from media table');
         }
     }
 

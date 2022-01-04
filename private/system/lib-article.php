@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2009 by the following authors:
@@ -140,7 +140,7 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
                                      array($comments,$id),
                                      array(Database::INTEGER, Database::STRING)
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $db->error($e->getMessage());
         }
         COM_olderStuff(); // update comment count in Older Stories block
@@ -199,8 +199,8 @@ function plugin_deletecomment_article($cid, $id)
         $retval .= COM_refresh(COM_buildUrl($_CONF['site_url']
                  . "/article.php?story=$id") . '#comments');
     } else {
-        COM_errorLog ("User {$_USER['username']} "
-                    . "did not have permissions to delete comment $cid from $id");
+        Log::write('system',Log::WARNING,"User ".$_USER['username']." "
+                    . "did not have permissions to delete comment ".$cid." from ".$id);
         $retval .= COM_refresh ($_CONF['site_url'] . '/index.php');
     }
 
@@ -544,7 +544,7 @@ function ARTICLE_emailUserTopics()
 
     try {
         $stmt = $db->conn->executeQuery($usersql);
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }

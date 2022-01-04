@@ -1,5 +1,5 @@
-/*@ glFusion CMS Theme 1.7.1 | https://www.glfusion.org
-(c) 2017 glFusion | GNU GPLv2 License */
+/*@ glFusion CMS Theme 2.0.0 | https://www.glfusion.org
+(c) 2017-2021 glFusion | GNU GPLv2 License */
 /* ========================================================================
 This should contain site wide styles that augment the UIKIT styles
 
@@ -2288,7 +2288,7 @@ input.error {
 .autotranslations li {
 	float: left;
 	margin: 0 5px 5px 0;
-	background: url(../../images/translations/sprite-flags.png) no-repeat top left;
+	background: url(../../assets/image/sprite-flags.png) no-repeat top left;
 	width: 16px;
 	height: 11px;
 }
@@ -2474,7 +2474,7 @@ input.error {
 /* Batch processing styles
 ========================================================================== */
 .tm-updating {
-	background-image: url('../../images/throbber.gif');
+	background-image: url('../../assets/image/throbber.gif');
 	background-repeat: no-repeat;
 	padding-right:15px;
 }
@@ -2647,4 +2647,11 @@ pre {
 
 #whats_new_block .uk-list {
 	line-height:2 !important;
+}
+
+.cc-grid-item {
+    text-align: center;
+    margin-top: 20px;
+    width:85px;
+    height:85px;
 }

@@ -1,13 +1,13 @@
 <?php
 /**
-* glFusion CMS
+* glFusion CMS - Media Gallery Plugin
 *
 * UTF-8 Language File for the Media Gallery Plugin
 *
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2018 by the following authors:
+*  Copyright (C) 2002-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -687,6 +687,10 @@ $LANG_MG01 = array (
     'playback_options'          => 'Playback Options',
     'meta_data'                 => 'Meta Data',
     'auto_rotate'               => 'Auto Rotate Uploads',
+    'menulabel'                 => 'Menu Label',
+    'path_mg'                   => 'MediaGallery Directory',
+    'path_mediaobjects'         => 'Full Path to mediaobjects/ directory',
+    'mediaobjects_url'          => 'Full URL to mediaobjects/',
 );
 
 // error messages
@@ -879,8 +883,8 @@ $LANG_MG03 = array (
     'click_here'            => 'click here',
     'published'             => 'Published by',
     'on'                    => 'On',
-    'no_flash'              => '<div style="width:200px;">It appears you do not have the Flash Plugin installed, or the version you have is out of date and cannot play the requested content.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" style="border:none;" /></a></p></div>',
-    'tagline'               => 'Gallery powered by <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
+    'no_flash'              => 'Flash Player has reached its end of life (EOL) effective January 1, 2021. Flash media files can no longer be played.',
+    'tagline'               => 'Gallery powered by <a href="https://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url'            => 'Download <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url'         => 'Download <a href="%s">xppubwiz.reg (Windows Vista)</a>',
     'title_desc_keywords'   => 'All media meta data',

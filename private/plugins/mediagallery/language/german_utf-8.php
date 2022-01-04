@@ -1,13 +1,13 @@
 <?php
 /**
-* glFusion CMS
+* glFusion CMS - Media Gallery Plugin
 *
 * UTF-8 Language File for the Media Gallery Plugin
 *
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2018 by the following authors:
+*  Copyright (C) 2002-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -687,6 +687,10 @@ $LANG_MG01 = array (
     'playback_options'          => 'Playback-Optionen',
     'meta_data'                 => 'Meta-Daten',
     'auto_rotate'               => 'Uploads automatisch drehen',
+    'menulabel'                 => 'Menübezeichnung',
+    'path_mg'                   => 'MediaGallery Verzeichnis',
+    'path_mediaobjects'         => 'Vollständiger Pfad zum Verzeichnis mediaobjects/',
+    'mediaobjects_url'          => 'Vollständige URL zu mediaobjects/',
 );
 
 // error messages
@@ -879,8 +883,8 @@ $LANG_MG03 = array (
     'click_here'            => 'Hier klicken',
     'published'             => 'Veröffentlicht von',
     'on'                    => 'An',
-    'no_flash'              => '<div style="width:200px;">Es scheint, dass Du Flash-Plugin nicht installiert hast, oder dass die vorhandene Vesion zu alt ist, so dass die angeforderten Inhalte nicht wiedergegeben werden können.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Adobe-Flash-Player herunterladen" style="border:none;" /></a></p></div>',
-    'tagline'               => '<a href="http://www.glfusion.org" target="_new">Galerie powered by MediaGallery</a>',
+    'no_flash'              => 'Flash Player has reached its end of life (EOL) effective January 1, 2021. Flash media files can no longer be played.',
+    'tagline'               => 'Gallery powered by <a href="https://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url'            => '<a href="%s">xppubwiz.reg (Windows XP) herunterladen</a>',
     'vista_pub_url'         => '<a href="%s">xppubwiz.reg (Windows Vista) herunteladen</a>',
     'title_desc_keywords'   => 'Alle Medien-Meta-Daten',

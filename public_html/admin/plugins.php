@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -28,6 +28,7 @@ use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\FileSystem;
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 // Number of plugins to list per page
 // We use 25 here instead of the 50 entries in other lists to leave room
@@ -526,7 +527,7 @@ function PLUGINS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                         . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
                     $retval .= '&nbsp;<span class="warning">'
                         . $A['pi_code_version']
-                        . '</span><br ' . XHTML . '>';
+                        . '</span><br>';
                 } elseif ($enabled) {
                     $retval = $A['pi_version'];
                 } elseif (!$installed) {
@@ -544,20 +545,15 @@ function PLUGINS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 . '<p>' . $A['maintainer'] . '</p>'
                 . '<p><b>' . $LANG32[82] . ':</b></p>'
                 . '<p>glFusion: v' . $A['glfusionversion'] . '<br />' . 'PHP: v' . $A['phpversion'] . '</p>';
-            $attr['class'] = COM_getTooltipStyle();
-            $attr['title'] = $tip;
-             if ($enabled) {
-                $retval = COM_createLink($icon_arr['info'], '#', $attr);
-             } else {
-                $retval = COM_createLink($icon_arr['greyinfo'], '#', $attr);
-             }
+                $retval = FieldList::info(
+                    array('title' => $tip)
+                );
              break;
 
         case 'bundled':
             if ($bundled) {
-                $retval = ($enabled) ? $icon_arr['check'] : $icon_arr['greycheck'];
-            } else {
-                $retval = '';
+                $state = $enabled ? true : false;
+                $retval = FieldList::checkmark(array('active'=>$state));
             }
             break;
 
@@ -574,19 +570,26 @@ function PLUGINS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if ($installed) {
                 $attr['title'] = $LANG32[79];
                 $attr['onclick'] = 'return doubleconfirm(\'' . $LANG32[76] . '\',\'' . $LANG32[31] . '\');';
-                $retval = COM_createLink($icon_arr['delete'],
-                    $_CONF['site_admin_url'] . '/plugins.php'
-                    . '?delete=x'
-                    . '&amp;pi_name=' . $A['pi_name']
-                    . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $_CONF['site_admin_url'] . '/plugins.php'.'?delete=x'.'&amp;pi_name=' . $A['pi_name'].'&amp;' . CSRF_TOKEN . '=' . $token,
+                        'title' => $LANG32[79],
+                        'attr' => array(
+                            'onclick' => 'return doubleconfirm(\'' . $LANG32[76] . '\',\'' . $LANG32[31] . '\');',
+                        )
+                    )
+                );
             } else {
-                $attr['title'] = $LANG32[79];
-                $attr['onclick'] = 'return doubleconfirm(\'' . $LANG32[88] . '\',\'' . $LANG32[89] . '\');';
-                $retval = COM_createLink($icon_arr['delete'],
-                    $_CONF['site_admin_url'] . '/plugins.php'
-                    . '?remove=x'
-                    . '&amp;pi_name=' . $A['pi_name']
-                    . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $_CONF['site_admin_url'] . '/plugins.php'.'?remove=x'.'&amp;pi_name=' . $A['pi_name'].'&amp;' . CSRF_TOKEN . '=' . $token,
+                        'title' => $LANG32[79],
+                        'attr' => array(
+                            'onclick' => 'return doubleconfirm(\'' . $LANG32[88] . '\',\'' . $LANG32[89] . '\');',
+                        )
+                    )
+                );
             }
             break;
 
@@ -616,7 +619,7 @@ function PLUGINS_list($token)
                               COM_getBlockTemplate('_admin_block', 'header')));
 
     $menu_arr = array (
-                    array('url' => $_CONF['site_admin_url'],
+                    array('url' => $_CONF['site_admin_url'].'/index.php',
                           'text' => $LANG_ADMIN['admin_home']));
 
     $T->set_var('admin_menu',ADMIN_createMenu(
@@ -954,7 +957,7 @@ function PLUGINS_processUpload()
     USES_lib_admin();
 
     $menu_arr = array (
-                    array('url' => $_CONF['site_admin_url'],
+                    array('url' => $_CONF['site_admin_url'].'/index.php',
                           'text' => $LANG_ADMIN['admin_home']));
 
     $T = new Template($_CONF['path_layout'] . 'admin/plugins');

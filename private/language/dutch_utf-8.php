@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -143,6 +143,7 @@ $LANG01 = array(
     127 => 'Permalink',
     129 => 'Instellingen Website',
     130 => 'Webservices',			// depreciated
+    131 => 'Features',
     500 => 'Verwijder A.U.B. de admin/install/ folder!',
     501 => 'Root Debug is Ingeschakeld',
     502 => 'No fail SQL is Ingeschakeld',
@@ -396,7 +397,7 @@ $LANG04 = array(
     159 => 'Dit is een automatisch gegenereerd bericht. Reageer a.u.b. niet op dit emailbericht.',
     160 => 'Aangemeld',
     161 => 'Wachtwoord Sterkte',
-    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " % & * / \ ) or emoji characters',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
     163 => 'Remote User',
     164 => 'Remote User name',
     165 => 'Remote Service',
@@ -1461,6 +1462,8 @@ $MESSAGE = array(
     116 => "The plugin's files and related directories were successfully removed.",
     117 => "The remote account has been unlinked from your local account.",
     118 => 'Unlinking your remote account failed - current password was not entered or did not match.',
+    119 => 'The feature was successfully saved.',
+    120 => 'There was an error saving the feature.',
     200 => 'Sorry, you do not have access to this page.  Please note that all attempts to access unauthorized features are logged.',
     500 => 'De Template Cache is met succes geleegd',
     501 => 'Security Token is Invalide - Mogelijke sessie timeout.',
@@ -1574,6 +1577,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'The security token has expired. Please validate your session below.',
     'token_expired_footer' => 'The security token for this operation has expired, please re-validate',
     'validation_failed' => 'Validation Failed - Please retry.',
+    'feature_id' => 'Feature ID',
+    'feature_name' => 'Feature Name',
+    'avail_groups' => 'Available Groups',
+    'incl_groups' => 'Included Groups',
 );
 
 ###############################################################################
@@ -1651,6 +1658,31 @@ $LANG_DB_ADMIN = array(
     'overall_progress'    => 'Overall Progress',
     'no_backups_found'    => 'No Backup Files Found',
     'error_msg'           => 'The following errors were encountered',
+    'missing_required'    => 'Please Fill Out All Required Fields',
+    'time'                => 'Tijdstip',
+    'table'               => 'Tabel',
+    'changes_found'       => 'Changes Found',
+    'rows_updated'        => 'Rows Updated',
+    'sr_title'            => 'Search and Replace',
+    'search_for'          => 'Zoek naar',
+    'replace_with'        => 'Replace With',
+    'tables_to_search'    => 'Tables to search',
+    'search'              => 'Zoek',
+    'remove'              => 'Verwijder',
+    'case'                => 'Case-Insensitive',
+    'dry_run'             => 'Dry Run',
+    'available_tables'    => 'Available Tables',
+    'execute'             => 'Execute',
+    'sr_warning_banner'   => 'Ensure you have a recent backup of your database!  The Search / Replace feature does not have an undo option, so be careful to ensure the changes you make are correct.',
+    'dry_run_complete'    => 'Review the Dry Run results above. Validate the replacements are correct. If you are satisfied with the results, you can execute the Search and Replace by selecting the Execute button below.',
+    'sr_parameters'       => 'Search and Replace Parameters',
+    'sr_warning_1'        => 'Are you sure you want to perform the search / replace?',
+    'sr_warning_2'        => 'You do have a good backup, right?',
+    'edit'                => 'Wijzigen',
+    'cancel'              => 'Annuleren',
+    'seconds'             => 'seconden',
+    'plugin_table_column' => 'Plugin :: Table -> Column',
+
 );
 
 ###############################################################################
@@ -1952,6 +1984,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Your session is about to expire for inactivity. Please select OK to refresh the session.',
     'reset' => 'Herstel',
     'remaining_chars' => 'Remaining Characters ',
+    'feature_admin' => 'Feature Administration',
+    'feature_editor' => 'Feature Editor',
+    'feature_list' => 'Feature List',
+    'core_only' => 'Show Only Core Features',
+    'assigned_groups' => 'Assigned Groups',
 );
 
 ###############################################################################
@@ -2693,7 +2730,8 @@ $LANG_confignames['Core'] = array(
     'show_right_blocks' => 'Rechter Blokken Altijd Tonen?',
     'showfirstasfeatured' => 'Toon eerste Artikel als Featured?',
     'backend' => 'Feeds Toestaan?',
-    'rdf_file' => 'RSS Feeds Folder',
+    'rdf_file' => 'Main RSS File',
+    'path_rss' => 'Path to store RSS feeds',
     'rdf_limit' => 'Max. Feed',
     'rdf_storytext' => 'Artikellengte in Feed',
     'rdf_language' => 'Taal v/d Feed',
@@ -2727,6 +2765,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Zet Ingezonden Reacties in Wachtrij',
     'passwordspeedlimit' => 'Snelheidslimiet Wachtwoord',
     'login_attempts' => 'Max. aantal Aanmeldings Pogingen',
+    'login_landing' => 'Bestemmingspagina inloggen',
     'login_speedlimit' => 'Snelheidslimiet van Aanmelden',
     'user_html' => 'Gebruiker HTML',
     'admin_html' => 'Beheerder HTML',
@@ -2856,6 +2895,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'Artikel Overzicht',
     'log_level' => 'Log Level',
     'enable_admin_actions' => 'Enable Admin Logging',
+    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -2869,6 +2909,7 @@ $LANG_configsubgroups['Core'] = array(
     'sg_misc' => 'Overig',
     'sg_spam' => 'Spam / Bot Protection',
     'sg_cache' => 'Caching',
+    'sg_advanced' => 'Geavanceerde settings',
 );
 
 $LANG_fs['Core'] = array(

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2010-2019 by the following authors:
+*  Copyright (C) 2010-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -52,7 +52,7 @@ function editPreferences()
               'text' => $LANG28[54]),
         array('url' => $_CONF['site_admin_url'] . '/prefeditor.php',
                           'text' => $LANG28[95],'active'=>true),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -86,27 +86,25 @@ function editPreferences()
     // Get available languages
     $language = MBYTE_languageList ($_CONF['default_charset']);
     // build language select
-    $selection = '<select id="language" name="language">' . LB;
+    $options = '';
     foreach ($language as $langFile => $langName) {
-        $selection .= '<option value="' . $langFile . '"';
-        if ( $langFile == $_CONF['language'] ) {
-            $selection .= ' selected="selected"';
+        $options .= '<option value="' . $langFile . '"';
+        if ($langFile == $_CONF['language']) {
+            $options .= ' selected="selected"';
         }
-        $selection .= '>' . $langName . '</option>' . LB;
+        $options .= '>' . $langName . '</option>' . LB;
     }
-    $selection .= '</select>';
-
-    $T->set_var('language_selector', $selection);
+    $T->set_var('lang_options', $options);
 
     if ($_CONF['allow_user_themes'] == 1) {
-        $selection = '<select id="theme" name="theme">' . LB;
         $usertheme = $_CONF['theme'];
         $themeFiles = COM_getThemes ();
         usort ($themeFiles,function ($a,$b) {return strcasecmp($a,$b);});
+        $options = '';
         foreach ($themeFiles as $theme) {
-            $selection .= '<option value="' . $theme . '"';
+            $options .= '<option value="' . $theme . '"';
             if ($usertheme == $theme) {
-                $selection .= ' selected="selected"';
+                $options .= ' selected="selected"';
             }
             $words = explode ('_', $theme);
             $bwords = array ();
@@ -118,50 +116,49 @@ function editPreferences()
                     $bwords[] = $th;
                 }
             }
-            $selection .= '>' . implode (' ', $bwords) . '</option>' . LB;
+            $options .= '>' . implode (' ', $bwords) . '</option>' . LB;
         }
-        $selection .= '</select>';
-        $T->set_var('theme_selector', $selection);
+        $T->set_var('theme_options', $options);
     } else {
-        $T->set_var('theme_selector',$_CONF['theme']);
+        $T->set_var('theme_name', $_CONF['theme']);
     }
 
-    $selection  = '<select id="cooktime" name="cooktime">' . LB;
-    $selection .= COM_optionList($_TABLES['cookiecodes'],'cc_value,cc_descr',2678400, 0);
-    $selection .= '</select>';
-    $T->set_var('cooktime_selector', $selection);
+    $T->set_var(
+        'cooktime_options',
+        COM_optionList($_TABLES['cookiecodes'],'cc_value,cc_descr',2678400, 0)
+    );
 
-    $selection = Date::getTimeZoneDropDown($_CONF['timezone'],
-            array('id' => 'tzid', 'name' => 'tzid'));
-    $T->set_var('timezone_selector', $selection);
+    $T->set_var('timezone_options', Date::getTimeZoneOptions($_CONF['timezone']));
 
-    $selection = '<select id="dfid" name="dfid">' . LB
-               . COM_optionList ($_TABLES['dateformats'], 'dfid,description',
-                                 0) . '</select>';
-    $T->set_var('dateformat_selector', $selection);
-    $search_result_select  = '<select name="search_result_format" id="search_result_format">'.LB;
+    $T->set_var(
+        'dateformat_options',
+        COM_optionList($_TABLES['dateformats'], 'dfid,description', 0)
+    );
+
     if (isset($LANG_configSelect['Core'])) {
         $cfgSelect = $LANG_configSelect['Core'][18];
     } else {
         $cfgSelect = array_flip($LANG_configselects['Core'][18]);
     }
+    $options = '';
     foreach ($cfgSelect AS $type => $name ) {
-        $search_result_select .= '<option value="'. $type . '"' . ('google' == $type ? 'selected="selected"' : '') . '>'.$name.'</option>'.LB;
+        $options .= '<option value="' . $type . '"';
+        if ($type == 'google') {
+            $options .= ' selected="selected"';
+        }
+        $options .= '>' . $name . '</option>' . LB;
     }
-    $search_result_select .= '</select>';
-    $T->set_var('search_result_select',$search_result_select);
+    $T->set_var('search_result_options', $options);
 
-    $selection = '<select id="commentmode" name="commentmode">';
-    $selection .= COM_optionList ($_TABLES['commentmodes'], 'mode,name',
-                                  $_CONF['comment_mode']);
-    $selection .= '</select>';
-    $T->set_var('displaymode_selector', $selection);
+    $T->set_var(
+        'commentmode_options',
+        COM_optionList ($_TABLES['commentmodes'], 'mode,name', $_CONF['comment_mode'])
+    );
 
-    $selection = '<select id="commentorder" name="commentorder">';
-    $selection .= COM_optionList ($_TABLES['sortcodes'], 'code,name',
-                                  0);
-    $selection .= '</select>';
-    $T->set_var('sortorder_selector', $selection);
+    $T->set_var(
+        'commentorder_options',
+        COM_optionList($_TABLES['sortcodes'], 'code,name', 0)
+    );
 
     $T->set_var('gltoken_name', CSRF_TOKEN);
     $T->set_var('gltoken', SEC_createToken());

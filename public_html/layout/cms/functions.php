@@ -175,10 +175,6 @@ $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/timepicker.min
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/tooltip.min.js');
 $outputHandle->addScriptFile($_CONF['path_layout'].'js/components/upload.min.js');
 
-// Media Player
-$outputHandle->addScriptFile($_CONF['path_html'].'javascript/addons/mediaplayer/mediaelement-and-player.min.js');
-$outputHandle->addCSSFile($_CONF['path_html'] .'javascript/addons/mediaplayer/mediaelementplayer.css');
-
 // must load the jquery ui library we want to use if using jquery ui.
 $outputHandle->addLinkStyle($_CONF['layout_url'].'/css/jquery-ui/jquery-ui.min.css');
 
@@ -195,4 +191,29 @@ function theme_getToolTipStyle()
 {
     return('tooltip');
 }
+
+/*
+ * return array of attributes the theme can use to allow filtering exceptions
+ *
+ *  array( element,  attribute,  data_required )
+ *
+ *  see http://htmlpurifier.org/docs/enduser-customize.html for details on how this is used
+ */
+function theme_getAttributes()
+{
+    $attributes = array(
+        array('a','data-uk-lightbox','Bool'),
+        array('div', 'data-uk-slider','Bool'),
+        array('div', 'data-uk-slideset','CDATA'),
+        array('ul', 'data-uk-slideshow','CDATA'),
+        array('div', 'data-uk-parallax','CDATA'),
+        array('div', 'data-uk-accordion','Bool'),
+        array('ul', 'data-uk-nestable','Bool'),
+        array('ul', 'data-uk-sortable','Bool'),
+        array('div', 'data-uk-sticky','CDATA'),
+        array('span', 'data-uk-tooltip','CDATA')
+    );
+    return $attributes;
+}
+
 ?>

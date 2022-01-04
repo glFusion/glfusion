@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2019 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -23,6 +23,7 @@ require_once $_CONF['path_system'].'lib-autotag.php';
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 if (!SEC_hasRights('autotag.admin')) {
     Log::logAccessViolation('Autotag Manager');
@@ -458,15 +459,21 @@ function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token='')
             if ($A['is_function'] && (!$phprights || $_AM_CONF['allow_php'] == 0)) {
                 $retval = '';
             } else {
-                $attr['title'] = $LANG_ADMIN['edit'];
-                $retval = COM_createLink($icon_arr['edit'], $_CONF['site_admin_url'].'/autotag.php'. '?edit=x&amp;tag=' . $A['tag'], $attr );
+                $retval = FieldList::edit(
+                    array(
+                        'url' => $_CONF['site_admin_url'].'/autotag.php'. '?edit=x&amp;tag=' . $A['tag'],
+                    )
+                );
             }
             break;
 
         case 'pedit':
-            $url = $_CONF['site_admin_url'] . '/autotag.php?pedit=x&amp;autotag_id=' . $A['tag'];
-            $attr['title'] = $LANG_ADMIN['edit'];
-            $retval = COM_createLink($icon_arr['edit'], $url, $attr);
+            $retval = FieldList::edit(
+                array(
+                    'url' => $_CONF['site_admin_url'] . '/autotag.php?pedit=x&amp;autotag_id=' . $A['tag'],
+                    'attr' => array('title'=>$LANG_ADMIN['edit']),
+                )
+            );
             break;
 
         case "description":
@@ -493,7 +500,11 @@ function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token='')
             break;
 
         case 'is_function':
-            $retval = ($isfunction) ? (($isenabled) ? $icon_arr['check'] : $icon_arr['greycheck']) : '';
+            $retval = '';
+            $active = $isenabled ? true : false;
+            if ($isfunction) {
+                $retval = FieldList::checkmark(array('active' => $active));
+            }
             break;
 
         case 'is_enabled':
@@ -516,12 +527,17 @@ function AT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token='')
             break;
 
         case 'delete':
-            if (!$isfunction OR ($isfunction AND $phprights)) {
-                $attr['title'] = $LANG_ADMIN['delete'];
-                $attr['onclick'] = 'return confirm(\'' . $LANG_AM['confirm'] . '\');';
-                $retval = COM_createLink($icon_arr['delete'],
-                    $_CONF['site_admin_url'].'/autotag.php' . '?delete=x&amp;tag=' . $A['tag']
-                    . '&amp;' . CSRF_TOKEN . '=' . $token, $attr );
+            if (!$isfunction || ($isfunction AND $phprights)) {
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $_CONF['site_admin_url'].'/autotag.php' . '?delete=x&amp;tag=' . $A['tag'].'&amp;' . CSRF_TOKEN . '=' . $token,
+                        'attr' => array(
+                            'title'   => $LANG_ADMIN['delete'],
+                            'onclick' => 'return confirm(\'' . $LANG_AM['confirm'] . '\');'
+                        ),
+
+                    )
+                );
             } else {
                 $retval = '';
             }

@@ -1,0 +1,19 @@
+version: '2'
+services:
+  glfusion:
+    image: glfusion
+    ports:
+     - "8080:80"
+     - "8443:443"
+    volumes:
+     - glfusion_public_data:/var/www/app/public_html/data
+     - glfusion_private_data:/var/www/app/private/data
+     - glfusion_logs:/var/www/app/private/logs
+     - glfusion_mysql:/var/lib/mysql
+     - glfusion_ssl:/etc/nginx/ssl
+volumes:
+  glfusion_public_data:
+  glfusion_private_data:
+  glfusion_logs:
+  glfusion_mysql:
+  glfusion_ssl:

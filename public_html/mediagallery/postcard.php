@@ -1,33 +1,20 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | postcard.php                                                             |
-// |                                                                          |
-// | Allows users to send electronic postcards of images                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Allows users to send electronic postcards
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 require_once '../lib-common.php';
+
+use \glFusion\Log\Log;
 
 if (!in_array('mediagallery', $_PLUGINS)) {
     COM_404();
@@ -360,7 +347,7 @@ function MG_sendPostCard() {
     $sql = "INSERT INTO {$_TABLES['mg_postcard']} (pc_id,mid,to_name,to_email,from_name,from_email,subject,message,pc_time,uid) VALUES ('$pcId','".DB_escapeString($mid)."','".DB_escapeString($toname)."','".DB_escapeString($toemail)."','".DB_escapeString($fromname)."','".DB_escapeString($fromemail)."','$newsubject','$newmessage',$pc_time,$uid)";
     $result = DB_query($sql);
     if ( DB_error() ) {
-        COM_errorLog("Media Gallery: Error saving postcard");
+        Log::write('system',Log::ERROR,"Media Gallery: Error saving postcard");
     }
 
     COM_clearSpeedlimit($_CONF['commentspeedlimit'],'mgpostcard');
@@ -473,7 +460,6 @@ function MG_sendPostCard() {
 * This will print a message to the glFusion access log
 *
 * @param        string      $string         Message to write to access log
-* @see COM_errorLog
 *
 */
 

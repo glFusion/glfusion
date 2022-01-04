@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on orignal work by the following authors:
@@ -21,6 +21,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 /*
 if ( isset($_SYSTEM['no_fail_sql']) && $_SYSTEM['no_fail_sql'] == 1 ) {
@@ -72,7 +73,7 @@ function DB_setdebug($flag)
 function DB_displayError($flag)
 {
     $db = Database::getInstance();
-    $db->setDisplayError($flat);
+    $db->setDisplayError($flag);
 }
 
 /**
@@ -89,6 +90,8 @@ function DB_query ($sql, $ignore_errors = 0)
 {
     global $_SYSTEM, $_DB_dbms;
 
+    $dbError = '';
+
     $db = Database::getInstance();
 
     if (is_array ($sql)) {
@@ -99,7 +102,8 @@ function DB_query ($sql, $ignore_errors = 0)
             foreach ($sql as $db => $request) {
                 $errmsg .= LB . $db . ': ' . $request;
             }
-            $result = COM_errorLog ($errmsg, 3);
+            $result = $errmsg;
+            Log::write('system',Log::ERROR,$errmsg);
             die ($result);
         }
     }
@@ -110,17 +114,22 @@ function DB_query ($sql, $ignore_errors = 0)
 
     try {
         $result = $db->conn->query($sql);
-    } catch (\Doctrine\DBAL\DBALException | PDOException $e) {
-        if ($ignore_errors) {
-            $result = false;
-            if (defined ('DVLP_DEBUG')) {
-                $db->_errorlog("SQL Error: " . $e->getMessage() . PHP_EOL. $sql);
-            }
-        } else {
-            trigger_error(DB_error($sql), E_USER_ERROR);
+    } catch (Throwable $e) {
+        $err = $db->conn->errorInfo();
+        if (isset($err[2])) {
+            $dbError = preg_replace('!\s+!', ' ', $err[2]);
         }
+        if (defined ('DVLP_DEBUG')) {
+            if (class_exists('\glFusion\Log\Log',true)) {
+//                Log::write('system',Log::DEBUG,"SQL Error: " . $dbError);
+//                Log::write('system',Log::DEBUG,"SQL: " . $sql);
+            }
+        }
+        if ($ignore_errors) {
+            return false;
+        }
+        $db->dbError($dbError,$sql);
     }
-
     if ($result === false) {
         if ($ignore_errors) {
             return false;
@@ -516,6 +525,9 @@ function DB_error($sql = '')
                 }
             }
         }
+//        Log::write('system',Log::ERROR,"SQL Error: " . $db->getErrno());
+//        Log::write('system',Log::ERROR,"SQL: " . $sql);
+
         if ($db->_display_error) {
             return  $db->getErrno() . ': ' . $sql;
         } else {

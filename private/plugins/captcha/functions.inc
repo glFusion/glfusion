@@ -1,36 +1,23 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | CAPTCHA Plugin - glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | functions.inc                                                            |
-// |                                                                          |
-// | glFusion integration functions.                                          |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - CAPTCHA Plugin
+*
+* Plugin APIs
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 define('CAPTCHA_GDLIB', 0);
 define('CAPTCHA_IMGMAGICK', 1); // retired
@@ -732,7 +719,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
     CAPTCHA_expireSessions();
 
     if ( isset($_POST['validation_field']) && !empty($_POST['validation_field']) ) {
-        CAPTCHA_errorLog("CAPTCHA: Honey Pot Field was populated in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+        CAPTCHA_errorLog("CAPTCHA: Honey Pot Field was populated in " . $ctype . " - IP Address: " . $_SERVER['REAL_ADDR'] );
         // immediate ban!
         if ( function_exists('bb2_ban') ) {
             bb2_ban($_SERVER['REAL_ADDR'],2);
@@ -753,7 +740,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         if ( function_exists('bb2_ban') ) {
             bb2_ban($_SERVER['REAL_ADDR'],2);
         }
-        CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (no session id) in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+        CAPTCHA_errorLog("CAPTCHA: Detected an attempt to bypass CAPTCHA (no session id) in " . $ctype . " - IP Address: " . $_SERVER['REAL_ADDR'] );
         $msg = $LANG_CP00['bypass_error_blank'];
         $rc = 0;
         return ( array( $rc, $msg ) );
@@ -771,7 +758,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
             if ( $resp) $errors = $resp->getErrorCodes();
             if ( is_array($errors) ) {
                 foreach ($errors as $code) {
-                    COM_errorLog($code);
+                    Log::write('system',Log::ERROR,$code);
                 }
             }
 
@@ -794,7 +781,7 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         $cTime = DB_getItem($_TABLES['cp_sessions'],'cptime',"session_id='" . DB_escapeString($csid) . "'");
         $now = time();
         if ( $cTime == '' || $cTime+$_CP_CONF['expire']+3600 < $now ) {
-            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use an expired CAPTCHA in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use an expired CAPTCHA in " . $ctype . " - IP Address: " . $_SERVER['REAL_ADDR'] );
             $msg = $LANG_CP00['session_expired'];
             $rc = 0;
             CAPTCHA_checkRetries( $csid );
@@ -804,14 +791,14 @@ function CAPTCHA_checkInput( $response, $ctype='general' ) {
         if ( $validationString == '' ) {
            // no active session was found
             CAPTCHA_checkRetries( $csid );
-            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use old CAPTCHA Session in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            CAPTCHA_errorLog("CAPTCHA: Detected an attempt to use old CAPTCHA Session in " . $ctype . " - IP Address: " . $_SERVER['REAL_ADDR'] );
             $msg = $LANG_CP00['bypass_error_blank'];
             $rc = 0;
             return ( array( $rc, $msg ) );
         }
         if ( $validationString != $response ) {
             $msg = $LANG_CP00['entry_error'];
-            CAPTCHA_errorLog("CAPTCHA: An invalid CAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REMOTE_ADDR'] );
+            CAPTCHA_errorLog("CAPTCHA: An invalid CAPTCHA string was entered in " . $ctype . " - IP Address: " . $_SERVER['REAL_ADDR'] );
             $rc = 0;
             CAPTCHA_checkRetries( $csid );
             return ( array( $rc, $msg ) );
@@ -862,17 +849,8 @@ function CAPTCHA_errorLog( $logentry, $override = 0) {
     if ( $_CP_CONF['logging'] != 1 && $override == 0) {
         return;
     }
-
-    $dt = new \Date('now',$_CONF['timezone']);
-
-    if( !empty( $logentry )) {
-        $timestamp = $dt->format("d M Y H:i:s T",true);
-        $logfile = $_CONF['path_log'] . 'captcha.log';
-
-        if( $file = fopen( $logfile, 'a' )) {
-            fputs( $file, "$timestamp - $logentry \n" );
-            fclose($file);
-        }
+    if ( !empty($logentry)) {
+        Log::write('system',Log::WARNING,$logentry);
     }
 }
 ?>

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2020 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -34,7 +34,7 @@ if (empty ($_CONF['cookiedomain'])) {
             // e.g. 'localhost' or other local names
             $_CONF['cookiedomain'] = '';
         } else {
-            $_CONF['cookiedomain'] = '.' . $server[1];
+            $_CONF['cookiedomain'] = $server[1];
         }
     }
 }
@@ -186,6 +186,16 @@ function SESS_sessionCheck()
     SESS_setVar('session.counter',$count);
     $gc_check = $count % 10;
 
+    // set new current url and previous url session vars here
+    $currentURL = COM_getCurrentURL();
+    $previousURL = SESS_getVar('session.currenturl');
+
+    SESS_setVar('session.currenturl',$currentURL);
+    SESS_setVar('session.previousurl',$previousURL);
+    if (!isset($_SERVER['HTTP_REFERER'])) {
+        $_SERVER['HTTP_REFERER'] = $_CONF['site_url'];
+    }
+
     // failsafe
     if ( $_CONF['allow_user_themes'] == 0 ) {
         $_USER['theme'] = $_CONF['theme'];
@@ -290,12 +300,12 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
         if ( !empty($oldsessionid) ) {
             try {
                 $stmt = $db->conn->delete($_TABLES['sessions'],array('md5_sess_id' => $oldsessionid));
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
 //                throw($e);
                 try {
                     $db->conn->query("REPAIR TABLE `{$_TABLES['sessions']}`");
                     Log::write('system',Log::ERROR,"Attempting to repair the glFusion Sessions Table");
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     Log::write('system',Log::ERROR,"Unable to write to the glFusion Sessions Table");
                 }
             }
@@ -379,7 +389,7 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
             array($sessid, $mintime),
             array(Database::STRING,Database::INTEGER)
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }
@@ -415,7 +425,7 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
 
         try {
             $db->conn->delete($_TABLES['sessions'], array('md5_sess_id' => $sessid));
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -474,7 +484,7 @@ function SESS_endUserSession($userid)
     if ( !defined('DEMO_MODE') ) {
         try {
             $db->conn->delete($_TABLES['sessions'],array('uid' => $userid),array(Database::INTEGER));
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
             $db->dbError($e->getMessage(),$sql);
         }
 		if (session_id()) {
@@ -486,7 +496,7 @@ function SESS_endUserSession($userid)
             $sess = $_COOKIE[$_CONF['cookie_session']];
             try {
                 $db->conn->delete($_TABLES['sessions'], array('md5_sess_id' => $sess));
-            } catch(\Doctrine\DBAL\DBALException $e) {
+            } catch(Throwable $e) {
                 $db->dbError($e->getMessage(),$sql);
             }
         }
@@ -525,7 +535,7 @@ function SESS_getUserData($username)
                 array($username),
                 array(Database::STRING)
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $db->dbError($e->getMessage(),$sql);
     }
 
@@ -565,7 +575,7 @@ function SESS_getUserDataFromId($userid)
             array(Database::INTEGER),
             new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $cacheKey)
             );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $db->dbError($e->getMessage(),$sql);
     }
 
@@ -664,7 +674,7 @@ function SESS_completeLogin($uid, $authenticated = 1)
                             array('uid' => $_USER['uid']),
                             array(Database::STRING, Database::INTEGER)
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }

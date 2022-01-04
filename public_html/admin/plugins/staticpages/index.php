@@ -1,42 +1,29 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Static Pages Plugin - glFusion CMS                                       |
-// +--------------------------------------------------------------------------+
-// | index.php                                                                |
-// |                                                                          |
-// | Administration page.                                                     |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Mark A. Howard         mark AT usable-web DOT com                        |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Phill Gillespie  - phill AT mediaaustralia DOT com DOT au       |
-// |          Tom Willett      - twillett AT users DOT sourceforge DOT net    |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Static Pages Plugin
+*
+* Administration Page
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*   Mark A. Howard  mark AT usable-web DOT com
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs        tony AT tonybibbs DOT com
+*  Tom Willett       twillett AT users DOT sourceforge DOT net
+*  Blaine Lang       langmail AT sympatico DOT ca
+*  Dirk Haun         dirk AT haun-online DOT de
+*
+*/
 
 require_once '../../../lib-common.php';
 require_once '../../auth.inc.php';
+
+use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 $display = '';
 
@@ -80,7 +67,7 @@ function PAGE_form($A, $error = false, $editFlag = 0)
               'text' => $LANG_STATIC['page_list']),
         array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?edit=x',
               'text' => $lang_create_or_edit,'active'=>true),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -565,6 +552,8 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     $retval = '';
     $access = SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],
                             $A['perm_group'],$A['perm_members'],$A['perm_anon']);
+
+
     $enabled = ($A['sp_status'] == 1) ? true : false;
 
     $dt = new Date('now',$_USER['tzid']);
@@ -573,29 +562,31 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'edit':
             if ($access == 3) {
-                $attr['title'] = $LANG_ADMIN['edit'];
-                $retval = COM_createLink(
-                    $icon_arr['edit'],
-                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
-                    . '?edit=x&amp;sp_id=' . $A['sp_id'], $attr );
-            } else {
-                $retval = $icon_arr['blank'];
+                $retval = FieldList::edit(
+                    array(
+                        'url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'.'?edit=x&amp;sp_id=' . $A['sp_id'],
+                        'attr' => array(
+                            'title' => $LANG_ADMIN['edit']
+                        )
+                    )
+                );
             }
             break;
 
         case 'copy':
             if ($access >= 2) {
-                $attr['title'] = $LANG_ADMIN['copy'];
-                $retval = COM_createLink(
-                    $icon_arr['copy'],
-                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
-                    . '?clone=x&amp;sp_id=' . $A['sp_id'], $attr);
-            } else {
-                $retval = $icon_arr['blank'];
+                $retval = FieldList::copy(
+                    array(
+                        'url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'.'?clone=x&amp;sp_id=' . $A['sp_id'],
+                        'attr' => array(
+                            'title' => $LANG_ADMIN['copy'],
+                        )
+                    )
+                );
             }
             break;
 
-        case "sp_title":
+        case 'sp_title':
             $sp_title = $A['sp_title'];
             if ($enabled) {
                 $url = COM_buildUrl(
@@ -610,10 +601,10 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'sp_search' :
-            if ($fieldvalue == 0) {
-                $retval = '<i class="uk-icon uk-icon-minus uk-text-danger"></i>';
+            if ($fieldvalue != 1) {
+                $retval = FieldList::minus();
             } else {
-                $retval = '<i class="uk-icon uk-icon-check uk-text-success"></i>';
+                $retval = FieldList::checkmark(array('active'=> true));
             }
             break;
         case 'access':
@@ -652,15 +643,15 @@ function PAGE_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'delete':
             if ($access == 3) {
-                $attr['title'] = $LANG_ADMIN['delete'];
-                $attr['onclick'] = "return confirm('" . $LANG_STATIC['delete_confirm'] . "');";
-                $retval = COM_createLink(
-                    $icon_arr['delete'],
-                    $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'
-                    . '?delete=x&amp;sp_id=' . $A['sp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
-
-            } else {
-                $retval = $icon_arr['blank'];
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php'.'?delete=x&amp;sp_id=' . $A['sp_id'] . '&amp;' . CSRF_TOKEN . '=' . $token,
+                        'attr' => array(
+                            'title'   => $LANG_ADMIN['delete'],
+                            'onclick' => "return confirm('" . $LANG_STATIC['delete_confirm'] . "');"
+                        ),
+                    )
+                );
             }
             break;
 
@@ -701,7 +692,7 @@ function PAGE_list()
               'text' => $LANG_STATIC['page_list'],'active'=>true),
         array('url' => $_CONF['site_admin_url'] . '/plugins/staticpages/index.php?edit=x',
               'text' => $LANG_ADMIN['create_new']),
-        array('url' => $_CONF['site_admin_url'],
+        array('url' => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -1008,7 +999,7 @@ switch ($action) {
 
     case 'delete':
         if (empty($sp_id) || (is_numeric ($sp_id) && ($sp_id == 0))) {
-            COM_errorLog('Attempted to delete staticpage, sp_id empty or null, value =' . $sp_id);
+            Log::write('system',Log::ERROR,'Attempted to delete staticpage, sp_id empty or null, value =' . $sp_id);
             $display .= COM_refresh($_CONF['site_admin_url'] . '/plugins/staticpages/index.php');
         } elseif (SEC_checkToken()) {
             $args = array(

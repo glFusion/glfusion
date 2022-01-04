@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2018 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -26,6 +26,8 @@ if (!defined ('GVERSION')) {
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Formatter;
+use \glFusion\Log\Log;
+use \glFusion\FieldList;
 
 USES_lib_user();
 
@@ -58,7 +60,7 @@ function plugin_subscription_email_format_comment($category,$track_id,$post_id,$
 
     try {
         $commentRecord = $db->conn->fetchAssoc($sql, array($post_id),array(Database::INTEGER));
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }
@@ -305,24 +307,11 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 
     // Order
     $selector_data = COM_optionList( $_TABLES['sortcodes'], 'code,name', $order );
-    $selector = '<select name="order">' . LB
-              . $selector_data
-              . LB . '</select>';
-    $commentbar->set_var( 'order_selector', $selector);
-    $commentbar->set_var( 'order_select_data', $selector_data);
+    $commentbar->set_var( 'order_selector', $selector_data);
 
     // Mode
-    if( $page == 'comment.php' ) {
-        $selector = '<select name="format">';
-    } else {
-        $selector = '<select name="mode">';
-    }
     $selector_data = COM_optionList( $_TABLES['commentmodes'], 'mode,name', $mode );
-    $selector .= LB
-               . $selector_data
-               . LB . '</select>';
-    $commentbar->set_var( 'mode_selector', $selector);
-    $commentbar->set_var( 'mode_select_data',$selector_data);
+    $commentbar->set_var( 'mode_selector', $selector_data);
     $commentbar->set_var( 'mode_select_field_name', ($page == 'comment.php' ? 'format' : 'mode' ) ) ;
 
     return $commentbar->finish( $commentbar->parse( 'output', 'commentbar' ));
@@ -1193,7 +1182,7 @@ function CMT_getCount($type, $sid, $queued = 0)
 * @return   string  HTML for comment form
 *
 */
-function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
+function CMT_commentForm($title,$comment,$sid,$pid='0',$type = '',$mode = '',$postmode = '')
 {
     global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS, $LANG_ADMIN;
 
@@ -1303,6 +1292,7 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
 //   since we really want the raw data
 //   we can do the filtering on display or edit below
                 $A[$key] = @htmlspecialchars(COM_checkWords(strip_tags($_POST[$key])),ENT_QUOTES,COM_getEncodingt());
+                $A[$key] = USER_uniqueUsername($A[$key]);
             } else {
                 $A[$key] = COM_applyFilter($_POST[$key]);
             }
@@ -1446,12 +1436,10 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
         $comment_template->set_var('uid', 1);
 
         if ( isset($A['username'])) {
-            $name = $A['username'];
+            $name = USER_uniqueUsername($A['username']);
         } else {
             $name = $LANG03[24]; //anonymous user
         }
-        $usernameblock = '<input type="text" name="username" size="16" value="' .
-                         $name . '" maxlength="32"/>';
         $comment_template->set_var('username', $filter->editableText($name));
 
         $comment_template->set_var('action_url', $_CONF['site_url'] . '/users.php?mode=new');
@@ -1504,14 +1492,10 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type,$mode,$postmode)
         //for editing
         $comment_template->set_var('save_type','saveedit');
         $comment_template->set_var('lang_save',$LANG03[29]);
-        $comment_template->set_var('save_option', '<input type="submit" name="saveedit" value="'
-            . $LANG03[29] . '"/>');
     } elseif (($_CONF['skip_preview'] == 1) || ($mode == 'preview_new')) {
         //new comment
         $comment_template->set_var('save_type','savecomment');
         $comment_template->set_var('lang_save',$LANG03[11]);
-        $comment_template->set_var('save_option', '<input type="submit" name="savecomment" value="'
-            . $LANG03[11] . '"/>');
     }
 
 // set some fields if mod or admin edit
@@ -1563,7 +1547,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 
     // Check that anonymous comments are allowed
     if (($uid == 1) && (($_CONF['loginrequired'] == 1) || ($_CONF['commentsloginrequired'] == 1))) {
-        COM_errorLog("CMT_saveComment: IP address {$_SERVER['REMOTE_ADDR']} "
+        Log::write('system',Log::WARNING,'CMT_saveComment: IP address '.$_SERVER['REAL_ADDR'].' '
                    . 'attempted to save a comment with anonymous comments disabled for site.');
         return $ret = 2;
     }
@@ -1572,8 +1556,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     COM_clearSpeedlimit ($_CONF['commentspeedlimit'], 'comment');
     $last = COM_checkSpeedlimit ('comment');
     if ($last > 0) {
-        COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried "
-                   . 'to submit a comment before the speed limit expired');
+        Log::write('system',Log::WARNING,'CMT_saveComment: '.$uid.' from IP address '.$_SERVER['REAL_ADDR'].' '
+        . 'attempted to submit a comment before the speed limit expired.');
         return $ret = 3;
     }
 
@@ -1583,6 +1567,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
     if ( COM_isAnonUser() ) {
         if (isset($_POST['username']) ) {
             $uname = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt(),true);
+            $uname = USER_uniqueUsername($uname);
         } else {
             $uname = '';
         }
@@ -1597,7 +1582,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 
     // Error Checking
     if (empty ($sid) || empty ($comment) || empty ($type) ) {
-        COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REMOTE_ADDR']} tried to submit a comment with one or more missing values.");
+        Log::write('system',Log::WARNING,'CMT_saveComment: '.$uid.' from '.$_SERVER['REAL_ADDR'].' tried to submit a comment with one or more missing values.');
         if ( SESS_isSet('glfusion.commentpresave.error') ) {
             $msg = SESS_getVar('glfusion.commentpresave.error') . '<br/>' . $LANG03[12];
         } else {
@@ -1665,7 +1650,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             array(Database::INTEGER, Database::STRING)
         );
         if ($row === false) {
-            COM_errorLog("CMT_saveComment: $uid from {$_SERVER['REAL_ADDR']} tried "
+            Log::write('system',Log::WARNING,'CMT_saveComment: '.$uid.' from '.$_SERVER['REAL_ADDR'].' tried '
                        . 'to reply to a non-existent comment or the pid/sid did not match');
             return 4;
         }
@@ -1673,8 +1658,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
         $rht    = $row['rht'];
         $indent = $row['indent'];
 
-        $db->conn->beginTransaction();
         $db->conn->query("LOCK TABLES `{$_TABLES['comments']}` WRITE");
+        $db->conn->beginTransaction();
         try {
             $db->conn->executeUpdate(
                     "UPDATE `{$_TABLES['comments']}` SET lft = lft + 2 "
@@ -1715,17 +1700,15 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             $db->conn->commit();
             $db->conn->query("UNLOCK TABLES `{$_TABLES['comments']}` WRITE");
             usleep(250000);
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch (\Exception $e) {
             $db->conn->rollBack();
             $db->conn->query("UNLOCK TABLES");
             throw($e);
         }
-
     } else {  // first - parent level comment
 
-        $db->conn->beginTransaction();
         $db->conn->query("LOCK TABLES `{$_TABLES['comments']}` WRITE");
-
+        $db->conn->beginTransaction();
         try {
             $rht = $db->conn->fetchColumn(
                 "SELECT MAX(rht) FROM `{$_TABLES['comments']}` WHERE sid=?",
@@ -1735,14 +1718,14 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             if ($rht === null) {
                 $rht = 0;
             }
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             $rht = 0;
         }
 
         $indent = 0;
 
         try {
-            $db->conn->executeUpdate(
+            $db->conn->executeQuery(
                 "INSERT INTO `{$_TABLES['comments']}` (sid,uid,name,comment,date,title,pid,queued,postmode,lft,rht,indent,type,ipaddress) "
               . " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 array($sid,$uid,$uname,$comment,$_CONF['_now']->toMySQL(true),$title,$pid,$queued,$postmode,$rht+1,$rht+2,0,$type,$IP),
@@ -1770,7 +1753,7 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
             $db->conn->commit();
             $db->conn->query("UNLOCK TABLES");
             usleep(250000);
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch (\Exception $e) {
             $db->conn->rollBack();
             $db->conn->query("UNLOCK TABLES");
             throw($e);
@@ -1959,7 +1942,7 @@ function CMT_deleteComment ($cid, $sid, $type)
     // Sanity check, note we return immediately here and no DB operations
     // are performed
     if (!is_numeric ($cid) || ($cid < 0) || empty ($sid) || empty ($type)) {
-        COM_errorLog("CMT_deleteComment: {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+        Log::write('system',Log::WARNING,'CMT_deleteComment: '.$_USER['uid'].' from '.$_SERVER['REAL_ADDR'].' tried '
                    . 'to delete a comment with one or more missing/bad values.');
         return 1;
     }
@@ -1972,9 +1955,8 @@ function CMT_deleteComment ($cid, $sid, $type)
     // from happening at the same time. A transaction would work better,
     // but aren't supported with MyISAM tables.
 
-    $db->conn->beginTransaction();
     $db->conn->query("LOCK TABLES `{$_TABLES['comments']}` WRITE");
-
+    $db->conn->beginTransaction();
     try {
         $cmtData = $db->conn->fetchAssoc(
             "SELECT pid, lft, rht FROM `{$_TABLES['comments']}` "
@@ -1983,7 +1965,7 @@ function CMT_deleteComment ($cid, $sid, $type)
           array(Database::INTEGER, Database::STRING, Database::STRING)
         );
         if ($cmtData === false) {
-            COM_errorLog("CMT_deleteComment: {$_USER['uid']} from {$_SERVER['REMOTE_ADDR']} tried "
+            Log::write('system',Log::WARNING,'CMT_deleteComment: '.$_USER['uid'].' from '.$_SERVER['REAL_ADDR'].' tried '
                        . 'to delete a comment that doesn\'t exist as described.');
             return $ret = 2;
         }
@@ -2022,7 +2004,7 @@ function CMT_deleteComment ($cid, $sid, $type)
         $db->conn->commit();
         $db->conn->query("UNLOCK TABLES");
         usleep(250000);
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $db->conn->rollBack();
         $db->conn->query("UNLOCK TABLES");
         throw($e);
@@ -2384,7 +2366,7 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
     }
     try {
         $stmt = $db->conn->executeQuery($sql,$sqlParams,$sqlTypes);
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $throw($e);
     }
 
@@ -2592,18 +2574,24 @@ function plugin_itemlist_comment($token)
                       'no_data'     => $LANG01[29],
                       'form_url'    => "{$_CONF['site_admin_url']}/moderation.php"
     );
-
-    $actions = '<input name="approve" type="image" src="'
-        . $_CONF['layout_url'] . '/images/admin/accept.' . $_IMAGE_TYPE
-        . '" style="vertical-align:bottom;" title="' . $LANG29[44]
-        . '" onclick="return confirm(\'' . $LANG29[45] . '\');"'
-        . '/>&nbsp;' . $LANG29[1];
+    $actions = FieldList::approveButton(array(
+        'name' => 'approve_x',
+        'text' => $LANG29[1],
+        'attr' => array(
+            'title' => $LANG29[44],
+            'onclick' => 'return confirm(\'' . $LANG29[45] . '\');'
+        )
+    ));
     $actions .= '&nbsp;&nbsp;&nbsp;&nbsp;';
-    $actions .= '<input name="delbutton" type="image" src="'
-        . $_CONF['layout_url'] . '/images/admin/delete.' . $_IMAGE_TYPE
-        . '" style="vertical-align:text-bottom;" title="' . $LANG01[124]
-        . '" onclick="return confirm(\'' . $LANG01[125] . '\');"'
-        . '/>&nbsp;' . $LANG_ADMIN['delete'];
+
+    $actions .= FieldList::deleteButton(array(
+        'name' => 'delbutton_x',
+        'text' => $LANG_ADMIN['delete'],
+        'attr' => array(
+            'title' => $LANG01[124],
+            'onclick' => 'return confirm(\'' . $LANG29[45] . '\');'
+        )
+    ));
 
     $options = array('chkselect' => true,
                      'chkfield' => 'cid',
@@ -2648,7 +2636,7 @@ function plugin_moderationapprove_comment($id)
 
     try {
         $stmt = $db->conn->executeUpdate($sql,array($id),array(Database::INTEGER));
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if ($db->getIgnore()) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         } else {
@@ -2658,7 +2646,7 @@ function plugin_moderationapprove_comment($id)
     $sql = "SELECT * FROM `{$_TABLES['comments']}` WHERE cid=?";
     try {
         $row = $db->conn->fetchAssoc($sql,array($id),array(Database::INTEGER));
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if ($db->getIgnore()) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
             return false;
@@ -2667,7 +2655,6 @@ function plugin_moderationapprove_comment($id)
         }
     }
     if ($row === false) {
-        COM_errorLog("Unable to retrieve approved comment");
         return false;
     }
 
@@ -2709,7 +2696,7 @@ function plugin_moderationdelete_comment($id)
     $sql = "DELETE FROM `{$_TABLES['comments']}` WHERE cid=? AND queued=1";
     try {
         $stmt = $db->conn->executeUpdate($sql,array($id),array(Database::INTEGER));
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         if ($db->getIgnore()) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         } else {
@@ -2753,18 +2740,22 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
     }
 
     $dt = new Date('now',$_USER['tzid']);
-
     $field = $fieldname;
+    $field = ($fieldname == "0" ) ? 'edit' : $field;
     $field = ($type == 'user' && $fieldname == 1) ? 'user' : $field;
     $field = ($type == 'story' && $fieldname == 2) ? 'day' : $field;
     $field = ($type == 'story' && $fieldname == 3) ? 'tid' : $field;
     $field = ($type == 'user' && $fieldname == 3) ? 'email' : $field;
     $field = ($type <> 'user' && $fieldname == 4) ? 'uid' : $field;
     $field = ($type == 'user' && $fieldname == 4) ? 'day' : $field;
-
     switch ($field) {
         case 'edit':
-            $retval = COM_createLink($icon_arr['edit'], $A['edit']);
+            $retval = FieldList::edit(array(
+                'url' => $A['edit'],
+                'attr' => array(
+                    'title' => $LANG_ADMIN['edit'],
+                )
+            ));
             break;
 
         case 'title' :
@@ -2772,9 +2763,15 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             break;
 
         case 'user':
+            $retval = FieldList::user(array(
+
+            ));
+            $retval .= '&nbsp;' . $fieldvalue;
+/*
             $retval =  '<img src="' . $_CONF['layout_url']
             . '/images/admin/user.' . $_IMAGE_TYPE
             . '" style="vertical-align:bottom;"/>&nbsp;' . $fieldvalue;
+*/
             break;
 
         case 'day':
@@ -2802,10 +2799,8 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
             if ( $A['uid'] == 1 ) {
 
                 if ( empty($A['name']) ) $A['name'] = $LANG03[24];
-
-                $retval = $icon_arr['greyuser']
-                            . '&nbsp;&nbsp;'
-                            . '<span style="vertical-align:top">' . $A['name'] . '</span>';
+                $retval = FieldList::editusers();
+                $retval .= $A['name'];
             } else {
                 $db = Database::getInstance();
                 $username = $db->conn->fetchColumn(
@@ -2815,48 +2810,51 @@ function CMT_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                                 array(Database::INTEGER)
                             );
 
+                $retval = FieldList::editusers(
+                    array(
+                        'url' => $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'],
+                        'attr' => array(
+                            'title' => $LANG28[108],
+                        )
+                    )
+                );
                 $attr['title'] = $LANG28[108];
                 $url = $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' .  $A['uid'];
-                $retval = COM_createLink($icon_arr['user'], $url, $attr);
-                $retval .= '&nbsp;&nbsp;';
-                $attr['style'] = 'vertical-align:top;';
                 $retval .= COM_createLink($username, $url, $attr);
             }
             break;
 
         case 'email':
-            $url = 'mailto:' . $fieldvalue;
-            $attr['title'] = $LANG28[111];
-            $retval = COM_createLink($icon_arr['mail'], $url, $attr);
+            $retval = FieldList::email(array(
+                'url' => 'mailto:' . $fieldvalue,
+                'attr' => array(
+                    'title' => $LANG28[111],
+                )
+            ));
             $retval .= '&nbsp;&nbsp;';
             $attr['title'] = $LANG28[99];
             $url = $_CONF['site_admin_url'] . '/mail.php?uid=' . $A['uid'];
-            $attr['style'] = 'vertical-align:top;';
             $retval .= COM_createLink($fieldvalue, $url, $attr);
             break;
 
         case 'approve':
-            $retval = '';
-            $attr['title'] = $LANG29[1];
-            $attr['onclick'] = 'return confirm(\'' . $LANG29[48] . '\');';
-            $retval .= COM_createLink($icon_arr['accept'],
-                $_CONF['site_admin_url'] . '/moderation.php'
-                . '?approve=x'
-                . '&amp;type=' . $A['_type_']
-                . '&amp;id=' . $A['cid']
-                . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            $retval = FieldList::approve(array(
+                'url' => $_CONF['site_admin_url'] . '/moderation.php'.'?approve=x'.'&amp;type=' . $A['_type_'].'&amp;id=' . $A['cid']. '&amp;' . CSRF_TOKEN . '=' . $token,
+                'attr' => array(
+                    'title' => $LANG29[1],
+                    'onclick' => 'return confirm(\'' . $LANG29[48] . '\');',
+                )
+            ));
             break;
 
         case 'delete':
-            $retval = '';
-            $attr['title'] = $LANG_ADMIN['delete'];
-            $attr['onclick'] = 'return confirm(\'' . $LANG29[49] . '\');';
-            $retval .= COM_createLink($icon_arr['delete'],
-                $_CONF['site_admin_url'] . '/moderation.php'
-                . '?delete=x'
-                . '&amp;type=' . $A['_type_']
-                . '&amp;id=' . $A['cid']
-                . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+            $retval = FieldList::delete(array(
+                'delete_url' => $_CONF['site_admin_url'] . '/moderation.php'.'?delete=x'.'&amp;type=' . $A['_type_'].'&amp;id=' . $A['cid'].'&amp;' . CSRF_TOKEN . '=' . $token,
+                'attr' => array(
+                    'title' => $LANG_ADMIN['delete'],
+                    'onclick' => 'return confirm(\'' . $LANG29[49] . '\');',
+                )
+            ));
             break;
 
         case 'preview' :

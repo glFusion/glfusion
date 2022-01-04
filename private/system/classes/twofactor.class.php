@@ -1,19 +1,28 @@
 <?php
 /**
-*   glFusion Two Factor Wrapper
+* glFusion CMS
 *
-*   @author     Mark R. Evans <mark@lglfusion.org>
-*   @copyright  Copyright (c) 2017-2018 Mark R. Evans <mark@glfusion.org>
-*   @package    glFusion
-*   @version    1.0.0
-*   @license    http://opensource.org/licenses/gpl-2.0.php
-*               GNU Public License v2 or later
+* Two Factor Wrapper
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2017-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*  Tony Bibbs         tony AT tonybibbs DOT com
+*  Tom Willett        twillett AT users DOT sourceforge DOT ne
+*  Blaine Lang        langmail AT sympatico DOT ca
+*  Dirk Haun          dirk AT haun-online DOT de
+*
 */
 
-// this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
+
+use \glFusion\Log\Log;
 
 class TwoFactor
 {
@@ -129,7 +138,7 @@ class TwoFactor
         try {
             $secret = $this->getTFAObject()->createSecret(self::NUM_BITS_OF_SECRET);
         } catch (Throwable $ex) {
-            COM_errorLog(__METHOD__ . ': ' . $ex->getMessage());
+            Log::write('system',Log::ERROR,__METHOD__ . ': ' . $ex->getMessage());
             $secret = null;
         }
         if ($secret != null) {
@@ -157,7 +166,7 @@ class TwoFactor
         try {
             return $this->getTFAObject()->getQRCodeImageAsDataUri($_CONF['site_name'].'@'.$username, $secret, self::QR_CODE_SIZE);
         } catch (RobThree\Auth\TwoFactorAuthException $ex) {
-            COM_errorLog(__METHOD__ . ': ' . $ex->getMessage());
+            Log::write('system',Log::ERROR,__METHOD__ . ': ' . $ex->getMessage());
             return null;
         }
     }

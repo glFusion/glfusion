@@ -1,47 +1,37 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | glFusion CMS                                                             |
-// +--------------------------------------------------------------------------+
-// | lib-custom.php                                                           |
-// |                                                                          |
-// | Your very own custom glFusion library.                                   |
-// |                                                                          |
-// | This is the file where you should put all of your custom code.  When     |
-// | possible you should not alter lib-common.php but, instead, put code here.|
-// | This will make upgrading to future versions of glFusion easier for you   |
-// | because you will always be guaranteed that the glFusion developers will  |
-// | NOT add required code to this file.                                      |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Tony Bibbs       - tony AT tonybibbs DOT com                    |
-// |          Blaine Lang      - blaine AT portalparts DOT com                |
-// |          Dirk Haun        - dirk AT haun-online DOT de                   |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS
+*
+* Custom Functions
+*
+* This is the file where you should put all of your custom code.  When
+* possible you should not alter lib-common.php but, instead, put code here.
+* This will make upgrading to future versions of glFusion easier for you
+* because you will always be guaranteed that the glFusion developers will
+*| NOT add required code to this file.
+*
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2009 by the following authors:
+*   Authors: Tony Bibbs         - tony AT tonybibbs DOT com
+*            Blaine Lang        - blaine AT portalparts DOT com
+*            Dirk Haun          - dirk AT haun-online DOT de
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+use \glFusion\Log\Log;
+
 // You can use this global variable to print useful messages to the errorlog
-// using COM_errorLog().  To see an example of how to do this, look in
+// using Log::write().  To see an example of how to do this, look in
 // lib-common.php and see how $_COM_VERBOSE was used throughout the code
 $_CST_VERBOSE = false;
 
@@ -120,7 +110,7 @@ function phpblock_showrights()
     global $_RIGHTS, $_CST_VERBOSE;
 
     if ($_CST_VERBOSE) {
-        COM_errorLog('**** Inside phpblock_showrights in lib-custom.php ****', 1);
+        Log::write('system',Log::DEBUG,'**** Inside phpblock_showrights in lib-custom.php ****');
     }
 
     $retval .= '&nbsp;';
@@ -130,7 +120,7 @@ function phpblock_showrights()
     }
 
     if ($_CST_VERBOSE) {
-        COM_errorLog('**** Leaving phpblock_showrights in lib-custom.php ****', 1);
+        Log::wirte('system',Log::DEBUG,'**** Leaving phpblock_showrights in lib-custom.php ****');
     }
 
     return $retval;
@@ -543,7 +533,7 @@ function CUSTOM_handleError($errno, $errstr, $errfile, $errline, $errcontext)
     {
         COM_mail($_CONF['site_mail'], $_CONF['site_name'].' Error Handler',
                 "An error has occurred: $errno $errstr @ $errline of $errfile");
-        COM_errorLog("Error Handler: $errno $errstr @ $errline of $errfile");
+        Log::write('system',Log::ERROR,"Error Handler: $errno $errstr @ $errline of $errfile");
     }
     echo("
         <html>

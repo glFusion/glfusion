@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Eric Warren     eric AT glfusion DOT org
 *
@@ -19,12 +19,13 @@ require_once 'auth.inc.php';
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\FileSystem;
 
 USES_lib_admin();
 
 $display = '';
 
-if (!SEC_inGroup ('Root')) {
+if (!SEC_hasRights ('env.admin')) {
     $display .= COM_siteHeader ('menu', $MESSAGE[30])
         . COM_showMessageText($MESSAGE[200],$MESSAGE[30],true,'error')
         . COM_siteFooter ();
@@ -36,8 +37,7 @@ if (!SEC_inGroup ('Root')) {
 function _checkEnvironment()
 {
     global $_CONF, $_TABLES, $_PLUGINS, $_SYSTEM, $LANG_ADMIN, $LANG_ENVCHK,
-           $filemgmt_FileStore, $filemgmt_SnapStore, $filemgmt_SnapCat,
-           $_FF_CONF, $_MG_CONF, $_DB_dbms,$_DB, $_CP_CONF;
+           $_FF_CONF, $_MG_CONF, $_DB_dbms,$_DB, $_CP_CONF, $_FM_CONF;
 
     $retval = '';
     $permError = 0;
@@ -66,7 +66,7 @@ function _checkEnvironment()
     $menu_arr = array (
         array('url'  => $_CONF['site_admin_url'].'/envcheck.php',
               'text' => $LANG_ENVCHK['recheck']),
-        array('url'  => $_CONF['site_admin_url'],
+        array('url'  => $_CONF['site_admin_url'].'/index.php',
               'text' => $LANG_ADMIN['admin_home'])
     );
 
@@ -98,9 +98,9 @@ function _checkEnvironment()
     } else {
         $T->set_var('class','tm-pass');
     }
-    $T->set_var('recommended','7.2.0+');
+    $T->set_var('recommended','7.4.0+');
 
-    $phpnotes = sprintf($LANG_ENVCHK['php_req_version'],'7.1.0');
+    $phpnotes = sprintf($LANG_ENVCHK['php_req_version'],'7.3.0');
     if ( !_phpUpToDate() ) {
         $phpnotes .= '<br><span class="tm-fail">'.$LANG_ENVCHK['phpendoflife'].'</span>';
     }
@@ -447,7 +447,7 @@ function _checkEnvironment()
 
     try {
         $stmt = $db->conn->query("SELECT @@character_set_database, @@collation_database;");
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         $dbInfo['db_collation'] = $LANG_ENVCHK['unknown'];
         $dbInfo['db_charset']   = $LANG_ENVCHK['unknown'];
     }
@@ -481,9 +481,7 @@ function _checkEnvironment()
     ));
 
     // extract syndication storage path
-    $feedpath = $_CONF['rdf_file'];
-    $pos = strrpos( $feedpath, '/' );
-    $feedPath = substr( $feedpath, 0, $pos + 1 );
+    $feedPath = $_CONF['path_rss'];
 
     $file_list = array( $_CONF['path_data'],
                         $_CONF['path_data'].'glfusion.lck',
@@ -501,15 +499,16 @@ function _checkEnvironment()
                         $_CONF['path_data'].'htmlpurifier/',
                         $_CONF['path_html'],
                         $feedPath,
-                        $_CONF['rdf_file'],
-                        $_CONF['path_html'].'images/articles/',
-                        $_CONF['path_html'].'images/topics/',
-                        $_CONF['path_html'].'images/userphotos/',
-                        $_CONF['path_html'].'images/library/File/',
-                        $_CONF['path_html'].'images/library/Flash/',
-                        $_CONF['path_html'].'images/library/Image/',
-                        $_CONF['path_html'].'images/library/Media/',
-                        $_CONF['path_html'].'images/library/userfiles/',
+                        $_CONF['path_rss']. $_CONF['rdf_file'],
+                        $_CONF['path_images'],
+                        $_CONF['path_images'].'articles/',
+                        $_CONF['path_images'].'topics/',
+                        $_CONF['path_images'].'userphotos/',
+                        $_CONF['path_images'].'library/File/',
+                        $_CONF['path_images'].'library/Flash/',
+                        $_CONF['path_images'].'library/Image/',
+                        $_CONF['path_images'].'library/Media/',
+                        $_CONF['path_images'].'library/userfiles/',
                     );
     $mg_file_list = array();
     if (isset($_MG_CONF)) {
@@ -567,17 +566,17 @@ function _checkEnvironment()
                             $_MG_CONF['path_mediaobjects'].'orig/f/',
                             $_MG_CONF['path_mediaobjects'].'disp/f/',
                             $_MG_CONF['path_mediaobjects'].'tn/f/',
-                            $_MG_CONF['path_html'].'watermarks/',
+                            $_CONF['path_html'].'data/mediagallery/watermarks/',
                         );
     }
 
     $fm_file_list = array(
-                        $filemgmt_FileStore,
-                        $filemgmt_FileStore.'tmp/',
-                        $filemgmt_SnapStore,
-                        $filemgmt_SnapStore.'tmp/',
-                        $filemgmt_SnapCat,
-                        $filemgmt_SnapCat.'tmp/',
+                        $_FM_CONF['FileStore'],
+                        $_FM_CONF['FileStore'].'tmp/',
+                        $_FM_CONF['SnapStore'],
+                        $_FM_CONF['SnapStore'].'tmp/',
+                        $_FM_CONF['SnapCat'],
+                        $_FM_CONF['SnapCat'].'tmp/',
                     );
 
     $forum_file_list = array(
@@ -746,8 +745,11 @@ function _phpOutOfDate()
 }
 
 function _isWritable($path) {
-    if ($path[strlen($path)-1]=='/')
-        return _isWritable($path.uniqid(mt_rand()).'.tmp');
+
+    if ($path[strlen($path)-1]=='/') {
+        FileSystem::mkDir($path);
+        return ($path.uniqid(mt_rand()).'.tmp');
+    }
 
     if (@file_exists($path)) {
         if (!($f = @fopen($path, 'r+')))

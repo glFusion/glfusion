@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2020 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2009 by the following authors:
@@ -98,6 +98,11 @@ if (!defined('CSRF_TOKEN')) {
 */
 function SEC_getUserGroups($uid='')
 {
+//    global $_USER;
+
+//    if (($_USER['uid'] == $uid) && SEC_inGroup('Root')) {
+//        return \Group::getAllAvailable();
+//    }
     return \Group::getAll($uid);
 }
 
@@ -190,7 +195,7 @@ function SEC_isModerator()
 */
 function SEC_isAdmin()
 {
-    return SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
+    return SEC_hasRights('system.root,story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
 }
 
 
@@ -344,6 +349,10 @@ function SEC_hasAccess($owner_id,$group_id,$perm_owner,$perm_group,$perm_members
 function SEC_hasRights($features,$operator='AND')
 {
     global $_USER, $_RIGHTS, $_SEC_VERBOSE;
+
+    if (SEC_inGroup('Root')) {
+        return true;
+    }
 
     if (is_string($features)) {
         $features = explode(',',$features);
@@ -1173,38 +1182,102 @@ function SEC_removeFeatureFromDB ($feature_name, $logging = false)
 */
 function SEC_getGroupDropdown ($group_id, $access, $var_name='group_id')
 {
-    global $_TABLES;
-
-    $groupdd = '';
+    global $_TABLES, $_CONF;
 
     $db = Database::getInstance();
 
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file(array(
+        'dropdown' => 'selection.thtml',
+        'optionlist' => 'optionlist.thtml',
+    ) );
+    $T->set_var('var_name', $var_name);
+
     if ($access == 3) {
         $usergroups = SEC_getUserGroups ();
-
         uksort($usergroups, "strnatcasecmp");
 
-        $groupdd .= '<select name="' . $var_name . '">' . LB;
+        $T->set_block('optionlist', 'options', 'opts');
         foreach ($usergroups as $ug_name => $ug_id) {
-            $groupdd .= '<option value="' . $ug_id . '"';
-            if ($group_id == $ug_id) {
-                $groupdd .= ' selected="selected"';
-            }
-            $groupdd .= '>' . ucfirst($ug_name) . '</option>' . LB;
+            $T->set_var(array(
+                'opt_name' => ucfirst($ug_name),
+                'opt_value' => $ug_id,
+                'selected' => ($group_id == $ug_id),
+            ) );
+            $T->parse('opts', 'options', true);
         }
-        $groupdd .= '</select>' . LB;
+        $T->parse('option_list', 'opts');
     } else {
         // They can't set the group then
-        $groupdd .= $db->getItem (
+        $group_name = $db->getItem (
                         $_TABLES['groups'],
                         'grp_name',
                         array('grp_id' => $group_id),
                         array(Database::STRING)
-                    )
-                 . '<input type="hidden" name="' . $var_name . '" value="' . $group_id
-                 . '"/>';
+        );
+        $T->set_var(array(
+            'item_name' => $group_name,
+            'item_id' => $group_id,
+        ) );
     }
+    $T->parse('output', 'dropdown');
+    $groupdd = $T->finish($T->get_var('output'));
+    return $groupdd;
+}
 
+/**
+* Create a group dropdown of all groups on the system - regardless of user's permission
+*
+* Creates the group dropdown menu that's used on pretty much every admin page
+*
+* @param    int     $group_id   current group id (to be selected)
+* @param    int     $access     access permission
+* @param    string  $var_name   Optional variable name, "group_id" if empty
+* @return   string              HTML for the dropdown
+*
+*/
+function SEC_getGroupDropdownAll ($group_id, $access, $var_name='group_id')
+{
+    global $_TABLES, $_CONF;
+
+    $db = Database::getInstance();
+
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file(array(
+        'dropdown' => 'selection.thtml',
+        'optionlist' => 'optionlist.thtml',
+    ) );
+    $T->set_var('var_name', $var_name);
+
+    if ($access == 3) {
+        $usergroups = \Group::getAllAvailable();
+        uksort($usergroups, "strnatcasecmp");
+
+        $T->set_block('optionlist', 'options', 'opts');
+        foreach ($usergroups as $ug_name => $ug_id) {
+            $T->set_var(array(
+                'opt_name' => ucfirst($ug_name),
+                'opt_value' => $ug_id,
+                'selected' => ($group_id == $ug_id),
+            ) );
+            $T->parse('opts', 'options', true);
+        }
+        $T->parse('option_list', 'opts');
+    } else {
+        // They can't set the group then
+        $group_name = $db->getItem (
+                        $_TABLES['groups'],
+                        'grp_name',
+                        array('grp_id' => $group_id),
+                        array(Database::STRING)
+        );
+        $T->set_var(array(
+            'item_name' => $group_name,
+            'item_id' => $group_id,
+        ) );
+    }
+    $T->parse('output', 'dropdown');
+    $groupdd = $T->finish($T->get_var('output'));
     return $groupdd;
 }
 
@@ -1308,7 +1381,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
                     Database::INTEGER
                 )
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error inserting token into DB: ' . $e->getMessage());
     }
 
@@ -1463,7 +1536,7 @@ function _sec_checkToken($ajax=0)
                 $return = false;
             } else if($tokendata['urlfor'] != $referCheck) {
                 Log::write('system',Log::WARNING,"CheckToken: Token failed - token URL/IP does not match referer URL/IP.");
-                Log::write('system',Log::WARNING,"Token URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
+                Log::write('system',Log::WARNING,"Expected URL: " . $tokendata['urlfor'] . " - REFERER URL: " . $_SERVER['HTTP_REFERER']);
 
                 if ( function_exists('bb2_ban') ) {
                     bb2_ban($_SERVER['REAL_ADDR'],3);
@@ -1564,7 +1637,7 @@ function SEC_createTokenGeneral($action='general',$ttl = TOKEN_TTL)
                     Database::INTEGER
                 )
         );
-    } catch(\Doctrine\DBAL\DBALException $e) {
+    } catch(Throwable $e) {
         Log::write('system',Log::ERROR,'Error inserting token into DB: ' . $e->getMessage());
     }
     /* And return the token to the user */
@@ -1608,9 +1681,9 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
         $numberOfTokens = count($tokenRows);
         if ( $numberOfTokens != 1 ) {
             if ( $numberOfTokens == 0 ) {
-                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - no token found in the database - " . $action . " " . $_USER['uid']);
+                Log::write('system',Log::INFO,"CheckTokenGeneral: Token failed - no token found in the database (user must re-autheticate) - " . $action . " :: User: " . $_USER['uid']);
             } else {
-                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - more than one token found in the database");
+                Log::write('system',Log::WARNING,"CheckTokenGeneral: Token failed - more than one token found in the database :: User: " . $_USER['uid']);
             }
             $return = false; // none, or multiple tokens. Both are invalid. (token is unique key...)
         } else {
@@ -2138,6 +2211,9 @@ function SEC_loginForm($use_options = array())
 
         // action
         'form_action' => $_CONF['site_url'].'/users.php',
+
+        // landing page after successful login
+        'login_landing' => '',
     );
 
     $options = array_merge($default_options, $use_options);
@@ -2185,7 +2261,7 @@ function SEC_loginForm($use_options = array())
                 $select = '<input type="hidden" name="service" value="'. $modules[0] . '"/>' . $modules[0] . LB;
             } else {
                 // Build select
-                $select = '<select name="service">';
+                $select = '';
                 if ( isset($_CONF['standard_auth_first']) && $_CONF['standard_auth_first'] == 1 ) {
                     if ($_CONF['user_login_method']['standard']) {
                         $select .= '<option value="">' .  $_CONF['site_name'] . '</option>' . LB;
@@ -2199,7 +2275,6 @@ function SEC_loginForm($use_options = array())
                         $select .= '<option value="">' .  $_CONF['site_name'] . '</option>' . LB;
                     }
                 }
-                $select .= '</select>';
             }
 
             $loginform->set_file('services', 'services.thtml');
@@ -2209,10 +2284,16 @@ function SEC_loginForm($use_options = array())
             $services .= $loginform->finish($loginform->get_var('output'));
         }
     }
+
+    if ($options['login_landing']) {
+        $options['hidden_fields'] .= '<input type="hidden" name="login_landing" value="' .
+            $options['login_landing'] . '" />' . LB;
+    }
+
     if (! empty($options['hidden_fields'])) {
         // allow caller to (ab)use {services} for hidden fields
         $services .= $options['hidden_fields'];
-        $loginform->set_var('hidden_fields',$options['hidden_fields']);
+        //$loginform->set_var('hidden_fields',$options['hidden_fields']);
     }
     $loginform->set_var('services', $services);
 

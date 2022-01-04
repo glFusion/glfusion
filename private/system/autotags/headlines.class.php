@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2019 by the following authors:
+*  Copyright (C) 2014-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -28,7 +28,7 @@ class autotag_headlines extends BaseAutotag {
         $this->description = $_AUTOTAGS['headlines']['description'];
     }
 
-    public function parse($p1, $p2='', $fulltag)
+    public function parse($p1, $p2='', $fulltag='')
     {
         global $_CONF, $_TABLES, $_USER, $LANG01;
 
@@ -280,7 +280,7 @@ class autotag_headlines extends BaseAutotag {
 
         try {
             $stmt = $queryBuilder->execute();
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }

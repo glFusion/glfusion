@@ -1,29 +1,16 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | centerblock.inc.php                                                      |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* Centerblock code
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2002-2021 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*/
 
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
@@ -90,7 +77,7 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
                         }
                     }
                 } else {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                     $media_size = array(200,200); //$media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
                 }
                 $album_media_count = $MG_albums[$album_id]->getMediaCount();
@@ -109,7 +96,7 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
                     }
                 }
                 if ( $media_size == false ) {
-                    $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                     $media_size = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
                 }
 
@@ -292,7 +279,7 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
                     }
                 }
             } else {
-                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                 $media_size = array(200,200); // $media_size = @getimagesize($_MG_CONF['path_mediaobjects'] . 'empty.png');
             }
             $album_media_count = $MG_albums[$album_id]->getMediaCount();
@@ -311,7 +298,7 @@ function _mg_centerblock( $where=1, $page=1, $topic ='' ) {
                 }
             }
             if ( $media_size == false ) {
-                $album_last_image = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                $album_last_image = $_MG_CONF['assets_url'] . '/placeholder.svg';
                 $media_size = array(200,200); // @getimagesize($_MG_CONF['path_mediaobjects'] . 'missing.png');
             }
 

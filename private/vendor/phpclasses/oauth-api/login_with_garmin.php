@@ -2,7 +2,7 @@
 /*
  * login_with_garmin.php
  *
- * @(#) $Id: login_with_garmin.php,v 1.2 2016/03/30 04:31:54 mlemos Exp $
+ * @(#) $Id: login_with_garmin.php,v 1.4 2021/08/17 13:34:19 mlemos Exp $
  *
  */
 
@@ -15,16 +15,17 @@
 	$client = new oauth_client_class;
 	$client->debug = true;
 	$client->debug_http = true;
-	$client->server = 'Garmin2Legged';
-	$client->redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].
-		dirname(strtok($_SERVER['REQUEST_URI'],'?')).'/login_with_twitter.php';
+	$client->server = 'Garmin';
+	$client->redirect_uri = 'https://'.$_SERVER['HTTP_HOST'].
+		dirname(strtok($_SERVER['REQUEST_URI'],'?')).'/login_with_garmin.php';
 
 	$client->client_id = ''; $application_line = __LINE__;
 	$client->client_secret = '';
 
 	if(strlen($client->client_id) == 0
 	|| strlen($client->client_secret) == 0)
-		die('Please go to Garmin Apps page , '.
+		die('Please go to Garmin Apps page at '.
+			'https://developerportal.garmin.com/user/me/apps?program=829 '.
 			'create an application, and in the line '.$application_line.
 			' set the client_id to Consumer key and client_secret with Consumer secret. ');
 
@@ -34,33 +35,16 @@
 		{
 			if(strlen($client->access_token))
 			{
-				$activitySummaryRequest = new stdClass;
-				$activitySummaryRequest->consumerToken = $client->client_id;
-				$activitySummaryRequest->unacknowledgedOnly=false;
-				$activitySummaryRequest->beginTimeMillis=0;
-				$activitySummaryRequest->endTimeMillis = time()*1000;
-
-				$activitySummary = new stdClass;
-				$activitySummary->activitySummaryRequest = $activitySummaryRequest;
-
-				$activityRequest = new stdClass;
-				$activityRequest->GET_ACTIVITY_SUMMARY = array( $activitySummary );
-
-				$WELLNESS = new stdClass;
-				$WELLNESS->activityRequests = array( $activityRequest );
-
-				$serviceRequests = new stdClass;
-				$serviceRequests->WELLNESS = $WELLNESS;
-
-				$parameters = new stdClass;
-				$parameters->serviceRequests = $serviceRequests;
-
 				$success = $client->CallAPI(
-					'http://gcsapitest.garmin.com/gcs-api/api/json',
-					'POST', array(), array(
+					'https://apis.garmin.com/wellness-api/rest/user/id',
+					'GET', array(), array(
 						'FailOnAccessError' => true, 
-						'RequestBody' => json_encode($parameters), 
-						'RequestContentType' => 'application/octet-stream',
+					), $user);
+				
+				$success = $client->CallAPI(
+					'https://apis.garmin.com/wellness-api/rest/activities?uploadStartTimeInSeconds=0&uploadEndTimeInSeconds=86400',
+					'GET', array(), array(
+						'FailOnAccessError' => true, 
 					), $activity);
 			}
 		}
@@ -79,6 +63,7 @@
 <body>
 <?php
 		echo '<h1>You have logged in successfully with Garmin!</h1>';
+		echo '<pre>User:', "\n\n", HtmlSpecialChars(print_r($user, 1)), '</pre>';
 		echo '<pre>Activity:', "\n\n", HtmlSpecialChars(print_r($activity, 1)), '</pre>';
 ?>
 </body>

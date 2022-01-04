@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -54,13 +54,25 @@ $forumConfigData = array(
     ),
 
     array(
+        'name' => 'exit_type',
+        'default_value' => 'login',
+        'type' => 'select',
+        'subgroup' => 0,
+        'fieldset' => 0,
+        'selection_array' => 7,
+        'sort' => 20,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
         'name' => 'registered_to_post',
         'default_value' => '0',
         'type' => 'select',
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 20,
+        'sort' => 30,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -72,7 +84,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 30,
+        'sort' => 40,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -84,7 +96,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 40,
+        'sort' => 50,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -96,7 +108,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 45,
+        'sort' => 60,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -108,7 +120,19 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 50,
+        'sort' => 70,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
+        'name' => 'likes_prf_limit',
+        'default_value' => 20,
+        'type' => 'text',
+        'subgroup' => 0,
+        'fieldset' => 0,
+        'selection_array' => 0,
+        'sort' => 75,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -120,7 +144,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 60,
+        'sort' => 80,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -132,7 +156,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 70,
+        'sort' => 90,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -144,7 +168,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 80,
+        'sort' => 100,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -156,7 +180,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 90,
+        'sort' => 110,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -168,7 +192,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 5,
-        'sort' => 100,
+        'sort' => 120,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -180,7 +204,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 110,
+        'sort' => 130,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -192,7 +216,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 120,
+        'sort' => 140,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -204,7 +228,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 130,
+        'sort' => 150,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -216,7 +240,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 140,
+        'sort' => 160,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -228,7 +252,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 150,
+        'sort' => 170,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -240,7 +264,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 160,
+        'sort' => 180,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -252,7 +276,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 170,
+        'sort' => 190,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -264,7 +288,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 180,
+        'sort' => 200,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -276,7 +300,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 3,
-        'sort' => 190,
+        'sort' => 210,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -288,7 +312,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 4,
-        'sort' => 200,
+        'sort' => 220,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -300,7 +324,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 210,
+        'sort' => 230,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -312,7 +336,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 220,
+        'sort' => 240,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -324,7 +348,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 230,
+        'sort' => 250,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -336,7 +360,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 240,
+        'sort' => 260,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -348,7 +372,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 250,
+        'sort' => 270,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -360,7 +384,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 260,
+        'sort' => 280,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -372,7 +396,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 270,
+        'sort' => 290,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -384,7 +408,7 @@ $forumConfigData = array(
         'subgroup' => 0,
         'fieldset' => 0,
         'selection_array' => 0,
-        'sort' => 280,
+        'sort' => 300,
         'set' => TRUE,
         'group' => 'forum'
     ),
@@ -415,7 +439,7 @@ $forumConfigData = array(
 
     array(
         'name' => 'uploadpath',
-        'default_value' => $_CONF['path_html'].'forum/media',
+        'default_value' => '',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 1,
@@ -427,7 +451,7 @@ $forumConfigData = array(
 
     array(
         'name' => 'downloadURL',
-        'default_value' => $_CONF['site_url'].'/forum/media',
+        'default_value' => '',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 1,

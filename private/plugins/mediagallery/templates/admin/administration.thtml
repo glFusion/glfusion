@@ -3,7 +3,7 @@
 <nav class="uk-navbar tm-admin-navbar">
     <ul class="uk-navbar-nav uk-hidden-small">
       <li><a href="{site_admin_url}/plugins/mediagallery/index.php">Media Gallery Admin</a></li>
-      <li><a href="{true_site_admin_url}">{$LANG_ADMIN[admin_home]}</a></li>
+      <li><a href="{true_site_admin_url}/index.php">{$LANG_ADMIN[admin_home]}</a></li>
     </ul>
 
     <div class="uk-navbar-content uk-visible-small">{$LANG01[menu]}</div>
@@ -12,7 +12,7 @@
         <a class="uk-navbar-toggle"></a>
         <div class="uk-dropdown">
             <ul class="uk-nav uk-nav-dropdown">
-                <li><a href="{true_site_admin_url}">{$LANG_ADMIN[admin_home]}</a></li>
+                <li><a href="{true_site_admin_url}/index.phpt">{$LANG_ADMIN[admin_home]}</a></li>
             </ul>
         </div>
     </div>

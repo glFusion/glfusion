@@ -119,6 +119,7 @@ class Social
         static $fmCache = array();
 
         $retval = '';
+        $counter = 0;
 
         if ( $uid == 0 ) {
             if ( COM_isAnonUser()) return;
@@ -166,7 +167,9 @@ class Social
             $T->set_var('lang_follow_me', $LANG_SOCIAL['follow_me']);
             $T->set_var('lang_follow_us', $LANG_SOCIAL['follow_us']);
             $T->parse('sb','social_buttons',true);
+            $counter++;
         }
+        if ($counter == 0) return '';
         $T->set_var('lang_share_it', $LANG_SOCIAL['share_it_label']);
         $T->set_var('lang_follow_us', $LANG_SOCIAL['follow_us']);
 

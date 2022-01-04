@@ -4,32 +4,18 @@
 
 ### Internal development changes
 
-- September 2020
-- Updated james-heinrich/getid3 (v1.9.19 => v1.9.20)
-- Updated ezyang/htmlpurifier (v4.12.0 => v4.13.0)
-- Updated doctrine/event-manager (1.1.0 => 1.1.1)
-- Updated doctrine/cache (1.10.1 => 1.10.2)
-- Updated doctrine/dbal (2.10.2 => 2.10.3)
-- Updated monolog/monolog (1.25.4 => 1.25.5)
-
-- Language File Sync
-- Cache class updates to support latest phpFastCache
-- Updated CKEditor to v4.13.1
-- Updated openpsa/universalfeedcreator (v1.8.3.1 => v1.8.3.2)
-- Updated james-heinrich/getid3 (v1.9.17 => v1.9.18)
-- Updated ezyang/htmlpurifier (v4.10.0 => v4.12.0)
-- Updated simplepie/simplepie (1.5.2 => 1.5.3)
-- Updated phpxmlrpc/phpxmlrpc (4.3.2 => 4.4.1)
-- Updated phpfastcache/phpfastcache (7.0.5 => 7.1.0)
-- Updated psr/log (1.1.0 => 1.1.2)
-- Updated filp/whoops (2.4.0 => 2.5.0)
-- Updated doctrine/event-manager (v1.0.0 => 1.1.0)
-- Updated doctrine/cache (v1.8.0 => 1.10.0)
-- Updated doctrine/dbal (v2.9.2 => v2.10.0)
-- Updated monolog/monolog (1.24.0 => 1.25.2)
+- glFusion v2 requires PHP v7.4 or later
 
 ### Added
 
+- Disallowed names - you can now set user names that are not allowed on the site for both registration and anonymous names
+- Turkish Translation
+- New Feature Administration - see what feature / rights are associated to each group
+- Forum plugin - select exit type - whether to show Page Not Found or Login Page when user does not have permissions to view a topic
+- Simple DB search / replace capabilities
+- Implemented direct link from Forum Likes
+- Ability to include theme specific HTML attributes - such as data-uk-lightbox to the HTML filtering allowed attributes
+- Czech Translations
 - Added INTL extension to the environment checks - need to update wiki to show used by Agenda plugin
 - Admin / Moderator actions are now logged and available for viewing in Command & Control
   - Configuration option to enable / disable - Config -> Miscellaneous -> Debug -> Enable Admin Actions
@@ -46,6 +32,11 @@
 
 ### Changed
 
+- FileMgmt Plugin internals reworked - improved template use, layout and overall code improvements (Lee)
+- Syndication System internals reworked - improved overall code and modernized (Lee)
+- Allow embedded [img] tag inside [url] tag in BBcode formatter
+- Removed 'most' HTML from the code base and moved to templates
+- Consolidate dynamic data under a single directory (actually two - private/data and public_html/data)
 - Logview now initializes the log with date/time cleared
 - Admin Actions now displays the IP
 - Story Editor - display thumbnail of attached images
@@ -63,6 +54,9 @@
 - Maintenance / Cron task execution has been optimized to reduce user impact / experience
 - Template class code significantly streamlined - utilizes new caching engine to allow for memory based caching of templates
 - Replaced all old style Cache calls to new Cache class interface
+- FileMgmt Admin screens now adhere to glFusion UI standards
+- Password is required to change any user profile fields
+- Disabled autocomplete for TOTP (2FA) code input fields
 
 ### Depreciated
 
@@ -71,6 +65,8 @@
 
 ### Removed
 
+- Removed mediaelement.js - now use native HTML 5 audio / video
+- Removed all Flash / SWF / FLV media support in Media Gallery
 - All MooTools related widgets
 - Remove the submission related Plugin APIs - except the Moderation Queue APIs
       PLG_showSubmitForm()
@@ -81,12 +77,49 @@
 
 ### Fixed
 
-- PHP v7.4 Compatibility Fixes
+- Potential XSS Reflected Vulnerability reported by nu11secu1ty
+- Media Gallery Media Manage and Caption screens did not honor album sort order
+- Back button on Group Admin would re-submit the form
+- PHP v8 Compatibility Fixes
 - Error changing article SID
 
 ### Security
 
 - Utilize PDO prepared SQL statements to decrease SQL injection opportunities
+
+## v1.7.9 (March 13, 2021)
+
+### Updates
+
+- Updated PHP version checks to support current EOL state
+- Updated CKeditor (4.13.1 => v4.16.0)
+- Updated james-heinrich/getid3 (v1.9.19 => v1.9.20)
+- Updated ezyang/htmlpurifier (v4.12.0 => v4.13.0)
+- Updated html2text/html2text (4.2.1 => 4.3.1)
+- Updated phpmailer/phpmailer (v5.2.27 => v5.2.28)
+- Updated simplepie/simplepie (1.5.3 => 1.5.6)
+- Updated phpxmlrpc/phpxmlrpc (4.4.1 => 4.4.2)
+- Updated robthree/twofactorauth (1.6.7 => 1.8.0)
+- Updated openpsa/universalfeedcreator (v1.8.3.2 => v1.8.4)
+- Updated phpclasses/httpclient (1.0.5 => 1.0.7)
+- Updated phpclasses/oauth-api (1.0.103 => 1.0.110)
+- Updated splitbrain/php-archive (1.1.1 => 1.2.1)
+
+### Fixed
+
+- PHP v8 Compatibility Updates
+- Story post hour was incorrectly calculated
+- Post action messages where not being properly displayed. For example, save a group membership and the confirmation message did not display.
+- Upgrade issues when upgrading very old glFusion sites
+- CAPTCHA Plugin - Fixed Google ReCaptcha
+- Fixed SQL error in Polls list
+- Fixed Cancel button when editing group membership.
+- Fixed JavaScript error in Forum preview iFrame
+- Media Gallery CKEditor browser did not display error messages correctly when no selection or invalid selection was made.
+
+### Changed
+
+- PHP v5.6 is now the required minimum version
 
 ## v1.7.8.pl1 (January 1, 2020)
 
@@ -99,14 +132,15 @@
 - Improved error handling of missing media in Media Gallery media manage
 - Plugin administrator did not accept .tar.gz plugin uploads on some systems
 - Default content still referenced the old Gitter chat room
+- Fixed rating error for non US locales (using a comma instead of decimal in DB update)
 
 ## v1.7.8 (December 24, 2019)
 
 ### Updates
 
 - Updated CKEditor to v4.13.1
-- Updated splitbrain/php-archive (1.0.10 => 1.1.1)
-- Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.3.2)
+- Updated splitbrain/php-archive (1.0.10 => 1.2.1)
+- Updated openpsa/universalfeedcreator (v1.8.3 => v1.8.4)
 - Updated geshi/geshi (v1.0.9.0 => v1.0.9.1)
 - Updated html2text/html2text (4.1.0 => 4.2.1)
 - Updated james-heinrich/getid3 (v1.9.15 => v1.9.18)

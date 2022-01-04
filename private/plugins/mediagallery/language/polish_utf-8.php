@@ -1,13 +1,13 @@
 <?php
 /**
-* glFusion CMS
+* glFusion CMS - Media Gallery Plugin
 *
 * UTF-8 Language File for the Media Gallery Plugin
 *
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2018 by the following authors:
+*  Copyright (C) 2002-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -687,6 +687,10 @@ $LANG_MG01 = array (
     'playback_options'          => 'Opcje odtwarzania',
     'meta_data'                 => 'Dane meta',
     'auto_rotate'               => 'Automatycznie obracanie',
+    'menulabel'                 => 'Menu Label',
+    'path_mg'                   => 'MediaGallery Directory',
+    'path_mediaobjects'         => 'Full Path to mediaobjects/ directory',
+    'mediaobjects_url'          => 'Full URL to mediaobjects/',
 );
 
 // error messages
@@ -879,8 +883,8 @@ $LANG_MG03 = array (
     'click_here'            => 'kliknij tutaj',
     'published'             => 'Opublikowany przez',
     'on'                    => 'Na',
-    'no_flash'              => '<div style="width:200px;border:1px solid;text-align:center;">Wygląda na to, że wtyczka flash nie jest zainstalowana lub posiadana wersja jest nieaktualna i nie może odtworzyć żądanej treści.<br/><p><a href="http://www.adobe.com/go/getflashplayer"><img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Pobierz Adobe Flash" style="border:none;"/></a></p></div>',
-    'tagline'               => 'Galeria stworzona dzięki <a href="http://www.glfusion.org" target="_new">Media Gallery</a>',
+    'no_flash'              => 'Flash Player has reached its end of life (EOL) effective January 1, 2021. Flash media files can no longer be played.',
+    'tagline'               => 'Gallery powered by <a href="https://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url'            => 'Pobierz <a href="%s">xppubwiz.reg (Windows XP)</a>',
     'vista_pub_url'         => 'Pobierz <a href="%s">xppubwiz.reg (Windows Vista)</a>',
     'title_desc_keywords'   => 'All media meta data',

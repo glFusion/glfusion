@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2017 by the following authors:
+*  Copyright (C) 2014-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 */
 
@@ -24,7 +24,7 @@ class autotag_vimeo extends BaseAutotag {
         $this->description = $_AUTOTAGS['vimeo']['description'];
     }
 
-    public function parse($p1, $p2='', $fulltag)
+    public function parse($p1, $p2='', $fulltag='')
     {
         global $_CONF;
 

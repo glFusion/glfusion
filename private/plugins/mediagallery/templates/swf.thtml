@@ -2,38 +2,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset={charset}">
-<script src="{site_url}/js/swfobject.js"></script>
 {themeCSS}
 <title>{title}</title>
 </head>
 <body>
-<div style="text-align:center;">
-<script>
-	var flashvars = {};
-    var params = {
-    wmode: "transparent"
-    };
-	var attributes = {};
-    params.play="{play}";
-    params.quality="{quality}";
-    params.menu="{menu}";
-    params.scale="{scale}";
-    params.wmode="{wmode}";
-    params.allowScriptAccess="{asa}";
-    params.loop="{loop}";
-
-    <!-- BEGIN flashvars -->
-    {fv}
-    <!-- END flashvars -->
-
-    swfobject.embedSWF("{movie}", "{id}", "{width}", "{height}", "9.0.0", "expressInstall.swf", flashvars, params, attributes);
-</script>
-  <div id="{id}">
-	<a href="//www.adobe.com/go/getflashplayer">
-		<img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player"/>
-	</a>
+  <div>
+    <div>
+      <img class="uk-thumbnail uk-thumbnail-large" src="{site_url}/assets/no_flash.png" alt="Flash has been retired." />
+    </div>
+    <div class="uk-container uk-margin-top uk-text-bold">
+      {lang_noflash}
+    </div>
   </div>
-</div>
 </body>
 </html>
 {# end {templatelocation} #}

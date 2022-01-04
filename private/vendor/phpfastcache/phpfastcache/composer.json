@@ -28,7 +28,8 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "league/climate": "^3.5"
+        "league/climate": "^3.5",
+        "ext-gettext": "*"
     },
     "suggest": {
         "ext-apc": "*",
@@ -41,19 +42,19 @@
         "ext-wincache": "*",
         "ext-leveldb": "*",
         "ext-couchbase": "*",
-        "predis/predis": "~1.1.0",
-        "mongodb/mongodb": "^1.1",
+        "ext-couchbase_v3": "*",
+        "predis/predis": "^1.1",
+        "mongodb/mongodb": "^1.9",
         "phpfastcache/phpssdb": "~1.0.0",
-        "phpfastcache/couchdb": "~1.0.0",
-        "phpfastcache/riak-client": "~1.4.4"
+        "phpfastcache/couchdb": "~1.0.0"
     },
     "conflict": {
-        "doctrine/couchdb": "*",
-        "basho/riak": "*"
+        "doctrine/couchdb": "*"
     },
     "autoload": {
         "psr-4": {
-            "Phpfastcache\\": "lib/Phpfastcache/"
+            "Phpfastcache\\": "lib/Phpfastcache/",
+            "Phpfastcache\\Tests\\": "tests/lib/"
         }
     }
 }

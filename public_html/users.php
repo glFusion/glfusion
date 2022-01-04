@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2019 by the following authors:
+*  Copyright (C) 2009-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -847,8 +847,18 @@ function USER_createuser($info = array())
     // is there a custom user check
     if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
         $msg = CUSTOM_userCheck ($username, $email);
+        if (is_array($msg)) {
+            $validationErrors += count($msg);
+            array_merge($errorMessages, $msg);
+        } else {
+            $validationErrors++;
+            array_push($errorMessages, $msg);
+        }
         if (!empty ($msg)) {
-            return CUSTOM_userForm ($msg);
+            if (function_exists('CUSTOM_userForm')) {
+                return CUSTOM_userForm ($msg);
+            }
+            // else, fall through to display the stock registration form
         }
     }
 
@@ -947,7 +957,7 @@ function USER_createuser($info = array())
                                 Database::STRING
                             )
                     );
-                } catch(\Doctrine\DBAL\DBALException $e) {
+                } catch(Throwable $e) {
                     // ignore error
                 }
             }
@@ -1001,6 +1011,11 @@ function loginform ($hide_forgotpw_link = false, $statusmode = -1)
         'hide_forgotpw_link' => $hide_forgotpw_link,
         'form_action'        => $_CONF['site_url'].'/users.php',
     );
+    if (isset($_POST['login_landing'])) {
+        $options['login_landing'] = $_POST['login_landing'];
+    } elseif (isset($_GET['landing'])) {
+        $options['login_landing'] = $_GET['landing'];
+    }
 
     if ($statusmode == USER_ACCOUNT_DISABLED) {
         $options['title']   = $LANG04[114]; // account disabled
@@ -1278,7 +1293,7 @@ function userLogout()
                         array('remote_ip' => ''),
                         array('uid' => $_USER['uid'])
             );
-        } catch(\Doctrine\DBAL\DBALException $e) {
+        } catch(Throwable $e) {
             // ignore any errors
         }
         SESS_endUserSession ($_USER['uid']);
@@ -1846,6 +1861,16 @@ switch ($mode) {
             COM_resetSpeedlimit('login');
 
             // we are now fully logged in, let's see if there is someplace we need to go....
+            // First, check for a landing page supplied by the form or global config
+            foreach (array($_POST, $_CONF) as $A) {
+                if (isset($A['login_landing']) && !empty($A['login_landing'])) {
+                    if ($A['login_landing'][0] != '/') {
+                        $A['login_landing'] = '/' . $A['login_landing'];
+                    }
+                    COM_refresh($_CONF['site_url'] . $A['login_landing']);
+                }
+            }
+
             if ( SESS_isSet('login_referer') ) {
                 $_SERVER['HTTP_REFERER'] = SESS_getVar('login_referer');
                 SESS_unSet('login_referer');
