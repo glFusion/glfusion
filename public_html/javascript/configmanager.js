@@ -19,6 +19,10 @@ function handleAdd(self, array_type, array_name) {
 }
 
 function handleAddWithName(self, array_type, array_name, name) {
+	var lang_idx = $(self).data('lang-idx');
+	if (typeof(lang_idx) == "undefined") {
+		lang_idx = "0";
+	}
     array_type = array_type.substring(1);
     if (array_type.charAt(0) == "*" || array_type.charAt(0) == "%") {
         add_array(self.parentNode.parentNode.parentNode, array_name, name, (array_type.charAt(0) == "*"), array_type, '1');
@@ -30,35 +34,75 @@ function handleAddWithName(self, array_type, array_name, name) {
         if (typeof(name) == "number") {
             name--;
         }
-        add_select(self.parentNode.parentNode.parentNode, array_name, name, '1');
+        add_select(self.parentNode.parentNode.parentNode, array_name, name, '1', lang_idx);
     }
 }
 
-function add_select(tbl, arr_name, index, deletable) {
+function add_select(tbl, arr_name, index, deletable, lang_idx) {
     var newRow = tbl.insertRow(tbl.rows.length - 1);
     titleCell = newRow.insertCell(0);
     paramCell = newRow.insertCell(1);
     titleCell.className = "uk-text-left";
     titleCell.appendChild(document.createTextNode(index));
-    dropDown = tbl.getElementsByTagName('tr')[0].getElementsByTagName('td')[1].getElementsByTagName('select')[0].cloneNode(true);
-    dropDown.name = arr_name + "[" + index + "]";
-    paramCell.appendChild(dropDown);
+    //dropDown = tbl.getElementsByTagName('tr')[0].getElementsByTagName('td')[1].getElementsByTagName('select')[0].cloneNode(true);
+    d = tbl.getElementsByTagName('tr')[0].getElementsByTagName('td')[1].getElementsByTagName('select')[0];
+	var varName = arr_name + "[" + index + "]";
+	if (typeof(d) != 'undefined') {
+	    dropDown = d.cloneNode(true);
+		dropDown.name = varName;
+		paramCell.appendChild(dropDown);
+	    if (deletable) {
+			addDeleteBtn(paramCell);
+	    }
+	} else {
+	    var dataS = {
+		    "action" : "configselectoptions",
+			"plugin": 'evlist',
+			"varname": arr_name,
+			"lang_idx": lang_idx
+		};
+		data = $.param(dataS);
+	    $.ajax({
+		    type: "POST",
+			dataType: "text",
+	        url: site_admin_url + "/ajax_controller.php",
+		    data: data,
+			success: function(result) {
+				//console.log("Ajax Result: " + result);
+				paramCell.innerHTML = '<select name="' + varName + '">' +
+					result + '</select>';
+			    if (deletable) {
+					addDeleteBtn(paramCell);
+			    }
+		    },
+			failure: function(x, y, z) {
+				console.log(x);
+				console.log(y);
+				console.log(z);
+			}
+	    });
+	}
 
-    if (deletable) {
-        paramCell.appendChild(document.createTextNode("\n"));
-        deleteButton = document.createElement("button");
-        deleteButton.type = "button";
-        deleteButton.classList.add('uk-button');
-        deleteButton.classList.add('uk-button-danger');
-        deleteButton.classList.add('uk-button-small');
-        deleteButton.innerHTML = 'x';
-        deleteButton.value = "x";
-        deleteButton.onclick =
-            function () {
-                glfremove(this)
-            };
-        paramCell.appendChild(deleteButton);
-    }
+}
+
+/**
+ * Add a delete button to a field
+ */
+function addDeleteBtn(paramCell)
+{
+    paramCell.appendChild(document.createTextNode("\n"));
+	deleteButton = document.createElement("button");
+	deleteButton.type = "button";
+	deleteButton.classList.add('uk-button');
+	deleteButton.classList.add('uk-button-danger');
+	deleteButton.classList.add('uk-button-small');
+	deleteButton.innerHTML = 'x';
+	deleteButton.value = "x";
+	deleteButton.onclick =
+	function () {
+		glfremove(this)
+	};
+	paramCell.appendChild(deleteButton);
 }
 
 function add_element(tbl, arr_name, index, disp_type, def_val, deletable) {

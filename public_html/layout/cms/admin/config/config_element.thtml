@@ -121,7 +121,7 @@
 <!-- BEGIN keyed-add-button -->
 <tr>
 	<td colspan="2">
-	  <button class="uk-button uk-button-success add_ele_input" onclick="handleAdd(this, '{array_type}', '{arr_name}');return false;">{lang_add_element}</button>
+	  <button class="uk-button uk-button-success add_ele_input" data-lang-idx="{lang_idx}" onclick="handleAdd(this, '{array_type}', '{arr_name}');return false;">{lang_add_element}</button>
 		<input class="uk-form-width-medium">
 	</td>
 </tr>

@@ -56,7 +56,43 @@ if (is_ajax()) {
             case 'pagepreview' :
                 pagePreview();
                 break;
-
+            case 'configselectoptions' :
+                $plugin = $_POST['plugin'];
+                $varname = $_POST['varname'];
+                $lang_idx = isset($_POST['lang_idx']) ? (int)$_POST['lang_idx'] : 0;
+                $opt_str = '';
+                $function = 'plugin_configmanager_select_' . $varname . '_' . $plugin;
+                if (function_exists($function)) {
+                    COM_errorLog("running function $function");
+                    $opts = $function();
+                    // Now format as a string of options
+                    if (is_array($opts)) {
+                        foreach ($opts as $dscp=>$val) {
+                            $opt_str .= '<option value="' . $val . '">' . $dscp . '</option>' . LB;
+                        }
+                    }
+                } elseif (
+                    array_key_exists($plugin, $LANG_configSelect) &&
+                    is_array($LANG_configSelect[$plugin]) &&
+                    array_key_exists($lang_idx, $LANG_configSelect[$plugin]) &&
+                    is_array($LANG_configSelect[$plugin][$lang_idx])
+                ) {
+                    foreach ($LANG_configSelect[$plugin][$lang_idx] as $val=>$dscp) {
+                        $opt_str .= '<option value="' . $val . '">' . $dscp . '</option>' . LB;
+                    }
+                } elseif (
+                    array_key_exists($plugin, $LANG_configselects) &&
+                    is_array($LANG_configselects[$plugin]) &&
+                    array_key_exists($lang_idx, $LANG_configselects[$plugin]) &&
+                    is_array($LANG_configselects[$plugin][$lang_idx])
+                ) {
+                    foreach ($LANG_configselects[$plugin][$lang_idx] as $dscp=>$val) {
+                        $opt_str .= '<option value="' . $val . '">' . $dscp . '</option>' . LB;
+                    }
+                }
+                echo $opt_str;
+                exit;
+                break;
         }
     } else {
         die();
