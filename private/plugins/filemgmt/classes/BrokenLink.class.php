@@ -166,7 +166,7 @@ class BrokenLink
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_FM_CONF, $_USER, $_TABLES, $LANG_ADMIN;
+        global $_FM_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG_FM00;
 
         $retval = '';
         static $grp_names = array();
@@ -210,6 +210,16 @@ class BrokenLink
                 ),
             ) );
             break;
+
+        case 'title' :
+            if (!file_exists($_FM_CONF['FileStore'].$A['url'])) {
+                $retval = $fieldvalue . ' <span class="fm-file-missing tooltip" title="'.$LANG_FM00['not_found'].'"><sup>**</sup></span>';
+            } else {
+                $retval = $fieldvalue;
+            }
+            clearstatcache();
+            break;
+
 
         default:
             $retval = htmlspecialchars($fieldvalue, ENT_QUOTES, COM_getEncodingt());

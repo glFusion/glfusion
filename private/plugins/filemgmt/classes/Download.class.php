@@ -763,8 +763,8 @@ class Download
 // end of the file shot
 
         if ($AddNewFile || $this->lid > 0) {
-            if (strlen($this->version) > 9) {
-                $this->version = substr($this->version,0,8);
+            if (strlen($this->version) > 24) {
+                $this->version = substr($this->version,0,24);
             }
 
             if ($this->lid == 0) {
@@ -1445,7 +1445,7 @@ class Download
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_FM_CONF, $_USER, $_TABLES, $LANG_ADMIN;
+        global $_FM_CONF, $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG_FM00;
 
         $retval = '';
         static $grp_names = array();
@@ -1454,7 +1454,6 @@ class Download
         if ($dt === NULL) {
             $dt = new \Date('now',$_USER['tzid']);
         }
-
         switch($fieldname) {
         case 'edit':
             $retval .= FieldList::edit(array(
@@ -1463,6 +1462,15 @@ class Download
                     'title' => _MD_EDIT,
                 ),
             ) );
+            break;
+
+        case 'title' :
+            if (!file_exists($_FM_CONF['FileStore'].$A['url'])) {
+                $retval = $fieldvalue . ' <span class="fm-file-missing tooltip" title="'.$LANG_FM00['not_found'].'"><sup>**</sup></span>';
+            } else {
+                $retval = $fieldvalue;
+            }
+            clearstatcache();
             break;
 
         case 'date':
@@ -1481,7 +1489,9 @@ class Download
             break;
 
         case 'hits' :
-            $retval = COM_numberFormat($fieldvalue);
+            $retval = '<a href="'.$_CONF['site_url'].'/filemgmt/downloadhistory.php?lid='.$fieldvalue.'" target="_blank">';
+            $retval .= COM_numberFormat($fieldvalue);
+            $retval .= '</a>';
             break;
 
         case 'size' :
