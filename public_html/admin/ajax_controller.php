@@ -77,15 +77,18 @@ if (is_ajax()) {
                     array_key_exists($lang_idx, $LANG_configSelect[$plugin]) &&
                     is_array($LANG_configSelect[$plugin][$lang_idx])
                 ) {
+                    // $LANG_configSelect is bundled with glFusion and is know to exist
                     foreach ($LANG_configSelect[$plugin][$lang_idx] as $val=>$dscp) {
                         $opt_str .= '<option value="' . $val . '">' . $dscp . '</option>' . LB;
                     }
                 } elseif (
+                    is_array($LANG_configselects) &&
                     array_key_exists($plugin, $LANG_configselects) &&
                     is_array($LANG_configselects[$plugin]) &&
                     array_key_exists($lang_idx, $LANG_configselects[$plugin]) &&
                     is_array($LANG_configselects[$plugin][$lang_idx])
                 ) {
+                    // $LANG_configselects may or may not be present in glFusion 2.0+
                     foreach ($LANG_configselects[$plugin][$lang_idx] as $dscp=>$val) {
                         $opt_str .= '<option value="' . $val . '">' . $dscp . '</option>' . LB;
                     }
