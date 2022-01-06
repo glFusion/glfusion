@@ -106,7 +106,7 @@ class Rater
 
     /** Flag to indicate that the javascript has been included.
      * @var boolean */
-    private static $have_js = 0;
+    private $have_js = 0;
 
     /** Field by which votes will be sorted.
      * @var string */
@@ -338,6 +338,20 @@ class Rater
         return $this;
     }
 
+    /**
+     * Set the flag to wrap the output in `<div>` sections or not.
+     * Wrapper is normally used for the initial display, but not when
+     * called via AJAX.
+     *
+     * @param   boolean $flag   True to wrap, False to not
+     * @return  object  $this
+     */
+    public function withJS(bool $flag) : self
+    {
+        $this->have_js = $flag ? 0 : 1;
+        return $this;
+    }
+
 
     /**
      * Set the static display flag.
@@ -465,9 +479,10 @@ class Rater
             'rating'    => $rating1,
             'total_votes' => $this->total_votes,
             'bar_size'  => $this->size,
-            'need_js'   => self::$have_js ? 0 : 1,
+            'need_js'   => $this->have_js ? 0 : 1,
         ) );
-        self::$have_js = 1;
+        $this->withJS(false);
+//        self::$have_js = 1;
 
         // Place the rating icons.
         // RTL is set in the CSS, so start with the right (unchecked)

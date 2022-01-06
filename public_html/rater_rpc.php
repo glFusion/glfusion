@@ -82,25 +82,30 @@ if ($canRate) {
 $total_votes = $Rater->getTotalVotes();
 $new_rating = $Rater->getRating();
 $tense = ($total_votes == 1) ? $LANG13['vote'] : $LANG13['votes'];
+$withJS = true;
 
 // set message
 switch ($status) {
 case 1:     // either IP or UID has already voted
     $message = "<script>alert('". $LANG13['ip_rated'] . "');</script>";
+    $withJS = true;
     break;
 case 2:     // voting too frequently
     $message = "<script>alert('" .
         sprintf($LANG13['rate_speedlimit'],$last,$_CONF['rating_speedlimit']) .
         "');</script>";
+    $withJS=true;
     break;
 case 3:     // no permission to vote or your already own the item
     $message = "<script>alert('".$LANG13['own_rated']."');</script>";
+    $withJS=true;
     break;
 default:    // vote recorded normally
     $message = '<span class="thanks">&nbsp;' . $LANG13['thanks_for_vote'] . '</span>';
+    $withJS=false;
     break;
 }
 
 // Updating the ratingbar and echo back to the javascript
-$newBar = $Rater->withWrapper(0)->withSize($size)->Render();
+$newBar = $Rater->withWrapper(false)->withJS($withJS)->withSize($size)->Render();
 echo implode("\n", array($newBar, $message));

@@ -5,8 +5,6 @@ $(document).ready(function() {
     $(".ratingstar").unbind('click').on("click", function(event) {
         event.preventDefault();
         var div = $(this).parent();
-        var parent1 = div.parent();
-        var parent2 = parent1.parent();
         var type = div.data("type");
         var item_id = div.data("item");
         var units = div.data("units");
@@ -18,7 +16,7 @@ $(document).ready(function() {
             "&t=" + ip +
             "&j=" + $(this).data("points");
         $.get(url, function(data) {
-            parent2.html(data);
+            $('#unit_long'+item_id).html(data);
         });
     });
 });
@@ -29,14 +27,14 @@ $(document).ready(function() {
     <div id="unit_long{item_id}">
 {!endif}
 {!if voting}
-        <div id="rater_{item_id}" class="ratingstars enabled"
+        <div id="rater_{item_id}" class="ratingstars enabled" style="padding-left:5px;"
             data-size="{bar_size}"
             data-type="{item_type}"
             data-item="{item_id}"
             data-ip="{ip_address}"
             data-units="{units}">
 {!else}
-        <div class="ratingstars"title="my title">
+        <div class="ratingstars" style="padding-left:5px;">
 {!endif}
 <!-- BEGIN ratingIcons -->
 {!!if {size}=='lg' !!}
