@@ -2307,6 +2307,7 @@ $LANG_LOGO = array(
     'logo_type'         => 'Logo Type',
     'theme'             => 'Theme',
     'grp_access'        => 'Group Access',
+    'disabled'          => 'Disabled',
     'all_users'         => 'All Users',
     'site_theme'        => 'Site Theme',
     'default'           => 'Default',

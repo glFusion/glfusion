@@ -223,6 +223,13 @@ function commandcontrol()
             'lang' => $LANG_LOGO['logo_admin'],
             'image' => $_CONF['layout_url'] . '/images/icons/logo.' . $_IMAGE_TYPE,
         ),
+        $LANG_LOGO['theme'] => array(
+            'condition' => SEC_hasRights('logo.admin'),
+            'url' => $_CONF['site_admin_url'] . '/themes.php',
+            'lang' => $LANG_LOGO['theme'],
+            'image' => $_CONF['layout_url'] . '/images/icons/theme.' . $_IMAGE_TYPE,
+        ),
+
         $LANG_AM['title'] => array(
             'condition' => SEC_hasRights('autotag.admin'),
             'url' => $_CONF['site_admin_url'] . '/autotag.php',

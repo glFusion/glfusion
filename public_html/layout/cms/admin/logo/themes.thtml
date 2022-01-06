@@ -129,7 +129,7 @@ var Theme = (function() {
 			{$LANG_LOGO['all_users']} ({$LANG_LOGO['site_theme']})
 {!else}
 			<select name="grp_access" onchange="Theme.toggle(this, '{theme_name}', 'grp_access', this.value);">
-				<option value="0" {grp_0_sel}>-- Disabled --</option>
+				<option value="0" {grp_0_sel}>-- {$LANG_LOGO['disabled']} --</option>
 				{grp_access_options}
 			</select>
 {!endif}
@@ -139,7 +139,7 @@ var Theme = (function() {
 				onchange='Theme.toggle(this, "{theme_name}", "logo_type", "{type_sel}");'>
 {!if is_default}
 {!else}
-				<option value="-1" {type_sel_-1}>Default</option>
+				<option value="-1" {type_sel_-1}>{$LANG_LOGO['default']}</option>
 {!endif}
 				<option value="0" {type_sel_0}>{$LANG_LOGO['none']}</option>
 				<option value="1" {type_sel_1}>{$LANG_LOGO['graphic']}</option>
