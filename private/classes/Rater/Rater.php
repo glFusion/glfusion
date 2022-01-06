@@ -541,7 +541,7 @@ class Rater
             ON r.uid = u.uid
             WHERE type = \"{$type}\" $whereClause
             ORDER BY {$this->vote_sortby} {$this->vote_sortdir}";
-        $retval = $db->conn->fetchAssoc($sql);
+        $retval = $db->conn->fetchAll($sql);
 
         if ($retval === false) {
             return array();
