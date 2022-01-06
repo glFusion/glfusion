@@ -3,9 +3,9 @@
  * glFusion Rating Interface.
  *
  * @license Creative Commons Attribution 3.0 License.
- *     http://creativecommons.org/licenses/by/3.0/                              |
+ *     http://creativecommons.org/licenses/by/3.0/
  *
- *  Copyright (C) 2008-2019 by the following authors:
+ *  Copyright (C) 2008-2022 by the following authors:
  *   Mark R. Evans   mark AT glfusion DOT org
  *
  *  Based on original work Copyright (C) 2006,2007,2008 by the following authors:
@@ -539,9 +539,14 @@ class Rater
         $sql = "SELECT * FROM {$_TABLES['rating_votes']} AS r
             LEFT JOIN {$_TABLES['users']} AS u
             ON r.uid = u.uid
-            WHERE type =  $whereClause
+            WHERE type = \"{$type}\" $whereClause
             ORDER BY {$this->vote_sortby} {$this->vote_sortdir}";
         $retval = $db->conn->fetchAssoc($sql);
+
+        if ($retval === false) {
+            return array();
+        }
+
         return $retval;
     }
 
