@@ -2297,6 +2297,21 @@ $LANG_LOGO = array(
     'logo_saved'        => 'Options de Logo sauvegardés avec succès.',
     'invalid_type'      => 'Invalid type d`image, que JPG, PNG et GIF sont autorisés',
     'invalid_size'      => 'Logo Téléchargé supérieure au maximum la taille de ',
+
+    'item_updated'      => 'The item has been updated.',
+    'image_deleted'     => 'The image was deleted.',
+    'item_unchanged'    => 'The item  was not changed.',
+    'none'              => 'None',
+    'graphic'           => 'Graphic',
+    'text'              => 'Text',
+    'logo_type'         => 'Logo Type',
+    'theme'             => 'Theme',
+    'grp_access'        => 'Group Access',
+    'all_users'         => 'All Users',
+    'site_theme'        => 'Site Theme',
+    'default'           => 'Default',
+    'yes'               => 'Yes',
+    'no'                => 'No',
 );
 
 ###############################################################################

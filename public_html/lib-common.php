@@ -295,13 +295,11 @@ if ( !isset($_SYSTEM['admin_session']) ) {
     $_SYSTEM['admin_session'] = 1200;
 }
 
-/*
 $_LOGO = array();
 $resultSet = $db->conn->query("SELECT * FROM `{$_TABLES['logo']}`")->fetchAll();
 foreach($resultSet AS $row) {
     $_LOGO[$row['config_name']] = $row['config_value'];
 }
-*/
 
 list($usec, $sec) = explode(' ', microtime());
 mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
@@ -1164,11 +1162,11 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
            $theme_pagetitle, $theme_headercode, $theme_layout,
-           /*$_LOGO, */$uiStyles;
+           $_LOGO, $uiStyles;
 
     COM_hit();
 
-    $_LOGO = new glFusion\Theme($_USER['theme']);
+    $Theme = new glFusion\Theme\Theme($_USER['theme']);
 
     if ( isset($blockInterface['right']) ) {
         $currentURL = COM_getCurrentURL();
@@ -1234,8 +1232,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'site_name', $_CONF['site_name']);
     $theme->set_var( 'background_image', $_CONF['layout_url'].'/images/bg.' . $_IMAGE_TYPE );
     $theme->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
-    //if ($_LOGO['display_site_slogan']) {
-    if ($_LOGO->displaySlogan()) {
+    if ($Theme->displaySlogan()) {
         $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
     }
     $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
@@ -1249,50 +1246,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $theme->set_var( 'welcome_msg', $msg );
     $theme->set_var( 'datetime', $curtime );
-
-    /*
-    if ( $_LOGO['use_graphic_logo'] == 1 && file_exists($_CONF['path_images'] . $_LOGO['logo_name']) ) {
-        $L = new Template( $_CONF['path_layout'] );
-        $L->set_file( array(
-            'logo'          => 'logo-graphic.thtml',
-        ));
-
-        $imgInfo = @getimagesize($_CONF['path_images'] . $_LOGO['logo_name']);
-        $dimension = $imgInfo[3];
-
-        $L->set_var( 'site_name', $_CONF['site_name'] );
-        $site_logo = $_CONF['path_images_url'] . '/' . $_LOGO['logo_name'];
-        $L->set_var( 'site_logo', $site_logo);
-        $L->set_var( 'dimension', $dimension );
-        if ( $imgInfo[1] != 100 ) {
-            $delta = 100 - $imgInfo[1];
-            $newMargin = $delta;
-            $L->set_var( 'delta', 'style="padding-top:' . $newMargin . 'px;"');
-        } else {
-            $L->set_var('delta','');
-        }
-        if ($_LOGO['display_site_slogan']) {
-            $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
-        }
-        $L->parse('output','logo');
-        $theme->set_var('logo_block',$L->finish($L->get_var('output')));
-    } else if ( $_LOGO['use_graphic_logo'] == 0 ) {
-        $L = new Template( $_CONF['path_layout'] );
-        $L->set_file( array(
-            'logo'          => 'logo-text.thtml',
-        ));
-        $L->set_var( 'site_name', $_CONF['site_name'] );
-        if ($_LOGO['display_site_slogan']) {
-            $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
-        }
-        $L->parse('output','logo');
-        $theme->set_var('logo_block',$L->finish($L->get_var('output')));
-    } else {
-        $theme->set_var('logo_block','');
-    }
-     */
-
-    $theme->set_var('logo_block', $_LOGO->getTemplate());
+    $theme->set_var('logo_block', $Theme->getTemplate());
     $theme->set_var( 'site_logo', $_CONF['layout_url']
                                    . '/images/logo.' . $_IMAGE_TYPE );
     $theme->set_var( array (

@@ -676,6 +676,16 @@ $_SQL[] = "CREATE TABLE {$_TABLES['logo']} (
 ) ENGINE=MyISAM;
 ";
 
+$_SQL[] = " CREATE TABLE `{$_TABLES['themes']}` (
+  `theme` varchar(40) NOT NULL DEFAULT '',
+  `logo_type` tinyint(1) NOT NULL DEFAULT -1,
+  `display_site_slogan` tinyint(1) NOT NULL DEFAULT -1,
+  `logo_file` varchar(40) NOT NULL DEFAULT '',
+  `grp_access` int(11) unsigned NOT NULL DEFAULT 2,
+  PRIMARY KEY (`theme`)
+) ENGINE=MyISAM;
+";
+
 $_SQL[] = "CREATE TABLE {$_TABLES['menu']} (
   id int(11) NOT NULL auto_increment,
   menu_name varchar(64) NOT NULL,
@@ -1012,4 +1022,7 @@ $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabl
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('mgslider', 'HTML: displays Media Gallery album. usage: [mgslider:<i>#album_id#</i> - Album ID for images <i>kenburns:0/1</i> - 1 = Enable Ken Burns effect <i>autoplay:0/1</i> 1 = Autoplay the slides <i>template:_name_</i> - Custom template name if wanted]', 1, 1, '');";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('url', 'HTML: Create a link with description. usage: [url:<i>http://link.com/here</i> - Full URL <i>text</i> - text to be used for the URL link]', 1, 1, '');";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('iteminfo', 'HTML: Returns an info from content. usage: [iteminfo:<i>content_type</i> - Content Type - i.e.; article, mediagallery <i>id:</i> - id of item to get info from <i>what:</i> - what to return, i.e.; url, description, excerpt, date, author, etc.]', 1, 1, '');";
+$_DATA[] = "INSERT INTO {$_TABLES['themes']} (theme, logo_type, display_site_slogan) VALUES
+    ('_default', 0, 1),
+    ('cms', -1, -1)";
 ?>

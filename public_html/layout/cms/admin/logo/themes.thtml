@@ -112,12 +112,12 @@ var Theme = (function() {
 <form class="uk-form" action="{site_admin_url}/themes.php" method="post" enctype="multipart/form-data">
 <table class="uk-table">
 	<tr>
-		<th>Theme</th>
-		<th>Enabled</th>
-		<th>Logo Type</th>
-		<th>Show Site Slogan?</th>
-		<th>Logo File</th>
-		<th>Upload New</th>
+		<th>{$LANG_LOGO['theme']}</th>
+		<th>{$LANG_LOGO['grp_access']}</th>
+		<th>{$LANG_LOGO['logo_type']}</th>
+		<th>{$LANG_LOGO['display_site_slogan']}</th>
+		<th>{$LANG_LOGO['current_logo']}</th>
+		<th>{$LANG_LOGO['upload_logo']}</th>
 	</tr>
 <!-- BEGIN dataRow -->
 	<tr>
@@ -126,7 +126,7 @@ var Theme = (function() {
 {!if is_default}
 			N/A
 {!elseif is_site_theme}
-			All Users (Site Theme)
+			{$LANG_LOGO['all_users']} ({$LANG_LOGO['site_theme']})
 {!else}
 			<select name="grp_access" onchange="Theme.toggle(this, '{theme_name}', 'grp_access', this.value);">
 				<option value="0" {grp_0_sel}>-- Disabled --</option>
@@ -141,9 +141,9 @@ var Theme = (function() {
 {!else}
 				<option value="-1" {type_sel_-1}>Default</option>
 {!endif}
-				<option value="0" {type_sel_0}>None</option>
-				<option value="1" {type_sel_1}>Graphic</option>
-				<option value="2" {type_sel_2}>Text</option>
+				<option value="0" {type_sel_0}>{$LANG_LOGO['none']}</option>
+				<option value="1" {type_sel_1}>{$LANG_LOGO['graphic']}</option>
+				<option value="2" {type_sel_2}>{$LANG_LOGO['text']}</option>
 			</select>
 		</td>
 		<td>
@@ -151,10 +151,10 @@ var Theme = (function() {
 				onchange='Theme.toggle(this, "{theme_name}", "display_site_slogan", "{slogan_sel}");'>
 {!if is_default}
 {!else}
-				<option value="-1" {slogan_sel_-1}>Default</option>
+				<option value="-1" {slogan_sel_-1}>{$LANG_LOGO['default']}</option>
 {!endif}
-				<option value="1" {slogan_sel_1}>Yes</option>
-				<option value="0" {slogan_sel_0}>No</option>
+				<option value="1" {slogan_sel_1}>{$LANG_LOGO['yes']}</option>
+				<option value="0" {slogan_sel_0}>{$LANG_LOGO['no']}</option>
 			</select>
 		</td>
 		<td style="white-space:nowrap;">

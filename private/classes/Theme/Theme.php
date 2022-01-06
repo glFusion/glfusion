@@ -6,14 +6,14 @@
  * is later disabled, the user will be reset to the $_CONF['theme'] setting.
  *
  * @author      Lee Garner <lee@leegarner.com>
- * @copyright   Copyright (c) 2020-2021 Lee Garner <lee@leegarner.com>
+ * @copyright   Copyright (c) 2020-2022 Lee Garner <lee@leegarner.com>
  * @package     glfusion
- * @version     0.0.1
+ * @version     v0.0.1
  * @license     http://opensource.org/licenses/gpl-2.0.php
  *              GNU Public License v2 or later
  * @filesource
  */
-namespace glFusion;
+namespace glFusion\Theme;
 use glFusion\Database\Database;
 use Template;
 
@@ -67,7 +67,7 @@ class Theme
 
     /** Flag indicating the theme record was found.
      * @var boolean */
-    private $exists = 0;
+    private $exists = false;
 
     /** Flag to indicate that some change has been made.
      * @var boolean */
@@ -95,7 +95,7 @@ class Theme
      *
      * @return  array       Array of DB record arrays
      */
-    private static function getThemes()
+    protected static function getThemes() : array
     {
         static $themes = array();
         if (!empty($themes)) {
@@ -131,7 +131,7 @@ class Theme
      * @param   string  $theme  Theme name
      * @return  object  $this
      */
-    private function Load($theme)
+    private function Load($theme) : self
     {
         $themes = self::getThemes();
         $this->theme = $theme;
@@ -143,12 +143,12 @@ class Theme
         $this->logo_file = $default['logo_file'];
 
         if (array_key_exists($theme, $themes)) {
-            $this->exists = 1;
+            $this->exists = true;
             $this->tainted = false;
             // Override the default values here
             $this->_override($themes[$theme]);
         } else {
-            $this->exists = 0;
+            $this->exists = false;
             $this->tainted = true;  // doesn't exist in table yet, need to save
         }
 
@@ -166,7 +166,7 @@ class Theme
      * @param   integer $type   Logo type flag
      * @return  object  $this
      */
-    public function setLogoType($type)
+    public function setLogoType(int $type) : self
     {
         if ($type != $this->logo_type) {
             $this->logo_type = (int)$type;
@@ -182,7 +182,7 @@ class Theme
      * @param   integer $type   Display flag
      * @return  object  $this
      */
-    public function setDisplaySiteSlogan($flag)
+    public function setDisplaySiteSlogan(?bool $flag=NULL) : self
     {
         if ($flag != $this->display_site_slogan) {
             $this->display_site_slogan = $flag ? 1 : 0;
@@ -198,7 +198,7 @@ class Theme
      * @param   string  $name   Image filename
      * @return  object  $this
      */
-    public function setImageName($name)
+    public function setImageName(string $name) : self
     {
         if ($name != $this->logo_file) {
             $this->logo_file = $name;
@@ -214,7 +214,7 @@ class Theme
      * @param   array   $A      Array of fields from the DB
      * @return  object  $this
      */
-    private function _override($A)
+    private function _override(array $A) : self
     {
         global $_CONF;
 
@@ -241,7 +241,7 @@ class Theme
      *
      * @return  boolean     True if the user is in the access group
      */
-    public function canUse()
+    public function canUse() : bool
     {
         global $_CONF;
 
@@ -264,7 +264,7 @@ class Theme
      * @param   string  $theme  Theme name
      * @return  boolean     True if the theme path exists
      */
-    public static function pathExists($theme)
+    public static function pathExists(string $theme) : bool
     {
         global $_CONF;
 
@@ -277,9 +277,9 @@ class Theme
      *
      * @return  boolean     1 if found, 0 if not
      */
-    public function Exists()
+    public function Exists() : bool
     {
-        return $this->exists ? 1 : 0;
+        return $this->exists;
     }
 
 
@@ -288,9 +288,9 @@ class Theme
      *
      * @return  boolean     1 if set, 0 if not
      */
-    public function displaySlogan()
+    public function displaySlogan() : bool
     {
-        return $this->display_site_slogan ? 1 : 0;
+        return $this->display_site_slogan ? true : false;
     }
 
 
@@ -300,7 +300,7 @@ class Theme
      *
      * @return  boolean     1 to use graphic, 0 to not
      */
-    public function useGraphic()
+    public function useGraphic() : bool
     {
         global $_CONF;
 
@@ -308,9 +308,9 @@ class Theme
             $this->logo_type == self::GRAPHIC &&
             file_exists($this->getImagePath())
         ) {
-            return 1;
+            return true;
         } else {
-            return 0;
+            return false;
         }
     }
 
@@ -320,7 +320,7 @@ class Theme
      *
      * @return  boolean     1 to use text, 0 to not
      */
-    public function useText()
+    public function useText() : bool
     {
         return $this->logo_type == self::TEXT;
     }
@@ -331,7 +331,7 @@ class Theme
      *
      * @return  string      Logo filename
      */
-    public function getImageName()
+    public function getImageName() : string
     {
         return $this->logo_file;
     }
@@ -342,7 +342,7 @@ class Theme
      *
      * @return  string      Filesystem path to logo image
      */
-    public function getImagePath()
+    public function getImagePath() : string
     {
         global $_CONF;
         return $_CONF['path_html'] . '/images/' . $this->logo_file;
@@ -354,7 +354,7 @@ class Theme
      *
      * @return  boolean     True on success, False on failure
      */
-    public function delImage()
+    public function delImage() : bool
     {
         if (is_file($this->getImagePath())) {
             $this->updateFile('');
@@ -372,10 +372,9 @@ class Theme
      *
      * @return  string      HTML for logo
      */
-    public function getTemplate()
+    public function getTemplate() : string
     {
         global $_CONF;
-        $_CONF['site_slogan'] = 'Testing site slogan';
 
         $retval = '';
         $L = new Template( $_CONF['path_layout']);
@@ -422,7 +421,7 @@ class Theme
      *
      * @return  object  $this
      */
-    public function Save()
+    public function Save() : self
     {
         global $_TABLES;
 
@@ -477,7 +476,7 @@ class Theme
      * @param   integer $oldvalue   Old (current) value
      * @return  integer     New value, or old value upon failure
      */
-    public function setval($field, $oldvalue, $newvalue)
+    public function setval(string $field, int $oldvalue, int $newvalue) : int
     {
         global $_TABLES;
 
@@ -510,7 +509,7 @@ class Theme
      * @param   string  $filename   New filename
      * @return  object  $this
      */
-    public function updateFile($filename)
+    public function updateFile(string $filename) : self
     {
         $sql = "UPDATE " . self::$table .
                 " SET logo_file  = ?
@@ -531,136 +530,12 @@ class Theme
 
 
     /**
-     * Logo Admin List View.
-     *
-     * @return  string      HTML for the logo list.
-     */
-    public static function adminList($cat_id=0)
-    {
-        global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_LOGO, $_IMAGE_TYPE;
-
-        $dbThemes = self::getThemes();
-        $data_arr = array(
-            array(
-                'theme' => self::$default,
-                'logo_type' => (int)$dbThemes[self::$default]['logo_type'],
-                'display_site_slogan' => (int)$dbThemes[self::$default]['display_site_slogan'],
-                'logo_file' => $dbThemes[self::$default]['logo_file'],
-                'disabled' => 1,
-                'grp_access' => 0,
-            )
-        );
-
-        $tmp = array_diff(scandir($_CONF['path_themes']), array('.', '..'));
-        if ($tmp !== false) {
-            foreach ($tmp as $dirname) {
-                if (self::pathExists($dirname)) {
-                    if (isset($dbThemes[$dirname])) {
-                        // Theme already exists in the database, use those values
-                        $logo_type = (int)$dbThemes[$dirname]['logo_type'];
-                        $show_slogan = (int)$dbThemes[$dirname]['display_site_slogan'];
-                        $logo_file = $dbThemes[$dirname]['logo_file'];
-                        if ($dbThemes[$dirname]['theme'] == $_CONF['theme']) {
-                            $grp_access = 2;
-                        } else {
-                            $grp_access = $dbThemes[$dirname]['grp_access'];
-                        }
-                    } else {
-                        // Theme not saved in DB yet, use default values
-                        $logo_type = 0;
-                        $show_slogan = 0;
-                        $logo_file = '';
-                        $grp_access = 2;
-                    }
-                    $data_arr[] = array(
-                        'theme' => $dirname,
-                        'logo_type' => $logo_type,
-                        'display_site_slogan' => $show_slogan,
-                        'logo_file' => $logo_file,
-                        'disabled' => 0,
-                        'grp_access' => $grp_access,
-                    );
-                }
-            }
-        }
-
-        USES_lib_admin();
-
-        $menu_arr = array(
-            array(
-                'url'  => $_CONF['site_admin_url'],
-                'text' => $LANG_ADMIN['admin_home'],
-            ),
-        );
-
-        $retval = '';
-        $retval .= COM_startBlock($LANG_LOGO['logo_options'],'', COM_getBlockTemplate('_admin_block', 'header'));
-        $retval .= ADMIN_createMenu(
-            $menu_arr,
-            $LANG_LOGO['instructions'],
-            $_CONF['layout_url'] . '/images/icons/logo.' . $_IMAGE_TYPE
-        );
-        $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-
-        $T = new \Template($_CONF['path_layout'] . '/admin/logo');
-        $T->set_file('form', 'themes.thtml');
-        $T->set_block('form', 'dataRow', 'DR');
-        foreach ($data_arr as $A){
-            $img_path = $_CONF['path_html'] . '/images/' . $A['logo_file'];
-            if (!is_file($img_path)) {
-                $img_path = '';
-                $img_url = '';
-            } else {
-                $img_url = COM_createImage(
-                    $_CONF['site_url'] . '/images/' . $A['logo_file'],
-                    _('Logo Image'),
-                    array(
-                        'style' => self::LOGO_ADMIN_STYLE,
-                    )
-                );
-            }
-            $T->clear_var('type_sel_-1');
-            $T->clear_var('type_sel_0');
-            $T->clear_var('type_sel_1');
-            $T->clear_var('type_sel_2');
-            $T->clear_var('slogan_sel_-1');
-            $T->clear_var('slogan_sel_0');
-            $T->clear_var('slogan_sel_1');
-            $T->set_var(array(
-                'theme_name'    => $A['theme'],
-                'is_default'    => $A['theme'] == self::$default,
-                'type_sel_' . $A['logo_type'] => 'selected="selected"',
-                'slogan_sel_' . $A['display_site_slogan'] => 'selected="selected"',
-                'img_path'      => $img_path,
-                'img_url'       => $img_url,
-                'type_sel'      => $A['logo_type'],
-                'slogan_sel'    => $A['display_site_slogan'],
-                'disabled'      => $A['disabled'],
-                'old_gid'       => $A['grp_access'],
-                'is_site_theme' => $A['theme'] == $_CONF['theme'],
-                'grp_access_options' => COM_optionList(
-                    $_TABLES['groups'],
-                    'grp_id,grp_name',
-                    $A['grp_access'],
-                    1
-                ),
-                'grp_0_sel' => $A['grp_access'] == 0 ? 'selected="selected"' : '',
-            ) );
-            $T->parse('DR', 'dataRow', true);
-        }
-        $T->parse('output', 'form');
-        $retval .= $T->finish($T->get_var('output'));
-        return $retval;
-    }
-
-
-    /**
      * Save all images uploaded for logos.
      *
      * @deprecated - functions are handled by AJAX now
      * @return  array   Array of file information, possibly for future ajax
      */
-    public static function saveLogos()
+    public static function saveLogos() : array
     {
         global $_CONF;
 
@@ -678,9 +553,6 @@ class Theme
             }
             if (isset($_POST['display_site_slogan'][$theme])) {
                 $Logo->setDisplaySiteSlogan($_POST['display_site_slogan'][$theme]);
-            }
-            if ($theme == 'cms') {
-//                var_dump($Logo);die;
             }
 
             // Handle the file upload, if any
@@ -701,13 +573,13 @@ class Theme
      * @param   integer $index  Index into the $files array
      * @return  array       Array of status, message, and url (if successful)
      */
-    public function handleUpload($files, $index)
+    public function handleUpload(array $files, int $index) : array
     {
-        global $_CONF;
+        global $_CONF, $LANG_LOGO;
 
         $thisinfo = array(
             'status' => false,
-            'message' => _('Unknown file type uploaded'),
+            'message' => $LANG_LOGO['invalid_type'],
         );
         switch ($files['type'][$index]) {
         case 'image/png' :
@@ -734,7 +606,8 @@ class Theme
                     $imgInfo[0] > $_CONF['max_logo_width'] ||
                     $imgInfo[1] > $_CONF['max_logo_height']
                 ) {
-                    $thisinfo['message'] = _('The logo is larger than the allowed dimensions');
+                    $thisinfo['message'] = $LANG_LOGO['invalid_size'] .
+                        $_CONF['max_logo_width'] . ' x ' . $_CONF['max_logo_height'];
                 } else {
                     $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;
                     $rc = move_uploaded_file(
@@ -750,7 +623,7 @@ class Theme
             }
             $thisinfo['url'] =  COM_createImage(
                 $_CONF['site_url'] . '/images/' . $this->logo_file,
-                _('Logo Image'),
+                $LANG_LOGO['current_logo'],
                 array(
                     'style' => self::LOGO_ADMIN_STYLE,
                 )

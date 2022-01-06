@@ -17,6 +17,8 @@ require_once 'auth.inc.php';
 
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
+use \glFusion\Theme\Theme;
+use \glFusion\Theme\AdminList;
 
 USES_lib_admin();
 
@@ -24,7 +26,7 @@ $display = '';
 
 // Only let admin users access this page
 if (!SEC_hasRights('logo.admin')) {
-    Log::logAccessViolation('Logo Administration');
+    Log::logAccessViolation('Theme Administration');
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
@@ -48,6 +50,7 @@ if ( isset($_GET['mode']) ) {
 
 $content = '';
 $expected = array('ajaxupload', 'ajaxtoggle', 'savelogos', 'del_logo_img');
+
 $action = 'listlogos';
 foreach ($expected as $provided) {
     if (isset($_POST[$provided])) {
@@ -58,21 +61,21 @@ foreach ($expected as $provided) {
 switch ($action) {
 case 'ajaxupload':
     // Upload a logo image
-    $Logo = new glFusion\Theme($_POST['theme']);
+    $Theme = new Theme($_POST['theme']);
     $retval = array(
         'status' => false,
     );
-    $retval = $Logo->handleUpload($_FILES['images'], 0);
+    $retval = $Theme->handleUpload($_FILES['images'], 0);
     echo json_encode($retval);
     exit;
     break;
 
 case 'ajaxtoggle':
     // Toggle a database field
-    $Logo = new glFusion\Theme($_POST['theme']);
-    if (!$Logo->Exists()) {
+    $Theme = new Theme($_POST['theme']);
+    if (!$Theme->Exists()) {
         // If the logo record doesn't exist yet, create it.
-        $Logo->createRecord();
+        $Theme->Save();
     }
     switch ($_POST['type']) {
     case 'display_site_slogan':
@@ -81,11 +84,11 @@ case 'ajaxtoggle':
     case 'grp_access':
         $oldval = (int)$_POST['oldval'];
         $newval = (int)$_POST['newval'];
-        $result = $Logo->setval($_POST['type'], $oldval, $newval);
+        $result = $Theme->setval($_POST['type'], $oldval, $newval);
         if ($newval == $result) {   // successfully changed
-            $msg = _('Field has been updated.');
+            $msg = $LANG_LOGO['item_updated'];
         } else {
-            $msg = _('Item was not changed.');
+            $msg = $LANG_LOGO['item_unchanged'];
         }
         $retval = array(
             'newval' => $newval,
@@ -99,16 +102,16 @@ case 'ajaxtoggle':
 
 case 'del_logo_img':
     // Delete a logo image via AJAX
-    $Logo = new glFusion\Theme($_POST['theme']);
-    if ($Logo->delImage()) {
+    $Theme = new Theme($_POST['theme']);
+    if ($Theme->delImage()) {
         $retval = array(
             'status' => true,
-            'statusMessage' => 'Image was deleted.',
+            'statusMessage' => $LANG_LOGO['image_deleted'],
         );
     } else {
         $retval = array(
             'status' => false,
-            'statusMessage' => 'No change made',
+            'statusMessage' => $LANG_LOGO['item_unchanged'],
         );
     }
     echo json_encode($retval);
@@ -117,7 +120,7 @@ case 'del_logo_img':
 
 case 'savelogos':
     // @deprecated, handled by AJAX now
-    $messages = glFusion\Theme::saveLogos();
+    $messages = Theme::saveLogos();
     $msg = '';
     foreach ($messages as $key=>$info) {
         if (isset($info['message'])) {
@@ -128,12 +131,12 @@ case 'savelogos':
         $msg = '<ul>' . $msg . '</ul>';
         COM_setMsg($msg, 'error');
     }
-    COM_refresh($_CONF['site_url'] . '/admin/logo.php');
+    COM_refresh($_CONF['site_url'] . '/admin/themes.php');
     break;
 
 case 'listlogos':
 default:
-    $content = glFusion\Theme::adminList();
+    $content = AdminList::render();
     break;
 }
 
