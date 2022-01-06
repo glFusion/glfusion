@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -37,8 +37,8 @@ $LANG_FM00 = array (
     'editor'            => 'Plugin Editor',
     'warning'           => 'De-Install Waarschuwing',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
-    'WhatsNewLabel'    => 'Bestanden',
-    'WhatsNewPeriod'   => ' laatste %s dag(en)',
+    'WhatsNewLabel'     => 'Bestanden',
+    'WhatsNewPeriod'    => ' laatste %s dag(en)',
     'new_upload'        => 'Nieuw Bestand ontvangen op ',
     'new_upload_body'   => 'Er is een nieuw bestand aangeleverd en staat in de wachtrij bij ',
     'details'           => 'Bestandsdetails',
@@ -64,72 +64,81 @@ $LANG_FM02 = array(
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "Nieuwe pagina",
-    'adminhome' => "Beheerpagina",
-    'plugin_name' => "Bestandsbeheer",
-    'searchlabel' => "Bestandenlijst",
-    'searchlabel_results' => "Bestandenlijst Resultaten",
-    'downloads' => "Mijn Downloads",
-    'report' => "Top Downloads",
-    'usermenu1' => "Mijn Downloads",
-    'usermenu2' => "  Best Gewaardeerd",
-    'usermenu3' => "Upload een bestand",
-    'admin_menu' => "Bestandsbeheer Instellingen",
-    'writtenby' => "Geschreven Door",
-    'date' => "Laatste wijziging",
-    'title' => "Titel",
-    'content' => "Inhoud",
-    'hits' => "Treffers",
-    'Filelisting' => "Bestandslijst",
-    'DownloadReport' => "Download History for single file",
-    'StatsMsg1' => "Top Ten Accessed Files in Repository",
-    'StatsMsg2' => "It appears there are no files defined for the filemgmt plugin on this site or no one has ever accessed them.",
-    'usealtheader' => "Gebruik Alt. Header",
-    'url' => "URL",
-    'edit' => "Wijzig",
-    'lastupdated' => "Laatst Bijgewerkt",
-    'pageformat' => "Pagina Formaat",
-    'leftrightblocks' => "Linker & Rechter Blokken",
-    'blankpage' => "Blanco Pagina",
-    'noblocks' => "Geen blokken",
-    'leftblocks' => "Linker Blokken",
-    'addtomenu' => 'Voeg Toe aan Menu',
-    'label' => 'Label',
-    'nofiles' => 'Aantal bestanden in onze bibliotheek (Downloads)',
-    'save' => 'Opslaan',
-    'preview' => 'Voorbeeld Bekijken',
-    'delete' => 'Verwijder',
-    'cancel' => 'Annuleren',
-    'access_denied' => 'Toegang Geweigerd',
-    'invalid_install' => 'Someone has tried to illegally access the File Management install/uninstall page.  User id: ',
-    'start_install' => 'Attempting to install the Filemgmt Plugin',
-    'start_dbcreate' => 'Attempting to create tables for Filemgmt plugin',
-    'install_skip' => '... skipped as per filemgmt.cfg',
-    'access_denied_msg' => 'You are illegally trying access the File Mgmt administration pages.  Please note that all attempts to illegally access this page are logged',
+    'newpage'               => "Nieuwe pagina",
+    'adminhome'             => "Beheerpagina",
+    'plugin_name'           => "Bestandsbeheer",
+    'searchlabel'           => "Bestandenlijst",
+    'searchlabel_results'   => "Bestandenlijst Resultaten",
+    'downloads'             => "Mijn Downloads",
+    'report'                => "Top Downloads",
+    'usermenu1'             => "Mijn Downloads",
+    'usermenu2'             => "  Best Gewaardeerd",
+    'usermenu3'             => "Upload een bestand",
+    'admin_menu'            => "Bestandsbeheer Instellingen",
+    'writtenby'             => "Geschreven Door",
+    'date'                  => "Laatste wijziging",
+    'title'                 => "Titel",
+    'content'               => "Inhoud",
+    'hits'                  => "Treffers",
+    'Filelisting'           => "Bestandslijst",
+    'DownloadReport'        => "Download History for single file",
+    'StatsMsg1'             => "Top Ten Accessed Files in Repository",
+    'StatsMsg2'             => "It appears there are no files defined for the filemgmt plugin on this site or no one has ever accessed them.",
+    'usealtheader'          => "Gebruik Alt. Header",
+    'url'                   => "URL",
+    'edit'                  => "Wijzig",
+    'lastupdated'           => "Laatst Bijgewerkt",
+    'pageformat'            => "Pagina Formaat",
+    'leftrightblocks'       => "Linker & Rechter Blokken",
+    'blankpage'             => "Blanco Pagina",
+    'noblocks'              => "Geen blokken",
+    'leftblocks'            => "Linker Blokken",
+    'addtomenu'             => 'Voeg Toe aan Menu',
+    'label'                 => 'Label',
+    'nofiles'               => 'Aantal bestanden in onze bibliotheek (Downloads)',
+    'save'                  => 'Bewaar',
+    'preview'               => 'Bekijk',
+    'delete'                => 'Verwijderen',
+    'cancel'                => 'Annuleren',
+    'access_denied'         => 'Toegang Geweigerd',
+    'invalid_install'       => 'Someone has tried to illegally access the File Management install/uninstall page.  User id: ',
+    'start_install'         => 'Attempting to install the Filemgmt Plugin',
+    'start_dbcreate'        => 'Attempting to create tables for Filemgmt plugin',
+    'install_skip'          => '... skipped as per filemgmt.cfg',
+    'access_denied_msg'     => 'You are illegally trying access the File Mgmt administration pages.  Please note that all attempts to illegally access this page are logged',
     'installation_complete' => 'Installatie Gereed',
     'installation_complete_msg' => 'The data structures for the File Mgmt plugin for glFusion have been successfully installed into your database!  If you ever need to uninstall this plugin, please read the README document that came with this plugin.',
-    'installation_failed' => 'Installatie Mislukt',
+    'installation_failed'   => 'Installatie Mislukt',
     'installation_failed_msg' => 'The installation of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
-    'system_locked' => 'Systeem Gelocked',
-    'system_locked_msg' => 'The File Mgmt plugin has already been installed and is locked.  If you are trying to uninstall this plugin, please read the README document that shipped with this plugin',
-    'uninstall_complete' => 'Verwijdering Gereed',
+    'system_locked'         => 'Systeem Gelocked',
+    'system_locked_msg'     => 'The File Mgmt plugin has already been installed and is locked.  If you are trying to uninstall this plugin, please read the README document that shipped with this plugin',
+    'uninstall_complete'    => 'Verwijdering Gereed',
     'uninstall_complete_msg' => 'The datastructures for the File Mgmt plugin have been successfully removed from your glFusion database<br><br>You will need to manually remove all files in your file repository.',
-    'uninstall_failed' => 'Verwijdering Mislukt.',
-    'uninstall_failed_msg' => 'The uninstall of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
-    'install_noop' => 'Plugin Installatie',
-    'install_noop_msg' => 'The filemgmt plugin install executed but there was nothing to do.<br><br>Check your plugin install.cfg file.',
-    'all_html_allowed' => 'Alle HTML is toegestaan',
-    'no_new_files'  => 'Er zijn geen nieuwe bestanden',
-    'no_comments'   => 'Er zijn geen nieuwe reacties',
-    'more'          => '<em>meer ...</em>',
-    'newly_uploaded' => 'Newly Uploaded',
-    'click_to_view' => 'Click here to view',
-    'no_file_uploaded' => 'No File Uploaded',
-    'description' => 'Description',
-    'category' => 'Category',
-    'err_req_fields' => 'Some required fields were not supplied',
-    'go_back' => 'Go Back',
-    'err_demomode' => 'Uploads are disabled in demo mode',
+    'uninstall_failed'      => 'Verwijdering Mislukt.',
+    'uninstall_failed_msg'  => 'The uninstall of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
+    'install_noop'          => 'Plugin Installatie',
+    'install_noop_msg'      => 'The filemgmt plugin install executed but there was nothing to do.<br><br>Check your plugin install.cfg file.',
+    'all_html_allowed'      => 'Alle HTML is toegestaan',
+    'no_new_files'          => 'Er zijn geen nieuwe bestanden',
+    'no_comments'           => 'Er zijn geen nieuwe reacties',
+    'more'                  => '<em>meer ...</em>',
+    'newly_uploaded'        => 'Newly Uploaded',
+    'click_to_view'         => 'Click here to view',
+    'no_file_uploaded'      => 'No File Uploaded',
+    'description'           => 'Description',
+    'category'              => 'Categorie',
+    'err_req_fields'        => 'Some required fields were not supplied',
+    'go_back'               => 'Ga Terug',
+    'err_demomode'          => 'Uploads are disabled in demo mode',
+    'edit_category'         => 'Wijzig Categorie',
+    'create_category'       => 'Maak nieuwe Categorie',
+    'can_view'              => 'Can View',
+    'can_upload'            => 'Can Upload',
+    'delete_category'       => 'Delete Category',
+    'new_category'          => 'New Category',
+    'new_file'              => 'New File',
+    'remote_ip'             => 'Remote IP',
+    'back_to_listing'       => 'Back To Listing',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
@@ -229,6 +238,7 @@ define("_MD_SEARCH","Zoek");
 define("_MD_MAIN","Hoofd");
 define("_MD_SUBMITFILE","Verstuur Bestand");
 define("_MD_POPULAR","Populair");
+define("_MD_POP", "Pop");   // abbrevision for listing badge
 define("_MD_NEW","Nieuw");
 define("_MD_TOPRATED","Best Gewaardeerd");
 
@@ -305,7 +315,7 @@ define("_MD_INTFILEAT","Interesting Download File at %s"); // %s is your site na
 define("_MD_INTFILEFOUND","Here is an interesting download file I have found at %s"); // %s is your site name
 
 define("_MD_RECEIVED","We received your download information. Thanks!");
-define("_MD_WHENAPPROVED","You'll receive an E-mail when it's approved.");
+define("_MD_WHENAPPROVED","You&apos;ll receive an E-mail when it&apos;s approved.");
 define("_MD_SUBMITONCE","Submit your file/script only once.");
 define("_MD_APPROVED", "Uw bestand is goedgekeurd");
 define("_MD_ALLPENDING","All file/script information are posted pending verification.");
@@ -417,6 +427,7 @@ define("_MD_ERRORDESC","ERROR: You need to enter DESCRIPTION!");
 define("_MD_NEWDLADDED","New download added to the database.");
 define("_MD_NEWDLADDED_DUPFILE","Warning: Duplicate File. New download added to the database.");
 define("_MD_NEWDLADDED_DUPSNAP","Warning: Duplicate Snap. New download added to the database.");
+define("_MD_DLUPDATED", "File has been updated.");
 define("_MD_HELLO","Hallo %s");
 define("_MD_WEAPPROVED","We approved your download submission to our downloads section. The file name is: ");
 define("_MD_THANKSSUBMIT","Hartelijk dank voor uw inzending!");
@@ -462,4 +473,3 @@ define("_MD_COMMENTSWANTED","Reacties worden gewaardeerd");
 define("_MD_CLICK2SEE","Klik om te bekijken: ");
 define("_MD_CLICK2DL","Klik om te downloaden: ");
 define("_MD_ORDERBY","Sorteer Op: ");
-?>

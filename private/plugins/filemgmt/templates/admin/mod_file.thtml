@@ -1,6 +1,10 @@
 {# begin {templatelocation} #}
 <div class="uk-panel uk-panel-box uk-margin-top">
-    <div class="uk-panel-title">{path}</div>
+
+	<div class="uk-text-bold uk-text-large">
+		{title}
+	</div>
+
     <form id="filemgmt_mod_file" class="uk-form uk-form-horizontal" method="post" enctype="multipart/form-data" action="{site_admin_url}/plugins/filemgmt/index.php">
         <input type="hidden" name="lid" value="{lid}" />
 		<input type="hidden" name="redirect" value="{redirect}" />
@@ -25,6 +29,9 @@
 			<div class="uk-form-controls">
 				{url}
 				<input type="hidden" name="url" value="{url}" />
+{!if file_missing}
+				<span class="uk-text-danger uk-text-bold uk-margin-left">File Missing</span>
+{!endif}
 			</div>
 		</div>
 {!endif}
@@ -67,7 +74,7 @@
 		<div class="uk-form-row uk-margin">
 			<label class="uk-form-label">{lang_description}</label>
 			<div class="uk-form-controls">
-				<textarea class="uk-textarea uk-form-width-large required" id="description" name="description" rows="10" cols="80">{description}</textarea>
+				<textarea class="uk-textarea uk-form-width-extralarge required" id="description" name="description" rows="10" cols="80">{description}</textarea>
 			</div>
 		</div>
 

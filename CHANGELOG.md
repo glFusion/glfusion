@@ -4,10 +4,11 @@
 
 ### Internal development changes
 
-- glFusion v2 requires PHP v7.3 or later
+- glFusion v2 requires PHP v7.4 or later
 
 ### Added
 
+- Disallowed names - you can now set user names that are not allowed on the site for both registration and anonymous names
 - Turkish Translation
 - New Feature Administration - see what feature / rights are associated to each group
 - Forum plugin - select exit type - whether to show Page Not Found or Login Page when user does not have permissions to view a topic
@@ -31,6 +32,8 @@
 
 ### Changed
 
+- FileMgmt Plugin internals reworked - improved template use, layout and overall code improvements (Lee)
+- Syndication System internals reworked - improved overall code and modernized (Lee)
 - Allow embedded [img] tag inside [url] tag in BBcode formatter
 - Removed 'most' HTML from the code base and moved to templates
 - Consolidate dynamic data under a single directory (actually two - private/data and public_html/data)
@@ -74,6 +77,7 @@
 
 ### Fixed
 
+- Potential XSS Reflected Vulnerability reported by nu11secu1ty
 - Media Gallery Media Manage and Caption screens did not honor album sort order
 - Back button on Group Admin would re-submit the form
 - PHP v8 Compatibility Fixes
@@ -82,6 +86,40 @@
 ### Security
 
 - Utilize PDO prepared SQL statements to decrease SQL injection opportunities
+
+## v1.7.10 (January 1, 2022)
+
+### Changed
+
+- Removed title processing from comment entry - defaults to the items title that is being commmented on.
+- Implemented Login Landing configuration option - set custom page to navigate after loggging in (cygnus8929)
+- Minimum supported PHP version bumped to PHP v5.6.0 - Recommended bumped to PHP v7.4+
+
+### Fixed
+
+- Potential XSS Reflected Vulnerability reported by nu11secu1ty
+- BB2 regex check for User Agent fails due to regex delimiters
+- CSRF protection on BB2 blacklist entries
+- Anonymous comments could impersonate (use the same username) as an existing user - Topsec_bunney reported
+- 404 errors were always logged regardless of configuration setting
+- Subtitle's on stories did not handle quotes properly
+- User notifications were being sent to the no-reply address instead of the site address
+- Story Admin did not properly show story lists based on search criteria
+- PHP v8 Compatibility Updates
+- Code error in SpamX logging for SFS checks
+- fusionrescue code cleanup - improved hanlding of configuration items with array values
+- Fixed HTML issue in logo-graphic.thtml (removed errant quote)
+- Disabled autocomplete for TOTP (2FA) code input fields
+
+### Updates
+
+- Updated CKEditor to v4.17.1
+- Upgrading ezyang/htmlpurifier (v4.13.0 => v4.14.0)
+- Upgrading james-heinrich/getid3 (v1.9.20 => v1.9.21)
+- Upgrading phpclasses/oauth-api (1.0.110 => 1.0.113)
+- Upgrading phpxmlrpc/phpxmlrpc (4.5.2 => 4.6.0)
+- Upgrading robthree/twofactorauth (1.8.0 => 1.8.1)
+- Upgrading simplepie/simplepie (1.5.6 => 1.5.8)
 
 ## v1.7.9 (March 13, 2021)
 

@@ -2004,6 +2004,17 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
+    	'name' => 'login_landing',
+    	'default_value' => '/index.php',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 4,
+    	'selection_array' => NULL,
+    	'sort' => 140,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
     	'name' => 'fs_user_submission',
     	'default_value' => NULL,
     	'type' => 'fieldset',
@@ -2099,6 +2110,17 @@ $coreConfigData = array(
     	'fieldset' => 5,
     	'selection_array' => NULL,
     	'sort' => 80,
+    	'set' => TRUE,
+    	'group' => 'Core'
+    ),
+    array(
+    	'name' => 'disallow_usernames',
+    	'default_value' => 'root,admin,system,manager,service',
+    	'type' => 'text',
+    	'subgroup' => 4,
+    	'fieldset' => 5,
+    	'selection_array' => NULL,
+    	'sort' => 90,
     	'set' => TRUE,
     	'group' => 'Core'
     ),

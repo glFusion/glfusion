@@ -64,7 +64,24 @@ use \glFusion\Log\Log;
  */
 
 function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $units='', $static='',$size='',$wrapper = 1) {
+
+    return glFusion\Rater\Rater::create($type, $id)
+        //->withTotalVotes($total_votes)
+        //->withRating($total_value)
+        ->withUnits($units)
+        ->withStatic($static)
+        ->withSize($size)
+        ->withWrapper($wrapper)
+        ->render();
+
     global $_USER, $_TABLES, $_CONF, $LANG13;
+
+    return \glFusion\Rater::create($type, $id)
+        ->withSize($size)
+        ->withStatic($static)
+        ->withUnits($units)
+        ->withWrapper($wrapper)
+        ->Render();
 
     if ( $size == 'sm') {
         $rating_unitwidth = 15;
@@ -168,7 +185,17 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
 */
 function RATING_getVoteData( $type, $item_id='', $sort='ratingdate', $sortdir = 'desc', $filterArray = '' )
 {
+    return glFusion\Rater\Rater::create($type, $item_id)
+        ->voteSortBy($sort)
+        ->voteSortDir($sortdir)
+        ->getVoteData($filterArray);
+
     global $_TABLES;
+
+    return \glFusion\Rater::create($type, $item_id)
+        ->voteSortBy($sort)
+        ->voteSortDir($sortdir)
+        ->getVoteData($filterArray);
 
     $whereClause = '';
     $retval = array();
@@ -214,6 +241,9 @@ function RATING_getVoteData( $type, $item_id='', $sort='ratingdate', $sortdir = 
 */
 function RATING_getRating( $type, $item_id )
 {
+    $R = glFusion\Rater\Rater::create($type, $item__id);
+    return array($R->getRatingId(), $R->getRating(), $R->getTotalVotes);
+
     global $_TABLES;
 
     $sql = "SELECT * FROM {$_TABLES['rating']} WHERE type='".DB_escapeString($type)."' AND item_id='".DB_escapeString($item_id)."'";
@@ -247,6 +277,11 @@ function RATING_getRating( $type, $item_id )
 */
 function RATING_hasVoted( $type, $item_id, $uid, $ip )
 {
+    return glFusion\Rater\Rater::create($type, $item_id)
+        ->withUid($uid)
+        ->withIpAddress($ip)
+        ->userHadVoted();
+
     global $_TABLES;
 
     $voted = 0;
@@ -279,6 +314,9 @@ function RATING_hasVoted( $type, $item_id, $uid, $ip )
 */
 function RATING_resetRating( $type, $item_id )
 {
+    glFusion\Rater\Rater::reset($type, $item_id);
+    return;
+
     global $_TABLES;
 
     DB_delete($_TABLES['rating'],array('type','item_id'),array($type,$item_id));
@@ -298,7 +336,13 @@ function RATING_resetRating( $type, $item_id )
 */
 function RATING_deleteVote( $voteID )
 {
+    glFusion\Rater\Rater::deleteVote($voteID);
+    return;
+
     global $_TABLES;
+
+    return \glFusion\Rater::create($type, $id)
+        ->deleteVote($voteID);
 
     $retval = false;
 
@@ -353,6 +397,12 @@ function RATING_deleteVote( $voteID )
 */
 function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
 {
+    $R = glFusion\Rater\Rater::create($type, $item_id)
+        ->withUid($uid)
+        ->withIpAddress($ip)
+        ->addVote($rating);
+    return array($R->getRating(), $R->getTotalVotes());
+
     global $_TABLES;
 
     $ratingdate = time();
@@ -418,6 +468,8 @@ function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
 */
 function RATING_getRatedIds($type)
 {
+    return glFusion\Rater\Rater::getRatedIds($type);
+
     global $_TABLES, $_USER;
 
     $ip     = DB_escapeString($_SERVER['REAL_ADDR']);
@@ -441,4 +493,3 @@ function RATING_floatvalue($val){
     $val = preg_replace('/\.(?=.*\.)/', '', $val);
     return $val;
 }
-?>

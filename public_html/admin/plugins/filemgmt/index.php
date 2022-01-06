@@ -60,6 +60,10 @@ if ($op == 'moderate') {
     $opval = (int) $_GET['lid'];
 }
 
+if (isset($opval)) {
+    $opval = COM_applyFilter($opval,TRUE);
+}
+
 //https://dev.glfusion.org/admin/plugins/filemgmt/index.php?modDownload=729
 //https://dev.glfusion.org/admin/plugins/filemgmt/index.php?moderate=x&lid=728
 
@@ -152,7 +156,16 @@ case "delVote":
     exit;
     break;
 case "delCat":
-    delCat();
+    // when deleting from the edit form
+    if (isset($_POST['cid'])) {
+        $opval = (int) COM_applyFilter($_POST['cid'],true);
+    }
+    if(Filemgmt\Category::getInstance($opval)->delete()) {
+        COM_setMsg(_MD_CATDELETED);
+    } else {
+        COM_setMsg('Error :: Unable to delete category');
+    }
+    COM_refresh("{$_FM_CONF['admin_url']}/index.php?categoryConfigAdmin");
     break;
 case 'modCat':
     $content .= Filemgmt\Category::getInstance($opval)->edit();
@@ -167,7 +180,7 @@ case 'modDownload':
     $content .= Filemgmt\Download::getInstance($opval)->edit();
     break;
 case "modDownloadS":
-    echo "here";die;
+//    echo "here";die;
     modDownloadS();
     break;
 case "delDownload":
@@ -194,7 +207,7 @@ case "newfileConfigAdmin":
     $content .= Filemgmt\Download::getInstance(0)->edit();
     break;
 case "listNewDownloads":
-    $content .= Filemgmt\Download::adminList(0, 0);
+    $content .= Filemgmt\Download::adminList(0, 1);
     break;
 case 'files':
 default:
@@ -205,7 +218,7 @@ default:
     } else {
         $cat = 0;
     }
-    $content .= Filemgmt\Download::adminList($cat);
+    $content .= Filemgmt\Download::adminList($cat,1);
     break;
 }
 

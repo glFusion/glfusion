@@ -397,7 +397,7 @@ $LANG04 = array(
     159 => 'Dit is een automatisch gegenereerd bericht. Reageer a.u.b. niet op dit emailbericht.',
     160 => 'Aangemeld',
     161 => 'Wachtwoord Sterkte',
-    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
     163 => 'Remote User',
     164 => 'Remote User name',
     165 => 'Remote Service',
@@ -2765,6 +2765,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Zet Ingezonden Reacties in Wachtrij',
     'passwordspeedlimit' => 'Snelheidslimiet Wachtwoord',
     'login_attempts' => 'Max. aantal Aanmeldings Pogingen',
+    'login_landing' => 'Bestemmingspagina inloggen',
     'login_speedlimit' => 'Snelheidslimiet van Aanmelden',
     'user_html' => 'Gebruiker HTML',
     'admin_html' => 'Beheerder HTML',
@@ -2894,6 +2895,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'Artikel Overzicht',
     'log_level' => 'Log Level',
     'enable_admin_actions' => 'Enable Admin Logging',
+    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
 );
 
 $LANG_configsubgroups['Core'] = array(

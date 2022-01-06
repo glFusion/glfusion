@@ -399,7 +399,7 @@ $LANG04 = array(
     159 => 'Ten e-mail został wygenerowany automatycznie. Prosimy nie odpowiadać na ten e-mail.',
     160 => 'Dostępny',
     161 => 'Siła hasła',
-    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
     163 => 'Użytkownik zdalny',
     164 => 'Zdalna nazwa użytkownika',
     165 => 'Usługa zdalna',
@@ -2769,6 +2769,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Przesyłanie komentarzy do kolejki',
     'passwordspeedlimit' => 'Limit',
     'login_attempts' => 'Ilość prób logowania',
+    'login_landing' => 'Strona docelowa logowania',
     'login_speedlimit' => 'Ograniczenie czasu logowania',
     'user_html' => 'HTML użytkownika',
     'admin_html' => 'Admin HTML',
@@ -2898,6 +2899,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'Artykuły',
     'log_level' => 'Log Level',
     'enable_admin_actions' => 'Enable Admin Logging',
+    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
 );
 
 $LANG_configsubgroups['Core'] = array(

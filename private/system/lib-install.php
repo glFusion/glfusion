@@ -791,6 +791,8 @@ function INSTALLER_applyGroupDefault($grp_id, $add = true)
 {
     global $_TABLES, $_GROUP_VERBOSE;
 
+    $db = Database::getInstance();
+
     /**
     * In the "add" case, we have to insert one record for each user. Pack this
     * many values into one INSERT statement to save some time and bandwidth.

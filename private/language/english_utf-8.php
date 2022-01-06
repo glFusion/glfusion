@@ -397,7 +397,7 @@ $LANG04 = array(
     159 => 'This email was generated automatically. Please do not reply to this email.',
     160 => 'On-line',
     161 => 'Password Strength',
-    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
     163 => 'Remote User',
     164 => 'Remote User name',
     165 => 'Remote Service',
@@ -2765,6 +2765,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Queue Comment Submissions',
     'passwordspeedlimit' => 'Password Speed Limit',
     'login_attempts' => 'Max. Login Attempts',
+    'login_landing' => 'Login Landing Page',
     'login_speedlimit' => 'Login Speed Limit',
     'user_html' => 'User HTML',
     'admin_html' => 'Admin HTML',
@@ -2894,6 +2895,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'Story Administration',
     'log_level' => 'Log Level',
     'enable_admin_actions' => 'Enable Admin Logging',
+    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
 );
 
 $LANG_configsubgroups['Core'] = array(

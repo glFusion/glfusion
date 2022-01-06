@@ -37,7 +37,6 @@ $FM_ratedIds = RATING_getRatedIds('filemgmt');
 $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
-    //'records'          =>     'filelisting_record.thtml',
     'category'         =>     'filelisting_category.thtml'
 ) );
 
@@ -75,6 +74,15 @@ if ($lid > 0) {
     $p->set_var('filelisting_record', $File->showListingRecord());
     $p->parse('fRecord', 'fileRecords');
 
+    $cid = $File->getCid();
+
+    $pathstring = "<li><a href='{$_FM_CONF['url']}/index.php'>"._MD_MAIN."</a></li>";
+    $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_FM_CONF['url']}/viewcat.php");
+    $pathstring .= $nicepath;
+
+    $p->set_var('category_path_link',$pathstring);
+
+
     $p->parse('output', 'page');
     $display .= $p->finish ($p->get_var('output'));
 } else {
@@ -82,13 +90,13 @@ if ($lid > 0) {
     $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
     $p->set_file(array (
         'page'             =>     'filelisting.thtml',
-        //'records'          =>     'filelisting_record.thtml',
         'category'         =>     'filelisting_category.thtml',
     ));
 
-    $p->set_var ('imgset',$_CONF['layout_url'] . '/nexflow/images');
-    $p->set_var ('tablewidth', $_FM_CONF['shotwidth'] + 10);
+    $p->set_var('imgset',$_CONF['layout_url'] . '/nexflow/images');
+    $p->set_var('tablewidth', $_FM_CONF['shotwidth'] + 10);
     $p->set_var('can_submit', Filemgmt\Download::canSubmit());
+    $p->set_var('lang_categories',_MD_CATEGORIES);
 
     $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
     if ($page < 1) {
@@ -102,6 +110,14 @@ if ($lid > 0) {
     $result = DB_query($sql);
     $nrows = DB_numRows($result);
 
+    if ($nrows > 2) {
+        $columns = 3;
+    } elseif ($nrows > 1) {
+        $columns = 2;
+    } elseif ($nrows > 0) {
+        $columns = 1;
+    }
+    $p->set_var('columns',$columns);
     // Need to use a SQL stmt that does a join on groups user has access to  - for file count
     $sql  = "SELECT count(*)  FROM {$_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid WHERE status > 0 ";
@@ -145,8 +161,10 @@ if ($lid > 0) {
                 $chcount = 0;
                 foreach($arr as $ele) {
                     $chtitle=$myts->makeTboxData4Show($ele['title']);
-                    if ($chcount >= $numSubCategories2Show){
-                        $subcategories .= "...";
+                    if ($chcount >= $numSubCategories2Show) {
+                        if ($numSubCategories2Show != 0) {
+                            $subcategories .= "...";
+                        }
                         break;
                     }
                     if ($space>0) {

@@ -50,6 +50,15 @@
     </a>
 <!-- END field-delete -->
 
+<!-- BEGIN field-refresh -->
+    <a href="{refresh_url}"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-refresh"></i>
+    </a>
+<!-- END field-refresh -->
+
 <!-- BEGIN field-info -->
     <a class="{tooltip_style}" title="{title}"><i class="uk-icon uk-icon-info-circle"></i></a>
 <!-- END field-info -->

@@ -40,9 +40,9 @@ high volume community discussion sites, and almost everything in between.
 glFusion will run on any web server that supports PHP. Modern web servers such
 as Apache, Nginx, Caddy, LiteSpeed, IIS, Lighttpd,and Abyss are known to work.
 
-### PHP version 7.3.0 or later
+### PHP version 7.4.0 or later
 
-PHP needs to be at least version 7.3.0, the latest PHP release is highly
+PHP needs to be at least version 7.4.0, the latest PHP release is highly
 recommended and well supported by glFusion.
 
 ### MySQL v5.6.0 or later

@@ -566,7 +566,7 @@ class UploadDownload
             }
         }
         $returnChmod = true;
-        $perms = $this->_getPermissions();
+        $perms = (int) $this->_getPermissions();
         if (!empty($perms)) {
             $returnChmod = @chmod ($this->_filePath . '/' . $this->_getDestinationName (), octdec($perms));
         }

@@ -352,7 +352,8 @@ function handleEditSubmit()
     $cid        = COM_applyFilter ($_POST['cid'],true);
     $postmode   = COM_applyFilter ($_POST['postmode']);
     $comment    = $_POST['comment_text'];
-    $title      = strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING));
+//    $title      = strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING));
+    $title = '';
 
     // at this time - we do not allow entering title - so pull from DB again.
     $itemInfo = PLG_getItemInfo($type,$sid,('url,title'));
@@ -638,7 +639,8 @@ if ( isset($_POST['cancel'] ) ) {
     $sid     = isset($_POST['sid']) ? COM_sanitizeID(COM_applyFilter ($_POST['sid'])) : '';
     $pid     = isset($_POST['pid']) ? COM_applyFilter ($_POST['pid'],true) : 0;
     $postmode = isset($_POST['postmode']) ? COM_applyFilter($_POST['postmode']) : 'text';
-    $title   = isset($_POST['title']) ? strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING)) : '';
+//    $title   = isset($_POST['title']) ? strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING)) : '';
+    $title = '';
     $mode    = isset($_POST['mode']) ? COM_applyFilter($_POST['mode']) : '';
 
     $modedit = isset($_POST['modedit']) ? COM_applyFilter($_POST['modedit']) : '';
@@ -694,6 +696,7 @@ if ( isset($_POST['cancel'] ) ) {
             $pid     = COM_applyFilter ($_POST['pid'],true);
             $postmode = COM_applyFilter($_POST['postmode']);
             $title   = strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING));
+            $title   = '';
             $mode    = COM_applyFilter($_POST['mode']);
 
             if ( $type != 'article' ) {
@@ -831,8 +834,8 @@ if ( isset($_POST['cancel'] ) ) {
 // pull data passed
                 $sid   = isset($_REQUEST['sid']) ? COM_sanitizeID(COM_applyFilter ($_REQUEST['sid'])) : '';
                 $type  = isset($_REQUEST['type']) ? COM_applyFilter ($_REQUEST['type']) : '';
-                $title = isset($_REQUEST['title']) ? filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING) /*strip_tags($_REQUEST['title'])*/ : '';
-
+//                $title = isset($_REQUEST['title']) ? filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING) /*strip_tags($_REQUEST['title'])*/ : '';
+                $title = '';
 // set postmode (options are text or html)
 
                 if ( $_CONF['comment_postmode'] == 'plaintext') {
@@ -912,7 +915,7 @@ if ( isset($_POST['cancel'] ) ) {
     }
 }
 
-echo COM_siteHeader('menu',$pageTitle);
+echo COM_siteHeader('none',$pageTitle);
 echo $pageBody;
 echo COM_siteFooter();
 ?>

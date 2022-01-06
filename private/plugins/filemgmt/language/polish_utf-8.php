@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -37,8 +37,8 @@ $LANG_FM00 = array (
     'editor'            => 'Wtyczka Edycja',
     'warning'           => 'Ostrzeżenie o odinstalowaniu',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Wtyczka zainstalowana i włączona.<br>Wyłącz najpierw, jeśli chcesz odinstalować.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Wtyczka Edycja</a></div',
-    'WhatsNewLabel'    => 'Pliki',
-    'WhatsNewPeriod'   => ' ostatnie %s dni',
+    'WhatsNewLabel'     => 'Pliki',
+    'WhatsNewPeriod'    => ' ostatnie %s dni',
     'new_upload'        => 'Nowy plik dodany w',
     'new_upload_body'   => 'Nowy plik został przesłany do kolejki ',
     'details'           => 'Plik szczegóły',
@@ -64,72 +64,81 @@ $LANG_FM02 = array(
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "Nowa Strona",
-    'adminhome' => "Administracja",
-    'plugin_name' => "Zarządzanie Plikami",
-    'searchlabel' => "Lista Plików",
-    'searchlabel_results' => "Pliki Lista Wyników",
-    'downloads' => "Pliki do pobrania",
-    'report' => "Najczęściej pobierane",
-    'usermenu1' => "Pobrano",
-    'usermenu2' => "&nbsp;&nbsp;Najwyżej oceniane",
-    'usermenu3' => "Wgraj Plik",
-    'admin_menu' => "Filemgmt Admin",
-    'writtenby' => "Dodany przez",
-    'date' => "Ostatnia Aktualizacja",
-    'title' => "Tytuł",
-    'content' => "Treść",
-    'hits' => "Wyświetleń",
-    'Filelisting' => "Lista Plików",
-    'DownloadReport' => "Pobierz historię dla pojedynczego pliku",
-    'StatsMsg1' => "Dziesięć najlepszych plików w repozytorium",
-    'StatsMsg2' => "Wygląda na to, że nie ma plików zdefiniowanych dla wtyczki filemgmt na tej stronie lub nikt nigdy nie miał do nich dostępu.",
-    'usealtheader' => "Użyj Alt. Nagłówek",
-    'url' => "Adres WWW",
-    'edit' => "Edycja",
-    'lastupdated' => "Ostatnia Aktualizacja",
-    'pageformat' => "Format Strony",
-    'leftrightblocks' => "Lewe & Prawe Bloki",
-    'blankpage' => "Pusta Strona",
-    'noblocks' => "Brak Bloków",
-    'leftblocks' => "Lewe Bloki",
-    'addtomenu' => 'Dodaj do Menu',
-    'label' => 'Etykieta',
-    'nofiles' => 'Liczba plików w repozytorium (pliki do pobrania)',
-    'save' => 'zapisz',
-    'preview' => 'podgląd',
-    'delete' => 'usuń',
-    'cancel' => 'anuluj',
-    'access_denied' => 'Brak dostępu',
-    'invalid_install' => 'Ktoś próbował nielegalnie uzyskać dostęp do  instalowania / odinstalowywania plików. Identyfikator użytkownika: ',
-    'start_install' => 'Próba instalacji Wtyczki Filemgmt',
-    'start_dbcreate' => 'Próba utworzenia tabel Wtyczki Filemgmt',
-    'install_skip' => '... pomijane zgodnie z filemgmt.cfg',
-    'access_denied_msg' => 'Nielegalnie próbujesz uzyskać dostęp do stron administracyjnych File Mgmt. Pamiętaj, że wszystkie próby nielegalnego dostępu do tej strony są rejestrowane',
+    'newpage'               => "Nowa Strona",
+    'adminhome'             => "Administracja",
+    'plugin_name'           => "Zarządzanie Plikami",
+    'searchlabel'           => "Lista Plików",
+    'searchlabel_results'   => "Pliki Lista Wyników",
+    'downloads'             => "Pliki do pobrania",
+    'report'                => "Najczęściej pobierane",
+    'usermenu1'             => "Pobrano",
+    'usermenu2'             => "&nbsp;&nbsp;Najwyżej oceniane",
+    'usermenu3'             => "Wgraj Plik",
+    'admin_menu'            => "Filemgmt Admin",
+    'writtenby'             => "Dodany przez",
+    'date'                  => "Ostatnia Aktualizacja",
+    'title'                 => "Tytuł",
+    'content'               => "Treść",
+    'hits'                  => "Wyświetleń",
+    'Filelisting'           => "Lista Plików",
+    'DownloadReport'        => "Pobierz historię dla pojedynczego pliku",
+    'StatsMsg1'             => "Dziesięć najlepszych plików w repozytorium",
+    'StatsMsg2'             => "Wygląda na to, że nie ma plików zdefiniowanych dla wtyczki filemgmt na tej stronie lub nikt nigdy nie miał do nich dostępu.",
+    'usealtheader'          => "Użyj Alt. Nagłówek",
+    'url'                   => "Adres WWW",
+    'edit'                  => "Edycja",
+    'lastupdated'           => "Ostatnia Aktualizacja",
+    'pageformat'            => "Format Strony",
+    'leftrightblocks'       => "Lewe & Prawe Bloki",
+    'blankpage'             => "Pusta Strona",
+    'noblocks'              => "Brak Bloków",
+    'leftblocks'            => "Lewe Bloki",
+    'addtomenu'             => 'Dodaj do Menu',
+    'label'                 => 'Etykieta',
+    'nofiles'               => 'Liczba plików w repozytorium (pliki do pobrania)',
+    'save'                  => 'Zapisz',
+    'preview'               => 'Podgląd',
+    'delete'                => 'Usuń',
+    'cancel'                => 'Anuluj',
+    'access_denied'         => 'Brak dostępu',
+    'invalid_install'       => 'Ktoś próbował nielegalnie uzyskać dostęp do  instalowania / odinstalowywania plików. Identyfikator użytkownika: ',
+    'start_install'         => 'Próba instalacji Wtyczki Filemgmt',
+    'start_dbcreate'        => 'Próba utworzenia tabel Wtyczki Filemgmt',
+    'install_skip'          => '... pomijane zgodnie z filemgmt.cfg',
+    'access_denied_msg'     => 'Nielegalnie próbujesz uzyskać dostęp do stron administracyjnych File Mgmt. Pamiętaj, że wszystkie próby nielegalnego dostępu do tej strony są rejestrowane',
     'installation_complete' => 'Instalacja Zakończona',
     'installation_complete_msg' => 'Struktury danych dla wtyczki File Mgmt dla glFusion zostały pomyślnie zainstalowane w bazie danych! Jeśli kiedykolwiek będziesz musiał odinstalować wtyczkę, przeczytaj dokument readme dołączony do tej wtyczki.',
-    'installation_failed' => 'Instalacja nie powiodła się',
+    'installation_failed'   => 'Instalacja nie powiodła się',
     'installation_failed_msg' => 'Instalacja Wtyczki File Mgmt nie powiodła się. W pliku diagnostycznym glFusion error.log znajdziesz informacje diagnostyczne',
-    'system_locked' => 'System Zablokowany',
-    'system_locked_msg' => 'Wtyczka File Mgmt została już zainstalowana i jest zablokowana. Jeśli próbujesz odinstalować wtyczkę, przeczytaj dokument readme dostarczone ze wtyczką',
-    'uninstall_complete' => 'Odinstalowanie Zakończone',
+    'system_locked'         => 'System Zablokowany',
+    'system_locked_msg'     => 'Wtyczka File Mgmt została już zainstalowana i jest zablokowana. Jeśli próbujesz odinstalować wtyczkę, przeczytaj dokument readme dostarczone ze wtyczką',
+    'uninstall_complete'    => 'Odinstalowanie Zakończone',
     'uninstall_complete_msg' => 'Struktury danych dla wtyczki File Mgmt zostały pomyślnie usunięte z bazy danych glFusion<br><br>Będziesz musiał ręcznie usunąć wszystkie pliki z repozytorium plików.',
-    'uninstall_failed' => 'Odinstalowanie nie powiodło się.',
-    'uninstall_failed_msg' => 'Odinstalowanie wtyczki File Mgmt nie powiodło się. W pliku diagnostycznym glFusion error.log znajdziesz informacje diagnostyczne',
-    'install_noop' => 'Wtyczka Instalacja',
-    'install_noop_msg' => 'Instalacja Wtyczki FileMgmt została wykonana, ale nie było nic do zrobienia.<br><br>Sprawdź plik plugin install.cfg.',
-    'all_html_allowed' => 'HTML dozwolony',
-    'no_new_files'  => 'Brak nowych plików',
-    'no_comments'   => 'Brak nowych komentarzy',
-    'more'          => '<em>więcej ...</em>',
-    'newly_uploaded' => 'Newly Uploaded',
-    'click_to_view' => 'Click here to view',
-    'no_file_uploaded' => 'No File Uploaded',
-    'description' => 'Description',
-    'category' => 'Category',
-    'err_req_fields' => 'Some required fields were not supplied',
-    'go_back' => 'Go Back',
-    'err_demomode' => 'Uploads are disabled in demo mode',
+    'uninstall_failed'      => 'Odinstalowanie nie powiodło się.',
+    'uninstall_failed_msg'  => 'Odinstalowanie wtyczki File Mgmt nie powiodło się. W pliku diagnostycznym glFusion error.log znajdziesz informacje diagnostyczne',
+    'install_noop'          => 'Wtyczka Instalacja',
+    'install_noop_msg'      => 'Instalacja Wtyczki FileMgmt została wykonana, ale nie było nic do zrobienia.<br><br>Sprawdź plik plugin install.cfg.',
+    'all_html_allowed'      => 'HTML dozwolony',
+    'no_new_files'          => 'Brak nowych plików',
+    'no_comments'           => 'Brak nowych komentarzy',
+    'more'                  => '<em>więcej ...</em>',
+    'newly_uploaded'        => 'Newly Uploaded',
+    'click_to_view'         => 'Click here to view',
+    'no_file_uploaded'      => 'No File Uploaded',
+    'description'           => 'Opis',
+    'category'              => 'Kategoria',
+    'err_req_fields'        => 'Some required fields were not supplied',
+    'go_back'               => 'Wróć',
+    'err_demomode'          => 'Uploads are disabled in demo mode',
+    'edit_category'         => 'Edytuj kategorię',
+    'create_category'       => 'Stwórz kategorię',
+    'can_view'              => 'Can View',
+    'can_upload'            => 'Can Upload',
+    'delete_category'       => 'Delete Category',
+    'new_category'          => 'New Category',
+    'new_file'              => 'New File',
+    'remote_ip'             => 'Adres IP',
+    'back_to_listing'       => 'Back To Listing',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
@@ -229,6 +238,7 @@ define("_MD_SEARCH","Szukaj");
 define("_MD_MAIN","Główna");
 define("_MD_SUBMITFILE","Prześlij Plik");
 define("_MD_POPULAR","Popularna");
+define("_MD_POP", "Pop");   // abbrevision for listing badge
 define("_MD_NEW","Nowa");
 define("_MD_TOPRATED","Najwyżej Oceniane");
 
@@ -417,6 +427,7 @@ define("_MD_ERRORDESC","BŁĄD: nie dodałeś opisu!");
 define("_MD_NEWDLADDED","Nowy plik został dodany do bazy danych.");
 define("_MD_NEWDLADDED_DUPFILE","Ostrzeżenie: duplikat pliku. Nowy plik został dodany do bazy danych.");
 define("_MD_NEWDLADDED_DUPSNAP","Ostrzeżenie: zduplikowane przyciąganie. Nowy plik został dodany do bazy danych.");
+define("_MD_DLUPDATED", "File has been updated.");
 define("_MD_HELLO","Witaj %s");
 define("_MD_WEAPPROVED","Zatwierdziliśmy przesłanie pliku do naszej sekcji plików do pobrania. Nazwa pliku: ");
 define("_MD_THANKSSUBMIT","Dziękujemy za przesłanie zgłoszenia!");
@@ -462,4 +473,3 @@ define("_MD_COMMENTSWANTED","Komentarze są doceniane");
 define("_MD_CLICK2SEE","Kliknij, aby zobaczyć: ");
 define("_MD_CLICK2DL","Kliknij, aby pobrać: ");
 define("_MD_ORDERBY","Dodany przez: ");
-?>

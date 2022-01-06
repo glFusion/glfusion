@@ -1,3 +1,39 @@
+## 8.0.8
+#### _"Sanitary-passed"_
+##### 18 august 2021
+- __Core__
+  - Fixed small date issue with tag items that stays longer than necessary active in backend
+- __Drivers__
+  - Improved Mongodb driver code
+  - Improved Couchdb driver code
+  - Improved Couchbase driver code (SDK 2 version)
+  - Implemented #721 // Added Couchbase SDK 3 support (use `Couchbasev3` driver name)
+- __Misc__
+  - Increased test reliability by adding more code coverage in CRUD tests and by performing some updates on Travis CI
+
+## 8.0.7
+#### _"Vaccinated"_
+##### 12 august 2021
+- __Drivers__
+  - Improved Couchdb driver code and tests
+  - Dropped Riak support permanently (unmaintainable)
+- __Docs__
+  - Fixed vulnerability issue that cause exposed phpinfo() in some situations (@geolim4)
+  
+## 8.0.6
+#### _"Re-deconfined"_
+##### 07 july 2021
+- __Helpers__
+  - Allow $cacheItem to be retrieved by callback argument in CacheConditionalHelper (@geolim4)
+
+## 8.0.5
+#### _"Re-re-confined"_
+##### 05 april 2021
+- __Drivers__
+  - Fixed #782 // Random warning in Files driver
+  - Fixed #781 // bad type hint Riak driver
+  - Fixed #788 // Redundant directory name for Sqlite
+
 ## 8.0.4
 #### _"Confined Xmas"_
 ##### 21 december 2020

@@ -1,18 +1,23 @@
 {# begin {templatelocation} #}
-<div>
+		<li>
+			<span class="uk-text-medium">
 {!if cat_img_url}
-	<a href="{site_url}/filemgmt/viewcat.php?cid={cid}">
-		<img src="{cat_img_url}" style="border:0px;width:{shotwidth}px;margin-right:3px;">
-	</a>
+				<a href="{site_url}/filemgmt/viewcat.php?cid={cid}">
+					<img src="{cat_img_url}" class="uk-thumbnail uk-thumbnail-mini" style="border:0px;width:{shotwidth}px;margin-right:3px;">
+				</a>
 {!else}
+				<a href="{site_url}/filemgmt/viewcat.php?cid={cid}">
+					<i class="uk-icon uk-icon-folder-o uk-icon-small uk-text-center" style="border:0px;width:{shotwidth}px;margin-right:3px;"></i>
+				</a>
 {!endif}
-	<a href="{site_url}/filemgmt/viewcat.php?cid={cid}">
-		<b>{category_name}</b>
-	</a>&nbsp;{num_files}&nbsp;
+				<a href="{site_url}/filemgmt/viewcat.php?cid={cid}">{category_name}</a>&nbsp;({num_files})
 {!if files_waiting_submission}
-	({files_waiting_submission})
+				({files_waiting_submission})
 {!endif}
-	<br />
-	{subcategories}
-</div>
+			</span>
+
+			<div class="uk-margin-large-left" style="margin-left:20%;">
+				{subcategories}
+			</div>
+		</li>
 {# end {templatelocation} #}

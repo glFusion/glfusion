@@ -1,0 +1,72 @@
+{# begin {templatelocation} #}
+{!if need_js}
+<script>
+$(document).ready(function() {
+    $(".ratingstar").on("click", function(event) {
+        event.preventDefault();
+        var div = $(this).parent();
+        var parent1 = div.parent();
+        var parent2 = parent1.parent();
+        var type = div.data("type");
+        var item_id = div.data("item");
+        var units = div.data("units");
+        var size = div.data("size");
+        var ip = div.data("ip");
+        var url = glfusionSiteUrl + "/rater2_rpc.php?p=" + type +
+            "&q=" + item_id + "&c=" + units + "&s=" + size +
+            "&t=" + ip +
+            "&j=" + $(this).data("points");
+        $.get(url, function(data) {
+            parent2.html(data);
+        });
+    });
+});
+</script>
+{!endif}
+{!if wrapper}
+<div id="ratingdiv{item_id}" class="ratingbar">
+    <div id="unit_long{item_id}">
+{!endif}
+{!if voting}
+        <div id="rater_{item_id}" class="ratingstars enabled"
+            data-size="{bar_size}"
+            data-type="{item_type}"
+            data-item="{item_id}"
+            data-ip="{ip_address}"
+            data-units="{units}">
+{!else}
+        <div class="ratingstars"title="my title">
+{!endif}
+<!-- BEGIN ratingIcons -->
+{!!if {size}=='lg' !!}
+  {!!set icon_size 'uk-icon-large' !!}
+  {!!set icon_width '25' !!}
+{!!elseif {size}=='med' !!}
+  {!!set icon_size 'uk-icon-medium' !!}
+  {!!set icon_width '20' !!}
+{!else}
+  {!!set icon_size 'uk-icon-small' !!}
+  {!!set icon_width '15' !!}
+{!endif}
+{!!if {checked} == "checked" !!}
+    {!!set icon_cls 'uk-icon-star ratingStarChecked' !!}
+{!!elseif {checked} == 'half' !!}
+    {!!set icon_cls 'uk-icon-star-half-o ratingStarChecked' !!}
+{!else}
+    {!!set icon_cls 'uk-icon-star-o' !!}
+{!endif}
+            <i style="width:{icon_width}px;" class="{rater_cls} {icon_size} uk-icon {icon_cls} {icon_size} " data-points="{points}"></i>
+<!-- END ratingIcons -->
+        </div>
+        <div class="static">
+{!if voting}
+            {$LANG13['rating']}: <strong>{rating}</strong> / {units} ({total_votes} {tense} {$LANG13['cast']})
+{!else}
+            {$LANG13['currently']} {rating} / {units} ({total_votes} {tense})
+{!endif}
+        </div>
+{!if wrapper}
+    </div>
+</div>
+{!endif}
+{# end {templatelocation} #}

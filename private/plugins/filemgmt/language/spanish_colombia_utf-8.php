@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -37,8 +37,8 @@ $LANG_FM00 = array (
     'editor'            => 'Editor de la Extensión',
     'warning'           => 'Advertencia de desinstalación',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">La Extensión está instalada y habilitada.<br>deshabilitala primero si quieres desinstalarla.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Editor de la Extensión </a></div',
-    'WhatsNewLabel'    => 'Nuevas Descargas',
-    'WhatsNewPeriod'   => 'últimos %s días',
+    'WhatsNewLabel'     => 'Nuevas Descargas',
+    'WhatsNewPeriod'    => 'últimos %s días',
     'new_upload'        => 'Archivo enviado el ',
     'new_upload_body'   => 'Un archivo ha sido enviado a la cola de carga el ',
     'details'           => 'Detalles',
@@ -64,72 +64,81 @@ $LANG_FM02 = array(
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "Nueva página",
-    'adminhome' => "Página de Inicio - Administrador",
-    'plugin_name' => "Descargas",
-    'searchlabel' => "Lista de archivos",
-    'searchlabel_results' => "Resultados de la lista de archivos",
-    'downloads' => "Descargas",
-    'report' => "Top descargas",
-    'usermenu1' => "Descargas",
-    'usermenu2' => "&nbsp;&nbsp;Mejor votadas",
-    'usermenu3' => "Cargar Archivos",
-    'admin_menu' => "Descargas",
-    'writtenby' => "Escrito por",
-    'date' => "Última actualización",
-    'title' => "Título",
-    'content' => "Contenido",
-    'hits' => "Accesos",
-    'Filelisting' => "Lista de archivos",
-    'DownloadReport' => "Historial de descargas para archivos simples",
-    'StatsMsg1' => "Archivos más accesados",
-    'StatsMsg2' => "Parece que no hay archivos definidos en la Extensión filemgmt o nadie ha accesado nunca a ella.",
-    'usealtheader' => "Use Alt. Header",
-    'url' => "URL",
-    'edit' => "Modificar",
-    'lastupdated' => "Última actualización",
-    'pageformat' => "Formato de página",
-    'leftrightblocks' => "Bloque derecho e izquierdo",
-    'blankpage' => "Página en blanco",
-    'noblocks' => "Sin bloques",
-    'leftblocks' => "Bloque izquierdo",
-    'addtomenu' => 'Agregar al Menú',
-    'label' => 'Etiqueta',
-    'nofiles' => 'Número de archivos en el depósito (Descargas)',
-    'save' => 'Guardar',
-    'preview' => 'Vista previa',
-    'delete' => 'Borrar',
-    'cancel' => 'Cancelar',
-    'access_denied' => 'Acceso Denegado',
-    'invalid_install' => 'Alguien ha intentado accesar ilegalmente a la página de instalación del Administrador de Archivos. Id del usuario: ',
-    'start_install' => 'Intentando instalar la Extensión Filemgmt ',
-    'start_dbcreate' => 'Intentando crear una base de datos para la Extensión File mgmt',
-    'install_skip' => '... saltado por filemgmt.cfg',
-    'access_denied_msg' => 'Estás tratando de accesar ilegalmente a la página del administrador de archivos.  Todos los intentos ilegales de accesar a esta página están siendo registrados',
+    'newpage'               => "Nueva página",
+    'adminhome'             => "Página de Inicio - Administrador",
+    'plugin_name'           => "Descargas",
+    'searchlabel'           => "Lista de archivos",
+    'searchlabel_results'   => "Resultados de la lista de archivos",
+    'downloads'             => "Descargas",
+    'report'                => "Top descargas",
+    'usermenu1'             => "Descargas",
+    'usermenu2'             => "&nbsp;&nbsp;Mejor votadas",
+    'usermenu3'             => "Cargar Archivos",
+    'admin_menu'            => "Descargas",
+    'writtenby'             => "Escrito por",
+    'date'                  => "Última actualización",
+    'title'                 => "Título",
+    'content'               => "Contenido",
+    'hits'                  => "Accesos",
+    'Filelisting'           => "Lista de archivos",
+    'DownloadReport'        => "Historial de descargas para archivos simples",
+    'StatsMsg1'             => "Archivos más accesados",
+    'StatsMsg2'             => "Parece que no hay archivos definidos en la Extensión filemgmt o nadie ha accesado nunca a ella.",
+    'usealtheader'          => "Use Alt. Header",
+    'url'                   => "URL",
+    'edit'                  => "Modificar",
+    'lastupdated'           => "Última actualización",
+    'pageformat'            => "Formato de página",
+    'leftrightblocks'       => "Bloque derecho e izquierdo",
+    'blankpage'             => "Página en blanco",
+    'noblocks'              => "Sin bloques",
+    'leftblocks'            => "Bloque izquierdo",
+    'addtomenu'             => 'Agregar al Menú',
+    'label'                 => 'Etiqueta',
+    'nofiles'               => 'Número de archivos en el depósito (Descargas)',
+    'save'                  => 'Guardar',
+    'preview'               => 'Vista previa',
+    'delete'                => 'Borrar',
+    'cancel'                => 'Cancelar',
+    'access_denied'         => 'Acceso Denegado',
+    'invalid_install'       => 'Alguien ha intentado accesar ilegalmente a la página de instalación del Administrador de Archivos. Id del usuario: ',
+    'start_install'         => 'Intentando instalar la Extensión Filemgmt ',
+    'start_dbcreate'        => 'Intentando crear una base de datos para la Extensión File mgmt',
+    'install_skip'          => '... saltado por filemgmt.cfg',
+    'access_denied_msg'     => 'Estás tratando de accesar ilegalmente a la página del administrador de archivos.  Todos los intentos ilegales de accesar a esta página están siendo registrados',
     'installation_complete' => 'Instalación Finalizada',
     'installation_complete_msg' => 'Las estructuras de datos para la Extensión File Mgmt  para glFusion han sido instaladas satisfactoriamente!  si alguna vez necesitas desinstalar esta extensión , por favor lee el archivo readme.',
-    'installation_failed' => 'Instalación Fallida',
+    'installation_failed'   => 'Instalación Fallida',
     'installation_failed_msg' => 'La instalación de la extensión File Mgmt ha fallado. Por favor revisa el: error.log de glFusion ',
-    'system_locked' => 'Sistema cerrado',
-    'system_locked_msg' => 'La instalación de la extensión File Mgmt esta realizada y cerrada. Si estas intentando desinstalar la extensión, por favor lee el archivo Readme que viene con ella',
-    'uninstall_complete' => 'Desinstalación Completa',
+    'system_locked'         => 'Sistema cerrado',
+    'system_locked_msg'     => 'La instalación de la extensión File Mgmt esta realizada y cerrada. Si estas intentando desinstalar la extensión, por favor lee el archivo Readme que viene con ella',
+    'uninstall_complete'    => 'Desinstalación Completa',
     'uninstall_complete_msg' => 'Las estructuras de datos para la extensión File Mgmt han sido removidas de la base de datos<br><br>Necesitas borrar los archivos del servidor manualmente.',
-    'uninstall_failed' => 'Desinstalación fallida.',
-    'uninstall_failed_msg' => 'La Desinstalación ha fallado.  Por favor revisa tu glFusion error.log ',
-    'install_noop' => 'Instalar Extensión',
-    'install_noop_msg' => 'La instalación de la extensión filemgmt fue ejecutada pero no había nada que hacer.<br><br>Revisa el archivo: install.cfg de la extensión.',
-    'all_html_allowed' => 'Todo HTML es permitido',
-    'no_new_files'  => 'No hay archivos nuevos',
-    'no_comments'   => 'No hay comentarios nuevos',
-    'more'          => '<em>más ...</em>',
-    'newly_uploaded' => 'Newly Uploaded',
-    'click_to_view' => 'Click here to view',
-    'no_file_uploaded' => 'No File Uploaded',
-    'description' => 'Description',
-    'category' => 'Category',
-    'err_req_fields' => 'Some required fields were not supplied',
-    'go_back' => 'Go Back',
-    'err_demomode' => 'Uploads are disabled in demo mode',
+    'uninstall_failed'      => 'Desinstalación fallida.',
+    'uninstall_failed_msg'  => 'La Desinstalación ha fallado.  Por favor revisa tu glFusion error.log ',
+    'install_noop'          => 'Instalar Extensión',
+    'install_noop_msg'      => 'La instalación de la extensión filemgmt fue ejecutada pero no había nada que hacer.<br><br>Revisa el archivo: install.cfg de la extensión.',
+    'all_html_allowed'      => 'Todo HTML es permitido',
+    'no_new_files'          => 'No hay archivos nuevos',
+    'no_comments'           => 'No hay comentarios nuevos',
+    'more'                  => '<em>más ...</em>',
+    'newly_uploaded'        => 'Newly Uploaded',
+    'click_to_view'         => 'Click here to view',
+    'no_file_uploaded'      => 'No File Uploaded',
+    'description'           => 'Descripción',
+    'category'              => 'Categoría',
+    'err_req_fields'        => 'Some required fields were not supplied',
+    'go_back'               => 'Regresar',
+    'err_demomode'          => 'Uploads are disabled in demo mode',
+    'edit_category'         => 'Edit Category',
+    'create_category'       => 'Create Category',
+    'can_view'              => 'Can View',
+    'can_upload'            => 'Can Upload',
+    'delete_category'       => 'Delete Category',
+    'new_category'          => 'New Category',
+    'new_file'              => 'New File',
+    'remote_ip'             => 'IP Remota',
+    'back_to_listing'       => 'Back To Listing',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
@@ -229,8 +238,8 @@ define("_MD_SEARCH","Buscar");
 define("_MD_MAIN","Principal");
 define("_MD_SUBMITFILE","Enviar archivo");
 define("_MD_POPULAR","Popular");
-define("_MD_NEW","Nuevo");
 define("_MD_POP", "Pop");   // abbrevision for listing badge
+define("_MD_NEW","Nuevo");
 define("_MD_TOPRATED","Top rankeado");
 
 define("_MD_NEWTHISWEEK","Nuevo esta semana");
@@ -418,6 +427,7 @@ define("_MD_ERRORDESC","ERROR: Necesitas escribir la descripción!");
 define("_MD_NEWDLADDED","Nueva descarga agregada a la base de datos.");
 define("_MD_NEWDLADDED_DUPFILE","Advertencia: Archivo duplicado. Nueva descarga agregada a la base de datos.");
 define("_MD_NEWDLADDED_DUPSNAP","Advertencia: Snap Duplicado. Nueva descarga agregada a la base de datos.");
+define("_MD_DLUPDATED", "File has been updated.");
 define("_MD_HELLO","Hola %s");
 define("_MD_WEAPPROVED","Hemos aprobado tu descarga enviada. El nombre del archivo es: ");
 define("_MD_THANKSSUBMIT","Gracias por tu envío!");
@@ -463,4 +473,3 @@ define("_MD_COMMENTSWANTED","Sus comentarios son valorados");
 define("_MD_CLICK2SEE","Clic para ver: ");
 define("_MD_CLICK2DL","Clic para descargar: ");
 define("_MD_ORDERBY","Ordenar por: ");
-?>

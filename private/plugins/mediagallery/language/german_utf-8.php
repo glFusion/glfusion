@@ -687,10 +687,10 @@ $LANG_MG01 = array (
     'playback_options'          => 'Playback-Optionen',
     'meta_data'                 => 'Meta-Daten',
     'auto_rotate'               => 'Uploads automatisch drehen',
-    'menulabel'                 => 'Menu Label',
-    'path_mg'                   => 'MediaGallery Directory',
-    'path_mediaobjects'         => 'Full Path to mediaobjects/ directory',
-    'mediaobjects_url'          => 'Full URL to mediaobjects/',
+    'menulabel'                 => 'Menübezeichnung',
+    'path_mg'                   => 'MediaGallery Verzeichnis',
+    'path_mediaobjects'         => 'Vollständiger Pfad zum Verzeichnis mediaobjects/',
+    'mediaobjects_url'          => 'Vollständige URL zu mediaobjects/',
 );
 
 // error messages
@@ -883,8 +883,8 @@ $LANG_MG03 = array (
     'click_here'            => 'Hier klicken',
     'published'             => 'Veröffentlicht von',
     'on'                    => 'An',
-    'no_flash'              => '<div style="width:200px;">Es scheint, dass Du Flash-Plugin nicht installiert hast, oder dass die vorhandene Vesion zu alt ist, so dass die angeforderten Inhalte nicht wiedergegeben werden können.<br /><p><a href="http://www.adobe.com/go/getflashplayer"><img src="//www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Adobe-Flash-Player herunterladen" style="border:none;" /></a></p></div>',
-    'tagline'               => '<a href="http://www.glfusion.org" target="_new">Galerie powered by MediaGallery</a>',
+    'no_flash'              => 'Flash Player has reached its end of life (EOL) effective January 1, 2021. Flash media files can no longer be played.',
+    'tagline'               => 'Gallery powered by <a href="https://www.glfusion.org" target="_new">Media Gallery</a>',
     'xp_pub_url'            => '<a href="%s">xppubwiz.reg (Windows XP) herunterladen</a>',
     'vista_pub_url'         => '<a href="%s">xppubwiz.reg (Windows Vista) herunteladen</a>',
     'title_desc_keywords'   => 'Alle Medien-Meta-Daten',

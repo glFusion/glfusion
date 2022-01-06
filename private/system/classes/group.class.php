@@ -291,7 +291,21 @@ class Group
         } else {
             $groups = self::getAll($uid);
             $rights = explode( ',', SEC_getUserPermissions(0,$uid));
+
         }
+        if (!is_array($rights)) $rights = array();
+// NEW ROOT HANDLING
+        // here - we should check to see if root is one of the assigned groups - if it is - return true
+        // also need to figure out how to check for the right system.root - which would be in the $rights var
+
+        if (in_array('Root',$groups)) {
+            return true;
+        }
+        if (in_array('system.root',$rights)) {
+            return true;
+        }
+
+// END OF NEW ROOT HANDLING
 
         if (is_numeric($grp_to_verify)) {
             $rc = (in_array($grp_to_verify, $groups)) ? true : false;

@@ -335,7 +335,7 @@ function PLG_uninstall ($type)
         if ($stmt !== false && $stmt !==NULL) {
             Log::write('system',Log::INFO,'removing feed files');
             while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
-                $fullpath = SYND_getFeedPath( $A[0] );
+                $fullpath = SYND_getFeedPath( $A['filename'] );
                 if ( file_exists( $fullpath ) ) {
                     unlink ($fullpath);
                     Log::write('system',Log::INFO,"Removed Feed File: $fullpath");

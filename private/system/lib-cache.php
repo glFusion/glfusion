@@ -70,6 +70,7 @@ function _template_set_root($root) {
         }
         if ( $r != '' ) {
             $retval[] = $r . '/custom';
+            $retval[] = $_CONF['path_data'].'templates/'.$_CONF['theme'].'/';
             $retval[] = $r;
             if ( $_USER['theme'] != 'cms' ) {
                 $retval[] = $_CONF['path_themes'] . 'cms/' .substr($r, strlen($_CONF['path_layout']));

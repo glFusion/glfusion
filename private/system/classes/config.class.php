@@ -229,7 +229,7 @@ class config
             $db->_errorlog("SQL Error: " . $e->getMessage());
         }
         if ($name != 'theme')  {
-            $this->config_array[$group][$name] = $value;
+            $this->config_array[$group][$name] = @unserialize($value);
             $this->_post_configuration();
             $this->_writeIntoCache();
             $this->_purgeCache();
@@ -670,6 +670,7 @@ class config
                       (($cur[2] != -1) ?
                        //isset($LANG_configselects[$group][$cur[2]]) : null),
                        $cfgSelect[$group][$cur[2]] : null),
+                      'lang_idx' => $cur[2],
                       'value' =>
                       (($cur[4] == 'unset') ?
                        'unset' : @unserialize($cur[4])),
@@ -916,7 +917,8 @@ class config
                                                    $e['type'],
                                                    $e['value'],
                                                    $e['selectionArray'], false,
-                                                   $e['reset']);
+                                                   $e['reset'],
+                                                   $e['lang_idx']);
                 }
                 $rc = $this->_UI_get_fs($grp, $sg, $activeTab, $fs_contents, $fset, $t);
                 if ( $rc ) {
@@ -1032,7 +1034,7 @@ class config
 
     function _UI_get_conf_element($group, $name, $display_name, $type, $val,
                                   $selectionArray = null , $deletable = false,
-                                  $allow_reset = false)
+                                  $allow_reset = false, $lang_idx = '')
     {
         global $_CONF, $LANG_CONFIG;
 
@@ -1169,6 +1171,7 @@ class config
         } elseif (strpos($type, "*") === 0 || strpos($type, "%") === 0) {
             $t->set_var('arr_name', $name);
             $t->set_var('array_type', $type);
+            $t->set_var('lang_idx', $lang_idx);
             $button = $t->parse('output', (strpos($type, "*") === 0 ?
                                            'keyed-add-button' :
                                            'unkeyed-add-button'));

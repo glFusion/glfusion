@@ -6338,7 +6338,7 @@ function COM_recursiveDelete($path)
 
 }
 
-function COM_buildOwnerList($fieldName,$owner_id=2)
+function COM_buildOwnerList($fieldName,$owner_id=2, $includeAnonymous = false)
 {
     global $_TABLES, $_CONF;
 
@@ -6350,7 +6350,7 @@ function COM_buildOwnerList($fieldName,$owner_id=2)
     $T->set_var('var_name', $fieldName);
     $options = '';
     while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
-        if ( $row['uid'] == 1 ) {
+        if ( $row['uid'] == 1 && $includeAnonymous == false) {
             continue;
         }
         $options .= '<option value="' . $row['uid'] . '"';

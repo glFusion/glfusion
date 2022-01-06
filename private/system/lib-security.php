@@ -98,6 +98,11 @@ if (!defined('CSRF_TOKEN')) {
 */
 function SEC_getUserGroups($uid='')
 {
+//    global $_USER;
+
+//    if (($_USER['uid'] == $uid) && SEC_inGroup('Root')) {
+//        return \Group::getAllAvailable();
+//    }
     return \Group::getAll($uid);
 }
 
@@ -1221,6 +1226,62 @@ function SEC_getGroupDropdown ($group_id, $access, $var_name='group_id')
 }
 
 /**
+* Create a group dropdown of all groups on the system - regardless of user's permission
+*
+* Creates the group dropdown menu that's used on pretty much every admin page
+*
+* @param    int     $group_id   current group id (to be selected)
+* @param    int     $access     access permission
+* @param    string  $var_name   Optional variable name, "group_id" if empty
+* @return   string              HTML for the dropdown
+*
+*/
+function SEC_getGroupDropdownAll ($group_id, $access, $var_name='group_id')
+{
+    global $_TABLES, $_CONF;
+
+    $db = Database::getInstance();
+
+    $T = new Template($_CONF['path_layout'] . '/fields');
+    $T->set_file(array(
+        'dropdown' => 'selection.thtml',
+        'optionlist' => 'optionlist.thtml',
+    ) );
+    $T->set_var('var_name', $var_name);
+
+    if ($access == 3) {
+        $usergroups = \Group::getAllAvailable();
+        uksort($usergroups, "strnatcasecmp");
+
+        $T->set_block('optionlist', 'options', 'opts');
+        foreach ($usergroups as $ug_name => $ug_id) {
+            $T->set_var(array(
+                'opt_name' => ucfirst($ug_name),
+                'opt_value' => $ug_id,
+                'selected' => ($group_id == $ug_id),
+            ) );
+            $T->parse('opts', 'options', true);
+        }
+        $T->parse('option_list', 'opts');
+    } else {
+        // They can't set the group then
+        $group_name = $db->getItem (
+                        $_TABLES['groups'],
+                        'grp_name',
+                        array('grp_id' => $group_id),
+                        array(Database::STRING)
+        );
+        $T->set_var(array(
+            'item_name' => $group_name,
+            'item_id' => $group_id,
+        ) );
+    }
+    $T->parse('output', 'dropdown');
+    $groupdd = $T->finish($T->get_var('output'));
+    return $groupdd;
+}
+
+/**
 * Encrypt password
 *
 * For now, this is only a wrapper function to get all the direct calls to
@@ -2150,6 +2211,9 @@ function SEC_loginForm($use_options = array())
 
         // action
         'form_action' => $_CONF['site_url'].'/users.php',
+
+        // landing page after successful login
+        'login_landing' => '',
     );
 
     $options = array_merge($default_options, $use_options);
@@ -2220,10 +2284,16 @@ function SEC_loginForm($use_options = array())
             $services .= $loginform->finish($loginform->get_var('output'));
         }
     }
+
+    if ($options['login_landing']) {
+        $options['hidden_fields'] .= '<input type="hidden" name="login_landing" value="' .
+            $options['login_landing'] . '" />' . LB;
+    }
+
     if (! empty($options['hidden_fields'])) {
         // allow caller to (ab)use {services} for hidden fields
         $services .= $options['hidden_fields'];
-        $loginform->set_var('hidden_fields',$options['hidden_fields']);
+        //$loginform->set_var('hidden_fields',$options['hidden_fields']);
     }
     $loginform->set_var('services', $services);
 

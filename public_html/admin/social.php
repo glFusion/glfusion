@@ -373,9 +373,8 @@ function SI_get_site()
 
     $extra = '';
     if ( isset($_SOCIAL['social_site_extra'])) {
-        $extra = @unserialize($_SOCIAL['social_site_extra']);
+        $extra = $_SOCIAL['social_site_extra'];
     }
-
     $T = new Template($_CONF['path_layout'] . 'admin/social');
     $T->set_file('page','site_social.thtml');
 
