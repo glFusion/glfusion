@@ -7,7 +7,7 @@
 * @license Creative Commons Attribution 3.0 License.
 *     http://creativecommons.org/licenses/by/3.0/                              |
 *
-*  Copyright (C) 2008-2019 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on original work Copyright (C) 2006,2007,2008 by the following authors:
@@ -241,8 +241,8 @@ function RATING_getVoteData( $type, $item_id='', $sort='ratingdate', $sortdir = 
 */
 function RATING_getRating( $type, $item_id )
 {
-    $R = glFusion\Rater\Rater::create($type, $item__id);
-    return array($R->getRatingId(), $R->getRating(), $R->getTotalVotes);
+    $R = glFusion\Rater\Rater::create($type, $item_id);
+    return array($R->getRatingId(), $R->getRating(), $R->getTotalVotes());
 
     global $_TABLES;
 
@@ -277,10 +277,10 @@ function RATING_getRating( $type, $item_id )
 */
 function RATING_hasVoted( $type, $item_id, $uid, $ip )
 {
-    return glFusion\Rater\Rater::create($type, $item_id)
+    $R = glFusion\Rater\Rater::create($type, $item_id)
         ->withUid($uid)
-        ->withIpAddress($ip)
-        ->userHadVoted();
+        ->withIpAddress($ip);
+    return $R->userHasVoted();
 
     global $_TABLES;
 
@@ -397,10 +397,11 @@ function RATING_deleteVote( $voteID )
 */
 function RATING_addVote( $type, $item_id, $rating, $uid, $ip )
 {
-    $R = glFusion\Rater\Rater::create($type, $item_id)
-        ->withUid($uid)
-        ->withIpAddress($ip)
-        ->addVote($rating);
+    $R = glFusion\Rater\Rater::create($type, $item_id);
+    $R->withUid($uid);
+    $R->withIpAddress($ip);
+    $R->addVote($rating);
+
     return array($R->getRating(), $R->getTotalVotes());
 
     global $_TABLES;
