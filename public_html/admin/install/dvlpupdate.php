@@ -976,6 +976,21 @@ function glfusion_200()
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM
         ";
+    $_SQL[] = "
+        CREATE TABLE `{$_TABLES['themes']}` (
+          `theme` varchar(40) NOT NULL DEFAULT '',
+          `logo_type` tinyint(1) NOT NULL DEFAULT -1,
+          `display_site_slogan` tinyint(1) NOT NULL DEFAULT -1,
+          `logo_file` varchar(40) NOT NULL DEFAULT '',
+          `grp_access` int(11) unsigned NOT NULL DEFAULT 2,
+          PRIMARY KEY (`theme`)
+        ) ENGINE=MyISAM;
+        ";
+    $_SQL[] = "
+        INSERT INTO {$_TABLES['themes']} (theme, logo_type, display_site_slogan) VALUES
+            ('_default', 0, 1),
+            ('cms', -1, -1)
+        ";
 
     if ($use_innodb) {
         $statements = count($_SQL);

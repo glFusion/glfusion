@@ -40,6 +40,7 @@ $_TABLES['frontpagecodes']      = $_DB_table_prefix . 'frontpagecodes';
 $_TABLES['group_assignments']   = $_DB_table_prefix . 'group_assignments';
 $_TABLES['groups']              = $_DB_table_prefix . 'groups';
 $_TABLES['logo']                = $_DB_table_prefix . 'logo';
+$_TABLES['themes']              = $_DB_table_prefix . 'themes';
 $_TABLES['maillist']            = $_DB_table_prefix . 'maillist';
 $_TABLES['menu']                = $_DB_table_prefix . 'menu';
 $_TABLES['menu_config']         = $_DB_table_prefix . 'menu_config';
