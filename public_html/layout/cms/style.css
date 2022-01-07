@@ -2677,3 +2677,9 @@ div.ratingbar > * > span.static {
     font-size: 0.875rem;
 }
 /* End CSS-based rating stars */
+
+img.themeAdminImage {
+    width: auto;
+	max-height:50px;
+}
+

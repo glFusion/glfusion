@@ -34,13 +34,6 @@ class Theme
     const GRAPHIC = 1;
     const TEXT = 2;
 
-    // Logo size styling for the admin list
-    const LOGO_ADMIN_STYLE = 'width:auto;max-height:50px';
-
-    /** Table name, until included in glFusion core.
-     * @var string */
-    public static $table = 'gl_themes';
-
     /** Default theme name.
      * @var string */
     public static $default = '_default';
@@ -97,6 +90,8 @@ class Theme
      */
     protected static function getThemes() : array
     {
+        global $_TABLES;
+
         static $themes = array();
         if (!empty($themes)) {
             return $themes;
@@ -104,7 +99,7 @@ class Theme
 
         try {
             // @todo: need table name
-            $sql = "SELECT * FROM " . self::$table;
+            $sql = "SELECT * FROM " . $_TABLES['themes'];
             $stmt = Database::getInstance()
                 ->conn->executeQuery(
                     $sql
@@ -430,7 +425,7 @@ class Theme
             return $this;
         }
 
-        $sql = "INSERT INTO " . self::$table . " SET
+        $sql = "INSERT INTO {$_TABLES['themes']} SET
             theme = ?,
             logo_type = ?,
             display_site_slogan = ?,
@@ -484,9 +479,9 @@ class Theme
         $oldvalue = (int)$oldvalue;
         $newvalue = (int)$newvalue;
 
-        $sql = "UPDATE " . self::$table .
-                 " SET $field  = ?
-                WHERE theme = ?";
+        $sql = "UPDATE {$_TABLES['themes']}
+            SET $field  = ?
+            WHERE theme = ?";
         try {
             $stmt = Database::getInstance()
                 ->conn->executeQuery(
@@ -511,9 +506,11 @@ class Theme
      */
     public function updateFile(string $filename) : self
     {
-        $sql = "UPDATE " . self::$table .
-                " SET logo_file  = ?
-                WHERE theme = ?";
+        global $_TABLES;
+
+        $sql = "UPDATE {$_TABLES['themes']}
+            SET logo_file  = ?
+            WHERE theme = ?";
         try {
             $stmt = Database::getInstance()
                 ->conn->executeQuery(
@@ -625,7 +622,7 @@ class Theme
                 $_CONF['site_url'] . '/images/' . $this->logo_file,
                 $LANG_LOGO['current_logo'],
                 array(
-                    'style' => self::LOGO_ADMIN_STYLE,
+                    'class' => 'themeAdminImage',
                 )
             );
         }
