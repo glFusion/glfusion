@@ -492,7 +492,7 @@ class Theme
     public function getImagePath() : string
     {
         global $_CONF;
-        return $_CONF['path_html'] . '/images/' . $this->logo_file;
+        return $_CONF['path_images'] . $this->logo_file;
     }
 
 
@@ -560,7 +560,7 @@ class Theme
             $dimension = $imgInfo[3];
 
             $L->set_var( 'site_name', $_CONF['site_name'] );
-            $site_logo = $_CONF['site_url'] . '/images/' . $this->logo_file;
+            $site_logo = $_CONF['path_images_url'] . '/' . $this->logo_file;
             $L->set_var( 'site_logo', $site_logo);
             $L->set_var( 'dimension', $dimension );
             if ( $imgInfo[1] != 100 ) {
@@ -786,17 +786,17 @@ class Theme
                     $newlogoname = 'logo' . substr(md5(uniqid(rand())),0,8) . $ext;
                     $rc = move_uploaded_file(
                         $files['tmp_name'][$index],
-                        $_CONF['path_html'] . 'images/' . $newlogoname
+                        $_CONF['path_images'] . $newlogoname
                     );
                     if ($rc) {
-                        @chmod($_CONF['path_html'] . 'images/' . $newlogoname,0644);
+                        @chmod($_CONF['path_images'] . $newlogoname,0644);
                         $this->updateFile($newlogoname);
                         $thisinfo['status'] = true;
                     }
                 }
             }
             $thisinfo['url'] =  COM_createImage(
-                $_CONF['site_url'] . '/images/' . $this->logo_file,
+                $_CONF['path_images_url'] . '/' . $this->logo_file,
                 $LANG_LOGO['current_logo'],
                 array(
                     'class' => 'themeAdminImage',
