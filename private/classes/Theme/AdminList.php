@@ -34,50 +34,11 @@ class AdminList extends Theme
     {
         global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_LOGO, $_IMAGE_TYPE;
 
-        $dbThemes = self::getThemes();
-        $data_arr = array(
-            array(
-                'theme' => self::$default,
-                'logo_type' => (int)$dbThemes[self::$default]['logo_type'],
-                'display_site_slogan' => (int)$dbThemes[self::$default]['display_site_slogan'],
-                'logo_file' => $dbThemes[self::$default]['logo_file'],
-                'disabled' => 1,
-                'grp_access' => 0,
-            )
-        );
-
-        $tmp = array_diff(scandir($_CONF['path_themes']), array('.', '..'));
-        if ($tmp !== false) {
-            foreach ($tmp as $dirname) {
-                if (self::pathExists($dirname)) {
-                    if (isset($dbThemes[$dirname])) {
-                        // Theme already exists in the database, use those values
-                        $logo_type = (int)$dbThemes[$dirname]['logo_type'];
-                        $show_slogan = (int)$dbThemes[$dirname]['display_site_slogan'];
-                        $logo_file = $dbThemes[$dirname]['logo_file'];
-                        if ($dbThemes[$dirname]['theme'] == $_CONF['theme']) {
-                            $grp_access = 2;
-                        } else {
-                            $grp_access = $dbThemes[$dirname]['grp_access'];
-                        }
-                    } else {
-                        // Theme not saved in DB yet, use default values
-                        $logo_type = 0;
-                        $show_slogan = 0;
-                        $logo_file = '';
-                        $grp_access = 2;
-                    }
-                    $data_arr[] = array(
-                        'theme' => $dirname,
-                        'logo_type' => $logo_type,
-                        'display_site_slogan' => $show_slogan,
-                        'logo_file' => $logo_file,
-                        'disabled' => 0,
-                        'grp_access' => $grp_access,
-                    );
-                }
-            }
-        }
+        $themes = self::getAll(true, false);
+        $themes[Theme::DEFAULT_NAME] = self::getDefault();
+        // Sync added and removed themes from the filesystem
+        $themes = self::syncFilesystem($themes);
+        ksort($themes);
 
         USES_lib_admin();
 
@@ -97,17 +58,17 @@ class AdminList extends Theme
         );
         $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 
-        $T = new \Template($_CONF['path_layout'] . '/admin/logo');
+        $T = new \Template($_CONF['path_layout'] . '/admin');
         $T->set_file('form', 'themes.thtml');
         $T->set_block('form', 'dataRow', 'DR');
-        foreach ($data_arr as $A){
-            $img_path = $_CONF['path_html'] . '/images/' . $A['logo_file'];
+        foreach ($themes as $Theme){
+            $img_path = $Theme->getImagePath();
             if (!is_file($img_path)) {
                 $img_path = '';
                 $img_url = '';
             } else {
                 $img_url = COM_createImage(
-                    $_CONF['site_url'] . '/images/' . $A['logo_file'],
+                    $_CONF['site_url'] . '/images/' . $Theme->getImageName(),
                     _('Logo Image'),
                     array(
                         'class' => 'themeAdminImage',
@@ -122,24 +83,23 @@ class AdminList extends Theme
             $T->clear_var('slogan_sel_0');
             $T->clear_var('slogan_sel_1');
             $T->set_var(array(
-                'theme_name'    => $A['theme'],
-                'is_default'    => $A['theme'] == self::$default,
-                'type_sel_' . $A['logo_type'] => 'selected="selected"',
-                'slogan_sel_' . $A['display_site_slogan'] => 'selected="selected"',
+                'theme_name'    => $Theme->getName(),
+                'is_default'    => $Theme->getName() == self::DEFAULT_NAME,
+                'type_sel_' . $Theme->getLogoType() => 'selected="selected"',
+                'slogan_sel_' . $Theme->displaySlogan() => 'selected="selected"',
                 'img_path'      => $img_path,
                 'img_url'       => $img_url,
-                'type_sel'      => $A['logo_type'],
-                'slogan_sel'    => $A['display_site_slogan'],
-                'disabled'      => $A['disabled'],
-                'old_gid'       => $A['grp_access'],
-                'is_site_theme' => $A['theme'] == $_CONF['theme'],
+                'type_sel'      => $Theme->getLogoType(),
+                'slogan_sel'    => $Theme->displaySlogan(),
+                'old_gid'       => $Theme->getGrpAccess(),
+                'is_site_theme' => $Theme->getName() == $_CONF['theme'],
                 'grp_access_options' => COM_optionList(
                     $_TABLES['groups'],
                     'grp_id,grp_name',
-                    $A['grp_access'],
+                    $Theme->getGrpAccess(),
                     1
                 ),
-                'grp_0_sel' => $A['grp_access'] == 0 ? 'selected="selected"' : '',
+                'grp_0_sel' => $Theme->getGrpAccess() == 0 ? 'selected="selected"' : '',
             ) );
             $T->parse('DR', 'dataRow', true);
         }
