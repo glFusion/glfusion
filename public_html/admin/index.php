@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2019 by the following authors:
+*  Copyright (C) 2009-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -216,12 +216,6 @@ function commandcontrol()
             'url' => $_CONF['site_admin_url'] . '/menu.php',
             'lang' => $LANG_MB01['menu_builder'],
             'image' => $_CONF['layout_url'] . '/images/icons/menubuilder.' . $_IMAGE_TYPE,
-        ),
-        $LANG_LOGO['logo_admin'] => array(
-            'condition' => SEC_hasRights('logo.admin'),
-            'url' => $_CONF['site_admin_url'] . '/logo.php',
-            'lang' => $LANG_LOGO['logo_admin'],
-            'image' => $_CONF['layout_url'] . '/images/icons/logo.' . $_IMAGE_TYPE,
         ),
         $LANG_LOGO['theme'] => array(
             'condition' => SEC_hasRights('logo.admin'),

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2018 by the following authors:
+*  Copyright (C) 2017-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -39,7 +39,7 @@ $_TABLES['features']            = $_DB_table_prefix . 'features';
 $_TABLES['frontpagecodes']      = $_DB_table_prefix . 'frontpagecodes';
 $_TABLES['group_assignments']   = $_DB_table_prefix . 'group_assignments';
 $_TABLES['groups']              = $_DB_table_prefix . 'groups';
-$_TABLES['logo']                = $_DB_table_prefix . 'logo';
+//$_TABLES['logo']                = $_DB_table_prefix . 'logo';
 $_TABLES['themes']              = $_DB_table_prefix . 'themes';
 $_TABLES['maillist']            = $_DB_table_prefix . 'maillist';
 $_TABLES['menu']                = $_DB_table_prefix . 'menu';

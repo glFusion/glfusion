@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -294,13 +294,13 @@ if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
 if ( !isset($_SYSTEM['admin_session']) ) {
     $_SYSTEM['admin_session'] = 1200;
 }
-
+/*
 $_LOGO = array();
 $resultSet = $db->conn->query("SELECT * FROM `{$_TABLES['logo']}`")->fetchAll();
 foreach($resultSet AS $row) {
     $_LOGO[$row['config_name']] = $row['config_value'];
 }
-
+*/
 list($usec, $sec) = explode(' ', microtime());
 mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
 

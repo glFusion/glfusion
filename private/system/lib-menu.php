@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2018-2018 by the following authors:
+*  Copyright (C) 2018-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -464,11 +464,19 @@ function getAdminMenu()
                 $label =  $LANG_MB01['menu_builder'];
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
+/*
             if ( SEC_inGroup( 'Root' )) {
                 $url = $_CONF['site_admin_url'] . '/logo.php';
                 $label =  $LANG_LOGO['logo_admin'];
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
+*/
+            if (SEC_hasRights('logo.admin')) {
+                $url = $_CONF['site_admin_url'] . '/themes.php';
+                $label = $LANG_LOGO['theme'];
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
             if ( SEC_hasRights( 'topic.edit' )) {
                 $count = $db->conn->fetchColumn(
                     "SELECT COUNT(*) AS count FROM `{$_TABLES['topics']}`" . $db->getPermSql(),

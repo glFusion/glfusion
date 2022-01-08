@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -667,15 +667,6 @@ CREATE TABLE {$_TABLES['vars']} (
 ) ENGINE=MyISAM
 ";
 
-$_SQL[] = "CREATE TABLE {$_TABLES['logo']} (
-  id int(11) NOT NULL auto_increment,
-  config_name varchar(128) default NULL,
-  config_value varchar(255) NOT NULL,
-  PRIMARY KEY  (id),
-  UNIQUE KEY config_name (config_name)
-) ENGINE=MyISAM;
-";
-
 $_SQL[] = " CREATE TABLE `{$_TABLES['themes']}` (
   `theme` varchar(40) NOT NULL DEFAULT '',
   `logo_type` tinyint(1) NOT NULL DEFAULT -1,
@@ -951,6 +942,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','2.0
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (0,'Trackback Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (-1,'Trackback Disabled') ";
 
+/* --------
 #
 # Default logo / menu data
 #
@@ -960,7 +952,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['logo']} (id, config_name, config_value) VALUE
 (2, 'display_site_slogan', '1'),
 (3, 'logo_name', 'logo1234.png');
 ";
-
+-------- */
 $_DATA[] = "INSERT INTO {$_TABLES['menu']} (`id`, `menu_name`, `menu_type`, `menu_active`, `group_id`) VALUES(1, 'navigation', 1, 1, 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu']} (`id`, `menu_name`, `menu_type`, `menu_active`, `group_id`) VALUES(2, 'footer', 2, 1, 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu']} (`id`, `menu_name`, `menu_type`, `menu_active`, `group_id`) VALUES(3, 'block', 3, 1, 2);";
