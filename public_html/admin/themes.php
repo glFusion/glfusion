@@ -61,7 +61,7 @@ foreach ($expected as $provided) {
 switch ($action) {
 case 'ajaxupload':
     // Upload a logo image
-    $Theme = new Theme($_POST['theme']);
+    $Theme = Theme::getInstance($_POST['theme']);
     $retval = array(
         'status' => false,
     );
@@ -72,7 +72,7 @@ case 'ajaxupload':
 
 case 'ajaxtoggle':
     // Toggle a database field
-    $Theme = new Theme($_POST['theme']);
+    $Theme = Theme::getInstance($_POST['theme']);
     if (!$Theme->Exists()) {
         // If the logo record doesn't exist yet, create it.
         $Theme->Save();
@@ -102,7 +102,7 @@ case 'ajaxtoggle':
 
 case 'del_logo_img':
     // Delete a logo image via AJAX
-    $Theme = new Theme($_POST['theme']);
+    $Theme = Theme::getInstance($_POST['theme']);
     if ($Theme->delImage()) {
         $retval = array(
             'status' => true,

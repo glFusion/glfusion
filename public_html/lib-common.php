@@ -830,35 +830,19 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
 */
 function COM_getThemes( $all = false )
 {
-    global $_CONF, $_PLUGINS;
-
-    $index = 1;
+    global $_CONF;
 
     $themes = array();
 
     // If users aren't allowed to change their theme then only return the default theme
-
     if (( $_CONF['allow_user_themes'] == 0 ) && !$all ) {
-        $themes[$index] = $_CONF['theme'];
+        $themes[] = $_CONF['theme'];
     } else {
-        $fd = opendir( $_CONF['path_themes'] );
-
-        while (( $dir = @readdir( $fd )) == TRUE ) {
-            if ( is_dir( $_CONF['path_themes'] . $dir) && $dir <> '.' && $dir <> '..' && $dir <> 'CVS' && substr( $dir, 0 , 1 ) <> '.' ) {
-                clearstatcache();
-                if ( $dir == 'chameleon' ) {
-                    if (in_array($dir,$_PLUGINS)) {
-                        $themes[$index] = $dir;
-                        $index++;
-                    }
-                } else {
-                    $themes[$index] = $dir;
-                    $index++;
-                }
-            }
+        $_Themes = glFusion\Theme\Theme::getAll($all);
+        foreach ($_Themes as $_Theme) {
+            $themes[] = $_Theme->getName();
         }
     }
-
     return $themes;
 }
 
@@ -1166,7 +1150,10 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     COM_hit();
 
-    $Theme = new glFusion\Theme\Theme($_USER['theme']);
+    $Theme = glFusion\Theme\Theme::getInstance();
+    if (!$Theme->isValid()) {
+        $Theme = glFusion\Theme\Theme::getInstance('cms');
+    }
 
     if ( isset($blockInterface['right']) ) {
         $currentURL = COM_getCurrentURL();

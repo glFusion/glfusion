@@ -15,6 +15,7 @@
  */
 namespace glFusion\Theme;
 use glFusion\Database\Database;
+use glFusion\Cache\Cache;
 use Template;
 
 if (!defined ('GVERSION')) {
@@ -34,13 +35,17 @@ class Theme
     const GRAPHIC = 1;
     const TEXT = 2;
 
-    /** Default theme name.
-     * @var string */
-    public static $default = '_default';
+    const DEFAULT_NAME = '_default';
+    const CACHE_KEY = 'themes_available';
+    const CACHE_TTL = 900;  // 15 minutes
+
+    /** Default theme object.
+     * @var object */
+    private static $default = NULL;
 
     /** Theme (layout) name.
      * @var string */
-    private $theme = '_default';
+    private $theme = self::DEFAULT_NAME;
 
     /** Use a graphic logo?
      * @var boolean */
@@ -72,86 +77,193 @@ class Theme
      *
      * @param   string  $theme  Theme name being used
      */
-    public function __construct($theme = '')
+    public function __construct(?array $A = NULL)
+    {
+        if (is_array($A) && !empty($A)) {
+            $this->setVars($A);
+        }
+    }
+
+
+    /**
+     * Get an instance of a specific theme.
+     *
+     * @param   string  $theme  Theme name, default is user's current theme
+     * @return  object  Theme object
+     */
+    public static function getInstance(?string $theme=NULL) : self
     {
         global $_USER;
 
+        static $themes = array();
         if ($theme == '') {
             $theme = $_USER['theme'];  // set in lib-common.php
         }
-        $this->Load($theme);
+        if (!array_key_exists($theme, $themes)) {
+            $_Theme = new self;
+            $_Theme->withName($theme)->readTheme();
+            $_Theme->_override();
+            $themes[$theme] = $_Theme;
+        }
+        return $themes[$theme];
+    }
+
+
+    /**
+     * Set all the theme vars from an array, e.g. database record.
+     *
+     * @param   array   $A      Array of key-value pairs
+     * @return  object  $this
+     */
+    public function setVars(array $A) : self
+    {
+        if (isset($A['theme'])) {
+            $this->withName($A['theme']);
+        }
+        if (isset($A['display_site_slogan'])) {
+            $this->withDisplaySlogan((int)$A['display_site_slogan']);
+        }
+        if (isset($A['logo_type'])) {
+            $this->withLogoType((int)$A['logo_type']);
+        }
+        if (isset($A['grp_access'])) {
+            $this->withGrpAccess((int)$A['grp_access']);
+        }
+        if (isset($A['logo_file'])) {
+            $this->withImageName($A['logo_file']);
+        }
+        return $this;
+    }
+
+
+    /**
+     * Read the current theme name from the DB and load properties.
+     *
+     * @return  object  $this
+     */
+    private function readTheme() : self
+    {
+        global $_TABLES;
+
+        $sql = "SELECT * FROM {$_TABLES['themes']}
+            WHERE theme = ?";
+        try {
+            $stmt = Database::getInstance()
+                ->conn->executeQuery(
+                    $sql,
+                    array($this->theme),
+                    array(Database::STRING)
+                );
+            $data = $stmt->fetch(Database::ASSOCIATIVE);
+            $stmt->closeCursor();
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            $data = array();
+            // Ignore errors or failed attempts
+        }
+        $this->setVars($data);
+        return $this;
+    }
+
+
+    /**
+     * Get the default theme.
+     * Caches in the static object var.
+     *
+     * @return  object  Default Theme object
+     */
+    protected static function getDefault() : object
+    {
+        if (self::$default === NULL) {
+            self::$default = new self;
+            self::$default->withName(self::DEFAULT_NAME)->readTheme();
+        }
+        return self::$default;
     }
 
 
     /**
      * Get all the themes that have DB records.
      *
+     * @param   boolean $all    True to get all, False to check group access
      * @return  array       Array of DB record arrays
      */
-    protected static function getThemes() : array
+    public static function getAll(?bool $all=false, ?bool $enabled = true) : array
     {
-        global $_TABLES;
+        global $_TABLES, $_USER, $_CONF;
 
-        static $themes = array();
-        if (!empty($themes)) {
-            return $themes;
-        }
+        $themes = array();
 
         try {
-            // @todo: need table name
-            $sql = "SELECT * FROM " . $_TABLES['themes'];
+            $sql = "SELECT * FROM {$_TABLES['themes']}
+                WHERE theme <> '" . self::DEFAULT_NAME . "'";
+            if ($enabled) {
+                $sql .= " AND grp_access > 0";
+            }
+            if (!$all) {
+                $groups = SEC_getUserGroups($_USER['uid']);
+                $grp_sql = implode(',', $groups);
+                $sql .= " AND grp_access IN ($grp_sql)";
+            }
+            $sql .= " ORDER BY theme ASC";
             $stmt = Database::getInstance()
-                ->conn->executeQuery(
-                    $sql
-                );
+                ->conn->executeQuery($sql);
             $data = $stmt->fetchAll(Database::ASSOCIATIVE);
             $stmt->closeCursor();
         } catch(\Doctrine\DBAL\DBALException $e) {
             $data = array();
             // Ignore errors or failed attempts
         }
+
         foreach($data as $A) {
-            $themes[$A['theme']] = $A;
+            $themes[$A['theme']] = new self($A);
         }
         return $themes;
     }
 
 
     /**
-     * Get the logo information for the theme.
-     * Sets the default values and then overrides with the specific theme
-     * values if found in the DB.
-     * If the requested theme has a record in the DB the "exists" flag is set.
+     * Add or remove themes from the DB if they've been changed on the filesystem.
      *
-     * @param   string  $theme  Theme name
-     * @return  object  $this
+     * @param   array   $themes     Array of Theme objects
+     * @return  array       Updated array of themes
      */
-    private function Load($theme) : self
+    protected static function syncFilesystem(array $themes) : array
     {
-        $themes = self::getThemes();
-        $this->theme = $theme;
-        $default = $themes[self::$default];
+        global $_CONF;
 
-        // Set vars directly to avoid tainting if already exists.
-        $this->logo_type = (int)$default['logo_type'];
-        $this->display_site_slogan = (int)$default['display_site_slogan'];
-        $this->logo_file = $default['logo_file'];
+        $tmp = array_diff(scandir($_CONF['path_themes']), array('.', '..'));
+        if ($tmp !== false) {
+            foreach ($tmp as $idx=>$dirname) {
+                if (!is_dir($_CONF['path_themes'] . $dirname)) {
+                    // ignore regular files
+                    continue;
+                }
+                if (array_key_exists($dirname, $themes)) {
+                    // already have this theme in the DB, verify that it's valid
+                    if (!$themes[$dirname]->isValid()) {
+                        self::delete($dirname);
+                        unset($themes[$dirname]);
+                    }
+                } else {
+                    // don't have it in the DB, add it with defaults if valid
+                    $Th = new Theme;
+                    $Th->withName($dirname);
+                    if ($Th->isValid()) {
+                        $Th->Taint()->Save();
+                        $themes[$dirname] = $Th;
+                    }
+                }
+            }
 
-        if (array_key_exists($theme, $themes)) {
-            $this->exists = true;
-            $this->tainted = false;
-            // Override the default values here
-            $this->_override($themes[$theme]);
-        } else {
-            $this->exists = false;
-            $this->tainted = true;  // doesn't exist in table yet, need to save
+            // Now remove themes no longer on disk but still in the DB.
+            $dbThemes = array_keys($themes);
+            foreach (array_diff($dbThemes, $tmp) as $theme) {
+                if ($theme != self::DEFAULT_NAME) {
+                    self::delete($theme);
+                }
+            }
         }
-
-        if ($this->exists && self::pathExists($theme)) {
-            // Create the DB record if it doesn't exist but is on disk
-            $this->Save();
-        }
-        return $this;
+        return $themes;
     }
 
 
@@ -161,7 +273,7 @@ class Theme
      * @param   integer $type   Logo type flag
      * @return  object  $this
      */
-    public function setLogoType(int $type) : self
+    public function withLogoType(int $type) : self
     {
         if ($type != $this->logo_type) {
             $this->logo_type = (int)$type;
@@ -172,12 +284,47 @@ class Theme
 
 
     /**
+     * Get the type of logo (text, image).
+     *
+     * @return  integer     Logo type flag
+     */
+    public function getLogoType() : int
+    {
+        return (int)$this->logo_type;
+    }
+
+
+    /**
+     * Set the theme name.
+     *
+     * @param   string  $name   Theme name
+     * @return  object  $this
+     */
+    public function withName(string $name) : self
+    {
+        $this->theme = $name;
+        return $this;
+    }
+
+
+    /**
+     * Get the theme name.
+     *
+     * @return  string      Theme name
+     */
+    public function getName() : string
+    {
+        return $this->theme;
+    }
+
+
+    /**
      * Set the flag to display the site slogan or not.
      *
      * @param   integer $type   Display flag
      * @return  object  $this
      */
-    public function setDisplaySiteSlogan(?bool $flag=NULL) : self
+    public function withDisplaySlogan(?bool $flag=NULL) : self
     {
         if ($flag != $this->display_site_slogan) {
             $this->display_site_slogan = $flag ? 1 : 0;
@@ -193,7 +340,7 @@ class Theme
      * @param   string  $name   Image filename
      * @return  object  $this
      */
-    public function setImageName(string $name) : self
+    public function withImageName(string $name) : self
     {
         if ($name != $this->logo_file) {
             $this->logo_file = $name;
@@ -209,23 +356,28 @@ class Theme
      * @param   array   $A      Array of fields from the DB
      * @return  object  $this
      */
-    private function _override(array $A) : self
+    private function _override() : self
     {
         global $_CONF;
 
-        if (isset($A['logo_type']) && $A['logo_type'] > -1) {
-            $this->logo_type = (int)$A['logo_type'];
+        $Def = self::getDefault();
+
+        if ($this->logo_type == -1) {
+            $this->logo_type = $Def->getLogoType();
         }
-        if (isset($A['display_site_slogan']) && $A['display_site_slogan'] > -1) {
-            $this->display_site_slogan = (int)$A['display_site_slogan'];
+        if ($this->display_site_slogan == -1) {
+            $this->display_site_slogan = $Def->displaySlogan() ? 1 : 0;
         }
-        if (isset($A['logo_file']) && !empty($A['logo_file'])) {
-            $this->logo_file = $A['logo_file'];
+        if (empty($this->logo_file)) {
+            $this->logo_file = $Def->getImageName();
         }
-        if (isset($A['grp_access']) && $A['theme'] != $_CONF['theme']) {
-            // Override group access unless this is the site theme,
-            // which must always be available.
-            $this->grp_access = (int)$A['grp_access'];
+
+        // Override group access unless this is the site theme,
+        // which must always be available.
+        if ($this->theme == $_CONF['theme']) {
+            $this->grp_access = 2;
+        } elseif ($this->grp_access == 0) {
+            $this->grp_access = $Def->getGrpAccess();
         }
         return $this;
     }
@@ -341,6 +493,29 @@ class Theme
     {
         global $_CONF;
         return $_CONF['path_html'] . '/images/' . $this->logo_file;
+    }
+
+
+    /**
+     * Set the group access value.
+     *
+     * @param   integer $grp_access Group ID with access
+     */
+    public function withGrpAccess(int $grp_access) : self
+    {
+        $this->grp_access = $grp_access;
+        return $this;
+    }
+
+
+    /**
+     * Get the group that can use this theme.
+     *
+     * @return  ingeter     Group ID
+     */
+    public function getGrpAccess() : int
+    {
+        return (int)$this->grp_access;
     }
 
 
@@ -546,10 +721,10 @@ class Theme
             );
 
             if (isset($_POST['logo_type'][$theme])) {
-                $Logo->setLogoType($_POST['logo_type'][$theme]);
+                $Logo->withLogoType($_POST['logo_type'][$theme]);
             }
             if (isset($_POST['display_site_slogan'][$theme])) {
-                $Logo->setDisplaySiteSlogan($_POST['display_site_slogan'][$theme]);
+                $Logo->withDisplaySlogan($_POST['display_site_slogan'][$theme]);
             }
 
             // Handle the file upload, if any
@@ -576,7 +751,7 @@ class Theme
 
         $thisinfo = array(
             'status' => false,
-            'message' => $LANG_LOGO['invalid_type'],
+            'message' => '',
         );
         switch ($files['type'][$index]) {
         case 'image/png' :
@@ -593,11 +768,13 @@ class Theme
             break;
         default :
             $ext = 'unknown';
+            $thisinfo['message'] = $LANG_LOGO['invalid_type'];
             break;
         }
 
         if ($ext != 'unknown') {
             $imgInfo = @getimagesize($files['tmp_name'][$index]);
+
             if ($imgInfo) {
                 if (
                     $imgInfo[0] > $_CONF['max_logo_width'] ||
@@ -627,6 +804,95 @@ class Theme
             );
         }
         return $thisinfo;
+    }
+
+
+    /**
+     * Check if the theme is valid.
+     * Used to avoid offering themes which may have been removed from being
+     * used.
+     *
+     * @return  boolean     True if valid, False if not
+     */
+    public function isValid() : bool
+    {
+        static $valid = NULL;
+        if ($valid === NULL) {
+            $valid = self::pathExists($this->theme);
+        }
+        return $valid;
+    }
+
+
+    /**
+     * Taint the record to force saving.
+     *
+     * @return  object  $this
+     */
+    public function Taint() : self
+    {
+        $this->tainted = true;
+        return $this;
+    }
+
+
+    /**
+     * Delete a theme from the database.
+     *
+     * @param   string  $name   Theme name
+     */
+    public static function delete(string $name) : void
+    {
+        global $_TABLES;
+
+        try {
+            $stmt = Database::getInstance()
+                ->conn->executeQuery(
+                    "DELETE FROM {$_TABLES['themes']}
+                    WHERE theme = ?",
+                    array($name),
+                    array(Database::STRING)
+                );
+        } catch(\Doctrine\DBAL\DBALException $e) {
+            // Ignore errors or failed attempts
+        }
+    }
+
+
+    /**
+     * Invalidate the cache, such as after updating themes.
+     */
+    private static function _invalidateCache()
+    {
+        Cache::getInstance()->delete(self::CACHE_KEY);
+    }
+
+
+    /**
+     * Set themes into the cache to speed up subsequent lookups.
+     *
+     * @param   array   $data   Array of Theme objects
+     * @param   string  $cache_key  Cache key (for future use)
+     */
+    private static function _setCache($data, $cache_key=self::CACHE_KEY)
+    {
+        Cache::getInstance()->set($cache_key, $data, array('themes'), self::CACHE_TTL);
+    }
+
+
+    /**
+     * Get an item from cache, if available.
+     *
+     * @param   string  $cache_key  Cache key (for future use)
+     * @return  mixed       Cache data, NULL if not found
+     */
+    private static function _getCache($cache_key=self::CACHE_KEY)
+    {
+        if (Cache::getInstance()->has($cache_key)) {
+            return Cache::getInstance()->get($cache_key);
+        } else {
+            return NULL;
+        }
     }
 
 }
