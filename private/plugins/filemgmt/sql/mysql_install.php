@@ -68,7 +68,7 @@ $_SQL['filemgmt_filedetail'] = "CREATE TABLE {$_TABLES['filemgmt_filedetail']} (
 $_SQL['filemgmt_filedesc'] = "CREATE TABLE {$_TABLES['filemgmt_filedesc']} (
   lid int(11) unsigned NOT NULL default '0',
   description text NOT NULL,
-  KEY lid (lid)
+  PRIMARY KEY (lid)
 ) ENGINE=MyISAM";
 
 #

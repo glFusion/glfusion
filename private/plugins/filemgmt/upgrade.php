@@ -116,9 +116,117 @@ function filemgmt_upgrade()
             return true;
     }
 
-    // Update any configuration item changes
-    USES_lib_install();
-    global $_FM_DEFAULT;
-    require_once __DIR__ . '/install_defaults.php';
-    _update_config('filemgmt', $_FM_DEFAULT);
+
+    filemgmt_update_config();
+
+    CTL_clearCache();    
+
+     if ( DB_getItem($_TABLES['plugins'],'pi_version',"pi_name='filemgmt'") == $_FM_CONF['pi_version']) {
+        return true;
+    } else {
+        return false;
+    }
+
+
+}
+
+function filemgmt_update_config()
+{
+    global $_CONF, $_FM_CONF, $_TABLES;
+
+    $c = config::get_instance();
+
+    require_once $_CONF['path'].'plugins/filemgmt/sql/filemgmt_config_data.php';
+
+    // remove stray items
+    $result = DB_query("SELECT * FROM {$_TABLES['conf_values']} WHERE group_name='filemgmt'");
+    while ( $row = DB_fetchArray($result) ) {
+        $item = $row['name'];
+        if ( ($key = _searchForIdKey($item,$filemgmtConfigData)) === NULL ) {
+            DB_query("DELETE FROM {$_TABLES['conf_values']} WHERE name='".DB_escapeString($item)."' AND group_name='filemgmt'");
+        } else {
+            $filemgmtConfigData[$key]['indb'] = 1;
+        }
+    }
+    // add any missing items
+    foreach ($filemgmtConfigData AS $cfgItem ) {
+        if (!isset($cfgItem['indb']) ) {
+            _addConfigItem( $cfgItem );
+        }
+    }
+    $c = config::get_instance();
+    $c->initConfig();
+    $tcnf = $c->get_config('filemgmt');
+    // sync up sequence, etc.
+    foreach ( $filemgmtConfigData AS $cfgItem ) {
+        $c->sync(
+            $cfgItem['name'],
+            $cfgItem['default_value'],
+            $cfgItem['type'],
+            $cfgItem['subgroup'],
+            $cfgItem['fieldset'],
+            $cfgItem['selection_array'],
+            $cfgItem['sort'],
+            $cfgItem['set'],
+            $cfgItem['group']
+        );
+    }
+}
+
+if ( !function_exists('_searchForId')) {
+    function _searchForId($id, $array) {
+       foreach ($array as $key => $val) {
+           if ($val['name'] === $id) {
+               return $array[$key];
+           }
+       }
+       return null;
+    }
+}
+
+if ( !function_exists('_searchForIdKey')) {
+    function _searchForIdKey($id, $array) {
+       foreach ($array as $key => $val) {
+           if ($val['name'] === $id) {
+               return $key;
+           }
+       }
+       return null;
+    }
+}
+
+if ( !function_exists('_addConfigItem')) {
+    function _addConfigItem($data = array() )
+    {
+        global $_TABLES;
+
+        $Qargs = array(
+                       $data['name'],
+                       $data['set'] ? serialize($data['default_value']) : 'unset',
+                       $data['type'],
+                       $data['subgroup'],
+                       $data['group'],
+                       $data['fieldset'],
+                       ($data['selection_array'] === null) ?
+                        -1 : $data['selection_array'],
+                       $data['sort'],
+                       $data['set'],
+                       serialize($data['default_value']));
+        $Qargs = array_map('DB_escapeString', $Qargs);
+
+        $sql = "INSERT INTO {$_TABLES['conf_values']} (name, value, type, " .
+            "subgroup, group_name, selectionArray, sort_order,".
+            " fieldset, default_value) VALUES ("
+            ."'{$Qargs[0]}',"   // name
+            ."'{$Qargs[1]}',"   // value
+            ."'{$Qargs[2]}',"   // type
+            ."{$Qargs[3]},"     // subgroup
+            ."'{$Qargs[4]}',"   // groupname
+            ."{$Qargs[6]},"     // selection array
+            ."{$Qargs[7]},"     // sort order
+            ."{$Qargs[5]},"     // fieldset
+            ."'{$Qargs[9]}')";  // default value
+
+        DB_query($sql);
+    }
 }

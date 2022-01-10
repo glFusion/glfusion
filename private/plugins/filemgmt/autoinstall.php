@@ -6,7 +6,7 @@
  * @license     GNU General Public License version 2 or later
  *              http://www.opensource.org/licenses/gpl-license.php
  *
- * @copyrignt   Copyright (C) 2009-2021 by the following authors:
+ * @copyrignt   Copyright (C) 2009-2022 by the following authors:
  *              Mark R. Evans   mark AT glfusion DOT org
  *
  * Based on prior work Copyright (C) 2004 by Consult4Hire Inc.
@@ -22,6 +22,8 @@ use \glFusion\Log\Log;
 global $_DB_dbms;
 
 require_once __DIR__ . '/functions.inc';
+require_once $_CONF['path'].'plugins/filemgmt/filemgmt.php';
+require_once $_CONF['path'].'plugins/filemgmt/sql/mysql_install.php';
 
 // +--------------------------------------------------------------------------+
 // | Plugin installation options                                              |
