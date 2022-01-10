@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by Consult4Hire Inc.
@@ -17,6 +17,11 @@
 */
 
 require_once '../lib-common.php';
+
+if (!in_array('filemgmt', $_PLUGINS)) {
+    COM_404();
+    exit;
+}
 
 // Setup how many categories you want to show in the category row display
 $numCategoriesPerRow   = (int)$_FM_CONF['numcategoriesperrow'];
@@ -110,6 +115,7 @@ if ($lid > 0) {
     $result = DB_query($sql);
     $nrows = DB_numRows($result);
 
+    $columns = 1;
     if ($nrows > 2) {
         $columns = 3;
     } elseif ($nrows > 1) {
@@ -117,7 +123,9 @@ if ($lid > 0) {
     } elseif ($nrows > 0) {
         $columns = 1;
     }
+ 
     $p->set_var('columns',$columns);
+ 
     // Need to use a SQL stmt that does a join on groups user has access to  - for file count
     $sql  = "SELECT count(*)  FROM {$_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid WHERE status > 0 ";
@@ -206,7 +214,6 @@ if ($lid > 0) {
     $result = DB_query($sql);
     $numrows = DB_numROWS($result);
     $countsql = DB_query("SELECT COUNT(*) FROM ".$_TABLES['filemgmt_filedetail']." WHERE status > 0");
-
     $p->set_var('listing_heading', _MD_LATESTLISTING);
     if ($numrows > 0 ) {
         $p->set_block('page', 'fileRecords', 'fRecord');
@@ -224,9 +231,9 @@ if ($lid > 0) {
         );
         $p->unset_var('no_files');
     } else {
-        $p->set_var('lang_no_files',_MD_NOFILES);
-        $p->set_var('no_files',true);
-    }
+        $p->set_var('no_files', true);
+        $p->set_var('lang_nofiles', _MD_NOFILES);        
+    }        
 
     $p->parse ('output', 'page');
     $display .= $p->finish($p->get_var('output'));
