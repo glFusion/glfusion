@@ -218,6 +218,8 @@ $obsoletePublicFiles = array(
 
 // 2.0.0
 
+    'admin/logo.php',
+
     'ckeditor/plugins/codemirror/js/beautify-html.js',
     'ckeditor/plugins/codemirror/theme/ayu-dark.css',
     'ckeditor/plugins/codemirror/theme/ayu-mirage.css',
