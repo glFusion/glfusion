@@ -4,7 +4,7 @@
  *
  * @author      Mark R. Evans <mark AT glfusion DOT org>
  * @author      Lee Garner <lee@leegarner.com>
- * @copyright   Copyright (c) 2008-2021 Mark R. Evans <mark AT glfusion DOT org>
+ * @copyright   Copyright (c) 2008-2022 Mark R. Evans <mark AT glfusion DOT org>
  * @package     filemgmt
  * @version     v1.9.0
  * @since       v0.9.0
@@ -124,7 +124,7 @@ class Download
         } else {
             $this->submitter = $_USER['uid'];
         }
-    }
+     }
 
 
     /**
@@ -968,7 +968,7 @@ class Download
             'security_token' => SEC_createToken(),
             'redirect'      => $this->_editmode,
             'cancel_url'    => $cancel_url,
-            'redirect_url'  => $_SERVER['HTTP_REFERER'],
+            'redirect_url'  => $_SERVER['HTTP_REFERER'].'#fileid_'.$this->lid,
             'lang_approve'  => _MD_APPROVEREQ,
         ));
         if ($this->lid === 0) {
@@ -976,6 +976,13 @@ class Download
         } else {
             $T->unset_var('newfile');
         }
+
+        list($cacheFile, $cacheURL) = COM_getStyleCacheLocation();
+
+        $T->set_var(array(
+            'stylesheet' => $cacheURL,
+        ));
+
 
         $pathstring = "<a href=\"{$_FM_CONF['url']}/index.php\">"._MD_MAIN."</a>&nbsp;:&nbsp;";
         $nicepath = $mytree->getNicePathFromId($this->cid, "title", "{$_FM_CONF['url']}/viewcat.php");
@@ -1064,6 +1071,7 @@ class Download
                 array("AND" => "u.uid > 1")
             );
             $votes = count($ratingData);
+
             $T->set_var(array(
                 'totalvotes' => (int)$totalvotes,
                 'lang_dlratings' => sprintf(_MD_DLRATINGS, $votes),
@@ -1077,7 +1085,9 @@ class Download
 
             $cssid = 1;
             $T->set_block('ratings', 'reg_votes', 'rVotes');
+
             foreach ($ratingData AS $data) {
+
                 $formatted_date = self::formatTimestamp($data['ratingdate']);
                 $T->set_var(array(
                     'ratinguname' => $data['username'],
@@ -1523,6 +1533,7 @@ class Download
         $format->setAction('description');
         $format->setType('text');
         $format->setParseAutoTags(true);
+        $format->setProcessBBCode(true);
 
         $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates');
         $T->set_file('record', 'filelisting_record.thtml');
