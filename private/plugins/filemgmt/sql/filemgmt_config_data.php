@@ -164,11 +164,11 @@ $filemgmtConfigData = array(
     ),
     array(
         'name' => 'displayblocks',
-        'default_value' => false,
+        'default_value' => 0,
         'type' => 'select',
         'subgroup' => 0,
         'fieldset' => 0,
-        'selection_array' => 0,
+        'selection_array' => 3,
         'sort' => 120,
         'set' => true,
         'group' => 'filemgmt',
