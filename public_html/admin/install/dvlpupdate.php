@@ -999,7 +999,7 @@ function glfusion_200()
         }
     }
 
-    Log::write('system',Log::DEBUG,"Creating Admin Actions Table");
+    Log::write('system',Log::DEBUG,"Creating new glFusion v2.0 tables");
 
     foreach ($_SQL AS $sql) {
         try {
