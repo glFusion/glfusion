@@ -100,7 +100,7 @@ case "addSubCat":
     addSubCat();
     break;
 case "saveDownload":
-    $status = Filemgmt\Download::getInstance($_POST['lid'])->Save($_POST);
+    $status = Filemgmt\Download::getInstance($_POST['lid'])->save($_POST);
     switch ($status) {
     case Status::UPL_NODEMO:
         COM_setMsg($LANG_FILEMGMT['err_demomode'], 'error');
