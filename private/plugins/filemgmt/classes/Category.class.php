@@ -264,7 +264,7 @@ class Category
     {
         global $_TABLES;
 
-        if ($this->cid <= 1) {
+        if ($this->cid < 1) {
             return false;
         }
 
