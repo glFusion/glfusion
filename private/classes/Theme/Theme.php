@@ -816,11 +816,11 @@ class Theme
      */
     public function isValid() : bool
     {
-        static $valid = NULL;
-        if ($valid === NULL) {
-            $valid = self::pathExists($this->theme);
+        static $themes = array();
+        if (!isset($themes[$this->theme])) {
+            $themes[$this->theme] = self::pathExists($this->theme);
         }
-        return $valid;
+        return $themes[$this->theme];
     }
 
 
