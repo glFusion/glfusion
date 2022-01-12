@@ -48,7 +48,7 @@ class Theme
     private $theme = self::DEFAULT_NAME;
 
     /** Use a graphic logo?
-     * @var boolean */
+     * @var integer */
     private $logo_type = -1;
 
     /** Display the site slogan?
@@ -115,8 +115,12 @@ class Theme
      * @param   array   $A      Array of key-value pairs
      * @return  object  $this
      */
-    public function setVars(array $A) : self
+    public function setVars(?array $A=NULL) : self
     {
+        if (!is_array($A) || empty($A)) {
+            return $this;
+        }
+
         if (isset($A['theme'])) {
             $this->withName($A['theme']);
         }
@@ -138,13 +142,15 @@ class Theme
 
     /**
      * Read the current theme name from the DB and load properties.
+     * If the theme is not found in the DB but exists on disk, use
+     * default properties. If the theme isn't valid (removed from disk),
+     * then use the site theme.
      *
      * @return  object  $this
      */
     private function readTheme() : self
     {
         global $_TABLES;
-
         $sql = "SELECT * FROM {$_TABLES['themes']}
             WHERE theme = ?";
         try {
@@ -160,7 +166,16 @@ class Theme
             $data = array();
             // Ignore errors or failed attempts
         }
-        $this->setVars($data);
+        if (is_array($data)) {
+            $this->setVars($data);
+        } else {
+            // Theme not found. Maybe not set in the database yet.
+            if ($this->isValid()) {
+                $this->Taint()->Save(); // just creates a default record
+            } else {
+                $this->fromDefault();   // get the site theme
+            }
+        }
         return $this;
     }
 
@@ -230,6 +245,9 @@ class Theme
     protected static function syncFilesystem(array $themes) : array
     {
         global $_CONF;
+
+        $themes = self::getAll(true, false);
+        $themes[self::DEFAULT_NAME] = self::getDefault();
 
         $tmp = array_diff(scandir($_CONF['path_themes']), array('.', '..'));
         if ($tmp !== false) {
@@ -351,15 +369,12 @@ class Theme
 
 
     /**
-     * Set the override values from the DB record.
+     * Use default values for this theme where value is set to inherit.
      *
-     * @param   array   $A      Array of fields from the DB
      * @return  object  $this
      */
     private function _override() : self
     {
-        global $_CONF;
-
         $Def = self::getDefault();
 
         if ($this->logo_type == -1) {
@@ -374,7 +389,7 @@ class Theme
 
         // Override group access unless this is the site theme,
         // which must always be available.
-        if ($this->theme == $_CONF['theme']) {
+        if ($this->isSiteTheme()) {
             $this->grp_access = 2;
         } elseif ($this->grp_access == 0) {
             $this->grp_access = $Def->getGrpAccess();
@@ -390,9 +405,7 @@ class Theme
      */
     public function canUse() : bool
     {
-        global $_CONF;
-
-        if ($this->theme == $_CONF['theme']) {
+        if ($this->isSiteTheme()) {
             // The main site theme must always be available or there's
             // nothing to fall back on
             return true;
@@ -893,6 +906,88 @@ class Theme
         } else {
             return NULL;
         }
+    }
+
+
+    /**
+     * Read the default site theme as a fallback if a theme is not found.
+     *
+     * @return  object  $this
+     */
+    private function fromDefault() : self
+    {
+        global $_CONF;
+
+        if ($this->isSiteTheme()) {   // avoid recursion
+            return $this;
+        }
+        $this->theme = $_CONF['theme'];
+        return $this->readTheme();
+    }
+
+
+    /**
+     * Helper function to check if this is the default site theme.
+     *
+     * @return  boolean     True if default theme, False if user theme
+     */
+    public function isSiteTheme() : bool
+    {
+        global $_CONF;
+
+        return $this->theme == $_CONF['theme'];
+    }
+
+
+    /**
+     * Transfer settings from the legacy logo table to themes.
+     */
+    public static function upgradeFromLogo() : void
+    {
+        global $_TABLES, $_CONF;
+
+        if (!isset($_TABLES['logo'])) {
+            return;
+        }
+
+        // Check the _default theme for a flag to indicate that the
+        // upgrade should be done. Do not import from the logo table
+        // if already done, or for new installations.
+        $Default = self::getDefault();
+        if ($Default->getLogoType() != 99) {
+            // Already done
+            return;
+        }
+
+        // Get the logo information to populate the site theme.
+        $stmt = Database::getInstance()
+            ->conn->executeQuery("SELECT * FROM {$_TABLES['logo']}");
+        $data = $stmt->fetchAll(Database::ASSOCIATIVE);
+        if (!is_array($data)) {
+            return;
+        }
+
+        foreach ($data as $d) {
+            switch ($d['config_name']) {
+            case 'use_graphic_logo':
+                if ($d['config_value'] == 1) {
+                    $Default->withLogoType(self::GRAPHIC);
+                } elseif ($d['config_value'] == 0) {
+                    $Default->withLogoType(self::TEXT);
+                } else {
+                    $Default->withLogoType(self::NONE);
+                }
+                break;
+            case 'display_site_slogan':
+                $Default->withDisplaySlogan($d['config_value']);
+                break;
+            case 'logo_name':
+                $Default->withImageName($d['config_value']);
+                break;
+            }
+        }
+        // Update with the default logo type to avoid overwriting values again.
+        $Default->withLogoType(0)->Save();
     }
 
 }
