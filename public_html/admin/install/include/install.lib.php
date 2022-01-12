@@ -1571,6 +1571,16 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                   PRIMARY KEY (`id`)
                 ) ENGINE=MyISAM
                 ";
+            $_SQL[] = "CREATE TABLE `{$_TABLES['themes']}` (
+                  `theme` varchar(40) NOT NULL DEFAULT '',
+                  `logo_type` tinyint(1) NOT NULL DEFAULT -1,
+                  `display_site_slogan` tinyint(1) NOT NULL DEFAULT -1,
+                  `logo_file` varchar(40) NOT NULL DEFAULT '',
+                  `grp_access` int(11) unsigned NOT NULL DEFAULT 2,
+                  PRIMARY KEY (`theme`)
+                ) ENGINE=MyISAM";
+            $_SQL[] = "INSERT INTO {$_TABLES['themes']} (theme, logo_type, display_site_slogan)
+                VALUES ('_default', 99, 1), ('cms', -1, -1)";
 
             if ($use_innodb) {
                 $statements = count($_SQL);
@@ -1582,6 +1592,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
+
+            // Transfer settings from the logos table to themes
+            glFusion\Theme\Theme::upgradeFromLogo();
+
 //modify stories table to support new approach
             $sql = "ALTER TABLE `{$_TABLES['stories']}`
                         ADD COLUMN `id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,

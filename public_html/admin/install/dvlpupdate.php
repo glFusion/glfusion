@@ -986,11 +986,8 @@ function glfusion_200()
           PRIMARY KEY (`theme`)
         ) ENGINE=MyISAM;
         ";
-    $_SQL[] = "
-        INSERT INTO {$_TABLES['themes']} (theme, logo_type, display_site_slogan) VALUES
-            ('_default', 0, 1),
-            ('cms', -1, -1)
-        ";
+    $_SQL[] = "INSERT INTO {$_TABLES['themes']} (theme, logo_type, display_site_slogan)
+        VALUES ('_default', 99, 1), ('cms', -1, -1)";
 
     if ($use_innodb) {
         $statements = count($_SQL);
@@ -1013,6 +1010,9 @@ function glfusion_200()
             }
         }
     }
+
+    // Transfer settings from the logos table to themes
+    glFusion\Theme\Theme::upgradeFromLogo();
 
     // only execute if Forum plugin is enabled
     if (in_array('forum',$_PLUGINS)) {
