@@ -60,7 +60,7 @@ function userprofile()
         }
     } else if ( isset($_GET['username']) ) {
         $username = $_GET['username'];
-        if ( !USER_validateUsername($username,1) ) {
+        if ( !USER_validateUsername($username,true) ) {
             COM_404();
         }
         if ( empty($username) || $username == '' ) {

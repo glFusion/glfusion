@@ -968,7 +968,7 @@ function USER_emailMatches ($email, $domain_list)
 * @todo     Bugs: Race conditions apply ...
 *
 */
-function USER_uniqueUsername($username)
+function USER_uniqueUsername($username, $existing_user = false)
 {
     global $_TABLES, $_CONF;
 
@@ -978,7 +978,11 @@ function USER_uniqueUsername($username)
         return CUSTOM_uniqueUsername($username);
     }
 
-    if (isset($_CONF['disallow_usernames']) && !empty($_CONF['disallow_usernames'])) {
+    if (
+        !$existing_user &&
+        isset($_CONF['disallow_usernames']) &&
+        !empty($_CONF['disallow_usernames'])
+    ) {
         $disallowedName = explode(',',$_CONF['disallow_usernames']);
         foreach ($disallowedName AS $name) {
             if ( strcasecmp($name,$username) == 0) {
