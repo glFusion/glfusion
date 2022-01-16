@@ -1,6 +1,5 @@
 # glFusion CMS repository ignore file
 #
-# git update-index --assume-unchanged private/logs/system.log
 # git update-index --assume-unchanged private/logs/error.log
 # git update-index --assume-unchanged private/logs/captcha.log
 # git update-index --assume-unchanged private/logs/access.log
@@ -17,8 +16,6 @@
 
 # ignore sync directories
 .sync/
-.stignore
-.stfolder/
 
 # Configuration, Log and cache files
 db-config.php
@@ -37,20 +34,18 @@ sitemap.xml
 mobile.xml
 
 # Data directories
-private/data/
+#private/data/
 private/backups/
 private/logs/
 private/lib/htmlpurifier/HTMLPurifier/DefinitionCache/**
 
 #Images
-public_html/data/images/
-public_html/data/images/articles/
-public_html/data/images/userphotos/
-public_html/data/images/topics/
-public_html/data/images/forum/
+#public_html/images/
+#public_html/images/articles/
+#public_html/images/userphotos/
+#public_html/images/topics/
+#public_html/images/forum/
 public_html/backend/
-public_html/data/socialshare/
-public_html/data/filemgmt/
 
 #Development
 public_html/test/
@@ -58,17 +53,17 @@ public_html/utils/
 
 # Media Gallery
 private/plugins/mediagallery/config.php
-public_html/data/mediagallery/mediaobjects/tn/
-public_html/data/mediagallery/mediaobjects/orig/
-public_html/data/mediagallery/mediaobjects/disp/
-private/plugins/mediagallery/uploads/
+#public_html/mediagallery/mediaobjects/tn/
+#public_html/mediagallery/mediaobjects/orig/
+#public_html/mediagallery/mediaobjects/disp/
+#private/plugins/mediagallery/uploads/
 
 # Forum
-public_html/data/forum/media/
+#public_html/forum/media/
 
 # FileMgmt
-public_html/data/filemgmt/files/
-public_html/data/filemgmt/category_snaps/
+#public_html/filemgmt_data/files/
+#public_html/filemgmt_data/category_snaps/
 
 # Non-bundled plugins
 
@@ -207,10 +202,6 @@ public_html/admin/plugins/search/
 private/plugins/file/
 public_html/file/
 public_html/admin/plugins/file/
-
-private/plugins/referral/
-public_html/referral/
-public_html/admin/plugins/referral/
 
 private/plugins/test/
 public_html/admin/plugins/test/
