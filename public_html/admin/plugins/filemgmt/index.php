@@ -9,9 +9,8 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2022 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
-*   Lee Garner      lee AT leegarner DOT com
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
 *  Consultants4Hire Inc.
@@ -174,17 +173,14 @@ case 'modCat':
 case 'saveCat':
 case "modCatS":
     $status = Filemgmt\Category::getInstance($_POST['cid'])->save($_POST);
-    if ($status === true) {
-        COM_setMsg(_MD_NEWCATADDED);
-    } else {
-        COM_set_msg("Error Saving the Category Record");
-    }
     COM_refresh("{$_FM_CONF['admin_url']}/index.php?categoryConfigAdmin");
+    modCatS();
     break;
 case 'modDownload':
     $content .= Filemgmt\Download::getInstance($opval)->edit();
     break;
 case "modDownloadS":
+//    echo "here";die;
     modDownloadS();
     break;
 case "delDownload":
