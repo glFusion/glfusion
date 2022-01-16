@@ -1,4 +1,12 @@
 {# begin {templatelocation} #}
+<!-- Load WysiBB JS and Theme -->
+<script src="https://cdn.wysibb.com/js/jquery.wysibb.min.js"></script>
+<link rel="stylesheet" href="https://cdn.wysibb.com/css/default/wbbtheme.css" />
+<style>
+	.wysibb{
+	font-size:14px !important;
+}
+</style>
 <div class="uk-panel uk-panel-box uk-margin-top">
 
 	<div class="uk-text-bold uk-text-large">
@@ -89,7 +97,12 @@
 			<label class="uk-form-label">{lang_screenshot}</label>
 			<div class="uk-form-controls">
 {!if thumbnail}
-                <img class="uk-thumbnail uk-thumbnail-mini" src="{thumbnail}">&nbsp;&nbsp;<input class="uk-checkbox" type="checkbox" name="deletesnap">&nbsp;{lang_delete}<br>
+			<div class="uk-thumbnail uk-thumbnail-mini uk-align-left">
+				<a href="{thumbnail}" data-uk-lightbox title="{dtitle}">
+					<img src="{thumbnail}">
+				</a>
+				<div class="uk-thumbnail-caption"><input class="uk-checkbox" type="checkbox" name="deletesnap">&nbsp;{lang_delete}</div	>
+			</div>
 {!endif}
                 <input type="file" size="40" name="newfileshot">
 			</div>
@@ -127,6 +140,15 @@
 	</form>
 {rating_votes}
 </div>
+<!-- Init WysiBB BBCode editor -->
+<script>
+$(function() {
+	var wbbOpt = {
+		buttons: "bold,italic,underline,strike,sup,sub,|,bullist,numlist,|,link,|,fontcolor,quote"
+	}
+  $("#description").wysibb(wbbOpt);
+})
+</script>
 <script>
 	$( "#filemgmt_mod_file" ).validate({
 		errorElement: "div",

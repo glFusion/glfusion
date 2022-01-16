@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2021 by the following authors:
+*  Copyright (C) 2017-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -450,6 +450,9 @@ class Formatter
             if (!in_array('list',$this->bbcodeBlackList)) {
                 $bbcode->addParser ('list', array($this,'bbcode_stripcontents'));
             }
+            if (!in_array('ul',$this->bbcodeBlackList)) {
+                $bbcode->addParser ('list', array($this,'bbcode_stripcontents'));
+            }
             if (!in_array('b',$this->bbcodeBlackList) && !isset($this->_codes['b'])) {
                 $bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '<b>', 'end_tag' => '</b>'),
                                   'inline', array ('listitem', 'block', 'inline', 'link'), array ());
@@ -484,6 +487,12 @@ class Formatter
                 $bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
                                   'listitem', array ('list'), array ());
             }
+            if (!in_array('ul',$this->bbcodeBlackList) && !isset($this->_codes['list'])) {
+                $bbcode->addCode ('ul', 'callback_replace', array($this,'do_bbcode_list'), array ('usecontent_param' => 'default'),
+                                  'list', array ('inline','block', 'listitem'), array ());
+                $bbcode->addCode ('li', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'),
+                                  'listitem', array ('list'), array ());
+            }
             if (!in_array('quote',$this->bbcodeBlackList) && !isset($this->_codes['quote'])) {
                 $bbcode->addCode ('quote','simple_replace',null,array('start_tag' => '</p><blockquote>', 'end_tag' => '</blockquote><p>'),
                                   'inline', array('listitem','block','inline','link'), array());
@@ -510,7 +519,7 @@ class Formatter
 
             $bbcode->setCodeFlag ('quote', 'paragraph_type', BBCODE_PARAGRAPH_ALLOW_INSIDE);
             $bbcode->setCodeFlag ('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);
-            $bbcode->setCodeFlag ('*', 'paragraphs', true);
+//            $bbcode->setCodeFlag ('*', 'paragraphs', true);
             $bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
             $bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
         }

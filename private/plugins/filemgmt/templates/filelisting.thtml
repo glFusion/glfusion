@@ -70,7 +70,7 @@
 		</div>
 {!if can_submit}
 		<div style="text-align:right">
-			<a href="{site_url}/filemgmt/submit.php" class="uk-button uk-button-success">{$LANG_FILEMGMT['usermenu3']}</a>
+			<a href="{submit_url}" class="uk-button uk-button-success">{$LANG_FILEMGMT['usermenu3']}</a>
 		</div>
 {!endif}
 	</div>

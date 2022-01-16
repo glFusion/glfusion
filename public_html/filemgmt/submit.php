@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -193,11 +193,13 @@ if (Filemgmt\Download::canSubmit()) {
     $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
     $sql .= $groupsql;
     list($catAccessCnt) = DB_fetchArray( DB_query($sql));
-
     if ( $catAccessCnt < 1 ) {
+
+// change the error meessage to no categories found to upload to...
+
         Log::write('system',Log::ERROR,'Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is: '.$_SERVER['REAL_ADDR']);
         COM_setMsg(_GL_ERRORNOUPLOAD, 'error');
-        COM_refresh($_CONF['site_url'] . '/index.php');
+        COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
         exit;
     }
 
@@ -254,7 +256,7 @@ if (Filemgmt\Download::canSubmit()) {
 } else {
     Log::write('system',Log::ERROR,'Submit.php => FileMgmt Plugin Access denied. Attempted user upload of a file, Remote address is: '.$_SERVER['REAL_ADDR']);
     COM_setMsg(_GL_ERRORNOUPLOAD, 'error');
-    COM_refresh($_CONF['site_url'] . '/index.php');
+    COM_refresh($_CONF['site_url'] . '/filemgmt/index.php');
 }
 echo Filemgmt\Menu::siteHeader();
 echo $content;

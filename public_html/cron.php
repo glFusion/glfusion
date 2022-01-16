@@ -102,6 +102,21 @@ while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
     }
 }
 
+// purge stale user registrations
+//if (isset($_CONF['purge_stale_registrations']) && $_CONF['purge_stale_registrations'] > 0) {
+// status of 1 or 4
+// regdate > now - (XXhrs * 60 * 60)
+
+// do not delete banned or active users.
+
+//SELECT * FROM glfusion_dev.gl_users AS u LEFT JOIN glfusion_dev.gl_userinfo AS up ON u.uid=up.uid WHERE u.uid > 2 AND u.status <> 3 AND u.status <> 0 AND (up.lastlogin = 0 OR up.lastlogin = null) AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(regdate) > (2 * 2592000)
+//SELECT u.uid FROM glfusion_dev.gl_users AS u LEFT JOIN glfusion_dev.gl_userinfo AS up ON u.uid=up.uid WHERE u.uid > 2 AND u.status <> 3 AND u.status <> 0 AND (up.lastlogin = 0 OR up.lastlogin = null) AND UNIX_TIMESTAMP() - UNIX_TIMESTAMP(regdate) > (48*60*60)
+
+// loop thru uid = deleting each user...
+// USER_deleteAccount($uid) - but we'll need a special cron version to get past permission checks...
+
+//}
+
 if ( $_CONF['cron_schedule_interval'] > 0  ) {
     if (( $_VARS['last_scheduled_run'] + $_CONF['cron_schedule_interval'] ) <= time()) {
         Log::write('system',Log::DEBUG,'Updating last_scheduled_run date / time');
