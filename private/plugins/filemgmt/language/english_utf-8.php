@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2022 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -223,40 +223,30 @@ $PLG_filemgmt_MESSAGE5 = 'Filemgmt Plugin Upgrade Aborted<br>Current plugin vers
 // Language variables used by the plugin - general users access code.
 
 define("_MD_THANKSFORINFO","Thanks for the information. We'll look into your request shortly.");
-// define("_MD_BACKTOTOP","Back to Downloads Top");
-// broken link class
+define("_MD_BACKTOTOP","Back to Downloads Top");
 define("_MD_THANKSFORHELP","Thank you for helping to maintain this directory's integrity.");
 define("_MD_FORSECURITY","For security reasons your user name and IP address will also be temporarily recorded.");
 
-
-// define("_MD_SEARCHFOR","Search for");
-// define("_MD_MATCH","Match");
-// download class
+define("_MD_SEARCHFOR","Search for");
+define("_MD_MATCH","Match");
 define("_MD_ALL","ALL");
-
-// define("_MD_ANY","ANY");
-//define("_MD_NAME","Name");
-// download.class
+define("_MD_ANY","ANY");
+define("_MD_NAME","Name");
 define("_MD_DESCRIPTION","Description");
+define("_MD_SEARCH","Search");
 
-// define("_MD_SEARCH","Search");
-// download.class / functions / viewcat / index
 define("_MD_MAIN","Main");
-
-// define("_MD_SUBMITFILE","Submit File");
+define("_MD_SUBMITFILE","Submit File");
 define("_MD_POPULAR","Popular");
 define("_MD_POP", "Pop");   // abbrevision for listing badge
 define("_MD_NEW","New");
-//define("_MD_TOPRATED","Top Rated");
+define("_MD_TOPRATED","Top Rated");
 
-// define("_MD_NEWTHISWEEK","New this week");
-// define("_MD_UPTHISWEEK","Updated this week");
+define("_MD_NEWTHISWEEK","New this week");
+define("_MD_UPTHISWEEK","Updated this week");
 
-// viewcat
 define("_MD_POPULARITYLTOM","Popularity (Least to Most Hits)");
 define("_MD_POPULARITYMTOL","Popularity (Most to Least Hits)");
-
-// file listing sort items
 define("_MD_TITLEATOZ","Title (A to Z)");
 define("_MD_TITLEZTOA","Title (Z to A)");
 define("_MD_DATEOLD","Date (Old Files Listed First)");
@@ -264,23 +254,15 @@ define("_MD_DATENEW","Date (New Files Listed First)");
 define("_MD_RATINGLTOH","Rating (Lowest Score to Highest Score)");
 define("_MD_RATINGHTOL","Rating (Highest Score to Lowest Score)");
 
+define("_MD_NOSHOTS","No Thumbnails Available");
+define("_MD_EDITTHISDL","Edit This Download");
 
-// define("_MD_NOSHOTS","No Thumbnails Available");
-// define("_MD_EDITTHISDL","Edit This Download");
-
-//index.php
 define("_MD_LISTINGHEADING","<b>File Listing: There are %s files in our database</b>");
-//index.php
 define("_MD_LATESTLISTING","Latest Listing");
-//download.class
 define("_MD_DESCRIPTIONC","Description:");
-
-//define("_MD_EMAILC","Email: ");
-//download.clas
+define("_MD_EMAILC","Email: ");
 define("_MD_CATEGORYC","Category: ");
-
-//define("_MD_LASTUPDATEC","Last Update: ");
-//download.class
+define("_MD_LASTUPDATEC","Last Update: ");
 define("_MD_DLNOW","Download Now!");
 define("_MD_VERSION","Ver");
 define("_MD_SUBMITDATE","Date");
@@ -295,11 +277,11 @@ define("_MD_NUMVOTES","(%s)");
 define("_MD_NOPOST","N/A");
 define("_MD_NUMPOSTS","%s votes");
 define("_MD_COMMENTSC","Comments: ");
-define("_MD_ENTERCOMMENT", "Create first comment");
+define ("_MD_ENTERCOMMENT", "Create first comment");
 define("_MD_RATETHISFILE","Rate this File");
 define("_MD_MODIFY","Modify");
 define("_MD_REPORTBROKEN","Report Broken File");
-//define("_MD_TELLAFRIEND","Tell a Friend");
+define("_MD_TELLAFRIEND","Tell a Friend");
 define("_MD_VSCOMMENTS","View/Send Comments");
 define("_MD_EDIT","Edit");
 
@@ -380,8 +362,8 @@ define("_MD_CATEGORYTITLE","File Listing - Category View");
 define("_MD_DLCONF","Downloads Configuration");
 define("_MD_GENERALSET","Configuration Settings");
 define("_MD_ADDMODFILENAME","Add new file");
-define("_MD_ADDCATEGORYSNAP", 'Optional Image<div style="font-size:8pt;">Top Level Categories only</div>');
-define("_MD_ADDIMAGENOTE", '<span style="font-size:8pt;">Image height will be resized to 50</span>');
+define ("_MD_ADDCATEGORYSNAP", 'Optional Image<div style="font-size:8pt;">Top Level Categories only</div>');
+define ("_MD_ADDIMAGENOTE", '<span style="font-size:8pt;">Image height will be resized to 50</span>');
 define("_MD_ADDMODCATEGORY","<b>Categories:</b> Add, Modify, and Delete Categories");
 define("_MD_DLSWAITING","Downloads Waiting for Validation");
 define("_MD_BROKENREPORTS","Broken File Reports");
@@ -436,7 +418,7 @@ define("_MD_CATDELETED","Category Deleted.");
 define("_MD_WARNING","WARNING: Are you sure you want to delete this Category and ALL its Files and Comments?");
 define("_MD_YES","Yes");
 define("_MD_NO","No");
-define("_MD_NEWCATADDED","Category Record Successfully Updated");
+define("_MD_NEWCATADDED","New Category Added Successfully!");
 define("_MD_CONFIGUPDATED","New configuration saved");
 define("_MD_ERROREXIST","ERROR: The download info you provided is already in the database!");
 define("_MD_ERRORNOFILE","ERROR: File not found on record in the database!");
