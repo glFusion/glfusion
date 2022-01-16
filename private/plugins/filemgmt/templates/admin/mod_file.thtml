@@ -89,12 +89,7 @@
 			<label class="uk-form-label">{lang_screenshot}</label>
 			<div class="uk-form-controls">
 {!if thumbnail}
-			<div class="uk-thumbnail uk-thumbnail-mini uk-align-left">
-				<a href="{thumbnail}" data-uk-lightbox title="{dtitle}">
-					<img src="{thumbnail}">
-				</a>
-				<div class="uk-thumbnail-caption"><input class="uk-checkbox" type="checkbox" name="deletesnap">&nbsp;{lang_delete}</div	>
-			</div>
+                <img class="uk-thumbnail uk-thumbnail-mini" src="{thumbnail}">&nbsp;&nbsp;<input class="uk-checkbox" type="checkbox" name="deletesnap">&nbsp;{lang_delete}<br>
 {!endif}
                 <input type="file" size="40" name="newfileshot">
 			</div>
