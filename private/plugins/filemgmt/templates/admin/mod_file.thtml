@@ -1,12 +1,4 @@
 {# begin {templatelocation} #}
-<!-- Load WysiBB JS and Theme -->
-<script src="https://cdn.wysibb.com/js/jquery.wysibb.min.js"></script>
-<link rel="stylesheet" href="https://cdn.wysibb.com/css/default/wbbtheme.css" />
-<style>
-	.wysibb{
-	font-size:14px !important;
-}
-</style>
 <div class="uk-panel uk-panel-box uk-margin-top">
 
 	<div class="uk-text-bold uk-text-large">
@@ -140,15 +132,6 @@
 	</form>
 {rating_votes}
 </div>
-<!-- Init WysiBB BBCode editor -->
-<script>
-$(function() {
-	var wbbOpt = {
-		buttons: "bold,italic,underline,strike,sup,sub,|,bullist,numlist,|,link,|,fontcolor,quote"
-	}
-  $("#description").wysibb(wbbOpt);
-})
-</script>
 <script>
 	$( "#filemgmt_mod_file" ).validate({
 		errorElement: "div",
