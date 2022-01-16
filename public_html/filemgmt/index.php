@@ -43,7 +43,7 @@ $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
 $p->set_file (array (
     'page'             =>     'filelisting.thtml',
     'category'         =>     'filelisting_category.thtml'
-) );
+));
 
 $myts = new Filemgmt\MyTextSanitizer;
 $mytree = new Filemgmt\XoopsTree('',$_TABLES['filemgmt_cat'],"cid","pid");
@@ -98,9 +98,30 @@ if ($lid > 0) {
         'category'         =>     'filelisting_category.thtml',
     ));
 
-    $p->set_var('imgset',$_CONF['layout_url'] . '/nexflow/images');
     $p->set_var('tablewidth', $_FM_CONF['shotwidth'] + 10);
-    $p->set_var('can_submit', Filemgmt\Download::canSubmit());
+
+    // get the Group permissions SQL - will be used multiple times below
+    $groupsql = SEC_buildAccessSql();
+
+
+// determine if user can submit files and that there are valid categories to submit to...
+    $p->set_var('can_submit',false);
+    if (Filemgmt\Download::canSubmit()) {
+        $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
+        $sql .= $groupsql;
+        list($catAccessCnt) = DB_fetchArray( DB_query($sql));
+        if ( $catAccessCnt < 1 ) {
+            $p->unset_var('can_submit');
+        } else {
+            $p->set_var('can_submit',true);
+            if (SEC_hasRights("filemgmt.admin")) {
+                $p->set_var('submit_url', $_CONF['site_admin_url'].'/plugins/filemgmt/index.php?modDownload=0');
+            } else {
+                $p->set_var('submit_url', $_CONF['site_url'].'/filemgmt/submit.php');
+            }
+        }
+    }
+
     $p->set_var('lang_categories',_MD_CATEGORIES);
 
     $page = isset($_GET['page']) ? COM_applyFilter($_GET['page'],true) : 0;
@@ -109,13 +130,13 @@ if ($lid > 0) {
     }
     $show = (int)$_FM_CONF['perpage'];
 
-    $groupsql = SEC_buildAccessSql();
     $sql = "SELECT cid, title, imgurl,grp_access FROM {$_TABLES['filemgmt_cat']} WHERE pid = 0 ";
     $sql .= $groupsql . ' ORDER BY CID';
     $result = DB_query($sql);
     $nrows = DB_numRows($result);
 
     $columns = 1;
+
     if ($nrows > 2) {
         $columns = 3;
     } elseif ($nrows > 1) {
