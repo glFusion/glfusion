@@ -43,7 +43,7 @@ $filemgmtConfigData = array(
     ),
     array(
         'name' => 'perpage',
-        'default_value' => '5',
+        'default_value' => '10',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 0,
@@ -120,7 +120,7 @@ $filemgmtConfigData = array(
     ),
     array(
         'name' => 'whatsnewtitlelength',
-        'default_value' => '20',
+        'default_value' => '999',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 0,
@@ -164,7 +164,7 @@ $filemgmtConfigData = array(
     ),
     array(
         'name' => 'displayblocks',
-        'default_value' => 0,
+        'default_value' => 3,
         'type' => 'select',
         'subgroup' => 0,
         'fieldset' => 0,
@@ -265,7 +265,7 @@ $filemgmtConfigData = array(
     ),
     array(
         'name' => 'shotwidth',
-        'default_value' => '50',
+        'default_value' => '512',
         'type' => 'text',
         'subgroup' => 0,
         'fieldset' => 2,
