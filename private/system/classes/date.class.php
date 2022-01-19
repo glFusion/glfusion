@@ -22,7 +22,7 @@ if (!defined ('GVERSION')) {
  * Date is a class that stores a date and provides logic to manipulate
  * and render that date in a variety of formats.
  */
-class Date extends DateTime
+class Date extends \DateTime
 {
     const DAY_ABBR = "\x021\x03";
     const DAY_NAME = "\x022\x03";
@@ -259,7 +259,8 @@ class Date extends DateTime
      * @param   boolean True to return the date string in the local time zone, false to return it in GMT.
      * @return  string  The date string in the specified format format.
      */
-    public function format($format, $local = false)
+    #[\ReturnTypeWillChange]
+    public function format(string $format, bool $local = false) : string
     {
         // Do string replacements for date format options that can be translated.
         $format = preg_replace('/(^|[^\\\])D/', "\\1".self::DAY_ABBR, $format);
@@ -365,6 +366,7 @@ class Date extends DateTime
      * @param   object  The new DateTimeZone object.
      * @return  object  The old DateTimeZone object.
      */
+    #[\ReturnTypeWillChange]
     public function setTimezone($tz)
     {
         if ( $tz == null ) {
