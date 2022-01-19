@@ -260,7 +260,7 @@ class Date extends \DateTime
      * @return  string  The date string in the specified format format.
      */
     #[\ReturnTypeWillChange]
-    public function format(string $format, bool $local = false) : string
+    public function format($format, $local = false)
     {
         // Do string replacements for date format options that can be translated.
         $format = preg_replace('/(^|[^\\\])D/', "\\1".self::DAY_ABBR, $format);
