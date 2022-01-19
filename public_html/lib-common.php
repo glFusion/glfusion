@@ -115,7 +115,11 @@ if (version_compare(GVERSION,'2.0.0','>=')) {
   */
 
 if ( defined('DVLP_DEBUG')) {
-    error_reporting( E_ALL );
+    if (version_compare(PHP_VERSION,'8.1.0','<')) {
+        error_reporting( E_ALL );
+    } else {
+        error_reporting( E_ALL & ~E_DEPRECATED );   // skip depreciated errors with PHP v8.1.x --- for now....
+    }
     $whoops = new \Whoops\Run;
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
     $whoops->register();
