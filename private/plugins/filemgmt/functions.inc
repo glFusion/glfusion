@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by Consult4Hire Inc.
@@ -58,12 +58,8 @@ use Filemgmt\MyTextSanitizer;
 $_FM_CONF = config::get_instance()->get_config('filemgmt');
 
 require_once __DIR__ . '/filemgmt.php';
-if (is_file(__DIR__ . '/config.php')) {
-    // Include local config file if present, normally for testing.
-    require_once __DIR__ . '/config.php';
-}
 
-$_FM_CONF['extensions_map'] = $_FMDOWNLOAD;
+//$_FM_CONF['extensions_map'] = $_FMDOWNLOAD;
 
 if (empty($_FM_CONF['FileStore'])) {
     $_FM_CONF['FileStore'] = $_CONF['path_html'].'data/filemgmt/files/';

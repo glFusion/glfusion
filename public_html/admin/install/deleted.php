@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2015-2021 by the following authors:
+*  Copyright (C) 2015-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -118,6 +118,10 @@ $obsoletePrivateFiles = array(
     'plugins/mediagallery/templates/view_mp3_swf.thtml',
     'plugins/mediagallery/config.php.dist',
     'plugins/mediagallery/staticpage.txt',
+
+    'plugins/filemgmt/config.php.dist',
+    'plugins/filemgmt/config.php',
+
 
 // 1.7.0
     'system/classes/filter.class.php',

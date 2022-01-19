@@ -1,36 +1,20 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | filemgmt.php                                                             |
-// |                                                                          |
-// | Plugin system integration options                                        |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2009-2021 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
-
+/**
+* glFusion CMS - FileMgmt Plugin
+*
+* Plugin system integration options
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2022 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by Consult4Hire Inc.
+*  Author:
+*  Blaine Lang          blaine AT portalparts DOT com
+*
+*/
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
@@ -41,7 +25,7 @@ global $_DB_table_prefix, $_TABLES;
 
 $_FM_CONF['pi_name']            = 'filemgmt';
 $_FM_CONF['pi_display_name']    = 'FileMgmt';
-$_FM_CONF['pi_version']         = '1.9.1';
+$_FM_CONF['pi_version']         = '1.9.2';
 $_FM_CONF['gl_version']         = '2.0.0';
 $_FM_CONF['pi_url']             = 'https://www.glfusion.org/';
 
