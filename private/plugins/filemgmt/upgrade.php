@@ -26,7 +26,6 @@ function filemgmt_upgrade()
 {
     global $_TABLES,$_CONF,$_TABLES,$_FM_CONF, $_DB_table_prefix;;
 
-    include $_CONF['path'].'/plugins/filemgmt/config.php';
     include $_CONF['path'].'/plugins/filemgmt/filemgmt.php';
 
     require_once $_CONF['path_system'] . 'classes/config.class.php';
