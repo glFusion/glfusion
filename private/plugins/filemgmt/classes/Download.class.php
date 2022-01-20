@@ -646,7 +646,11 @@ class Download
         if ($Cat->canUpload()) {
             $this->status = Status::APPROVED;
             $retval = Status::UPL_OK;
-            $file_path = $_FM_CONF['FileStore'];
+            if ($_FM_CONF['outside_webroot']) {
+                $file_path = $_CONF['path'].'data/filemgmt_data/files/';
+            } else {
+                $file_path = $_FM_CONF['FileStore'];
+            }
             $snap_path = $_FM_CONF['SnapStore'];
         } else {
             $this->status = Status::SUBMISSION;
@@ -660,7 +664,11 @@ class Download
 // we have a file to upload - so we need to process it.
 //        if ($_FILES['newfile']['size'] != 0  && empty($this->url)) {
         if ($_FILES['newfile']['size'] != 0) {
-            FileSystem::mkDir($_FM_CONF['FileStore']);
+            if ($_FM_CONF['outside_webroot']) {
+                FileSystem::mkDir($_CONF['path'].'data/filemgmt_data/files/');
+            } else {
+                FileSystem::mkDir($_FM_CONF['FileStore']);
+            }
             FileSystem::mkDir($_FM_CONF['SnapStore']);
 
             $upload = new UploadDownload();
@@ -842,14 +850,18 @@ class Download
      */
     public function delete()
     {
-        global $_TABLES, $_FM_CONF;
+        global $_CONF, $_TABLES, $_FM_CONF;
 
         if ($this->status == 0) {
             // Deleting a submission
             $tmpfile = $_FM_CONF['FileStore_tmp'] . $this->url;
             $tmpsnap  = $_FM_CONF['SnapStore_tmp'] . $this->logourl;
         } else {
-            $tmpfile = $_FM_CONF['FileStore'] . $this->url;
+            if ($_FM_CONF['outside_webroot']) {
+                $tmpfile = $_CONF['path'].'data/filemgmt_data/files/'.$this->url;
+            } else {
+                $tmpfile = $_FM_CONF['FileStore'] . $this->url;
+            }
             $tmpsnap  = $_FM_CONF['SnapStore'] . $this->logourl;
         }
 
@@ -1026,7 +1038,12 @@ class Download
                 $categorySelectHTML .= "</option>\n";
             }
         }
-        if (!file_exists($_FM_CONF['FileStore'].$this->url)) {
+        if ($_FM_CONF['outside_webroot']) {
+            $tFile = $_CONF['path'].'data/filemgmt_data/files/'.$this->url;
+        } else {
+            $tFile = $_FM_CONF['FileStore'].$this->url;
+        }
+        if (!file_exists($tFile)) {
             $T->set_var('file_missing',true);
         } else {
             $T->unset_var('file_missing');
@@ -1174,7 +1191,11 @@ class Download
         $tmp = $_FM_CONF['FileStore_tmp'] . $this->url;
         if (file_exists($tmp) && (is_file($tmp))) {
             // if this temporary file was really uploaded?
-            $newfile = $_FM_CONF['FileStore'] . $this->url;
+            if ($_FM_CONF['outside_webroot']) {
+                $newfile = $_CONF['path'].'data/filemgmt_data/files/'.$this->url;
+            } else {
+                $newfile = $_FM_CONF['FileStore'] . $this->url;
+            }
             Log::write('system',Log::INFO, 'FileMgt Approve: File move from '.$tmp. ' to ' .$newfile );
             $rename = @rename($tmp, $newfile);
             Log::write('system',Log::INFO, 'FileMgt Approve: Results of rename is: '. $rename);
@@ -1475,7 +1496,12 @@ class Download
             break;
 
         case 'title' :
-            if (!file_exists($_FM_CONF['FileStore'].$A['url'])) {
+            if ($_FM_CONF['outside_webroot']) {
+                $tFile = $_CONF['path'].'data/filemgmt_data/files/'.$A['url'];
+            } else {
+                $tFile = $_FM_CONF['FileStore'].$A['url'];
+            }
+            if (!file_exists($tFile)) {
                 $retval = $fieldvalue . ' <span class="fm-file-missing tooltip" title="'.$LANG_FM00['not_found'].'"><sup>**</sup></span>';
             } else {
                 $retval = $fieldvalue;
@@ -1607,7 +1633,11 @@ class Download
         if (!isset($parts['scheme'])) {
             // Local file, check that the file exists
             $T->set_var('file_size',self::prettySize($this->size));
-            $fullurl = $_FM_CONF['FileStore'] . rawurldecode($this->url);
+            if ($_FM_CONF['outside_webroot']) {
+                $fullurl = $_CONF['path'].'data/filemgmt_data/files/' . rawurldecode($this->url);
+            } else {
+                $fullurl = $_FM_CONF['FileStore'] . rawurldecode($this->url);
+            }
             $is_found = file_exists($fullurl);
         } else {
             // Remote file, assume the file exists
