@@ -80,7 +80,11 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_FM_CONF['selectpriv'] == 
     if( $pos === false ) {
         $DL = new Filemgmt\UploadDownload();
         $DL->setAllowAnyMimeType(true);
-        $DL->setPath($_FM_CONF['FileStore']);
+        if ($_FM_CONF['outside_webroot']) {
+            $DL->setPath($_CONF['path'].'data/filemgmt_data/files/');
+        } else {
+            $DL->setPath($_FM_CONF['FileStore']);
+        }
         $DL->downloadFile($url);
     } else {
         $protocol = utf8_substr( $url, 0, $pos + 1 );
