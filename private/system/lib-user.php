@@ -1048,7 +1048,7 @@ function USER_validateUsername($username, $existing_user = false)
 	    return false;
 	}
 
-    if (isset($_CONF['disallow_usernames']) && !empty($_CONF['disallow_usernames']) && !SEC_hasRights('user.edit')) {
+    if (isset($_CONF['disallow_usernames']) && !empty($_CONF['disallow_usernames']) && !SEC_hasRights('user.edit') && !$existing_user) {
         $disallowedName = explode(',',$_CONF['disallow_usernames']);
         foreach ($disallowedName AS $name) {
             if ( strcasecmp($name,$username) == 0) {

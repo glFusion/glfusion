@@ -1716,7 +1716,7 @@ switch ($mode) {
         $loginname = '';
         if (isset ($_POST['loginname'])) {
             $loginname = $_POST['loginname'];
-            if ( !USER_validateUsername($loginname,1) ) {
+            if ( !USER_validateUsername($loginname,true) ) {
                 $loginname = '';
             }
         }
