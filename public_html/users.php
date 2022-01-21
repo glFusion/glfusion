@@ -793,7 +793,11 @@ function USER_createuser($info = array())
     }
 
     if ( $data['regtype'] == 'local' || $data['regtype'] == '' ) {
-        $ecount = $db->getCount($_TABLES['users'], 'email', $data['email'], Database::STRING);
+        if (function_exists('CUSTOM_uniqueEmail')) {
+            $ecount = CUSTOM_uniqueEmail($data['email']);
+        } else {
+            $ecount = $db->getCount($_TABLES['users'], 'email', $data['email'], Database::STRING);
+        }
         if ( $ecount != 0 ) {
             $validationErrors++;
             $errorMessages[] = $LANG04[19];
