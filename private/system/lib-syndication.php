@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2021 by the following authors:
+*  Copyright (C) 2017-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2003-2010 by the following authors:
@@ -511,7 +511,7 @@ function SYND_updateFeed( $fid )
             $filename = 'site.rss';
         }
         $rss->syndicationURL = SYND_getFeedUrl( $filename );
-        $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
+        $rss->copyright = 'Copyright ' . \Date::getInstance('now',$_CONF['timezone'])->format('Y') . ' '.$_CONF['site_name'];
 
         $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1], $A);
         if ($content === NULL) {

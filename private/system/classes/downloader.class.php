@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2015-2019 by the following authors:
+*  Copyright (C) 2015-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2002-2009 by the following authors:
@@ -17,6 +17,8 @@
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
+
+use \glFusion\Log\Log;
 
 /**
 * This class allows you to download a file from outside the web tree.  Many hooks
@@ -157,16 +159,15 @@ class downloader
     */
     function _logItem($logtype, $text)
     {
-        $timestamp = strftime("%c");
-        if (!$file = fopen($this->_logFile,'a')) {
-            // couldn't open log file for writing so let's disable logging and add an error
-            $this->setLogging(false);
-            $this->_addError('Error writing to log file: ' . $this->_logFile . '.  Logging has been disabled');
-            return false;
+        switch(strtolower($logtype)) {
+            case 'warning' :
+                Log::write('system',Log::WARNING,$text);
+                break;
+            case 'error' :
+                Log::write('system',Log::ERROR,$text);
+                break;
         }
-        fputs ($file, "$timestamp - $logtype: $text \n");
-        fclose($file);
-        return true;
+       return true;
     }
 
     /**
