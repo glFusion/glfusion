@@ -5,7 +5,7 @@
         "html2text/html2text": "^4.3",
         "james-heinrich/getid3": "^1.9",
         "ezyang/htmlpurifier": "^4.13",
-        "phpmailer/phpmailer": "^5",
+        "phpmailer/phpmailer": "^6",
         "simplepie/simplepie": "^1.5",
         "aziraphale/email-address-validator": "^2.0",
         "misd/linkify": "^1.1",

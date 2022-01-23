@@ -15,6 +15,7 @@ return array(
     'Phpfastcache\\Tests\\' => array($vendorDir . '/phpfastcache/phpfastcache/tests/lib'),
     'Phpfastcache\\' => array($vendorDir . '/phpfastcache/phpfastcache/lib/Phpfastcache'),
     'PhpXmlRpc\\' => array($vendorDir . '/phpxmlrpc/phpxmlrpc/src'),
+    'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Misd\\Linkify\\' => array($vendorDir . '/misd/linkify/src/Misd/Linkify'),
     'Html2Text\\' => array($vendorDir . '/html2text/html2text/src', $vendorDir . '/html2text/html2text/test'),

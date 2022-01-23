@@ -54,6 +54,7 @@ $_COM_VERBOSE = false;
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use PHPMailer\PHPMailer\PHPMailer;
 
 // process all vars to handle magic_quotes_gpc
 function all_stripslashes($var)
