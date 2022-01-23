@@ -7,11 +7,11 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2011-2017 by the following authors:
+*  Copyright (C) 2011-2012ß by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on the Joomla Framework                                            |
-*  Copyright (C) 2005-2011 Open Source Matters, Inc.
+*  Copyright (C) 2005-2022 Open Source Matters, Inc.
 */
 
 if (!defined ('GVERSION')) {
@@ -197,6 +197,19 @@ class Date extends \DateTime
         return (string) parent::format(self::$format);
     }
 
+
+    /**
+     * Proxy for new Date().
+     *
+     * @param   string  $date  String in a format accepted by strtotime(), defaults to "now".
+     * @param   mixed   $tz    Time zone to be used for the date.
+     *
+     * @return  Date
+     */
+    public static function getInstance($date = 'now', $tz = null)
+    {
+        return new static($date, $tz);
+    }
 
     /**
      * Set date / time stamp
