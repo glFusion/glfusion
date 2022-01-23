@@ -31,6 +31,8 @@ class XML extends \glFusion\Syndication\Feed
     {
         global $_CONF, $_SYND_DEBUG;
 
+        $dt = new \Date('now',$_CONF['timezone']);
+
         $rss = new \UniversalFeedCreator();
         if ($this->getContentLength() > 1 ) {
             $rss->descriptionTruncSize = $this->getContentLength();
@@ -55,7 +57,7 @@ class XML extends \glFusion\Syndication\Feed
             $filename = 'site.rss';
         }
         $rss->syndicationURL = self::getFeedUrl( $filename );
-        $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
+        $rss->copyright = 'Copyright ' . $dt->format("Y",true) . ' '.$_CONF['site_name'];
 
         $content = PLG_getFeedContent($this->getType(), $this->getFid(), $link, $data, $this->format, $this->format_version);
         if ($content === NULL) {
