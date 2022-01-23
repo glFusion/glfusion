@@ -186,7 +186,7 @@ if (empty($_FILES) && empty($_POST) && isset($_SERVER['REQUEST_METHOD']) && strt
     }
 
     COM_setMsg(sprintf($LANG_FILEMGMT_ERRORS['1111'],$maxSize),'error');
-    echo COM_refresh($_CONF['site_url'].'/filemgmt/subit.php');
+    echo COM_refresh($_CONF['site_url'].'/filemgmt/submit.php');
     exit;
 }
 
