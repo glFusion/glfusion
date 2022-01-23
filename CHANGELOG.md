@@ -33,6 +33,7 @@
 ### Changed
 
 - FileMgmt Plugin internals reworked - improved template use, layout and overall code improvements (Lee)
+- FileMgmt Plugin support url_rewrite on download links - if you need rewrite rules for your web server, implement for visit.php - see [glFusion URL Rewrite docs](https://www.glfusion.org/wiki/glfusion:configuration:site) for more details
 - Syndication System internals reworked - improved overall code and modernized (Lee)
 - Allow embedded [img] tag inside [url] tag in BBcode formatter
 - Removed 'most' HTML from the code base and moved to templates
