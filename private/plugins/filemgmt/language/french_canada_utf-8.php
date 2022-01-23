@@ -152,6 +152,7 @@ $LANG_FILEMGMT_ERRORS = array(
     "1108" => "Duplicate file - already existing in filestore",
     "1109" => "File type not allowed",
     "1110" => "You must define and select a category for the uploaded file",
+    "1111" => "File Size exceeds site configured maximum size of %s",
     "9999" => "Unknown Error"
 );
 
@@ -194,8 +195,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Activer Évaluations',
     'displayblocks'         => 'Afficher glFusion Blocs',
     'silent_edit_default'   => 'Silencieux sur Modifier',
-    'extensions_map'        => 'Extensions utilisées pour les téléchargements',
-    'EmailOption'           => 'Envoyer un e-mail après approbation?',
+    'extensions_map'        => 'Extensions used for downloads',
+    'EmailOption'           => 'Email submitter upon approval?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Paramètres Principaux'
@@ -315,7 +316,7 @@ define("_MD_INTFILEAT","Intéressant Téléchargement de fichier à %s"); // %s 
 define("_MD_INTFILEFOUND","Voici un fichier de téléchargement intéressante que j`ai trouvé à %s"); // %s is your site name
 
 define("_MD_RECEIVED","Nous avons reçu vos informations de téléchargement. Merci!");
-define("_MD_WHENAPPROVED","Vous recevrez un e-mail quand il est approuvé.");
+define("_MD_WHENAPPROVED","You&apos;ll receive an E-mail when it&apos;s approved.");
 define("_MD_SUBMITONCE","Envoyer votre fichier / script une seule fois.");
 define("_MD_APPROVED", "Votre fichier a été approuvé");
 define("_MD_ALLPENDING","Toutes les informations fichier / script sont publiés après vérification.");
@@ -412,7 +413,7 @@ define("_MD_NOMODREQ","Pas de Modification pour un Fichier d'appel.");
 define("_MD_DBUPDATED","Base de Données mise à jour avec Succès!");
 define("_MD_MODREQDELETED","Demande de Modification Supprimé.");
 define("_MD_IMGURLMAIN",'Image<div style="font-size:8pt;">Hauteur de l`image sera automatiquement redimensionnée à 50px</div>');
-define("_MD_PARENT","Catégorie Parente:");
+define("_MD_PARENT","Parent Category");
 define("_MD_SAVE","Enregistrer les modifications");
 define("_MD_CATDELETED","Catégorie Supprimé.");
 define("_MD_WARNING","AVERTISSEMENT: Êtes-vous sûr de vouloir supprimer cette catégorie et tous ses fichiers et commentaires?");

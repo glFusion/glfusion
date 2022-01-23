@@ -152,6 +152,7 @@ $LANG_FILEMGMT_ERRORS = array(
     "1108" => "Duplicate file - already existing in filestore",
     "1109" => "File type not allowed",
     "1110" => "You must define and select a category for the uploaded file",
+    "1111" => "File Size exceeds site configured maximum size of %s",
     "9999" => "Unknown Error"
 );
 
@@ -194,8 +195,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Habilitar Calificaciones',
     'displayblocks'         => 'Mostrar los Bloques glFusion',
     'silent_edit_default'   => 'Silent Edit Default',
-    'extensions_map'        => 'Extensiones utilizadas para descargas',
-    'EmailOption'           => '¿Remitente de correo electrónico después de la aprobación?',
+    'extensions_map'        => 'Extensions used for downloads',
+    'EmailOption'           => 'Email submitter upon approval?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Main Settings'
@@ -315,7 +316,7 @@ define("_MD_INTFILEAT","Descargas interesantes en  %s"); // %s is your site name
 define("_MD_INTFILEFOUND","Aqui hay una descarga interesante que he encontrado en  %s"); // %s is your site name
 
 define("_MD_RECEIVED","Hemos recibido la información de tu descarga. gracias!");
-define("_MD_WHENAPPROVED","Usted recibirá un E-mail cuando sea aprobado.");
+define("_MD_WHENAPPROVED","You&apos;ll receive an E-mail when it&apos;s approved.");
 define("_MD_SUBMITONCE","Envía tu archivo solo una vez.");
 define("_MD_APPROVED", "Tu archivo ha sido aprobado");
 define("_MD_ALLPENDING","Toda la información de los archivos serán publicados después de su aprobación.");
@@ -412,7 +413,7 @@ define("_MD_NOMODREQ","Sin petición de modificación de la descarga.");
 define("_MD_DBUPDATED","Actualización de la base de datos completada!");
 define("_MD_MODREQDELETED","Petición de modificación eliminada.");
 define("_MD_IMGURLMAIN",'Imagen (Alto de la imagen será modificada a 50 px): ');
-define("_MD_PARENT","Categoría relacionada:");
+define("_MD_PARENT","Parent Category");
 define("_MD_SAVE","Guardar cambios");
 define("_MD_CATDELETED","Categoría eliminada.");
 define("_MD_WARNING","Advertencia: ¿Deseas borrar esta categoría con todos sus archivos y comentarios?");

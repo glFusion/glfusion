@@ -152,6 +152,7 @@ $LANG_FILEMGMT_ERRORS = array(
     "1108" => "Duplicate file - already existing in filestore",
     "1109" => "File type not allowed",
     "1110" => "You must define and select a category for the uploaded file",
+    "1111" => "File Size exceeds site configured maximum size of %s",
     "9999" => "Unknown Error"
 );
 
@@ -258,7 +259,7 @@ define("_MD_NOSHOTS","No Thumbnails Available");
 define("_MD_EDITTHISDL","Edit This Download");
 
 define("_MD_LISTINGHEADING","<b>File Listing: There are %s files in our database</b>");
-define("_MD_LATESTLISTING","<b>Latest Listing:</b>");
+define("_MD_LATESTLISTING","Latest Listing");
 define("_MD_DESCRIPTIONC","Description:");
 define("_MD_EMAILC","Email: ");
 define("_MD_CATEGORYC","Category: ");
@@ -362,7 +363,7 @@ define("_MD_CATEGORYTITLE","File Listing - Category View");
 define("_MD_DLCONF","Downloads Configuration");
 define("_MD_GENERALSET","Configuration Settings");
 define("_MD_ADDMODFILENAME","Add new file");
-define ("_MD_ADDCATEGORYSNAP", 'Optional Image:<div style="font-size:8pt;">Top Level Categories only</div>');
+define ("_MD_ADDCATEGORYSNAP", 'Optional Image<div style="font-size:8pt;">Top Level Categories only</div>');
 define ("_MD_ADDIMAGENOTE", '<span style="font-size:8pt;">Image height will be resized to 50</span>');
 define("_MD_ADDMODCATEGORY","<b>Categories:</b> Add, Modify, and Delete Categories");
 define("_MD_DLSWAITING","Downloads Waiting for Validation");
@@ -379,8 +380,8 @@ define("_MD_DELETE","Poista");
 define("_MD_NOSUBMITTED","No New Submitted Downloads.");
 define("_MD_ADDMAIN","Add MAIN Category");
 define("_MD_TITLEC","Title: ");
-define("_MD_CATSEC", "View Access: ");
-define("_MD_UPLOADSEC", "Upload Access: ");
+define("_MD_CATSEC", "View Access");
+define("_MD_UPLOADSEC", "Upload Access");
 define("_MD_IMGURL","<br>Image Filename <font size='-2'> (located in your filemgmt_data/category_snaps directory - Image height will be resized to 50)</font>");
 define("_MD_ADD","Lis&auml;&auml;");
 define("_MD_ADDSUB","Add SUB-Category");

@@ -2299,22 +2299,6 @@ $LANG_LOGO = array(
     'logo_saved'        => 'Opcje logo zostały pomyślnie zapisane.',
     'invalid_type'      => 'Nieprawidłowy typ obrazu, dozwolone są tylko pliki JPG, PNG i GIF',
     'invalid_size'      => 'Przesłane logo większe niż dozwolony rozmiar ',
-
-    'item_updated'      => 'The item has been updated.',
-    'image_deleted'     => 'The image was deleted.',
-    'item_unchanged'    => 'The item  was not changed.',
-    'none'              => 'None',
-    'graphic'           => 'Graphic',
-    'text'              => 'Text',
-    'logo_type'         => 'Logo Type',
-    'theme'             => 'Theme',
-    'grp_access'        => 'Group Access',
-    'disabled'          => 'Disabled',
-    'all_users'         => 'All Users',
-    'site_theme'        => 'Site Theme',
-    'default'           => 'Default',
-    'yes'               => 'Yes',
-    'no'                => 'No',
 );
 
 ###############################################################################
@@ -2785,7 +2769,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Przesyłanie komentarzy do kolejki',
     'passwordspeedlimit' => 'Limit',
     'login_attempts' => 'Ilość prób logowania',
-    'login_landing' => 'Strona docelowa logowania',
+    'login_landing' => 'Login Landing Page',
     'login_speedlimit' => 'Ograniczenie czasu logowania',
     'user_html' => 'HTML użytkownika',
     'admin_html' => 'Admin HTML',

@@ -397,7 +397,7 @@ $LANG04 = array(
     159 => 'Tento email byl generován automaticky. Prosím, neodpovídej na něj.',
     160 => 'Online',
     161 => 'Síla hesla',
-    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
+    162 => 'Uživatelské jméno musí obsahovat alespoň %s znaků, nesmí obsahovat neplatné znaky ( < > " %% & * / \ ) nebo znaky emoji, a nemůže použít vyhrazený název  jako je správce, root, atd.',
     163 => 'Vzdálený uživatel',
     164 => 'Uživatelské jméno vzdáleného přístupu',
     165 => 'Vzdálená služba',
@@ -2297,22 +2297,6 @@ $LANG_LOGO = array(
     'logo_saved'        => 'Logo options successfully saved.',
     'invalid_type'      => 'Invalid image type, only JPG, PNG, and GIF are allowed',
     'invalid_size'      => 'Uploaded logo larger than allowed size of ',
-
-    'item_updated'      => 'The item has been updated.',
-    'image_deleted'     => 'The image was deleted.',
-    'item_unchanged'    => 'The item  was not changed.',
-    'none'              => 'None',
-    'graphic'           => 'Graphic',
-    'text'              => 'Text',
-    'logo_type'         => 'Logo Type',
-    'theme'             => 'Theme',
-    'grp_access'        => 'Group Access',
-    'disabled'          => 'Disabled',
-    'all_users'         => 'All Users',
-    'site_theme'        => 'Site Theme',
-    'default'           => 'Default',
-    'yes'               => 'Yes',
-    'no'                => 'No',
 );
 
 ###############################################################################
@@ -2781,7 +2765,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Queue Comment Submissions',
     'passwordspeedlimit' => 'Password Speed Limit',
     'login_attempts' => 'Max. Login Attempts',
-    'login_landing' => 'Vstupní vstupní stránka',
+    'login_landing' => 'Přihlašovací stránka',
     'login_speedlimit' => 'Login Speed Limit',
     'user_html' => 'User HTML',
     'admin_html' => 'Admin HTML',
@@ -2911,7 +2895,7 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'Administrace článků',
     'log_level' => 'Log Level',
     'enable_admin_actions' => 'Enable Admin Logging',
-    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
+    'disallow_usernames' => 'Nepovolená uživatelská jména (čárkou oddělený seznam)',
 );
 
 $LANG_configsubgroups['Core'] = array(

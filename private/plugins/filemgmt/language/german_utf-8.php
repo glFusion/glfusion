@@ -150,6 +150,7 @@ $LANG_FILEMGMT_ERRORS = array(
     "1108" => "Duplicate file - already existing in filestore",
     "1109" => "File type not allowed",
     "1110" => "You must define and select a category for the uploaded file",
+    "1111" => "File Size exceeds site configured maximum size of %s",
     "9999" => "Unknown Error"
 );
 
@@ -313,7 +314,7 @@ define("_MD_INTFILEAT","Interessanter Download bei %s"); // %s is your site name
 define("_MD_INTFILEFOUND","Hier ist ein interessanter Download, den ich bei %s gefunden habe"); // %s is your site name
 
 define("_MD_RECEIVED","Vielen Dank, wir haben Deine Download-Einsendung erhalten.");
-define("_MD_WHENAPPROVED","Du erhälst eine E-Mail, sobald die Datei überprüft und bestätigt wurde.");
+define("_MD_WHENAPPROVED","You&apos;ll receive an E-mail when it&apos;s approved.");
 define("_MD_SUBMITONCE","Achte darauf, dass Du Deine Datei nur einmal übermittlen.");
 define("_MD_APPROVED", "Deine Datei wurde soeben überprüft und bestätigt");
 define("_MD_ALLPENDING","Alle Datei-Informationen erwarten einer Überprüfung.");
@@ -410,7 +411,7 @@ define("_MD_NOMODREQ","Keine Download-Info-ändern-Anforderungen.");
 define("_MD_DBUPDATED","Datenbank erfolgreich aktualisiert!");
 define("_MD_MODREQDELETED","Änderungsanforderung gelöscht.");
 define("_MD_IMGURLMAIN",'Bild<font size=\'-2\'> (Bild-Höhe wird auf 50px gesetzt)</font>');
-define("_MD_PARENT","Oberkategorie:");
+define("_MD_PARENT","Parent Category");
 define("_MD_SAVE","Änderungen speichern");
 define("_MD_CATDELETED","Kategorie gespeichert.");
 define("_MD_WARNING","WARNUNG: Möchtest Du diese Kategorie und ALLE Dateien und Kommentare darin löschen?");

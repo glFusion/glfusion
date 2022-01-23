@@ -122,37 +122,38 @@ $LANG_FILEMGMT = array(
     'no_new_files'          => 'Nejsou nové soubory',
     'no_comments'           => 'Nejsou nové komentáře',
     'more'                  => '<em>další ...</em>',
-    'newly_uploaded'        => 'Newly Uploaded',
-    'click_to_view'         => 'Click here to view',
-    'no_file_uploaded'      => 'No File Uploaded',
+    'newly_uploaded'        => 'Nově nahrané',
+    'click_to_view'         => 'Klikni pro zobrazení',
+    'no_file_uploaded'      => 'Nebyly nahrány žádné soubory',
     'description'           => 'Popis',
     'category'              => 'Kategorie',
-    'err_req_fields'        => 'Some required fields were not supplied',
-    'go_back'               => 'Go Back',
-    'err_demomode'          => 'Uploads are disabled in demo mode',
+    'err_req_fields'        => 'Některá povinná pole nebyla zadána',
+    'go_back'               => 'Zpět',
+    'err_demomode'          => 'Nahrávání je zakázáno v demo režimu',
     'edit_category'         => 'Edituj kategorii',
     'create_category'       => 'Vytvoř kategorii',
-    'can_view'              => 'Can View',
-    'can_upload'            => 'Can Upload',
-    'delete_category'       => 'Delete Category',
-    'new_category'          => 'New Category',
-    'new_file'              => 'New File',
-    'remote_ip'             => 'Remote IP',
-    'back_to_listing'       => 'Back To Listing',
+    'can_view'              => 'Může zobrazit',
+    'can_upload'            => 'Může nahrávat',
+    'delete_category'       => 'Odstranit kategorii',
+    'new_category'          => 'Nová kategorie',
+    'new_file'              => 'Nový soubor',
+    'remote_ip'             => 'Vzdálená IP',
+    'back_to_listing'       => 'Zpět na seznam',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
-    "1101" => "Upload approval Error: The temporary file was not found. Check error.log",
-    "1102" => "Upload submit Error: The temporary filestore file was not created. Check error.log",
-    "1103" => "The download info you provided is already in the database!",
-    "1104" => "The download info was not complete - Need to enter a title for the new file",
-    "1105" => "The download info was not complete - Need to enter a description for the new file",
-    "1106" => "Upload Add Error: The new file was not created. Check error.log",
-    "1107" => "Upload Add Error: The temporary file was not found. Check error.log",
-    "1108" => "Duplicate file - already existing in filestore",
-    "1109" => "File type not allowed",
-    "1110" => "You must define and select a category for the uploaded file",
-    "9999" => "Unknown Error"
+    "1101" => "Chyba oprávnění při nahrávání: Dočasný soubor nebyl nalezen. Zkontrolujte chyby.log",
+    "1102" => "Chyba při nahrávání: Dočasný soubor souboru nebyl vytvořen. Zkontrolujte error.log",
+    "1103" => "Soubor, které jste zadali, je již v databázi!",
+    "1104" => "Informace o souboru jsou nedostatečné - Je třeba zadat název nového souboru",
+    "1105" => "Informace o souboru jsou nedostatečné - Je třeba zadat popis nového souboru",
+    "1106" => "Chyba při nahrávání: Nový soubor nebyl vytvořen. Zkontrolujte error.log",
+    "1107" => "Chyba při nahrávání: Dočasný soubor nebyl vytvořen. Zkontrolujte error.log",
+    "1108" => "Duplicitní soubor - již existuje v úložišti souborů",
+    "1109" => "Tento typ souboru není povolen",
+    "1110" => "Musíte definovat a vybrat kategorii pro nahraný soubor",
+    "1111" => "File Size exceeds site configured maximum size of %s",
+    "9999" => "Neznámá chyba"
 );
 
 $LANG_FILEMGMT_AUTOTAG = array(
@@ -194,8 +195,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Povolit hodnocení příspěvků',
     'displayblocks'         => 'Zobrazit bloky glFusion',
     'silent_edit_default'   => 'Silent Edit Default',
-    'extensions_map'        => 'Rozšíření používaná pro stahování',
-    'EmailOption'           => 'Odesílatel e -mailu po schválení?',
+    'extensions_map'        => 'Extenze souboru použitá pro stahování',
+    'EmailOption'           => 'Odesílatel e-mailu při schválení?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Hlavní nastavení'
@@ -412,7 +413,7 @@ define("_MD_NOMODREQ","Žádná žádost o úpravu stahování.");
 define("_MD_DBUPDATED","Database byla úspěšně aktualizována!");
 define("_MD_MODREQDELETED","Požadavek na změnu byl odstraněn.");
 define("_MD_IMGURLMAIN",'<div style="font-size:8pt;">Výška obrázku bude změněna na 50 px</div>');
-define("_MD_PARENT","Rodičovská kategorie:");
+define("_MD_PARENT","Nadřazená kategorie");
 define("_MD_SAVE","Ulož změny");
 define("_MD_CATDELETED","Kategorie smazána.");
 define("_MD_WARNING","VAROVÁNÍ: OPRAVDU chceš tuto kategorii zrušit včetně všech souborů a komentářů?");
@@ -427,7 +428,7 @@ define("_MD_ERRORDESC","CHYBA: Je třeba zadat POPIS!");
 define("_MD_NEWDLADDED","Nové stažení bylo přidáno do databáze.");
 define("_MD_NEWDLADDED_DUPFILE","Pozor: Duplikovaný Soubor. New download added to the database.");
 define("_MD_NEWDLADDED_DUPSNAP","Varování: Duplicitní Snap. Přidán nový soubor pro stažení do databáze.");
-define("_MD_DLUPDATED", "File has been updated.");
+define("_MD_DLUPDATED", "Soubor byl aktualizován.");
 define("_MD_HELLO","Ahoj %s");
 define("_MD_WEAPPROVED","Schválili jsme váš příspěvek do naší sekce ke stažení. Název souboru je: ");
 define("_MD_THANKSSUBMIT","Díky za váš příspěvek!");
