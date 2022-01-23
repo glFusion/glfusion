@@ -1,14 +1,14 @@
 {# begin {templatelocation} #}
 <script src="{site_url}/javascript/addons/datetime/jquery.datetimepicker.full.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{site_url}/javascript/addons/datetime/jquery.datetimepicker.min.css"/ >
-<script src="{site_url}/javascript/addons/datetime/datetimepicker.js"></script>
+<script src="{site_url}/javascript/addons/datetime/datetimepicker-cal.js"></script>
 <script>
-	function update_month() document.getElementById('end_month').value = document.getElementById('start_month').value;
-	function update_day() document.getElementById('end_day').value = document.getElementById('start_day').value;
-	function update_year() document.getElementById('end_year').value = document.getElementById('start_year').value;
-	function update_hour() document.getElementById('end_hour').value = document.getElementById('start_hour').value;
-	function update_minute() document.getElementById('end_minute').value = document.getElementById('start_minute').value;
-	function update_ampm() document.getElementById('end_ampm').value = document.getElementById('start_ampm').value;
+	function update_month() { document.getElementById('end_month').value = document.getElementById('start_month').value; }
+	function update_day() { document.getElementById('end_day').value = document.getElementById('start_day').value; }
+	function update_year() { document.getElementById('end_year').value = document.getElementById('start_year').value; }
+	function update_hour() { document.getElementById('end_hour').value = document.getElementById('start_hour').value; }
+	function update_minute() { document.getElementById('end_minute').value = document.getElementById('start_minute').value; }
+	function update_ampm() { document.getElementById('end_ampm').value = document.getElementById('start_ampm').value; }
 	$(window).load(function() {
 		$("#allday").change(toggleTOD);
 	});
