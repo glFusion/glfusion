@@ -82,11 +82,11 @@
 
 		<div class="uk-align-right uk-text-right uk-margin-top">
 {!if is_found}
-			<span style="padding-right:5px;padding-left:5px"><a href="{site_url}/filemgmt/visit.php?lid={lid}" rel="nofollow" title="{LANG_DOWNLOAD}">{LANG_DOWNLOAD}</a></span>
+			<span style="padding-right:5px;padding-left:5px"><a href="{download_link}" rel="nofollow" title="{LANG_DOWNLOAD}">{LANG_DOWNLOAD}</a></span>
 {!else}
 			<span style="padding-right:5px;padding-left:5px">{lang_not_found}</span>
 {!endif}
-			| <span style="padding-right:5px;padding-left:5px"><a href="{site_url}/filemgmt/index.php?id={lid}" rel="nofollow" title="{LANG_FILELINK}">{LANG_FILELINK}</a></span>
+			| <span style="padding-right:5px;padding-left:5px"><a href="{file_link}" rel="nofollow" title="{LANG_FILELINK}">{LANG_FILELINK}</a></span>
 			| <span style="padding-right:5px;padding-left:5px"><a href="{site_url}/filemgmt/brokenfile.php?lid={lid}" rel="nofollow">{LANG_REPORTBROKEN}</a></span>
 {!if LANG_EDIT}
 			| <span style="padding-right:5px;padding-left:5px"><a href="{site_admin_url}/plugins/filemgmt/index.php?modDownload={lid}" rel="nofollow">{LANG_EDIT}</a></span>
