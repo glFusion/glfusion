@@ -28,8 +28,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 }
 
 // we must have PHP v7.3 or greater
-if (version_compare(PHP_VERSION,'7.3.0','<')) {
-    die('glFusion requires PHP version 7.3.0 or greater.');
+if (version_compare(PHP_VERSION,'7.4.0','<')) {
+    die('glFusion requires PHP version 7.4.0 or greater.');
 }
 
 if (!defined ('GVERSION')) {
@@ -116,7 +116,7 @@ if (version_compare(GVERSION,'2.0.0','>=')) {
 
 if ( defined('DVLP_DEBUG')) {
     if (version_compare(PHP_VERSION,'8.1.0','<')) {
-        error_reporting( E_ALL );
+        error_reporting( E_ALL & ~E_USER_WARNING);
     } else {
         error_reporting( E_ALL & ~E_DEPRECATED );   // skip depreciated errors with PHP v8.1.x --- for now....
     }
@@ -6814,7 +6814,6 @@ function _js_out()
     if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
         $files[] = $_CONF['path_html'].'javascript/jquery/jquery.min.js';
         $files[] = $_CONF['path_layout'].'/js/header.js';
-        $files[] = $_CONF['path_html'].'javascript/addons/jqrating.min.js';
 
         if ( !isset($_SYSTEM['disable_jquery_tooltip']) || $_SYSTEM['disable_jquery_tooltip'] == false ) {
             $files[] = $_CONF['path_html'].'javascript/addons/tooltipster/jquery.tooltipster.min.js';
