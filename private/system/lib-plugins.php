@@ -2824,6 +2824,7 @@ function PLG_runScheduledTask ()
         foreach ($_PLUGINS as $pi_name) {
             $function = 'plugin_runScheduledTask_' . $pi_name;
             if (function_exists ($function)) {
+                Log::write('system',Log::DEBUG,'CRON: Running PLG_runScheduledTask for ' . $pi_name);
                 $function ();
             }
         }
