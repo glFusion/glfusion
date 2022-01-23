@@ -131,7 +131,7 @@ case 'savelogos':
         $msg = '<ul>' . $msg . '</ul>';
         COM_setMsg($msg, 'error');
     }
-    COM_refresh($_CONF['site_url'] . '/admin/themes.php');
+    COM_refresh($_CONF['site_admin_url'] . '/themes.php');
     break;
 
 case 'listlogos':
