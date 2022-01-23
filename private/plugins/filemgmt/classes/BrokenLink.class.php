@@ -217,7 +217,7 @@ class BrokenLink
             } else {
                 $tFile = $_FM_CONF['FileStore'].$A['url'];
             }
-            if (!file_exists($tFile) {
+            if (!file_exists($tFile)) {
                 $retval = $fieldvalue . ' <span class="fm-file-missing tooltip" title="'.$LANG_FM00['not_found'].'"><sup>**</sup></span>';
             } else {
                 $retval = $fieldvalue;
