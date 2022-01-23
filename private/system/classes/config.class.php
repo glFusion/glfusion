@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2018-2021 by the following authors:
+*  Copyright (C) 2018-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2007-2008 by the following authors:
@@ -1350,7 +1350,7 @@ class config
             }
         }
 
-        $retval .= '<div><a href="' . $_CONF['site_admin_url'] . '">'
+        $retval .= '<div><a href="' . $_CONF['site_admin_url'] . '/index.php">'
                 . $LANG_ADMIN['admin_home'] . '</a></div>';
         $retval .= COM_endBlock(COM_getBlockTemplate('configmanager_block',
                                                      'footer'));
