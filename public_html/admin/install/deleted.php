@@ -222,6 +222,9 @@ $obsoletePublicFiles = array(
 
 // 2.0.0
 
+    'javascript/addons/jqrating.js',
+    'javascript/addons/jqrating.min.js',
+
     'admin/logo.php',
 
     'ckeditor/plugins/codemirror/js/beautify-html.js',
