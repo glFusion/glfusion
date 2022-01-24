@@ -11,7 +11,7 @@
 * Copyright (C) 2005-2019 Michael Hampton
 *
 *  Modifiecations for glFusion Integration
-*  Copyright (C) 2017-2019 by the following authors:
+*  Copyright (C) 2017-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -25,7 +25,7 @@ use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 use \glFusion\Admin\AdminAction;
 
-global $_DB_table_prefix;
+global $_DB_table_prefix, $bb2_settings_defaults;
 
 define('BB2_CWD', dirname(__FILE__));
 
@@ -214,8 +214,8 @@ function bb2_read_settings() {
         }
     }
 
-    return array('log_table'      => $bb2_settings_defaults['log_table'],
-                 'ban_table'      => $bb2_settings_defaults['ban_table'],
+    return array('log_table'     => $bb2_settings_defaults['log_table'],
+                 'ban_table'     => $bb2_settings_defaults['ban_table'],
                  'wl_table'      => $bb2_settings_defaults['wl_table'],
                  'display_stats' => 0,
                  'strict'        => $_CONF['bb2_strict'],

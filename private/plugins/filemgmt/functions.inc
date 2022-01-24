@@ -83,6 +83,9 @@ $_FM_CONF['FileStore_tmp'] = $_CONF['path'] . '/data/filemgmt_data/files/tmp/';
 $_FM_CONF['SnapStore_tmp'] = $_CONF['path'] . '/data/filemgmt_data/snaps/tmp/';
 
 if ( COM_isAnonUser() ) {
+    if (!isset($_FM_CONF['uploadpublic'])) {
+        $_FM_CONF['uploadpublic'] = false;
+    }
     $_FM_CONF['uploadselect'] = $_FM_CONF['uploadpublic'];
 }
 
