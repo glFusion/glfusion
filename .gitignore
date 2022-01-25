@@ -58,6 +58,7 @@ private/plugins/mediagallery/config.php
 public_html/data/mediagallery/mediaobjects/tn/
 public_html/data/mediagallery/mediaobjects/orig/
 public_html/data/mediagallery/mediaobjects/disp/
+public_html/data/mediagallery/mediaobjects/covers/
 private/plugins/mediagallery/uploads/
 
 # Forum
