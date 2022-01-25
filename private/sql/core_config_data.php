@@ -2005,7 +2005,7 @@ $coreConfigData = array(
     ),
     array(
     	'name' => 'login_landing',
-    	'default_value' => '/index.php',
+    	'default_value' => '',
     	'type' => 'text',
     	'subgroup' => 4,
     	'fieldset' => 4,
