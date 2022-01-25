@@ -49,15 +49,22 @@ class XML extends \glFusion\Syndication\Feed
         	$rss->image = $image;
         }
         $rss->link = $_CONF['site_url'];
-        if ( !empty($this->getFilename())) {
+        if (!empty($this->getFilename())) {
             $filename = $this->getFilename();
         } else {
             $filename = 'site.rss';
         }
-        $rss->syndicationURL = self::getFeedUrl( $filename );
+        $rss->syndicationURL = self::getFeedUrl($filename);
         $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
 
-        $content = PLG_getFeedContent($this->getType(), $this->getFid(), $link, $data, $this->format, $this->format_version);
+        $content = PLG_getFeedContent(
+            $this->getType(),
+            $this->getFid(),
+            $link,
+            $data,
+            $this->format,
+            $this->format_version
+        );
         if ($content === NULL) {
             // Special NULL return if the plugin handles its own feed writing
             return;

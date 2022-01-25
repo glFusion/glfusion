@@ -22,6 +22,7 @@ require_once 'auth.inc.php';
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 use \glFusion\FieldList;
+use \glFusion\Syndication\Feed;
 
 $display = '';
 
@@ -457,10 +458,8 @@ function FEED_edit($fid = 0, $type = '', $A = array())
     $nicedate = COM_getUserDateTimeFormat ($A['date']);
     $feed_template->set_var ('feed_updated', $nicedate[0]);
 
-    //$formats = FEED_findFormats();
     $formats = \glFusion\Syndication\Feed::findFormats($A['type']);
 
-    //$selection = '<select name="format">' . LB;
     $selection = '';
     foreach ($formats as $f) {
         // if one changes this format below ('name-version'), also change parsing
@@ -473,7 +472,6 @@ function FEED_edit($fid = 0, $type = '', $A = array())
         $selection .= '>' . ucwords ($f['name'] . ' ' . $f['version'])
                    . '</option>' . LB;
     }
-    //$selection .= '</select>' . LB;
     $feed_template->set_var ('feed_format', $selection);
 
     $limits = $A['limits'];
@@ -482,7 +480,6 @@ function FEED_edit($fid = 0, $type = '', $A = array())
         $limits = substr ($A['limits'], 0, -1);
         $hours = true;
     }
-    //$selection = '<select name="limits_in">' . LB;
     $selection = '';
     $selection .= '<option value="0"';
     if (!$hours) {
@@ -494,7 +491,6 @@ function FEED_edit($fid = 0, $type = '', $A = array())
         $selection .= ' selected="selected"';
     }
     $selection .= '>' . $LANG33[35] . '</option>' . LB;
-    //$selection .= '</select>' . LB;
     $feed_template->set_var ('feed_limits', $limits);
     $feed_template->set_var ('feed_limits_what', $selection);
 
@@ -514,7 +510,6 @@ function FEED_edit($fid = 0, $type = '', $A = array())
         }
         $options = PLG_getFeedNames($A['type']);
     }
-    //$selection = '<select name="topic">' . LB;
     $selection = '';
     foreach ($options as $o) {
         $selection .= '<option value="' . $o['id'] . '"';
@@ -523,7 +518,6 @@ function FEED_edit($fid = 0, $type = '', $A = array())
         }
         $selection .= '>' . $o['name'] . '</option>' . LB;
     }
-    //$selection .= '</select>' . LB;
     $feed_template->set_var ('feed_topic', $selection);
 
     if ($A['is_enabled'] == 1) {
@@ -696,11 +690,12 @@ function FEED_save($A)
 /**
 * Delete a feed.
 *
+* @deprecated
 * @param    int      $fid   feed id
 * @return   string          HTML redirect
 *
 */
-function FEED_delete($fid)
+function XFEED_delete($fid)
 {
     global $_CONF, $_TABLES;
 
@@ -781,7 +776,7 @@ switch ($action) {
 
     case 'delete':
         if (SEC_checkToken()) {
-            $display .= FEED_delete($fid);
+            $display .= Feed::getById($fid)->delete();
         } else {
             Log::write('system',Log::ERROR,"User {$_USER['username']} tried to delete feed $fid and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');

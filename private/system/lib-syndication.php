@@ -33,6 +33,7 @@ if ($_CONF['trackback_enabled']) {
 /**
 * Check if a feed for all stories needs to be updated.
 *
+* @deprecated
 * @param    boolean $frontpage_only true: only articles shown on the frontpage
 * @param    string  $update_info    list of story ids
 * @param    string  $limit          number of entries or number of hours
@@ -41,7 +42,7 @@ if ($_CONF['trackback_enabled']) {
 * @return   boolean                 false = feed needs to be updated
 *
 */
-function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $updated_topic = '', $updated_id = '' )
+function XSYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $updated_topic = '', $updated_id = '' )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
@@ -128,6 +129,7 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
 /**
 * Check if a feed for stories from a topic needs to be updated.
 *
+* @deprecated
 * @param    string  $tid            topic id
 * @param    string  $update_info    list of story ids
 * @param    string  $limit          number of entries or number of hours
@@ -136,7 +138,7 @@ function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $update
 * @return   boolean                 false = feed needs to be updated
 *
 */
-function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic = '', $updated_id = '' )
+function XSYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic = '', $updated_id = '' )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
@@ -201,6 +203,7 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
 /**
 * Check if the contents of glFusion's built-in feeds need to be updated.
 *
+* @deprecated
 * @param    string  topic           indicator of the feed's "topic"
 * @param    string  limit           number of entries or number of hours
 * @param    string  updated_topic   (optional) specific topic to update
@@ -208,7 +211,7 @@ function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic =
 * @return   boolean                 false = feed has to be updated, true = ok
 *
 */
-function SYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = '', $updated_id = '' )
+function XSYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = '', $updated_id = '' )
 {
     $is_current = true;
 
@@ -235,6 +238,7 @@ function SYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = ''
 /**
 * Get content for a feed that holds stories from one topic.
 *
+* @deprecated
 * @param    string   $tid      topic id
 * @param    string   $limit    number of entries or number of stories
 * @param    string   $link     link to topic
@@ -242,7 +246,7 @@ function SYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = ''
 * @return   array              content of the feed
 *
 */
-function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid )
+function XSYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid )
 {
     global $_TABLES, $_CONF, $LANG01;
 
@@ -346,6 +350,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 /**
 * Get content for a feed that holds all stories.
 *
+* @deprecated
 * @param    boolean  $frontpage_only true: only articles shown on the frontpage
 * @param    string   $limit    number of entries or number of stories
 * @param    string   $link     link to homepage
@@ -355,7 +360,7 @@ function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLe
 * @return   array              content of the feed
 *
 */
-function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid)
+function XSYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid)
 {
     global $_TABLES, $_CONF, $LANG01;
 
@@ -471,102 +476,11 @@ function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $cont
 */
 function SYND_updateFeed( $fid )
 {
-    global $_CONF, $_TABLES, $_SYND_DEBUG;
-
     $Feed = glFusion\Syndication\Feed::getById($fid);
     $Feed->Generate();
-    return;
-
-    $db = Database::getInstance();
-
-    $A = $db->conn->fetchAssoc("SELECT * FROM {$_TABLES['syndication']} WHERE fid = ?",array($fid),array(Database::STRING));
-    if ( $A !== false && $A['is_enabled'] == 1 ) {
-
-        if ($A['format'] == 'ICS-1.0') {
-            return SYND_updateFeediCal( $A );
-        }
-
-        $format = explode( '-', $A['format'] );
-        $rss = new UniversalFeedCreator();
-        if ( $A['content_length'] > 1 ) {
-            $rss->descriptionTruncSize = $A['content_length'];
-        }
-        $rss->descriptionHtmlSyndicated = false;
-        $rss->language = $A['language'];
-        $rss->title = $A['title'];
-        $rss->description = $A['description'];
-
-        $imgurl = '';
-        if ($A['feedlogo'] != '' ) {
-        	$image = new FeedImage();
-        	$image->title = $A['title'];
-        	$image->url = $_CONF['site_url'] . $A['feedlogo'];
-    	    $image->link = $_CONF['site_url'];
-        	$rss->image = $image;
-        }
-        $rss->link = $_CONF['site_url'];
-        if ( !empty( $A['filename'] )) {
-            $filename = $A['filename'];
-        } else {
-            $filename = 'site.rss';
-        }
-        $rss->syndicationURL = SYND_getFeedUrl( $filename );
-        $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
-
-        $content = PLG_getFeedContent($A['type'], $fid, $link, $data, $format[0], $format[1], $A);
-        if ($content === NULL) {
-            // Special NULL return if the plugin handles its own feed writing
-            return;
-        } elseif ( is_array($content) ) {
-            foreach ( $content AS $feedItem ) {
-                $item = new FeedItem();
-
-                foreach($feedItem as $var => $value) {
-                    if ( $var == 'date') {
-                        $dt = new Date($value,$_CONF['timezone']);
-                        $item->date = $dt->toISO8601(true);
-                    } else if ( $var == 'summary' ) {
-                        $item->description = $value;
-                    } else if ( $var == 'link' ) {
-                        $item->guid = $value;
-                        $item->$var = $value;
-                    } else {
-                        $item->$var = $value;
-                    }
-                }
-                $rss->addItem($item);
-            }
-        }
-
-        if (empty($link)) {
-            $link = $_CONF['site_url'];
-        }
-
-        $rss->editor = $_CONF['site_mail'];
-        $rc = $rss->saveFeed($format[0].'-'.$format[1], SYND_getFeedPath( $filename ) ,0);
-
-        if( empty( $data )) {
-            $data = 'NULL';
-        } else {
-            $data = "'" . $data . "'";
-        }
-        if ($_SYND_DEBUG) {
-            Log::write('system',Log::DEBUG,"update_info for feed $fid is $data");
-        }
-
-        $db->conn->executeUpdate(
-                "UPDATE {$_TABLES['syndication']} SET updated = ?, update_info = ? WHERE fid = ?",
-                array(
-                    $_CONF['_now']->toMySQL(true),
-                    $data,
-                    $fid
-                ),
-                array(Database::STRING,Database::STRING,Database::STRING)
-        );
-    }
 }
 
-function SYND_updateFeediCal( $A )
+function XXSYND_updateFeediCal( $A )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
@@ -757,11 +671,7 @@ function SYND_truncateSummary( $text, $length )
 */
 function SYND_getFeedPath( $feedfile = '' )
 {
-    global $_CONF;
-
-    $feed = $_CONF['path_rss'] . $feedfile;
-
-    return $feed;
+    return glFusion\Syndication\Feed::getFeedPath($feedfile);
 }
 
 /**
@@ -773,24 +683,18 @@ function SYND_getFeedPath( $feedfile = '' )
 */
 function SYND_getFeedUrl( $feedfile = '' )
 {
-    global $_CONF;
-
-    $feedpath = SYND_getFeedPath();
-    $url = substr_replace ($feedpath, $_CONF['site_url'], 0,
-                           strlen ($_CONF['path_html']) - 1);
-    $url .= $feedfile;
-
-    return $url;
+    return glFusion\Syndication\Feed::getFeedUrl($feedfile);
 }
 
 /**
 * Helper function: Return MIME type for a feed format
 *
+* @deprecated
 * @param    string  $format     internal name of the feed format, e.g. Atom-1.0
 * @return   string              MIME type, e.g. application/atom+xml
 *
 */
-function SYND_getMimeType($format)
+function XSYND_getMimeType($format)
 {
     $fmt = explode('-', $format);
     $type = strtolower($fmt[0]);
