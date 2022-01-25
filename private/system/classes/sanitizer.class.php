@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2021 by the following authors:
+*  Copyright (C) 2014-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -366,11 +366,23 @@ class sanitizer
                 }
             }
         }
-//        $def->addAttribute('a', 'data-uk-lightbox','Bool');
-//        $def->addAttribute('span', 'data-uk-tooltip','CDATA');
 
+        // small hack to allow lightbox / tooltip since the glFusion configuration
+        // system isn't robust enough right now to allow user configurations
+        $def->addAttribute('a', 'data-uk-lightbox','Enum');
+        $def->addAttribute('a', 'data-uk-tooltip','Enum');
+        $def->addAttribute('span', 'data-uk-tooltip','Enum');
+        $def->addAttribute('span', 'data-uk-tooltip','CDATA');
+
+        $clean_html = '';
         $purifier = new HTMLPurifier($config);
-        $clean_html = $purifier->purify($str);
+
+        try {
+            $clean_html = $purifier->purify($str);
+        } catch (ErrorException $e) {
+            // if there is an errorexception - cleanHTML will return a null string
+            Log::write('system',Log::WARNING,"HTMLFILTER: " . $e->getMessage());
+        }
 
         if ($_CONF['debug_html_filter'] == true) {
             $e = $purifier->context->get('ErrorCollector');
