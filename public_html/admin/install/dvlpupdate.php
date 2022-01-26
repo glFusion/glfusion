@@ -989,6 +989,33 @@ function glfusion_200()
     $_SQL[] = "INSERT INTO {$_TABLES['themes']} (theme, logo_type, display_site_slogan)
         VALUES ('_default', 99, 1), ('cms', -1, -1)";
 
+
+    $_SQL[] = "CREATE TABLE `{$_TABLES['search_index']}` (
+      `item_id` varchar(128) NOT NULL DEFAULT '',
+      `type` varchar(20) NOT NULL DEFAULT '',
+      `content` MEDIUMTEXT,
+      `parent_id` varchar(128) NOT NULL DEFAULT '',
+      `parent_type` varchar(50) NOT NULL DEFAULT '',
+      `ts` int(11) unsigned NOT NULL DEFAULT '0',
+      `grp_access` mediumint(8) NOT NULL DEFAULT '2',
+      `title` varchar(200) NOT NULL DEFAULT '',
+      `owner_id` mediumint(9) NOT NULL DEFAULT '0',
+      `author` varchar(40) NOT NULL DEFAULT '',
+      PRIMARY KEY (`type`, `item_id`),
+      INDEX `type` (`type`),
+      INDEX `item_date` (`ts`),
+      INDEX `author` (`author`)
+    ) ENGINE=MyISAM";
+
+    $_SQL[] = "CREATE TABLE `{$_TABLES['search_stats']}` (
+      `term` varchar(200) NOT NULL,
+      `hits` int(11) unsigned NOT NULL DEFAULT '1',
+      `results` int(11) unsigned NOT NULL DEFAULT '1',
+      PRIMARY KEY (`term`),
+      KEY `hits` (`hits`)
+    ) ENGINE=MyISAM";
+
+
     if ($use_innodb) {
         $statements = count($_SQL);
         for ($i = 0; $i < $statements; $i++) {
@@ -1079,7 +1106,8 @@ function glfusion_200()
         array('ft_name' => 'database.admin','ft_desc' => 'Ability to perform Database Administration'),
         array('ft_name' => 'env.admin',     'ft_desc' => 'Ability to view Environment Check'),
         array('ft_name' => 'logview.admin', 'ft_desc' => 'Ability to view / clear glFusion Logs'),
-        array('ft_name' => 'upgrade.admin', 'ft_desc' => 'Ability to run Upgrade Check')
+        array('ft_name' => 'upgrade.admin', 'ft_desc' => 'Ability to run Upgrade Check'),
+        array('ft_name' => 'search.admin',  'ft_desc' => 'Ability to manage the Search Engine')
     );
 
     foreach($newCapabilities AS $feature) {

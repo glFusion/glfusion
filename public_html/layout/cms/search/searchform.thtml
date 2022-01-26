@@ -1,35 +1,49 @@
 {# begin {templatelocation} #}
-<h2>{search_heading}</h2>
-<form class="uk-form uk-form-stacked uk-margin-large uk-search uk-width-1-1" method="get" action="{site_url}/search.php">
+
+<h2>{lang_search_site}</h2>
+
+<form class="uk-form uk-form-stacked uk-margin-large uk-search uk-width-1-1" method="get" action="{form_action}">
 	<input type="hidden" name="mode" value="search">
-	<input class="uk-search" type="search" id="query" name="q" value="{query}" placeholder="{$LANG09[10]}">
-	<button class="uk-button uk-button-success" type="submit" name="submit" value="{$LANG09[10]}">{$LANG09[10]}</button>
-	<button type="button" class="uk-button uk-button-primary uk-margin-small" data-uk-toggle="{target:'#advanced'}">
-		{$LANG09[2]}
-	</button>
-	<div id="advanced" class="uk-hidden uk-margin-top  uk-animation-fade">
+	<input class="uk-search uk-width-4-5 uk-form-large required" type="search" id="query" name="q" value="{query}" placeholder="{$LANG_SEARCH_UI[search_placeholder]}">
+
+	<button class="uk-button uk-button-primary uk-button-large" type="submit" name="submit" value="{$LANG09[10]}">{$LANG09[10]}</button>
+
+	<div id="advanced" class="uk-margin-top">
 		<div class="uk-grid uk-margin-bottom">
-			<div class="uk-width-medium-1-5">
+
+			<div class="uk-width-medium-1-3">
 				<label class="uk-form-label">
 					{$LANG09[70]}
 				</label>
 				<div class="uk-form-controls">
-					<select name="type">
-						{plugin_types}
+					<select class="" name="type">
+		<!-- BEGIN PluginTypes -->
+						<option value="{pi_name}" {selected}>{pi_text}</option>
+		<!-- END PluginTypes -->
 					</select>
 				</div>
 			</div>
-			<div class="uk-width-medium-1-5">
+
+			<div class="uk-width-medium-1-3">
 				<label class="uk-form-label">
 					{$LANG09[71]}
 				</label>
 				<div class="uk-form-controls">
 					<select name="st">
-						{search_time}
+						<option value="0" {dt_sel_0}>{$LANG_SEARCH_UI[all]}</option>
+						<option value="1" {dt_sel_1}>{$LANG_SEARCH_UI[one_day]}</option>
+						<option value="7" {dt_sel_7}>{$LANG_SEARCH_UI[seven_days]}</option>
+						<option value="14" {dt_sel_14}>{$LANG_SEARCH_UI[two_weeks]}</option>
+						<option value="30" {dt_sel_30}>{$LANG_SEARCH_UI[one_month]}</option>
+						<option value="90" {dt_sel_90}>{$LANG_SEARCH_UI[three_months]}</option>
+						<option value="180" {dt_sel_180}>{$LANG_SEARCH_UI[six_months]}</option>
+						<option value="365" {dt_sel_365}>{$LANG_SEARCH_UI[one_year]}</option>
+						<option value="730" {dt_sel_730}>{$LANG_SEARCH_UI[two_years]}</option>
 					</select>
 				</div>
 			</div>
-			<div class="uk-width-medium-1-5">
+
+			<div class="uk-width-medium-1-3">
 				<label class="uk-form-label">
 					{$LANG09[72]}
 				</label>
@@ -41,29 +55,19 @@
 					</select>
 				</div>
 			</div>
-{!if author_option_list}
-			<div class="uk-width-medium-1-5">
-				<label class="uk-form-label">
-					{$LANG09[69]}
-				</label>
-				<div class="uk-form-controls">
-					<select name="author">
-						{author_option_list}
-					</select>
-				</div>
-			</div>
-{!endif}
-			<div class="uk-width-medium-1-5">
-				<label class="uk-form-label">
-					{$LANG09[73]}
-				</label>
-				<div class="uk-form-controls">
-					<select name="results">
-						{search_limits}
-					</select>
-				</div>
-			</div>
+
 		</div>
 	</div>
 </form>
+
+{!if query_string}
+<div class="uk-alert uk-alert-danger">
+	{query_string}
+</div>
+{!endif}
+
+{!if altered_search_message}
+<div class="uk-alert uk-alert-danger">{altered_search_message}</div>
+{!endif}
+
 {# end {templatelocation} #}

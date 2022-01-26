@@ -2848,11 +2848,12 @@ function PLG_itemSaved($id, $type, $old_id = '')
 {
     global $_PLUGINS;
 
-    $pluginTypes = array('comment');
+    $pluginTypes = array('comment','search');
 
     USES_lib_comment();
 
     $pluginTypes = array_merge($pluginTypes, $_PLUGINS);
+
     foreach ($pluginTypes as $pi_name) {
         $function = 'plugin_itemsaved_' . $pi_name;
         if (function_exists($function)) {
@@ -2886,7 +2887,7 @@ function PLG_itemDeleted($id, $type, $children = null)
 {
     global $_PLUGINS;
 
-    $pluginTypes = array('comment');
+    $pluginTypes = array('comment','search');
 
     USES_lib_comment();
 

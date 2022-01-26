@@ -87,6 +87,11 @@ $obsoletePublicDir = array(
 
 $obsoletePrivateFiles = array(
 // 2.0.0
+
+    'system/classes/search.class.php',
+    'system/classes/searchcriteria.class.php',
+    'system/classes/searchplugin.class.php',
+
     'system/classes/Cache.php',
     'system/classes/Autoload.php',
     'system/lib-story.php',

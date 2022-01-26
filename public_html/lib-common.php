@@ -428,6 +428,13 @@ require_once $_CONF['path_system'].'lib-rating.php';
 require_once $_CONF['path_system'].'lib-autotag.php';
 
 /**
+*  Search library
+*
+*/
+
+require_once $_CONF['path_system'].'lib-search.php';
+
+/**
 * This is the custom library.
 *
 * It is the sandbox for every glFusion Admin to play in.
@@ -1193,7 +1200,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'rightblocks'   => 'rightblocks.thtml',
     ));
 
-    $theme->set_var( 'num_search_results',$_CONF['num_search_results'] );
     // get topic if not on home page
     if ( !isset( $_GET['topic'] )) {
         if ( isset( $_GET['story'] )) {
