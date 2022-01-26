@@ -41,10 +41,8 @@ class ICS extends \glFusion\Syndication\Feed
         if (!empty($this->description)) {
             $vCalendar->setDescription($this->description);
         }
-        if (!empty($this->filename)) {
-            $filename = $this->filename;
-        } else {
-            $filename = 'glfusion.rss';
+        if (empty($this->filename)) {
+            $this->filename = 'glfusion.rss';
         }
 
         $content = PLG_getFeedContent($this->type, $this->fid, $link, $data, $this->format, $this->format_version);
@@ -161,7 +159,7 @@ class ICS extends \glFusion\Syndication\Feed
         }
         $feedData = $vCalendar->render();
         $this->setUpdateData($data);
-        return $this->writeFile($filename, $feedData);
+        return $this->writeFile($feedData);
     }
 
 }

@@ -229,6 +229,9 @@ class Feed
                     );
                     if ($F) {
                         $retval[$feed['fid']] = new $F($feed);
+                    } elseif (class_exists(__NAMESPACE__ . '\\Formats\\' . $format[0])) {
+                        $cls = __NAMESPACE__ . '\\Formats\\' . $format[0];
+                        $retval[$feed['fid']] = new $cls($feed);
                     } else {
                         $retval[$feed['fid']] = new Formats\XML($feed);
                     }
@@ -345,12 +348,23 @@ class Feed
      * @param   string  $feedfile   (option) feed file name
      * @return  string              path of feed directory or file
      */
-    public static function getFeedPath( $feedfile = '' ) : string
+    public static function getFeedPath(string $feedfile = '' ) : ?string
     {
         global $_CONF;
+        static $path = '';
 
-        $feed = $_CONF['path_rss'] . $feedfile;
-        return $feed;
+        if ($path === '') {
+            $path = $_CONF['path_rss'];
+            if (!is_dir($path)) {
+                @mkdir($path, 0755, true);
+            }
+        }
+        $retval = $path . $feedfile;
+        if (!is_writable($retval)) {
+            COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . " - Cannot write to $retval");
+            $path = NULL;
+        }
+        return $retval;
     }
 
 
@@ -489,13 +503,8 @@ class Feed
      */
     protected function writeFile(string $data) : bool
     {
-        $filename = $this->getFileName();
-        if (empty($filename)) {
-            Log::write('system', Log::ERROR, "Empty filename for syndication feed type {$this->type}");
-            return false;
-        }
-        $filepath = self::getFeedPath($filename);
-        if (($fp = @fopen($filepath, 'w')) !== false) {
+        $filepath = self::getFeedPath($this->filename);
+        if ($filepath && ($fp = @fopen($filepath, 'w+')) !== false) {
             fputs($fp, $data);
             fclose($fp);
             return true;

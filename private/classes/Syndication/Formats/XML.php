@@ -49,13 +49,11 @@ class XML extends \glFusion\Syndication\Feed
         	$rss->image = $image;
         }
         $rss->link = $_CONF['site_url'];
-        if (!empty($this->getFilename())) {
-            $filename = $this->getFilename();
-        } else {
-            $filename = 'site.rss';
+        if (empty($this->getFilename())) {
+            $this->filename = 'site.rss';
         }
-        $rss->syndicationURL = self::getFeedUrl($filename);
-        $rss->copyright = 'Copyright ' . strftime( '%Y' ) . ' '.$_CONF['site_name'];
+        $rss->syndicationURL = self::getFeedUrl( $this->filename );
+        $rss->copyright = 'Copyright ' . $dt->format("Y",true) . ' '.$_CONF['site_name'];
 
         $content = PLG_getFeedContent(
             $this->getType(),
@@ -93,7 +91,11 @@ class XML extends \glFusion\Syndication\Feed
             $link = $_CONF['site_url'];
         }
         $rss->editor = $_CONF['site_mail'];
-        $rc = $rss->saveFeed($this->format.'-'.$this->format_version, self::getFeedPath( $filename ) ,0);
+        $rc = $rss->saveFeed(
+            $this->format . '-' . $this->format_version,
+            self::getFeedPath($this->filename),
+            0
+        );
         $this->setUpdateData($data);
     }
 
