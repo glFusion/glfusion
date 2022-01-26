@@ -21,6 +21,7 @@ if (!defined ('GVERSION')) {
 }
 
 use \glFusion\Log\Log;
+use \glFusion\Admin\AdminAction;
 
 //$_POST = $_GET;
 
@@ -203,6 +204,8 @@ function SEARCH_completeAjax()
     global $_PLUGINS;
 
     if ( !COM_isAjax()) die();
+
+    AdminAction::write('system','search_engine',"Completed reindexing content");
 
     $retval['errorCode'] = 0;
     $retval['statusMessage'] = 'Reindexing Successful';

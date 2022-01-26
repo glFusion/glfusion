@@ -18,6 +18,8 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+use \glFusion\Admin\AdminAction;
+
 USES_lib_admin();
 
 $display = '';
@@ -206,6 +208,7 @@ case 'clearcounters':
     $db = \glFusion\Database\Database::getInstance();
     $db->conn->query("TRUNCATE `{$_TABLES['search_stats']}`");
     $view = 'counters';
+    AdminAction::write('system','search_engine',"Cleared Search Counters");
     break;
 
 default:
