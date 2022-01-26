@@ -1,0 +1,9 @@
+{# begin {templatelocation} #}
+
+{start_block}
+
+{admin_menu}
+
+{end_block}
+
+{# end {templatelocation} #}

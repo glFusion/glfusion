@@ -20,6 +20,25 @@
 </tr>
 <!-- END text-element -->
 
+
+<!-- BEGIN text-area -->
+<tr>
+  <td class="uk-text-middle key" style="width:30%;">
+    <span id="{name}" {!if cfg_item} class="tooltip_cfg" title="" {!endif}>
+      {display_name}
+    </span>
+    {unset_link}
+  </td>
+  <td>
+    <textarea style="width:100%;" rows="5" name="{name}">{value}</textarea>
+{!if delete}
+    <button class="uk-button uk-button-small uk-button-danger uk-margin-small" type="submit" onclick="glfremove(this);return false;" value="x">x</button>
+{!endif}
+  </td>
+</tr>
+<!-- END text-area -->
+
+
 <!-- BEGIN passwd-element -->
 <tr>
 	<td class="uk-width-1-3 key" style="width:30%;">

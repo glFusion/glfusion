@@ -370,7 +370,7 @@ function getUserMenu()
 function getAdminMenu()
 {
     global $_SP_CONF,$_USER, $_TABLES, $LANG01, $LANG_MB01, $LANG_LOGO,
-           $LANG_AM, $LANG_SOCIAL, $LANG29, $_CONF,$_GROUPS, $config;
+           $LANG_AM, $LANG_SOCIAL, $LANG29, $LANG_SEARCH_UI, $_CONF,$_GROUPS, $config;
 
     $item_array = array();
 
@@ -464,17 +464,17 @@ function getAdminMenu()
                 $label =  $LANG_MB01['menu_builder'];
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
-/*
-            if ( SEC_inGroup( 'Root' )) {
-                $url = $_CONF['site_admin_url'] . '/logo.php';
-                $label =  $LANG_LOGO['logo_admin'];
-                $item_array[] = array('label' => $label, 'url' => $url);
-            }
-*/
+
             if (SEC_hasRights('logo.admin')) {
                 $url = $_CONF['site_admin_url'] . '/themes.php';
                 $label = $LANG_LOGO['theme'];
                 $item_array[] = array('label' => $label, 'url' => $url);
+            }
+
+            if (SEC_hasRights('search.admin')) {
+                $url = $_CONF['site_admin_url'] . '/search.php';
+                $label = $LANG_SEARCH_UI['menu_label'];
+                $item_array[] = array('label'=>$label,'url'=> $url);
             }
 
             if ( SEC_hasRights( 'topic.edit' )) {

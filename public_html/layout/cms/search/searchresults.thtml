@@ -1,0 +1,47 @@
+{# begin {templatelocation} #}
+{!if sql}
+<div class="uk-margin uk-alert uk-alert-danger uk-text-wrap">
+	{sql}
+</div>
+{!endif}
+
+<div class="uk-margin tm-search-results-count">
+	{showing_results} {!if search_time}<em>({search_time} {$LANG_INDEXER[seconds]})</em> {!endif}
+</div>
+<ul class="uk-grid uk-grid-width-1-1">
+	<!-- BEGIN searchresults -->
+	<li class="uk-margin-bottom">
+		<div class="uk-panel uk-margin-small tm-search-results-row">
+			<div class="uk-text-left">
+				<span class="tm-search-results-title uk-text-bold" style="font-size:larger;">
+					{result_counter}.
+					<a href="{item_url}">{title} {!if relevance}({relevance}){!endif}</a>
+				</span>
+				<div class="tm-search-results-excerpt uk-margin-small-top">
+					{excerpt}
+				</div>
+				<div class="uk-article-meta tm-search-results-meta uk-margin-small-top">
+					{lang_by} {author}
+					{lang_on} {date}
+{!if src_link}
+					- <a href="{src_link}">{src}</a>
+{!else}
+					- {src}
+{!endif}
+{!!if {hits} != 0 !!}
+					- {hits} {lang_hits}
+{!endif}
+				</div>
+			</div>
+		</div>
+	</li>
+	<!-- END searchresults -->
+</ul>
+{!if message}
+<div class="uk-alert uk-alert-warning">
+	{message}
+</div>
+{!endif}
+
+<div class="uk-text-center uk-margin-top">{google_paging}</div>
+{# end {templatelocation} #}

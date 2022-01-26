@@ -91,7 +91,7 @@ function render_cc_item (&$template, $url = '', $image = '', $label = '', $count
 */
 function commandcontrol()
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG_MB01, $LANG_AM, $LANG_LOGO, $LANG29, $LANG_LOGVIEW, $LANG_SOCIAL, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG01, $LANG_MB01, $LANG_AM, $LANG_LOGO, $LANG29, $LANG_LOGVIEW, $LANG_SOCIAL, $LANG_SEARCH_UI, $_IMAGE_TYPE;
 
     USES_lib_comment();
 
@@ -216,6 +216,12 @@ function commandcontrol()
             'url' => $_CONF['site_admin_url'] . '/menu.php',
             'lang' => $LANG_MB01['menu_builder'],
             'image' => $_CONF['layout_url'] . '/images/icons/menubuilder.' . $_IMAGE_TYPE,
+        ),
+        $LANG_SEARCH_UI['menu_label'] => array(
+            'condition' => SEC_hasRights('search.admin'),
+            'url' => $_CONF['site_admin_url'] . '/search.php',
+            'lang' => $LANG_SEARCH_UI['menu_label'],
+            'image' => $_CONF['layout_url'] . '/images/icons/search.' . $_IMAGE_TYPE,
         ),
         $LANG_LOGO['theme'] => array(
             'condition' => SEC_hasRights('logo.admin'),

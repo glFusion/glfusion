@@ -1,0 +1,124 @@
+{# begin {templatelocation} #}
+<script>
+	var lang_indexing = "{lang_indexing}";
+	var lang_index = "{lang_index}";
+	var lang_success = "{lang_success}";
+	var lang_ok = "{lang_ok}";
+	var lang_cancel = "{lang_cancel}";
+	var lang_retrieve_content_types = "{lang_retrieve_content_types}";
+	var lang_no_errors = "{lang_no_errors}";
+	var lang_error_getcontenttypes = "{lang_error_getcontenttypes}";
+	var lang_error_getcontentlist = "Getcontentlist";
+	var lang_remove_content_1 = "{lang_remove_content_1}";
+	var lang_remove_content_2 = "{lang_remove_content_2}";
+	var lang_content_type = "{lang_content_type}";
+	var lang_remove_fail = "{lang_remove_fail}";
+	var lang_retrieve_content_list = "{lang_retrieve_content_list}";
+	var destination = 'index.php';
+
+	function checkAll(ele) {
+		var checkboxes = document.getElementsByTagName('input');
+		if (ele.checked) {
+			for (var i = 0; i < checkboxes.length; i++) {
+				if (checkboxes[i].type == 'checkbox') {
+					checkboxes[i].checked = true;
+				}
+			}
+		} else {
+			for (var i = 0; i < checkboxes.length; i++) {
+				console.log(i)
+				if (checkboxes[i].type == 'checkbox') {
+					checkboxes[i].checked = false;
+				}
+			}
+		}
+	}
+</script>
+<script src="{site_url}/javascript/searchindex.js"></script>
+
+{start_block}
+
+{admin_menu}
+
+<h2>{lang_title}</h2>
+
+<p>{lang_conversion_instructions}</p>
+
+<div id="idx-reindex">
+	<form id="reindexform" class="uk-form" action="{form_action}" method="post" style="display:inline;">
+		<input type="hidden" name="{action}" value="{action}">
+		<input type="hidden" name="{security_token_name}" value="{security_token}">
+
+		<div class="uk-form-row uk-margin-bottom">
+			<label>
+				<input type="checkbox" onchange="checkAll(this)" name="chk[]">&nbsp;<span class="uk-text-bold uk-text-italics">{$LANG_SEARCH_ADMIN['chk_unchk_all']}</span>
+			</label>
+		</div>
+
+	<!-- BEGIN contenttypes -->
+		<div class="uk-form-row uk-margin-top-remove">
+			<label>
+				<input id="ct_{content_type}" type="checkbox" value="{content_type}">&nbsp;{content_type}
+			</label>
+		</div>
+	<!-- END contenttypes -->
+
+		<div class="uk-form-row">
+			<label>
+				<input type="checkbox" id="idxer-truncate" name="idxer-truncate" value="1">
+					<span class="uk-text-bold uk-text-italics">&nbsp;{lang_empty}</span>
+			</label>
+		</div>
+
+		<div class="uk-form-row">
+			<button id="reindexbutton" class="uk-button uk-button-primary" type="submit" >{lang_index}</button>
+			<button id="cnlb" name="cancelbutton" class="uk-button uk-button-danger" type="submit" >{lang_cancel}</button>
+		</div>
+	</form>
+</div>
+
+<p>{lang_conversion_status}</p>
+
+<div style="margin-top:15px;">
+	<div id="search_batchprocesor" style="display:none;">
+		<hr>
+		<h3 class="uk-margin-bottom uk-margin-remove-top">{lang_ajax_status}</h3>
+
+		<div class="uk-margin">
+			<span id="t" class="tm-updating" style="display:none;">&nbsp;</span>
+			<span class="msg" id="batchinterface_msg">&nbsp;</span>
+		</div>
+
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-9">
+				<div class="uk-align-left uk-text-bold">{lang_current_progress}</div>
+			</div>
+			<div class="uk-width-medium-8-9">
+				<div class="uk-progress">
+					<div id="pb-current" class="uk-progress-bar" style="width: 0%;">0%</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="uk-grid">
+			<div class="uk-width-medium-1-9">
+				<div class="uk-clear uk-align-left uk-text-bold">{lang_overall_progress}</div>
+			</div>
+			<div class="uk-width-medium-8-9">
+				<div class="uk-progress uk-progress-success">
+					<div id="pb" class="uk-progress-bar uk-progress-success" style="width: 0%;">0%</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div id="search_message_window" class="uk-panel uk-panel-box uk-alert-danger uk-margin-top" style="display:none;">
+	<div class="uk-panel-title">{lang_error_header}</div>
+	<div id="search_messages"></div>
+</div>
+
+{end_block}
+
+{# end {templatelocation} #}
