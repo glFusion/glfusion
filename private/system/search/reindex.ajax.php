@@ -20,6 +20,8 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+use \glFusion\Log\Log;
+
 //$_POST = $_GET;
 
 function SEARCH_getContentTypesAjax()
@@ -167,12 +169,11 @@ function SEARCH_indexContentItemAjax()
             }
         }
 
-        $retval['errorCode'] = 0;
-        $retval['statusMessage'] = 'Content Item Index Successful';
     } else {
-        $retval['errorCode'] = -1;
-        $retval['statusMessage'] = 'Error indexing content';
+        Log::write('system',Log::DEBUG,'Search Indexer: Unable to retrieve data for ID: '.$id.' Type::'.$type);
     }
+    $retval['errorCode'] = 0;
+    $retval['statusMessage'] = 'Content Item Index Successful';
 
     $return["js"] = json_encode($retval);
 
