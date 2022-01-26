@@ -67,8 +67,8 @@ $LANG_FILEMGMT = array(
     'newpage'               => "Nová strana",
     'adminhome'             => "Administrace domů",
     'plugin_name'           => "Správa souborů",
-    'searchlabel'           => "Výpis souborů",
-    'searchlabel_results'   => "Výsledek výpisu souborů",
+    'searchlabel'           => "Má stahování",
+    'searchlabel_results'   => "Downloads Results",
     'downloads'             => "Má stahování",
     'report'                => "Nejstahovanější",
     'usermenu1'             => "Má stahování",
@@ -152,7 +152,7 @@ $LANG_FILEMGMT_ERRORS = array(
     "1108" => "Duplicitní soubor - již existuje v úložišti souborů",
     "1109" => "Tento typ souboru není povolen",
     "1110" => "Musíte definovat a vybrat kategorii pro nahraný soubor",
-    "1111" => "File Size exceeds site configured maximum size of %s",
+    "1111" => "Velikost souboru přesahuje maximální velikost %s",
     "9999" => "Neznámá chyba"
 );
 
