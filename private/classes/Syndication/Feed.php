@@ -585,7 +585,7 @@ class Feed
             }
             break;
         default:
-            $where = 'AND (tid = ? OR alternate_tid = ?) AND perm_anon > 0';
+            $where .= 'AND (tid = ? OR alternate_tid = ?) AND perm_anon > 0';
             $params[] = $tid;
             $params[] = $tid;
             $types[] = Database::STRING;
@@ -596,15 +596,15 @@ class Feed
         if (!empty($this->limit)) {
             if (substr($this->limit, -1) == 'h') { // last xx hours
                 $limitsql = '';
-                $hours = (int) substr( $limit, 0, -1 );
-                $where = " AND date >= DATE_SUB(?,INTERVAL ? HOUR)";
+                $where .= " AND date >= DATE_SUB(?,INTERVAL ? HOUR)";
                 $params[] = $_CONF['_now']->toMySQL(true);
-                $params[] = $hours;
+                $params[] = (int)substr($limit, 0, -1);
                 $types[]  = Database::STRING;
                 $types[]  = Database::INTEGER;
             } else {
-                $limitsql = ' LIMIT ' . (int) $this->limit;
-                $hours = 0;
+                $limitsql = ' LIMIT ?';
+                $params[] = (int)$this->limit;
+                $types[] = Database::INTEGER;
             }
         } else {
             $limitsql = ' LIMIT 10';
