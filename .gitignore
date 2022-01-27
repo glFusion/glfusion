@@ -1,9 +1,7 @@
 # glFusion CMS repository ignore file
 #
-# git update-index --assume-unchanged private/logs/error.log
-# git update-index --assume-unchanged private/logs/captcha.log
-# git update-index --assume-unchanged private/logs/access.log
-# git update-index --assume-unchanged private/logs/spamx.log
+# git update-index --assume-unchanged private/logs/system.log
+# git update-index --assume-unchanged private/logs/404.log
 # git update-index --assume-unchanged public_html/backend/glfusion.rss
 # git ls-files -v | grep '^[[:lower:]]'
 #
@@ -25,6 +23,10 @@ siteconfig.php
 lib-custom.php
 custom.css
 404.log
+system.log
+access.log
+captcha.log
+spamx.log
 public_html/.htaccess
 public_html/web.config
 aspnet_client/
@@ -73,3 +75,4 @@ public_html/data/filemgmt/snaps/
 public_html/ckeditor/build-config.js
 
 # Non-bundled plugins
+
