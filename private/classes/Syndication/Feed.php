@@ -121,8 +121,10 @@ class Feed
      */
     public static function getById(int $fid) : object
     {
-        $sql = "fid = " . (int)$fid;
-        $feeds = self::_execQuery($sql);
+        $sql = "fid = ?";
+        $params = array($fid);
+        $types = array(Database::INTEGER);
+        $feeds = self::_execQuery($sql, $params, $types);
         // $feeds will be an array with one element, so get it by index.
         if (isset($feeds[$fid])) {
             return $feeds[$fid];
@@ -142,13 +144,20 @@ class Feed
     public static function getEnabled(?string $type=NULL, ?string $tid=NULL) : array
     {
         $query = "is_enabled = 1";
+        $params = array();
+        $types = array();
         if (!empty($type)) {
-            $query .= " AND type = '" . DB_escapeString($type) . "'";
+            $query .= ' AND type = ?';
+            $params[] = $type;
+            $types[] = Database::STRING;
         }
         if (!empty($tid)) {
-            $query .= " AND topic = '" . DB_escapeString($tid) . "'";
+            $query .= ' AND topic = ?';
+            $params[] = $tid;
+            $types[] = Database::STRING;
         }
-        return self::_execQuery($query);
+        $query .= ' ORDER BY updated DESC';
+        return self::_execQuery($query, $params, $types);
     }
 
 
@@ -162,11 +171,15 @@ class Feed
     public static function getByHeaderTid(?string $tid=NULL) : array
     {
         $query = "is_enabled = 1 AND (header_tid = 'all'";
+        $params = array();
+        $types = array();
         if ($tid != 'all') {
-            $query .= " OR header_tid = '" . DB_escapeString($tid) . "'";
+            $query .= ' OR header_tid = ?';
+            $params[] = $tid;
+            $types[] = Database::STRING;
         }
         $query .= ')';
-        return self::_execQuery($query);
+        return self::_execQuery($query, $params, $types);
     }
 
 
@@ -179,13 +192,21 @@ class Feed
      */
     public static function getAll(?string $type=NULL, ?string $tid=NULL) : array
     {
+        $where = '1=1';
+        $params = array();
+        $types = array();
         if (!empty($type)) {
-            $type = "type = '" . DB_escapeString($type) . "'";
+            $where .= ' AND type = ?';
+            $params[] = $type;
+            $types[] = Database::STRING;
         }
         if (!empty($tid)) {
-            $query .= " AND topic = '" . DB_escapeString($tid) . "'";
+            $where .= ' AND topic = ?';
+            $params[] = $topic;
+            $types[] = Database::STRING;
         }
-        return self::_execQuery($type);
+
+        return self::_execQuery($where, $params, $types);
     }
 
 
@@ -195,7 +216,7 @@ class Feed
      * @param   string  $where  Optional SQL filter string
      * @return  array       Array of instantiated child objects
      */
-    private static function _execQuery(string $where='') : array
+    private static function _execQuery(?string $where='', ?array $params, ?array $types) : array
     {
         global $_TABLES;
 
@@ -206,7 +227,7 @@ class Feed
             $sql .= " WHERE $where";
         }
         try {
-            $stmt = $db->conn->executeQuery($sql);
+            $stmt = $db->conn->executeQuery($sql, $params, $types);
         } catch(Throwable $e) {
             return $retval;
         }
