@@ -24,8 +24,6 @@ use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 use \glFusion\Cache\Cache;
 
-include $_CONF['path'].'system/search/wordstemmer.php';
-
 /**
 *   Index an item when it is saved.
 *   First deletes any existing index records, then creates newones.
