@@ -24,6 +24,10 @@ if (!defined ('GVERSION')) {
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 
+global $_CONF;
+
+include $_CONF['path'].'system/search/wordstemmer.php';
+
 class Search
 {
     /**
