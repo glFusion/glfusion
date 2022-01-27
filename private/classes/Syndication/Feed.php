@@ -536,7 +536,7 @@ class Feed
         }
     }
 
-    
+
     /**
      * Check if a feed for stories needs to be updated.
      *

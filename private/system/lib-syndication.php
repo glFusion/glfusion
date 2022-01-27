@@ -42,7 +42,7 @@ if ($_CONF['trackback_enabled']) {
 * @return   boolean                 false = feed needs to be updated
 *
 */
-function XSYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $updated_topic = '', $updated_id = '' )
+function SYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $updated_topic = '', $updated_id = '' )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
@@ -138,7 +138,7 @@ function XSYND_feedUpdateCheckAll( $frontpage_only, $update_info, $limit, $updat
 * @return   boolean                 false = feed needs to be updated
 *
 */
-function XSYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic = '', $updated_id = '' )
+function SYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic = '', $updated_id = '' )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
@@ -211,7 +211,7 @@ function XSYND_feedUpdateCheckTopic( $tid, $update_info, $limit, $updated_topic 
 * @return   boolean                 false = feed has to be updated, true = ok
 *
 */
-function XSYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = '', $updated_id = '' )
+function SYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = '', $updated_id = '' )
 {
     $is_current = true;
 
@@ -246,7 +246,7 @@ function XSYND_feedUpdateCheck( $topic, $update_data, $limit, $updated_topic = '
 * @return   array              content of the feed
 *
 */
-function XSYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid )
+function SYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid )
 {
     global $_TABLES, $_CONF, $LANG01;
 
@@ -360,7 +360,7 @@ function XSYND_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $contentL
 * @return   array              content of the feed
 *
 */
-function XSYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid)
+function SYND_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $contentLength, $feedType, $feedVersion, $fid)
 {
     global $_TABLES, $_CONF, $LANG01;
 
@@ -480,7 +480,7 @@ function SYND_updateFeed( $fid )
     $Feed->Generate();
 }
 
-function XXSYND_updateFeediCal( $A )
+function SYND_updateFeediCal( $A )
 {
     global $_CONF, $_TABLES, $_SYND_DEBUG;
 
@@ -694,7 +694,7 @@ function SYND_getFeedUrl( $feedfile = '' )
 * @return   string              MIME type, e.g. application/atom+xml
 *
 */
-function XSYND_getMimeType($format)
+function SYND_getMimeType($format)
 {
     $fmt = explode('-', $format);
     $type = strtolower($fmt[0]);

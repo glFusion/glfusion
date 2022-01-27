@@ -46,7 +46,6 @@ class ICS extends \glFusion\Syndication\Feed
         }
 
         $content = PLG_getFeedContent($this->type, $this->fid, $link, $data, $this->format, $this->format_version);
-        //var_dump($content);die;
         if ( is_array($content) ) {
             foreach ( $content AS $feedItem ) {
                 if (!isset($feedItem['guid'])) {
