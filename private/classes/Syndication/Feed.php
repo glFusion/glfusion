@@ -422,10 +422,11 @@ class Feed
 
         // Now perform housekeeping.
         if (empty($this->update_info)) {
-            $data = 'NULL';
+            $data = NULL;
         } else {
-            $data = DB_escapeString($this->update_info);
+            $data = $this->update_info;
         }
+
         if (self::$DEBUG) {
             Log::write('system',Log::DEBUG,"update_info for feed {$this->fid} is {$this->update_info}");
         }
