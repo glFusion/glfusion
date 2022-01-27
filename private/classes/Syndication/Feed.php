@@ -11,7 +11,8 @@
  * @filesource
  */
 namespace glFusion\Syndication;
-use \glFusion\Database\Database;
+use glFusion\Database\Database;
+use glFusion\Log\Log;
 
 
 /**
@@ -20,6 +21,10 @@ use \glFusion\Database\Database;
  */
 class Feed
 {
+    /** Manually set this to true to enable debug logging.
+     * @var boolean */
+    protected static $DEBUG = false;
+
     /** Record ID.
      * @var integer */
     protected $fid = 0;
@@ -32,7 +37,7 @@ class Feed
      * @var string */
     protected $topic = '';
 
-    /** Header Topic ID.
+    /** ID of topic where a header link will be added for this feed.
      * @var string */
     protected $header_tid = '';
 
@@ -45,10 +50,13 @@ class Feed
     protected $format_version = '';
 
     /** Limit the number of items or time span for feed content.
+     * Default is 10 items.
+     * Add "h" suffix to specify hours since item creation.
      * @var string */
     protected $limits = '10';
 
-    /** Content Length. 0 = none, 1 = all, anything else limits the content.
+    /** Content Length in characters.
+     * 0 = none, 1 = all, anything else limits the content.
      * @var integer */
     protected $content_length = 1;
 
@@ -93,7 +101,7 @@ class Feed
     /**
      * Constructor.
      *
-     * @param  mixed   $A  Array of properties or group ID
+     * @param  array    $A  Array of properties, e.g. a DB record
      */
     public function __construct(array $A=array())
     {
@@ -113,8 +121,10 @@ class Feed
      */
     public static function getById(int $fid) : object
     {
-        $sql = "fid = " . (int)$fid;
-        $feeds = self::_execQuery($sql);
+        $sql = "fid = ?";
+        $params = array($fid);
+        $types = array(Database::INTEGER);
+        $feeds = self::_execQuery($sql, $params, $types);
         // $feeds will be an array with one element, so get it by index.
         if (isset($feeds[$fid])) {
             return $feeds[$fid];
@@ -128,15 +138,48 @@ class Feed
      * Get all the enabled feeds, optionally filtering by type.
      *
      * @param   string  $type   Optional type of feed, aka plugin name
+     * @param   string  $tid    Optional topic, normally for articles
      * @return  array       Array of feed objects
      */
-    public static function getEnabled(string $type='') : array
+    public static function getEnabled(?string $type=NULL, ?string $tid=NULL) : array
     {
-        $type = "is_enabled = 1";
+        $query = "is_enabled = 1";
+        $params = array();
+        $types = array();
         if (!empty($type)) {
-            $type = "AND type = '" . DB_escapeString($type) . "'";
+            $query .= ' AND type = ?';
+            $params[] = $type;
+            $types[] = Database::STRING;
         }
-        return self::_execQuery($type);
+        if (!empty($tid)) {
+            $query .= ' AND topic = ?';
+            $params[] = $tid;
+            $types[] = Database::STRING;
+        }
+        $query .= ' ORDER BY updated DESC';
+        return self::_execQuery($query, $params, $types);
+    }
+
+
+    /**
+     * Get all the enabled feeds matching a topic or "all".
+     *
+     * @param   string  $type   Optional type of feed, aka plugin name
+     * @param   string  $tid    Optional topic, normally for articles
+     * @return  array       Array of feed objects
+     */
+    public static function getByHeaderTid(?string $tid=NULL) : array
+    {
+        $query = "is_enabled = 1 AND (header_tid = 'all'";
+        $params = array();
+        $types = array();
+        if ($tid != 'all') {
+            $query .= ' OR header_tid = ?';
+            $params[] = $tid;
+            $types[] = Database::STRING;
+        }
+        $query .= ')';
+        return self::_execQuery($query, $params, $types);
     }
 
 
@@ -144,14 +187,26 @@ class Feed
      * Get all the feeds, optionally filtering by type.
      *
      * @param   string  $type   Optional type of feed, aka plugin name
+     * @param   string  $tid    Optional topic, normally for articles
      * @return  array       Array of feed objects
      */
-    public static function getAll(string $type='') : array
+    public static function getAll(?string $type=NULL, ?string $tid=NULL) : array
     {
+        $where = '1=1';
+        $params = array();
+        $types = array();
         if (!empty($type)) {
-            $type = "type = '" . DB_escapeString($type) . "'";
+            $where .= ' AND type = ?';
+            $params[] = $type;
+            $types[] = Database::STRING;
         }
-        return self::_execQuery($type);
+        if (!empty($tid)) {
+            $where .= ' AND topic = ?';
+            $params[] = $topic;
+            $types[] = Database::STRING;
+        }
+
+        return self::_execQuery($where, $params, $types);
     }
 
 
@@ -161,7 +216,7 @@ class Feed
      * @param   string  $where  Optional SQL filter string
      * @return  array       Array of instantiated child objects
      */
-    private static function _execQuery(string $where='') : array
+    private static function _execQuery(?string $where='', ?array $params, ?array $types) : array
     {
         global $_TABLES;
 
@@ -172,7 +227,7 @@ class Feed
             $sql .= " WHERE $where";
         }
         try {
-            $stmt = $db->conn->executeQuery($sql);
+            $stmt = $db->conn->executeQuery($sql, $params, $types);
         } catch(Throwable $e) {
             return $retval;
         }
@@ -195,6 +250,9 @@ class Feed
                     );
                     if ($F) {
                         $retval[$feed['fid']] = new $F($feed);
+                    } elseif (class_exists(__NAMESPACE__ . '\\Formats\\' . $format[0])) {
+                        $cls = __NAMESPACE__ . '\\Formats\\' . $format[0];
+                        $retval[$feed['fid']] = new $cls($feed);
                     } else {
                         $retval[$feed['fid']] = new Formats\XML($feed);
                     }
@@ -231,7 +289,7 @@ class Feed
                     break;
                 case 'format':
                     $format = explode('-', $A['format']);
-                    $this->format = $format[0];
+                    $this->format = strtolower($format[0]);
                     if (isset($format[1])) {
                         $this->format_version = $format[1];
                     }
@@ -306,27 +364,49 @@ class Feed
 
 
     /**
-     * Get the path of the feed directory or a specific feed file
+     * Get the path of the feed directory or a specific feed file.
      *
      * @param   string  $feedfile   (option) feed file name
      * @return  string              path of feed directory or file
      */
-    public static function getFeedPath( $feedfile = '' ) : string
+    public static function getFeedPath(string $feedfile = '' ) : ?string
     {
         global $_CONF;
+        static $path = '';
 
-        $feed = $_CONF['path_rss'] . $feedfile;
-        return $feed;
+        if ($path === '') {
+            $path = $_CONF['path_rss'];
+            if (!is_dir($path)) {
+                @mkdir($path, 0755, true);
+            }
+        }
+        $retval = $path . $feedfile;
+        if (!is_writable($retval)) {
+            COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . " - Cannot write to $retval");
+            $path = NULL;
+        }
+        return $retval;
     }
 
 
     /**
-     * Get the URL of the feed directory or a specific feed file
+     * Non-static shortcut function to get the full filespec.
+     *
+     * @return  string      Full file path
+     */
+    public function getFilePath() : string
+    {
+        return self::getFeedPath($this->filename);
+    }
+
+
+    /**
+     * Get the URL of the feed directory or a specific feed file.
      *
      * @param    string  $feedfile   (option) feed file name
      * @return   string              URL of feed directory or file
      */
-    public static function getFeedUrl( string $feedfile = '' ) : string
+    public static function getFeedUrl(string $feedfile='') : string
     {
         global $_CONF;
 
@@ -338,6 +418,17 @@ class Feed
 
 
     /**
+     * Non-static shortcut function to get the feed URL.
+     *
+     * @return  string      URL to feed file
+     */
+    public function getUrl() : string
+    {
+        return self::getFeedUrl($this->filename);
+    }
+
+
+    /**
      * Wrapper function for each feed type's _generate() function.
      * Handles updating the syndication table with new information.
      *
@@ -345,18 +436,19 @@ class Feed
      */
     public function Generate() : void
     {
-        global $_CONF, $_TABLES, $_SYND_DEBUG;
+        global $_CONF, $_TABLES;
 
         // Actually generate the feed.
         $this->_generate();
 
         // Now perform housekeeping.
         if (empty($this->update_info)) {
-            $data = 'NULL';
+            $data = NULL;
         } else {
-            $data = DB_escapeString($this->update_info);
+            $data = $this->update_info;
         }
-        if ($_SYND_DEBUG) {
+
+        if (self::$DEBUG) {
             Log::write('system',Log::DEBUG,"update_info for feed {$this->fid} is {$this->update_info}");
         }
 
@@ -404,6 +496,7 @@ class Feed
             }
         }
 
+        // Not a plugin type, or the plugin doesn't supply its own formats.
         $formats = array();
         $files = glob(__DIR__ . '/Formats/*.php');
         if (is_array($files)) {
@@ -427,21 +520,166 @@ class Feed
     /**
      * Write the feed data to the specified file.
      *
-     * @param   string  $filename   Filename to write, path will be added
      * @param   string  $data       Data to be written
      * @return  bool        True on success, False on error
      */
-    protected function _writeFile(string $fileName, string $data) : bool
+    protected function writeFile(string $data) : bool
     {
-        $filepath = self::getFeedPath($fileName);
-        if (($fp = @fopen($filepath, 'w')) !== false) {
+        $filepath = self::getFeedPath($this->filename);
+        if ($filepath && ($fp = @fopen($filepath, 'w+')) !== false) {
             fputs($fp, $data);
             fclose($fp);
             return true;
         } else {
-            Log:;write('system', Log::ERROR, "Error: Unable to open $filepath for writing");
+            Log::write('system', Log::ERROR, "Error: Unable to open $filepath for writing");
             return false;
         }
     }
+
+
+    /**
+     * Check if a feed for stories needs to be updated.
+     *
+     * @param    string  $tid            topic id
+     * @param    string  $updated_id     (optional) entry id to be updated
+     * @return   boolean                 false = feed needs to be updated
+     */
+    public function updateCheck(string $tid, ?string $updated_id=NULL) : bool
+    {
+        global $_CONF, $_TABLES;
+
+        $db = Database::getInstance();
+        $where = '';
+        $params = array(
+            $_CONF['_now']->toMySQL(true),
+        );
+        $types = array(
+            Database::STRING,
+        );
+        $frontpage_only = false;
+        switch ($this->topic) {
+        case '::frontpage':
+            $frontpage_only = true;
+        case '::all':
+            $topiclist = array();
+            $sql = "SELECT tid FROM `{$_TABLES['topics']}` " . $db->getPermSQL('WHERE',1);
+            $stmt = $db->conn->executeQuery($sql);
+
+            while ($T = $stmt->fetch(Database::ASSOCIATIVE)) {
+                $topiclist[] = $T['tid'];
+            }
+            // if there are topics....
+            if (count($topiclist) > 0) {
+                $inTopics = implode(',',
+                    array_map(
+                        function($t) {return Database::getInstance()->conn->quote($t);},
+                        $topiclist
+                    )
+                );
+                $where .= " AND (tid IN (".$inTopics.") OR alternate_tid IN (".$inTopics."))";
+            }
+            if ($frontpage_only) {
+                $where .= ' AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= ? ) ) ';
+                $params[] = $_CONF['_now']->toMySQL(true);
+                $types[]  = Database::STRING;
+            }
+            break;
+        default:
+            $where .= 'AND (tid = ? OR alternate_tid = ?) AND perm_anon > 0';
+            $params[] = $tid;
+            $params[] = $tid;
+            $types[] = Database::STRING;
+            $types[] = Database::STRING;
+            break;
+        }
+
+        if (!empty($this->limit)) {
+            if (substr($this->limit, -1) == 'h') { // last xx hours
+                $limitsql = '';
+                $where .= " AND date >= DATE_SUB(?,INTERVAL ? HOUR)";
+                $params[] = $_CONF['_now']->toMySQL(true);
+                $params[] = (int)substr($limit, 0, -1);
+                $types[]  = Database::STRING;
+                $types[]  = Database::INTEGER;
+            } else {
+                $limitsql = ' LIMIT ?';
+                $params[] = (int)$this->limit;
+                $types[] = Database::INTEGER;
+            }
+        } else {
+            $limitsql = ' LIMIT 10';
+        }
+        $sql = "SELECT sid FROM `{$_TABLES['stories']}`
+                WHERE draft_flag = 0 AND date <= ? $where
+                ORDER BY `date` DESC " . $limitsql;
+        $stmt = $db->conn->executeQuery(
+                $sql,
+                $params,
+                $types
+        );
+
+        $sids = array();
+        while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+            if ($A['sid'] == $updated_id) {
+                // no need to look any further - this feed has to be updated
+                return false;
+            }
+            $sids[] = $A['sid'];
+        }
+        $current = implode( ',', $sids );
+
+        if (self::$DEBUG) {
+            Log::write('system',Log::DEBUG,"Update check for topic $tid: comparing new list ($current) with old list ($update_info)");
+        }
+        $rc = ($current != $this->update_info) ? false : true;
+        return $rc;
+    }
+
+
+    /**
+     * Get the feed mime type.
+     *
+     * @return  string      Mime type corresponding to the feed type
+     */
+    public function getMimeType() : string
+    {
+        return 'application/' . $this->format . '+xml';
+    }
+
+
+    /**
+     * Delete the feed. Removes files and configuration.
+     */
+    public function delete() : void
+    {
+        global $_TABLES;
+
+        if ($this->fid > 0) {
+            $fullpath = $this->getFilePath();
+            if (file_exists( $fullpath) ) {
+                unlink ($fullpath);
+                Log::write('system',Log::INFO,"Removed Feed File: $fullpath");
+            } else {
+                Log::write('system',Log::ERROR,"Error removing feed file: $fullpath");
+            }
+            Log::write('system',Log::INFO,'...success');
+            // Remove Links Feeds from syndiaction table
+            Log::write('system',Log::INFO,'removing feeds from table');
+            $db->conn->delete(
+                $_TABLES['syndication'],
+                array('fid' => $this->fid),
+                array(Database::STRING)
+            );
+            Log::write('system',Log::INFO,'...success');
+        }
+    }
+
+
+    /**
+     * Generate the feed.
+     * This is just a no-op function to prevent PHP errors if a feed type
+     * does not implement the function (which shouldn't ever happen).
+     */
+    protected function _generate() {}
 
 }

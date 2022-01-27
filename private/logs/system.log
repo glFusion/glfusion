@@ -1,1 +1,10 @@
 *** dummy entry ***
+[2022-01-25 15:52:16]  192.168.77.118 WARNING: Unable to retrieve JS file: /var/www/sites/dev/public_html/javascript/addons/mediaplayer/mediaelement-and-player.min.js  
+[2022-01-25 15:52:16]  192.168.77.118 WARNING: Unable to retrieve CSS file: /var/www/sites/dev/public_html/javascript/addons/mediaplayer/mediaelementplayer.css  
+[2022-01-25 16:06:28]  192.168.77.118 WARNING: Unable to retrieve JS file: /var/www/sites/dev/public_html/javascript/addons/mediaplayer/mediaelement-and-player.min.js  
+[2022-01-25 16:06:28]  192.168.77.118 WARNING: Unable to retrieve CSS file: /var/www/sites/dev/public_html/javascript/addons/mediaplayer/mediaelementplayer.css  
+[2022-01-25 16:10:25]  192.168.77.118 ERROR: Cannot write to /var/www/sites/dev/private/data/backend/shop.xml  
+[2022-01-25 16:11:09]  192.168.77.118 ERROR: Cannot write to /var/www/sites/dev/public_html/data/backend/shop.xml  
+[2022-01-25 16:12:55]  192.168.77.118 ERROR: Cannot write to /var/www/sites/dev/public_html/data/backend/shop.xml  
+[2022-01-25 16:13:15]  192.168.77.118 ERROR: Cannot write to /var/www/sites/dev/public_html/data/backend/shop.xml  
+[2022-01-26 08:54:14]  192.168.77.118 WARNING: CheckToken: Token failed - no token found in database - https://gldev.leegarner.com/admin/syndication.php?edit=x&fid=11  

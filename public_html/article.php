@@ -303,26 +303,16 @@ if (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
     }
 
     if ($_CONF['backend'] == 1) {
-
-        // if multiple - return the most recent updated
-        $sql = "SELECT filename,title,format
-                FROM `{$_TABLES['syndication']}`
-                WHERE type = 'article' AND topic = ? AND is_enabled = 1
-                ORDER BY title ASC";
-
-        $stmt = $db->conn->executeQuery(
-                    $sql,
-                    array($story->get('tid')),
-                    array(Database::STRING),
-                    new \Doctrine\DBAL\Cache\QueryCacheProfile(86400, 'synd_'.$story->get('tid'))
-        );
-        while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
-            $feedUrl = SYND_getFeedUrl($row['filename']);
-            $feedTitle = sprintf($LANG11[6], $row['title']);
-            $feedType = SYND_getMimeType($row['format']);
-            $story_options[] = COM_createLink($feedTitle, $feedUrl,
-                                              array('type'  => $feedType,
-                                                    'class' => ''));
+        $Feeds = glFusion\Syndication\Feed::getEnabled('article', $story->get('tid'));
+        foreach ($Feeds as $Feed) {
+            $story_options[] = COM_createLink(
+                $Feed->getTitle(),
+                $Feed->getUrl(),
+                array(
+                    'type' => $Feed->getMimeType(),
+                    'class' => '',
+                )
+            );
         }
     }
     if (($_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ||

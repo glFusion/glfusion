@@ -1004,41 +1004,39 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
     }
 
-    $feed_url = array();
     if ( $_CONF['backend'] == 1 ) { // add feed-link to header if applicable
+        $feed_topics= array();
         if ( SESS_isSet('feedurl') ) {
-            $feed_url = unserialize(SESS_getVar('feedurl') );
+            $feed_topics = @unserialize(SESS_getVar('feedurl') );
+        }
+        if (!is_array($feed_topics)) {
+            // could be null if unserialize() fails, make sure it's an array
+            $feed_topics = array();
+        }
+        $feedtopic = $topic;
+        if (empty($feedtopic)) {
+            // ensure a good key for the feed_urls array
+            $feedtopic = 'all';
+        }
+        if (array_key_exists($feedtopic, $feed_topics)) {
+            $feed_links = $feed_topics[$feedtopic];
         } else {
-            $baseurl = SYND_getFeedUrl();
-
-            $sql = "SELECT format, filename, title, language FROM `{$_TABLES['syndication']}`
-                     WHERE (header_tid = 'all')";
-            if ( !empty( $topic )) {
-                $sql .= " OR (header_tid = ?)";
-            }
-            $db = Database::getInstance();
-            $stmt = $db->conn->prepare($sql);
-            if ( !empty( $topic )) {
-                $stmt->bindParam(1,$topic,Database::STRING);
-            }
-            $stmt->execute();
-            $topicRows = $stmt->fetchAll();
-            foreach($topicRows AS $A) {
-                if ( !empty( $A['filename'] )) {
-                    $format = explode( '-', $A['format'] );
-                    $format_type = strtolower( $format[0] );
-                    $format_name = ucwords( $format[0] );
-
-                    $feed_url[] = '<link rel="alternate" type="application/'
-                              . $format_type . '+xml"'
-                              . ' href="' . $baseurl . $A['filename'] . '" title="'
-                              . $format_name . ' Feed: ' . $A['title'] . '"/>';
+            $feed_links = array();
+            $Feeds = glFusion\Syndication\Feed::getByHeaderTid($feedtopic);
+            foreach ($Feeds as $Feed) {
+                if (!empty($Feed->getFilename())) {
+                    $feed_links[] = '<link rel="alternate" type="application/'
+                        . $Feed->getMimeType()
+                        . '" href="' . $Feed->getUrl()
+                        . '" title="' . ucwords($Feed->getFormat())
+                        . ' Feed: ' . $Feed->getTitle() . '"/>';
                 }
             }
-            SESS_setVar('feedurl',serialize($feed_url));
+            $feed_urls[$feedtopic] = $feed_links;
+            SESS_setVar('feedurl',serialize($feed_topics));
         }
+        $header->set_var( 'feed_url', implode( PHP_EOL, $feed_links ));
     }
-    $header->set_var( 'feed_url', implode( PHP_EOL, $feed_url ));
 
     $relLinks = array();
     if ( !COM_onFrontpage() ) {
@@ -1847,32 +1845,13 @@ function COM_debug( $A )
 */
 function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated_id = '' )
 {
-    global $_CONF, $_TABLES;
+    global $_CONF;
 
     if ( $_CONF['backend'] > 0 ) {
-        if ( !empty( $updated_type ) && ( $updated_type != 'article' )) {
-            // when a plugin's feed is to be updated, skip glFusion's own feeds
-            $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE (is_enabled = 1) AND (type <> 'article')";
-        } else {
-            $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE is_enabled = 1";
-        }
-
-        $db = Database::getInstance();
-        $stmt = $db->conn->query($sql);
-        $resultSet = $stmt->fetchAll();
-        foreach($resultSet AS $A) {
-            $is_current = true;
-            if ( $A['type'] == 'article' ) {
-                $is_current = SYND_feedUpdateCheck( $A['topic'],
-                                $A['update_info'], $A['limits'],
-                                $updated_topic, $updated_id );
-            } else {
-                $is_current = PLG_feedUpdateCheck( $A['type'], $A['fid'],
-                                $A['topic'], $A['update_info'], $A['limits'],
-                                $updated_type, $updated_topic, $updated_id );
-            }
-            if ( !$is_current ) {
-                SYND_updateFeed( $A['fid'] );
+        $Feeds = glFusion\Syndication\Feed::getEnabled($updated_type);
+        foreach ($Feeds as $Feed) {
+            if (!$Feed->updateCheck($updated_type, $updated_id)) {
+                $Feed->Generate();
             }
         }
     }
