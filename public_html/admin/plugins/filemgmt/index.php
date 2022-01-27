@@ -27,6 +27,23 @@ use \glFusion\FieldList;
 use Filemgmt\Download;
 use Filemgmt\Models\Status;
 
+if (empty($_FILES) && empty($_POST) && isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+    //catch file overload error...
+    $postMax = ini_get('post_max_size'); //grab the size limits...
+    $uploadMax = ini_get('upload_max_filesize');
+
+    if (intval($postMax) <= intval($uploadMax)) {
+        $maxSize = $postMax;
+    } else {
+        $maxSize = $uploadMax;
+    }
+
+    COM_setMsg(sprintf($LANG_FILEMGMT_ERRORS['1111'],$maxSize),'error');
+    echo COM_refresh($_CONF['site_admin_url'].'/plugins/filemgmt/index.php');
+    exit;
+}
+
+
 // Set view and action variables.
 $op = 'files';
 $expected = array(
@@ -63,9 +80,6 @@ if ($op == 'moderate') {
 if (isset($opval)) {
     $opval = COM_applyFilter($opval,TRUE);
 }
-
-//https://dev.glfusion.org/admin/plugins/filemgmt/index.php?modDownload=729
-//https://dev.glfusion.org/admin/plugins/filemgmt/index.php?moderate=x&lid=728
 
 $display = '';
 if (!SEC_hasRights('filemgmt.edit')) {

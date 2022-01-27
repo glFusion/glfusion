@@ -19,7 +19,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Log\Log;
 
-global $_DB_dbms;
+global $_DB_dbms, $_FM_CONF;
 
 require_once __DIR__ . '/functions.inc';
 require_once $_CONF['path'].'plugins/filemgmt/filemgmt.php';

@@ -53,6 +53,10 @@ function _template_set_root($root) {
         $root = array($root);
     }
 
+    if (!isset($_USER['theme'])) {
+        $_USER['theme'] = 'cms';
+    }
+
     foreach ($root as $r) {
 
         if (substr($r, -1) == '/') {

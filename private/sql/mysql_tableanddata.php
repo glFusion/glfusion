@@ -705,6 +705,33 @@ $_SQL[] = "CREATE TABLE {$_TABLES['menu_elements']} (
 ) ENGINE=MyISAM;
 ";
 
+$_SQL[] = "CREATE TABLE `{$_TABLES['search_index']}` (
+  `item_id` varchar(128) NOT NULL DEFAULT '',
+  `type` varchar(20) NOT NULL DEFAULT '',
+  `content` MEDIUMTEXT,
+  `parent_id` varchar(128) NOT NULL DEFAULT '',
+  `parent_type` varchar(50) NOT NULL DEFAULT '',
+  `ts` int(11) unsigned NOT NULL DEFAULT '0',
+  `grp_access` mediumint(8) NOT NULL DEFAULT '2',
+  `title` varchar(200) NOT NULL DEFAULT '',
+  `owner_id` mediumint(9) NOT NULL DEFAULT '0',
+  `author` varchar(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`type`, `item_id`),
+  INDEX `type` (`type`),
+  INDEX `item_date` (`ts`),
+  INDEX `author` (`author`)
+) ENGINE=MyISAM;
+";
+
+$_SQL[] = "CREATE TABLE `{$_TABLES['search_stats']}` (
+  `term` varchar(200) NOT NULL,
+  `hits` int(11) unsigned NOT NULL DEFAULT '1',
+  `results` int(11) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`term`),
+  KEY `hits` (`hits`)
+) ENGINE=MyISAM;
+";
+
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (1,3) ";    // story.edit to Story Admin
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (2,3) ";    // story.moderate to  Story Admin
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (3,3) ";    // story.submit to Story Admin
@@ -812,6 +839,8 @@ $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (30,'env.admin', 'Ability to view Environment Check', 1)";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (31,'logview.admin', 'Ability to view / clear glFusion logs', 1)";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (32,'upgrade.admin', 'Ability to run Upgrade Check', 1)";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (33,'search.admin', 'Ability to manage the Search Engine', 1)";
+
 
 $_DATA[] = "INSERT INTO {$_TABLES['frontpagecodes']} (code, name) VALUES (0,'Show Only in Topic') ";
 $_DATA[] = "INSERT INTO {$_TABLES['frontpagecodes']} (code, name) VALUES (1,'Show on Front Page') ";

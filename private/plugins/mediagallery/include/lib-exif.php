@@ -1,39 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Media Gallery Plugin - glFusion CMS                                      |
-// +--------------------------------------------------------------------------+
-// | lib-exif.php                                                             |
-// |                                                                          |
-// | EXIF/IPTC Reading routines                                               |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2002-2015 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Based on previous work by                                                |
-// | Copyright (C) 2004-2008 by the following authors:                        |
-// |                                                                          |
-// | Bharat Mediratta <bharat@menalto.com>                                    |
-// | Georg Rehfeld <rehfeld@georg-rehfeld.de>                                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Media Gallery Plugin
+*
+* EXIF/IPTC Reading / parsing
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2022 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on previous work by
+*  Copyright (C) 2004-2008 by the following authors:
+*    Bharat Mediratta <bharat@menalto.com>
+*    Georg Rehfeld <rehfeld@georg-rehfeld.de>
+*
+*/
 
-// this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
@@ -228,18 +211,6 @@ function postProcessValue(  $property, $value ) {
         if (!empty($time)) {
             $dt = MG_getUserDateTimeFormat( $time );
             $value = $dt[0];
-/*
-            if (isset($m[8])) {
-                $offset = ((int)$m[9] * 60 + (isset($m[11]) ? (int)$m[11] : 0)) * 60;
-                if ($m[8] == '+') {
-                    $time += $offset;
-                }
-                else {
-                    $time -= $offset;
-                }
-            }
-            $value = strftime('%x %X', $time);
-*/
         }
         break;
     }

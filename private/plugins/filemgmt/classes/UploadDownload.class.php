@@ -19,6 +19,7 @@
  */
 namespace Filemgmt;
 
+use \glFusion\Log\Log;
 
 /**
  * File upload and download class.
@@ -236,15 +237,18 @@ class UploadDownload
      */
     public function logItem($logtype, $text)
     {
-        $timestamp = strftime("%c");
-        if (!$file = fopen($this->_logFile, 'a')) {
-            // couldn't open log file for writing so let's disable logging and add an error
-            $this->setLogging(false);
-            $this->_addError('Error writing to log file: ' . $this->_logFile . '.  Logging has been disabled');
-            return false;
+        switch(strtolower($logtype)) {
+            case 'error' :
+                Log::write('system',Log::ERROR, 'Filemgmt: '.$text);
+                break;
+            case 'warning' :
+                Log::write('system',Log::WARNING, 'Filemgmt: '.$text);
+                break;
+            case 'default' :
+                Log::write('system',Log::WARNING, 'Filemgmt: '.$text);
+                break;
         }
-        fputs ($file, "$timestamp - $logtype: $text \n");
-        fclose($file);
+
         return true;
     }
 

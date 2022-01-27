@@ -67,8 +67,8 @@ $LANG_FILEMGMT = array(
     'newpage'               => "Nieuwe pagina",
     'adminhome'             => "Beheerpagina",
     'plugin_name'           => "Bestandsbeheer",
-    'searchlabel'           => "Bestandenlijst",
-    'searchlabel_results'   => "Bestandenlijst Resultaten",
+    'searchlabel'           => "Mijn Downloads",
+    'searchlabel_results'   => "Downloads Results",
     'downloads'             => "Mijn Downloads",
     'report'                => "Top Downloads",
     'usermenu1'             => "Mijn Downloads",
@@ -152,6 +152,7 @@ $LANG_FILEMGMT_ERRORS = array(
     "1108" => "Duplicate file - already existing in filestore",
     "1109" => "File type not allowed",
     "1110" => "You must define and select a category for the uploaded file",
+    "1111" => "File Size exceeds site configured maximum size of %s",
     "9999" => "Unknown Error"
 );
 
@@ -194,8 +195,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Enable Ratings',
     'displayblocks'         => 'Display glFusion Blocks',
     'silent_edit_default'   => 'Silent Edit Default',
-    'extensions_map'        => 'Extensies die worden gebruikt voor downloads',
-    'EmailOption'           => 'Indiener e-mailen na goedkeuring?',
+    'extensions_map'        => 'Extensions used for downloads',
+    'EmailOption'           => 'Email submitter upon approval?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Hoofd Instellingen'
@@ -412,7 +413,7 @@ define("_MD_NOMODREQ","No Download Modification Request.");
 define("_MD_DBUPDATED","Database Succesvol Bijgewerkt!");
 define("_MD_MODREQDELETED","Modification Request Deleted.");
 define("_MD_IMGURLMAIN",'Image<div style="font-size:8pt;">Image height will be resized to 50px</div>');
-define("_MD_PARENT","Bovenliggende Categorie:");
+define("_MD_PARENT","Parent Category");
 define("_MD_SAVE","Bewaar Wijzigingen");
 define("_MD_CATDELETED","Categorie Verwijderd.");
 define("_MD_WARNING","WARNING: Are you sure you want to delete this Category and ALL its Files and Comments?");

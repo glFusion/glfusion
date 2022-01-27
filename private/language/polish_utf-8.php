@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -531,6 +531,64 @@ $LANG08 = array(
     38 => 'wysłał ci następujący artykuł...',
     39 => 'Przeczytaj pełny artykuł',
 );
+
+############
+# Search
+$LANG_SEARCH_UI = array(
+    'menu_label'    => 'Search Admin',
+    'all'           => 'Wszystkie',
+    'all_posts_by'  => 'All Posts By ',
+    'by'            => 'Autor',
+    'hits'          => 'Odwiedzono',
+    'new_search'    => 'Please enter the search criteria above and select Search',
+    'on'            => 'na',
+    'one_day'       => '1 dzień',
+    'one_month'     => '1 miesiąc',
+    'one_year'      => '1 rok',
+    'search'        => 'Szukaj',
+    'seven_days'    => '7 dni',
+    'showing_results' => 'Showing %s - %s of %s Results',
+    'six_months'    => '6 miesięcy',
+    'three_months'  => '3 miesięcy',
+    'two_weeks'     => '2 tygodnie',
+    'two_years'     => '2 years',
+    'seconds'       => 'secs',
+    'search_placeholder' => 'Enter Your Search Request',
+    'altered_search' => 'Using <b>all of these words</b> did not return any data so the search was modified to <b>any of these words</b>',
+);
+
+$LANG_SEARCH_ADMIN = array(
+    'cancel'            => 'Anuluj',
+    'chk_unchk_all'     => 'Check/Uncheck All',
+    'clear_counters'    => 'Clear Counters',
+    'content_type'      => 'Typ zawartości',
+    'current_progress'  => 'Aktualny postęp',
+    'empty_table'       => 'Remove all data from Search Index table prior to indexing',
+    'error_getcontenttypes' => 'Unable to retrieve content types from glFusion',
+    'error_heading'     => 'Błędy',
+    'hlp_counters'      => 'Here are the search queries made by site visitors, along with the number of times each query was made.',
+    'hlp_gen_all'       => 'Re-generate all indexes for the selected content types. Use this option after installing the plugin, or after changing certain key configuration items such as the minimum word length or changing the stemmer.',
+    'hlp_reindex'       => 'Re-indexing content will remove all existing search items for the content type and re-scan the content to rebuild the search word index. This can take a significant amount of time on large volume content types such as Forums.',
+    'index_instructions'=> 'This will scan the selected content types and rebuild the Search index',
+    'index_status'      => 'Indexing Status',
+    'search_admin'      => 'Search Administration',
+    'indexing'          => 'Indexing',
+    'no_errors'         => 'No Errors',
+    'overall_progress'  => 'Ogólny postęp',
+    'queries'           => 'Queries',
+    'reindex_button'    => 'Re-index',
+    'reindex_title'     => 'Re-index Content',
+    'remove_content_1'  => 'Removing existing index entries for ',
+    'remove_content_2'  => ' - This can take several minutes....',
+    'remove_fail'       => 'Failed to remove existing index entries.',
+    'results'           => 'Wyniki',
+    'retrieve_content_list' => 'Retrieving content list for ',
+    'retrieve_content_types'=> 'Retrieving Content Types',
+    'search_terms'      => 'Search Terms',
+    'submit'            => 'Wyślij',
+    'success'           => 'Success',
+);
+
 
 ###############################################################################
 # search.php
@@ -2303,18 +2361,18 @@ $LANG_LOGO = array(
     'item_updated'      => 'The item has been updated.',
     'image_deleted'     => 'The image was deleted.',
     'item_unchanged'    => 'The item  was not changed.',
-    'none'              => 'None',
+    'none'              => 'Brak',
     'graphic'           => 'Graphic',
-    'text'              => 'Text',
+    'text'              => 'Wiadomość',
     'logo_type'         => 'Logo Type',
-    'theme'             => 'Theme',
+    'theme'             => 'Szablon',
     'grp_access'        => 'Group Access',
-    'disabled'          => 'Disabled',
-    'all_users'         => 'All Users',
+    'disabled'          => 'Wyłączony',
+    'all_users'         => 'Wszyscy użytkownicy',
     'site_theme'        => 'Site Theme',
-    'default'           => 'Default',
-    'yes'               => 'Yes',
-    'no'                => 'No',
+    'default'           => 'Domyślny',
+    'yes'               => 'Tak',
+    'no'                => 'Nie',
 );
 
 ###############################################################################
@@ -2593,7 +2651,6 @@ $LANG_ACTIONS = array(
 );
 
 
-
 $LANG_configsections['Core'] = array(
     'label' => 'glFusion',
     'title' => 'Konfiguracja'
@@ -2785,7 +2842,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Przesyłanie komentarzy do kolejki',
     'passwordspeedlimit' => 'Limit',
     'login_attempts' => 'Ilość prób logowania',
-    'login_landing' => 'Strona docelowa logowania',
+    'login_landing' => 'Login Landing Page',
     'login_speedlimit' => 'Ograniczenie czasu logowania',
     'user_html' => 'HTML użytkownika',
     'admin_html' => 'Admin HTML',
@@ -2916,6 +2973,11 @@ $LANG_confignames['Core'] = array(
     'log_level' => 'Log Level',
     'enable_admin_actions' => 'Enable Admin Logging',
     'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
+    'search_excerpt_length' => 'Excerpt Size',
+    'search_per_page' => 'Results Per Page',
+    'search_type' => 'Default Search Type',
+    'search_stopwords' => 'Stopwords',
+    'search_summarize_discussions' => 'Index Hierachtical Content By Parent',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -3030,5 +3092,6 @@ $LANG_configSelect['Core'] = array(
                 '600' => 'EMERGENCY',
                 '525' => 'DVLP_DEBUG',
                ),
+    37 => array('all' => 'All of the words', 'any' => 'Any of the words', 'phrase' => 'Dokładna fraza'),
 );
 ?>

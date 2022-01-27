@@ -1586,6 +1586,8 @@ class Download
             'hits'      => COM_numberFormat($this->hits),
 //            'file_description' => nl2br($this->description),
             'file_description' => $format->parse($this->description, true,7200),
+            'download_link' => COM_buildURL($_CONF['site_url'].'/filemgmt/visit.php?lid='.$this->lid),
+            'file_link' => COM_buildURL($_CONF['site_url'].'/filemgmt/index.php?id='.$this->lid),
             'is_found' => true,
             'LANG_DLNOW' => _MD_DLNOW,
             'LANG_SUBMITTEDBY' => _MD_SUBMITTEDBY,

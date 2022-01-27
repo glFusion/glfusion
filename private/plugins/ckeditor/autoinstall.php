@@ -27,6 +27,8 @@ require_once $_CONF['path'].'plugins/ckeditor/ckeditor.php';
 // | Plugin installation options                                              |
 // +--------------------------------------------------------------------------+
 
+global $_CK_CONF;
+
 $INSTALL_plugin['ckeditor'] = array(
   'installer' => array('type' => 'installer', 'version' => '1', 'mode' => 'install'),
 

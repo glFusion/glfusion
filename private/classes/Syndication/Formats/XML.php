@@ -31,6 +31,8 @@ class XML extends \glFusion\Syndication\Feed
     {
         global $_CONF, $_SYND_DEBUG;
 
+        $dt = new \Date('now',$_CONF['timezone']);
+
         $rss = new \UniversalFeedCreator();
         if ($this->getContentLength() > 1 ) {
             $rss->descriptionTruncSize = $this->getContentLength();

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2021 by the following authors:
+*  Copyright (C) 2002-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -333,7 +333,7 @@ function MG_parseAlbumsRSS( &$rss, $aid ) {
                 $item->descriptionTruncSize = 500;
                 $item->descriptionHtmlSyndicated = true;
 
-                $item->date = strftime("%a, %d %b %Y %H:%M:%S %z",$MG_albums[$aid]->last_update);
+                $item->date = \Date::getInstance($MG_albums[$aid]->last_update,$_CONF['timezone'])->format("r");
                 $item->source = $_CONF['site_url'];
                 if ($MG_albums[$aid]->owner_id != '' ) {
                     $username = DB_getItem($_TABLES['users'],'username',"uid={$MG_albums[$aid]->owner_id}");

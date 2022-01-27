@@ -67,8 +67,8 @@ $LANG_FILEMGMT = array(
     'newpage'               => "New Page",
     'adminhome'             => "Admin Home",
     'plugin_name'           => "File Management",
-    'searchlabel'           => "File Listing",
-    'searchlabel_results'   => "File Listing Results",
+    'searchlabel'           => "Downloads",
+    'searchlabel_results'   => "Downloads Results",
     'downloads'             => "Downloads",
     'report'                => "Top Downloads",
     'usermenu1'             => "Downloads",
@@ -152,6 +152,7 @@ $LANG_FILEMGMT_ERRORS = array(
     "1108" => "Duplicate file - already existing in filestore",
     "1109" => "File type not allowed",
     "1110" => "You must define and select a category for the uploaded file",
+    "1111" => "File Size exceeds site configured maximum size of %s",
     "9999" => "Unknown Error"
 );
 

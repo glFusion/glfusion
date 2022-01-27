@@ -112,7 +112,12 @@ function AT_loadTags()
         }
         // otherwise ignore
     }
-    $allow_php = ($_AM_CONF['allow_php'] == 1) ? true : false;
+    if (!isset($_AM_CONF['allow_php']) || $_AM_CONF['allow_php'] != 1) {
+        $allow_php = false;
+    } else {
+        $allow_php = true;
+    }
+//    $allow_php = ($_AM_CONF['allow_php'] == 1) ? true : false;
     while ($R = $stmt->fetch(Database::ASSOCIATIVE)) {
         $isfunction = ($R['is_function'] == 1) ? true : false;
         if (!$isfunction OR ($isfunction AND $allow_php)) {

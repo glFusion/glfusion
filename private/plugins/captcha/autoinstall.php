@@ -28,6 +28,8 @@ require_once $_CONF['path'].'plugins/captcha/sql/mysql_install.php';
 // | Plugin installation options                                              |
 // +--------------------------------------------------------------------------+
 
+global $_CP_CONF;
+
 $INSTALL_plugin['captcha'] = array(
   'installer' => array('type' => 'installer', 'version' => '1', 'mode' => 'install'),
 

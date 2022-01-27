@@ -31,7 +31,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-global $_DB_table_prefix, $_TABLES;
+global $_DB_table_prefix, $_TABLES, $_CK_CONF;
 
 // Plugin info
 

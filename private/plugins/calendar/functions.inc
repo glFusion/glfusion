@@ -1565,76 +1565,7 @@ function plugin_searchtypes_calendar()
     return $tmp;
 }
 
-/**
-* This searches for events matching the user query and returns an array for the
-* header and table rows back to search.php where it will be formated and printed
-*
-* @param    string  $query      Keywords user is looking for
-* @param    date    $datestart  Start date to get results for
-* @param    date    $dateend    End date to get results for
-* @param    string  $topic      The topic they were searching in
-* @param    string  $type       Type of items they are searching, or 'all' (deprecated)
-* @param    int     $author     Get all results by this author
-* @param    string  $keyType    search key type: 'all', 'phrase', 'any'
-* @param    int     $page       page number of current search (deprecated)
-* @param    int     $perpage    number of results per page (deprecated)
-* @return   object              search result object
-*
-*/
-function plugin_dopluginsearch_calendar($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
-{
-    global $_TABLES, $LANG_CAL_1, $_USER;
-
-    if ( COM_isAnonUser() ) {
-        $uid = 1;
-    } else {
-        $uid = $_USER['uid'];
-    }
-
-
-    // Make sure the query is SQL safe
-    $query = DB_escapeString(trim(htmlspecialchars($query)));
-
-    $sql_e = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, hits, CONCAT('/calendar/event.php?eid=',eid) AS url ";
-    $sql_e .= "FROM {$_TABLES['events']} WHERE status=1 ";
-
-    $sql_p = "SELECT eid AS id, title, description, UNIX_TIMESTAMP(datestart) AS date, owner_id AS uid, 0 AS hits, ";
-    $sql_p .= "CONCAT('/calendar/event.php?mode=personal&eid=',eid) AS url ";
-    $sql_p .= "FROM {$_TABLES['personal_events']} WHERE (uid = $uid) ";
-
-    $sql = COM_getPermSQL('AND') . ' ';
-
-    if (!empty ($author))
-        $sql .= "AND (owner_id = '".DB_escapeString($author)."') ";
-
-    // Search the public events
-    $search_e = new SearchCriteria('calendar', array($LANG_CAL_1[16],$LANG_CAL_1[24]));
-    $columns = array('location','description','title');
-    $sql .= $search_e->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(datestart)', $datestart, $dateend);
-    list($sql_tmp,$ftsql_tmp) = $search_e->buildSearchSQL($keyType, $query, $columns, $sql_e . $sql);
-    $search_e->setSQL($sql_tmp);
-    $search_e->setFTSQL($ftsql_tmp);
-    $search_e->setRank(2);
-
-    if ( COM_isAnonUser() ) {
-        return $search_e;
-    }
-
-    // Search personal events
-    $search_p = new SearchCriteria('calendar', array($LANG_CAL_1[16],$LANG_CAL_1[23]));
-    $columns = array('location','description','title');
-    $sql_tmp .= $search_p->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(datestart)', $datestart, $dateend);
-    list($sql_tmp,$ftsql_tmp) = $search_p->buildSearchSQL($keyType, $query, $columns, $sql_p . $sql);
-    $search_p->setSQL($sql_tmp);
-    $search_p->setFTSQL($ftsql_tmp);
-    $search_p->setRank(2);
-
-    return array($search_e,$search_p);
-}
-
-
-/**
-* Set template variables
+/** Set template variables
 *
 * @param    string  $templatename   name of template, e.g. 'header'
 * @param    ref     $template       reference of actual template

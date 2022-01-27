@@ -2,7 +2,7 @@
 <script src="{site_url}/javascript/addons/character-counter/jquery.charactercounter.js"></script>
 <script src="{site_url}/javascript/addons/datetime/jquery.datetimepicker.full.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{site_url}/javascript/addons/datetime/jquery.datetimepicker.min.css"/ >
-<script src="{site_url}/javascript/addons/datetime/datetimepicker.js"></script>
+<script src="{site_url}/javascript/addons/datetime/datetimepicker-cal.js"></script>
 
 <script>
 	function update_month() { document.getElementById('end_month').value = document.getElementById('start_month').value; }

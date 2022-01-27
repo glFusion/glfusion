@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2021 by the following authors:
+*  Copyright (C) 2002-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -472,7 +472,7 @@ function MG_postcardLog( $logentry )
     if( !empty( $logentry )) {
         $logentry = str_replace( array( '<?', '?>' ), array( '(@', '@)' ),$logentry );
 
-        $timestamp = strftime( '%c' );
+        $timestamp = Date::getInstance('now',$_USER['tzid'])->format('c',true);
         $logfile = $_CONF['path_log'] . 'postcard.log';
 
         if( !$file = fopen( $logfile, 'a' )) {

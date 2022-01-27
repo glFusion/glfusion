@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2009 by the following authors:
@@ -528,7 +528,7 @@ function ARTICLE_emailUserTopics()
     $storytext_text = '';
 
 
-    $subject = strip_tags( $_CONF['site_name'] . $LANG08[30] . strftime( '%Y-%m-%d', time() ));
+    $subject = strip_tags( $_CONF['site_name'] . $LANG08[30] . \Date::getInstance('now',$_USER['tzid'])->format("Y-m-d",true) );
 
     $authors = array();
 
@@ -616,8 +616,8 @@ function ARTICLE_emailUserTopics()
         $TT->set_file(array('message'     => 'digest_text.thtml',
                            'story'        => 'digest_story_text.thtml'));
 
-        $T->set_var('week_date',strftime( $_CONF['shortdate'], time() ));
-        $TT->set_var('week_date',strftime( $_CONF['shortdate'], time() ));
+        $T->set_var('week_date', \Date::getInstance('now',$_CONF['timezone'])->format($_CONF['shortdate'],true));
+        $TT->set_var('week_date',\Date::getInstance('now',$_CONF['timezone'])->format($_CONF['shortdate'],true));
 
         $T->set_var('site_name',$_CONF['site_name']);
         $TT->set_var('site_name',$_CONF['site_name']);

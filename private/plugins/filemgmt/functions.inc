@@ -83,6 +83,9 @@ $_FM_CONF['FileStore_tmp'] = $_CONF['path'] . '/data/filemgmt_data/files/tmp/';
 $_FM_CONF['SnapStore_tmp'] = $_CONF['path'] . '/data/filemgmt_data/snaps/tmp/';
 
 if ( COM_isAnonUser() ) {
+    if (!isset($_FM_CONF['uploadpublic'])) {
+        $_FM_CONF['uploadpublic'] = false;
+    }
     $_FM_CONF['uploadselect'] = $_FM_CONF['uploadpublic'];
 }
 
@@ -519,94 +522,6 @@ function plugin_searchtypes_filemgmt()
         return '';
     }
 }
-
-
-/**
-* this searches for files matching the user query and returns an array of
-* for the header and table rows back to search.php where it will be formated and
-* printed
-*
-* @query            string          Keywords user is looking for
-* @datestart        date/time       Start date to get results for
-* @dateend          date/time       End date to get results for
-* @topic            string          The topic they were searching in
-* @type             string          Type of items they are searching
-* @author           string          Get all results by this author
-*
-*/
-function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
-{
-    global $_USER, $_FM_CONF, $LANG_FILEMGMT, $_TABLES, $_CONF;
-
-    if (COM_isAnonUser() && $_FM_CONF['selectpriv'] == 1) {
-        return '';
-    }
-    $query = trim(DB_escapeString(htmlspecialchars($query)));
-
-    $sql  = "SELECT a.lid AS id, a.title, description, date, submitter AS uid, hits, CONCAT('/filemgmt/index.php?id=',a.lid) AS url ";
-    $sql .= "FROM {$_TABLES['filemgmt_filedetail']} a ";
-    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
-    $sql .= "LEFT JOIN {$_TABLES['filemgmt_filedesc']} c ON c.lid=a.lid ";
-    $sql .= SEC_buildAccessSql('WHERE');
-    $sql .= " AND a.status > 0 ";
-
-    if (!empty ($author))
-        $sql .= "AND (submitter = '$author') ";
-
-    $search = new SearchCriteria('filemgmt', 'FileMgmt');
-    $columns = array('c.description','a.title');
-    $sql .= $search->getDateRangeSQL('AND', 'date', $datestart, $dateend);
-    list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
-    $search->setSQL($sql);
-    $search->setFTSQL($ftsql);
-    $search->setRank(3);
-
-    return $search;
-}
-
-/**
-* this searches the plugins comments matching the user query and returns an array of
-* for the header and table rows back to search.php where it will be formated and
-* printed
-*
-* @query            string          Keywords user is looking for
-* @datestart        date/time       Start date to get results for
-* @dateend          date/time       End date to get results for
-* @topic            string          The topic they were searching in
-* @type             string          Type of items they are searching
-* @author           string          Get all results by this author
-*
-*/
-function plugin_dopluginsearch_comment_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
-{
-    global $_USER, $_FM_CONF, $LANG_FILEMGMT, $_TABLES, $_CONF, $LANG09;
-
-    $query = trim(DB_escapeString(htmlspecialchars($query)));
-
-    $sql =  "SELECT a.lid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
-    $sql .= "CONCAT('/filemgmt/index.php?id=',a.lid,'#comments') AS url ";
-    $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
-    $sql .= "LEFT JOIN {$_TABLES['filemgmt_filedetail']} a ON c.sid=CONCAT('fileid_',a.lid) ";
-    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
-    $sql .= "WHERE (c.type='filemgmt' AND c.queued = 0) AND (u.uid = c.uid) ";
-    $sql .= SEC_buildAccessSql('AND');
-    $sql .= " AND a.status > 0 ";
-
-    if (!empty($author)) {
-        $sql .= "AND (c.uid = '$author') ";
-    }
-
-    $search_c = new SearchCriteria('comments', 'FileMgmt > '.$LANG09[66]);
-    $columns = array('comment','c.title');
-    $sql .= $search_c->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(c.date)', $datestart, $dateend);
-    list($sql,$ftsql) = $search_c->buildSearchSQL($keyType, $query, $columns, $sql);
-    $search_c->setSQL($sql);
-    $search_c->setFTSQL($ftsql);
-    $search_c->setRank(2);
-
-    return $search_c;
-}
-
 
 /**
 * This will put an option for Filemgmt Admin in the command and control block on

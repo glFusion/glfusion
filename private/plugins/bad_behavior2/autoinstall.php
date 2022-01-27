@@ -28,6 +28,8 @@ require_once $_CONF['path'].'plugins/bad_behavior2/sql/mysql_install.php';
 // | Plugin installation options                                              |
 // +--------------------------------------------------------------------------+
 
+global $_BB2_CONF;
+
 $INSTALL_plugin['bad_behavior2'] = array(
   'installer' => array('type' => 'installer', 'version' => '1', 'mode' => 'install'),
 

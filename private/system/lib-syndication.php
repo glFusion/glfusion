@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2021 by the following authors:
+*  Copyright (C) 2017-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2003-2010 by the following authors:
