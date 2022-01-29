@@ -369,7 +369,7 @@ $LANG04 = array(
     126 => 'Vahvista',
     127 => 'Muuttaaksesi näitä asetuksia, sinun täytyy anataa nykyinen salasanasi.',
     128 => 'Nimesi',
-    129 => 'Salasana & Sähköposti',
+    129 => 'Salasana',
     130 => 'Infoa sinusta',
     131 => 'Daily Digest Valinnat',
     132 => 'Daily Digest Toiminto',
@@ -453,6 +453,8 @@ $LANG04 = array(
     'linkedin'  => 'LinkedIn',
     'microsoft' => 'Microsoft',
     'twitter'   => 'Twitter',
+    'session_management' => 'Session Management',
+    'remote_account_info' => 'Remote Acccount Information',
 );
 
 ###############################################################################
@@ -461,7 +463,7 @@ $LANG04 = array(
 
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'Esikatsele',
-    'pe_namepass' => 'Käyttäjänimi & Salasana',
+    'pe_namepass' => 'Tili',
     'pe_twofactor' => 'Two Factor Auth',
     'pe_userinfo' => 'Infoa sinusta',
     'pe_layout' => 'Ulkoasu & Kieli',
@@ -977,7 +979,7 @@ $LANG24 = array(
     124 => 'Are you sure you want to cancel? Any changes will not be saved.',
     125 => 'Story Video',
     126 => 'Auto Play',
-);
+ );
 
 ###############################################################################
 # admin/topic.php

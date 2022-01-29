@@ -369,7 +369,7 @@ $LANG04 = array(
     126 => 'S`il vous plaît répéter pour confirmation',
     127 => 'Pour modifier ces paramètres, vous devrez entrer votre mot de passe actuel. (Notez que les zones de mot de passe sont affichés pour les comptes locaux seulement)',
     128 => 'Informations du Compte',
-    129 => 'Mot de passe & eMail',
+    129 => 'Mot de Passe',
     130 => 'A propos de l`utilisateur',
     131 => 'Options de résumé quotidien',
     132 => 'Daily Digest entité',
@@ -453,6 +453,8 @@ $LANG04 = array(
     'linkedin'  => 'LinkedIn',
     'microsoft' => 'Microsoft',
     'twitter'   => 'Twitter',
+    'session_management' => 'Session Management',
+    'remote_account_info' => 'Remote Acccount Information',
 );
 
 ###############################################################################
@@ -461,7 +463,7 @@ $LANG04 = array(
 
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'Avant-Première',
-    'pe_namepass' => 'Nom d`Utilisateur et Mot de passe',
+    'pe_namepass' => 'Compte',
     'pe_twofactor' => 'Two Factor Auth',
     'pe_userinfo' => 'À propos de Vous',
     'pe_layout' => 'Disposition & Langue',
@@ -977,7 +979,7 @@ $LANG24 = array(
     124 => 'Are you sure you want to cancel? Any changes will not be saved.',
     125 => 'Story Video',
     126 => 'Auto Play',
-);
+ );
 
 ###############################################################################
 # admin/topic.php

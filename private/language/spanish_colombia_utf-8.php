@@ -369,7 +369,7 @@ $LANG04 = array(
     126 => 'Repite parar confirmación',
     127 => 'Para cambiar alguno de estos ajustes, debes escribir tu contraseña actual.',
     128 => 'Identificación',
-    129 => 'Contraseña &amp; E-mail',
+    129 => 'Contraseña',
     130 => 'Acerca de',
     131 => 'Resumen Diario - Opciones',
     132 => 'Resumen Diario - Características',
@@ -453,6 +453,8 @@ $LANG04 = array(
     'linkedin'  => 'Linkedin',
     'microsoft' => 'Microsoft',
     'twitter'   => 'Twitter',
+    'session_management' => 'Session Management',
+    'remote_account_info' => 'Remote Acccount Information',
 );
 
 ###############################################################################
@@ -461,7 +463,7 @@ $LANG04 = array(
 
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'Visualizar',
-    'pe_namepass' => 'Usuario &amp; Contraseña',
+    'pe_namepass' => 'Cuenta',
     'pe_twofactor' => 'Two Factor Auth',
     'pe_userinfo' => 'Acerca de',
     'pe_layout' => 'Plantilla &amp; Idioma',
@@ -977,7 +979,7 @@ $LANG24 = array(
     124 => 'Are you sure you want to cancel? Any changes will not be saved.',
     125 => 'Story Video',
     126 => 'Auto Play',
-);
+ );
 
 ###############################################################################
 # admin/topic.php

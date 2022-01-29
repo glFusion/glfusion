@@ -371,7 +371,7 @@ $LANG04 = array(
     126 => 'Proszę powtórzyć w celu potwierdzenia',
     127 => 'Aby zmienić hasło do twojego konta musisz podać obecnie aktualne hasło a następnie wpisać i potwierdzić.',
     128 => 'Informacje o koncie',
-    129 => 'Hasło &amp; e-mail',
+    129 => 'Hasło',
     130 => 'Kilka informacji o tobie',
     131 => 'Konfiguracja powiadomień',
     132 => 'Otrzymuj każdego dnia powiadomienia',
@@ -455,6 +455,8 @@ $LANG04 = array(
     'linkedin'  => 'LinkedIn',
     'microsoft' => 'Microsoft',
     'twitter'   => 'Twitter',
+    'session_management' => 'Session Management',
+    'remote_account_info' => 'Remote Acccount Information',
 );
 
 ###############################################################################
@@ -463,7 +465,7 @@ $LANG04 = array(
 
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'Strona główna',
-    'pe_namepass' => 'Hasło',
+    'pe_namepass' => 'Konto',
     'pe_twofactor' => 'Autoryzacja',
     'pe_userinfo' => 'O mnie',
     'pe_layout' => 'Szablon & Język',
@@ -979,7 +981,7 @@ $LANG24 = array(
     124 => 'Czy na pewno chcesz zrezygnować? Wszelkie zmiany nie zostaną zapisane.',
     125 => 'Podgląd Video',
     126 => 'Automatyczne odtwarzanie',
-);
+ );
 
 ###############################################################################
 # admin/topic.php

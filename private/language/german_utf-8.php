@@ -369,7 +369,7 @@ $LANG04 = array(
     126 => 'Bitte die gleiche Adresse noch einmal eingeben',
     127 => 'Um diese Angaben zu ändern benötigst Du Dein aktuelles Passwort!',
     128 => 'Konto Informationen',
-    129 => 'Passwort &amp; E-Mail',
+    129 => 'Passwort',
     130 => 'Über Dich',
     131 => 'Abonnement-Einstellungen',
     132 => 'Abonnement-Eigenschaften',
@@ -453,6 +453,8 @@ $LANG04 = array(
     'linkedin'  => 'LinkedIn',
     'microsoft' => 'Microsoft',
     'twitter'   => 'Twitter',
+    'session_management' => 'Session Management',
+    'remote_account_info' => 'Remote Acccount Information',
 );
 
 ###############################################################################
@@ -461,7 +463,7 @@ $LANG04 = array(
 
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'Vorschau',
-    'pe_namepass' => 'Name &amp; Passwort',
+    'pe_namepass' => 'Benutzerkonto',
     'pe_twofactor' => 'Anmeldung',
     'pe_userinfo' => 'Über Dich',
     'pe_layout' => 'Sprache &amp; Design',
@@ -977,7 +979,7 @@ $LANG24 = array(
     124 => 'Bist du sicher, dass Du abbrechen möchtest? Sämtliche Änderungen werden nicht gespeichert.',
     125 => 'Story Video',
     126 => 'Auto-Play',
-);
+ );
 
 ###############################################################################
 # admin/topic.php

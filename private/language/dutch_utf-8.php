@@ -369,7 +369,7 @@ $LANG04 = array(
     126 => 'Herhaal a.u.b. om te bevestigen',
     127 => 'Om de instellingen te veranderen moet u uw huidige wachtwoord invoeren.',
     128 => 'Uw gebruikersnaam',
-    129 => 'Wachtwoord & email',
+    129 => 'Wachtwoord',
     130 => 'Informatie over uzelf',
     131 => 'Dagelijkse overzichtsopties',
     132 => 'Dagelijkse overzichtskenmerken',
@@ -453,6 +453,8 @@ $LANG04 = array(
     'linkedin'  => 'LinkedIn',
     'microsoft' => 'Microsoft',
     'twitter'   => 'Twitter',
+    'session_management' => 'Session Management',
+    'remote_account_info' => 'Remote Acccount Information',
 );
 
 ###############################################################################
@@ -461,7 +463,7 @@ $LANG04 = array(
 
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'Voorbeeld Bekijken',
-    'pe_namepass' => 'Gebruikersnaam & Wachtwoord',
+    'pe_namepass' => 'Account',
     'pe_twofactor' => 'Two Factor Auth',
     'pe_userinfo' => 'Uw profiel',
     'pe_layout' => 'Opmaak & Taal',
@@ -977,7 +979,7 @@ $LANG24 = array(
     124 => 'Are you sure you want to cancel? Any changes will not be saved.',
     125 => 'Story Video',
     126 => 'Auto Play',
-);
+ );
 
 ###############################################################################
 # admin/topic.php
