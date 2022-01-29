@@ -52,13 +52,6 @@
 				</div>
 			</div>
 
-			<div class="uk-form-row">
-				<label class="uk-form-label" for="select_result_format">{lang_search_format}</label>
-				<div class="uk-form-controls">
-				<select name="search_result_format" id="search_result_format">
-					{search_format_options}
-				</select>
-			</div>
 		</div>
 
 		{plugin_layout_display}

@@ -698,16 +698,6 @@ function editpreferences()
     } else {
         $cfgSelect = array_flip($LANG_configselects['Core'][18]);
     }
-    $options = '';
-    foreach ($cfgSelect AS $type => $name ) {
-        $options .= '<option value="' . $type . '"';
-        if ($type == $A['search_result_format']) {
-            $options .= ' selected="selected"';
-        }
-        $options .= '>' . $name . '</option>' . LB;
-    }
-    $preferences->set_var('search_format_options', $options);
-    $preferences->set_var('lang_search_format',$LANG_confignames['Core']['search_show_type']);
 
     $preferences->parse ('display_block', 'display', true);
 
@@ -1825,12 +1815,6 @@ function savepreferences($A)
         $A['language'] = $_CONF['language'];
     }
 
-    if ( isset($A['search_result_format']) ) {
-        $A['search_result_format'] = COM_applyFilter($A['search_result_format']);
-    } else {
-        $A['search_result_format'] = 'google';
-    }
-
     // Save theme, when doing so, put in cookie so we can set the user's theme
     // even when they aren't logged in
     $theme    = DB_escapeString ($A['theme']);
@@ -1848,7 +1832,7 @@ function savepreferences($A)
 
     $A['dfid'] = (int)COM_applyFilter ($A['dfid'], true);
 
-    DB_query("UPDATE {$_TABLES['userprefs']} SET search_result_format='".DB_escapeString($A['search_result_format'])."',noicons=".(int) $A['noicons'].", willing=".(int) $A['willing'].", dfid=".(int) $A['dfid'].", tzid='".DB_escapeString($A['tzid'])."', emailfromadmin='".DB_escapeString($A['emailfromadmin'])."', emailfromuser=".(int) $A['emailfromuser'].", showonline=".(int)$A['showonline']." WHERE uid=".(int)$_USER['uid']);
+    DB_query("UPDATE {$_TABLES['userprefs']} SET noicons=".(int) $A['noicons'].", willing=".(int) $A['willing'].", dfid=".(int) $A['dfid'].", tzid='".DB_escapeString($A['tzid'])."', emailfromadmin='".DB_escapeString($A['emailfromadmin'])."', emailfromuser=".(int) $A['emailfromuser'].", showonline=".(int)$A['showonline']." WHERE uid=".(int)$_USER['uid']);
 
     if (empty ($etids)) {
         $etids = '-';
