@@ -369,7 +369,7 @@ $LANG04 = array(
     126 => 'Please repeat for confirmation',
     127 => 'To change any of these settings, you will have to enter your current password. (Note that password fields are displayed for local accounts only)',
     128 => 'Account Information',
-    129 => 'Password &amp; email',
+    129 => 'Password',
     130 => 'About User',
     131 => 'Daily Digest Options',
     132 => 'Daily Digest Feature',
@@ -453,6 +453,8 @@ $LANG04 = array(
     'linkedin'  => 'LinkedIn',
     'microsoft' => 'Microsoft',
     'twitter'   => 'Twitter',
+    'session_management' => 'Session Management',
+    'remote_account_info' => 'Remote Acccount Information',
 );
 
 ###############################################################################
@@ -461,7 +463,7 @@ $LANG04 = array(
 
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'Preview',
-    'pe_namepass' => 'User name &amp; Password',
+    'pe_namepass' => 'Account',
     'pe_twofactor' => 'Two Factor Auth',
     'pe_userinfo' => 'About You',
     'pe_layout' => 'Layout &amp; Language',
@@ -977,7 +979,7 @@ $LANG24 = array(
     124 => 'Are you sure you want to cancel? Any changes will not be saved.',
     125 => 'Story Video',
     126 => 'Auto Play',
-);
+ );
 
 ###############################################################################
 # admin/topic.php

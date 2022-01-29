@@ -1,10 +1,4 @@
 {# begin {templatelocation} #}
-<div class="uk-form-row">
-	<label class="uk-form-label" for="resynch">{lang_resynch}</label>
-	<div class="uk-form-controls">
-		<input type="checkbox" id="resynch" name="resynch" {resynch_checked} />
-	</div>
-</div>
 
 {!if remote_account_type}
 	<div class="uk-form-row">
@@ -14,6 +8,13 @@
 		</div>
 	</div>
 {!endif}
+
+<div class="uk-form-row">
+	<label class="uk-form-label" for="resynch">{lang_resynch}</label>
+	<div class="uk-form-controls">
+		<input type="checkbox" id="resynch" name="resynch" {resynch_checked} />
+	</div>
+</div>
 
 {!if merge_account}
 	<div class="uk-form-row">
