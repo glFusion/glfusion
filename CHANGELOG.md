@@ -56,8 +56,9 @@
 - Template class code significantly streamlined - utilizes new caching engine to allow for memory based caching of templates
 - Replaced all old style Cache calls to new Cache class interface
 - FileMgmt Admin screens now adhere to glFusion UI standards
-- Password is required to change any user profile fields
+- Password is required to change any user account profile fields - not needed for preference type settings
 - Disabled autocomplete for TOTP (2FA) code input fields
+- 2FA requires a valid TOTP to disable
 
 ### Depreciated
 
