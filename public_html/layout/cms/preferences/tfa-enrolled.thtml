@@ -1,5 +1,6 @@
 {# begin {templatelocation} #}
 <div class="uk-panel-title">{lang_two_factor}</div>
+
 {lang_enrolled}
 
 {lang_regenerate_backup}
@@ -16,14 +17,19 @@
 	</a>
 </div>
 
+<div id="tfa-error" class="uk-margin">
+	{error_message}
+</div>
+
 <p>
 	{lang_disable_tfa_help}
 </p>
 
 <p>
-	<button id="tfa-disable" class="uk-button uk-button-danger">
-		{lang_disable_tfa_button}
-	</button>
+
+	<button id="tfa-disable" class="uk-button uk-button-danger">{lang_disable_tfa_button}</button>&nbsp;&nbsp;<input type="text" class="uk-form-width-medium" id="twofactorverify" name="twofactorverify" autocomplete="off" autofocus placeholder="{lang_authentication_code}">&nbsp;
+
+
 	<input type="hidden" id="_sectoken" name="_sectoken" value="{sectoken_value}">
 </p>
 {# end {templatelocation} #}

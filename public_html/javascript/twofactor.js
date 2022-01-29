@@ -86,6 +86,7 @@ $(document).ready(function () {
 				url: glfusionSiteUrl+"/twofactor.php",
 				data: {
 					action: 'disable',
+					tfacode: $('#twofactorverify').val(),
 				_sectoken: $("#_sectoken").val()
 				},
 				dataType : "json",
@@ -94,6 +95,8 @@ $(document).ready(function () {
 					if ( result.errorCode == 0 ) {
 						panel = result.panel;
 						$('#tfa-panel').html(panel);
+					} else {
+						$('#tfa-error').html('<span class="uk-text-bold uk-text-danger">'+result.message+'</span>');
 					}
 				},
 				error: function(result) {

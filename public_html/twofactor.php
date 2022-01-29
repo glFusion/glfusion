@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2016-2021 by the following authors:
+*  Copyright (C) 2016-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -15,6 +15,7 @@
 require_once 'lib-common.php';
 
 use \glFusion\Log\Log;
+use \glFusion\Cache\Cache;
 
 if ( COM_isAnonUser() ) die('invalid request');
 if ( !isset($_CONF['enable_twofactor']) || $_CONF['enable_twofactor'] == 0 ) die('invalid request');
@@ -67,6 +68,14 @@ switch ($action) {
     case 'disable' :
         $ajaxHandler = new \ajaxHandler();
         $rc = tfa_disable($ajaxHandler);
+        if ($rc !== true) {
+            $rc = 1;
+            $ajaxHandler->setMessage($LANG_TFA['error_verify_failed']);
+        } else {
+            $page = tfaEnroll();
+            $rc = 0;
+            $ajaxHandler->setResponse('panel',$page);
+        }
         break;
 
     case 'download_tfa_codes' :
@@ -186,6 +195,7 @@ function tfaVerify()
         $rc = $tfa->validateCode($code);
         if ( $rc == true ) {
             DB_query("UPDATE {$_TABLES['users']} SET tfa_enabled=1 WHERE uid=".(int) $_USER['uid']);
+            $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
         }
     } else {
         Log::write('system',Log::ERROR,"TwoFactor: Security token check failed");
@@ -243,22 +253,27 @@ function tfa_disable(&$ajaxHandler)
     global $_CONF, $_TABLES, $_USER, $LANG_TFA;
 
     $rc = -1;
+    $code = '';
 
     if (isset($_CONF['enable_twofactor']) && $_CONF['enable_twofactor'] && !COM_isAnonUser() && isset($_USER['uid']) && ($_USER['uid'] > 1)) {
         if ( _sec_checkToken(true) ) {
+            $code = '';
+
+            if ( isset( $_POST['tfacode'] ) ) {
+                $code = $_POST['tfacode'];
+            }
             $ajaxHandler = new \ajaxHandler();
-            DB_query("UPDATE {$_TABLES['users']} SET tfa_enabled=0, tfa_secret=NULL WHERE uid={$_USER['uid']}");
-            DB_query("DELETE FROM {$_TABLES['tfa_backup_codes']} WHERE uid={$_USER['uid']}");
-            $T = new Template ($_CONF['path_layout'] . 'preferences');
-            $T->set_file('page','tfa-notenrolled.thtml');
-            $T->set_var(array(
-                'lang_two_factor'   => $LANG_TFA['two_factor'],
-                'lang_not_enrolled' => $LANG_TFA['not_enrolled'],
-                'lang_enroll_button'=> $LANG_TFA['enroll_button'],
-            ));
-            $retval = $T->finish ($T->parse ('output', 'page'));
-            $ajaxHandler->setResponse( 'panel', $retval );
-            $rc = 0;
+
+            $tfa = TwoFactor::getInstance($_USER['uid']);
+            $codeVal = $tfa->validateCode($code);
+            if ( $codeVal == true ) {
+                DB_query("UPDATE {$_TABLES['users']} SET tfa_enabled=0, tfa_secret=NULL WHERE uid={$_USER['uid']}");
+                DB_query("DELETE FROM {$_TABLES['tfa_backup_codes']} WHERE uid={$_USER['uid']}");
+                $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
+                return true;
+            } else {
+                return false;
+            }
         }
     }
     return $rc;
