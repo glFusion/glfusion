@@ -1,0 +1,13 @@
+{site_name} {$LANG_GF01['warn_email_subject']}
+<div>
+================================================================================
+<p>{$LANG_GF01['warn_text']}</p>
+<p>{$LANG_GF01['TOPIC']}: {post_topic}</p>
+<p>{warn_type}
+{!if warn_dscp}
+- {warn_dscp}
+{!endif}a
+</p>
+================================================================================
+</div>
+{$LANG_GF01['lang_noreply']}

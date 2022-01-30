@@ -76,6 +76,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
     }
 
     $Poster = \Forum\User::getInstance($showtopic['uid']);
+    $isModerator = Forum\Moderator::hasPerm($showtopic['forum']);
 
     list($user_level, $user_levelname) = \Forum\Rank::getRank($Poster->posts, $Poster->adminLevel($showtopic['forum']));
 
@@ -117,9 +118,10 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
                 'LANG_edit' => ''));
     }
 
-//    if ( $query != '' ) {
-//        $showtopic['subject'] = COM_highlightQuery($showtopic['subject'],$query);
-//    }
+    if ( $query != '' ) {
+        $disp_subject = COM_highlightQuery($disp_subject,$query);
+        $showtopic['comment'] = COM_highlightQuery($showtopic['comment'], $query);
+    }
 
     if ($showtopic['pid'] == 0) {
         $replytopicid = $showtopic['id'];
@@ -258,16 +260,31 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
     } elseif ($uniqueid > 0) {
         $topictemplate->set_var('attachments',_ff_showattachments((int) $uniqueid));
     }
-    if ( SEC_inGroup('Root') && isset($showtopic['ip']) ) {
-        if( !empty( $_CONF['ip_lookup'] )) {
-            $iplink = '<a href="'.str_replace( '*', $showtopic['ip'], $_CONF['ip_lookup'] ) . '" target="_blank" rel="noopener noreferrer">'.$showtopic['ip'].'</a>';
-            $topictemplate->set_var('ipaddress',$iplink);
+    if ( SEC_inGroup('Root')) {
+        if (isset($showtopic['ip']) ) {
+            if( !empty( $_CONF['ip_lookup'] )) {
+                $iplink = '<a href="'.str_replace( '*', $showtopic['ip'], $_CONF['ip_lookup'] ) . '" target="_blank" rel="noopener noreferrer">'.$showtopic['ip'].'</a>';
+                $topictemplate->set_var('ipaddress',$iplink);
+            } else {
+                $topictemplate->set_var('ipaddress',$showtopic['ip']);
+            }
         } else {
-            $topictemplate->set_var('ipaddress',$showtopic['ip']);
+            $topictemplate->set_var('ipaddress','');
+        }
+    }
+
+    $warningsEnabled = Forum\Modules\Warning\Warning::featureEnabled();
+    if ($isModerator && $warningsEnabled) {
+        $warn_level = \Forum\Modules\Warning\Warning::getUserPercent($showtopic['uid']);
+        if ($warn_level > 0) {
+            $topictemplate->set_var('warn_level', $warn_level);
+        } else {
+            $topictemplate->clear_var('warn_level');
         }
     } else {
-        $topictemplate->set_var('ipaddress','');
+        $topictemplate->clear_var('warn_level');
     }
+
     $can_voteup = false;
     $can_votedn = false;
     $vote_language = '';
@@ -365,7 +382,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
             'mod_ban'       => $mod_perms['mod_ban'],
             'mod_lock'      => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] == 0),
             'mod_unlock'    => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] != 0),
-            'has_mod_perms' => Forum\Moderator::hasPerm($showtopic['forum']),
+            'mod_warn'      => ($mod_perms['mod_edit'] && $warningsEnabled),
+            'has_mod_perms' => $isModerator,
             'topic_parent_id' => $showtopic['pid'],
     ));
 

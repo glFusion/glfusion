@@ -78,66 +78,6 @@ $forumConfigData = array(
     ),
 
     array(
-        'name' => 'enable_user_rating_system',
-        'default_value' => false,
-        'type' => 'select',
-        'subgroup' => 0,
-        'fieldset' => 0,
-        'selection_array' => 0,
-        'sort' => 40,
-        'set' => TRUE,
-        'group' => 'forum'
-    ),
-
-    array(
-        'name' => 'enable_likes',
-        'default_value' => true,
-        'type' => 'select',
-        'subgroup' => 0,
-        'fieldset' => 0,
-        'selection_array' => 0,
-        'sort' => 50,
-        'set' => TRUE,
-        'group' => 'forum'
-    ),
-
-    array(
-        'name' => 'likes_threshold',
-        'default_value' => 3,
-        'type' => 'text',
-        'subgroup' => 0,
-        'fieldset' => 0,
-        'selection_array' => 0,
-        'sort' => 60,
-        'set' => TRUE,
-        'group' => 'forum'
-    ),
-
-    array(
-        'name' => 'enable_likes_profile',
-        'default_value' => true,
-        'type' => 'select',
-        'subgroup' => 0,
-        'fieldset' => 0,
-        'selection_array' => 0,
-        'sort' => 70,
-        'set' => TRUE,
-        'group' => 'forum'
-    ),
-
-    array(
-        'name' => 'likes_prf_limit',
-        'default_value' => 20,
-        'type' => 'text',
-        'subgroup' => 0,
-        'fieldset' => 0,
-        'selection_array' => 0,
-        'sort' => 75,
-        'set' => TRUE,
-        'group' => 'forum'
-    ),
-
-    array(
         'name' => 'allow_memberlist',
         'default_value' => false,
         'type' => 'select',
@@ -568,7 +508,7 @@ $forumConfigData = array(
         'set' => TRUE,
         'group' => 'forum'
     ),
-
+    
     array(
         'name' => 'ff_topic_post_settings',
         'default_value' => NULL,
@@ -939,5 +879,101 @@ $forumConfigData = array(
         'set' => TRUE,
         'group' => 'forum'
     ),
+
+    array(
+        'name' => 'ff_features',
+        'default_value' => NULL,
+        'type' => 'fieldset',
+        'subgroup' => 0,
+        'fieldset' => 5,
+        'selection_array' => NULL,
+        'sort' => 0,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+    array(
+        'name' => 'enable_user_rating_system',
+        'default_value' => false,
+        'type' => 'select',
+        'subgroup' => 0,
+        'fieldset' => 5,
+        'selection_array' => 0,
+        'sort' => 10,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
+        'name' => 'enable_likes',
+        'default_value' => true,
+        'type' => 'select',
+        'subgroup' => 0,
+        'fieldset' => 5,
+        'selection_array' => 0,
+        'sort' => 20,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
+        'name' => 'likes_threshold',
+        'default_value' => 3,
+        'type' => 'text',
+        'subgroup' => 0,
+        'fieldset' => 5,
+        'selection_array' => 0,
+        'sort' => 30,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
+        'name' => 'enable_likes_profile',
+        'default_value' => true,
+        'type' => 'select',
+        'subgroup' => 0,
+        'fieldset' => 5,
+        'selection_array' => 0,
+        'sort' => 40,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
+        'name' => 'likes_prf_limit',
+        'default_value' => 20,
+        'type' => 'text',
+        'subgroup' => 0,
+        'fieldset' => 5,
+        'selection_array' => 0,
+        'sort' => 50,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
+        'name' => 'warnings_enabled',
+        'default_value' => 0,
+        'type' => 'select',
+        'subgroup' => 0,
+        'fieldset' => 5,
+        'selection_array' => 0,
+        'sort' => 60,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
+    array(
+        'name' => 'warnings_max_points',
+        'default_value' => '100',
+        'type' => 'text',
+        'subgroup' => 0,
+        'fieldset' => 5,
+        'selection_array' => 0,
+        'sort' => 70,
+        'set' => TRUE,
+        'group' => 'forum'
+    ),
+
 );
 ?>

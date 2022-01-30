@@ -324,6 +324,7 @@ $queryBuilder
     ->select('*')
     ->from($_TABLES['ff_topic'])
     ->where('id = '.$queryBuilder->createNamedParameter($showtopic,Database::INTEGER).' OR pid = '.$queryBuilder->createNamedParameter($showtopic,Database::INTEGER))
+    ->andWhere("approved=1")
     ->orderBy('date', $order)
     ->setFirstResult($offset)
     ->setMaxResults($show);

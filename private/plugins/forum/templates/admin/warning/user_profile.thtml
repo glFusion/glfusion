@@ -1,0 +1,41 @@
+{# begin {templatelocation} #}
+<script src="{site_url}/javascript/addons/datetime/jquery.datetimepicker.full.min.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{site_url}/javascript/addons/datetime/jquery.datetimepicker.min.css"/ >
+<script src="{site_url}/javascript/addons/datetime/datetimepicker.js" type="text/javascript"></script>
+
+<div class="uk-alert uk-alert-danger">
+<h3>Administrative Settings</h3>
+
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="wl_pct">Banned Until:</label>
+		<div class="uk-form-controls">
+			<input type="text" name="ban_expires" id="dt_ban"
+				class="popupcal uk-input uk-form-width-medium"
+				value="{ban_expires}" maxlength="16" />
+			<i class="uk-icon uk-icon-remove uk-text-danger tooltip" title="Lift Restriction" onclick="$('#dt_ban').val('');"></i>
+ 
+		</div>
+	</div>
+
+	<div class="uk-form-row">
+		<label class="uk-form-label" for="wl_pct">Moderated Until:</label>
+		<div class="uk-form-controls">
+			<input type="text" name="moderate_expires" id="dt_moderate"
+				class="popupcal uk-input uk-form-width-medium"
+				value="{moderate_expires}" maxlength="16" />
+			<i class="uk-icon uk-icon-remove uk-text-danger tooltip" title="Lift Restriction" onclick="$('#dt_moderate').val('');"></i>
+		</div>
+	</div>
+
+	<div class="uk-form-row">
+		<label class="uk-form-label">Suspended Until:</label>
+		<div class="uk-form-controls">
+			<input type="text" name="suspend_expires" id="dt_suspend"
+				class="popupcal uk-input uk-form-width-medium"
+				value="{suspend_expires}" maxlength="16" />
+			<i class="uk-icon uk-icon-remove uk-text-danger tooltip" title="Lift Restriction" onclick="$('#dt_suspend').val('');"></i>
+		</div>
+	</div>
+
+</div>
+{# end {templatelocation} #}

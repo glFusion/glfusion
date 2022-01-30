@@ -49,5 +49,8 @@ $_TABLES['ff_rating_assoc']	= $_DB_table_prefix . 'forum_rating_assoc';
 $_TABLES['ff_badges']       = $_DB_table_prefix . 'forum_badges';
 $_TABLES['ff_ranks']        = $_DB_table_prefix . 'forum_ranks';
 $_TABLES['ff_likes_assoc']  = $_DB_table_prefix . 'forum_likes_assoc';
+$_TABLES['ff_warnings']     = $_DB_table_prefix . 'forum_warnings';
+$_TABLES['ff_warningtypes'] = $_DB_table_prefix . 'forum_warningtypes';
+$_TABLES['ff_warninglevels'] = $_DB_table_prefix . 'forum_warninglevels';
 
 ?>

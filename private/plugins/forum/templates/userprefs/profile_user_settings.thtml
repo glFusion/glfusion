@@ -71,7 +71,8 @@
 		</div>
 {!endif}
 </div>
-	</fieldset>
+  </fieldset>
+{warning_admin}
 </div>
 
 {# end {templatelocation} #}

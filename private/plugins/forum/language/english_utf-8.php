@@ -286,6 +286,49 @@ $LANG_GF01 = array(
     'less' => 'Less',
     'choose' => 'Choose',
     'display_after' => 'Display After',
+    /*--- Warning-related strings --*/
+    'warnings' => 'Warnings',
+    'warning_levels' => 'Warning Levels',
+    'warning_level' => 'Warning Level',
+    'warning_types' => 'Warning Types',
+    'warning_type' => 'Warning Type',
+    'log' => 'Log',
+    'month' => 'Month',
+    'year' => 'Year',
+    'week' => 'Week',
+    'day' => 'Day',
+    'months' => 'Months',
+    'years' => 'Years',
+    'weeks' => 'Weeks',
+    'days' => 'Days',
+    'dscp' => 'Description',
+    'points' => 'Points',
+    'issued' => 'Issued',
+    'expires' => 'Expires',
+    'expires_after'  => 'Expires After',
+    'issued_by' => 'Issued By',
+    'status' => 'Status',
+    'username' => 'User Name',
+    'revoked_by' => 'Revoked by',
+    'expired' => 'Expired',
+    'active' => 'Active',
+    'no_restriction' => 'No restriction',
+    'user_banned' => 'User is banned from the forum',
+    'user_suspended' => 'User\'s posting permission is suspended',
+    'user_moderated' => 'User\'s forum posts are moderated',
+    'action' => 'Action',
+    'percent' => 'Percent',
+    'admin_notes' => 'Administrative Notes',
+    'revoke_reason' => 'Reason for Revocation',
+    'revoke' => 'Revoke',
+    'forum_ban' => 'Forum Ban',
+    'site_ban' => 'Site Ban',
+    'suspend' => 'Suspend Posting',
+    'moderate' => 'Moderate Posts',
+    'warn_text' => 'You have received a warning from a forum administrator.',
+    'warn_email_subject' => 'Forum Warning Notification',
+    'lang_noreply' => 'This email was generated automatically. Please do not reply to this email.',
+    'none' => 'None',
 );
 
 $LANG_GF02 = array(
@@ -503,6 +546,7 @@ $LANG_GF02 = array(
     'post_ctc'      => 'Permalink Copied to Clipboard',
     'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
     'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>',
+    'msg_suspended' => 'Sorry, You have suspended from making entries.',
 );
 
 $LANG_GF03 = array(
@@ -1017,6 +1061,8 @@ $LANG_confignames['forum'] = array(
     'geshi_header_style' => 'GeSHi Header Block Style',
     'exit_type' => 'Exit Type',
     'likes_prf_limit' => 'Maximum number of Likes to show in profiles',
+    'warnings_enabled' => 'Enable Warning System',
+    'warnings_max_points' => 'Maximum points (to calculate warning level)',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1029,7 +1075,8 @@ $LANG_fs['forum'] = array(
     'ff_centerblock' => 'Centerblock Settings',
     'ff_latest_post_block' => 'Latest Posts Block Settings',
     'ff_rank_settings' => 'Rank Settings',
-    'ff_attachments_settings' => 'Attachment Settings'
+    'ff_attachments_settings' => 'Attachment Settings',
+    'ff_features' => 'Features',
 );
 
 $LANG_configSelect['forum'] = array(

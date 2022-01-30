@@ -25,7 +25,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Log\Log;
 
-global $LANG_GF06, $navbarMenu;
+global $LANG_GF06, $navbarMenu, $LANG_GF01;
 
 $navbarMenu = array(
     $LANG_GF06['1']   => $_CONF['site_admin_url'] .'/plugins/forum/index.php',
@@ -37,6 +37,9 @@ $navbarMenu = array(
     $LANG_GF06['11']  => $_CONF['site_admin_url'] .'/plugins/forum/badges.php',
     $LANG_GF06['12']  => $_CONF['site_admin_url'] .'/plugins/forum/ranks.php',
 );
+if (\Forum\Modules\Warning\Warning::featureEnabled()) {
+    $navbarMenu[$LANG_GF01['warnings']] = $_CONF['site_admin_url'] .'/plugins/forum/warnings.php';
+}
 if ( $_FF_CONF['enable_user_rating_system'] ) {
     $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
 }
@@ -44,7 +47,7 @@ if ( $_FF_CONF['enable_user_rating_system'] ) {
 
 function FF_adminNav( $selected = '' )
 {
-    global $_CONF, $_FF_CONF, $LANG_GF06, $LANG_ADMIN;
+    global $_CONF, $_FF_CONF, $LANG_GF01, $LANG_GF06, $LANG_ADMIN;
 
     $menu_arr = array();
 
@@ -58,6 +61,9 @@ function FF_adminNav( $selected = '' )
         $LANG_GF06['11']  => $_CONF['site_admin_url'] .'/plugins/forum/badges.php',
         $LANG_GF06['12']  => $_CONF['site_admin_url'] .'/plugins/forum/ranks.php',
     );
+    if (Forum\Modules\Warning\Warning::featureEnabled()) {
+        $navbarMenu[$LANG_GF01['warnings']] = $_CONF['site_admin_url'] .'/plugins/forum/warnings.php';
+    }
     if ( $_FF_CONF['enable_user_rating_system'] ) {
         $navbarMenu[$LANG_GF06['8']] = $_CONF['site_admin_url'] .'/plugins/forum/rating.php';
     }

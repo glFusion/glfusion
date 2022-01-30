@@ -64,7 +64,10 @@ forum_chkUsercanPost();
 
 $viewMode = false;
 $mode    = '';
-$expectedModes = array('newtopic','savetopic','newreply','savereply','edittopic','saveedit');
+$expectedModes = array(
+    'newtopic','savetopic','newreply','savereply','edittopic','saveedit',
+    'savemod', 'moderateedit',
+);
 
 /**
  * Get the mode and validate
@@ -103,7 +106,7 @@ if ( substr($referer,0,$sLength) != $_CONF['site_url'] ) {
 }
 $referer = htmlentities($referer,ENT_COMPAT, COM_getEncodingt());
 if ( strstr($referer,'moderation.php') !== false ) {
-    if ( isset($_REQUEST['id']) ) {
+    if ( isset($_REQUEST['id'])  && $mode != 'moderateedit' ) {
         $referer = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.COM_applyFilter($_REQUEST['id'],true);
     }
 }
@@ -256,6 +259,11 @@ switch ( $mode ) {
         $body .= FF_postEditor( $postData,$forumData,$mode,$viewMode );
         break;
 
+    case 'moderateedit' :
+        if (!SEC_hasRights('forum.edit')) {
+            _ff_accessError();
+        }
+
     case 'edittopic' :
         // we don't allow anonymous users to edit posts
         if ( COM_isAnonUser() ) {
@@ -316,6 +324,7 @@ switch ( $mode ) {
     case 'savetopic' :
     case 'savereply' :
     case 'saveedit' :
+    case 'savemod' :
         $txt = '';
         $postData = $_POST;
         if ( !isset($postData['postmode']) ) {
@@ -529,8 +538,12 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         $peTemplate->set_var ('hidden_action', 'newtopic');
     }
 
-    if ( $action == 'edittopic' ) {
-        $peTemplate->set_var('save_button','saveedit');
+    if ( $action == 'edittopic' || $action == 'moderateedit') {
+        if ($action == 'moderateedit' ) {
+            $peTemplate->set_var('save_button','savemod');
+        } else {
+            $peTemplate->set_var('save_button','saveedit');
+        }
         if (isset($postData['forum']) && forum_modPermission($postData['forum'],$_USER['uid'],'mod_edit')) {
             $editmoderator = true;
             $peTemplate->set_var ('hidden_modedit', '1');
@@ -807,6 +820,7 @@ function FF_postEditor( $postData, $forumData, $action, $viewMode )
         'LANG_maxattachments'=>sprintf($LANG_GF10['maxattachments'],$_FF_CONF['maxattachments']),
         'postmode'          => $postData['postmode'],
         'lang_timeout'      => $LANG_ADMIN['timeout_msg'],
+        'can_delete'        => $action == 'moderateedit',
     ));
 
     // Check and see if the filemgmt plugin is installed and enabled
@@ -976,7 +990,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             _ff_accessError();
         }
     }
-    if ( $action == 'saveedit' ) {
+    if ( $action == 'saveedit' || $action == 'savemod') {
         // does the forum match the forum id of the posted data?
         if ( ($forumData['forum'] != 0) && $forumData['forum'] != $postData['forum'] ) {
             _ff_accessError();
@@ -1122,7 +1136,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             }
         }
 
-        if ( $action == 'savetopic' ) {
+        if ( $action == 'savetopic') {
             $fields = "forum,name,email,date,lastupdated,subject,comment,postmode,ip,mood,uid,pid,sticky,locked,status";
             $sql  = "INSERT INTO {$_TABLES['ff_topic']} ($fields) ";
             $sql .= "VALUES (".(int) $forum."," .
@@ -1140,7 +1154,6 @@ function FF_saveTopic( $forumData, $postData, $action )
                     (int) $sticky."," .
                     (int) $locked."," .
                     (int) $status.")";
-
             DB_query($sql);
 
             // Find the id of the last inserted topic
@@ -1204,7 +1217,10 @@ function FF_saveTopic( $forumData, $postData, $action )
                 DB_query("UPDATE {$_TABLES['ff_topic']} SET attachments=1 WHERE id=".(int) $id);
             }
             DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
-        } elseif ( $action == 'saveedit' ) {
+        } elseif ( $action == 'saveedit' || $action == 'savemod') {
+            if ($action == 'savemod') {
+                $approve = ", approved = 1 ";
+            }
             $sql = "UPDATE {$_TABLES['ff_topic']} SET " .
                    "subject='$subject'," .
                    "comment='$comment'," .
@@ -1213,6 +1229,7 @@ function FF_saveTopic( $forumData, $postData, $action )
                    "sticky=".(int) $sticky."," .
                    "locked=".(int) $locked."," .
                    "status=".(int) $status." " .
+                   $approve .
                    "WHERE (id=".(int) $editid.")";
             DB_query($sql);
 
@@ -1271,7 +1288,10 @@ function FF_saveTopic( $forumData, $postData, $action )
                 PLG_subscribe('forum',DB_escapeString($forum),DB_escapeString($nid),(int) $uid,DB_escapeString($forum_name), $subject );
             }
         }
-        if ( $action != 'saveedit' ) {
+
+        if ($action == 'savemod') {
+            echo COM_refresh($_CONF['site_admin_url'] . '/moderation.php');
+        } elseif ( $action != 'saveedit' ) {
             _ff_chknotifications($forum,$savedPostID,$uid);
         }
 

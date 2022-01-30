@@ -319,7 +319,10 @@
 					<div class="uk-form-row">
 						<button onclick="actionClick('preview');return false;" class="uk-button uk-button-primary" type="submit" name="preview" id="preview" value="{LANG_PREVIEW}" tabindex="7">{LANG_PREVIEW}</button>
 						<button onclick="actionClick('save_button');return false;" class="uk-button uk-button-success" type="submit" name="{save_button}" id="{save_button}" value="{LANG_SUBMIT}" tabindex="8">{LANG_SUBMIT}</button>
-						<button onclick="actionClick('cancel');return false;" class="uk-button uk-button-danger cancel" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9">{$LANG_GF01[CANCEL]}</button>
+						<button onclick="actionClick('cancel');return false;" class="uk-button cancel" type="submit" name="cancel" value="{$LANG_GF01[CANCEL]}" tabindex="9">{$LANG_GF01[CANCEL]}</button>
+{!if can_delete}
+						<button onclick="return confirm('Are you sure you want to delete this item');" class="uk-button uk-button-danger delete" type="submit" name="delete_post" value="delete" tabindex="9">{$LANG_GF01[DELETE]}</button>
+{!endif}
 					</div>
 				</form>
 			</div>
