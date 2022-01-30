@@ -94,7 +94,7 @@ function USER_edit($uid = '', $msg = '')
             if ( $id == 'pe_preview' ) {
                 continue;
             }
-            if ( $id == 'pe_content' && $_CONF['hide_exclude_content'] == 1 && $_CONF['emailstories'] == 0 ) {
+            if ( $id == 'pe_content' && $_CONF['emailstories'] == 0 ) {
                 continue;
             } elseif ($id == 'pe_twofactor' ) {
                 continue;
@@ -274,7 +274,7 @@ function USER_edit($uid = '', $msg = '')
     $userform->set_var('group_panel',USER_groupPanel($U));
     $userform->set_var('userinfo_panel',USER_userinfoPanel($U));
     $userform->set_var('layout_panel',USER_layoutPanel($U));
-    if ( $_CONF['hide_exclude_content'] == 0 || $_CONF['emailstories'] == 1 ) {
+    if ( $_CONF['emailstories'] == 1 ) {
         $userform->set_var('content_panel',USER_contentPanel($U));
     }
     $userform->set_var('privacy_panel',USER_privacyPanel($U));
