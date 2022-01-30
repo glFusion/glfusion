@@ -111,7 +111,13 @@ class Dates
     }
 
 
-
+    /**
+     * Get the string representation of a time period, allowing for plurals.
+     *
+     * @param   integer $num    Number of periods, to see if a plural is needed
+     * @param   string  $period Base period language string ID
+     * @return  string      Period string for singular or plural instance
+     */
     public static function getDscp(int $num, string $period) : string
     {
         global $LANG_GF01;

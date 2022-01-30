@@ -11,8 +11,8 @@
  * @filesource
  */
 namespace Forum\Modules\Warning;
-use glFusion\Database\Database;
 use glFusion\FieldList;
+use glFusion\Database\Database;
 
 
 /**
@@ -75,11 +75,15 @@ class WarningType
     {
         global $_TABLES;
 
-        $sql = "SELECT * FROM {$_TABLES['ff_warningtypes']}
-                WHERE wt_id=" . $id;
-        $res = DB_query($sql);
-        if ($res && DB_numRows($res) == 1) {
-            $A = DB_fetchArray($res, false);
+        $db = Database::getInstance();
+        $stmt = $db->conn->prepare(
+            "SELECT * FROM {$_TABLES['ff_warningtypes']}
+            WHERE wt_id= ?"
+        );
+        $stmt->bindParam(1, $id, Database::INTEGER);
+        $stmt->execute();
+        $A = $stmt->fetch(Database::ASSOCIATIVE);
+        if (is_array($A)) {
             $this->setVars($A);
             return true;
         } else {
@@ -208,11 +212,15 @@ class WarningType
         global $_TABLES;
 
         $retval = array();
-        $sql = "SELECT * FROM {$_TABLES['ff_warningtypes']}
-            ORDER BY wt_points ASC";
-        $res = DB_query($sql);
-        if ($res && DB_numRows($res) > 0) {
-            while ($A = DB_fetchArray($res, false)) {
+        $db = Database::getInstance();
+        $stmt = $db->conn->prepare(
+            "SELECT * FROM {$_TABLES['ff_warningtypes']}
+            ORDER BY wt_points ASC"
+        );
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+        if (is_array($data)) {
+            foreach ($data as $A) {
                 $retval[$A['wt_id']] = new self($A);
             }
         }
@@ -228,8 +236,14 @@ class WarningType
     public static function Delete(int $wt_id) : void
     {
         global $_TABLES;
+    
+        $db = Database::getInstance();
 
-        DB_delete($_TABLES['ff_warningtypes'], 'wt_id', $wt_id);
+        $sql = "DELETE FROM `{$_TABLES['ff_warningtypes']}`
+            WHERE wt_id = ?";
+        $stmt = $db->conn->prepare($sql)
+                         ->bindParam(1, $wt_id, Database::INTEGER)
+                         ->execute();
     }
 
 
@@ -240,9 +254,7 @@ class WarningType
      */
     public function Edit()
     {
-        global $_TABLES, $_CONF, $LANG_GF01;
-
-        $db = Database::getInstance();
+        global $_CONF, $LANG_GF01;
 
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('editform', 'warningtype.thtml');
@@ -321,7 +333,7 @@ class WarningType
         );
         $text_arr = array(
             //'has_extras' => true,
-            'form_url' => $_CONF['site_admin_url'] . '/plugins/forum/warnings.php',
+            'form_url' => $_CONF['site_admin_url'] . '/plugins/forum/warnings.php?listtypes',
         );
 
         $retval .= ADMIN_list(
@@ -394,25 +406,29 @@ class WarningType
             $this->setVars($A, false);
         }
 
-        if ($this->wt_id > 0) {
-            $sql1 = "UPDATE {$_TABLES['ff_warningtypes']} SET ";
-            $sql3 = " WHERE wt_id = {$this->wt_id}";
-        } else {
-            $sql1 = "INSERT INTO {$_TABLES['ff_warningtypes']} SET ";
-            $sql3 = '';
-        }
-
-        $sql2 = "wt_points = " . (int)$this->wt_points . ",
-            wt_expires_qty = " . (int)$this->wt_expires_qty . ",
-            wt_expires_period = '" . DB_escapeString($this->wt_expires_period) . "',
-            wt_dscp = '" . DB_escapeString($this->wt_dscp) . "'";
-        $sql = $sql1 . $sql2 . $sql3;
-        DB_query($sql);
-        if (DB_error())  {
-            return false;
-        } else {
+        try {
+            $db = Database::getInstance();
+            $qb = $db->conn->createQueryBuilder();
+            if ($this->wt_id > 0) {
+                $qb->update($_TABLES['ff_warningtypes'])
+                             ->where('wt_id = :wt_id');
+            } else {
+                $qb->insert($_TABLES['ff_warningtypes']);
+            }
+            $qb->set('wt_points', ':wt_points')
+               ->set('wt_expires_qty', 'wt_expires_qty')
+               ->set('wt_expires_period', 'wt_expires_period')
+               ->set('wt_dscp', 'wt_dscp')
+               ->setParameter('wt_id', $this->wt_id)
+               ->setParameter('wt_points', $this->wt_points)
+               ->setParameter('wt_expires_qty', $this->wt_expires_qty)
+               ->setParameter('wt_expires_period', $this->wt_expires_period)
+               ->setParameter('wt_dscp', $this->wt_dscp);
+            $stmt = $qb->execute();
             return true;
-        }
+        } catch(Throwable $e) {
+            return false;
+        } 
     }
 
 }

@@ -79,12 +79,15 @@ class WarningLevel
     {
         global $_TABLES;
 
-        $sql = "SELECT * FROM {$_TABLES['ff_warninglevels']}
-                WHERE wl_id=" . $id;
-        //echo $sql;die;
-        $res = DB_query($sql);
-        if ($res && DB_numRows($res) == 1) {
-            $A = DB_fetchArray($res, false);
+        $db = Database::getInstance();
+        $stmt = $db->conn->prepare(
+            "SELECT * FROM {$_TABLES['ff_warninglevels']}
+             WHERE wl_id = ?"
+        );
+        $stmt->bindParam(1, $id, Database::INTEGER);
+        $stmt->execute();
+        $A = $stmt->fetch(Database::ASSOCIATIVE);
+        if (is_array($A)) {
             $this->setVars($A);
             return true;
         } else {
@@ -209,13 +212,17 @@ class WarningLevel
     {
         global $_TABLES;
 
-        $sql = "SELECT * FROM {$_TABLES['ff_warninglevels']}
-            WHERE wl_pct <= $pct
+        $db = Database::getInstance();
+        $stmt = $db->conn->prepare(
+            "SELECT * FROM {$_TABLES['ff_warninglevels']}
+            WHERE wl_pct <= ?
             ORDER BY wl_pct DESC
-            LIMIT 1";
-        $res = DB_query($sql);
-        if ($res && DB_numRows($res) == 1) {
-            $A = DB_fetchArray($res, false);
+            LIMIT 1"
+        );
+        $stmt->bindParam(1, $pct, Database::INTEGER);
+        $stmt->execute();
+        $A = $stmt->fetch(Database::ASSOCIATIVE);
+        if (is_array($A) && !empty($A)) {
             $retval = new self($A);
         } else {
             $retval = new self;
@@ -233,7 +240,13 @@ class WarningLevel
     {
         global $_TABLES;
 
-        DB_delete($_TABLES['ff_warninglevels'], 'wl_id', $wl_id);
+        $db = Database::getInstance();
+
+        $sql = "DELETE FROM `{$_TABLES['ff_warninglevels']}`
+            WHERE wl_id = ?";
+        $stmt = $db->conn->prepare($sql)
+                         ->bindParam(1, $wl_id, Database::INTEGER)
+                         ->execute();
     }
 
 
@@ -244,9 +257,7 @@ class WarningLevel
      */
     public function Edit()
     {
-        global $_TABLES, $_CONF, $LANG_GF01;
-
-        $db = Database::getInstance();
+        global $_CONF, $LANG_GF01;
 
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('editform', 'warninglevel.thtml');
@@ -312,11 +323,10 @@ class WarningLevel
         );
 
         $options = array('chkdelete' => 'true', 'chkfield' => 'wl_id');
-        $defsort_arr = array('field' => '', 'direction' => 'asc');
+        $defsort_arr = array('field' => 'wl_pct', 'direction' => 'asc');
         $query_arr = array(
             'table' => 'ff_warninglevels',
-            'sql' => "SELECT * FROM {$_TABLES['ff_warninglevels']}
-                ORDER BY wl_pct ASC",
+            'sql' => "SELECT * FROM {$_TABLES['ff_warninglevels']}",
             'query_fields' => array(),
         );
         $text_arr = array(
@@ -374,11 +384,11 @@ class WarningLevel
             break;
 
         case 'wl_action':
-            $retval .= Status::getDscp($fieldvalue);
+            $retval .= Status::getDscp((int)$fieldvalue);
             break;
 
         case 'wl_duration':
-            $retval .= $A['wl_duration_qty'] . ' ' . Dates::getDscp($A['wl_duration_qty'], $A['wl_duration_period']);
+            $retval .= $A['wl_duration_qty'] . ' ' . Dates::getDscp((int)$A['wl_duration_qty'], $A['wl_duration_period']);
             break;
 
         default:
@@ -403,26 +413,31 @@ class WarningLevel
             $this->setVars($A, false);
         }
 
-        if ($this->wl_id > 0) {
-            $sql1 = "UPDATE {$_TABLES['ff_warninglevels']} SET ";
-            $sql3 = " WHERE wl_id = {$this->wl_id}";
-        } else {
-            $sql1 = "INSERT INTO {$_TABLES['ff_warninglevels']} SET ";
-            $sql3 = '';
-        }
-
-        $sql2 = "wl_pct = " . (int)$this->wl_pct . ",
-            wl_duration = " . (int)$this->wl_duration . ",
-            wl_duration_qty = " . (int)$this->wl_duration_qty . ",
-            wl_duration_period = '" . DB_escapeString($this->wl_duration_period) . "',
-            wl_action = " . (int)$this->wl_action;
-        $sql = $sql1 . $sql2 . $sql3;
-        DB_query($sql);
-        if (DB_error())  {
-            return false;
-        } else {
+        try {
+            $db = Database::getInstance();
+            $qb = $db->conn->createQueryBuilder();
+            if ($this->wl_id > 0) {
+                $qb->update($_TABLES['ff_warninglevels'])
+                             ->where('wl_id = :wl_id');
+            } else {
+                $qb->insert($_TABLES['ff_warninglevels']);
+            }
+            $qb->set('wl_pct', ':wl_pct')
+               ->set('wl_duration', 'wl_duration')
+               ->set('wl_duration_qty', 'wl_duration_qty')
+               ->set('wl_duration_period', 'wl_duration_period')
+               ->set('wl_action', 'wl_action')
+               ->setParameter('wl_id', $this->wl_id)
+               ->setParameter('wl_pct', $this->wl_pct)
+               ->setParameter('wl_duration', $this->wl_duration)
+               ->setParameter('wl_duration_qty', $this->wl_duration_qty)
+               ->setParameter('wl_duration_period', $this->wl_duration_period)
+               ->setParameter('wl_action', $this->wl_action);
+            $stmt = $qb->execute();
             return true;
-        }
+        } catch(Throwable $e) {
+            return false;
+        } 
     }
 
 }

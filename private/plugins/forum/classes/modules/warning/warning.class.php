@@ -15,6 +15,7 @@ use glFusion\Database\Database;
 use glFusion\FieldList;
 use Forum\UserInfo;
 use Forum\Status;
+use Forum\Topic;
 
 
 class Warning
@@ -106,12 +107,20 @@ class Warning
     {
         global $_TABLES;
 
-        $sql = "SELECT * FROM {$_TABLES['ff_warnings']}
-                WHERE w_id=" . $w_id;
-        //echo $sql;die;
-        $res = DB_query($sql);
-        if ($res && DB_numRows($res) == 1) {
-            $A = DB_fetchArray($res, false);
+        $db = Database::getInstance();
+        try {
+            $stmt = $db->conn->query(
+                "SELECT * FROM {$_TABLES['ff_warnings']}
+                WHERE w_id=" . $w_id
+            );
+        } catch(Throwable $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            return false;
+        }
+        $A = $stmt->fetch(Database::ASSOCIATIVE);
+        if (is_array($A) && !empty($A)) {
             $this->setVars($A, true);
             return true;
         } else {
@@ -130,7 +139,7 @@ class Warning
     {
         global $_FF_CONF;
 
-        return (isset($_FF_CONF['enable_warnings']) && $_FF_CONF['enable_warnings']);
+        return (isset($_FF_CONF['warnings_enabled']) && $_FF_CONF['warnings_enabled']);
     }
 
 
@@ -145,7 +154,7 @@ class Warning
         global $_FF_CONF;
 
         $points = self::getUserPoints($uid);
-        return round(($points / (int)$_FF_CONF['warning_max_points']) * 100, 2);
+        return round(($points / (int)$_FF_CONF['warnings_max_points']) * 100, 2);
     }
 
 
@@ -159,14 +168,22 @@ class Warning
     {
         global $_TABLES;
 
+        $db = Database::getInstance();
         $sql = "SELECT sum(w.w_points) AS totalpoints
             FROM {$_TABLES['ff_warnings']} w
             WHERE w.w_uid = $uid
             AND w.w_expires > UNIX_TIMESTAMP()
             AND w.revoked_date = 0";
-        $res = DB_query($sql);
-        if ($res && DB_numRows($res) == 1) {
-            $A = DB_fetchArray($res, false);
+        try {
+            $stmt = $db->conn->query($sql);
+        } catch(Throwable $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            return false;
+        }
+        $A = $stmt->fetch(Database::ASSOCIATIVE);
+        if (is_array($A) && isset($A['totalpoints'])) {
             return (int)$A['totalpoints'];
         } else {
             return 0;
@@ -222,7 +239,7 @@ class Warning
             $this->w_expires = (int)$A['w_expires'];
             $this->revoked_by = (int)$A['revoked_by'];
             $this->revoked_date = (int)$A['revoked_date'];
-            $this->revoked_reason = (int)$A['revoked_reason'];
+            $this->revoked_reason = $A['revoked_reason'];
         }
         return $this;
     }
@@ -254,6 +271,12 @@ class Warning
     }
 
 
+    /**
+     * Set the ID of the topic causing the warning.
+     *
+     * @param   integer $id     Topic record ID
+     * @return  object  $this
+     */
     public function withTopicId(int $id) : self
     {
         $this->w_topic_id = (int)$id;
@@ -261,6 +284,12 @@ class Warning
     }
 
 
+    /**
+     * Set the return URL after submitting the warning.
+     *
+     * @param   string  $url    URL for redirection
+     * @return  object  $this
+     */
     public function withReturnUrl(string $url) : self
     {
         $this->_return_url = $url;
@@ -347,25 +376,46 @@ class Warning
     }
 
 
-    public static function getAll($uid, $activeonly=true)
+    /**
+     * Get all the warnings in the database for a user.
+     *
+     * @param   integer $uid    User ID
+     * @param   boolean $activeonly     True to get only active warnings
+     * @return  array   Array of Warning objects
+     */
+    public static function getAll(int $uid, bool $activeonly=true) : array
     {
         global $_TABLES;
 
         $uid = (int)$uid;
         $retval = array();
-        $sql = "SELECT * FROM {$_TABLES['ff_warnings']} WHERE 1=1";
+
+        $db = Database::getInstance();
+        $qb = $db->conn->createQueryBuilder();
+        $qb->select('*')
+            ->from($_TABLES['ff_warnings'])
+            ->where('1=1')
+            ->orderBy('w_expires', 'DESC');
+
         if ($uid > 1) {
-            $sql .= " AND w_uid = $uid";
+            $qb->andWhere('w_uid = ' .$qb->createNamedParameter($uid));
         }
         if ($activeonly) {
-            $sql .= " AND w_expires > UNIX_TIMESTAMP()";
+            $qb->andWhere('w_expires > UNIX_TIMESTAMP()');
         }
-        $sql .= " ORDER BY w_expires DESC";
-        $res = DB_query($sql);
-        if ($res) {
-            while ($A = DB_fetchArray($res, false)) {
-                $retval[$A['w_id']] = new self($A);
+        try {
+            $stmt = $qb->execute();
+            $A = $stmt->fetchAll(Database::ASSOCIATIVE);
+            if (is_array($A) && !empty($A)) {
+                foreach ($A as $warning) {
+                    $retval[$warning['w_id']] = new self($warning);
+                }
             }
+        } catch(Throwable $e) {
+            if (defined('DVLP_DEBUG')) {
+                throw($e);
+            }
+            return false;
         }
         return $retval;
     }
@@ -380,8 +430,11 @@ class Warning
     public static function Delete(int $w_id) : void
     {
         global $_TABLES;
+    
+        $db = Database::getInstance();
 
-        DB_delete($_TABLES['ff_warnings'], 'w_id', $w_id);
+        $sql = "DELETE FROM `{$_TABLES['ff_warnings']}` WHERE w_id = $w_id";
+        $db->conn->executeUpdate($sql);
     }
 
 
@@ -394,16 +447,22 @@ class Warning
     {
         global $_TABLES, $_USER;
 
-        $uid = (int)$_USER['uid'];
-        $reason = DB_escapeString($this->revoked_reason);
-        $dt = time();
         $sql = "UPDATE {$_TABLES['ff_warnings']} SET
-            revoked_date = $dt,
-            revoked_reason = '$reason',
-            revoked_by = $uid
-            WHERE w_id = {$this->w_id}";
-        DB_query($sql);
-        return DB_error() ? false : true;
+            revoked_date = ?,
+            revoked_reason = ?,
+            revoked_by = ?
+            WHERE w_id = ?";
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->conn->executeQuery(
+                $sql,
+                array(time(), $this->revoked_reason, $_USER['uid'], $this->w_id),
+                array(Database::INTEGER, Database::STRING, Database::INTEGER, Database::INTEGER)
+            );
+            return true;
+        } catch(Throwable $e) {
+            return false;
+        }
     }
 
 
@@ -424,7 +483,7 @@ class Warning
             'w_id'      => $this->w_id,
             'uid'       => $this->w_uid,
             'username'  => COM_getDisplayName($this->w_uid),
-            'subject'   => DB_getItem($_TABLES['ff_topic'], 'subject', "id = {$this->w_topic_id}"),
+            'subject'   => Topic::getInstance($this->w_topic_id)->getSubject(),
             'topic_id'  => $this->w_topic_id,
             'dscp'      => $this->w_dscp,
             'notes'     => $this->w_notes,
@@ -455,7 +514,7 @@ class Warning
             'w_id'      => $this->w_id,
             'uid'       => $this->w_uid,
             'username'  => COM_getDisplayName($this->w_uid),
-            'subject'   => DB_getItem($_TABLES['ff_topic'], 'subject', "id = {$this->w_topic_id}"),
+            'subject'   => Topic::getInstance($this->w_topic_id)->getSubject(),
             'topic_id'  => $this->w_topic_id,
             'dscp'      => $this->w_dscp,
             'notes'     => $this->w_notes,
@@ -678,38 +737,54 @@ class Warning
         }
 
         $this->_WT = WarningType::getInstance($this->wt_id);
-        $points = $this->_WT->getPoints();
-        if ($this->w_id > 0) {
-            $expires = $this->w_expires;  // using existing value
-            $sql1 = "UPDATE {$_TABLES['ff_warnings']} SET ";
-            $sql3 = "WHERE w_id = {$this->w_id}";
-        } else {
-            $expires = time() + $this->_WT->getExpirationSeconds();
-            $sql1 = "INSERT INTO {$_TABLES['ff_warnings']} SET ";
-            $sql3 = '';
-        }
 
-        $sql2 = "w_uid = '" . (int)$this->w_uid . "',
-                wt_id = '{$this->wt_id}',
-                w_topic_id = {$this->w_topic_id},
-                ts = UNIX_TIMESTAMP(),
-                w_points = $points,
-                w_expires = {$expires},
-                revoked_date = {$this->revoked_date},
-                revoked_by = {$this->revoked_by},
-                revoked_reason = '" . DB_escapeString($this->revoked_reason) . "',
-                w_dscp = '" . DB_escapeString($this->w_dscp) . "',
-                w_notes = '" . DB_escapeString($this->w_notes) . "'";
-        $sql = $sql1 . $sql2 . $sql3;
-        DB_query($sql);
-        if (DB_error())  {
-            return false;
-        } else {
+        try {
+            $db = Database::getInstance();
+            $qb = $db->conn->createQueryBuilder();
+            if ($this->w_id > 0) {
+                $expires = $this->w_expires;  // using existing value
+                $sql = "UPDATE {$_TABLES['ff_warnings']} SET ";
+                $qb->update($_TABLES['ff_warnings'])
+                             ->where('w_id = :w_id');
+            } else {
+                $expires = time() + $this->_WT->getExpirationSeconds();
+                $sql = "INSERT INTO {$_TABLES['ff_warnings']} SET ";
+                $qb->insert($_TABLES['ff_warnings']);
+            }
+            $qb->values(array(
+                'w_uid' => ':w_uid',
+                'wt_id' => ':wt_id',
+                'w_topic_id' => ':w_topic_id',
+                'ts' => 'UNIX_TIMESTAMP()',
+                'w_points' => ':w_points',
+                'w_expires' => ':w_expires',
+                'revoked_date' => ':revoked_date',
+                'revoked_by' => ':revoked_by',
+                'revoked_reason' => ':revoked_reason',
+                'w_dscp' => ':w_dscp',
+                'w_notes' => ':w_notes',
+            ) )
+                ->setParameter('w_uid', $this->w_uid)
+                ->setParameter('wt_id', $this->wt_id)
+                ->setParameter('w_topic_id', $this->w_topic_id)
+                ->setParameter('w_points', $this->_WT->getPoints())
+                ->setParameter('w_expires', $expires)
+                ->setParameter('revoked_date', $this->revoked_date)
+                ->setParameter('revoked_by', $this->revoked_by)
+                ->setParameter('revoked_reason', $this->revoked_reason)
+                ->setParameter('w_dscp', $this->w_dscp)
+                ->setParameter('w_notes', $this->w_notes)
+                ->setParameter('w_id', $this->w_id);
+            $stmt = $qb->execute();
             // Take action, if necessary
             $this->takeAction();
             // Notify the user, if selected
-            $this->notifyUser((int)$A['notify']);
+            if (isset($A['notify'])) {
+                $this->notifyUser((int)$A['notify']);
+            }
             return true;
+        } catch(Throwable $e) {
+            return false;
         }
     }
 
@@ -721,10 +796,34 @@ class Warning
      */
     private function notifyUser(int $type) : void
     {
+        global $_CONF, $LANG_GF01;
+
+        $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         switch ($type) {
-        case 1:         // Notify via the PM plugin
+        case 1:         // Notify via Email
+            $T->set_file('email', 'notify_email.thtml');
+            $Topic = Topic::getInstance($this->w_topic_id);
+            $T->set_var(array(
+                'post_topic' => $Topic->getSubject(),
+                'warn_type' => $this->_WT->getDscp(),
+                'warn_dscp' => $this->getDscp(),
+            ) );
+            $T->parse('output', 'email');
+            $html_msg = $T->finish($T->get_var('output'));
+            $html2TextConverter = new \Html2Text\Html2Text($html_msg);
+            $text_msg = $html2TextConverter->getText();
+            COM_emailNotification(array(
+                'to' => array($Topic->getEmail()),
+                'from' => array(
+                        'email' => $_CONF['noreply_mail'],
+                        'name'  => $_CONF['site_name'],
+                ),
+                'htmlmessage' => $html_msg,
+                'textmessage' => $text_msg,
+                'subject' => $_CONF['site_name'] . ': ' . $LANG_GF01['warn_email_subject'],
+            ) );
             break;
-        case 2:         // NOtify via Email
+        case 2:         // Notify via the PM plugin, maybe future
             break;
         }
     }
@@ -739,8 +838,8 @@ class Warning
     {
         global $_TABLES, $LANG_GF01;
 
-        if ($this->w_uid < 2) {
-            // Can only act on logged-in users.
+        if ($this->w_uid < 2 || SEC_inGroup('Root', $this->w_uid)) {
+            // Can only act on logged-in users, and not administrators.
             return false;
         }
 
@@ -749,43 +848,36 @@ class Warning
         }
         $percent = self::getUserPercent($this->w_uid);
         $WL = WarningLevel::getByPercent($percent);
-        if ($WL->getID() < 1) {
+        if ($WL->getID() < 1 || $WL->getAction() < 1) {
             // No matching warninglevel record found.
             return false;
         }
 
-        if ($WL->getAction() > 0) {
-            $status = $WL->getAction();
-            if ($status == Status::SITE_BAN) {
-                // Update the users table with a permanent site ban.
-                $sql = "UPDATE {$_TABLES['users']}
-                    SET status = " . USER_ACCOUNT_DISABLED .
-                    " WHERE uid = {$this->w_uid}";
-            } else {
-                $expiration = time() + $WL->getDuration();
-                $field = Status::getKey($status) . '_expires';
-                $sql = "UPDATE {$_TABLES['ff_userinfo']}
-                    SET $field = $expiration
-                    WHERE uid = {$this->w_uid}";
-            }
-            DB_query($sql, 1);
-            if (DB_error()) {
-                COM_errorLog("SQL Error: $sql");
-                return false;
-            } else {
-                COM_errorLog(
-                    "User {$this->w_uid} forum status updated: " .
-                    $LANG_GF01[Status::getKey($status)]
-                );
-                return true;
-            }
+        $status = $WL->getAction();
+        if ($status == Status::SITE_BAN) {
+            // Update the users table with a permanent site ban.
+            $sql = "UPDATE {$_TABLES['users']}
+                SET status = " . USER_ACCOUNT_DISABLED .
+                " WHERE uid = {$this->w_uid}";
+        } else {
+            $expiration = time() + $WL->getDuration();
+            $field = Status::getKey($status) . '_expires';
+            $sql = "UPDATE {$_TABLES['ff_userinfo']}
+                SET $field = $expiration
+                WHERE uid = {$this->w_uid}";
         }
-        return false;
-    }
-
-
-    private function _notifyUser()
-    {
+        $db = Database::getInstance();
+        try {
+            $db->conn->executeUpdate($sql);
+            COM_errorLog(
+                "User {$this->w_uid} forum status updated: " .
+                $LANG_GF01[Status::getKey($status)]
+            );
+            return true;
+        } catch(Throwable $e) {
+            COM_errorLog("SQL Error: $sql");
+            return false;
+        }
     }
 
 }
