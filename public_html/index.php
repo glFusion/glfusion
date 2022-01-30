@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2018-2021 by the following authors:
+*  Copyright (C) 2018-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -156,12 +156,8 @@ if (!empty($topic)) {
 }
 
 $U['maxstories'] = 0;
-$U['aids'] = '';
-$U['tids'] = '';
 if (!COM_isAnonUser()) {
     $U['maxstories'] = $_USER['maxstories'];
-    $U['aids'] = $_USER['aids'];
-    $U['tids'] = $_USER['tids'];
 }
 
 $maxstories = 0;
@@ -262,33 +258,6 @@ if ($topic != $archivetid) {
 }
 
 $db->qbGetPermSQL($queryBuilder,'',0,SEC_ACCESS_RO,'s');
-
-// test data
-//$U['aids'] = $U['aids'] . "5 10 escape'd bad";
-
-if (!empty($U['aids'])) {
-    $aids = explode(' ',$U['aids']);
-    $aids = array_map( 'intval', $aids);
-    $U['aids'] = implode(',',$aids);
-    $queryBuilder->andWhere(
-        $queryBuilder->expr()->notIn('s.uid',
-         $queryBuilder->createNamedParameter($aids,\Doctrine\DBAL\Connection::PARAM_INT_ARRAY)
-        )
-    );
-}
-
-// test data
-//$U['tids'] = "one two escape'd ";
-
-if (!empty($U['tids'])) {
-    $tids = explode(' ',$U['tids']);
-    $U['tids'] = implode(',',$tids);
-    $queryBuilder->andWhere(
-        $queryBuilder->expr()->notIn('s.uid',
-          $queryBuilder->createNamedParameter($tids,\Doctrine\DBAL\Connection::PARAM_STR_ARRAY)
-        )
-    );
-}
 
 $db->qbGetTopicSQL($queryBuilder,'AND',0,'s');
 

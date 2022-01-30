@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2010-2018 by the following authors:
+*  Copyright (C) 2010-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -95,7 +95,7 @@ function phpblock_calendar( $help='', $title='' )
 
     $retval = '';
 
-    if( !$_USER['noboxes'] && $_CA_CONF['showupcomingevents'] ) {
+    if( $_CA_CONF['showupcomingevents'] ) {
         $range = $_CA_CONF['upcomingeventsrange'];
         if( $range == 0 ) {
             $range = 14; // fallback: 14 days

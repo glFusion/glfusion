@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2010-2021 by the following authors:
+*  Copyright (C) 2010-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -66,7 +66,6 @@ function editPreferences()
         'lang_theme'            => $LANG04[72],
         'lang_cooktime'         => $LANG04[68],
         'lang_noicons'          => $LANG04[40],
-        'lang_noboxes'          => $LANG04[44],
         'lang_maxstories'       => $LANG04[43],
         'lang_timezone'         => $LANG04[158],
         'lang_dateformat'       => $LANG04[42],
@@ -134,21 +133,6 @@ function editPreferences()
         'dateformat_options',
         COM_optionList($_TABLES['dateformats'], 'dfid,description', 0)
     );
-
-    if (isset($LANG_configSelect['Core'])) {
-        $cfgSelect = $LANG_configSelect['Core'][18];
-    } else {
-        $cfgSelect = array_flip($LANG_configselects['Core'][18]);
-    }
-    $options = '';
-    foreach ($cfgSelect AS $type => $name ) {
-        $options .= '<option value="' . $type . '"';
-        if ($type == 'google') {
-            $options .= ' selected="selected"';
-        }
-        $options .= '>' . $name . '</option>' . LB;
-    }
-    $T->set_var('search_result_options', $options);
 
     $T->set_var(
         'commentmode_options',
@@ -243,19 +227,6 @@ function applyPreferences()
                     }
                     $prefs_sql .= 'noicons='.$noicons;
                     break;
-                case 'noboxes' : // userindex - noboxes
-                    if ( isset($_POST['noboxes']) && $_POST['noboxes'] == 'on' ) {
-                        $noboxes = 1;
-                    } else {
-                        $noboxes = 0;
-                    }
-                    if ($index_first) {
-                        $index_sql .= ',';
-                    } else {
-                        $index_first++;
-                    }
-                    $index_sql .= 'noboxes='.$noboxes;
-                    break;
                 case 'maxstories' : // userindex - maxstories
                     if ( isset($_POST['maxstories']) ) {
                         $maxstories = COM_applyFilter($_POST['maxstories'],true);
@@ -287,18 +258,6 @@ function applyPreferences()
                             $prefs_first++;
                         }
                         $prefs_sql .= 'dfid='.$dfid;
-                    }
-                    break;
-                case 'search_result_format' :   // userprefs - search_result_format
-                    if ( isset($_POST['search_result_format']) ) {
-                        $format = $_POST['search_result_format'];
-                        $search_result_format = ($format == 'google' ? 'google' : 'table');
-                        if ( $prefs_first ) {
-                            $prefs_sql .= ',';
-                        } else {
-                            $prefs_first++;
-                        }
-                        $prefs_sql .= 'search_result_format="'.DB_escapeString($search_result_format).'"';
                     }
                     break;
                 case 'commentmode' :    //usercomment - commentmode

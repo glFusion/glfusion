@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -402,16 +402,8 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
     }
 
     if ($A['sp_format'] <> 'blankpage') {
-        if (!isset($_USER['noboxes'])) {
-            if ( COM_isAnonUser() ) {
-                $_USER['noboxes'] = 0;
-            } else {
-                $_USER['noboxes'] = DB_getItem($_TABLES['userindex'],
-                                        'noboxes', "uid=".(int)$_USER['uid']);
-            }
-        }
 
-        if (($A['sp_format'] == 'allblocks' || $A['sp_format'] == 'rightblocks') && ($_USER['noboxes'] != 1)) {
+        if (($A['sp_format'] == 'allblocks' || $A['sp_format'] == 'rightblocks') ) {
             $footerOption = true;
         } else if (($A['sp_format'] == 'leftblocks') || ($A['sp_format'] == 'noblocks')) {
             $footerOption = false;

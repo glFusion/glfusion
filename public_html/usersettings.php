@@ -67,7 +67,7 @@ function edituser()
     $cnt = 0;
     if ( is_array($LANG_MYACCOUNT) ) {
         foreach ($LANG_MYACCOUNT as $id => $label) {
-            if ( $id == 'pe_content' && $_CONF['hide_exclude_content'] == 1 && $_CONF['emailstories'] == 0 ) {
+            if ( $id == 'pe_content' && (!isset($_CONF['emailstories']) || $_CONF['emailstories'] == 0)) {
                 continue;
             } elseif ( $id == 'pe_twofactor' && (!isset($_CONF['enable_twofactor']) || $_CONF['enable_twofactor'] == 0 || !function_exists('hash_hmac')) ) {
                 continue;
@@ -526,8 +526,6 @@ function editpreferences()
     $preferences->set_var ('lang_misc_help', $LANG04[140]);
     $preferences->set_var ('lang_noicons', $LANG04[40]);
     $preferences->set_var ('lang_noicons_text', $LANG04[49]);
-    $preferences->set_var ('lang_noboxes', $LANG04[44]);
-    $preferences->set_var ('lang_noboxes_text', $LANG04[51]);
     $preferences->set_var ('lang_maxstories', $LANG04[43]);
     if (strpos ($LANG04[52], '%d') === false) {
         $maxtext = $LANG04[52] . ' ' . $_CONF['limitnews'];
@@ -681,12 +679,6 @@ function editpreferences()
         $preferences->set_var ('noicons_checked', '');
     }
 
-    if ($A['noboxes'] == 1) {
-        $preferences->set_var ('noboxes_checked', 'checked="checked"');
-    } else {
-        $preferences->set_var ('noboxes_checked', '');
-    }
-
     $preferences->set_var ('maxstories_value', $A['maxstories']);
     $selection = COM_optionList ($_TABLES['dateformats'], 'dfid,description', $A['dfid']);
     $preferences->set_var ('dateformat_options', $selection);
@@ -757,53 +749,6 @@ function editpreferences()
 
     // excluded items block
     $permissions = '';
-    if ( $_CONF['hide_exclude_content'] != 1 ) {
-        $permissions = $db->getPermSQL ('');
-        $preferences->set_var ('exclude_topic_checklist',
-            COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $A['tids'], 'topics'));
-        if (($_CONF['contributedbyline'] == 1) && ($_CONF['hide_author_exclusion'] == 0)) {
-            $preferences->set_var ('lang_authors', $LANG04[56]);
-
-            $sql = "SELECT DISTINCT story.uid, users.username,users.fullname
-                    FROM `{$_TABLES['stories']}` story, `{$_TABLES['users']}` users
-                    WHERE story.uid = users.uid";
-
-            if ($_CONF['show_fullname'] == 1) {
-                $sql .= ' ORDER BY users.fullname';
-            } else {
-                $sql .= ' ORDER BY users.username';
-            }
-
-            $stmt = $db->conn->query($sql);
-
-            $authors = explode (' ', $A['aids']);
-
-            $selauthors = '';
-            $preferences->set_block('exclude', 'ExcludeAuthors', 'EA');
-            while ($B = $stmt->fetch(Database::ASSOCIATIVE)) {
-                $preferences->set_var(array(
-                    'value' => $B['uid'],
-                    'name' => COM_getDisplayName ($B['uid'], $B['username'],$B['fullname']),
-                    'selected' => in_array (sprintf ('%d', $B['uid']), $authors),
-                ) );
-                $preferences->parse('EA', 'ExcludeAuthors', true);
-            }
-
-            if ($db->getCount($_TABLES['topics']) > 10) {
-                $Selboxsize = intval (DB_count ($_TABLES['topics']) * 1.5);
-            } else {
-                $Selboxsize = 15;
-            }
-            $preferences->set_var('ea_selboxsize', $Selboxsize);
-        } else {
-            $preferences->set_var ('lang_authors', '');
-            $preferences->set_var ('exclude_author_checklist', '');
-        }
-        $preferences->set_var('plugin_content_exclude',PLG_profileEdit($_USER['uid'],'content','exclude'));
-        $preferences->parse ('exclude_block', 'exclude', true);
-    } else {
-        $preferences->set_var ('exclude_block', '');
-    }
 
     // daily digest block
     if ($_CONF['emailstories'] == 1) {
@@ -823,33 +768,7 @@ function editpreferences()
         $preferences->set_var('digest_block', '');
     }
 
-    if ( $_CONF['hide_exclude_content'] != 1 ) {
-        // boxes block
-        $selectedblocks = '';
-        if (strlen($A['boxes']) > 0) {
-            $blockresult = DB_query("SELECT bid FROM {$_TABLES['blocks']} WHERE bid NOT IN (" . str_replace(' ',',',trim($A['boxes'])) . ")");
-            for ($x = 1; $x <= DB_numRows($blockresult); $x++) {
-                $row = DB_fetchArray($blockresult);
-                $selectedblocks .= $row['bid'];
-                if ($x <> DB_numRows($blockresult)) {
-                    $selectedblocks .= ' ';
-                }
-            }
-        }
-        $whereblock = '';
-        if (!empty ($permissions)) {
-            $whereblock .= $permissions . ' AND ';
-        }
-        $whereblock .= "((type != 'layout' AND type != 'gldefault' AND is_enabled = 1) OR "
-                     . "(type = 'gldefault' AND is_enabled = 1 AND name IN ('whats_new_block','older_stories'))) "
-                     . "ORDER BY onleft desc,blockorder,title";
-        $preferences->set_var ('boxes_checklist', COM_checkList ($_TABLES['blocks'],
-                'bid,title,type', $whereblock, $selectedblocks,'blocks'));
-        $preferences->set_var('plugin_content_boxes',PLG_profileEdit($_USER['uid'],'content','boxes'));
-        $preferences->parse ('boxes_block', 'boxes', true);
-    } else {
-        $preferences->set_var ('boxes_block', '');
-    }
+    $preferences->set_var ('boxes_block', '');
 
     $preferences->set_var('plugin_content',PLG_profileEdit($_USER['uid'],'content'));
 
@@ -1703,11 +1622,6 @@ function savepreferences($A)
     } else {
         $A['willing'] = 0;
     }
-    if (isset ($A['noboxes']) && ($A['noboxes'] == 'on')) {
-        $A['noboxes'] = 1;
-    } else {
-        $A['noboxes'] = 0;
-    }
     if (isset ($A['emailfromadmin']) && ($A['emailfromadmin'] == 'on')) {
         $A['emailfromadmin'] = 1;
     } else {
@@ -1733,66 +1647,15 @@ function savepreferences($A)
         }
     }
 
-    $TIDS = array();
-    $AIDS = array();
-    $BOXES = array();
     $ETIDS = array();
-    $AETIDS = array();
 
-    if (isset($A['topics']) && is_array($A['topics'])) {
-        $TIDS  = @array_values($A['topics']);
-    }
-    if (isset($A['selauthors']) && is_array($A['selauthors'])) {
-        $AIDS  = @array_values($A['selauthors']);
-    }
-    if (isset($A['blocks']) && is_array($A['blocks'])) {
-        $BOXES = @array_values($A['blocks']);
-    }
     if (isset($A['dgtopics']) && is_array($A['dgtopics'])) {
         $ETIDS = @array_values($A['dgtopics']); 
-    }
-    $allowed_etids = USER_buildTopicList ();
-    if (!is_array($allowed_etids)) {
-        $AETIDS = explode (' ', $allowed_etids);
-    }
-
-    $tids = '';
-    if (is_array($TIDS) && sizeof ($TIDS) > 0) {
-        $tids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $TIDS)));
-    }
-
-    $aids = '';
-    if (is_array($AIDS) && sizeof ($AIDS) > 0) {
-        foreach ($AIDS as $key => $val) {
-            $AIDS[$key] = intval($val);
-        }
-        $aids = DB_escapeString (implode (' ', $AIDS));
-    }
-    $selectedblocks = '';
-    $selectedBoxes = array();
-    if (is_array($BOXES) && count ($BOXES) > 0) {
-        foreach ($BOXES AS $key => $val) {
-            $BOXES[$key] = intval($val);
-        }
-        $boxes = DB_escapeString(implode(',', $BOXES));
-
-        $blockresult = DB_query("SELECT bid,name FROM {$_TABLES['blocks']} WHERE bid NOT IN ($boxes)");
-
-        $numRows = DB_numRows($blockresult);
-        for ($x = 1; $x <= $numRows; $x++) {
-            $row = DB_fetchArray ($blockresult);
-            if ($row['name'] <> 'user_block' AND $row['name'] <> 'admin_block' AND $row['name'] <> 'section_block') {
-                $selectedblocks .= $row['bid'];
-                if ($x <> $numRows) {
-                    $selectedblocks .= ' ';
-                }
-            }
-        }
     }
 
     $etids = '';
     if (is_array($ETIDS) && sizeof ($ETIDS) > 0) {
-        $etids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $ETIDS)));
+        $etids = DB_escapeString (implode (' ', $ETIDS));
     }
 
     if (isset ($A['tzid'])) {
@@ -1837,7 +1700,7 @@ function savepreferences($A)
     if (empty ($etids)) {
         $etids = '-';
     }
-    DB_save($_TABLES['userindex'],"uid,tids,aids,boxes,noboxes,maxstories,etids","{$_USER['uid']},'$tids','$aids','$selectedblocks',".(int)$A['noboxes'].",".(int)$A['maxstories'].",'$etids'");
+    DB_save($_TABLES['userindex'],"uid,maxstories,etids","{$_USER['uid']},".(int)$A['maxstories'].",'$etids'");
 
     $A['commentmode'] = COM_applyFilter ($A['commentmode']);
     if (empty ($A['commentmode'])) {

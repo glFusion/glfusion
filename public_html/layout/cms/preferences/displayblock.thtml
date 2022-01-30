@@ -21,13 +21,6 @@
 			</div>
 
 			<div class="uk-form-row">
-				<label class="uk-form-label" for="noboxes">{lang_noboxes}</label>
-				<div class="uk-form-controls uk-align-center">
-					<input type="checkbox" id="noboxes" name="noboxes" {noboxes_checked} />
-				</div>
-			</div>
-
-			<div class="uk-form-row">
 				<label class="uk-form-label" for="maxstories">{lang_maxstories}</label>
 				<div class="uk-form-controls">
 					<input type="text" size="3" maxlength="3" id="maxstories" name="maxstories" value="{maxstories_value}" />

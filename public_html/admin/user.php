@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -158,14 +158,9 @@ function USER_edit($uid = '', $msg = '')
         $U['about'] = '';
         $U['pgpkey'] = '';
         $U['noicons'] = 0;
-        $U['noboxes'] = 0;
-        $U['tids'] = '';
         $U['etids'] = '-';
-        $U['aids'] = '';
-        $U['boxes'] = '';
         $uid = '';
         $U['cookietimeout'] = $_CONF['session_cookie_timeout'];// 2678400;
-        $U['etids'] = '-';
         $U['status'] = USER_ACCOUNT_AWAITING_ACTIVATION;
         $U['account_type'] = LOCAL_USER;
         $U['emailfromadmin'] = 1;
@@ -173,7 +168,6 @@ function USER_edit($uid = '', $msg = '')
         $U['showonline'] = 1;
         $U['maxstories'] = 0;
         $U['dfid'] = 0;
-        $U['search_result_format'] = $_CONF['search_style'];
         $U['commentmode'] = $_CONF['comment_mode'];
         $U['commentorder'] = 'ASC';
         $U['commentlimit'] = 100;
@@ -224,8 +218,6 @@ function USER_edit($uid = '', $msg = '')
         $U['tzid']           = COM_applyFilter($_POST['tzid']);
     if ( isset($_POST['dfid'] ) )
         $U['dfid']           = COM_applyFilter($_POST['dfid'],true);
-    if ( isset($_POST['search_result_format'] ) )
-        $U['search_result_format']     = COM_applyFilter($_POST['search_result_format']);
     if ( isset($_POST['commentmode'] ) )
         $U['commentmode']    =  COM_applyFilter($_POST['commentmode']);
     if ( isset($_POST['commentorder'] ) )
@@ -238,8 +230,6 @@ function USER_edit($uid = '', $msg = '')
         $U['emailfromadmin'] = $_POST['emailfromadmin'] == 'on' ? 1 : 0;
     if ( isset($_POST['noicons'] ) )
         $U['noicons']        = $_POST['noicons'] == 'on' ? 1 : 0;
-    if ( isset($_POST['noboxes'] ) )
-        $U['noboxes']        = $_POST['noboxes'] == 'on' ? 1 : 0;
     if ( isset($_POST['showonline'] ) )
         $U['showonline']     = $_POST['showonline'] == 'on' ? 1 : 0;
     if ( isset($_POST['topic_order']) )
@@ -716,11 +706,9 @@ function USER_layoutPanel($U, $newuser = 0)
     $userform->set_var('lang_language', $LANG04[73]);
     $userform->set_var('lang_theme', $LANG04[72]);
     $userform->set_var('lang_noicons', $LANG04[40]);
-    $userform->set_var('lang_noboxes', $LANG04[44]);
     $userform->set_var('lang_maxstories', $LANG04[43]);
     $userform->set_var('lang_timezone', $LANG04[158]);
     $userform->set_var('lang_dateformat', $LANG04[42]);
-    $userform->set_var('lang_search_format',$LANG_confignames['Core']['search_show_type']);
 
     $userform->set_var('lang_comment_title', $LANG04[133]);
     $userform->set_var('lang_comment_help_title', $LANG04[134]);
@@ -812,12 +800,6 @@ function USER_layoutPanel($U, $newuser = 0)
         $userform->set_var('noicons_checked', '');
     }
 
-    if ($U['noboxes'] == 1) {
-        $userform->set_var('noboxes_checked', 'checked="checked"');
-    } else {
-        $userform->set_var('noboxes_checked', '');
-    }
-
     $userform->set_var('maxstories_value', $U['maxstories']);
 
     // Timezone
@@ -836,20 +818,6 @@ function USER_layoutPanel($U, $newuser = 0)
         'dateformat_options',
         COM_optionList ($_TABLES['dateformats'], 'dfid,description', $U['dfid'])
     );
-
-    if (isset($LANG_configSelect['Core'])) {
-        $cfgSelect = $LANG_configSelect['Core'][18];
-
-    } else {
-        $cfgSelect = array_flip($LANG_configselects['Core'][18]);
-    }
-    $options = '';
-    foreach ($cfgSelect AS $type => $name ) {
-        $options .= '<option value="'. $type . '"' .
-            ($U['search_result_format'] == $type ? 'selected="selected"' : '') .
-            '>'.$name.'</option>'.LB;
-    }
-    $userform->set_var('search_result_options',$options);
 
     if (!empty($uid) && $uid > 1 ) {
         $userform->set_var('plugin_layout_display',PLG_profileEdit($uid,'layout','display'));
@@ -902,63 +870,14 @@ function USER_contentPanel($U, $newuser = 0)
     $userform = new Template ($_CONF['path_layout'] . 'admin/user/');
     $userform->set_file('user','contentpanel.thtml');
 
-    $userform->set_var('lang_exclude_title', $LANG04[136]);
-    $userform->set_var('lang_excluded_items_title', $LANG04[137]);
-    $userform->set_var('lang_excluded_items', $LANG04[54]);
     $userform->set_var('lang_topics', $LANG04[48]);
     $userform->set_var('lang_authors', $LANG04[56]);
+
     $userform->set_var('lang_digest_top_header', $LANG04[131]);
     $userform->set_var('lang_digest_help_header', $LANG04[132]);
     $userform->set_var('lang_emailedtopics', $LANG04[76]);
-    $userform->set_var('lang_boxes_title', $LANG04[144]);
-    $userform->set_var('lang_boxes_help_title', $LANG04[143]);
-    $userform->set_var('lang_boxes', $LANG04[55]);
+
     $permissions = '';
-    if ( $_CONF['hide_exclude_content'] != 1 ) {
-        $permissions = COM_getPermSQL ('',$uid);
-        $userform->set_var('exclude_topic_checklist',
-             COM_checkList($_TABLES['topics'], 'tid,topic', $permissions, $U['tids'], 'topics'));
-
-        if (($_CONF['contributedbyline'] == 1) && ($_CONF['hide_author_exclusion'] == 0)) {
-            $userform->set_var('lang_authors', $LANG04[56]);
-            $sql = "SELECT DISTINCT story.uid, users.username,users.fullname FROM {$_TABLES['stories']} story, {$_TABLES['users']} users WHERE story.uid = users.uid";
-            if ($_CONF['show_fullname'] == 1) {
-                $sql .= ' ORDER BY users.fullname';
-            } else {
-                $sql .= ' ORDER BY users.username';
-            }
-            $query = DB_query ($sql);
-            $nrows = DB_numRows ($query );
-            $authors = explode (' ', $U['aids']);
-
-            $selauthors = '';
-            for( $i = 0; $i < $nrows; $i++ ) {
-                $B = DB_fetchArray ($query);
-                $selauthors .= '<option value="' . $B['uid'] . '"';
-                if (in_array (sprintf ('%d', $B['uid']), $authors)) {
-                   $selauthors .= ' selected';
-                }
-                $selauthors .= '>' . COM_getDisplayName ($B['uid'], $B['username'],$B['fullname']).'</option>' . LB;
-            }
-
-            if (DB_count($_TABLES['topics']) > 10) {
-                $Selboxsize = intval (DB_count ($_TABLES['topics']) * 1.5);
-            } else {
-                $Selboxsize = 15;
-            }
-            $userform->set_var('exclude_author_checklist', '<select name="selauthors[]" multiple="multiple" size="'. $Selboxsize. '">' . $selauthors . '</select>');
-        } else {
-            $userform->set_var('lang_authors', '');
-            $userform->set_var('exclude_author_checklist', '');
-        }
-        if (!empty($uid) && $uid > 1 ) {
-            $userform->set_var('plugin_content_exclude',PLG_profileEdit($uid,'content','exclude'));
-        }
-    } else {
-        $userform->set_var('exclude_topic_checklist','');
-        $userform->set_var('exclude_author_checklist','');
-        $userform->set_var('plugin_content_exclude','');
-    }
 
     // daily digest block
     if ($_CONF['emailstories'] == 1) {
@@ -979,35 +898,6 @@ function USER_contentPanel($U, $newuser = 0)
         }
     } else {
         $userform->set_var('email_topic_checklist', '');
-    }
-
-    if ( $_CONF['hide_exclude_content'] != 1 ) {
-        // boxes block
-        $selectedblocks = '';
-        if (strlen($U['boxes']) > 0) {
-            $blockresult = DB_query("SELECT bid FROM {$_TABLES['blocks']} WHERE bid NOT IN (" . str_replace(' ',',',trim($U['boxes'])) . ")");
-            for ($x = 1; $x <= DB_numRows($blockresult); $x++) {
-                $row = DB_fetchArray($blockresult);
-                $selectedblocks .= $row['bid'];
-                if ($x <> DB_numRows($blockresult)) {
-                    $selectedblocks .= ' ';
-                }
-            }
-        }
-        $whereblock = '';
-        if (!empty ($permissions)) {
-            $whereblock .= $permissions . ' AND ';
-        }
-        $whereblock .= "((type != 'layout' AND type != 'gldefault' AND is_enabled = 1) OR "
-                     . "(type = 'gldefault' AND is_enabled = 1 AND name IN ('whats_new_block','older_stories'))) "
-                     . "ORDER BY onleft desc,blockorder,title";
-        $userform->set_var('boxes_checklist', COM_checkList ($_TABLES['blocks'],
-                'bid,title,type', $whereblock, $selectedblocks,'blocks'));
-        if (!empty($uid) && $uid > 1 ) {
-            $userform->set_var('plugin_content_boxes',PLG_profileEdit($uid,'content','boxes'));
-        }
-    } else {
-        $userform->set_var('boxes_block', '');
     }
 
     if (!empty($uid) && $uid > 1 ) {
@@ -1529,14 +1419,12 @@ function USER_save($uid)
     $maxstories     = COM_applyFilter($_POST['maxstories'],true);
     $tzid           = COM_applyFilter($_POST['tzid']);
     $dfid           = COM_applyFilter($_POST['dfid'],true);
-    $search_fmt     = COM_applyFilter($_POST['search_result_format']);
     $commentmode    = COM_applyFilter($_POST['commentmode']);
     $commentorder   = (isset($_POST['commentorder']) && $_POST['commentorder'] == 'DESC') ? 'DESC' : 'ASC';
     $commentlimit   = COM_applyFilter($_POST['commentlimit'],true);
     $emailfromuser  = (isset($_POST['emailfromuser']) && $_POST['emailfromuser'] == 'on') ? 1 : 0;
     $emailfromadmin = (isset($_POST['emailfromadmin']) && $_POST['emailfromadmin'] == 'on') ? 1 : 0;
     $noicons        = (isset($_POST['noicons']) && $_POST['noicons'] == 'on') ? 1 : 0;
-    $noboxes        = (isset($_POST['noboxes']) && $_POST['noboxes'] == 'on') ? 1 : 0;
     $showonline     = (isset($_POST['showonline']) && $_POST['showonline'] == 'on') ? 1 : 0;
     $topic_order    = (isset($_POST['topic_order']) && $_POST['topic_order'] == 'ASC') ? 'ASC' : 'DESC';
     $maxstories     = COM_applyFilter($_POST['maxstories'],true);
@@ -1754,8 +1642,8 @@ function USER_save($uid)
             "emailstories = 0,".
             "emailfromadmin = $emailfromadmin,".
             "emailfromuser  = $emailfromuser,".
-            "showonline = $showonline,".
-            "search_result_format = '".DB_escapeString($search_fmt)."' WHERE uid=$uid;";
+            "showonline = $showonline".
+            " WHERE uid=$uid;";
 
         DB_query($sql);
 
@@ -1769,71 +1657,20 @@ function USER_save($uid)
         DB_query($sql);
 
         // userindex table
-        $TIDS = array();
-        $AIDS = array();
-        $BOXES = array();
         $ETIDS = array();
-        $AETIDS = array();
         $allowed_etids = array();
 
-        if (isset($_POST['topics']) && is_array($_POST['topics'])) {
-            $TIDS  = @array_values($_POST['topics']);
-        }
-//        $TIDS  = @array_values($_POST['topics']);
-        if (isset($_POST['selauthors']) && is_array($_POST['selauthors'])) {
-            $AIDS  = @array_values($_POST['selauthors']);
-        }
-        if (isset($_POST['blocks']) && is_array($_POST['blocks'])) {
-            $BOXES = @array_values($_POST['blocks']);
-        }
         if (isset($_POST['dgtopics']) && is_array($_POST['dgtopics'])) {
             $ETIDS = @array_values($_POST['dgtopics']);
-        }
-        $allowed_etids = USER_buildTopicList ();
-        if (is_array($allowed_etids)) {
-            $AETIDS = explode (' ', $allowed_etids);
-        }
-
-        $tids = '';
-        if (is_array($TIDS) && sizeof ($TIDS) > 0) {
-            $tids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $TIDS)));
-        }
-        $aids = '';
-        if (is_array($AIDS) && sizeof ($AIDS) > 0) {
-            foreach ($AIDS as $key => $val) {
-                $AIDS[$key] = intval($val);
-            }
-            $aids = DB_escapeString (implode (' ', $AIDS));
-        }
-        $selectedblocks = '';
-        $selectedBoxes = array();
-        if (is_array($BOXES) && count ($BOXES) > 0) {
-            foreach ($BOXES AS $key => $val) {
-                $BOXES[$key] = intval($val);
-            }
-            $boxes = DB_escapeString(implode(',', $BOXES));
-
-            $blockresult = DB_query("SELECT bid,name FROM {$_TABLES['blocks']} WHERE bid NOT IN ($boxes)");
-
-            $numRows = DB_numRows($blockresult);
-            for ($x = 1; $x <= $numRows; $x++) {
-                $row = DB_fetchArray ($blockresult);
-                if ($row['name'] <> 'user_block' AND $row['name'] <> 'admin_block' AND $row['name'] <> 'section_block') {
-                    $selectedblocks .= $row['bid'];
-                    if ($x <> $numRows) {
-                        $selectedblocks .= ' ';
-                    }
-                }
-            }
         }
 
         $etids = '-';
         if (is_array($ETIDS) && sizeof ($ETIDS) > 0) {
-            $etids = DB_escapeString (implode (' ', array_intersect ($AETIDS, $ETIDS)));
+            $etids = DB_escapeString (implode (' ', $ETIDS));
         } else {
             $etids = '-';
         }
-        DB_save($_TABLES['userindex'],"uid,tids,aids,boxes,noboxes,maxstories,etids","$uid,'$tids','$aids','$selectedblocks',$noboxes,$maxstories,'$etids'");
+        DB_save($_TABLES['userindex'],"uid,maxstories,etids","$uid,$maxstories,'$etids'");
 
         // usercomment
 

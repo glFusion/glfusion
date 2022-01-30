@@ -1,38 +1,22 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Forum Plugin for glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | forum.inc.php                                                            |
-// |                                                                          |
-// | Forum functions                                                          |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
-// |                              www.portalparts.com                         |
-// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
-// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Forum Plugin
+*
+* Forum functions
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2022 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Blaine Lang          blaine AT portalparts DOT com
+*                        www.portalparts.com
+*   Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com
+*   Prototype & Concept :        Mr.GxBlock, www.gxblock.com
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
@@ -582,21 +566,7 @@ function FF_GetUserBlocks( &$blocks ) {
     $retval = '';
     $sql = "SELECT name,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon FROM {$_TABLES['blocks']} WHERE onleft = 1 AND is_enabled = 1";
 
-    // Get user preferences on blocks
-    if( !isset( $_USER['noboxes'] ) || !isset( $_USER['boxes'] )) {
-        if( !COM_isAnonUser() ) {
-            $result = DB_query( "SELECT boxes,noboxes FROM {$_TABLES['userindex']} WHERE uid = ".(int) $_USER['uid']);
-            list($_USER['boxes'], $_USER['noboxes']) = DB_fetchArray( $result );
-        } else {
-            $_USER['boxes'] = '';
-            $_USER['noboxes'] = 0;
-        }
-    }
     $sql .= " AND (tid = 'all' AND type <> 'layout')";
-    if( !empty( $_USER['boxes'] )) {
-        $BOXES = str_replace( ' ', ',', trim($_USER['boxes']) );
-        $sql .= " AND (bid NOT IN ($BOXES) OR bid = '-1')";
-    }
 
     $sql .= ' ORDER BY blockorder,title asc';
     $result = DB_query( $sql );
@@ -632,15 +602,6 @@ function forum_showBlocks($showblocks)
     global $_CONF, $_USER, $_TABLES;
 
     $retval = '';
-    if( !isset( $_USER['noboxes'] )) {
-        if ( !COM_isAnonUser() ) {
-            $noboxes = DB_getItem( $_TABLES['userindex'], 'noboxes', "uid=".(int) $_USER['uid']);
-        } else {
-            $noboxes = 0;
-        }
-    } else {
-        $noboxes = $_USER['noboxes'];
-    }
 
     if ( is_array($showblocks)) {
         foreach($showblocks as $block) {
@@ -648,7 +609,7 @@ function forum_showBlocks($showblocks)
             $result = DB_query($sql);
             if (DB_numRows($result) == 1) {
                 $A = DB_fetchArray($result);
-                $retval .= COM_formatBlock($A,$noboxes);
+                $retval .= COM_formatBlock($A,0);
             }
         }
     }

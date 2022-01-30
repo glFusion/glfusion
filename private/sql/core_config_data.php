@@ -1402,17 +1402,6 @@ $coreConfigData = array(
     	'group' => 'Core'
     ),
     array(
-    	'name' => 'hide_author_exclusion',
-    	'default_value' => 0,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 70,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
     	'name' => 'show_fullname',
     	'default_value' => 0,
     	'type' => 'select',
@@ -1420,17 +1409,6 @@ $coreConfigData = array(
     	'fieldset' => 1,
     	'selection_array' => 0,
     	'sort' => 80,
-    	'set' => TRUE,
-    	'group' => 'Core'
-    ),
-    array(
-    	'name' => 'hide_exclude_content',
-    	'default_value' => 1,
-    	'type' => 'select',
-    	'subgroup' => 4,
-    	'fieldset' => 1,
-    	'selection_array' => 0,
-    	'sort' => 90,
     	'set' => TRUE,
     	'group' => 'Core'
     ),

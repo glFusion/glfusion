@@ -446,6 +446,15 @@ if (@file_exists($_CONF['path_system'].'lib-custom.php')) {
     require_once $_CONF['path_system'].'lib-custom.php';
 }
 
+// set for backward compatibility
+
+$_USER['noboxes'] = 0;
+$_USER['etids'] = '';
+$_USER['tids'] = '';
+$_USER['boxes'] = '';
+$_CONF['hide_author_exclusion'] = 0;
+$_CONF['hide_exclude_content'] = 0;
+
 // Set theme
 
 $usetheme = '';
@@ -1924,19 +1933,7 @@ function COM_showTopics( $topic='' )
 
     $sql = "SELECT tid,topic,imageurl FROM `{$_TABLES['topics']}`" . $langsql;
 
-    if ( !COM_isAnonUser() ) {
-        if ( !empty( $_USER['tids'] )) {
-            $tidsArray = array_map(function($tid) {
-              $db = Database::getInstance();
-              return $db->conn->quote($tid);
-            }, explode(' ',$_USER['tids']));
-            $sql .= " $op (tid NOT IN (".implode(',',$tidsArray).")) ". $db->getPermSQL( 'AND' );
-        } else {
-            $sql .= $db->getPermSQL($op);
-        }
-    } else {
-        $sql .= $db->getPermSQL($op);
-    }
+    $sql .= $db->getPermSQL($op);
 
     if ( $_CONF['sortmethod'] == 'alpha' ) {
         $sql .= ' ORDER BY topic ASC';
@@ -2903,9 +2900,7 @@ function COM_showBlock( $name, $help='', $title='', $position='' )
             break;
 
         case 'whats_new_block':
-            if ( !$_USER['noboxes'] ) {
-                $retval .= COM_whatsNewBlock( $help, $title, $position );
-            }
+            $retval .= COM_whatsNewBlock( $help, $title, $position );
             break;
     }
 
@@ -3001,7 +2996,7 @@ function COM_showBlocks($side, $topic='', $name='all')
     // to COM_formatBlock
     foreach( $blocks as $A ) {
         if ( $A['type'] == 'dynamic' or SEC_hasAccess( $A['owner_id'], $A['group_id'], $A['perm_owner'], $A['perm_group'], $A['perm_members'], $A['perm_anon'] ) > 0 ) {
-           $retval .= COM_formatBlock( $A, $_USER['noboxes'] );
+           $retval .= COM_formatBlock( $A );
         }
     }
 
@@ -3015,11 +3010,11 @@ function COM_showBlocks($side, $topic='', $name='all')
 * COM_showBlocks OR from plugin code
 *
 * @param        array     $A          Block Record
-* @param        bool      $noboxes    Set to true if userpref is no blocks
+* @param        boolean   $noboxes
 * @return       string    HTML Formated block
 *
 */
-function COM_formatBlock( $A, $noboxes = false )
+function COM_formatBlock( $A, $noboxes = false)
 {
     global $_CONF, $_TABLES, $_USER, $LANG21;
 
@@ -3060,7 +3055,7 @@ function COM_formatBlock( $A, $noboxes = false )
         $retval .= COM_showBlock( $A['name'], $A['help'], $A['title'], $position );
     }
 
-    if ($A['type'] == 'phpblock' && !$noboxes) {
+    if ($A['type'] == 'phpblock') {
         if ( !( $A['name'] == 'whosonline_block' AND $db->conn->fetchColumn("SELECT is_enabled FROM `{$_TABLES['blocks']}` WHERE name='whosonline_block'",array(),0) == 0 )) {
             $function = $A['phpblockfn'];
             $matches = array();
@@ -3096,7 +3091,7 @@ function COM_formatBlock( $A, $noboxes = false )
         }
     }
 
-    if ( !empty( $A['content'] ) && ( trim( $A['content'] ) != '' ) && !$noboxes ) {
+    if ( !empty( $A['content'] ) && ( trim( $A['content'] ) != '' )) {
         $blockcontent =  $A['content'] ;
 
         // Hack: If the block content starts with a '<' assume it

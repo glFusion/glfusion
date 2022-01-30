@@ -648,19 +648,8 @@ function getTopicMenu()
     }
 
     $sql = "SELECT tid,topic,imageurl FROM {$_TABLES['topics']}" . $langsql;
-    if ( !COM_isAnonUser() ) {
+    $sql .= $db->getPermSQL( $op );
 
-        $tids = $db->getItem($_TABLES['userindex'],'tids',array('uid'=>$_USER['uid']));
-
-        if ( !empty( $tids )) {
-            $sql .= " $op (tid NOT IN ('" . str_replace( ' ', "','", $tids )
-                 . "'))" . $db->getPermSQL( 'AND' );
-        } else {
-            $sql .= $db->getPermSQL( $op );
-        }
-    } else {
-        $sql .= $db->getPermSQL( $op );
-    }
     if ( $_CONF['sortmethod'] == 'alpha' ) {
         $sql .= ' ORDER BY topic ASC';
     } else {

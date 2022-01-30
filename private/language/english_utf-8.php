@@ -467,7 +467,7 @@ $LANG_MYACCOUNT = array(
     'pe_twofactor' => 'Two Factor Auth',
     'pe_userinfo' => 'About You',
     'pe_layout' => 'Layout &amp; Language',
-    'pe_content' => 'Content',
+    'pe_content' => 'Daily Digest',
     'pe_privacy' => 'Privacy',
     'pe_subscriptions' => 'Subscriptions',
 );
