@@ -152,10 +152,15 @@ class UserInfo
      * @param   integer $uid    User ID
      * @return  object  UserInfo object
      */
-    public static function getInstance(int $uid) : self
+    public static function getInstance(?int $uid=NULL) : self
     {
+        global $_USER;
+
         static $cache = array();
 
+        if ($uid === NULL) {
+            $uid = $_USER['uid'];
+        }
         $uid = (int)$uid;
         if (!array_key_exists($uid, $cache)) {
             $cache[$uid] = new self($uid);
@@ -256,9 +261,11 @@ class UserInfo
      */
     public function isSuspended() : bool
     {
+        global $LANG_GF02;
+
         $status = $this->_isActive($this->suspend_expires);
         if ($status) {
-            $this->_user_status_msg = 'Sorry, You have suspended from making entries' .
+            $this->_user_status_msg = $LANG_GF02['msg_suspended'] .
                 $this->_user_expires_msg . '.';
         }
         return $status;
@@ -292,13 +299,13 @@ class UserInfo
      */
     public function getForumStatus() : array
     {
-        global $_CONF;
+        global $_CONF, $LANG_GF01;
 
         $retval = array(
-            'status' => 0,
+            'status' => Status::NONE,
             'expires' => 0,
             'severity' => '',
-            'message' => 'No Restriction',
+            'message' => $LANG_GF01['no_restriction'],
         );
         if ($this->isBanned()) {
             $status = Status::BAN;
@@ -307,7 +314,7 @@ class UserInfo
                 'status' => Status::BAN,
                 'expires' => $this->ban_expires,
                 'severity' => 'danger',
-                'message' => 'User is banned from the forum',
+                'message' => $LANG_GF01['user_banned'],
             );
         } elseif ($this->isSuspended()) {
             $status = Status::SUSPEND;
@@ -316,7 +323,7 @@ class UserInfo
                 'status' => Status::SUSPEND,
                 'expires' => $this->suspend_expires,
                 'severity' => 'warning',
-                'message' => 'User\'s posting privilege is suspended',
+                'message' => $LANG_GF01['user_suspended'],
             );
         } elseif ($this->isModerated()) {
             $status = Status::MODERATE;
@@ -325,11 +332,8 @@ class UserInfo
                 'status' => Status::MODERATE,
                 'expires' => $this->moderate_expires,
                 'severity' => 'warning',
-                'message' => 'User\'s posts must be moderated',
+                'message' => $LANG_GF01['user_moderated'],
             );
-        /*} else {
-            $status = Status::NONE;
-            $exp = 0;*/
         }
         if ($retval['expires'] > time()) {
             $dt = new \Date($retval['expires'], $_CONF['timezone']);
@@ -337,10 +341,6 @@ class UserInfo
         }
 
         return $retval;
-        /*return array(
-            'status' => $status,
-            'expires' => $exp,
-        );*/
     }
 
 
