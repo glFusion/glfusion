@@ -1,28 +1,22 @@
 {# begin {templatelocation} #}
 <div id="pe_layout" class="jsenabled_hide">
-<div class="uk-panel uk-panel-box">
-        {display_block}
-        {comment_block}
-        {plugin_layout}
+	{display_block}
+	{comment_block}
+	{plugin_layout}
 </div>
-</div>
+
 <div id="pe_content" class="jsenabled_hide">
-<div class="uk-panel uk-panel-box">
-        {exclude_block}
-        {digest_block}
-        {boxes_block}
-        {plugin_content}
+	{digest_block}
+	{plugin_content}
 </div>
-</div>
+
 <div id="pe_privacy" class="jsenabled_hide">
-<div class="uk-panel uk-panel-box">
-        {privacy_block}
-        {plugin_privacy}
+	{privacy_block}
+	{plugin_privacy}
 </div>
-</div>
+
 <div id="pe_subscriptions" class="jsenabled_hide">
-<div class="uk-panel uk-panel-box">
-        {subscriptions_block}
+	{subscriptions_block}
 </div>
-</div>
+
 {# end {templatelocation} #}

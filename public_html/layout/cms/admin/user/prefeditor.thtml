@@ -42,18 +42,17 @@
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="noicons"></td>
     </tr>
     <tr>
-      <td><label for="noboxes">{lang_noboxes}:</label></td>
-      <td><input type="checkbox" id="noboxes" name="noboxes"></td>
-      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="noboxes"></td>
-    </tr>
-    <tr>
       <td><label for="maxstories">{lang_maxstories}:</label></td>
       <td><input type="text" class="uk-form-width-small" maxlength="3" id="maxstories" name="maxstories" value="0"></td>
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="maxstories"></td>
     </tr>
     <tr>
       <td><label for="tzid">{lang_timezone}:</label></td>
-      <td>{timezone_selector}</td>
+      <td>
+        <select name="tzid">
+        {timezone_options}
+        </select>
+      </td>
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="tzid"></td>
     </tr>
     <tr>
@@ -64,15 +63,6 @@
         </select>
       </td>
       <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="dfid"></td>
-    </tr>
-    <tr>
-      <td><label for="search_result_format">{lang_search_format}:</label></td>
-      <td>
-        <select name="search_result_format" id="search_result_format">
-          {search_result_options}
-        </select>
-      </td>
-      <td class="uk-text-center"><input type="checkbox" name="enabled[]" value="search_result_format"></td>
     </tr>
     <tr>
       <td><label for="commentmode">{lang_displaymode}:</label></td>

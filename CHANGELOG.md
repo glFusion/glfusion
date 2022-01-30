@@ -56,8 +56,9 @@
 - Template class code significantly streamlined - utilizes new caching engine to allow for memory based caching of templates
 - Replaced all old style Cache calls to new Cache class interface
 - FileMgmt Admin screens now adhere to glFusion UI standards
-- Password is required to change any user profile fields
+- Password is required to change any user account profile fields - not needed for preference type settings
 - Disabled autocomplete for TOTP (2FA) code input fields
+- 2FA requires a valid TOTP to disable
 
 ### Depreciated
 
@@ -66,6 +67,7 @@
 
 ### Removed
 
+- The ability to exclude content - users had the option to select authors, topics and blocks they did not want to view - this was disabled by default - this capability has now been fully removed
 - Removed mediaelement.js - now use native HTML 5 audio / video
 - Removed all Flash / SWF / FLV media support in Media Gallery
 - All MooTools related widgets

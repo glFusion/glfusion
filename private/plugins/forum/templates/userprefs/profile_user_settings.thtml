@@ -1,74 +1,74 @@
 {# begin {templatelocation} #}
 <div id="pe_forumprefs" class="jsenabled_hide">
-  <fieldset data-uk-margin>
-    <legend>{lang_forum_prefs}</legend>
-    <div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
-     {lang_forumprefs_help}
-    </div>
-    <div class="uk-panel uk-panel-box">
-    <div class="uk-form-row">
-      <label class="uk-form-label" for="xtopicsperpage"><span class="tooltip" title="{LANG_GF92[topicspp]}::{$LANG_GF92[topicspp_help]}">{LANG_GF92[topicspp]}</span></label>
-      <div class="uk-form-controls">
-        <input type="text" id="xtopicsperpage" name="xtopicsperpage" value="{topicsperpage}">
-      </div>
-    </div>
+	<fieldset data-uk-margin>
+		<legend style="font-weight:700;">{lang_forum_prefs}</legend>
+		<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin">
+		 {lang_forumprefs_help}
+		</div>
+		<div class="uk-panel uk-panel-box">
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="xtopicsperpage"><span class="tooltip" title="{LANG_GF92[topicspp]}::{$LANG_GF92[topicspp_help]}">{LANG_GF92[topicspp]}</span></label>
+			<div class="uk-form-controls">
+				<input type="text" id="xtopicsperpage" name="xtopicsperpage" value="{topicsperpage}">
+			</div>
+		</div>
 
-    <div class="uk-form-row">
-      <label class="uk-form-label" for="xpostsperpage">{LANG_GF92[postspp]}</label>
-      <div class="uk-form-controls">
-        <input type="text" id="xpostsperpage" name="xpostsperpage" value="{postsperpage}">
-      </div>
-    </div>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="xpostsperpage">{LANG_GF92[postspp]}</label>
+			<div class="uk-form-controls">
+				<input type="text" id="xpostsperpage" name="xpostsperpage" value="{postsperpage}">
+			</div>
+		</div>
 
-    <div class="uk-form-row">
-      <label class="uk-form-label" for="xviewanonposts">{LANG_GF02[msg130]}</label>
-      <div class="uk-form-controls">
-        <input type="checkbox" id="xviewanonposts" name="xviewanonposts" {viewanonposts_checked}>
-      </div>
-    </div>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="xviewanonposts">{LANG_GF02[msg130]}</label>
+			<div class="uk-form-controls">
+				<input type="checkbox" id="xviewanonposts" name="xviewanonposts" {viewanonposts_checked}>
+			</div>
+		</div>
 
-    <div class="uk-form-row">
-      <label class="uk-form-label" for="xalwaysnotify">{LANG_GF02[msg132]}</label>
-      <div class="uk-form-controls">
-        <input type="checkbox" id="xalwaysnotify" name="xalwaysnotify" {alwaysnotify_checked}>
-      </div>
-    </div>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="xalwaysnotify">{LANG_GF02[msg132]}</label>
+			<div class="uk-form-controls">
+				<input type="checkbox" id="xalwaysnotify" name="xalwaysnotify" {alwaysnotify_checked}>
+			</div>
+		</div>
 
-    <div class="uk-form-row">
-      <label class="uk-form-label" for="xnotifyonce">{LANG_GF02[msg184]}</label>
-      <div class="uk-form-controls">
-        <input type="checkbox" id="xnotifyonce" name="xnotifyonce" {notifyonce_checked}>
-      </div>
-    </div>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="xnotifyonce">{LANG_GF02[msg184]}</label>
+			<div class="uk-form-controls">
+				<input type="checkbox" id="xnotifyonce" name="xnotifyonce" {notifyonce_checked}>
+			</div>
+		</div>
 
-    <div class="uk-form-row">
-      <label class="uk-form-label" for="notifyfull">{lang_notify_full}</label>
-      <div class="uk-form-controls">
-        <input type="checkbox" id="notifyfull" name="notifyfull" {notifyfull_checked}>
-      </div>
-    </div>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="notifyfull">{lang_notify_full}</label>
+			<div class="uk-form-controls">
+				<input type="checkbox" id="notifyfull" name="notifyfull" {notifyfull_checked}>
+			</div>
+		</div>
 
-    <div class="uk-form-row">
-      <label class="uk-form-label" for="xshowiframe">{LANG_GF92[showiframe]}</label>
-      <div class="uk-form-controls">
-        <input type="checkbox" id="xshowiframe" name="xshowiframe" {showiframe_checked}>
-      </div>
-    </div>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="xshowiframe">{LANG_GF92[showiframe]}</label>
+			<div class="uk-form-controls">
+				<input type="checkbox" id="xshowiframe" name="xshowiframe" {showiframe_checked}>
+			</div>
+		</div>
 
-    <div class="uk-form-row">
-      <label class="uk-form-label" for="topic_order">{lang_topic_order}</label>
-      <div class="uk-form-controls">
-        {topic_order_select}
-      </div>
-    </div>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="topic_order">{lang_topic_order}</label>
+			<div class="uk-form-controls">
+				{topic_order_select}
+			</div>
+		</div>
 
 {!if lang_use_wysiwyg}
-    <div class="uk-form-row">
-      <label class="uk-form-label" for="use_wysiwyg_editor">{lang_use_wysiwyg}</label>
-      <div class="uk-form-controls">
-        {wysiwyg_select}
-      </div>
-    </div>
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="use_wysiwyg_editor">{lang_use_wysiwyg}</label>
+			<div class="uk-form-controls">
+				{wysiwyg_select}
+			</div>
+		</div>
 {!endif}
 </div>
   </fieldset>

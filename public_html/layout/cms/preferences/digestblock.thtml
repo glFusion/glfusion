@@ -1,11 +1,15 @@
 {# begin {templatelocation} #}
 <fieldset>
-    <legend>{lang_digest_top_header}</legend>
-      <div class="uk-panel uk-panel-box uk-panel-box-primary">
-        <div class="uk-panel-title">{lang_digest_help_header}</div>
-        {lang_emailedtopics}
-       </div>
-    <div>{email_topic_checklist}</div>
-    {plugin_content_digest}
+	<legend style="font-weight:700;">{lang_digest_top_header}</legend>
+	
+	<div class="uk-panel uk-panel-box uk-panel-box-primary uk-margin-bottom">
+		{lang_emailedtopics}
+   </div>
+	
+	<div class="uk-panel uk-panel-box">
+		{email_topic_checklist}
+	</div>
+	
+	{plugin_content_digest}
 </fieldset>
 {# end {templatelocation} #}

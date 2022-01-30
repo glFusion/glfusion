@@ -1,11 +1,16 @@
 {# begin {templatelocation} #}
 <div id="pe_twofactor" class="jsenabled_hide">
-	<fieldset>
+
+	<fieldset data-uk-margin>
+		<legend style="font-weight:700;">{$LANG_TFA[two_factor]}</legend>
+
 		<div id="tfa-panel" class="uk-panel uk-panel-box uk-margin-top">
 			{content}
 		</div>
 	</fieldset>
+
 </div>
+
 <script>
 	var lang_disable_warning = '{lang_disable_warning}';
 	var lang_ajax_error = '{lang_ajax_error}';

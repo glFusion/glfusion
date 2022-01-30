@@ -1,25 +1,29 @@
 {# begin {templatelocation} #}
 <div class="uk-overflow-container uk-width-1-1">
-<fieldset style="margin-top:10px;">
 
-<legend>{$LANG04[183]}</legend>
-<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
-  <tr>
-    <th>{$LANG04[179]}</th>
-    <th>{$LANG04[180]}</th>
-    <th>{$LANG04[181]}</th>
-    <th>{$LANG04[182]}</th>
-  </tr>
+	<fieldset>
+		<legend style="font-weight:700;">{$LANG04[183]}</legend>
 
-  <!-- BEGIN subrows -->
-  <tr>
-    <td><input type="checkbox" name="subdelete[]" value="{subid}" style="text-align:center;" /></td>
-    <td>{sub_type}</td>
-    <td>{sub_category}</td>
-    <td>{sub_description}</td>
-  </tr>
-  <!-- END subrows -->
-  </table>
-</fieldset>
+		<div class="uk-panel uk-panel-box">
+
+			<table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+			  <tr>
+				<th>{$LANG04[179]}</th>
+				<th>{$LANG04[180]}</th>
+				<th>{$LANG04[181]}</th>
+				<th>{$LANG04[182]}</th>
+			  </tr>
+
+			  <!-- BEGIN subrows -->
+			  <tr>
+				<td><input type="checkbox" name="subdelete[]" value="{subid}" style="text-align:center;" /></td>
+				<td>{sub_type}</td>
+				<td>{sub_category}</td>
+				<td>{sub_description}</td>
+			  </tr>
+			  <!-- END subrows -->
+			</table>
+		</div>
+	</fieldset>
 </div>
 {# end {templatelocation} #}

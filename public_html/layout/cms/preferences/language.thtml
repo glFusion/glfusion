@@ -1,10 +1,10 @@
 {# begin {templatelocation} #}
 <div class="uk-form-row">
-<label class="uk-form-label" for="language">{lang_language}</label>
-<div class="uk-form-controls">
-<select id="language" name="language">
-    {language_options}
-</select>
-</div>
+	<label class="uk-form-label" for="language">{lang_language}</label>
+	<div class="uk-form-controls">
+		<select id="language" name="language">
+			{language_options}
+		</select>
+	</div>
 </div>
 {# end {templatelocation} #}

@@ -367,7 +367,7 @@ $LANG04 = array(
     124 => 'Potvrď email',
     125 => 'Musíš zadat stejnou emailovou adresu do obou polí!',
     126 => 'Prosím opakuj pro kontrolu',
-    127 => 'Pro změnu nastavení, je vyžadováno zadání stávajícího hesla.',
+    127 => 'To change any of these settings, you will have to enter your current password.',
     128 => 'Informace o účtu (např. jméno bez diakritiky)',
     129 => 'Heslo',
     130 => 'O uživateli',
@@ -378,7 +378,7 @@ $LANG04 = array(
     135 => '<li>Jak mají být zobrazovány</li><li>V jakém pořadí</li><li>Nastav max. počet komentářů, které se mají zobrazit - předvoleno je 100</li>',
     136 => 'Neuvádět sekce a autory',
     137 => 'Filtrovat obsah článků',
-    138 => 'Různá nastavení',
+    138 => 'Display Settings',
     139 => 'Layout and Language<br />(Rozvržení a jazyk)',
     140 => '<li>Pokud je zaškrtnuto bez ikon sekcí, nebudou zobrazovány ikony sekcí u článků</li><li>Pokud je zaškrtnuto bez bloků, budou se zobrazovat pouze bloky Pro Adminy, Můj účet a Sekce<li>Nastav max. počet článků, které se mají na stránce zobrazit</li><li>Nastav své téma (=grafickou šablonu) a formát data a času</li><li>Jak zobrazit výsledky hledání</li>',
     141 => 'Nastavení soukromí',
@@ -453,8 +453,8 @@ $LANG04 = array(
     'linkedin'  => 'LinkedIn',
     'microsoft' => 'Microsoft',
     'twitter'   => 'Twitter',
-    'session_management' => 'Session Management',
-    'remote_account_info' => 'Remote Acccount Information',
+    'session_management' => 'Správce relací',
+    'remote_account_info' => 'Informace o účtu',
 );
 
 ###############################################################################
@@ -467,7 +467,7 @@ $LANG_MYACCOUNT = array(
     'pe_twofactor' => 'Dvoufaktorové ověření',
     'pe_userinfo' => 'O tobě',
     'pe_layout' => 'Rozvržení &amp; jazyk',
-    'pe_content' => 'Obsah',
+    'pe_content' => 'Daily Digest',
     'pe_privacy' => 'Soukromí',
     'pe_subscriptions' => 'Odběry',
 );
@@ -2408,7 +2408,7 @@ $LANG_AM = array (
     'no_tag_or_replacement'     => 'Musíte vyplnit alespoň pole <b>Tag </b> a <b>náhrada</b>.',
     'phpfn_missing'             => 'Hodina: \'%s.class.php\' neexistuje v %sautotag/ adresáři.',
     'phpfn_must_exist'          => 'Musíte vytvořit tuto třídu a umístit ji do systému/autotagu/adresáře před definováním přiřazeného PHP autotagu.',
-    'phpfn_replace'             => 'This tag will be expanded by a call to the PHP class {tag}.class.php.',
+    'phpfn_replace'             => 'Tag bude rozšířen o volání do PHP třídy {tag}.class.php.',
     'html_allowed'              => '(HTML:OK)',
     'instructions'              => 'To modify or delete an Auto tag, click on that tag\'s edit icon below. To create a new Auto tag, click on "Create New" above. <p>If there are PHP function-based Auto tags below that you cannot edit or enable, it is because 1) you do not have access to the autotag.PHP feature and/or 2) PHP Auto tags are disabled in the Autotag Manager plugin configuration panel.</p>',
     'public_instructions'       => 'The complete list of Auto tags that are currently available and enabled on this site are displayed below.  For each Autotag, the contributing glFusion Module is displayed, as well as the Type and Description.  Usage examples are provided with the <i>required</i> and {optional} parameters.  Where multiple options are available, a link to the glFusion.org wiki documentation is provided.',
