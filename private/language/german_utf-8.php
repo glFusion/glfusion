@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -143,7 +143,7 @@ $LANG01 = array(
     127 => 'Dauerhafter Link',
     129 => 'Konfiguration',
     130 => 'Webservices',			// depreciated
-    131 => 'Features',
+    131 => 'Funktionen',
     500 => 'Bitte nach der Installation oder der Aktualisierung das ../pfad/zu/glfusion/admin/install Verzeichnis löschen!',
     501 => 'Root Debug ist eingeschaltet',
     502 => 'No fail SQL ist eingeschaltet',
@@ -369,7 +369,7 @@ $LANG04 = array(
     126 => 'Bitte die gleiche Adresse noch einmal eingeben',
     127 => 'Um diese Angaben zu ändern benötigst Du Dein aktuelles Passwort!',
     128 => 'Konto Informationen',
-    129 => 'Passwort &amp; E-Mail',
+    129 => 'Passwort',
     130 => 'Über Dich',
     131 => 'Abonnement-Einstellungen',
     132 => 'Abonnement-Eigenschaften',
@@ -397,7 +397,7 @@ $LANG04 = array(
     159 => 'Diese E-Mail wurde automatisch generiert. Bitte nicht auf diese E-Mail antworten.',
     160 => 'Online',
     161 => 'Passwortstärke',
-    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
     163 => 'Remote Benutzer',
     164 => 'Remote Benutzername',
     165 => 'Remote Service',
@@ -453,6 +453,8 @@ $LANG04 = array(
     'linkedin'  => 'LinkedIn',
     'microsoft' => 'Microsoft',
     'twitter'   => 'Twitter',
+    'session_management' => 'Session Management',
+    'remote_account_info' => 'Remote Acccount Information',
 );
 
 ###############################################################################
@@ -461,7 +463,7 @@ $LANG04 = array(
 
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'Vorschau',
-    'pe_namepass' => 'Name &amp; Passwort',
+    'pe_namepass' => 'Benutzerkonto',
     'pe_twofactor' => 'Anmeldung',
     'pe_userinfo' => 'Über Dich',
     'pe_layout' => 'Sprache &amp; Design',
@@ -529,6 +531,64 @@ $LANG08 = array(
     38 => 'sendete Dir den folgenden Artikel...',
     39 => 'Lies den ganzen Artikel',
 );
+
+############
+# Search
+$LANG_SEARCH_UI = array(
+    'menu_label'    => 'Search Admin',
+    'all'           => 'Alle',
+    'all_posts_by'  => 'All Posts By ',
+    'by'            => 'Autor:',
+    'hits'          => 'Angezeigt',
+    'new_search'    => 'Please enter the search criteria above and select Search',
+    'on'            => 'am',
+    'one_day'       => '1 Tag',
+    'one_month'     => '1 Monat',
+    'one_year'      => '1 Jahr',
+    'search'        => 'Suchen',
+    'seven_days'    => '7 Tage',
+    'showing_results' => 'Showing %s - %s of %s Results',
+    'six_months'    => '6 Monate',
+    'three_months'  => '3 Monate',
+    'two_weeks'     => '2 Wochen',
+    'two_years'     => '2 years',
+    'seconds'       => 'secs',
+    'search_placeholder' => 'Enter Your Search Request',
+    'altered_search' => 'Using <b>all of these words</b> did not return any data so the search was modified to <b>any of these words</b>',
+);
+
+$LANG_SEARCH_ADMIN = array(
+    'cancel'            => 'Abbrechen',
+    'chk_unchk_all'     => 'Check/Uncheck All',
+    'clear_counters'    => 'Clear Counters',
+    'content_type'      => 'Inhalts-Typ',
+    'current_progress'  => 'Aktueller-Fortschritt',
+    'empty_table'       => 'Remove all data from Search Index table prior to indexing',
+    'error_getcontenttypes' => 'Unable to retrieve content types from glFusion',
+    'error_heading'     => 'Fehler',
+    'hlp_counters'      => 'Here are the search queries made by site visitors, along with the number of times each query was made.',
+    'hlp_gen_all'       => 'Re-generate all indexes for the selected content types. Use this option after installing the plugin, or after changing certain key configuration items such as the minimum word length or changing the stemmer.',
+    'hlp_reindex'       => 'Re-indexing content will remove all existing search items for the content type and re-scan the content to rebuild the search word index. This can take a significant amount of time on large volume content types such as Forums.',
+    'index_instructions'=> 'This will scan the selected content types and rebuild the Search index',
+    'index_status'      => 'Indexing Status',
+    'search_admin'      => 'Search Administration',
+    'indexing'          => 'Indexing',
+    'no_errors'         => 'No Errors',
+    'overall_progress'  => 'Gesamt-Fortschritt',
+    'queries'           => 'Queries',
+    'reindex_button'    => 'Re-index',
+    'reindex_title'     => 'Re-index Content',
+    'remove_content_1'  => 'Removing existing index entries for ',
+    'remove_content_2'  => ' - This can take several minutes....',
+    'remove_fail'       => 'Failed to remove existing index entries.',
+    'results'           => 'Ergebnisse',
+    'retrieve_content_list' => 'Retrieving content list for ',
+    'retrieve_content_types'=> 'Retrieving Content Types',
+    'search_terms'      => 'Search Terms',
+    'submit'            => 'Absenden',
+    'success'           => 'Success',
+);
+
 
 ###############################################################################
 # search.php
@@ -919,7 +979,7 @@ $LANG24 = array(
     124 => 'Bist du sicher, dass Du abbrechen möchtest? Sämtliche Änderungen werden nicht gespeichert.',
     125 => 'Story Video',
     126 => 'Auto-Play',
-);
+ );
 
 ###############################################################################
 # admin/topic.php
@@ -1462,8 +1522,8 @@ $MESSAGE = array(
     116 => "Die Dateien des Plugins und verwandte Verzeichnisse wurden erfolgreich entfernt.",
     117 => "Das Remote-Konto wurde aus Deinem Lokalen-Konto entfernt.",
     118 => 'Entfernen des Remot-Kontos fehlgeschlagen - das eingegebene Passwort stimmt nicht überein.',
-    119 => 'The feature was successfully saved.',
-    120 => 'There was an error saving the feature.',
+    119 => 'Die Funktion wurde erfolgreich gespeichert.',
+    120 => 'Beim Speichern der Funktion ist ein Fehler aufgetreten.',
     200 => 'Leider hast Du keinen Zugriff auf diese Seite. Bitte beachte, dass alle nicht autorisierten Zugriffe protokolliert werden.',
     500 => 'Der Template-Cache wurde erfolgreich geleert',
     501 => 'Security Token ist ungültig - Möglicherweise ist die Sitzung abgelaufen.',
@@ -1577,10 +1637,10 @@ $LANG_ACCESS = array(
     'token_expired' => 'Die Anmeldung ist abgelaufen. Bitte bestätige Deine Sitzung erneut.',
     'token_expired_footer' => 'Die Anmeldung für diese Anfrage ist abgelaufen. Bitte bestätige Deine Sitzung erneut.',
     'validation_failed' => 'Validierung fehlgeschlagen - Bitte versuche es nochmal.',
-    'feature_id' => 'Feature ID',
-    'feature_name' => 'Feature Name',
-    'avail_groups' => 'Available Groups',
-    'incl_groups' => 'Included Groups',
+    'feature_id' => 'Funktions-ID',
+    'feature_name' => 'Funktionsname',
+    'avail_groups' => 'Verfügbare Gruppen',
+    'incl_groups' => 'Eingeschlossene Gruppen',
 );
 
 ###############################################################################
@@ -1658,30 +1718,30 @@ $LANG_DB_ADMIN = array(
     'overall_progress'    => 'Gesamt-Fortschritt',
     'no_backups_found'    => 'Keine Backup-Dateien gefunden',
     'error_msg'           => 'Die folgenden Fehler sind aufgetreten',
-    'missing_required'    => 'Please Fill Out All Required Fields',
+    'missing_required'    => 'Bitte füllen Sie alle erforderlichen Felder aus',
     'time'                => 'Uhrzeit',
     'table'               => 'Tabelle',
-    'changes_found'       => 'Changes Found',
-    'rows_updated'        => 'Rows Updated',
-    'sr_title'            => 'Search and Replace',
+    'changes_found'       => 'Änderungen gefunden',
+    'rows_updated'        => 'Zeilen aktualisiert',
+    'sr_title'            => 'Suchen und Ersetzen',
     'search_for'          => 'Suche nach',
-    'replace_with'        => 'Replace With',
-    'tables_to_search'    => 'Tables to search',
+    'replace_with'        => 'Ersetzen durch',
+    'tables_to_search'    => 'Zu durchsuchende Tabellen',
     'search'              => 'Suchen',
     'remove'              => 'Löschen',
-    'case'                => 'Case-Insensitive',
-    'dry_run'             => 'Dry Run',
-    'available_tables'    => 'Available Tables',
-    'execute'             => 'Execute',
-    'sr_warning_banner'   => 'Ensure you have a recent backup of your database!  The Search / Replace feature does not have an undo option, so be careful to ensure the changes you make are correct.',
-    'dry_run_complete'    => 'Review the Dry Run results above. Validate the replacements are correct. If you are satisfied with the results, you can execute the Search and Replace by selecting the Execute button below.',
-    'sr_parameters'       => 'Search and Replace Parameters',
-    'sr_warning_1'        => 'Are you sure you want to perform the search / replace?',
-    'sr_warning_2'        => 'You do have a good backup, right?',
+    'case'                => 'Groß-/Kleinschreibung ignorieren',
+    'dry_run'             => 'Probelauf',
+    'available_tables'    => 'Verfügbare Tabellen',
+    'execute'             => 'Ausführen',
+    'sr_warning_banner'   => 'Stellen Sie sicher, dass Sie ein aktuelles Backup Ihrer Datenbank haben! Die Funktion Suchen / Ersetzen hat keine Rückgängig-Option, also achten Sie darauf, dass die von Ihnen vorgenommenen Änderungen korrekt sind.',
+    'dry_run_complete'    => 'Überprüfen Sie ob die Ergebnisse des Probelaufs korrekt sind. Wenn Sie mit den Ergebnissen zufrieden sind, können Sie die Änderungen übernehmen indem Sie unten den Knopf Ausführen auswählen.',
+    'sr_parameters'       => 'Suchen und Ersetzen Parameter',
+    'sr_warning_1'        => 'Sind Sie sicher, dass Sie die Suchen und Ersetzen durchführen möchten?',
+    'sr_warning_2'        => 'Haben Sie auch wirklich ein aktuelles Backup?',
     'edit'                => 'Bearbeiten',
     'cancel'              => 'Abbrechen',
     'seconds'             => 'Sekunden',
-    'plugin_table_column' => 'Plugin :: Table -> Column',
+    'plugin_table_column' => 'Plugin :: Tabelle -> Spalte',
 
 );
 
@@ -1984,11 +2044,11 @@ $LANG_ADMIN = array(
     'timeout_msg' => 'Deine Sitzung wird in Kürze wegen Inaktivität ablaufen. Bitte drücke "OK" um die Sitzung wieder zu aktualisieren.',
     'reset' => 'Zurücksetzen',
     'remaining_chars' => 'Verbleibende Zeichen ',
-    'feature_admin' => 'Feature Administration',
-    'feature_editor' => 'Feature Editor',
-    'feature_list' => 'Feature List',
-    'core_only' => 'Show Only Core Features',
-    'assigned_groups' => 'Assigned Groups',
+    'feature_admin' => 'Funktion Administration',
+    'feature_editor' => 'Funktion Editor',
+    'feature_list' => 'Liste der Funktionen',
+    'core_only' => 'Nur Kernfunktionen anzeigen',
+    'assigned_groups' => 'Zugewiesene Gruppen',
 );
 
 ###############################################################################
@@ -2297,6 +2357,22 @@ $LANG_LOGO = array(
     'logo_saved'        => 'Logo-Optionen erfolgreich gespeichert.',
     'invalid_type'      => 'Ungültiges Bildformat, nur JPG, PNG, und GIF sind erlaubt',
     'invalid_size'      => 'Hochgeladenes Logo ist größer als die erlaubte Größe von ',
+
+    'item_updated'      => 'The item has been updated.',
+    'image_deleted'     => 'The image was deleted.',
+    'item_unchanged'    => 'The item  was not changed.',
+    'none'              => 'Aus',
+    'graphic'           => 'Graphic',
+    'text'              => 'als Text',
+    'logo_type'         => 'Logo Type',
+    'theme'             => 'Erscheinungsbild',
+    'grp_access'        => 'Group Access',
+    'disabled'          => 'Deaktiviert',
+    'all_users'         => 'Alle Benutzer',
+    'site_theme'        => 'Site Theme',
+    'default'           => 'Standard',
+    'yes'               => 'Ja',
+    'no'                => 'Nein',
 );
 
 ###############################################################################
@@ -2573,7 +2649,6 @@ $LANG_ACTIONS = array(
 );
 
 
-
 $LANG_configsections['Core'] = array(
     'label' => 'glFusion',
     'title' => 'glFusion-Konfiguration'
@@ -2730,8 +2805,8 @@ $LANG_confignames['Core'] = array(
     'show_right_blocks' => 'Immer rechte Blöcke anzeigen',
     'showfirstasfeatured' => 'Ersten Artikel als Hauptartikel',
     'backend' => 'Feed einschalten',
-    'rdf_file' => 'Main RSS File',
-    'path_rss' => 'Path to store RSS feeds',
+    'rdf_file' => 'Haupt-RSS-Datei',
+    'path_rss' => 'Pfad zum Speichern von RSS-Feeds',
     'rdf_limit' => 'Feed-Limit',
     'rdf_storytext' => 'Artikellänge',
     'rdf_language' => 'Sprache',
@@ -2765,7 +2840,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Moderation von Kommentaren',
     'passwordspeedlimit' => 'Passwort Wartezeit in Sek.',
     'login_attempts' => 'Max. Anmeldeversuche',
-    'login_landing' => 'Login-Landingpage',
+    'login_landing' => 'Login Landing Page',
     'login_speedlimit' => 'Anmeldung Wartezeit in Sek.',
     'user_html' => 'Erlaubtes Benutzer HTML',
     'admin_html' => 'Erlaubtes Admin HTML',
@@ -2875,10 +2950,10 @@ $LANG_confignames['Core'] = array(
     'story_sort_by' => 'Artikel-Liste Sortierfeld',
     'story_sort_dir' => 'Artikel-Liste Sortierrichtung',
     'cache_driver' => 'Cache-Treiber',
-    'cache_redis_host' => 'Redis Cache Server',
-    'cache_redis_port' => 'Redis Cache Server Port',
-    'cache_memcached_host' => 'Memcache(d) Cache Server',
-    'cache_memcached_port' => 'Memcached(d) Cache Server Port',
+    'cache_redis_host' => 'Redis-Cache-Server',
+    'cache_redis_port' => 'Redis-Cache-Server-Port',
+    'cache_memcached_host' => 'Memcache(d) Cache-Server',
+    'cache_memcached_port' => 'Memcached(d) Cache-Server-Port',
     'cache_timeout' => 'Verbindungs-Timeout',
     'cache_redis_socket' => 'Pfad / Dateiname zu Redis Socket',
     'cache_redis_password' => 'Redis-Passwort',
@@ -2895,6 +2970,12 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'Artikel-Verwaltung',
     'log_level' => 'Log-Level',
     'enable_admin_actions' => 'Admin-Logging aktivieren',
+    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
+    'search_excerpt_length' => 'Excerpt Size',
+    'search_per_page' => 'Results Per Page',
+    'search_type' => 'Default Search Type',
+    'search_stopwords' => 'Stopwords',
+    'search_summarize_discussions' => 'Index Hierachtical Content By Parent',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -3009,5 +3090,6 @@ $LANG_configSelect['Core'] = array(
                 '600' => 'NOTFALL',
                 '525' => 'DVLP_DEBUG',
                ),
+    37 => array('all' => 'All of the words', 'any' => 'Any of the words', 'phrase' => 'Exakte Übereinstimmung'),
 );
 ?>

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -174,6 +174,22 @@ function FM_getGroupList ($basegroup)
     return $checked;
 }
 
+if (empty($_FILES) && empty($_POST) && isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+    //catch file overload error...
+    $postMax = ini_get('post_max_size'); //grab the size limits...
+    $uploadMax = ini_get('upload_max_filesize');
+
+    if (intval($postMax) <= intval($uploadMax)) {
+        $maxSize = $postMax;
+    } else {
+        $maxSize = $uploadMax;
+    }
+
+    COM_setMsg(sprintf($LANG_FILEMGMT_ERRORS['1111'],$maxSize),'error');
+    echo COM_refresh($_CONF['site_url'].'/filemgmt/submit.php');
+    exit;
+}
+
 $content = '';
 
 if (defined('DEMO_MODE') ) {
@@ -223,7 +239,8 @@ if (Filemgmt\Download::canSubmit()) {
             COM_setMsg(_MD_NEWDLADDED_DUPSNAP, 'error');
             break;
         case Status::OK:
-            COM_setMsg(_MD_NEWDLADDED);
+        case Status::UPL_OK;
+            COM_setMsg(_MD_NEWDLADDED,'info',1);
             break;
         case Status::UPL_PENDING:
             COM_setMsg(_MD_RECEIVED . '<br />' . _MD_WHENAPPROVED, 'success');
@@ -238,6 +255,7 @@ if (Filemgmt\Download::canSubmit()) {
             COM_setMsg(_MD_ERRUPLOAD, 'error');
             break;
         }
+
         if (!empty($redirect)) {
             COM_refresh($redirect);
         }

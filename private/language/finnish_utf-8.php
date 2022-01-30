@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000 by the following authors:
@@ -369,7 +369,7 @@ $LANG04 = array(
     126 => 'Vahvista',
     127 => 'Muuttaaksesi näitä asetuksia, sinun täytyy anataa nykyinen salasanasi.',
     128 => 'Nimesi',
-    129 => 'Salasana & Sähköposti',
+    129 => 'Salasana',
     130 => 'Infoa sinusta',
     131 => 'Daily Digest Valinnat',
     132 => 'Daily Digest Toiminto',
@@ -397,7 +397,7 @@ $LANG04 = array(
     159 => 'Tämä sähköposti luotiin automaattisesti. älä vastaa tähän.',
     160 => 'Paikalla',
     161 => 'Salasanan vahvuus',
-    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters',
+    162 => 'The user name must by at least %s characters, cannot contain invalid characters ( < > " %% & * / \  ) or emoji characters and cannot use a system reserved name such as admin, root, etc.',
     163 => 'Etäkäyttäjä',
     164 => 'Etäkäyttö käyttäjänimi',
     165 => 'Etäkäyttö palvelu',
@@ -453,6 +453,8 @@ $LANG04 = array(
     'linkedin'  => 'LinkedIn',
     'microsoft' => 'Microsoft',
     'twitter'   => 'Twitter',
+    'session_management' => 'Session Management',
+    'remote_account_info' => 'Remote Acccount Information',
 );
 
 ###############################################################################
@@ -461,7 +463,7 @@ $LANG04 = array(
 
 $LANG_MYACCOUNT = array(
     'pe_preview' => 'Esikatsele',
-    'pe_namepass' => 'Käyttäjänimi & Salasana',
+    'pe_namepass' => 'Tili',
     'pe_twofactor' => 'Two Factor Auth',
     'pe_userinfo' => 'Infoa sinusta',
     'pe_layout' => 'Ulkoasu & Kieli',
@@ -529,6 +531,64 @@ $LANG08 = array(
     38 => 'sent you the following article...',
     39 => 'Read Full Article',
 );
+
+############
+# Search
+$LANG_SEARCH_UI = array(
+    'menu_label'    => 'Search Admin',
+    'all'           => 'Kaikki',
+    'all_posts_by'  => 'All Posts By ',
+    'by'            => 'Lähetti:',
+    'hits'          => 'Lukukertoja',
+    'new_search'    => 'Please enter the search criteria above and select Search',
+    'on'            => 'on',
+    'one_day'       => '1 päivä',
+    'one_month'     => '1 kuukausi',
+    'one_year'      => '1 vuosi',
+    'search'        => 'Etsi',
+    'seven_days'    => '7 päivää',
+    'showing_results' => 'Showing %s - %s of %s Results',
+    'six_months'    => '6 kuukautta',
+    'three_months'  => '3 kuukautta',
+    'two_weeks'     => '2 viikkoa',
+    'two_years'     => '2 years',
+    'seconds'       => 'secs',
+    'search_placeholder' => 'Enter Your Search Request',
+    'altered_search' => 'Using <b>all of these words</b> did not return any data so the search was modified to <b>any of these words</b>',
+);
+
+$LANG_SEARCH_ADMIN = array(
+    'cancel'            => 'Peruuta',
+    'chk_unchk_all'     => 'Check/Uncheck All',
+    'clear_counters'    => 'Clear Counters',
+    'content_type'      => 'Content Type',
+    'current_progress'  => 'Current Progress',
+    'empty_table'       => 'Remove all data from Search Index table prior to indexing',
+    'error_getcontenttypes' => 'Unable to retrieve content types from glFusion',
+    'error_heading'     => 'Errors',
+    'hlp_counters'      => 'Here are the search queries made by site visitors, along with the number of times each query was made.',
+    'hlp_gen_all'       => 'Re-generate all indexes for the selected content types. Use this option after installing the plugin, or after changing certain key configuration items such as the minimum word length or changing the stemmer.',
+    'hlp_reindex'       => 'Re-indexing content will remove all existing search items for the content type and re-scan the content to rebuild the search word index. This can take a significant amount of time on large volume content types such as Forums.',
+    'index_instructions'=> 'This will scan the selected content types and rebuild the Search index',
+    'index_status'      => 'Indexing Status',
+    'search_admin'      => 'Search Administration',
+    'indexing'          => 'Indexing',
+    'no_errors'         => 'No Errors',
+    'overall_progress'  => 'Overall Progress',
+    'queries'           => 'Queries',
+    'reindex_button'    => 'Re-index',
+    'reindex_title'     => 'Re-index Content',
+    'remove_content_1'  => 'Removing existing index entries for ',
+    'remove_content_2'  => ' - This can take several minutes....',
+    'remove_fail'       => 'Failed to remove existing index entries.',
+    'results'           => 'Tulokset',
+    'retrieve_content_list' => 'Retrieving content list for ',
+    'retrieve_content_types'=> 'Retrieving Content Types',
+    'search_terms'      => 'Search Terms',
+    'submit'            => 'L&auml;het&auml;',
+    'success'           => 'Success',
+);
+
 
 ###############################################################################
 # search.php
@@ -919,7 +979,7 @@ $LANG24 = array(
     124 => 'Are you sure you want to cancel? Any changes will not be saved.',
     125 => 'Story Video',
     126 => 'Auto Play',
-);
+ );
 
 ###############################################################################
 # admin/topic.php
@@ -2297,6 +2357,22 @@ $LANG_LOGO = array(
     'logo_saved'        => 'Logo options successfully saved.',
     'invalid_type'      => 'Invalid image type, only JPG, PNG, and GIF are allowed',
     'invalid_size'      => 'Uploaded logo larger than allowed size of ',
+
+    'item_updated'      => 'The item has been updated.',
+    'image_deleted'     => 'The image was deleted.',
+    'item_unchanged'    => 'The item  was not changed.',
+    'none'              => 'Ei yht&auml;&auml;n',
+    'graphic'           => 'Graphic',
+    'text'              => 'Tavallinen teksti',
+    'logo_type'         => 'Logo Type',
+    'theme'             => 'Teema',
+    'grp_access'        => 'Group Access',
+    'disabled'          => 'Disabled',
+    'all_users'         => 'All Users',
+    'site_theme'        => 'Site Theme',
+    'default'           => 'Oletus',
+    'yes'               => 'Kyll&auml;',
+    'no'                => 'Ei',
 );
 
 ###############################################################################
@@ -2573,7 +2649,6 @@ $LANG_ACTIONS = array(
 );
 
 
-
 $LANG_configsections['Core'] = array(
     'label' => 'glFusion',
     'title' => 'glFusion Asetukset'
@@ -2765,7 +2840,7 @@ $LANG_confignames['Core'] = array(
     'commentsubmission' => 'Kommenttien Lähetysjono',
     'passwordspeedlimit' => 'Salasana Nopeusrajoitus',
     'login_attempts' => 'Max. Kirjautumis Yrityksiä',
-    'login_landing' => 'Kirjautumisen aloitussivu',
+    'login_landing' => 'Login Landing Page',
     'login_speedlimit' => 'Kirjautumis Nopeusrajoitus',
     'user_html' => 'Käyttäjä HTML',
     'admin_html' => 'Admin HTML',
@@ -2895,6 +2970,12 @@ $LANG_confignames['Core'] = array(
     'fset_story_administration' => 'Lista artikkeleista',
     'log_level' => 'Log Level',
     'enable_admin_actions' => 'Enable Admin Logging',
+    'disallow_usernames' => 'Disallowed Usernames (comma separated list)',
+    'search_excerpt_length' => 'Excerpt Size',
+    'search_per_page' => 'Results Per Page',
+    'search_type' => 'Default Search Type',
+    'search_stopwords' => 'Stopwords',
+    'search_summarize_discussions' => 'Index Hierachtical Content By Parent',
 );
 
 $LANG_configsubgroups['Core'] = array(
@@ -3009,5 +3090,6 @@ $LANG_configSelect['Core'] = array(
                 '600' => 'EMERGENCY',
                 '525' => 'DVLP_DEBUG',
                ),
+    37 => array('all' => 'All of the words', 'any' => 'Any of the words', 'phrase' => 'Exact Phrase'),
 );
 ?>

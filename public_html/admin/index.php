@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2019 by the following authors:
+*  Copyright (C) 2009-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -91,7 +91,7 @@ function render_cc_item (&$template, $url = '', $image = '', $label = '', $count
 */
 function commandcontrol()
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG_MB01, $LANG_AM, $LANG_LOGO, $LANG29, $LANG_LOGVIEW, $LANG_SOCIAL, $_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG01, $LANG_MB01, $LANG_AM, $LANG_LOGO, $LANG29, $LANG_LOGVIEW, $LANG_SOCIAL, $LANG_SEARCH_UI, $_IMAGE_TYPE;
 
     USES_lib_comment();
 
@@ -119,6 +119,7 @@ function commandcontrol()
     } else {
         $docUrl = $_CONF['site_url'].'/docs/english/index.html';
     }
+
     $modnum = 0;
     /*if (
         SEC_hasRights( 'story.edit,story.moderate', 'OR' ) ||
@@ -216,12 +217,19 @@ function commandcontrol()
             'lang' => $LANG_MB01['menu_builder'],
             'image' => $_CONF['layout_url'] . '/images/icons/menubuilder.' . $_IMAGE_TYPE,
         ),
-        $LANG_LOGO['logo_admin'] => array(
-            'condition' => SEC_hasRights('logo.admin'),
-            'url' => $_CONF['site_admin_url'] . '/logo.php',
-            'lang' => $LANG_LOGO['logo_admin'],
-            'image' => $_CONF['layout_url'] . '/images/icons/logo.' . $_IMAGE_TYPE,
+        $LANG_SEARCH_UI['menu_label'] => array(
+            'condition' => SEC_hasRights('search.admin'),
+            'url' => $_CONF['site_admin_url'] . '/search.php',
+            'lang' => $LANG_SEARCH_UI['menu_label'],
+            'image' => $_CONF['layout_url'] . '/images/icons/search.' . $_IMAGE_TYPE,
         ),
+        $LANG_LOGO['theme'] => array(
+            'condition' => SEC_hasRights('logo.admin'),
+            'url' => $_CONF['site_admin_url'] . '/themes.php',
+            'lang' => $LANG_LOGO['theme'],
+            'image' => $_CONF['layout_url'] . '/images/icons/theme.' . $_IMAGE_TYPE,
+        ),
+
         $LANG_AM['title'] => array(
             'condition' => SEC_hasRights('autotag.admin'),
             'url' => $_CONF['site_admin_url'] . '/autotag.php',

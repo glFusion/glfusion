@@ -42,7 +42,7 @@ if (!in_array($orderby, array('date', 'title', 'hits', 'rating'))) {
     $orderby = 'date';
 }
 if (isset($_GET['dir'])) {
-    $sortdir = $_GET['dir'] == 'asc' ? ' asc' : ' desc';
+    $sortdir = trim(rtrim($_GET['dir'])) == 'asc' ? ' asc' : ' desc';
 } else {
     $sortdir = 'desc';
 }
@@ -71,13 +71,14 @@ $p->set_file (array (
 $p->set_var ('tablewidth', $_FM_CONF['shotwidth'] + 10);
 $p->set_var('block_header', COM_startBlock(_MD_CATEGORYTITLE));
 $p->set_var('block_footer', COM_endBlock());
+$p->set_var('viewcat',true);
 
 $trimDescription=true;    // Set to false if you do not want to auto trim the description and insert the <more..> link
 
 $show = (int)$_FM_CONF['perpage'];
 $offset = ($page - 1) * $show;
 
-$pathstring = "<a href='index.php'>"._MD_MAIN."</a>&nbsp;:&nbsp;";
+$pathstring = "<li><a href='{$_FM_CONF['url']}/index.php'>"._MD_MAIN."</a></li>";
 $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_FM_CONF['url']}/viewcat.php");
 $pathstring .= $nicepath;
 
@@ -178,22 +179,55 @@ if($maxrows > 0) {
         exit;
     }
 
+    $p->unset_var('sortByPop');
+    $p->unset_var('sortByTitle');
+    $p->unset_var('sortByDate');
+    $p->unset_var('sortByRating');
+    $p->unset_var('sortbyasc');
+    $p->unset_var('sortbydesc');
+    $p->unset_var('newdir');
+    $p->unset_var('orderbyTrans');
+
+    $sortdir = trim(rtrim($sortdir));
+
     switch ($orderby) {
     case 'hits':
         $orderbyTrans = $sortdir == 'asc' ? _MD_POPULARITYLTOM : _MD_POPULARITYMTOL;
+        $p->set_var('sortByPop',true);
         break;
     case 'title':
         $orderbyTrans = $sortdir == 'asc' ? _MD_TITLEATOZ : _MD_TITLEZTOA;
+        $p->set_var('sortByTitle','title');
         break;
     case 'date':
         $orderbyTrans = $sortdir == 'asc' ? _MD_DATEOLD : _MD_DATENEW;
+        $p->set_var('sortByDate','date');
         break;
-    case 'rating asc':
+    case 'rating':
         $orderbyTrans = $sortdir == 'asc' ? _MD_RATINGLTOH : _MD_RATINGHTOL;
+        $p->set_var('sortByRating',true);
         break;
     default:
         $orderbyTrans = _MD_TITLEATOZ;
+        $p->set_var('sortByTitle','title');
         break;
+    }
+    switch(trim(rtrim($sortdir))) {
+        case 'asc' :
+            $p->set_var('sortbyasc','asc');
+            $p->unset_var('sortbydesc');
+            $p->set_var('newdir','desc');
+            break;
+        case 'desc' :
+            $p->set_var('sortbydesc','desc');
+            $p->unset_var('sortbyasc');
+            $p->set_var('newdir','asc');
+            break;
+        default :
+            $p->set_var('sortbydesc','desc');
+            $p->unset_var('sortbyasc');
+            $p->set_var('newdir','asc');
+            break;
     }
 
     //if 2 or more items in result, show the sort menu
@@ -205,6 +239,7 @@ if($maxrows > 0) {
         $p->set_var('LANG_POPULARITY',_MD_POPULARITY);
         $p->set_var('LANG_CURSORTBY',_MD_CURSORTBY);
         $p->set_var('orderbyTrans',$orderbyTrans);
+
         $p->parse('sort_menu', 'sortmenu');
     }
 
@@ -216,7 +251,7 @@ if($maxrows > 0) {
         $p->parse('fRecord', 'fileRecords', true);
     }
 
-    $base_url = $_FM_CONF['url'] . "/viewcat.php?cid=$cid&amp;orderby=$orderby&amp;dir=$sortdir";
+    $base_url = $_FM_CONF['url'] . "/viewcat.php?cid=".$cid."&amp;orderby=".$orderby."&amp;dir=".trim(rtrim($sortdir));
     $p->set_var('page_navigation', COM_printPageNavigation($base_url,$page, $numpages));
 }  else {
     $p->set_var('no_files', true);

@@ -240,29 +240,29 @@
 
 				<h2>Search</h2>
 
-				<dl id="desc_search_style">
-					<dt>Results List Style</dt>
-					<dd>Defines the format of the search results page:<br>Google Style - Presents the results in a Google Style format<br>Table Style - Presents the results in a tabular format.</dd>
+				<dl id="desc_search_stopwords">
+					<dt>Stop Words</dt>
+					<dd>A comma separated list of common words to remove from the search index and queries. Words such as THE, IS, A, etc.</dd>
 				</dl>
 
-				<dl id="desc_search_limits">
-					<dt>Page Limits</dt>
-					<dd>Define the valid page options for the Number of items per page dropdown on the search results page.</dd>
+				<dl id="desc_search_type">
+					<dt>Default Search Types</dt>
+					<dd>Sets the default search type of All, Any or Phrase.</dd>
 				</dl>
 
-				<dl id="desc_num_search_results">
-					<dt>Number of Search Results</dt>
-					<dd>Default number of search results per page.</dd>
+				<dl id="desc_search_per_page">
+					<dt>Results Per Page</dt>
+					<dd>Number of search results to show per page. For improved performance, keep this number reasonable around 20 or 25.</dd>
 				</dl>
 
-				<dl id="desc_search_show_num">
-					<dt>Show Result Number</dt>
-					<dd>Whether or not to display the number of each search result.</dd>
+				<dl id="desc_search_excerpt_length">
+					<dt>Excerpt Length</dt>
+					<dd>Number of words to include in the search results brief description.</dd>
 				</dl>
 
-				<dl id="desc_search_show_type">
-					<dt>Show Result Type</dt>
-					<dd>Show the result type (i.e. Forum, Wiki, Story, etc.)</dd>
+				<dl id="desc_search_summarize_discussions">
+					<dt>Summarize Hierachtical Content By Parent</dt>
+					<dd>If enabled, content that has a parent - child relationship, such as a Forum post with many topics, the search engine will index all children records to the parent - resulting in only 1 search result. If set to False, each item is indexed independently.</dd>
 				</dl>
 
 				<dl id="desc_search_show_user">
@@ -1058,6 +1058,11 @@
 				<dl id="desc_min_username_length">
 					<dt>Minimum Username Length</dt>
 					<dd>The minimum allowed length of a username.</dd>
+				</dl>
+
+				<dl id="desc_disallow_usernames">
+					<dt>Disallowed Usernames</dt>
+					<dd>A comma separated list of usernames that are not allowed on the site. Examples might be system, root, administrator, etc.</dd>
 				</dl>
 
 				<h2>Submission Settings</h2>

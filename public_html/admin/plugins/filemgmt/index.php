@@ -27,6 +27,23 @@ use \glFusion\FieldList;
 use Filemgmt\Download;
 use Filemgmt\Models\Status;
 
+if (empty($_FILES) && empty($_POST) && isset($_SERVER['REQUEST_METHOD']) && strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
+    //catch file overload error...
+    $postMax = ini_get('post_max_size'); //grab the size limits...
+    $uploadMax = ini_get('upload_max_filesize');
+
+    if (intval($postMax) <= intval($uploadMax)) {
+        $maxSize = $postMax;
+    } else {
+        $maxSize = $uploadMax;
+    }
+
+    COM_setMsg(sprintf($LANG_FILEMGMT_ERRORS['1111'],$maxSize),'error');
+    echo COM_refresh($_CONF['site_admin_url'].'/plugins/filemgmt/index.php');
+    exit;
+}
+
+
 // Set view and action variables.
 $op = 'files';
 $expected = array(
@@ -60,8 +77,9 @@ if ($op == 'moderate') {
     $opval = (int) $_GET['lid'];
 }
 
-//https://dev.glfusion.org/admin/plugins/filemgmt/index.php?modDownload=729
-//https://dev.glfusion.org/admin/plugins/filemgmt/index.php?moderate=x&lid=728
+if (isset($opval)) {
+    $opval = COM_applyFilter($opval,TRUE);
+}
 
 $display = '';
 if (!SEC_hasRights('filemgmt.edit')) {
@@ -96,7 +114,7 @@ case "addSubCat":
     addSubCat();
     break;
 case "saveDownload":
-    $status = Filemgmt\Download::getInstance($_POST['lid'])->Save($_POST);
+    $status = Filemgmt\Download::getInstance($_POST['lid'])->save($_POST);
     switch ($status) {
     case Status::UPL_NODEMO:
         COM_setMsg($LANG_FILEMGMT['err_demomode'], 'error');
@@ -152,7 +170,16 @@ case "delVote":
     exit;
     break;
 case "delCat":
-    delCat();
+    // when deleting from the edit form
+    if (isset($_POST['cid'])) {
+        $opval = (int) COM_applyFilter($_POST['cid'],true);
+    }
+    if(Filemgmt\Category::getInstance($opval)->delete()) {
+        COM_setMsg(_MD_CATDELETED);
+    } else {
+        COM_setMsg('Error :: Unable to delete category');
+    }
+    COM_refresh("{$_FM_CONF['admin_url']}/index.php?categoryConfigAdmin");
     break;
 case 'modCat':
     $content .= Filemgmt\Category::getInstance($opval)->edit();
@@ -167,7 +194,7 @@ case 'modDownload':
     $content .= Filemgmt\Download::getInstance($opval)->edit();
     break;
 case "modDownloadS":
-    echo "here";die;
+//    echo "here";die;
     modDownloadS();
     break;
 case "delDownload":
@@ -194,7 +221,7 @@ case "newfileConfigAdmin":
     $content .= Filemgmt\Download::getInstance(0)->edit();
     break;
 case "listNewDownloads":
-    $content .= Filemgmt\Download::adminList(0, 0);
+    $content .= Filemgmt\Download::adminList(0, 1);
     break;
 case 'files':
 default:
@@ -205,7 +232,7 @@ default:
     } else {
         $cat = 0;
     }
-    $content .= Filemgmt\Download::adminList($cat);
+    $content .= Filemgmt\Download::adminList($cat,1);
     break;
 }
 

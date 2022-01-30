@@ -1,44 +1,28 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | FileMgmt Plugin - glFusion CMS                                           |
-// +--------------------------------------------------------------------------+
-// | visit.php                                                                |
-// |                                                                          |
-// | downloads a file directly                                                |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2017 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// |                                                                          |
-// | Copyright (C) 2004 by Consult4Hire Inc.                                  |
-// | Author:                                                                  |
-// | Blaine Lang            blaine@portalparts.com                            |
-// |                                                                          |
-// | Based on:                                                                |
-// | myPHPNUKE Web Portal System - http://myphpnuke.com/                      |
-// | PHP-NUKE Web Portal System - http://phpnuke.org/                         |
-// | Thatware - http://thatware.org/                                          |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - FileMgmt Plugin
+*
+* User file download
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2022 by the following authors:
+*   Mark R. Evans   mark AT glfusion DOT org
+*
+*  Based on prior work Copyright (C) 2004 by Consult4Hire Inc.
+*  Author:
+*  Blaine Lang          blaine AT portalparts DOT com
+*
+*  Based on:
+*   myPHPNUKE Web Portal System - http://myphpnuke.com/
+*   PHP-NUKE Web Portal System - http://phpnuke.org/
+*   hatware - http://thatware.org/
+*
+*/
 
 require_once '../lib-common.php';
-//include_once $_CONF['path'].'plugins/filemgmt/include/header.php';
-//include_once $_CONF['path'].'plugins/filemgmt/include/functions.php';
+
 
 use \glFusion\Log\Log;
 
@@ -59,14 +43,12 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_FM_CONF['selectpriv'] == 
     $tempFile = 0;
     $lid = 0;
     $status = '';
-    if ( isset($_GET['lid']) ) {
-        $lid = COM_applyFilter($_GET['lid'],true);
-        //$status = 'status>0';
-    }
+    COM_setArgNames( array('lid') );
+    $lid = COM_applyFilter(COM_getArgument( 'lid' ),true);
 
     $File = Filemgmt\Download::getInstance($lid);
     if (!$File->canRead()) {
-        COM_errorLog("Unauthorized download attempt for file " . $File->getLid());
+        Log::write('system',Log::ERROR,'FileMgmt: Unauthorized download attempt for file ' . $lid);
         COM_404();
     }
 
@@ -74,13 +56,17 @@ if ( (!isset($_USER['uid']) || $_USER['uid'] < 2) && $_FM_CONF['selectpriv'] == 
     $url = $File->getUrl();
 
     $found_it = false;
-    Log::write('system',Log::INFO, "Download File:{$url}, User ID is:{$uid}");
+    Log::write('system',Log::INFO, "Download File:{$url}, User ID is: {$uid}");
  
     $pos = utf8_strpos( $url, ':' );
     if( $pos === false ) {
         $DL = new Filemgmt\UploadDownload();
         $DL->setAllowAnyMimeType(true);
-        $DL->setPath($_FM_CONF['FileStore']);
+        if ($_FM_CONF['outside_webroot']) {
+            $DL->setPath($_CONF['path'].'data/filemgmt_data/files/');
+        } else {
+            $DL->setPath($_FM_CONF['FileStore']);
+        }
         $DL->downloadFile($url);
     } else {
         $protocol = utf8_substr( $url, 0, $pos + 1 );

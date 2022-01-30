@@ -269,9 +269,9 @@ class XoopsTree
         $myts = MyTextSanitizer::getInstance();
         $name = $myts->makeTboxData4Show($name);
         if (strpos($funcURL,'?',0) === FALSE) {
-            $path = "<a href=\"{$funcURL}?{$this->id}={$sel_id}\">{$name}</a>&nbsp;:&nbsp;{$path}";
+            $path = "<li><a href=\"{$funcURL}?{$this->id}={$sel_id}\">{$name}</a>{$path}</li>";
         } else {
-            $path = "<a href=\"{$funcURL}&{$this->id}={$sel_id}\">{$name}</a>&nbsp;:&nbsp;{$path}";
+            $path = "<li><a href=\"{$funcURL}&{$this->id}={$sel_id}\">{$name}</a>{$path}</li>";
         }
         if ( $parentid == 0 ) {
             return $path;

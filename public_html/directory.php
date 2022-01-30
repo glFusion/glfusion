@@ -46,6 +46,8 @@ if (COM_isAnonUser() && (($_CONF['loginrequired'] == 1) ||
 */
 function DIR_lastDayOfMonth($month, $year)
 {
+    global $_USER;
+
     $month++;
     if ($month > 12) {
         $month = 1;
@@ -54,7 +56,7 @@ function DIR_lastDayOfMonth($month, $year)
 
     $lastday = mktime(0, 0, 0, $month, 0, $year);
 
-    return intval(strftime('%d', $lastday));
+    return intval(Date::getInstance($lastday,$_USER['tzid'])->format('d',true));
 }
 
 

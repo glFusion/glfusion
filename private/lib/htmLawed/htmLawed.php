@@ -1,7 +1,7 @@
 <?php
 
 /*
-htmLawed 1.2.3, 5 July 2017
+htmLawed 1.2.6, 4 September 2021
 Copyright Santosh Patnaik
 Dual licensed with LGPL 3 and GPL 2+
 A PHP Labware internal utility - www.bioinformatics.org/phplabware/internal_utilities/htmLawed
@@ -37,13 +37,13 @@ else{
 }
 $C['elements'] =& $e;
 // config attrs
-$x = !empty($C['deny_attribute']) ? strtolower(str_replace(array("\n", "\r", "\t", ' '), '', $C['deny_attribute'])) : '';
-$x = array_flip((isset($x[0]) && $x[0] == '*') ? str_replace('/', 'data-', explode('-', str_replace('data-', '/', $x))) : explode(',', $x. (!empty($C['safe']) ? ',on*' : '')));
+$x = !empty($C['deny_attribute']) ? strtolower(preg_replace('"\s+-"', '/', trim($C['deny_attribute']))) : '';
+$x = array_flip((isset($x[0]) && $x[0] == '*') ? explode('/', $x) : explode(',', $x. (!empty($C['safe']) ? ',on*' : '')));
 $C['deny_attribute'] = $x;
 // config URLs
 $x = (isset($C['schemes'][2]) && strpos($C['schemes'], ':')) ? strtolower($C['schemes']) : 'href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, tel, telnet'. (empty($C['safe']) ? ', app, javascript; *: data, javascript, ' : '; *:'). 'file, http, https';
 $C['schemes'] = array();
-foreach(explode(';', str_replace(array(' ', "\t", "\r", "\n"), '', $x)) as $v){
+foreach(explode(';', trim(str_replace(array(' ', "\t", "\r", "\n"), '', $x), ';')) as $v){
  $x = $x2 = null; list($x, $x2) = explode(':', $v, 2);
  if($x2){$C['schemes'][$x] = array_flip(explode(',', $x2));}
 }
@@ -143,7 +143,7 @@ foreach($t as $tk=>$tv){
  }
  if($o){$r[] = $tv;}
 }
-if($s == ','){$s = ', ';}
+if($s == ','){$s = ', ';} 
 $r = implode($s, $r);
 return (isset($r[0]) ? $r : (isset($p['default']) ? $p['default'] : 0));
 }
@@ -219,7 +219,7 @@ for($i=-1, $ci=count($t); ++$i<$ci;){
   if(isset($cE[$e]) or !in_array($e, $q)){continue;} // Empty/unopen
   if($p == $e){array_pop($q); echo '</', $e, '>'; unset($e); continue;} // Last open
   $add = ''; // Nesting - close open tags that need to be
-  for($j=-1, $cj=count($q); ++$j<$cj;){
+  for($j=-1, $cj=count($q); ++$j<$cj;){  
    if(($d = array_pop($q)) == $e){break;}
    else{$add .= "</{$d}>";}
   }
@@ -366,22 +366,31 @@ return "{$b}{$p}{$a}";
 function hl_regex($p){
 // check regex
 if(empty($p)){return 0;}
-if($t = ini_get('track_errors')){$o = isset($php_errormsg) ? $php_errormsg : null;}
-else{ini_set('track_errors', 1);}
-unset($php_errormsg);
+if($v = function_exists('error_clear_last') && function_exists('error_get_last')){error_clear_last();}
+else{
+ if($t = ini_get('track_errors')){$o = isset($php_errormsg) ? $php_errormsg : null;}
+ else{ini_set('track_errors', 1);}
+ unset($php_errormsg);
+}
 if(($d = ini_get('display_errors'))){ini_set('display_errors', 0);}
 preg_match($p, '');
+if($v){$r = error_get_last() == null ? 1 : 0; }
+else{
+ $r = isset($php_errormsg) ? 0 : 1;
+ if($t){$php_errormsg = isset($o) ? $o : null;}
+ else{ini_set('track_errors', 0);}
+}
 if($d){ini_set('display_errors', 1);}
-$r = isset($php_errormsg) ? 0 : 1;
-if($t){$php_errormsg = isset($o) ? $o : null;}
-else{ini_set('track_errors', 0);}
 return $r;
 }
 
 function hl_spec($t){
 // final $spec
 $s = array();
-$t = str_replace(array("\t", "\r", "\n", ' '), '', preg_replace_callback('/"(?>(`.|[^"])*)"/sm', function($m) {return substr(str_replace(array(";", "|", "~", " ", ",", "/", "(", ")", '`"'), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\""), $m[0]), 1, -1);}, trim($t)));
+if(!function_exists('hl_aux1')){function hl_aux1($m){
+ return substr(str_replace(array(";", "|", "~", " ", ",", "/", "(", ")", '`"'), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", '"'), $m[0]), 1, -1);
+}}
+$t = str_replace(array("\t", "\r", "\n", ' '), '', preg_replace_callback('/"(?>(`.|[^"])*)"/sm', 'hl_aux1', trim($t))); 
 for($i = count(($t = explode(';', $t))); --$i>=0;){
  $w = $t[$i];
  if(empty($w) or ($e = strpos($w, '=')) === false or !strlen(($a =  substr($w, $e+1)))){continue;}
@@ -643,11 +652,11 @@ if($e == 'font'){
  $a2 = '';
  while(preg_match('`(^|\s)(color|size)\s*=\s*(\'|")?(.+?)(\\3|\s|$)`i', $a, $m)){
   $a = str_replace($m[0], ' ', $a);
-  $a2 .= strtolower($m[2]) == 'color' ? (' color: '. str_replace('"', '\'', trim($m[4])). ';') : (isset($fs[($m = trim($m[4]))]) ? ($a2 .= ' font-size: '. str_replace('"', '\'', $fs[$m]). ';') : '');
+  $a2 .= strtolower($m[2]) == 'color' ? (' color: '. str_replace(array('"', ';', ':'), '\'', trim($m[4])). ';') : (isset($fs[($m = trim($m[4]))]) ? (' font-size: '. $fs[$m]. ';') : '');
  }
  while(preg_match('`(^|\s)face\s*=\s*(\'|")?([^=]+?)\\2`i', $a, $m) or preg_match('`(^|\s)face\s*=(\s*)(\S+)`i', $a, $m)){
   $a = str_replace($m[0], ' ', $a);
-  $a2 .= ' font-family: '. str_replace('"', '\'', trim($m[3])). ';';
+  $a2 .= ' font-family: '. str_replace(array('"', ';', ':'), '\'', trim($m[3])). ';';
  }
  $e = 'span'; return ltrim(str_replace('<', '', $a2));
 }
@@ -660,7 +669,10 @@ return '';
 function hl_tidy($t, $w, $p){
 // tidy/compact HTM
 if(strpos(' pre,script,textarea', "$p,")){return $t;}
-$t = preg_replace(array('`(<\w[^>]*(?<!/)>)\s+`', '`\s+`', '`(<\w[^>]*(?<!/)>) `'), array(' $1', ' ', '$1'), preg_replace_callback(array('`(<(!\[CDATA\[))(.+?)(\]\]>)`sm', '`(<(!--))(.+?)(-->)`sm', '`(<(pre|script|textarea)[^>]*?>)(.+?)(</\2>)`sm'), function($m){return $m[1]. str_replace(array("<", ">", "\n", "\r", "\t", " "), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), $m[3]). $m[4];}, $t));
+if(!function_exists('hl_aux2')){function hl_aux2($m){
+ return $m[1]. str_replace(array("<", ">", "\n", "\r", "\t", ' '), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), $m[3]). $m[4];
+}}
+$t = preg_replace(array('`(<\w[^>]*(?<!/)>)\s+`', '`\s+`', '`(<\w[^>]*(?<!/)>) `'), array(' $1', ' ', '$1'), preg_replace_callback(array('`(<(!\[CDATA\[))(.+?)(\]\]>)`sm', '`(<(!--))(.+?)(-->)`sm', '`(<(pre|script|textarea)[^>]*?>)(.+?)(</\2>)`sm'), 'hl_aux2', $t));
 if(($w = strtolower($w)) == -1){
  return str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), array('<', '>', "\n", "\r", "\t", ' '), $t);
 }
@@ -683,7 +695,7 @@ while($X){
   $r = ''; list($e, $r) = explode('>', $t[$i]);
   $x = $e[0] == '/' ? 0 : (substr($e, -1) == '/' ? 1 : ($e[0] != '!' ? 2 : -1));
   $y = !$x ? ltrim($e, '/') : ($x > 0 ? substr($e, 0, strcspn($e, ' ')) : 0);
-  $e = "<$e>";
+  $e = "<$e>"; 
   if(isset($d[$y])){
    if(!$x){
     if($n){echo "\n", str_repeat($s, --$n), "$e\n", str_repeat($s, $n);}
@@ -713,5 +725,5 @@ return str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), array(
 
 function hl_version(){
 // version
-return '1.2.3';
+return '1.2.6';
 }

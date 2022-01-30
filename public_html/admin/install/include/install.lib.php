@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Eric Warren     eric AT glfusion DOT org
 *
@@ -24,7 +24,7 @@ if (!defined('LB')) {
     define('LB', "\n");
 }
 if (!defined('SUPPORTED_PHP_VER')) {
-    define('SUPPORTED_PHP_VER', '7.3.0');
+    define('SUPPORTED_PHP_VER', '7.4.0');
 }
 if (!defined('SUPPORTED_MYSQL_VER')) {
     define('SUPPORTED_MYSQL_VER', '5.5.0');
@@ -1507,6 +1507,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
         case '1.7.9' :
 
+            $current_fusion_version = '1.7.10';
+
+        case '1.7.10' :
+
             $current_fusion_version = '1.8.0';
 
         case '1.8.0' : // internal development release
@@ -1571,6 +1575,45 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                   PRIMARY KEY (`id`)
                 ) ENGINE=MyISAM
                 ";
+            $_SQL[] = "
+                CREATE TABLE `{$_TABLES['themes']}` (
+                    `theme` varchar(40) NOT NULL DEFAULT '',
+                    `logo_type` tinyint(1) NOT NULL DEFAULT -1,
+                    `display_site_slogan` tinyint(1) NOT NULL DEFAULT -1,
+                    `logo_file` varchar(40) NOT NULL DEFAULT '',
+                    `grp_access` int(11) unsigned NOT NULL DEFAULT 2,
+                    PRIMARY KEY (`theme`)
+                ) ENGINE=MyISAM";
+
+            $_SQL[] = "INSERT INTO {$_TABLES['themes']} (theme, logo_type, display_site_slogan)
+                VALUES ('_default', 99, 1), ('cms', -1, -1)";
+
+            $_SQL[] = "
+                CREATE TABLE `{$_TABLES['search_index']}` (
+                    `item_id` varchar(128) NOT NULL DEFAULT '',
+                    `type` varchar(20) NOT NULL DEFAULT '',
+                    `content` MEDIUMTEXT,
+                    `parent_id` varchar(128) NOT NULL DEFAULT '',
+                    `parent_type` varchar(50) NOT NULL DEFAULT '',
+                    `ts` int(11) unsigned NOT NULL DEFAULT '0',
+                    `grp_access` mediumint(8) NOT NULL DEFAULT '2',
+                    `title` varchar(200) NOT NULL DEFAULT '',
+                    `owner_id` mediumint(9) NOT NULL DEFAULT '0',
+                    `author` varchar(40) NOT NULL DEFAULT '',
+                    PRIMARY KEY (`type`, `item_id`),
+                    INDEX `type` (`type`),
+                    INDEX `item_date` (`ts`),
+                    INDEX `author` (`author`)
+                ) ENGINE=MyISAM";
+
+            $_SQL[] = "
+                CREATE TABLE `{$_TABLES['search_stats']}` (
+                    `term` varchar(200) NOT NULL,
+                    `hits` int(11) unsigned NOT NULL DEFAULT '1',
+                    `results` int(11) unsigned NOT NULL DEFAULT '1',
+                    PRIMARY KEY (`term`),
+                    KEY `hits` (`hits`)
+                ) ENGINE=MyISAM";
 
             if ($use_innodb) {
                 $statements = count($_SQL);
@@ -1582,6 +1625,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             foreach ($_SQL as $sql) {
                 DB_query($sql,1);
             }
+
+            // Transfer settings from the logos table to themes
+            glFusion\Theme\Theme::upgradeFromLogo();
+
 //modify stories table to support new approach
             $sql = "ALTER TABLE `{$_TABLES['stories']}`
                         ADD COLUMN `id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT FIRST,
@@ -1601,7 +1648,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 array('ft_name' => 'database.admin','ft_desc' => 'Ability to perform Database Administration'),
                 array('ft_name' => 'env.admin',     'ft_desc' => 'Ability to view Environment Check'),
                 array('ft_name' => 'logview.admin', 'ft_desc' => 'Ability to view / clear glFusion Logs'),
-                array('ft_name' => 'upgrade.admin', 'ft_desc' => 'Ability to run Upgrade Check')
+                array('ft_name' => 'upgrade.admin', 'ft_desc' => 'Ability to run Upgrade Check'),
+                array('ft_name' => 'search.admin',  'ft_desc' => 'Ability to manage the Search Engine')
             );
 
             foreach($newCapabilities AS $feature) {

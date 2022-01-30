@@ -20,6 +20,8 @@ use \glFusion\Log\Log;
 
 USES_lib_admin();
 
+COM_404();
+
 $display = '';
 
 // Only let admin users access this page

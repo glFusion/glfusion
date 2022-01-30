@@ -104,8 +104,9 @@ while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
 
 if ( $_CONF['cron_schedule_interval'] > 0  ) {
     if (( $_VARS['last_scheduled_run'] + $_CONF['cron_schedule_interval'] ) <= time()) {
-        Log::write('system',Log::DEBUG,'Updating last_scheduled_run date / time');
+        Log::write('system',Log::DEBUG,'Running last_scheduled_run items.');
         $db->conn->query("UPDATE `{$_TABLES['vars']}` SET value=UNIX_TIMESTAMP() WHERE name='last_scheduled_run'");
+        Log::write('system',Log::DEBUG,'Running PLG_runScheduledTasks.');
         PLG_runScheduledTask();
     }
 }

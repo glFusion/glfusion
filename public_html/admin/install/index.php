@@ -1886,6 +1886,14 @@ function INST_doPluginInstall()
                 DB_query($fsql,1);
             }
         }
+
+        // install the search enginer primer
+        if ( is_array($_SE_DEFAULT_DATA) ) {
+            foreach ($_SE_DEFAULT_DATA AS $sql) {
+                DB_query($sql,1);
+            }
+        }
+
         // cycle through the rest of the installed plugins and add their data
         if ( is_array($installedPlugins) ) {
             foreach ($installedPlugins AS $plugin) {

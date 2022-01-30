@@ -4,7 +4,7 @@
  *
  * @author      Mark R. Evans <mark AT glfusion DOT org>
  * @author      Lee Garner <lee@leegarner.com>
- * @copyright   Copyright (c) 2008-2021 Mark R. Evans <mark AT glfusion DOT org>
+ * @copyright   Copyright (c) 2008-2022 Mark R. Evans <mark AT glfusion DOT org>
  * @package     filemgmt
  * @version     v1.9.0
  * @since       v0.9.0
@@ -21,14 +21,13 @@ use glFusion\Cache\Cache;
 use glFusion\FieldList;
 use Filemgmt\Models\Status;
 
-
 /**
  * Class for downloadable items.
  * @package filemgmt
  */
 class Download
 {
-    const PERMS = 0644;
+    const PERMS = '0644';
 
     /** Downoad ID.
      * @var integer */
@@ -125,7 +124,7 @@ class Download
         } else {
             $this->submitter = $_USER['uid'];
         }
-    }
+     }
 
 
     /**
@@ -263,7 +262,7 @@ class Download
         global $_FM_CONF;
 
         $interval = 86400 * (int)$_FM_CONF['whatsnewperioddays'];
-        return self::getAll("date > UNIX_TIMESTAMP() - $interval ORDER BY date DESC", 15);
+        return self::getAll("status = 1 AND date > UNIX_TIMESTAMP() - $interval ORDER BY date DESC", 15);
     }
 
 
@@ -318,6 +317,17 @@ class Download
     {
         $this->cid = (int)$id;
         return $this;
+    }
+
+    /**
+     * Get the category ID for this download.
+     *
+     * @return  object  $this->cid
+     */
+    public function getCid()
+    {
+        return $this->cid;
+
     }
 
 
@@ -636,7 +646,11 @@ class Download
         if ($Cat->canUpload()) {
             $this->status = Status::APPROVED;
             $retval = Status::UPL_OK;
-            $file_path = $_FM_CONF['FileStore'];
+            if ($_FM_CONF['outside_webroot']) {
+                $file_path = $_CONF['path'].'data/filemgmt_data/files/';
+            } else {
+                $file_path = $_FM_CONF['FileStore'];
+            }
             $snap_path = $_FM_CONF['SnapStore'];
         } else {
             $this->status = Status::SUBMISSION;
@@ -650,13 +664,16 @@ class Download
 // we have a file to upload - so we need to process it.
 //        if ($_FILES['newfile']['size'] != 0  && empty($this->url)) {
         if ($_FILES['newfile']['size'] != 0) {
-            FileSystem::mkDir($_FM_CONF['FileStore']);
+            if ($_FM_CONF['outside_webroot']) {
+                FileSystem::mkDir($_CONF['path'].'data/filemgmt_data/files/');
+            } else {
+                FileSystem::mkDir($_FM_CONF['FileStore']);
+            }
             FileSystem::mkDir($_FM_CONF['SnapStore']);
 
             $upload = new UploadDownload();
             $upload->setPerms(self::PERMS);
             $upload->setFieldName('newfile');
-
 
             if ( FileSystem::mkDir($file_path) === false ) {
                 Log::write('system',Log::ERROR,'FileMgmt: Unable to create ' . $file_path. ' ');
@@ -730,14 +747,11 @@ class Download
             )
         );
 
-        if (
-            isset($_CONF['debug_image_upload']) &&
-            $_CONF['debug_image_upload']
-        ) {
+        if (isset($_CONF['debug_image_upload']) && $_CONF['debug_image_upload']) {
             $upload->setLogFile($_CONF['path'] . 'logs/error.log');
             $upload->setDebug(true);
         }
-        $upload->setMaxDimensions(640,480);
+        $upload->setMaxDimensions(2048,2048);
         $upload->setAutomaticResize(true);
         $upload->setMaxFileSize(100000000);
         $upload->uploadFiles();
@@ -751,12 +765,14 @@ class Download
                 $this->logourl = $myts->makeTboxData4Save(rawurlencode($snapfilename));
                 $AddNewFile = true;
             }
+        } elseif (isset($A['deletesnap'])) {
+            $this->deleteImage();
         }
 // end of the file shot
 
         if ($AddNewFile || $this->lid > 0) {
-            if (strlen($this->version) > 9) {
-                $this->version = substr($this->version,0,8);
+            if (strlen($this->version) > 24) {
+                $this->version = substr($this->version,0,24);
             }
 
             if ($this->lid == 0) {
@@ -768,6 +784,7 @@ class Download
                 $sql1 = "UPDATE `{$_TABLES['filemgmt_filedetail']}` SET ";
                 $sql3 = " WHERE lid = {$this->lid} ";
             }
+
             $sql2 = "cid = {$this->cid},
                 title = '" . DB_escapeString($this->title) . "',
                 url = '" . DB_escapeString($this->url) . "',
@@ -781,6 +798,11 @@ class Download
                 rating = {$this->rating},
                 votes = {$this->votes},
                 comments = {$this->comments}";
+
+            if (!isset($A['silentedit']) && $this->lid <> 0) {
+                $sql2 .= ",date = UNIX_TIMESTAMP() ";
+            }
+
             $sql = $sql1 . $sql2 . $sql3;
             DB_query($sql);
 
@@ -828,14 +850,18 @@ class Download
      */
     public function delete()
     {
-        global $_TABLES, $_FM_CONF;
+        global $_CONF, $_TABLES, $_FM_CONF;
 
         if ($this->status == 0) {
             // Deleting a submission
             $tmpfile = $_FM_CONF['FileStore_tmp'] . $this->url;
             $tmpsnap  = $_FM_CONF['SnapStore_tmp'] . $this->logourl;
         } else {
-            $tmpfile = $_FM_CONF['FileStore'] . $this->url;
+            if ($_FM_CONF['outside_webroot']) {
+                $tmpfile = $_CONF['path'].'data/filemgmt_data/files/'.$this->url;
+            } else {
+                $tmpfile = $_FM_CONF['FileStore'] . $this->url;
+            }
             $tmpsnap  = $_FM_CONF['SnapStore'] . $this->logourl;
         }
 
@@ -902,7 +928,7 @@ class Download
      */
     public function edit($post=array())
     {
-        global $_CONF,$_FM_CONF, $_TABLES,$_USER, $_DB_name;
+        global $_CONF,$_FM_CONF, $_TABLES,$_USER, $_DB_name, $LANG_FILEMGMT;
 
         $display = '';
         $totalvotes = '';
@@ -954,7 +980,7 @@ class Download
             'security_token' => SEC_createToken(),
             'redirect'      => $this->_editmode,
             'cancel_url'    => $cancel_url,
-            'redirect_url'  => $_SERVER['HTTP_REFERER'],
+            'redirect_url'  => $_SERVER['HTTP_REFERER'].'#fileid_'.$this->lid,
             'lang_approve'  => _MD_APPROVEREQ,
         ));
         if ($this->lid === 0) {
@@ -963,20 +989,32 @@ class Download
             $T->unset_var('newfile');
         }
 
+        list($cacheFile, $cacheURL) = COM_getStyleCacheLocation();
+
+        $T->set_var(array(
+            'stylesheet' => $cacheURL,
+        ));
+
+
         $pathstring = "<a href=\"{$_FM_CONF['url']}/index.php\">"._MD_MAIN."</a>&nbsp;:&nbsp;";
         $nicepath = $mytree->getNicePathFromId($this->cid, "title", "{$_FM_CONF['url']}/viewcat.php");
         $pathstring .= $nicepath;
         if ($this->lid > 0) {
             $hdr_title = $this->title;
         } else {
-            $hdr_title = 'New File';
+            $hdr_title = $LANG_FILEMGMT['new_file'];
         }
         $pathstring .= "<a href=\"{$_FM_CONF['url']}/index.php?id={$this->lid}\">{$hdr_title}</a>";
 
         $categorySelectHTML = '';
         $rootCats = Category::getChildren(0, true);
         foreach ($rootCats as $cid=>$Cat) {
-            $categorySelectHTML .= '<option value="'.$cid.'">' . $Cat->getName();
+            $categorySelectHTML .= '<option value="'.$cid.'"';
+            if ($cid == $this->cid) {
+                $categorySelectHTML .= ' selected="selected" ';
+            }
+            $categorySelectHTML .= '>' . $Cat->getName();
+
             if (!$Cat->canUpload()) {
                 $categorySelectHTML .= " *";
             }
@@ -986,7 +1024,12 @@ class Download
                 $Cat = new Category($option);
                 $option['prefix'] = str_replace(".","--",$option['prefix']);
                 $catpath = $option['prefix']."&nbsp;".$myts->makeTboxData4Show($Cat->getName());
-                $categorySelectHTML .= '<option value="'.$Cat->getID() . '">';
+                $categorySelectHTML .= '<option value="'.$Cat->getID() . '"';
+                if ($Cat->getID() == $this->cid) {
+                    $categorySelectHTML .= ' selected="selected" ';
+                }
+                $categorySelectHTML .= '>';
+
                 if (!$Cat->canUpload()) {
                     $categorySelectHTML .= "$catpath *";
                 } else {
@@ -994,6 +1037,16 @@ class Download
                 }
                 $categorySelectHTML .= "</option>\n";
             }
+        }
+        if ($_FM_CONF['outside_webroot']) {
+            $tFile = $_CONF['path'].'data/filemgmt_data/files/'.$this->url;
+        } else {
+            $tFile = $_FM_CONF['FileStore'].$this->url;
+        }
+        if (!file_exists($tFile)) {
+            $T->set_var('file_missing',true);
+        } else {
+            $T->unset_var('file_missing');
         }
 
         $T->set_var(array(
@@ -1008,13 +1061,13 @@ class Download
             'description' => $myts->makeTareaData4Edit($this->description),
             'category'  => $this->cid,
             'category_select_options' => $categorySelectHTML,
-            'owner_select' =>  COM_buildOwnerList('submitter', $this->submitter),
+            'owner_select' =>  COM_buildOwnerList('submitter', $this->submitter,true),
             'hits' => $myts->makeTboxData4Edit($this->hits),
             'can_delete' => $this->lid > 0,
             'cmt_chk_' . $this->comments => 'checked="checked"',
         ));
 
-        if (!empty($this->logourl) && file_exists($_FM_CONF['SnapStore'].$this->logourl)) {
+        if (!empty($this->logourl)) {//  && file_exists($_FM_CONF['SnapStore'].$this->logourl)) {
             $T->set_var('thumbnail', $_FM_CONF['FileSnapURL'].$this->logourl);
         } else {
             $T->unset_var('thumbnail');
@@ -1035,6 +1088,7 @@ class Download
                 array("AND" => "u.uid > 1")
             );
             $votes = count($ratingData);
+
             $T->set_var(array(
                 'totalvotes' => (int)$totalvotes,
                 'lang_dlratings' => sprintf(_MD_DLRATINGS, $votes),
@@ -1048,7 +1102,9 @@ class Download
 
             $cssid = 1;
             $T->set_block('ratings', 'reg_votes', 'rVotes');
+
             foreach ($ratingData AS $data) {
+
                 $formatted_date = self::formatTimestamp($data['ratingdate']);
                 $T->set_var(array(
                     'ratinguname' => $data['username'],
@@ -1079,7 +1135,7 @@ class Download
      */
     public function canRead($groups = NULL)
     {
-        return $this->lid > 0 && Category::getInstance($this->cid)->canRead($groups);
+        return $this->lid > 0 && Category::getInstance($this->cid)->canRead($groups) && (SEC_hasRights('filemgmt.edit') || $this->status == 1);
     }
 
 
@@ -1093,6 +1149,23 @@ class Download
         global $_FM_CONF;
 
         return (SEC_hasRights("filemgmt.upload") || $_FM_CONF['uploadselect']);
+    }
+
+    /**
+     * Deletes a single image from disk.
+     * $del_db is used to save a DB call if this is called from Save().
+     *
+     */
+    public function deleteImage()
+    {
+        global $_TABLES, $_FM_CONF;
+
+        $filename = $this->logourl;
+        if (is_file("{$_FM_CONF['SnapStore']}/{$filename}")) {
+            @unlink("{$_FM_CONF['SnapStore']}/{$filename}");
+        }
+
+        $this->logourl= '';
     }
 
 
@@ -1118,11 +1191,15 @@ class Download
         $tmp = $_FM_CONF['FileStore_tmp'] . $this->url;
         if (file_exists($tmp) && (is_file($tmp))) {
             // if this temporary file was really uploaded?
-            $newfile = $_FM_CONF['FileStore'] . $this->url;
+            if ($_FM_CONF['outside_webroot']) {
+                $newfile = $_CONF['path'].'data/filemgmt_data/files/'.$this->url;
+            } else {
+                $newfile = $_FM_CONF['FileStore'] . $this->url;
+            }
             Log::write('system',Log::INFO, 'FileMgt Approve: File move from '.$tmp. ' to ' .$newfile );
             $rename = @rename($tmp, $newfile);
             Log::write('system',Log::INFO, 'FileMgt Approve: Results of rename is: '. $rename);
-            $chown = @chmod($newfile, self::PERMS);
+            $chown = @chmod($newfile, octdec(self::PERMS));
             if (!is_file($newfile)) {
                 Log::write('system',Log::ERROR, 'Filemgmt upload approve error: New file does not exist after move of tmp file: '.$newfile);
                 $AddNewFile = false;    // Set false again - in case it was set true above for actual file
@@ -1207,7 +1284,7 @@ class Download
      */
     public static function adminList($cid=0, $status = -1)
     {
-        global $_FM_CONF, $LANG_FM02, $_TABLES, $LANG_ADMIN, $_DB_name;
+        global $_FM_CONF, $LANG_FM02, $_TABLES, $LANG_ADMIN, $LANG_FILEMGMT, $_DB_name;
 
         USES_lib_admin();
 
@@ -1245,7 +1322,7 @@ class Download
                 'sort' => true,
             ),
             array(
-                'text' => 'Hits',
+                'text' => $LANG_FILEMGMT['hits'],
                 'field' => 'hits',
                 'sort' => true,
                 'align' => 'right',
@@ -1263,7 +1340,7 @@ class Download
                 'align' => 'right',
             ),
             array(
-                'text' => 'Delete',
+                'text' => $LANG_FILEMGMT['delete'],
                 'field' => 'delete',
                 'align' => 'center',
             ),
@@ -1333,7 +1410,7 @@ class Download
      */
     public function getDownloadHistory()
     {
-        global $_TABLES, $_FM_CONF;
+        global $_TABLES, $_FM_CONF, $LANG_FILEMGMT;
 
         USES_lib_admin();
 
@@ -1344,17 +1421,17 @@ class Download
             WHERE fh.lid = {$this->lid}";
         $header_arr = array(
             array(
-                'text'  => 'Date',
+                'text'  => _MD_DATE,
                 'field' => 'date',
                 'sort'  => true,
             ),
             array(
-                'text'  => 'User',
+                'text'  => _MD_USER,
                 'field' => 'username',
                 'sort'  => false,
             ),
             array(
-                'text'  => 'Remote IP',
+                'text'  => $LANG_FILEMGMT['remote_ip'],
                 'field' => 'remote_ip',
                 'sort'  => false,
             ),
@@ -1399,7 +1476,7 @@ class Download
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_FM_CONF, $_USER, $_TABLES, $LANG_ADMIN;
+        global $_FM_CONF, $_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG_FM00;
 
         $retval = '';
         static $grp_names = array();
@@ -1408,16 +1485,28 @@ class Download
         if ($dt === NULL) {
             $dt = new \Date('now',$_USER['tzid']);
         }
-
         switch($fieldname) {
         case 'edit':
             $retval .= FieldList::edit(array(
                 'url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
                 'attr' => array(
-                    'class' => 'tooltip',
-                    'title' => 'Edit',
+                    'title' => _MD_EDIT,
                 ),
             ) );
+            break;
+
+        case 'title' :
+            if ($_FM_CONF['outside_webroot']) {
+                $tFile = $_CONF['path'].'data/filemgmt_data/files/'.$A['url'];
+            } else {
+                $tFile = $_FM_CONF['FileStore'].$A['url'];
+            }
+            if (!file_exists($tFile)) {
+                $retval = $fieldvalue . ' <span class="fm-file-missing tooltip" title="'.$LANG_FM00['not_found'].'"><sup>**</sup></span>';
+            } else {
+                $retval = $fieldvalue;
+            }
+            clearstatcache();
             break;
 
         case 'date':
@@ -1430,14 +1519,15 @@ class Download
                 'delete_url' => $_FM_CONF['admin_url'] . "/index.php?delDownload={$A['lid']}",
                 'attr' => array(
                     'onclick' => "return confirm('OK to delete');",
-                    'title' => 'Delete Item',
-                    'class' => 'tooltip',
+                    'title' => _MD_DELETE,
                 ),
             ) );
             break;
 
         case 'hits' :
-            $retval = COM_numberFormat($fieldvalue);
+            $retval = '<a href="'.$_CONF['site_url'].'/filemgmt/downloadhistory.php?lid='.$fieldvalue.'" target="_blank">';
+            $retval .= COM_numberFormat($fieldvalue);
+            $retval .= '</a>';
             break;
 
         case 'size' :
@@ -1459,7 +1549,7 @@ class Download
      */
     public function showListingRecord()
     {
-        global $_CONF, $_FM_CONF, $_TABLES, $LANG01, $LANG_FILEMGMT;
+        global $_CONF, $_FM_CONF, $_TABLES, $LANG01, $LANG_FILEMGMT, $LANG_FM00;
 
         static $mytree = NULL;
         $dt = new \Date($this->date);
@@ -1469,6 +1559,7 @@ class Download
         $format->setAction('description');
         $format->setType('text');
         $format->setParseAutoTags(true);
+        $format->setProcessBBCode(true);
 
         $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates');
         $T->set_file('record', 'filelisting_record.thtml');
@@ -1493,9 +1584,10 @@ class Download
             'lid'       => $this->lid,
             'dtitle'    => $this->title,
             'hits'      => COM_numberFormat($this->hits),
-            'file_description' => nl2br($this->description),
-
+//            'file_description' => nl2br($this->description),
             'file_description' => $format->parse($this->description, true,7200),
+            'download_link' => COM_buildURL($_CONF['site_url'].'/filemgmt/visit.php?lid='.$this->lid),
+            'file_link' => COM_buildURL($_CONF['site_url'].'/filemgmt/index.php?id='.$this->lid),
             'is_found' => true,
             'LANG_DLNOW' => _MD_DLNOW,
             'LANG_SUBMITTEDBY' => _MD_SUBMITTEDBY,
@@ -1508,7 +1600,8 @@ class Download
             'votestring' => ($this->rating > 0) ? sprintf(_MD_NUMVOTES, $this->votes) : '',
             'logourl'   => $this->logourl,
             'snapshot_url' => $_FM_CONF['FileSnapURL'] . $this->logourl,
-            'LANG_VERSION' =>  _MD_VERSION,
+            'LANG_VER' =>  _MD_VERSION,
+            'LANG_VERSION' => _MD_VERSIONC,
             'LANG_SUBMITDATE' => _MD_SUBMITDATE,
             'datetime'  => $dt->format('M.d.Y', true),
             'version'   => $this->version,
@@ -1518,11 +1611,13 @@ class Download
             'download_count' => COM_numberFormat($this->hits),
             'LANG_FILESIZE' => _MD_FILESIZE,
             'LANG_DOWNLOAD' => _MD_DOWNLOAD,
+            'LANG_DOWNLOADS' => $LANG_FILEMGMT['downloads'],
             'LANG_FILELINK' => _MD_FILELINK,
             'LANG_RATETHISFILE' => _MD_RATETHISFILE,
             'LANG_REPORTBROKEN' => _MD_REPORTBROKEN,
             'LANG_HOMEPAGE' => _MD_HOMEPAGE,
             'LANG_CATEGORY' => _MD_CATEGORYC,
+            'LANG_COMMENTS' => _MD_COMMENTSC,
             'category_path' => $path,
             'submitter_name' => COM_getDisplayName($this->submitter),
             'submitter_link' => $this->submitter > 1,
@@ -1532,6 +1627,7 @@ class Download
             'lang_new'  => _MD_NEW,
             'lang_new_title' => $LANG_FILEMGMT['newly_uploaded'],
             'lang_popular' => _MD_POPULAR,
+            'lang_not_found' => $LANG_FM00['not_found'],
         ) );
 
         // Check if this is a local or remotely-hosted file.
@@ -1539,7 +1635,11 @@ class Download
         if (!isset($parts['scheme'])) {
             // Local file, check that the file exists
             $T->set_var('file_size',self::prettySize($this->size));
-            $fullurl = $_FM_CONF['FileStore'] . rawurldecode($this->url);
+            if ($_FM_CONF['outside_webroot']) {
+                $fullurl = $_CONF['path'].'data/filemgmt_data/files/' . rawurldecode($this->url);
+            } else {
+                $fullurl = $_FM_CONF['FileStore'] . rawurldecode($this->url);
+            }
             $is_found = file_exists($fullurl);
         } else {
             // Remote file, assume the file exists
@@ -1577,6 +1677,7 @@ class Download
             $T->set_var('comment_link',$comment_link['link_with_count']);
             $T->set_var('comment_tooltip', $comment_link['comment_count']);
             $T->set_var('show_comments','true');
+            $T->set_var('comment_count', $commentCount);
         } else {
             $T->set_var('show_comments','none');
             $T->unset_var('show_comments');

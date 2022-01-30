@@ -29,8 +29,10 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Cache\\' => 10,
+            'Phpfastcache\\Tests\\' => 19,
             'Phpfastcache\\' => 13,
             'PhpXmlRpc\\' => 10,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'M' => 
         array (
@@ -47,6 +49,7 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
         ),
         'D' => 
         array (
+            'Doctrine\\Deprecations\\' => 22,
             'Doctrine\\DBAL\\' => 14,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\' => 16,
@@ -78,6 +81,10 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
+        'Phpfastcache\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpfastcache/phpfastcache/tests/lib',
+        ),
         'Phpfastcache\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpfastcache/phpfastcache/lib/Phpfastcache',
@@ -85,6 +92,10 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
         'PhpXmlRpc\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpxmlrpc/phpxmlrpc/src',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'Monolog\\' => 
         array (
@@ -102,6 +113,10 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
         'Eluceo\\iCal\\' => 
         array (
             0 => __DIR__ . '/..' . '/eluceo/ical/src',
+        ),
+        'Doctrine\\Deprecations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/deprecations/lib/Doctrine/Deprecations',
         ),
         'Doctrine\\DBAL\\' => 
         array (
@@ -148,7 +163,6 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
         'AtomCreator03' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator03.php',
         'AtomCreator10' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator10.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'EasyPeasyICS' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
         'FeedCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/FeedCreator.php',
         'FeedDate' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedDate.php',
         'FeedHtmlField' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Element/FeedHtmlField.php',
@@ -163,15 +177,10 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
         'MBOXCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/MBOXCreator.php',
         'OPMLCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/OPMLCreator.php',
         'PHPCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/PHPCreator.php',
-        'PHPMailer' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
-        'PHPMailerOAuth' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmaileroauth.php',
-        'PHPMailerOAuthGoogle' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmaileroauthgoogle.php',
         'PIECreator01' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/PIECreator01.php',
-        'POP3' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.pop3.php',
         'RSSCreator091' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/RSSCreator091.php',
         'RSSCreator10' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/RSSCreator10.php',
         'RSSCreator20' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/Creator/RSSCreator20.php',
-        'SMTP' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.smtp.php',
         'UniversalFeedCreator' => __DIR__ . '/..' . '/openpsa/universalfeedcreator/lib/UniversalFeedCreator.php',
         'basic_sasl_client_class' => __DIR__ . '/..' . '/phpclasses/sasl/basic_sasl_client.php',
         'cookie_oauth_client_class' => __DIR__ . '/..' . '/phpclasses/oauth-api/cookie_oauth_client.php',
@@ -242,9 +251,11 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
         'getid3_svg' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.graphic.svg.php',
         'getid3_swf' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio-video.swf.php',
         'getid3_szip' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.archive.szip.php',
+        'getid3_tag_nikon_nctg' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.tag.nikon-nctg.php',
         'getid3_tak' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio.tak.php',
         'getid3_tar' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.archive.tar.php',
         'getid3_tiff' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.graphic.tiff.php',
+        'getid3_torrent' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.misc.torrent.php',
         'getid3_ts' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio-video.ts.php',
         'getid3_tta' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio.tta.php',
         'getid3_voc' => __DIR__ . '/..' . '/james-heinrich/getid3/getid3/module.audio.voc.php',
@@ -264,10 +275,9 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
         'http_class' => __DIR__ . '/..' . '/phpclasses/httpclient/http.php',
         'login_sasl_client_class' => __DIR__ . '/..' . '/phpclasses/sasl/login_sasl_client.php',
         'mysqli_oauth_client_class' => __DIR__ . '/..' . '/phpclasses/oauth-api/mysqli_oauth_client.php',
-        'ntlm_sasl_client_class' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
+        'ntlm_sasl_client_class' => __DIR__ . '/..' . '/phpclasses/sasl/ntlm_sasl_client.php',
         'oauth_client_class' => __DIR__ . '/..' . '/phpclasses/oauth-api/oauth_client.php',
         'oauth_session_value_class' => __DIR__ . '/..' . '/phpclasses/oauth-api/oauth_client.php',
-        'phpmailerException' => __DIR__ . '/..' . '/phpmailer/phpmailer/class.phpmailer.php',
         'plain_sasl_client_class' => __DIR__ . '/..' . '/phpclasses/sasl/plain_sasl_client.php',
         'sasl_client_class' => __DIR__ . '/..' . '/phpclasses/sasl/sasl.php',
         'sasl_interact_class' => __DIR__ . '/..' . '/phpclasses/sasl/sasl.php',

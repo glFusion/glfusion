@@ -109,7 +109,7 @@ $A["subject"] = stripslashes(@htmlspecialchars($A["subject"],ENT_QUOTES,COM_getE
 
 $A['comment'] = ff_FormatForPrint( $A['comment'], $A['postmode'],$A['status'] );
 list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
-$date = strftime('%B %d %Y @ %I:%M %p', $A['date']);
+$date = Date::getInstance($A['date'],$_USER['tzid'])->format('F d Y @ h:i a',true);
 echo"
     <html>
     <head>
@@ -136,20 +136,20 @@ echo"
 ";
 
 $result2 = DB_query("SELECT * FROM {$_TABLES['ff_topic']} WHERE (pid=".(int)$id.")");
-while($B = DB_fetchArray($result2)){
-$date = strftime('%B %d %Y @ %I:%M %p', $B['date']);
+while($B = DB_fetchArray($result2)) {
+    $date = Date::getInstance($B['date'],$_USER['tzid'])->format('F d Y @ h:i a',true);
 
-echo"
+    echo "
 
-                <h4>$B[subject]</h4>
-                <b>{$LANG_GF01['POSTEDON']}:</b> $date
-            <br>
-                <b>{$LANG_GF01['BY']}</b> $B[name]
-            <br>
-            <br>
-            <b>{$LANG_GF01['CONTENT']}:</b>
-            <p>" . ff_FormatForPrint( $B['comment'], $B['postmode'] ) . "</p>
-            <hr width=\"25%\" align=\"left\">
+        <h4>$B[subject]</h4>
+        <b>{$LANG_GF01['POSTEDON']}:</b> $date
+        <br>
+        <b>{$LANG_GF01['BY']}</b> $B[name]
+        <br>
+        <br>
+        <b>{$LANG_GF01['CONTENT']}:</b>
+        <p>" . ff_FormatForPrint( $B['comment'], $B['postmode'] ) . "</p>
+        <hr width=\"25%\" align=\"left\">
 
 ";
 

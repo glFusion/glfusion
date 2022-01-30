@@ -2,10 +2,9 @@
     <id>filemgmt</id>
     <name>FileMgmt</name>
     <description>Download Manager</description>
-    <version>1.8.0</version>
+    <version>1.9.2</version>
     <glfusionversion>2.0.0</glfusionversion>
-    <phpversion>7.0.0</phpversion>
+    <phpversion>7.4.0</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>
-    <renamedist>config.php.dist</renamedist>
 </plugin>

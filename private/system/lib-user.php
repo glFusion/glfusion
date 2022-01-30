@@ -968,9 +968,9 @@ function USER_emailMatches ($email, $domain_list)
 * @todo     Bugs: Race conditions apply ...
 *
 */
-function USER_uniqueUsername($username)
+function USER_uniqueUsername($username, $existing_user = false)
 {
-    global $_TABLES;
+    global $_TABLES, $_CONF;
 
     $db = Database::getInstance();
 
@@ -978,8 +978,22 @@ function USER_uniqueUsername($username)
         return CUSTOM_uniqueUsername($username);
     }
 
+    if (
+        !$existing_user &&
+        isset($_CONF['disallow_usernames']) &&
+        !empty($_CONF['disallow_usernames']) &&
+        !SEC_hasRights('user.edit')
+    ) {
+        $disallowedName = explode(',',$_CONF['disallow_usernames']);
+        foreach ($disallowedName AS $name) {
+            if ( strcasecmp($name,$username) == 0) {
+                $username = 'AnonymousUser';
+            }
+        }
+    }
+
     if (empty($username)) {
-        $username = 'User';
+        $username = 'AnonymousUser';
     }
 
     $try = $username;
@@ -1008,11 +1022,11 @@ function USER_uniqueUsername($username)
 *
 * @return	boolean     true if OK, false if not
 */
-function USER_validateUsername($username, $existing_user = 0)
+function USER_validateUsername($username, $existing_user = false)
 {
 	global $_CONF, $_TABLES, $_USER;
 
-    if ( $existing_user == 0 ) {
+    if ( $existing_user == false ) {
     	if ( strlen($username) < $_CONF['min_username_length'] ) {
     	    return false;
     	}
@@ -1033,6 +1047,16 @@ function USER_validateUsername($username, $existing_user = 0)
 	if ( preg_match('/' . $regex . '/u', $username)) {
 	    return false;
 	}
+
+    if (isset($_CONF['disallow_usernames']) && !empty($_CONF['disallow_usernames']) && !SEC_hasRights('user.edit') && !$existing_user) {
+        $disallowedName = explode(',',$_CONF['disallow_usernames']);
+        foreach ($disallowedName AS $name) {
+            if ( strcasecmp($name,$username) == 0) {
+                return false;
+            }
+        }
+    }
+
 	return true;
 }
 

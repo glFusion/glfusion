@@ -7,11 +7,11 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2011-2017 by the following authors:
+*  Copyright (C) 2011-2012ß by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on the Joomla Framework                                            |
-*  Copyright (C) 2005-2011 Open Source Matters, Inc.
+*  Copyright (C) 2005-2022 Open Source Matters, Inc.
 */
 
 if (!defined ('GVERSION')) {
@@ -22,7 +22,7 @@ if (!defined ('GVERSION')) {
  * Date is a class that stores a date and provides logic to manipulate
  * and render that date in a variety of formats.
  */
-class Date extends DateTime
+class Date extends \DateTime
 {
     const DAY_ABBR = "\x021\x03";
     const DAY_NAME = "\x022\x03";
@@ -199,6 +199,19 @@ class Date extends DateTime
 
 
     /**
+     * Proxy for new Date().
+     *
+     * @param   string  $date  String in a format accepted by strtotime(), defaults to "now".
+     * @param   mixed   $tz    Time zone to be used for the date.
+     *
+     * @return  Date
+     */
+    public static function getInstance($date = 'now', $tz = null)
+    {
+        return new static($date, $tz);
+    }
+
+    /**
      * Set date / time stamp
      *
      * @param   int   unix timestamp
@@ -259,6 +272,7 @@ class Date extends DateTime
      * @param   boolean True to return the date string in the local time zone, false to return it in GMT.
      * @return  string  The date string in the specified format format.
      */
+    #[\ReturnTypeWillChange]
     public function format($format, $local = false)
     {
         // Do string replacements for date format options that can be translated.
@@ -365,6 +379,7 @@ class Date extends DateTime
      * @param   object  The new DateTimeZone object.
      * @return  object  The old DateTimeZone object.
      */
+    #[\ReturnTypeWillChange]
     public function setTimezone($tz)
     {
         if ( $tz == null ) {

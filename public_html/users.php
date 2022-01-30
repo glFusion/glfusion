@@ -60,7 +60,7 @@ function userprofile()
         }
     } else if ( isset($_GET['username']) ) {
         $username = $_GET['username'];
-        if ( !USER_validateUsername($username,1) ) {
+        if ( !USER_validateUsername($username,true) ) {
             COM_404();
         }
         if ( empty($username) || $username == '' ) {
@@ -793,7 +793,11 @@ function USER_createuser($info = array())
     }
 
     if ( $data['regtype'] == 'local' || $data['regtype'] == '' ) {
-        $ecount = $db->getCount($_TABLES['users'], 'email', $data['email'], Database::STRING);
+        if (function_exists('CUSTOM_uniqueEmail')) {
+            $ecount = CUSTOM_uniqueEmail($data['email']);
+        } else {
+            $ecount = $db->getCount($_TABLES['users'], 'email', $data['email'], Database::STRING);
+        }
         if ( $ecount != 0 ) {
             $validationErrors++;
             $errorMessages[] = $LANG04[19];
@@ -1716,7 +1720,7 @@ switch ($mode) {
         $loginname = '';
         if (isset ($_POST['loginname'])) {
             $loginname = $_POST['loginname'];
-            if ( !USER_validateUsername($loginname,1) ) {
+            if ( !USER_validateUsername($loginname,true) ) {
                 $loginname = '';
             }
         }

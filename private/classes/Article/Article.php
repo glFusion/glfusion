@@ -24,6 +24,7 @@ use \glFusion\Formatter;
 use \glFusion\Social\Social;
 use \glFusion\Log\Log;
 use \glFusion\Admin\AdminAction;
+use \glFusion\Syndication\Feed;
 
 class Article
 {
@@ -2685,28 +2686,14 @@ class Article
      */
     private function getFeedUrl()
     {
-        global $_CONF, $_TABLES, $LANG11;
+        global $_CONF;
 
         $retval = '';
-
-        $db = Database::getInstance();
-
-        if ($_CONF['backend'] == 1) {
-
-            // if multiple - return the most recent updated
-            $sql = "SELECT filename,title,format
-                    FROM `{$_TABLES['syndication']}`
-                    WHERE type = 'article' AND topic = ? AND is_enabled = 1
-                    ORDER BY updated DESC";
-
-            $row = $db->conn->fetchAssoc(
-                        $sql,
-                        array($this->tid),
-                        array(Database::STRING),
-                        new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, 'synd_'.$this->tid)
-            );
-            if ($row !== false && $row !== null) {
-                $retval = SYND_getFeedUrl($row['filename']);
+        if ($_CONF['backend'] > 0) {
+            $Feeds = Feed::getEnabled('article', $this->tid);
+            if (count($Feeds) > 0) {
+                $Feed = array_pop($Feeds);
+                $retval = $Feed->getUrl();
             }
         }
         return $retval;

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -667,12 +667,13 @@ CREATE TABLE {$_TABLES['vars']} (
 ) ENGINE=MyISAM
 ";
 
-$_SQL[] = "CREATE TABLE {$_TABLES['logo']} (
-  id int(11) NOT NULL auto_increment,
-  config_name varchar(128) default NULL,
-  config_value varchar(255) NOT NULL,
-  PRIMARY KEY  (id),
-  UNIQUE KEY config_name (config_name)
+$_SQL[] = " CREATE TABLE `{$_TABLES['themes']}` (
+  `theme` varchar(40) NOT NULL DEFAULT '',
+  `logo_type` tinyint(1) NOT NULL DEFAULT -1,
+  `display_site_slogan` tinyint(1) NOT NULL DEFAULT -1,
+  `logo_file` varchar(40) NOT NULL DEFAULT '',
+  `grp_access` int(11) unsigned NOT NULL DEFAULT 2,
+  PRIMARY KEY (`theme`)
 ) ENGINE=MyISAM;
 ";
 
@@ -701,6 +702,33 @@ $_SQL[] = "CREATE TABLE {$_TABLES['menu_elements']} (
   group_id mediumint(9) NOT NULL,
   PRIMARY KEY( id ),
   INDEX ( pid )
+) ENGINE=MyISAM;
+";
+
+$_SQL[] = "CREATE TABLE `{$_TABLES['search_index']}` (
+  `item_id` varchar(128) NOT NULL DEFAULT '',
+  `type` varchar(20) NOT NULL DEFAULT '',
+  `content` MEDIUMTEXT,
+  `parent_id` varchar(128) NOT NULL DEFAULT '',
+  `parent_type` varchar(50) NOT NULL DEFAULT '',
+  `ts` int(11) unsigned NOT NULL DEFAULT '0',
+  `grp_access` mediumint(8) NOT NULL DEFAULT '2',
+  `title` varchar(200) NOT NULL DEFAULT '',
+  `owner_id` mediumint(9) NOT NULL DEFAULT '0',
+  `author` varchar(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`type`, `item_id`),
+  INDEX `type` (`type`),
+  INDEX `item_date` (`ts`),
+  INDEX `author` (`author`)
+) ENGINE=MyISAM;
+";
+
+$_SQL[] = "CREATE TABLE `{$_TABLES['search_stats']}` (
+  `term` varchar(200) NOT NULL,
+  `hits` int(11) unsigned NOT NULL DEFAULT '1',
+  `results` int(11) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`term`),
+  KEY `hits` (`hits`)
 ) ENGINE=MyISAM;
 ";
 
@@ -811,6 +839,8 @@ $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (30,'env.admin', 'Ability to view Environment Check', 1)";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (31,'logview.admin', 'Ability to view / clear glFusion logs', 1)";
 $_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (32,'upgrade.admin', 'Ability to run Upgrade Check', 1)";
+$_DATA[] = "INSERT INTO {$_TABLES['features']} (ft_id, ft_name, ft_descr, ft_gl_core) VALUES (33,'search.admin', 'Ability to manage the Search Engine', 1)";
+
 
 $_DATA[] = "INSERT INTO {$_TABLES['frontpagecodes']} (code, name) VALUES (0,'Show Only in Topic') ";
 $_DATA[] = "INSERT INTO {$_TABLES['frontpagecodes']} (code, name) VALUES (1,'Show on Front Page') ";
@@ -941,6 +971,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','2.0
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (0,'Trackback Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (-1,'Trackback Disabled') ";
 
+/* --------
 #
 # Default logo / menu data
 #
@@ -950,7 +981,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['logo']} (id, config_name, config_value) VALUE
 (2, 'display_site_slogan', '1'),
 (3, 'logo_name', 'logo1234.png');
 ";
-
+-------- */
 $_DATA[] = "INSERT INTO {$_TABLES['menu']} (`id`, `menu_name`, `menu_type`, `menu_active`, `group_id`) VALUES(1, 'navigation', 1, 1, 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu']} (`id`, `menu_name`, `menu_type`, `menu_active`, `group_id`) VALUES(2, 'footer', 2, 1, 2);";
 $_DATA[] = "INSERT INTO {$_TABLES['menu']} (`id`, `menu_name`, `menu_type`, `menu_active`, `group_id`) VALUES(3, 'block', 3, 1, 2);";
@@ -1012,4 +1043,7 @@ $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabl
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('mgslider', 'HTML: displays Media Gallery album. usage: [mgslider:<i>#album_id#</i> - Album ID for images <i>kenburns:0/1</i> - 1 = Enable Ken Burns effect <i>autoplay:0/1</i> 1 = Autoplay the slides <i>template:_name_</i> - Custom template name if wanted]', 1, 1, '');";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('url', 'HTML: Create a link with description. usage: [url:<i>http://link.com/here</i> - Full URL <i>text</i> - text to be used for the URL link]', 1, 1, '');";
 $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabled, is_function, replacement) VALUES ('iteminfo', 'HTML: Returns an info from content. usage: [iteminfo:<i>content_type</i> - Content Type - i.e.; article, mediagallery <i>id:</i> - id of item to get info from <i>what:</i> - what to return, i.e.; url, description, excerpt, date, author, etc.]', 1, 1, '');";
+$_DATA[] = "INSERT INTO {$_TABLES['themes']} (theme, logo_type, display_site_slogan) VALUES
+    ('_default', 0, 1),
+    ('cms', -1, -1)";
 ?>

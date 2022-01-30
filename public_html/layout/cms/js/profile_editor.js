@@ -65,6 +65,10 @@ function showhideProfileEditorDiv(selected, selindex) {
 	    		document.getElementById('pe_twofactor').style.display = '';
 	        document.getElementById('save_button').style.display = 'none';
 	 	}
+        if ( selected == 'pe_namepass' ) {
+            document.getElementById('pe_namepass').style.display='';
+            document.getElementById('save_button').style.display = 'none';   
+        }
 
     pf();
 }

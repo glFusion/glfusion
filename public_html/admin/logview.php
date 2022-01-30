@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008
@@ -75,7 +75,7 @@ if ( isset($_POST['clearlog']) ) {
     } else {
         // old school...
         @unlink($_CONF['path_log'] . $availableLogs[$log]);
-        $timestamp = strftime( "%c" );
+        $timestamp = \Date::getInstance('now',$_CONF['timezone'])->format('[Y-m-d G:i:s]',true);
         $fd = fopen( $_CONF['path_log'] . $availableLogs[$log], 'a' );
         fputs( $fd, "$timestamp - Log File Cleared \n" );
         fclose($fd);

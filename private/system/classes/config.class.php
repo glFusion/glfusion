@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2018-2021 by the following authors:
+*  Copyright (C) 2018-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2007-2008 by the following authors:
@@ -670,6 +670,7 @@ class config
                       (($cur[2] != -1) ?
                        //isset($LANG_configselects[$group][$cur[2]]) : null),
                        $cfgSelect[$group][$cur[2]] : null),
+                      'lang_idx' => $cur[2],
                       'value' =>
                       (($cur[4] == 'unset') ?
                        'unset' : @unserialize($cur[4])),
@@ -916,7 +917,8 @@ class config
                                                    $e['type'],
                                                    $e['value'],
                                                    $e['selectionArray'], false,
-                                                   $e['reset']);
+                                                   $e['reset'],
+                                                   $e['lang_idx']);
                 }
                 $rc = $this->_UI_get_fs($grp, $sg, $activeTab, $fs_contents, $fset, $t);
                 if ( $rc ) {
@@ -1032,7 +1034,7 @@ class config
 
     function _UI_get_conf_element($group, $name, $display_name, $type, $val,
                                   $selectionArray = null , $deletable = false,
-                                  $allow_reset = false)
+                                  $allow_reset = false, $lang_idx = '')
     {
         global $_CONF, $LANG_CONFIG;
 
@@ -1169,6 +1171,7 @@ class config
         } elseif (strpos($type, "*") === 0 || strpos($type, "%") === 0) {
             $t->set_var('arr_name', $name);
             $t->set_var('array_type', $type);
+            $t->set_var('lang_idx', $lang_idx);
             $button = $t->parse('output', (strpos($type, "*") === 0 ?
                                            'keyed-add-button' :
                                            'unkeyed-add-button'));
@@ -1347,7 +1350,7 @@ class config
             }
         }
 
-        $retval .= '<div><a href="' . $_CONF['site_admin_url'] . '">'
+        $retval .= '<div><a href="' . $_CONF['site_admin_url'] . '/index.php">'
                 . $LANG_ADMIN['admin_home'] . '</a></div>';
         $retval .= COM_endBlock(COM_getBlockTemplate('configmanager_block',
                                                      'footer'));

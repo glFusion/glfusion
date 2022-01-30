@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2018 by the following authors:
+*  Copyright (C) 2017-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -40,6 +40,7 @@ $_TABLES['frontpagecodes']      = $_DB_table_prefix . 'frontpagecodes';
 $_TABLES['group_assignments']   = $_DB_table_prefix . 'group_assignments';
 $_TABLES['groups']              = $_DB_table_prefix . 'groups';
 $_TABLES['logo']                = $_DB_table_prefix . 'logo';
+$_TABLES['themes']              = $_DB_table_prefix . 'themes';
 $_TABLES['maillist']            = $_DB_table_prefix . 'maillist';
 $_TABLES['menu']                = $_DB_table_prefix . 'menu';
 $_TABLES['menu_config']         = $_DB_table_prefix . 'menu_config';
@@ -49,6 +50,8 @@ $_TABLES['plugins']             = $_DB_table_prefix . 'plugins';
 $_TABLES['postmodes']           = $_DB_table_prefix . 'postmodes';
 $_TABLES['rating']              = $_DB_table_prefix . 'rating';
 $_TABLES['rating_votes']        = $_DB_table_prefix . 'rating_votes';
+$_TABLES['search_index']        = $_DB_table_prefix . 'search_index';
+$_TABLES['search_stats']        = $_DB_table_prefix . 'search_stats';
 $_TABLES['sessions']            = $_DB_table_prefix . 'sessions';
 $_TABLES['social_share']        = $_DB_table_prefix . 'social_share';
 $_TABLES['social_follow_services'] = $_DB_table_prefix . 'social_follow_services';
@@ -60,6 +63,7 @@ $_TABLES['stories']             = $_DB_table_prefix . 'stories';
 $_TABLES['storysubmission']     = $_DB_table_prefix . 'storysubmission';
 $_TABLES['subscriptions']       = $_DB_table_prefix . 'subscriptions';
 $_TABLES['syndication']         = $_DB_table_prefix . 'syndication';
+$_TABLES['tfa_backup_codes']    = $_DB_table_prefix . 'tfa_backup_codes';
 $_TABLES['tokens']              = $_DB_table_prefix . 'tokens';
 $_TABLES['topics']              = $_DB_table_prefix . 'topics';
 $_TABLES['trackback']           = $_DB_table_prefix . 'trackback';
@@ -70,7 +74,6 @@ $_TABLES['userinfo']            = $_DB_table_prefix . 'userinfo';
 $_TABLES['userprefs']           = $_DB_table_prefix . 'userprefs';
 $_TABLES['users']               = $_DB_table_prefix . 'users';
 $_TABLES['vars']                = $_DB_table_prefix . 'vars';
-$_TABLES['tfa_backup_codes']    = $_DB_table_prefix . 'tfa_backup_codes';
 
 // force the initialization of the DB driver which forces the initial connection
 glFusion\Database\Database::getInstance();

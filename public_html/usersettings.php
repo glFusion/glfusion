@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2021 by the following authors:
+*  Copyright (C) 2009-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark A. Howard  mark AT usable-web DOT com
 *
@@ -50,6 +50,10 @@ function edituser()
             array(Database::INTEGER,Database::INTEGER,Database::INTEGER)
     );
 
+    $sectoken_name  = CSRF_TOKEN;
+    $sectoken_value = SEC_createToken();
+
+
     $preferences = new Template ($_CONF['path_layout'] . 'preferences');
     $preferences->set_file (array ('profile'            => 'profile.thtml',
                                    'photo'              => 'userphoto.thtml',
@@ -58,7 +62,6 @@ function edituser()
                                    'password'           => 'password.thtml',
                                    'resynch'            => 'resynch.thtml',
                                    'deleteaccount'      => 'deleteaccount.thtml'));
-
 
     $navbar = new navbar;
     $cnt = 0;
@@ -89,6 +92,11 @@ function edituser()
     $preferences->set_var ('navbar', $navbar->generate());
 
     $preferences->set_var ('no_javascript_warning',$LANG04[150]);
+
+    $preferences->set_var (array(
+        'sectoken_name' => $sectoken_name,
+        'sectoken_value' => $sectoken_value
+    ));
 
     $preferences->set_var ('cssid1', 1);
     $preferences->set_var ('cssid2', 2);
@@ -155,6 +163,8 @@ function edituser()
     $preferences->set_var ('lang_password_email_legend', $LANG04[129]);
     $preferences->set_var ('lang_personal_info_legend', $LANG04[130]);
     $preferences->set_var ('lang_resynch', $LANG04[178]);
+    $preferences->set_var ('lang_session_management', $LANG04['session_management']);
+    $preferences->set_var ('lang_remote_account_info', $LANG04['remote_account_info']);
 
     $display_name = COM_getDisplayName ($_USER['uid']);
 
@@ -261,10 +271,13 @@ function edituser()
                 'lang_regenerate_backup' => $LANG_TFA['regenerate_backup'],
                 'lang_regenerate_button' => $LANG_TFA['regenerate_button'],
                 'lang_download_backup'  => $LANG_TFA['download_backup'],
-                'sectoken_name'    => CSRF_TOKEN,
-                'sectoken_value'   => SEC_createToken(),
+//                'sectoken_name'    => CSRF_TOKEN,
+//                'sectoken_value'   => SEC_createToken(),
+                'sectoken_name'     => $sectoken_name,
+                'sectoken_value'    => $sectoken_value,
                 'lang_disable_tfa_help' => $LANG_TFA['disable_tfa_help'],
                 'lang_disable_tfa_button' => $LANG_TFA['disable_tfa_button'],
+                'lang_authentication_code' => $LANG_TFA['auth_code'],
             ));
             $tfaTemplate->parse('tfapanel','tfa_panel');
             $tfaPanelContent = $tfaTemplate->finish($tfaTemplate->get_var('tfapanel'));
@@ -1021,67 +1034,11 @@ function saveuser($A)
         return COM_refresh ($_CONF['site_url'] . '/index.php');
     }
 
-    if ( isset($_POST['merge']) ) {
-        if ( COM_applyFilter($_POST['remoteuid'],true) != $_USER['uid'] ) {
-            echo COM_refresh($_CONF['site_url'].'/usersettings.php?mode=edit');
-        }
-        USER_mergeAccounts();
-    }
-
-    // If not set or possibly removed from template - initialize variable
-    if (!isset($A['cooktime'])) {
-        $A['cooktime'] = 0;
-    } else {
-        $A['cooktime'] = COM_applyFilter ($A['cooktime'], true);
-    }
-    // If empty or invalid - set to user default
-    // So code after this does not fail the user password required test
-    if ($A['cooktime'] < 0) { // note that == 0 is allowed!
-        $A['cooktime'] = $_USER['cookietimeout'];
-    }
-
     // to change the password, email address, or cookie timeout,
     // we need the user's current password
     $account_type = DB_getItem ($_TABLES['users'], 'account_type', "uid = {$_USER['uid']}");
     $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
     $current_password = DB_getItem($_TABLES['users'], 'passwd',"uid = {$_USER['uid']}");
-    if ( $current_password != '' && $current_password != NULL ) {
-        if (!empty ($A['newp']) || ($A['email'] != $_USER['email']) || ($A['cooktime'] != $_USER['cookietimeout'])) {
-            if (empty($A['passwd']) || !SEC_check_hash($A['passwd'],$current_password)) {
-                COM_setMsg($MESSAGE[83],'error');
-                return COM_refresh ($_CONF['site_url'].'/usersettings.php');
-            } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
-                $ret = CUSTOM_userCheck ($A['username'], $A['email']);
-                if (!empty($ret)) {
-                    // Need a numeric return for the default message handler
-                    // - if not numeric use default message
-                    if (!is_numeric($ret)) {
-                        $ret = 97;
-                    }
-                    COM_setMsg( $MESSAGE[$ret], 'error',true );
-                    return COM_refresh("{$_CONF['site_url']}/usersettings.php");
-                }
-            } elseif ($A['newp'] != '') {
-                $err = SEC_checkPwdComplexity($A['newp']);
-                if ( count($err) > 0 ) {
-                    $msg = implode('<br>',$err);
-                    COM_setMsg($msg,'error');
-                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
-                }
-            }
-        } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
-            $ret = CUSTOM_userCheck ($A['username'], $A['email']);
-            if (!empty($ret)) {
-                // Need a numeric return for the default message hander - if not numeric use default message
-                // - if not numeric use default message
-                if (!is_numeric($ret)) {
-                    $ret = 97;
-                }
-                COM_setMsg( $MESSAGE[$ret], 'error',true );
-                return COM_refresh("{$_CONF['site_url']}/usersettings.php");
-            }
-        }
-    }
 
     // Let plugins have a chance to decide what to do before saving the user, return errors.
     $msg = PLG_itemPreSave ('useredit', $A['username']);
@@ -1094,56 +1051,9 @@ function saveuser($A)
         return COM_refresh("{$_CONF['site_url']}/usersettings.php");
     }
 
-    // no need to filter the password as it's encoded anyway
-    if ($_CONF['allow_username_change'] == 1) {
-        $A['new_username'] = $A['new_username'];
-        if (!empty ($A['new_username']) && USER_validateUsername($A['new_username']) && ($A['new_username'] != $_USER['username'])) {
-            $A['new_username'] = DB_escapeString ($A['new_username']);
-            if (DB_count ($_TABLES['users'], 'username', $A['new_username']) == 0) {
-                if ($_CONF['allow_user_photo'] == 1) {
-                    $photo = DB_getItem ($_TABLES['users'], 'photo',"uid = ".(int)$_USER['uid']);
-                    if (!empty ($photo) && strstr($photo,$_USER['username']) !== false ) {
-                        $newphoto = preg_replace ('/' . $_USER['username'] . '/',$_USER['uid'], $photo, 1);
-                        $imgpath = $_CONF['path_images'] . 'userphotos/';
-
-                        @rename ($imgpath . $photo, $imgpath . $newphoto);
-                        DB_change ($_TABLES['users'], 'photo',DB_escapeString ($newphoto), "uid", (int) $_USER['uid']);
-                    }
-                }
-                DB_change ($_TABLES['users'], 'username', $A['new_username'],"uid", (int)$_USER['uid']);
-            } else {
-                COM_setMsg( $MESSAGE[51], 'error',true );
-                return COM_refresh ($_CONF['site_url'].'/usersettings.php');
-            }
-        }
-    }
-/* ----
-    // a quick spam check with the unfiltered field contents
-    $profile = '<h1>' . $LANG04[1] . ' ' . $_USER['username'] . '</h1><p>';
-    if (empty($service)) {
-        $profile .= COM_createLink($A['homepage'], $A['homepage']) . '<br />';
-    }
-    $profile .= $A['location'] . '<br />' . $A['sig'] . '<br />'
-                . PLG_replaceTags($A['about']) . '<br />' . $A['pgpkey'] . '</p>';
-
-    $spamData = array(
-        'username'  => $A['username'],
-        'email'     => $A['email'],
-        'ip'        => $_SERVER['REAL_ADDR'],
-        'type'      => 'profile'
-    );
-
-    $result = PLG_checkforSpam ($profile, $_CONF['spamx'],$spamData);
-    if ($result > 0) {
-        COM_displayMessageAndAbort ($result, 'spamx', 403, 'Forbidden');
-    }
----- */
-    $A['email'] = COM_applyFilter ($A['email']);
-    $A['email_conf'] = COM_applyFilter ($A['email_conf']);
     $A['homepage'] = COM_applyFilter ($A['homepage']);
 
     // basic filtering only
-    $A['fullname'] = COM_truncate(trim(USER_sanitizeName($A['fullname'])),80);
     $A['location'] = strip_tags ($A['location']);
     $A['sig'] = strip_tags ($A['sig']);
     $A['about'] = strip_tags ($A['about']);
@@ -1157,186 +1067,89 @@ function saveuser($A)
             $A[$service_input] = strip_tags($A[$service_input]);
         }
     }
-
-    if (!COM_isEmail ($A['email'])) {
-        COM_setMsg($MESSAGE[52],'error');
-        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
-    } else if ($A['email'] !== $A['email_conf']) {
-        COM_setMsg($MESSAGE[78],'error');
-        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
-    } else if (emailAddressExists ($A['email'], $_USER['uid'])) {
-        COM_setMsg($MESSAGE[56],'error');
-        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
-    } else {
-        if ( $current_password != '' ) {
-            if (!empty($A['newp'])) {
-                $A['newp'] = trim($A['newp']);
-                $A['newp_conf'] = trim($A['newp_conf']);
-                if (($A['newp'] == $A['newp_conf']) && SEC_check_hash($A['passwd'],$current_password) ){
-                    $passwd = SEC_encryptPassword($A['newp']);
-                    DB_change($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", (int)$_USER['uid']);
-                    if ($A['cooktime'] > 0) {
-                        $cooktime = $A['cooktime'];
-                        $token_ttl = $A['cooktime'];
-                    } else {
-                        $cooktime = 0;
-                        $token_ttl = 14400;
-                    }
-                    $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
-                    SEC_setCookie($_CONF['cookie_password'], $ltToken,time() + $cooktime);
-                } elseif (!SEC_check_hash($A['passwd'],$current_password) ) {
-                    COM_setMsg($MESSAGE[68],'error');
-                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
-                } elseif ($A['newp'] != $A['newp_conf']) {
-                    COM_setMsg($MESSAGE[67],'error');
-                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
-                }
-            }
-        } else {
-            // Cookie
-            if ($A['cooktime'] > 0) {
-                $cooktime = $A['cooktime'];
-            } else {
-                $cooktime = 0;
-            }
-            $ltToken = SEC_createTokenGeneral('ltc',$cooktime);
-            SEC_setCookie($_CONF['cookie_password'], $ltToken, time() + $cooktime);
+    $filename = '';
+    if ($_CONF['allow_user_photo'] == 1) {
+        $delete_photo = '';
+        if (isset ($A['delete_photo'])) {
+            $delete_photo = $A['delete_photo'];
         }
-
-        if ($_US_VERBOSE) {
-            Log::write('system',Log::DEBUG,'usersettings.php: cooktime = ' . $A['cooktime']);
-        }
-
-        if ($A['cooktime'] <= 0) {
-            $cookie_timeout = 0;
-            $token_ttl = 14400;
-        } else {
-            $cookie_timeout = time() + $A['cooktime'];
-            $token_ttl = $A['cooktime'];
-        }
-        SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'], $cookie_timeout,
-                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                       $_CONF['cookiesecure'],true);
-        DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$_USER['uid']." AND urlfor='ltc'");
-        if ( $cookie_timeout > 0 ) {
-            $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
-            SEC_setCookie ($_CONF['cookie_password'], $ltToken, $cookie_timeout,
-                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                           $_CONF['cookiesecure'],true);
-        } else {
-            SEC_setCookie ($_CONF['cookie_password'], '', -10000,
-                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                           $_CONF['cookiesecure'],true);
-        }
-        if ($_CONF['allow_user_photo'] == 1) {
-            $delete_photo = '';
-            if (isset ($A['delete_photo'])) {
-                $delete_photo = $A['delete_photo'];
-            }
-            $filename = handlePhotoUpload ($delete_photo);
-        }
-
-        if (!empty ($A['homepage'])) {
-            $pos = MBYTE_strpos ($A['homepage'], ':');
-            if ($pos === false) {
-                $A['homepage'] = 'http://' . $A['homepage'];
-            }
-            else {
-                $prot = substr ($A['homepage'], 0, $pos + 1);
-                if (($prot != 'http:') && ($prot != 'https:')) {
-                    $A['homepage'] = 'http:' . substr ($A['homepage'], $pos + 1);
-                }
-            }
-            $A['homepage'] = DB_escapeString ($A['homepage']);
-        }
-
-        $A['fullname']  = DB_escapeString ($A['fullname']);
-        $A['email']     = DB_escapeString ($A['email']);
-        $A['location']  = DB_escapeString ($A['location']);
-        $A['sig']       = DB_escapeString ($A['sig']);
-        $A['about']     = DB_escapeString ($A['about']);
-        $A['pgpkey']    = DB_escapeString ($A['pgpkey']);
-
-        if (!empty ($filename)) {
-            if (!file_exists ($_CONF['path_images'] . 'userphotos/' . $filename)) {
-                $filename = '';
-            }
-        }
-
-        DB_query("UPDATE {$_TABLES['users']} SET fullname='{$A['fullname']}',email='{$A['email']}',homepage='{$A['homepage']}',sig='{$A['sig']}',cookietimeout=".(int) $A['cooktime'].",photo='".DB_escapeString($filename)."' WHERE uid=".(int)$_USER['uid']);
-        DB_query("UPDATE {$_TABLES['userinfo']} SET pgpkey='{$A['pgpkey']}',about='{$A['about']}',location='{$A['location']}' WHERE uid=".(int)$_USER['uid']);
-
-        foreach ( $social_services AS $service ) {
-            $service_input = $service['service'].'_username';
-            if ( isset($A[$service_input])) {
-                $A[$service_input] = DB_escapeString($A[$service_input]);
-            } else {
-                $A[$service_input] = '';
-            }
-            if ( $A[$service_input] != '' ) {
-                $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
-                $sql .= " VALUES (" . (int) $service['service_id'] . ",".$_USER['uid'].",'".$A[$service_input]."');";
-                DB_query($sql,1);
-            } else {
-                $sql = "DELETE FROM {$_TABLES['social_follow_user']} WHERE ssid = ".(int) $service['service_id']." AND uid=".(int) $_USER['uid'];
-                DB_query($sql,1);
-            }
-        }
-
-        // Call custom registration save function if enabled and exists
-        if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userSave'))) {
-            CUSTOM_userSave($_USER['uid']);
-        }
-
-        PLG_userInfoChanged ((int)$_USER['uid']);
-
-        // at this point, the user information has been saved, but now we're going to check to see if
-        // the user has requested resynchronization with their remoteservice account or to unlink their remote account
-        $msg = 5; // default msg = Your account information has been successfully saved
-
-        if ( isset($A['unmerge']) ) {
-            if ( USER_unmergeAccounts() ) {
-                $msg = 117;
-            } else {
-                $msg = 118;
-            }
-        } else {
-            if (isset($A['resynch']) ) {
-                if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) {
-                    $modules = SEC_collectRemoteOAuthModules();
-                    $active_service = (count($modules) == 0) ? false : in_array(substr($_USER['remoteservice'], 6), $modules);
-                    if (!$active_service) {
-                        $status = -1;
-                        $msg = 115; // Remote service has been disabled.
-                    } else {
-                        $service = substr($_USER['remoteservice'], 6);
-                        $consumer = new OAuthConsumer($service);
-                        $callback_url = $_CONF['site_url'];
-                        $consumer->setRedirectURL($callback_url);
-                        $user = $consumer->authenticateUser();
-                        $consumer->resyncUserData($user);
-                    }
-                }
-
-                if ($msg != 5) {
-                    $msg = 114; // Account saved but re-synch failed.
-                    Log::write('system',Log::ERROR,$MESSAGE[$msg]);
-                }
-            }
-        }
-        PLG_profileExtrasSave ();
-        PLG_profileSave();
-
-        $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
-
-        if ( $msg == 5 ) {
-            COM_setMsg($MESSAGE[$msg],'info');
-        } else {
-            COM_setMsg($MESSAGE[$msg],'error');
-        }
-
-        return COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid='.$_USER['uid']);
+        $filename = handlePhotoUpload ($delete_photo);
     }
+
+    if (!empty ($A['homepage'])) {
+        $pos = MBYTE_strpos ($A['homepage'], ':');
+        if ($pos === false) {
+            $A['homepage'] = 'http://' . $A['homepage'];
+        }
+        else {
+            $prot = substr ($A['homepage'], 0, $pos + 1);
+            if (($prot != 'http:') && ($prot != 'https:')) {
+                $A['homepage'] = 'http:' . substr ($A['homepage'], $pos + 1);
+            }
+        }
+        $A['homepage'] = DB_escapeString ($A['homepage']);
+    }
+
+    $A['location']  = DB_escapeString ($A['location']);
+    $A['sig']       = DB_escapeString ($A['sig']);
+    $A['about']     = DB_escapeString ($A['about']);
+    $A['pgpkey']    = DB_escapeString ($A['pgpkey']);
+
+    if (!empty ($filename)) {
+        if (!file_exists ($_CONF['path_images'] . 'userphotos/' . $filename)) {
+            $filename = '';
+        }
+    }
+
+    DB_query("UPDATE {$_TABLES['users']} SET
+        homepage='{$A['homepage']}',
+        sig='{$A['sig']}',
+        photo='".DB_escapeString($filename)."'
+        WHERE uid=".(int)$_USER['uid']);
+    DB_query("UPDATE {$_TABLES['userinfo']} SET pgpkey='{$A['pgpkey']}',about='{$A['about']}',location='{$A['location']}' WHERE uid=".(int)$_USER['uid']);
+
+    foreach ( $social_services AS $service ) {
+        $service_input = $service['service'].'_username';
+        if ( isset($A[$service_input])) {
+            $A[$service_input] = DB_escapeString($A[$service_input]);
+        } else {
+            $A[$service_input] = '';
+        }
+        if ( $A[$service_input] != '' ) {
+            $sql  = "REPLACE INTO {$_TABLES['social_follow_user']} (ssid,uid,ss_username) ";
+            $sql .= " VALUES (" . (int) $service['service_id'] . ",".$_USER['uid'].",'".$A[$service_input]."');";
+            DB_query($sql,1);
+        } else {
+            $sql = "DELETE FROM {$_TABLES['social_follow_user']} WHERE ssid = ".(int) $service['service_id']." AND uid=".(int) $_USER['uid'];
+            DB_query($sql,1);
+        }
+    }
+
+    // Call custom registration save function if enabled and exists
+    if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userSave'))) {
+        CUSTOM_userSave($_USER['uid']);
+    }
+
+    PLG_userInfoChanged ((int)$_USER['uid']);
+
+    // at this point, the user information has been saved, but now we're going to check to see if
+    // the user has requested resynchronization with their remoteservice account or to unlink their remote account
+    $msg = 5; // default msg = Your account information has been successfully saved
+
+
+    PLG_profileExtrasSave ();
+    PLG_profileSave();
+
+    $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
+
+    if ( $msg == 5 ) {
+        COM_setMsg($MESSAGE[$msg],'info');
+    } else {
+        COM_setMsg($MESSAGE[$msg],'error');
+    }
+
+    return COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid='.$_USER['uid']);
+
 }
 
 /**
@@ -1628,6 +1441,258 @@ function userprofile ($user, $msg = 0)
     return $retval;
 }
 
+/*
+ * Account Panel Update - updates user account settings - requires password
+ */
+function updateAccountInfo($A)
+{
+   global $_CONF, $_TABLES, $_USER, $LANG04, $LANG24, $MESSAGE, $_US_VERBOSE;
+
+    $db = Database::getInstance();
+
+    if ( isset($_POST['merge']) ) {
+        if ( COM_applyFilter($_POST['remoteuid'],true) != $_USER['uid'] ) {
+            echo COM_refresh($_CONF['site_url'].'/usersettings.php?mode=edit');
+        }
+        USER_mergeAccounts();
+    }
+
+    // If not set or possibly removed from template - initialize variable
+    if (!isset($A['cooktime'])) {
+        $A['cooktime'] = 0;
+    } else {
+        $A['cooktime'] = COM_applyFilter ($A['cooktime'], true);
+    }
+    // If empty or invalid - set to user default
+    // So code after this does not fail the user password required test
+    if ($A['cooktime'] < 0) { // note that == 0 is allowed!
+        $A['cooktime'] = $_USER['cookietimeout'];
+    }
+
+    // to change the password, email address, or cookie timeout,
+    // we need the user's current password
+    $account_type = DB_getItem ($_TABLES['users'], 'account_type', "uid = {$_USER['uid']}");
+    $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
+    $current_password = DB_getItem($_TABLES['users'], 'passwd',"uid = {$_USER['uid']}");
+
+    if ( $current_password != '' && $current_password != NULL ) {
+        if (!empty ($A['newp']) || ($A['email'] != $_USER['email']) || ($A['cooktime'] != $_USER['cookietimeout'])) {
+            if (empty($A['old_password']) || !SEC_check_hash($A['old_password'],$current_password)) {
+                COM_setMsg($MESSAGE[83],'error');
+                return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+            } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
+                $ret = CUSTOM_userCheck ($A['username'], $A['email']);
+                if (!empty($ret)) {
+                    // Need a numeric return for the default message handler
+                    // - if not numeric use default message
+                    if (!is_numeric($ret)) {
+                        $ret = 97;
+                    }
+                    COM_setMsg( $MESSAGE[$ret], 'error',true );
+                    return COM_refresh("{$_CONF['site_url']}/usersettings.php");
+                }
+            } elseif ($A['newp'] != '') {
+                $err = SEC_checkPwdComplexity($A['newp']);
+                if ( count($err) > 0 ) {
+                    $msg = implode('<br>',$err);
+                    COM_setMsg($msg,'error');
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+                }
+            }
+        } elseif ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
+            $ret = CUSTOM_userCheck ($A['username'], $A['email']);
+            if (!empty($ret)) {
+                // Need a numeric return for the default message hander - if not numeric use default message
+                // - if not numeric use default message
+                if (!is_numeric($ret)) {
+                    $ret = 97;
+                }
+                COM_setMsg( $MESSAGE[$ret], 'error',true );
+                return COM_refresh("{$_CONF['site_url']}/usersettings.php");
+            }
+        }
+    }
+
+    // Let plugins have a chance to decide what to do before saving the user, return errors.
+    $msg = PLG_itemPreSave ('useredit', $A['username']);
+    if (!empty ($msg)) {
+        // need a numeric return value - otherwise use default message
+        if (! is_numeric($msg)) {
+            $msg = 97;
+        }
+        COM_setMsg( $MESSAGE[$msg], 'error',true );
+        return COM_refresh("{$_CONF['site_url']}/usersettings.php");
+    }
+
+    // no need to filter the password as it's encoded anyway
+    if ($_CONF['allow_username_change'] == 1) {
+        $A['new_username'] = $A['new_username'];
+        if (!empty ($A['new_username']) && USER_validateUsername($A['new_username']) && ($A['new_username'] != $_USER['username'])) {
+            $A['new_username'] = DB_escapeString ($A['new_username']);
+            if (DB_count ($_TABLES['users'], 'username', $A['new_username']) == 0) {
+                if ($_CONF['allow_user_photo'] == 1) {
+                    $photo = DB_getItem ($_TABLES['users'], 'photo',"uid = ".(int)$_USER['uid']);
+                    if (!empty ($photo) && strstr($photo,$_USER['username']) !== false ) {
+                        $newphoto = preg_replace ('/' . $_USER['username'] . '/',$_USER['uid'], $photo, 1);
+                        $imgpath = $_CONF['path_images'] . 'userphotos/';
+
+                        @rename ($imgpath . $photo, $imgpath . $newphoto);
+                        DB_change ($_TABLES['users'], 'photo',DB_escapeString ($newphoto), "uid", (int) $_USER['uid']);
+                    }
+                }
+                DB_change ($_TABLES['users'], 'username', $A['new_username'],"uid", (int)$_USER['uid']);
+            } else {
+                COM_setMsg( $MESSAGE[51], 'error',true );
+                return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+            }
+        }
+    }
+
+
+    $A['email'] = COM_applyFilter ($A['email']);
+    $A['new_eml_conf'] = COM_applyFilter ($A['new_eml_conf']);
+
+    // basic filtering only
+    $A['fullname'] = COM_truncate(trim(USER_sanitizeName($A['fullname'])),80);
+
+    if (!COM_isEmail ($A['email'])) {
+        COM_setMsg($MESSAGE[52],'error');
+        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+    } else if ($A['email'] !== $A['new_eml_conf']) {
+        COM_setMsg($MESSAGE[78],'error');
+        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+    } else if (emailAddressExists ($A['email'], $_USER['uid'])) {
+        COM_setMsg($MESSAGE[56],'error');
+        return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+    } else {
+        if ( $current_password != '' ) {
+            if (!empty($A['newp'])) {
+                $A['newp'] = trim($A['newp']);
+                $A['newp_conf'] = trim($A['newp_conf']);
+                if (($A['newp'] == $A['newp_conf']) && SEC_check_hash($A['old_password'],$current_password) ){
+                    $passwd = SEC_encryptPassword($A['newp']);
+                    DB_change($_TABLES['users'], 'passwd', DB_escapeString($passwd),"uid", (int)$_USER['uid']);
+                    if ($A['cooktime'] > 0) {
+                        $cooktime = $A['cooktime'];
+                        $token_ttl = $A['cooktime'];
+                    } else {
+                        $cooktime = 0;
+                        $token_ttl = 14400;
+                    }
+                    $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
+                    SEC_setCookie($_CONF['cookie_password'], $ltToken,time() + $cooktime);
+                } elseif (!SEC_check_hash($A['old_password'],$current_password) ) {
+                    COM_setMsg($MESSAGE[68],'error');
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+                } elseif ($A['newp'] != $A['newp_conf']) {
+                    COM_setMsg($MESSAGE[67],'error');
+                    return COM_refresh ($_CONF['site_url'].'/usersettings.php');
+                }
+            }
+        } else {
+            // Cookie
+            if ($A['cooktime'] > 0) {
+                $cooktime = $A['cooktime'];
+            } else {
+                $cooktime = 0;
+            }
+            $ltToken = SEC_createTokenGeneral('ltc',$cooktime);
+            SEC_setCookie($_CONF['cookie_password'], $ltToken, time() + $cooktime);
+        }
+
+        if ($_US_VERBOSE) {
+            Log::write('system',Log::DEBUG,'usersettings.php: cooktime = ' . $A['cooktime']);
+        }
+
+        if ($A['cooktime'] <= 0) {
+            $cookie_timeout = 0;
+            $token_ttl = 14400;
+        } else {
+            $cookie_timeout = time() + $A['cooktime'];
+            $token_ttl = $A['cooktime'];
+        }
+        SEC_setCookie ($_CONF['cookie_name'], $_USER['uid'], $cookie_timeout,
+                       $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                       $_CONF['cookiesecure'],true);
+        DB_query("DELETE FROM {$_TABLES['tokens']} WHERE owner_id=".(int)$_USER['uid']." AND urlfor='ltc'");
+        if ( $cookie_timeout > 0 ) {
+            $ltToken = SEC_createTokenGeneral('ltc',$token_ttl);
+            SEC_setCookie ($_CONF['cookie_password'], $ltToken, $cookie_timeout,
+                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                           $_CONF['cookiesecure'],true);
+        } else {
+            SEC_setCookie ($_CONF['cookie_password'], '', -10000,
+                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                           $_CONF['cookiesecure'],true);
+        }
+
+        $A['fullname']  = DB_escapeString ($A['fullname']);
+        $A['email']     = DB_escapeString ($A['email']);
+
+
+        DB_query("UPDATE {$_TABLES['users']} SET
+                fullname='{$A['fullname']}',
+                email='{$A['email']}',
+                cookietimeout=".(int) $A['cooktime']."
+            WHERE uid=".(int)$_USER['uid']);
+
+        // Call custom registration save function if enabled and exists
+        if ($_CONF['custom_registration'] AND (function_exists('CUSTOM_userSave'))) {
+            CUSTOM_userSave($_USER['uid']);
+        }
+
+        PLG_userInfoChanged ((int)$_USER['uid']);
+
+        // at this point, the user information has been saved, but now we're going to check to see if
+        // the user has requested resynchronization with their remoteservice account or to unlink their remote account
+        $msg = 5; // default msg = Your account information has been successfully saved
+
+        if ( isset($A['unmerge']) ) {
+            if ( USER_unmergeAccounts() ) {
+                $msg = 117;
+            } else {
+                $msg = 118;
+            }
+        } else {
+            if (isset($A['resynch']) ) {
+                if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) {
+                    $modules = SEC_collectRemoteOAuthModules();
+                    $active_service = (count($modules) == 0) ? false : in_array(substr($_USER['remoteservice'], 6), $modules);
+                    if (!$active_service) {
+                        $status = -1;
+                        $msg = 115; // Remote service has been disabled.
+                    } else {
+                        $service = substr($_USER['remoteservice'], 6);
+                        $consumer = new OAuthConsumer($service);
+                        $callback_url = $_CONF['site_url'];
+                        $consumer->setRedirectURL($callback_url);
+                        $user = $consumer->authenticateUser();
+                        $consumer->resyncUserData($user);
+                    }
+                }
+
+                if ($msg != 5) {
+                    $msg = 114; // Account saved but re-synch failed.
+                    Log::write('system',Log::ERROR,$MESSAGE[$msg]);
+                }
+            }
+        }
+
+//        PLG_profileExtrasSave ();
+//        PLG_profileSave();
+
+        $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
+
+        if ( $msg == 5 ) {
+            COM_setMsg($MESSAGE[$msg],'info');
+        } else {
+            COM_setMsg($MESSAGE[$msg],'error');
+        }
+
+        return COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid='.$_USER['uid']);
+    }
+}
+
 /**
 * Saves user's preferences back to the database
 *
@@ -1832,21 +1897,36 @@ if (isset($_POST['btncancel']) AND $_POST['btncancel'] == $LANG_ADMIN['cancel'])
     $mode = COM_applyFilter ($_POST['mode']);
 } else if (isset ($_GET['mode'])) {
     $mode = COM_applyFilter ($_GET['mode']);
+} else if (isset($_POST['btnsubmitaccount']) && isset($_POST['pwdpanel']) && $_POST['pwdpanel'] == 'x') {
+    $mode = 'updateaccount';
 }
+
 
 $display = '';
 
 if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     switch ($mode) {
+    case 'updateaccount' :
+
+        if ( SEC_checkToken() ) {
+            $display .= updateAccountInfo($_POST);
+        } else {
+            print "token failed!!";exit;
+        }
+        break;
     case 'saveuser':
         // validate the password is correct.
         $account_type = DB_getItem ($_TABLES['users'], 'account_type', "uid = {$_USER['uid']}");
         $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
+
+/*
+
         $current_password = DB_getItem($_TABLES['users'], 'passwd',"uid = {$_USER['uid']}");
         if (empty($_POST['passwd']) || !SEC_check_hash($_POST['passwd'],$current_password)) {
             COM_setMsg($MESSAGE[83],'error');
             return COM_refresh ($_CONF['site_url'].'/usersettings.php');
         }
+*/
         savepreferences ($_POST);
         $display .= saveuser($_POST);
         break;

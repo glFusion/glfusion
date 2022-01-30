@@ -166,7 +166,7 @@ class BrokenLink
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     {
-        global $_FM_CONF, $_USER, $_TABLES, $LANG_ADMIN;
+        global $_CONF, $_FM_CONF, $_USER, $_TABLES, $LANG_ADMIN, $LANG_FM00;
 
         $retval = '';
         static $grp_names = array();
@@ -175,15 +175,15 @@ class BrokenLink
         if ($dt === NULL) {
             $dt = new \Date('now', $_USER['tzid']);
         }
-
         switch($fieldname) {
         case 'edit':
-            $retval .= FieldList::edit(array(
-                'edit_url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
+            $retval = FieldList::edit(array(
+                'url' => $_FM_CONF['admin_url'] . "/index.php?modDownload={$A['lid']}",
                 'attr' => array(
                     'title' => 'Edit File Record',
                 ),
             ) );
+
             break;
 
         case 'date':
@@ -210,6 +210,21 @@ class BrokenLink
                 ),
             ) );
             break;
+
+        case 'title' :
+            if ($_FM_CONF['outside_webroot']) {
+                $tFile = $_CONF['path'].'data/filemgmt_data/files/'.$A['url'];
+            } else {
+                $tFile = $_FM_CONF['FileStore'].$A['url'];
+            }
+            if (!file_exists($tFile)) {
+                $retval = $fieldvalue . ' <span class="fm-file-missing tooltip" title="'.$LANG_FM00['not_found'].'"><sup>**</sup></span>';
+            } else {
+                $retval = $fieldvalue;
+            }
+            clearstatcache();
+            break;
+
 
         default:
             $retval = htmlspecialchars($fieldvalue, ENT_QUOTES, COM_getEncodingt());

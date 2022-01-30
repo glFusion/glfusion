@@ -2655,3 +2655,31 @@ pre {
     width:85px;
     height:85px;
 }
+
+/* CSS-based rating stars */
+div.ratingstars  {
+    color: #999;
+}
+.ratingStarChecked {
+    color: goldenrod;
+}
+.ratingstars {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+div.ratingstars.enabled > i:hover:before,
+div.ratingstars.enabled > i:hover ~ i:before {
+    /* Force full star value from FontAwesome */
+    content: "\f005";
+    color: lightgreen;
+}
+div.ratingbar > * > span.static {
+    font-size: 0.875rem;
+}
+/* End CSS-based rating stars */
+
+img.themeAdminImage {
+    width: auto;
+	max-height:50px;
+}
+

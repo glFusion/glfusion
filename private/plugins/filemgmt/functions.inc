@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by Consult4Hire Inc.
@@ -58,12 +58,8 @@ use Filemgmt\MyTextSanitizer;
 $_FM_CONF = config::get_instance()->get_config('filemgmt');
 
 require_once __DIR__ . '/filemgmt.php';
-if (is_file(__DIR__ . '/config.php')) {
-    // Include local config file if present, normally for testing.
-    require_once __DIR__ . '/config.php';
-}
 
-$_FM_CONF['extensions_map'] = $_FMDOWNLOAD;
+//$_FM_CONF['extensions_map'] = $_FMDOWNLOAD;
 
 if (empty($_FM_CONF['FileStore'])) {
     $_FM_CONF['FileStore'] = $_CONF['path_html'].'data/filemgmt/files/';
@@ -75,7 +71,7 @@ if (empty($_FM_CONF['SnapStore'])) {
 }
 if (empty($_FM_CONF['SnapCat'])) {
     $_FM_CONF['SnapCat'] = $_CONF['path_html'].'data/filemgmt/category_snaps/';
-    $_FM_CONF['SnapCatURLURL'] = $_CONF['site_url'].'/data/filemgmt/category_snaps/';
+    $_FM_CONF['SnapCatURL'] = $_CONF['site_url'].'/data/filemgmt/category_snaps/';
 }
 
 // Common plugin-specific URLs
@@ -87,6 +83,9 @@ $_FM_CONF['FileStore_tmp'] = $_CONF['path'] . '/data/filemgmt_data/files/tmp/';
 $_FM_CONF['SnapStore_tmp'] = $_CONF['path'] . '/data/filemgmt_data/snaps/tmp/';
 
 if ( COM_isAnonUser() ) {
+    if (!isset($_FM_CONF['uploadpublic'])) {
+        $_FM_CONF['uploadpublic'] = false;
+    }
     $_FM_CONF['uploadselect'] = $_FM_CONF['uploadpublic'];
 }
 
@@ -200,9 +199,10 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode)
         $retval .= CMT_commentform ($title, $comment, $id, $pid,'filemgmt', $LANG03[14], $postmode);
         return $retval;
     } else { // success
-        $comments = CMT_getCount('filemgmt', $id);
-        DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($id));
         $lid = (int) substr($id,7);
+        $comments = CMT_getCount('filemgmt', $id);
+        DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($lid));
+//        $lid = (int) substr($id,7);
         echo COM_refresh (COM_buildUrl ($_FM_CONF['url']."/index.php?id=$lid"));
     }
 }
@@ -220,8 +220,11 @@ function plugin_savecomment_filemgmt($title,$comment,$id,$pid,$postmode)
 function plugin_commentapproved_filemgmt($cid,$type,$sid)
 {
     global $_TABLES;
-    $comments = CMT_getCount('filemgmt', $sid);
-    DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($sid));
+
+    if (SEC_hasRights('filemgmt.edit,comment.admin','OR')) {
+        $comments = CMT_getCount('filemgmt', $sid);
+        DB_change($_TABLES['filemgmt_filedetail'],'comments', $comments, 'lid',DB_escapeString($sid));
+    }
 }
 
 function plugin_editcomment_filemgmt($cid,$id)
@@ -272,39 +275,56 @@ function plugin_deletecomment_filemgmt($cid,$id)
  */
 function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$page,$view)
 {
-    global $_USER, $_FM_CONF, $FilemgmtAdmin, $LANG_FILEMGMT, $_TABLES, $_CONF, $LANG01,$_DB_name;
+    global $_USER, $_GROUPS, $_FM_CONF, $FilemgmtAdmin, $LANG_FILEMGMT, $_TABLES, $_CONF, $LANG01,$_DB_name;
 
     if (COM_isAnonUser() && $_FM_CONF['selectpriv'] == 1) {
         return '';
     }
 
-    $id = str_replace('fileid_','',$id);
+    $display = '';
 
-    $File = Filemgmt\Download::getInstance($id);
+    $lid = str_replace('fileid_','',$id);
+
+    $FM_ratedIds = array();
+    $FM_ratedIds = RATING_getRatedIds('filemgmt');
+    
+    $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
+    $p->set_file (array (
+        'page'             =>     'filelisting.thtml',
+        'category'         =>     'filelisting_category.thtml'
+    ) );
+
+    $myts = new Filemgmt\MyTextSanitizer;
+    $mytree = new Filemgmt\XoopsTree('',$_TABLES['filemgmt_cat'],"cid","pid");
+    $mytree->setGroupAccessFilter($_GROUPS);
+
+    $groupsql = SEC_buildAccessSql();
+
+    $File = Filemgmt\Download::getInstance($lid);
+
     if ($File->canRead() && $File->getCommentFlag()) {
-        $mytree = new XoopsTree($_DB_name,$_TABLES['filemgmt_cat'],"cid","pid");
 
-        $display = COM_startBlock("<b>". $LANG_FILEMGMT['plugin_name'] ."</b>");
-
-        $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
-        $p->set_file (array (
-            'page'             =>     'filelisting.thtml',
-            'category'         =>     'filelisting_category.thtml'));
-
-        $pathstring = "<a href='index.php'>"._MD_MAIN."</a>&nbsp;:&nbsp;";
-        $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_FM_CONF['url']}/viewcat.php?op=");
-        $pathstring .= $nicepath;
+        $p->set_var(array(
+            'block_header' => COM_startBlock("<b>". $LANG_FILEMGMT['plugin_name'] ."</b>"),
+            'block_footer' => COM_endBlock(),
+            'cssid' => 1,
+            'comment_records' => '',
+            'back_to_list' => true,
+        ) );
         $p->set_block('page', 'fileRecords', 'fRecord');
         $p->set_var('filelisting_record', $File->showListingRecord());
         $p->parse('fRecord', 'fileRecords');
-        $p->set_var(array(
-            'category_path_link' => $pathstring,
-            'cssid' => 1,
-        ) );
-        $p->parse('filelisting_records', 'records');
-        $p->parse ('output', 'page');
+
+        $cid = $File->getCid();
+
+        $pathstring = "<li><a href='{$_FM_CONF['url']}/index.php'>"._MD_MAIN."</a></li>";
+        $nicepath = $mytree->getNicePathFromId($cid, "title", "{$_FM_CONF['url']}/viewcat.php");
+        $pathstring .= $nicepath;
+
+        $p->set_var('category_path_link',$pathstring);
+
+        $p->parse('output', 'page');
         $display .= $p->finish ($p->get_var('output'));
-        $display .= COM_endBlock();
 
         /* Get formatted comment thread */
         if (SEC_hasRights('filemgmt.edit')) {
@@ -312,16 +332,14 @@ function plugin_displaycomment_filemgmt($id,$commentid,$title,$order,$format,$pa
         } else {
             $delete_option = false;
         }
-
         if ($view == 1) {
-            $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,true,$delete_option,0,$submitter);
+            $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,true,$delete_option,0);
         } else {
-            $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,false,$delete_option,0,$submitter);
+            $display .= CMT_userComments ("fileid_$id", $title, 'filemgmt',$order,$format,$commentid,$page,false,$delete_option,0);
         }
     } else {
         return false;
     }
-
     return $display;
 }
 
@@ -504,94 +522,6 @@ function plugin_searchtypes_filemgmt()
         return '';
     }
 }
-
-
-/**
-* this searches for files matching the user query and returns an array of
-* for the header and table rows back to search.php where it will be formated and
-* printed
-*
-* @query            string          Keywords user is looking for
-* @datestart        date/time       Start date to get results for
-* @dateend          date/time       End date to get results for
-* @topic            string          The topic they were searching in
-* @type             string          Type of items they are searching
-* @author           string          Get all results by this author
-*
-*/
-function plugin_dopluginsearch_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
-{
-    global $_USER, $_FM_CONF, $LANG_FILEMGMT, $_TABLES, $_CONF;
-
-    if (COM_isAnonUser() && $_FM_CONF['selectpriv'] == 1) {
-        return '';
-    }
-    $query = trim(DB_escapeString(htmlspecialchars($query)));
-
-    $sql  = "SELECT a.lid AS id, a.title, description, date, submitter AS uid, hits, CONCAT('/filemgmt/index.php?id=',a.lid) AS url ";
-    $sql .= "FROM {$_TABLES['filemgmt_filedetail']} a ";
-    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
-    $sql .= "LEFT JOIN {$_TABLES['filemgmt_filedesc']} c ON c.lid=a.lid ";
-    $sql .= SEC_buildAccessSql('WHERE');
-    $sql .= " AND a.status > 0 ";
-
-    if (!empty ($author))
-        $sql .= "AND (submitter = '$author') ";
-
-    $search = new SearchCriteria('filemgmt', 'FileMgmt');
-    $columns = array('c.description','a.title');
-    $sql .= $search->getDateRangeSQL('AND', 'date', $datestart, $dateend);
-    list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
-    $search->setSQL($sql);
-    $search->setFTSQL($ftsql);
-    $search->setRank(3);
-
-    return $search;
-}
-
-/**
-* this searches the plugins comments matching the user query and returns an array of
-* for the header and table rows back to search.php where it will be formated and
-* printed
-*
-* @query            string          Keywords user is looking for
-* @datestart        date/time       Start date to get results for
-* @dateend          date/time       End date to get results for
-* @topic            string          The topic they were searching in
-* @type             string          Type of items they are searching
-* @author           string          Get all results by this author
-*
-*/
-function plugin_dopluginsearch_comment_filemgmt($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
-{
-    global $_USER, $_FM_CONF, $LANG_FILEMGMT, $_TABLES, $_CONF, $LANG09;
-
-    $query = trim(DB_escapeString(htmlspecialchars($query)));
-
-    $sql =  "SELECT a.lid AS id, c.title AS title, c.comment AS description, UNIX_TIMESTAMP(c.date) AS date, c.uid AS uid, '0' AS hits, ";
-    $sql .= "CONCAT('/filemgmt/index.php?id=',a.lid,'#comments') AS url ";
-    $sql .= "FROM {$_TABLES['users']} AS u, {$_TABLES['comments']} AS c ";
-    $sql .= "LEFT JOIN {$_TABLES['filemgmt_filedetail']} a ON c.sid=CONCAT('fileid_',a.lid) ";
-    $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON b.cid=a.cid ";
-    $sql .= "WHERE (c.type='filemgmt' AND c.queued = 0) AND (u.uid = c.uid) ";
-    $sql .= SEC_buildAccessSql('AND');
-    $sql .= " AND a.status > 0 ";
-
-    if (!empty($author)) {
-        $sql .= "AND (c.uid = '$author') ";
-    }
-
-    $search_c = new SearchCriteria('comments', 'FileMgmt > '.$LANG09[66]);
-    $columns = array('comment','c.title');
-    $sql .= $search_c->getDateRangeSQL('AND', 'UNIX_TIMESTAMP(c.date)', $datestart, $dateend);
-    list($sql,$ftsql) = $search_c->buildSearchSQL($keyType, $query, $columns, $sql);
-    $search_c->setSQL($sql);
-    $search_c->setFTSQL($ftsql);
-    $search_c->setRank(2);
-
-    return $search_c;
-}
-
 
 /**
 * This will put an option for Filemgmt Admin in the command and control block on
@@ -1423,12 +1353,14 @@ function plugin_moderationvalues_filemgmt()
 {
     global $_TABLES;
 
-    return array (
-        'lid',
-        $_TABLES['filemgmt_filedetail'],
-        "lid,status",
-        '',
-    );
+    if (SEC_hasRights('filemgmt.edit')) {
+        return array (
+            'lid',
+            $_TABLES['filemgmt_filedetail'],
+            "lid,status",
+            '',
+        );
+    }
 }
 
 
@@ -1439,7 +1371,9 @@ function plugin_moderationvalues_filemgmt()
  */
 function plugin_moderationapprove_filemgmt($lid)
 {
-    Filemgmt\Download::getInstance($lid)->approve();
+    if (SEC_hasRights('filemgmt.edit')) {
+        Filemgmt\Download::getInstance($lid)->approve();
+    }
 }
 
 
@@ -1450,7 +1384,9 @@ function plugin_moderationapprove_filemgmt($lid)
  */
 function plugin_moderationdelete_filemgmt($lid)
 {
-    Filemgmt\Download::getInstance($lid)->delete();
+    if (SEC_hasRights('filemgmt.edit')) {
+        Filemgmt\Download::getInstance($lid)->delete();
+    }
 }
 
 /**
@@ -1465,7 +1401,9 @@ function plugin_submissioncount_filemgmt()
 
     $retval = 0;
 
-    $retval = DB_count ($_TABLES['filemgmt_filedetail'],'status',0);
+    if (SEC_hasRights('filemgmt.edit')) {
+        $retval = DB_count ($_TABLES['filemgmt_filedetail'],'status',0);
+    }
 
     return $retval;
 }

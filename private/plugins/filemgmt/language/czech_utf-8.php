@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -37,8 +37,8 @@ $LANG_FM00 = array (
     'editor'            => 'Editor pluginů',
     'warning'           => 'Upozornění před odinstalací',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin je nainstalován a povolen.<br>Nejprve vypněte, pokud jej chcete odinstalovat.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Editor pluginu</a></div',
-    'WhatsNewLabel'    => 'Soubory',
-    'WhatsNewPeriod'   => ' za posledních %s dní',
+    'WhatsNewLabel'     => 'Soubory',
+    'WhatsNewPeriod'    => ' za posledních %s dní',
     'new_upload'        => 'Nový soubor odeslán v ',
     'new_upload_body'   => 'Nový soubor byl odeslán do fronty v ',
     'details'           => 'Podrobnosti',
@@ -64,86 +64,96 @@ $LANG_FM02 = array(
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "Nová strana",
-    'adminhome' => "Administrace domů",
-    'plugin_name' => "Správa souborů",
-    'searchlabel' => "Výpis souborů",
-    'searchlabel_results' => "Výsledek výpisu souborů",
-    'downloads' => "Má stahování",
-    'report' => "Nejstahovanější",
-    'usermenu1' => "Má stahování",
-    'usermenu2' => "  Nejlépe hodnocené",
-    'usermenu3' => "Nahraj soubor",
-    'admin_menu' => "Admin pluginu Filemgmt",
-    'writtenby' => "Zapsáno",
-    'date' => "Naposledy aktualizováno",
-    'title' => "Název",
-    'content' => "Obsah",
-    'hits' => "Hity",
-    'Filelisting' => "Výpis souborů",
-    'DownloadReport' => "Stáhnout historii jednoho souboru",
-    'StatsMsg1' => "Top Ten přístupných souborů v úložišti",
-    'StatsMsg2' => "Vypadá to, že v úložišti (filemgmt plugin) nejsou na těchto stránkách žádné soubory nebo k nim není přístup.",
-    'usealtheader' => "Use Alt. Header",
-    'url' => "URL",
-    'edit' => "Editovat",
-    'lastupdated' => "Naposledy aktualizováno",
-    'pageformat' => "Formát stránky",
-    'leftrightblocks' => "Bloky nalevo a napravo",
-    'blankpage' => "Prázdná stránka",
-    'noblocks' => "Bez bloků",
-    'leftblocks' => "Bloky nalevo",
-    'addtomenu' => 'Přidat do menu',
-    'label' => 'Štítek',
-    'nofiles' => 'Počet souborů v úložišti (celkem staženo)',
-    'save' => 'uložit',
-    'preview' => 'náhled',
-    'delete' => 'vymazat',
-    'cancel' => 'zrušit',
-    'access_denied' => 'Přístup odepřen',
-    'invalid_install' => 'Někdo se pokusil nelegálně vstoupit na plugin File Management Instalovat /odinstalovat soubory. Id uživatele: ',
-    'start_install' => 'Pokus o instalaci Filemgmt Pluginu',
-    'start_dbcreate' => 'Pokus o vytvoření tabulek pro Filemgmt plugin',
-    'install_skip' => '... přeskočeno na filemgmt.cfg',
-    'access_denied_msg' => 'Neoprávněně zkoušíte přístup k administraci pluginu File Mgmt. Vezměte prosím na vědomí, že všechny pokusy o neoprávněný přístup na tuto stránku jsou zaznamenány',
+    'newpage'               => "Nová strana",
+    'adminhome'             => "Administrace domů",
+    'plugin_name'           => "Správa souborů",
+    'searchlabel'           => "Má stahování",
+    'searchlabel_results'   => "Výsledky stahování",
+    'downloads'             => "Má stahování",
+    'report'                => "Nejstahovanější",
+    'usermenu1'             => "Má stahování",
+    'usermenu2'             => "  Nejlépe hodnocené",
+    'usermenu3'             => "Nahraj soubor",
+    'admin_menu'            => "Admin pluginu Filemgmt",
+    'writtenby'             => "Zapsáno",
+    'date'                  => "Naposledy aktualizováno",
+    'title'                 => "Název",
+    'content'               => "Obsah",
+    'hits'                  => "Hity",
+    'Filelisting'           => "Výpis souborů",
+    'DownloadReport'        => "Stáhnout historii jednoho souboru",
+    'StatsMsg1'             => "Top Ten přístupných souborů v úložišti",
+    'StatsMsg2'             => "Vypadá to, že v úložišti (filemgmt plugin) nejsou na těchto stránkách žádné soubory nebo k nim není přístup.",
+    'usealtheader'          => "Use Alt. Header",
+    'url'                   => "URL",
+    'edit'                  => "Editovat",
+    'lastupdated'           => "Naposledy aktualizováno",
+    'pageformat'            => "Formát stránky",
+    'leftrightblocks'       => "Bloky nalevo a napravo",
+    'blankpage'             => "Prázdná stránka",
+    'noblocks'              => "Bez bloků",
+    'leftblocks'            => "Bloky nalevo",
+    'addtomenu'             => 'Přidat do menu',
+    'label'                 => 'Štítek',
+    'nofiles'               => 'Počet souborů v úložišti (celkem staženo)',
+    'save'                  => 'Ulož',
+    'preview'               => 'Náhled',
+    'delete'                => 'Smazat',
+    'cancel'                => 'Zrušit',
+    'access_denied'         => 'Přístup odepřen',
+    'invalid_install'       => 'Někdo se pokusil nelegálně vstoupit na plugin File Management Instalovat /odinstalovat soubory. Id uživatele: ',
+    'start_install'         => 'Pokus o instalaci Filemgmt Pluginu',
+    'start_dbcreate'        => 'Pokus o vytvoření tabulek pro Filemgmt plugin',
+    'install_skip'          => '... přeskočeno na filemgmt.cfg',
+    'access_denied_msg'     => 'Neoprávněně zkoušíte přístup k administraci pluginu File Mgmt. Vezměte prosím na vědomí, že všechny pokusy o neoprávněný přístup na tuto stránku jsou zaznamenány',
     'installation_complete' => 'Instalace dokončena',
     'installation_complete_msg' => 'Datové struktury pro plugin File Mgmt pro glFusion byly úspěšně nainstalovány do vaší databáze! Pokud někdy potřebujete odinstalovat tento plugin, přečtěte si prosím dokument README, který přišel s tímto pluginem.',
-    'installation_failed' => 'Instalace se nezdařila',
+    'installation_failed'   => 'Instalace se nezdařila',
     'installation_failed_msg' => 'Instalace pluginu File Mgmt selhala. Pro diagnostické informace si prosím přečtěte soubor glFusion error.log',
-    'system_locked' => 'Systém uzamčen',
-    'system_locked_msg' => 'Plugin File Mgmt již byl nainstalován a je uzamčen. Pokud se pokoušíte odinstalovat tento plugin, přečtěte si prosím dokument README, který je dodáván s tímto pluginem',
-    'uninstall_complete' => 'Odinstalace dokončena',
+    'system_locked'         => 'Systém uzamčen',
+    'system_locked_msg'     => 'Plugin File Mgmt již byl nainstalován a je uzamčen. Pokud se pokoušíte odinstalovat tento plugin, přečtěte si prosím dokument README, který je dodáván s tímto pluginem',
+    'uninstall_complete'    => 'Odinstalace dokončena',
     'uninstall_complete_msg' => 'Data pro plugin File Mgmt byly úspěšně odstraněny z databáze glFusion<br><br>Budete muset ručně odstranit všechny soubory v úložišti souborů.',
-    'uninstall_failed' => 'Odinstalace se nezdařila.',
-    'uninstall_failed_msg' => 'Instalace pluginu File Mgmt selhala. Pro diagnostické informace si prosím přečtěte soubor glFusion error.log',
-    'install_noop' => 'Plugin installed',
-    'install_noop_msg' => 'Instalace pluginu filemgmt provedena, ale nebylo co dělat.<br><br>Zkontrolujte konfiguraci pluginu v install.cfg.',
-    'all_html_allowed' => 'HTML tagy povoleny',
-    'no_new_files'  => 'Nejsou nové soubory',
-    'no_comments'   => 'Nejsou nové komentáře',
-    'more'          => '<em>další ...</em>',
-    'newly_uploaded' => 'Newly Uploaded',
-    'click_to_view' => 'Click here to view',
-    'no_file_uploaded' => 'No File Uploaded',
-    'description' => 'Description',
-    'category' => 'Category',
-    'err_req_fields' => 'Some required fields were not supplied',
-    'go_back' => 'Go Back',
-    'err_demomode' => 'Uploads are disabled in demo mode',
+    'uninstall_failed'      => 'Odinstalace se nezdařila.',
+    'uninstall_failed_msg'  => 'Instalace pluginu File Mgmt selhala. Pro diagnostické informace si prosím přečtěte soubor glFusion error.log',
+    'install_noop'          => 'Plugin installed',
+    'install_noop_msg'      => 'Instalace pluginu filemgmt provedena, ale nebylo co dělat.<br><br>Zkontrolujte konfiguraci pluginu v install.cfg.',
+    'all_html_allowed'      => 'HTML tagy povoleny',
+    'no_new_files'          => 'Nejsou nové soubory',
+    'no_comments'           => 'Nejsou nové komentáře',
+    'more'                  => '<em>další ...</em>',
+    'newly_uploaded'        => 'Nově nahrané',
+    'click_to_view'         => 'Klikni pro zobrazení',
+    'no_file_uploaded'      => 'Nebyly nahrány žádné soubory',
+    'description'           => 'Popis',
+    'category'              => 'Kategorie',
+    'err_req_fields'        => 'Některá povinná pole nebyla zadána',
+    'go_back'               => 'Zpět',
+    'err_demomode'          => 'Nahrávání je zakázáno v demo režimu',
+    'edit_category'         => 'Edituj kategorii',
+    'create_category'       => 'Vytvoř kategorii',
+    'can_view'              => 'Může zobrazit',
+    'can_upload'            => 'Může nahrávat',
+    'delete_category'       => 'Odstranit kategorii',
+    'new_category'          => 'Nová kategorie',
+    'new_file'              => 'Nový soubor',
+    'remote_ip'             => 'Vzdálená IP',
+    'back_to_listing'       => 'Zpět na seznam',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
-    "1101" => "Upload approval Error: The temporary file was not found. Check error.log",
-    "1102" => "Upload submit Error: The temporary filestore file was not created. Check error.log",
-    "1103" => "The download info you provided is already in the database!",
-    "1104" => "The download info was not complete - Need to enter a title for the new file",
-    "1105" => "The download info was not complete - Need to enter a description for the new file",
-    "1106" => "Upload Add Error: The new file was not created. Check error.log",
-    "1107" => "Upload Add Error: The temporary file was not found. Check error.log",
-    "1108" => "Duplicate file - already existing in filestore",
-    "1109" => "File type not allowed",
-    "1110" => "You must define and select a category for the uploaded file",
-    "9999" => "Unknown Error"
+    "1101" => "Chyba oprávnění při nahrávání: Dočasný soubor nebyl nalezen. Zkontrolujte chyby.log",
+    "1102" => "Chyba při nahrávání: Dočasný soubor souboru nebyl vytvořen. Zkontrolujte error.log",
+    "1103" => "Soubor, které jste zadali, je již v databázi!",
+    "1104" => "Informace o souboru jsou nedostatečné - Je třeba zadat název nového souboru",
+    "1105" => "Informace o souboru jsou nedostatečné - Je třeba zadat popis nového souboru",
+    "1106" => "Chyba při nahrávání: Nový soubor nebyl vytvořen. Zkontrolujte error.log",
+    "1107" => "Chyba při nahrávání: Dočasný soubor nebyl vytvořen. Zkontrolujte error.log",
+    "1108" => "Duplicitní soubor - již existuje v úložišti souborů",
+    "1109" => "Tento typ souboru není povolen",
+    "1110" => "Musíte definovat a vybrat kategorii pro nahraný soubor",
+    "1111" => "Velikost souboru přesahuje maximální velikost %s",
+    "9999" => "Neznámá chyba"
 );
 
 $LANG_FILEMGMT_AUTOTAG = array(
@@ -185,8 +195,8 @@ $LANG_confignames['filemgmt'] = array(
     'enable_rating'         => 'Povolit hodnocení příspěvků',
     'displayblocks'         => 'Zobrazit bloky glFusion',
     'silent_edit_default'   => 'Silent Edit Default',
-    'extensions_map'        => 'Rozšíření používaná pro stahování',
-    'EmailOption'           => 'Odesílatel e -mailu po schválení?',
+    'extensions_map'        => 'Extenze souboru použitá pro stahování',
+    'EmailOption'           => 'Odesílatel e-mailu při schválení?',
 );
 $LANG_configsubgroups['filemgmt'] = array(
     'sg_main'               => 'Hlavní nastavení'
@@ -229,6 +239,7 @@ define("_MD_SEARCH","Hledej");
 define("_MD_MAIN","Hlavní");
 define("_MD_SUBMITFILE","Pošli soubor");
 define("_MD_POPULAR","Oblíbený");
+define("_MD_POP", "Pop");   // abbrevision for listing badge
 define("_MD_NEW","Nový");
 define("_MD_TOPRATED","Nejvyšší hodnocení");
 
@@ -402,7 +413,7 @@ define("_MD_NOMODREQ","Žádná žádost o úpravu stahování.");
 define("_MD_DBUPDATED","Database byla úspěšně aktualizována!");
 define("_MD_MODREQDELETED","Požadavek na změnu byl odstraněn.");
 define("_MD_IMGURLMAIN",'<div style="font-size:8pt;">Výška obrázku bude změněna na 50 px</div>');
-define("_MD_PARENT","Rodičovská kategorie:");
+define("_MD_PARENT","Nadřazená kategorie");
 define("_MD_SAVE","Ulož změny");
 define("_MD_CATDELETED","Kategorie smazána.");
 define("_MD_WARNING","VAROVÁNÍ: OPRAVDU chceš tuto kategorii zrušit včetně všech souborů a komentářů?");
@@ -417,6 +428,7 @@ define("_MD_ERRORDESC","CHYBA: Je třeba zadat POPIS!");
 define("_MD_NEWDLADDED","Nové stažení bylo přidáno do databáze.");
 define("_MD_NEWDLADDED_DUPFILE","Pozor: Duplikovaný Soubor. New download added to the database.");
 define("_MD_NEWDLADDED_DUPSNAP","Varování: Duplicitní Snap. Přidán nový soubor pro stažení do databáze.");
+define("_MD_DLUPDATED", "Soubor byl aktualizován.");
 define("_MD_HELLO","Ahoj %s");
 define("_MD_WEAPPROVED","Schválili jsme váš příspěvek do naší sekce ke stažení. Název souboru je: ");
 define("_MD_THANKSSUBMIT","Díky za váš příspěvek!");
@@ -462,4 +474,3 @@ define("_MD_COMMENTSWANTED","Komentáře jsou ceněny");
 define("_MD_CLICK2SEE","Klikni a prohlédni si: ");
 define("_MD_CLICK2DL","Klikni a stáhni si: ");
 define("_MD_ORDERBY","Seřaď dle: ");
-?>

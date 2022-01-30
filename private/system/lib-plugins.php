@@ -327,31 +327,12 @@ function PLG_uninstall ($type)
         }
 
         // uninstall feeds
-        $stmt = $db->conn->executeQuery(
-                    "SELECT filename FROM `{$_TABLES['syndication']}` WHERE type = ?",
-                    array($type),
-                    array(Database::STRING)
-        );
-        if ($stmt !== false && $stmt !==NULL) {
+        $Feeds = glFusion\Syndication\Feed::getAll($type);
+        if (!empty($Feeds)) {
             Log::write('system',Log::INFO,'removing feed files');
-            while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
-                $fullpath = SYND_getFeedPath( $A['filename'] );
-                if ( file_exists( $fullpath ) ) {
-                    unlink ($fullpath);
-                    Log::write('system',Log::INFO,"Removed Feed File: $fullpath");
-                } else {
-                    Log::write('system',Log::ERROR,"Error removing feed file: $fullpath");
-                }
+            foreach ($Feeds as $Feed) {
+                $Feed->delete();
             }
-            Log::write('system',Log::INFO,'...success');
-            // Remove Links Feeds from syndiaction table
-            Log::write('system',Log::INFO,'removing links feeds from table');
-            $db->conn->delete(
-                $_TABLES['syndication'],
-                array('type' => $type),
-                array(Database::STRING)
-            );
-            Log::write('system',Log::INFO,'...success');
         }
 
         // remove comments for this plugin
@@ -2365,6 +2346,28 @@ function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $f
     return $content;
 }
 
+
+function PLG_getFeedContent2(object $Feed) : array
+{
+    if ($plugin == 'custom') {
+        $function = 'CUSTOM_getfeedcontent2';
+        if (function_exists($function)) {
+            $content = $function($Feed);
+        }
+    } else {
+        $pluginTypes = array_merge(array('article','comment'), $_PLUGINS);
+        USES_lib_comment();
+        if (in_array ($plugin, $pluginTypes)) {
+            $function = 'plugin_getfeedcontent_' . $plugin;
+            if (function_exists ($function)) {
+                $content = $function ($feed, $link, $update_data, $feedType, $feedVersion, $A);
+            }
+        }
+    }
+
+    return $content;
+}
+
 /**
   * Get extension tags for a feed. For example, some plugins may extened the
   * available elements for an RSS 2.0 feed for articles. For some reason. This
@@ -2824,6 +2827,7 @@ function PLG_runScheduledTask ()
         foreach ($_PLUGINS as $pi_name) {
             $function = 'plugin_runScheduledTask_' . $pi_name;
             if (function_exists ($function)) {
+                Log::write('system',Log::DEBUG,'CRON: Running PLG_runScheduledTask for ' . $pi_name);
                 $function ();
             }
         }
@@ -2847,11 +2851,12 @@ function PLG_itemSaved($id, $type, $old_id = '')
 {
     global $_PLUGINS;
 
-    $pluginTypes = array('comment');
+    $pluginTypes = array('comment','search');
 
     USES_lib_comment();
 
     $pluginTypes = array_merge($pluginTypes, $_PLUGINS);
+
     foreach ($pluginTypes as $pi_name) {
         $function = 'plugin_itemsaved_' . $pi_name;
         if (function_exists($function)) {
@@ -2885,7 +2890,7 @@ function PLG_itemDeleted($id, $type, $children = null)
 {
     global $_PLUGINS;
 
-    $pluginTypes = array('comment');
+    $pluginTypes = array('comment','search');
 
     USES_lib_comment();
 

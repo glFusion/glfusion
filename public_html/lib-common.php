@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -28,8 +28,8 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
 }
 
 // we must have PHP v7.3 or greater
-if (version_compare(PHP_VERSION,'7.3.0','<')) {
-    die('glFusion requires PHP version 7.3.0 or greater.');
+if (version_compare(PHP_VERSION,'7.4.0','<')) {
+    die('glFusion requires PHP version 7.4.0 or greater.');
 }
 
 if (!defined ('GVERSION')) {
@@ -54,6 +54,7 @@ $_COM_VERBOSE = false;
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use PHPMailer\PHPMailer\PHPMailer;
 
 // process all vars to handle magic_quotes_gpc
 function all_stripslashes($var)
@@ -115,7 +116,11 @@ if (version_compare(GVERSION,'2.0.0','>=')) {
   */
 
 if ( defined('DVLP_DEBUG')) {
-    error_reporting( E_ALL );
+    if (version_compare(PHP_VERSION,'8.1.0','<')) {
+        error_reporting( E_ALL & ~E_USER_WARNING);
+    } else {
+        error_reporting( E_ALL & ~E_DEPRECATED );   // skip depreciated errors with PHP v8.1.x --- for now....
+    }
     $whoops = new \Whoops\Run;
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
     $whoops->register();
@@ -294,13 +299,13 @@ if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
 if ( !isset($_SYSTEM['admin_session']) ) {
     $_SYSTEM['admin_session'] = 1200;
 }
-
+/*
 $_LOGO = array();
 $resultSet = $db->conn->query("SELECT * FROM `{$_TABLES['logo']}`")->fetchAll();
 foreach($resultSet AS $row) {
     $_LOGO[$row['config_name']] = $row['config_value'];
 }
-
+*/
 list($usec, $sec) = explode(' ', microtime());
 mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
 
@@ -421,6 +426,13 @@ require_once $_CONF['path_system'].'lib-rating.php';
 */
 
 require_once $_CONF['path_system'].'lib-autotag.php';
+
+/**
+*  Search library
+*
+*/
+
+require_once $_CONF['path_system'].'lib-search.php';
 
 /**
 * This is the custom library.
@@ -830,35 +842,19 @@ function COM_getBlockTemplate( $blockname, $which, $position='' )
 */
 function COM_getThemes( $all = false )
 {
-    global $_CONF, $_PLUGINS;
-
-    $index = 1;
+    global $_CONF;
 
     $themes = array();
 
     // If users aren't allowed to change their theme then only return the default theme
-
     if (( $_CONF['allow_user_themes'] == 0 ) && !$all ) {
-        $themes[$index] = $_CONF['theme'];
+        $themes[] = $_CONF['theme'];
     } else {
-        $fd = opendir( $_CONF['path_themes'] );
-
-        while (( $dir = @readdir( $fd )) == TRUE ) {
-            if ( is_dir( $_CONF['path_themes'] . $dir) && $dir <> '.' && $dir <> '..' && $dir <> 'CVS' && substr( $dir, 0 , 1 ) <> '.' ) {
-                clearstatcache();
-                if ( $dir == 'chameleon' ) {
-                    if (in_array($dir,$_PLUGINS)) {
-                        $themes[$index] = $dir;
-                        $index++;
-                    }
-                } else {
-                    $themes[$index] = $dir;
-                    $index++;
-                }
-            }
+        $_Themes = glFusion\Theme\Theme::getAll($all);
+        foreach ($_Themes as $_Theme) {
+            $themes[] = $_Theme->getName();
         }
     }
-
     return $themes;
 }
 
@@ -1008,41 +1004,39 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
     }
 
-    $feed_url = array();
     if ( $_CONF['backend'] == 1 ) { // add feed-link to header if applicable
+        $feed_topics= array();
         if ( SESS_isSet('feedurl') ) {
-            $feed_url = unserialize(SESS_getVar('feedurl') );
+            $feed_topics = @unserialize(SESS_getVar('feedurl') );
+        }
+        if (!is_array($feed_topics)) {
+            // could be null if unserialize() fails, make sure it's an array
+            $feed_topics = array();
+        }
+        $feedtopic = $topic;
+        if (empty($feedtopic)) {
+            // ensure a good key for the feed_urls array
+            $feedtopic = 'all';
+        }
+        if (array_key_exists($feedtopic, $feed_topics)) {
+            $feed_links = $feed_topics[$feedtopic];
         } else {
-            $baseurl = SYND_getFeedUrl();
-
-            $sql = "SELECT format, filename, title, language FROM `{$_TABLES['syndication']}`
-                     WHERE (header_tid = 'all')";
-            if ( !empty( $topic )) {
-                $sql .= " OR (header_tid = ?)";
-            }
-            $db = Database::getInstance();
-            $stmt = $db->conn->prepare($sql);
-            if ( !empty( $topic )) {
-                $stmt->bindParam(1,$topic,Database::STRING);
-            }
-            $stmt->execute();
-            $topicRows = $stmt->fetchAll();
-            foreach($topicRows AS $A) {
-                if ( !empty( $A['filename'] )) {
-                    $format = explode( '-', $A['format'] );
-                    $format_type = strtolower( $format[0] );
-                    $format_name = ucwords( $format[0] );
-
-                    $feed_url[] = '<link rel="alternate" type="application/'
-                              . $format_type . '+xml"'
-                              . ' href="' . $baseurl . $A['filename'] . '" title="'
-                              . $format_name . ' Feed: ' . $A['title'] . '"/>';
+            $feed_links = array();
+            $Feeds = glFusion\Syndication\Feed::getByHeaderTid($feedtopic);
+            foreach ($Feeds as $Feed) {
+                if (!empty($Feed->getFilename())) {
+                    $feed_links[] = '<link rel="alternate" type="application/'
+                        . $Feed->getMimeType()
+                        . '" href="' . $Feed->getUrl()
+                        . '" title="' . ucwords($Feed->getFormat())
+                        . ' Feed: ' . $Feed->getTitle() . '"/>';
                 }
             }
-            SESS_setVar('feedurl',serialize($feed_url));
+            $feed_urls[$feedtopic] = $feed_links;
+            SESS_setVar('feedurl',serialize($feed_topics));
         }
+        $header->set_var( 'feed_url', implode( PHP_EOL, $feed_links ));
     }
-    $header->set_var( 'feed_url', implode( PHP_EOL, $feed_url ));
 
     $relLinks = array();
     if ( !COM_onFrontpage() ) {
@@ -1162,9 +1156,14 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
            $theme_pagetitle, $theme_headercode, $theme_layout,
-           $_LOGO,$uiStyles;
+           $_LOGO, $uiStyles;
 
     COM_hit();
+
+    $Theme = glFusion\Theme\Theme::getInstance();
+    if (!$Theme->isValid()) {
+        $Theme = glFusion\Theme\Theme::getInstance('cms');
+    }
 
     if ( isset($blockInterface['right']) ) {
         $currentURL = COM_getCurrentURL();
@@ -1199,7 +1198,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         'rightblocks'   => 'rightblocks.thtml',
     ));
 
-    $theme->set_var( 'num_search_results',$_CONF['num_search_results'] );
     // get topic if not on home page
     if ( !isset( $_GET['topic'] )) {
         if ( isset( $_GET['story'] )) {
@@ -1230,7 +1228,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     $theme->set_var( 'site_name', $_CONF['site_name']);
     $theme->set_var( 'background_image', $_CONF['layout_url'].'/images/bg.' . $_IMAGE_TYPE );
     $theme->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
-    if ($_LOGO['display_site_slogan']) {
+    if ($Theme->displaySlogan()) {
         $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
     }
     $msg = $LANG01[67] . ' ' . $_CONF['site_name'];
@@ -1244,47 +1242,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $theme->set_var( 'welcome_msg', $msg );
     $theme->set_var( 'datetime', $curtime );
-
-    if ( $_LOGO['use_graphic_logo'] == 1 && file_exists($_CONF['path_images'] . $_LOGO['logo_name']) ) {
-        $L = new Template( $_CONF['path_layout'] );
-        $L->set_file( array(
-            'logo'          => 'logo-graphic.thtml',
-        ));
-
-        $imgInfo = @getimagesize($_CONF['path_images'] . $_LOGO['logo_name']);
-        $dimension = $imgInfo[3];
-
-        $L->set_var( 'site_name', $_CONF['site_name'] );
-        $site_logo = $_CONF['path_images_url'] . '/' . $_LOGO['logo_name'];
-        $L->set_var( 'site_logo', $site_logo);
-        $L->set_var( 'dimension', $dimension );
-        if ( $imgInfo[1] != 100 ) {
-            $delta = 100 - $imgInfo[1];
-            $newMargin = $delta;
-            $L->set_var( 'delta', 'style="padding-top:' . $newMargin . 'px;"');
-        } else {
-            $L->set_var('delta','');
-        }
-        if ($_LOGO['display_site_slogan']) {
-            $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
-        }
-        $L->parse('output','logo');
-        $theme->set_var('logo_block',$L->finish($L->get_var('output')));
-    } else if ( $_LOGO['use_graphic_logo'] == 0 ) {
-        $L = new Template( $_CONF['path_layout'] );
-        $L->set_file( array(
-            'logo'          => 'logo-text.thtml',
-        ));
-        $L->set_var( 'site_name', $_CONF['site_name'] );
-        if ($_LOGO['display_site_slogan']) {
-            $L->set_var( 'site_slogan', $_CONF['site_slogan'] );
-        }
-        $L->parse('output','logo');
-        $theme->set_var('logo_block',$L->finish($L->get_var('output')));
-    } else {
-        $theme->set_var('logo_block','');
-    }
-
+    $theme->set_var('logo_block', $Theme->getTemplate());
     $theme->set_var( 'site_logo', $_CONF['layout_url']
                                    . '/images/logo.' . $_IMAGE_TYPE );
     $theme->set_var( array (
@@ -1887,32 +1845,13 @@ function COM_debug( $A )
 */
 function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated_id = '' )
 {
-    global $_CONF, $_TABLES;
+    global $_CONF;
 
     if ( $_CONF['backend'] > 0 ) {
-        if ( !empty( $updated_type ) && ( $updated_type != 'article' )) {
-            // when a plugin's feed is to be updated, skip glFusion's own feeds
-            $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE (is_enabled = 1) AND (type <> 'article')";
-        } else {
-            $sql = "SELECT fid,type,topic,limits,update_info FROM {$_TABLES['syndication']} WHERE is_enabled = 1";
-        }
-
-        $db = Database::getInstance();
-        $stmt = $db->conn->query($sql);
-        $resultSet = $stmt->fetchAll();
-        foreach($resultSet AS $A) {
-            $is_current = true;
-            if ( $A['type'] == 'article' ) {
-                $is_current = SYND_feedUpdateCheck( $A['topic'],
-                                $A['update_info'], $A['limits'],
-                                $updated_topic, $updated_id );
-            } else {
-                $is_current = PLG_feedUpdateCheck( $A['type'], $A['fid'],
-                                $A['topic'], $A['update_info'], $A['limits'],
-                                $updated_type, $updated_topic, $updated_id );
-            }
-            if ( !$is_current ) {
-                SYND_updateFeed( $A['fid'] );
+        $Feeds = glFusion\Syndication\Feed::getEnabled($updated_type);
+        foreach ($Feeds as $Feed) {
+            if (!$Feed->updateCheck($updated_type, $updated_id)) {
+                $Feed->Generate();
             }
         }
     }
@@ -6330,7 +6269,7 @@ function COM_recursiveDelete($path)
 
 }
 
-function COM_buildOwnerList($fieldName,$owner_id=2)
+function COM_buildOwnerList($fieldName,$owner_id=2, $includeAnonymous = false)
 {
     global $_TABLES, $_CONF;
 
@@ -6342,7 +6281,7 @@ function COM_buildOwnerList($fieldName,$owner_id=2)
     $T->set_var('var_name', $fieldName);
     $options = '';
     while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
-        if ( $row['uid'] == 1 ) {
+        if ( $row['uid'] == 1 && $includeAnonymous == false) {
             continue;
         }
         $options .= '<option value="' . $row['uid'] . '"';
@@ -6861,7 +6800,6 @@ function _js_out()
     if ( !isset($_SYSTEM['disable_jquery']) || $_SYSTEM['disable_jquery'] == false ) {
         $files[] = $_CONF['path_html'].'javascript/jquery/jquery.min.js';
         $files[] = $_CONF['path_layout'].'/js/header.js';
-        $files[] = $_CONF['path_html'].'javascript/addons/jqrating.min.js';
 
         if ( !isset($_SYSTEM['disable_jquery_tooltip']) || $_SYSTEM['disable_jquery_tooltip'] == false ) {
             $files[] = $_CONF['path_html'].'javascript/addons/tooltipster/jquery.tooltipster.min.js';

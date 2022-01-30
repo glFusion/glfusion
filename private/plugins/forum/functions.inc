@@ -433,49 +433,6 @@ function plugin_searchtypes_forum()
     return $tmp;
 }
 
-/**
-* this searches for files matching the user query and returns an array of
-* for the header and table rows back to search.php where it will be formated and
-* printed
-*
-* @query            string          Keywords user is looking for
-* @datestart        date/time       Start date to get results for
-* @dateend          date/time       End date to get results for
-* @topic            string          The topic they were searching in
-* @type             string          Type of items they are searching
-* @author           string          Get all results by this author
-*
-*/
-
-function plugin_dopluginsearch_forum($query, $datestart, $dateend, $topic, $type, $author, $keyType, $page, $perpage)
-{
-    global $LANG_GF00, $LANG_GF01, $_USER, $_TABLES, $_CONF, $_FF_CONF;
-
-    if ( COM_isAnonUser() && $_FF_CONF['registration_required'] == 1 )  {
-        return;
-    }
-
-    $query = trim(DB_escapeString($query));
-
-    $sql   = "SELECT id,subject AS title,comment AS description,date,uid,views AS hits, CONCAT('/forum/viewtopic.php?showtopic=',id,'&amp;topic=',id,'#',id) AS url ";
-    $sql  .= "FROM {$_TABLES['ff_topic']} t ";
-    $sql  .= "LEFT JOIN {$_TABLES['ff_forums']} f ON t.forum=f.forum_id ";
-    $sql  .= forum_buildSearchAccessSql('WHERE');
-
-    if (!empty ($author))
-        $sql .= "AND (uid = '$author') ";
-
-    $search = new SearchCriteria('forum', 'Forum');
-    $columns = array('comment','subject');
-    $sql .= $search->getDateRangeSQL('AND', 'date', $datestart, $dateend);
-    list($sql,$ftsql) = $search->buildSearchSQL($keyType, $query, $columns, $sql);
-    $search->setSQL($sql);
-    $search->setFTSQL($ftsql);
-    $search->setRank(4);
-
-    return $search;
-}
-
 // Common function used to build group access SQL
 function forum_buildSearchAccessSql($clause='AND') {
     global $_TABLES,$_USER;

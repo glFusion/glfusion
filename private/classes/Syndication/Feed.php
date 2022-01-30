@@ -11,7 +11,8 @@
  * @filesource
  */
 namespace glFusion\Syndication;
-use \glFusion\Database\Database;
+use glFusion\Database\Database;
+use glFusion\Log\Log;
 
 
 /**
@@ -20,6 +21,10 @@ use \glFusion\Database\Database;
  */
 class Feed
 {
+    /** Manually set this to true to enable debug logging.
+     * @var boolean */
+    protected static $DEBUG = false;
+
     /** Record ID.
      * @var integer */
     protected $fid = 0;
@@ -32,7 +37,7 @@ class Feed
      * @var string */
     protected $topic = '';
 
-    /** Header Topic ID.
+    /** ID of topic where a header link will be added for this feed.
      * @var string */
     protected $header_tid = '';
 
@@ -45,10 +50,13 @@ class Feed
     protected $format_version = '';
 
     /** Limit the number of items or time span for feed content.
+     * Default is 10 items.
+     * Add "h" suffix to specify hours since item creation.
      * @var string */
     protected $limits = '10';
 
-    /** Content Length. 0 = none, 1 = all, anything else limits the content.
+    /** Content Length in characters.
+     * 0 = none, 1 = all, anything else limits the content.
      * @var integer */
     protected $content_length = 1;
 
@@ -93,7 +101,7 @@ class Feed
     /**
      * Constructor.
      *
-     * @param  mixed   $A  Array of properties or group ID
+     * @param  array    $A  Array of properties, e.g. a DB record
      */
     public function __construct(array $A=array())
     {
@@ -113,8 +121,10 @@ class Feed
      */
     public static function getById(int $fid) : object
     {
-        $sql = "fid = " . (int)$fid;
-        $feeds = self::_execQuery($sql);
+        $sql = "fid = ?";
+        $params = array($fid);
+        $types = array(Database::INTEGER);
+        $feeds = self::_execQuery($sql, $params, $types);
         // $feeds will be an array with one element, so get it by index.
         if (isset($feeds[$fid])) {
             return $feeds[$fid];
@@ -128,15 +138,48 @@ class Feed
      * Get all the enabled feeds, optionally filtering by type.
      *
      * @param   string  $type   Optional type of feed, aka plugin name
+     * @param   string  $tid    Optional topic, normally for articles
      * @return  array       Array of feed objects
      */
-    public static function getEnabled(string $type='') : array
+    public static function getEnabled(?string $type=NULL, ?string $tid=NULL) : array
     {
-        $type = "is_enabled = 1";
+        $query = "is_enabled = 1";
+        $params = array();
+        $types = array();
         if (!empty($type)) {
-            $type = "AND type = '" . DB_escapeString($type) . "'";
+            $query .= ' AND type = ?';
+            $params[] = $type;
+            $types[] = Database::STRING;
         }
-        return self::_execQuery($type);
+        if (!empty($tid)) {
+            $query .= ' AND topic = ?';
+            $params[] = $tid;
+            $types[] = Database::STRING;
+        }
+        $query .= ' ORDER BY updated DESC';
+        return self::_execQuery($query, $params, $types);
+    }
+
+
+    /**
+     * Get all the enabled feeds matching a topic or "all".
+     *
+     * @param   string  $type   Optional type of feed, aka plugin name
+     * @param   string  $tid    Optional topic, normally for articles
+     * @return  array       Array of feed objects
+     */
+    public static function getByHeaderTid(?string $tid=NULL) : array
+    {
+        $query = "is_enabled = 1 AND (header_tid = 'all'";
+        $params = array();
+        $types = array();
+        if ($tid != 'all') {
+            $query .= ' OR header_tid = ?';
+            $params[] = $tid;
+            $types[] = Database::STRING;
+        }
+        $query .= ')';
+        return self::_execQuery($query, $params, $types);
     }
 
 
@@ -144,14 +187,26 @@ class Feed
      * Get all the feeds, optionally filtering by type.
      *
      * @param   string  $type   Optional type of feed, aka plugin name
+     * @param   string  $tid    Optional topic, normally for articles
      * @return  array       Array of feed objects
      */
-    public static function getAll(string $type='') : array
+    public static function getAll(?string $type=NULL, ?string $tid=NULL) : array
     {
+        $where = '1=1';
+        $params = array();
+        $types = array();
         if (!empty($type)) {
-            $type = "type = '" . DB_escapeString($type) . "'";
+            $where .= ' AND type = ?';
+            $params[] = $type;
+            $types[] = Database::STRING;
         }
-        return self::_execQuery($type);
+        if (!empty($tid)) {
+            $where .= ' AND topic = ?';
+            $params[] = $topic;
+            $types[] = Database::STRING;
+        }
+
+        return self::_execQuery($where, $params, $types);
     }
 
 
@@ -161,17 +216,18 @@ class Feed
      * @param   string  $where  Optional SQL filter string
      * @return  array       Array of instantiated child objects
      */
-    private static function _execQuery(string $where='') : array
+    private static function _execQuery(?string $where='', ?array $params, ?array $types) : array
     {
         global $_TABLES;
 
+        $retval = array();
         $db = Database::getInstance();
         $sql = "SELECT * FROM `{$_TABLES['syndication']}`";
         if (!empty($where)) {
             $sql .= " WHERE $where";
         }
         try {
-            $stmt = $db->conn->executeQuery($sql);
+            $stmt = $db->conn->executeQuery($sql, $params, $types);
         } catch(Throwable $e) {
             return $retval;
         }
@@ -194,6 +250,9 @@ class Feed
                     );
                     if ($F) {
                         $retval[$feed['fid']] = new $F($feed);
+                    } elseif (class_exists(__NAMESPACE__ . '\\Formats\\' . $format[0])) {
+                        $cls = __NAMESPACE__ . '\\Formats\\' . $format[0];
+                        $retval[$feed['fid']] = new $cls($feed);
                     } else {
                         $retval[$feed['fid']] = new Formats\XML($feed);
                     }
@@ -215,26 +274,34 @@ class Feed
     {
         global $_CONF;
 
-        // All property names, except "updated" which gets a Date object
+        // All property names
         $fields = array(
-            'fid', 'type', 'topic', 'header_tid', 'limits', //'format', 
+            'fid', 'type', 'topic', 'header_tid', 'limits', 'format',
             'content_length', 'title', 'description', 'feedlogo', 'filename',
-            'charset', 'language', 'is_enabled', 'update_info',
+            'charset', 'language', 'is_enabled', 'update_info', 'updated',
         );
         foreach ($fields as $fld_name) {
             if (isset($A[$fld_name])) {
-                $this->$fld_name = $A[$fld_name];
+                switch ($fld_name) {
+                case 'is_enabled':
+                case 'content_length':
+                    $this->$fld_name = (int)$A[$fld_name];
+                    break;
+                case 'format':
+                    $format = explode('-', $A['format']);
+                    $this->format = strtolower($format[0]);
+                    if (isset($format[1])) {
+                        $this->format_version = $format[1];
+                    }
+                    break;
+                case 'updated':
+                    $this->updated = new \Date($A['updated'], $_CONF['timezone']);
+                    break;
+                default:
+                    $this->$fld_name = $A[$fld_name];
+                    break;
+                }
             }
-        }
-        if (isset($A['format'])) {
-            $format = explode('-', $A['format']);
-            $this->format = $format[0];
-            if (isset($format[1])) {
-                $this->format_version = $format[1];
-            }
-        }
-        if (isset($A['updated'])) {
-            $this->updated = new \Date($A['updated'], $_CONF['timezone']);
         }
         return $this;
     }
@@ -297,26 +364,49 @@ class Feed
 
 
     /**
-     * Get the path of the feed directory or a specific feed file
+     * Get the path of the feed directory or a specific feed file.
      *
      * @param   string  $feedfile   (option) feed file name
      * @return  string              path of feed directory or file
      */
-    public static function getFeedPath( $feedfile = '' ) : string
+    public static function getFeedPath(string $feedfile = '' ) : ?string
     {
         global $_CONF;
+        static $path = '';
 
-        $feed = $_CONF['path_rss'] . $feedfile;
-        return $feed;
+        if ($path === '') {
+            $path = $_CONF['path_rss'];
+            if (!is_dir($path)) {
+                @mkdir($path, 0755, true);
+            }
+        }
+        $retval = $path . $feedfile;
+        if (!is_writable($retval)) {
+            COM_errorLog(__CLASS__ . '::' . __FUNCTION__ . " - Cannot write to $retval");
+            $path = NULL;
+        }
+        return $retval;
     }
-    
+
+
     /**
-     * Get the URL of the feed directory or a specific feed file
+     * Non-static shortcut function to get the full filespec.
+     *
+     * @return  string      Full file path
+     */
+    public function getFilePath() : string
+    {
+        return self::getFeedPath($this->filename);
+    }
+
+
+    /**
+     * Get the URL of the feed directory or a specific feed file.
      *
      * @param    string  $feedfile   (option) feed file name
      * @return   string              URL of feed directory or file
      */
-    public static function getFeedUrl( string $feedfile = '' ) : string
+    public static function getFeedUrl(string $feedfile='') : string
     {
         global $_CONF;
 
@@ -328,6 +418,17 @@ class Feed
 
 
     /**
+     * Non-static shortcut function to get the feed URL.
+     *
+     * @return  string      URL to feed file
+     */
+    public function getUrl() : string
+    {
+        return self::getFeedUrl($this->filename);
+    }
+
+
+    /**
      * Wrapper function for each feed type's _generate() function.
      * Handles updating the syndication table with new information.
      *
@@ -335,18 +436,19 @@ class Feed
      */
     public function Generate() : void
     {
-        global $_CONF, $_TABLES, $_SYND_DEBUG;
+        global $_CONF, $_TABLES;
 
         // Actually generate the feed.
         $this->_generate();
 
         // Now perform housekeeping.
         if (empty($this->update_info)) {
-            $data = 'NULL';
+            $data = NULL;
         } else {
-            $data = DB_escapeString($this->update_info);
+            $data = $this->update_info;
         }
-        if ($_SYND_DEBUG) {
+
+        if (self::$DEBUG) {
             Log::write('system',Log::DEBUG,"update_info for feed {$this->fid} is {$this->update_info}");
         }
 
@@ -379,6 +481,7 @@ class Feed
     /**
      * Get all the available feed formats.
      *
+     * @param   string  $type   Type of feed, e.g. plugin name
      * @return  array   Array of feed (name, version) elements
      */
     public static function findFormats(string $type = '') : array
@@ -393,6 +496,7 @@ class Feed
             }
         }
 
+        // Not a plugin type, or the plugin doesn't supply its own formats.
         $formats = array();
         $files = glob(__DIR__ . '/Formats/*.php');
         if (is_array($files)) {
@@ -416,341 +520,166 @@ class Feed
     /**
      * Write the feed data to the specified file.
      *
-     * @param   string  $filename   Filename to write, path will be added
      * @param   string  $data       Data to be written
      * @return  bool        True on success, False on error
      */
-    protected function _writeFile(string $fileName, string $data) : bool
+    protected function writeFile(string $data) : bool
     {
-        $filepath = self::getFeedPath($fileName);
-        if (($fp = @fopen($filepath, 'w')) !== false) {
+        $filepath = self::getFeedPath($this->filename);
+        if ($filepath && ($fp = @fopen($filepath, 'w+')) !== false) {
             fputs($fp, $data);
             fclose($fp);
             return true;
         } else {
-            Log:;write('system', Log::ERROR, "Error: Unable to open $filepath for writing");
+            Log::write('system', Log::ERROR, "Error: Unable to open $filepath for writing");
             return false;
         }
     }
 
 
     /**
-     * Creates the edit form.
+     * Check if a feed for stories needs to be updated.
      *
-     * @return  string      HTML for edit form
+     * @param    string  $tid            topic id
+     * @param    string  $updated_id     (optional) entry id to be updated
+     * @return   boolean                 false = feed needs to be updated
      */
-    public function Edit()
+    public function updateCheck(string $tid, ?string $updated_id=NULL) : bool
     {
-        global $_CONF, $LANG_ADMIN, $LANG_ACCESS, $_TABLES;
-
-        $allgroups = \Group::getAllAvailable();
-        $inc_groups = self::Groups($this->ft_name);
-
-        $included_opts = '';
-        $excluded_opts = '';
-        foreach ($allgroups as $grp_name=>$grp_id) {
-            if (in_array($grp_id, $inc_groups)) {
-                $included_opts .= '<option value="' . $grp_id . '">' . $grp_name . '</option>' . LB;
-            } else {
-                $excluded_opts .= '<option value="' . $grp_id . '">' . $grp_name . '</option>' . LB;
-            }
-        }
-
-        $T = new \Template($_CONF['path_layout'] . '/admin/feature');
-        $T->set_file('form', 'featureeditor.thtml');
-        $T->set_var(array(
-            'fid'         => $this->fid,
-            'ft_name'       => $this->ft_name,
-            'ft_descr'      => $this->ft_descr,
-            'ft_gl_core'    => $this->ft_gl_core,
-            'lang_fid'    => $LANG_ACCESS['feature_id'],
-            'lang_ft_name'  => $LANG_ACCESS['feature_name'],
-            'lang_ft_descr' => $LANG_ACCESS['description'],
-            'lang_fg_gl_core' => $LANG_ACCESS['coregroup'],
-            'lang_save'     => $LANG_ADMIN['save'],
-            'lang_cancel'   => $LANG_ADMIN['cancel'],
-            'gltoken_name'  => CSRF_TOKEN,
-            'gltoken'       => SEC_createToken(),
-            'included_groups' => $included_opts,
-            'excluded_groups' => $excluded_opts,
-            'lang_available' => $LANG_ACCESS['avail_groups'],
-            'lang_included' => $LANG_ADMIN['assigned_groups'],
-            'LANG_add'      => $LANG_ACCESS['add'],
-            'LANG_remove'   => $LANG_ACCESS['remove'],
-        ) );
-
-        // Construct the checkboxes of groups
-        /*$groups = $this->getGroups();
-        $sql = "SELECT grp_id, grp_name, grp_descr FROM {$_TABLES['groups']}";
-        $res = DB_query($sql);
-        $T->set_block('form', 'grpItems', 'grpChk');
-        while ($A = DB_fetchArray($res, false)) {
-            $T->set_var(array(
-                'grp_id'    => $A['grp_id'],
-                'grp_name'  => $A['grp_name'],
-                'grp_descr' => $A['grp_descr'],
-                'chk'       => in_array($A['grp_id'], $groups) ? 'checked="checked"' : '',
-            ) );
-            $T->parse('grpChk', 'grpItems', true);
-        }*/
-
-        $T->parse('output', 'form');
-        $retval = COM_startBlock(
-            $LANG_ADMIN['feature_editor'],
-            '',
-            COM_getBlockTemplate('_admin_block', 'header')
-        );
-        $retval .= self::adminMenu('edit');
-        $retval .= $T->finish($T->get_var('output'));
-        $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-        return $retval;
-    }
-
-
-    /**
-     * Save the feature information to the database.
-     *
-     * @param   array   $A      Optional array of values from $_POST
-     * @return  boolean         True if no errors, False otherwise
-     */
-    public function Save($A =NULL)
-    {
-        global $_TABLES, $_SHOP_CONF;
-
-        if (is_array($A)) {
-            $this->setVars($A, false);
-        }
+        global $_CONF, $_TABLES;
 
         $db = Database::getInstance();
-        $dataArray = array();
-        $typeArray = array();
+        $where = '';
+        $params = array(
+            $_CONF['_now']->toMySQL(true),
+        );
+        $types = array(
+            Database::STRING,
+        );
+        $frontpage_only = false;
+        switch ($this->topic) {
+        case '::frontpage':
+            $frontpage_only = true;
+        case '::all':
+            $topiclist = array();
+            $sql = "SELECT tid FROM `{$_TABLES['topics']}` " . $db->getPermSQL('WHERE',1);
+            $stmt = $db->conn->executeQuery($sql);
 
-        // Insert or update the record, as appropriate.
-        if ($this->fid == 0) {
-            $isNew = true;
-            $sql1 = "INSERT INTO `{$_TABLES['features']}`";
-            $sql3 = '';
-        } else {
-            $isNew = false;
-            $sql1 = "UPDATE `{$_TABLES['features']}`";
-            $sql3 = " WHERE fid = ?";
-            $dataArray[] = $this->fid;
-            $typeArray[] = DATABASE::INTEGER;
-        }
-        $sql2 = " SET ft_name = ?,
-            ft_descr = ?,
-            ft_gl_core  = ?";
-        $dataArray[] = $this->ft_name;
-        $typeArray[] = DATABASE::STRING;
-
-        $dataArray[] = $this->ft_descr;
-        $typeArray[] = DATABASE::STRING;
-
-        $dataArray[] = $this->ft_gl_core;
-        $typeArray[] = DATABASE::INTEGER;
-
-        $sql = $sql1 . $sql2 . $sql3;
-        //echo $sql;die;
-
-        $status = true;
-        try {
-            $stmt = $db->conn->executeQuery($sql,$dataArray,$typeArray);
-        } catch(Throwable $e) {
-            $status = false;
-        }
-        if ($isNew) {
-            $this->fid = $db->conn->lastInsertId();
-        }
-
-        // Now save the group assignments
-        if ($status) {
-            if (!$isNew) {
-                // If updating, delete all access records.
-                // Simplest method to remove any unchecked groups.
-
-                try {
-                    $db->conn->delete($_TABLES['access'],array('acc_fid' => $this->fid),array(DATABASE::INTEGER));
-                } catch(Throwable $e) {
-                    throw($e);
-                }
+            while ($T = $stmt->fetch(Database::ASSOCIATIVE)) {
+                $topiclist[] = $T['tid'];
             }
-            if (isset($A['groupmembers'])) {
-                $grp_members = explode('|', $A['groupmembers']);
-                foreach (explode('|', $A['groupmembers']) as $grp_id) {
-                    $vals[] = "(" . intval($this->fid).",".intval($grp_id).")";
-                }
-                $vals = implode(', ', $vals);
-                $sql = "INSERT INTO `{$_TABLES['access']}` VALUES $vals";
-                try {
-                    $db->conn->query($sql);
-                } catch (Throwable $e) {
-                    throw($e);
-                }
+            // if there are topics....
+            if (count($topiclist) > 0) {
+                $inTopics = implode(',',
+                    array_map(
+                        function($t) {return Database::getInstance()->conn->quote($t);},
+                        $topiclist
+                    )
+                );
+                $where .= " AND (tid IN (".$inTopics.") OR alternate_tid IN (".$inTopics."))";
             }
-        }
-        return $status;
-    }
-
-
-    /**
-     * Displays the admin list of features.
-     *
-     * @return  string      List of features
-     */
-    public static function adminList($coreonly=0)
-    {
-        global $_CONF, $_TABLES, $LANG_ADMIN, $LANG_ACCESS, $LANG28;
-
-        USES_lib_admin();
-        $retval = '';
-
-        $sql = "SELECT * FROM `{$_TABLES['features']}` ";
-        $header_arr = array(
-            array(
-                'text'  => 'ID',
-                'field' => 'fid',
-                'sort'  => true,
-            ),
-            array(
-                'text'  => $LANG_ADMIN['edit'],
-                'field' => 'edit',
-                'sort'  => false,
-                'align' => 'center',
-            ),
-            array(
-                'text'  => $LANG_ADMIN['name'],
-                'field' => 'ft_name',
-                'sort'  => true,
-            ),
-            array(
-                'text'  => $LANG_ACCESS['description'],
-                'field' => 'ft_descr',
-            ),
-            array(
-                'text'  => $LANG_ACCESS['coregroup'],
-                'field' => 'ft_gl_core',
-            ),
-        );
-
-        $defsort_arr = array(
-            'field' => 'ft_name',
-            'direction' => 'ASC',
-        );
-
-        if ($coreonly) {
-            $def_filter = ' WHERE ft_gl_core = 1';
-            $corechk = 'checked="checked"';
-        } else {
-            $def_filter = ' WHERE 1=1';
-            $corechk = '';
-        }
-
-        $filter = '<input type="checkbox" name="core" ' . $corechk .
-            ' onclick="this.form.submit();">&nbsp;' .
-            $LANG_ADMIN['core_only'] . '&nbsp;&nbsp;';
-
-        $query_arr = array(
-            'table' => 'features',
-            'sql' => $sql,
-            'query_fields' => array('ft_name', 'ft_descr'),
-            'default_filter' => $def_filter,
-        );
-        $text_arr = array(
-            'has_extras' => true,
-            'form_url' => $_CONF['site_admin_url'] . '/feature.php',
-        );
-
-        $options = array();
-        $retval .= COM_startBlock(
-            $LANG_ADMIN['feature_admin'],
-            '',
-            COM_getBlockTemplate('_admin_block', 'header')
-        );
-        $retval .= self::adminMenu('list');
-        $retval .= ADMIN_list(
-            'gl_ft_adminlist',
-            array(__CLASS__,  'getAdminField'),
-            $header_arr, $text_arr, $query_arr, $defsort_arr,
-            $filter, '', $options, ''
-        );
-        $retval .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
-        return $retval;
-    }
-
-
-    /**
-     * Get an individual field for the feature list.
-     *
-     * @param  string  $fieldname  Name of field (from the array, not the db)
-     * @param  mixed   $fieldvalue Value of the field
-     * @param  array   $A          Array of all fields from the database
-     * @param  array   $icon_arr   System icon array (not used)
-     * @return string              HTML for field display in the table
-     */
-    public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
-    {
-        global $_CONF, $LANG_ADMIN;
-
-        static $grp_names = array();
-        $retval = '';
-
-        switch($fieldname) {
-        case 'edit':
-            $retval = FieldList::edit(array(
-                'url' => $_CONF['site_admin_url'] . "/feature.php?edit={$A['fid']}",
-                'attr' => array(
-                    'title' => $LANG_ADMIN['edit']
-                )
-            ) );
-            break;
-        case 'ft_gl_core':
-            if ($fieldvalue) {
-                $retval = FieldList::checkmark(array(
-                    'active' => true,
-                ) );
+            if ($frontpage_only) {
+                $where .= ' AND ( frontpage = 1 OR (frontpage = 2 AND frontpage_date >= ? ) ) ';
+                $params[] = $_CONF['_now']->toMySQL(true);
+                $types[]  = Database::STRING;
             }
             break;
         default:
-            $retval = htmlspecialchars($fieldvalue, ENT_QUOTES, COM_getEncodingt());
+            $where .= 'AND (tid = ? OR alternate_tid = ?) AND perm_anon > 0';
+            $params[] = $tid;
+            $params[] = $tid;
+            $types[] = Database::STRING;
+            $types[] = Database::STRING;
             break;
         }
-        return $retval;
+
+        if (!empty($this->limit)) {
+            if (substr($this->limit, -1) == 'h') { // last xx hours
+                $limitsql = '';
+                $where .= " AND date >= DATE_SUB(?,INTERVAL ? HOUR)";
+                $params[] = $_CONF['_now']->toMySQL(true);
+                $params[] = (int)substr($limit, 0, -1);
+                $types[]  = Database::STRING;
+                $types[]  = Database::INTEGER;
+            } else {
+                $limitsql = ' LIMIT ?';
+                $params[] = (int)$this->limit;
+                $types[] = Database::INTEGER;
+            }
+        } else {
+            $limitsql = ' LIMIT 10';
+        }
+        $sql = "SELECT sid FROM `{$_TABLES['stories']}`
+                WHERE draft_flag = 0 AND date <= ? $where
+                ORDER BY `date` DESC " . $limitsql;
+        $stmt = $db->conn->executeQuery(
+                $sql,
+                $params,
+                $types
+        );
+
+        $sids = array();
+        while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+            if ($A['sid'] == $updated_id) {
+                // no need to look any further - this feed has to be updated
+                return false;
+            }
+            $sids[] = $A['sid'];
+        }
+        $current = implode( ',', $sids );
+
+        if (self::$DEBUG) {
+            Log::write('system',Log::DEBUG,"Update check for topic $tid: comparing new list ($current) with old list ($update_info)");
+        }
+        $rc = ($current != $this->update_info) ? false : true;
+        return $rc;
     }
 
 
     /**
-     * Create a menu for the admin interface.
+     * Get the feed mime type.
      *
-     * @param   string  $view   View to mark as active
-     * @return  string      HTML for admin menu
+     * @return  string      Mime type corresponding to the feed type
      */
-    public static function adminMenu($view='list')
+    public function getMimeType() : string
     {
-        global $_CONF, $LANG_ADMIN, $LANG_ACCESS;
-
-        USES_lib_admin();
-
-        $menu_arr = array(
-            array(
-                'url' => $_CONF['site_admin_url'] . '/feature.php',
-                'text' => $LANG_ADMIN['feature_list'],
-                'active'=> $view == 'list',
-            ),
-            array(
-                'url' => $_CONF['site_admin_url'] . '/group.php',
-                'text' => $LANG_ADMIN['admin_groups'],
-            ),
-            array(
-                'url' => $_CONF['site_admin_url'].'/index.php',
-                'text' => $LANG_ADMIN['admin_home'],
-            ),
-        );
-        $retval = ADMIN_createMenu(
-            $menu_arr,
-            '',
-            $_CONF['layout_url'] . '/images/icons/group.png',
-        );
-        return $retval;
+        return 'application/' . $this->format . '+xml';
     }
+
+
+    /**
+     * Delete the feed. Removes files and configuration.
+     */
+    public function delete() : void
+    {
+        global $_TABLES;
+
+        if ($this->fid > 0) {
+            $fullpath = $this->getFilePath();
+            if (file_exists( $fullpath) ) {
+                unlink ($fullpath);
+                Log::write('system',Log::INFO,"Removed Feed File: $fullpath");
+            } else {
+                Log::write('system',Log::ERROR,"Error removing feed file: $fullpath");
+            }
+            Log::write('system',Log::INFO,'...success');
+            // Remove Links Feeds from syndiaction table
+            Log::write('system',Log::INFO,'removing feeds from table');
+            $db->conn->delete(
+                $_TABLES['syndication'],
+                array('fid' => $this->fid),
+                array(Database::STRING)
+            );
+            Log::write('system',Log::INFO,'...success');
+        }
+    }
+
+
+    /**
+     * Generate the feed.
+     * This is just a no-op function to prevent PHP errors if a feed type
+     * does not implement the function (which shouldn't ever happen).
+     */
+    protected function _generate() {}
 
 }

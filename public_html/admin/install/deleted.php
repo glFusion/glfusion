@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2015-2021 by the following authors:
+*  Copyright (C) 2015-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -87,6 +87,11 @@ $obsoletePublicDir = array(
 
 $obsoletePrivateFiles = array(
 // 2.0.0
+
+    'system/classes/search.class.php',
+    'system/classes/searchcriteria.class.php',
+    'system/classes/searchplugin.class.php',
+
     'system/classes/Cache.php',
     'system/classes/Autoload.php',
     'system/lib-story.php',
@@ -118,6 +123,10 @@ $obsoletePrivateFiles = array(
     'plugins/mediagallery/templates/view_mp3_swf.thtml',
     'plugins/mediagallery/config.php.dist',
     'plugins/mediagallery/staticpage.txt',
+
+    'plugins/filemgmt/config.php.dist',
+    'plugins/filemgmt/config.php',
+
 
 // 1.7.0
     'system/classes/filter.class.php',
@@ -217,6 +226,11 @@ $obsoletePrivateFiles = array(
 $obsoletePublicFiles = array(
 
 // 2.0.0
+
+    'javascript/addons/jqrating.js',
+    'javascript/addons/jqrating.min.js',
+
+    'admin/logo.php',
 
     'ckeditor/plugins/codemirror/js/beautify-html.js',
     'ckeditor/plugins/codemirror/theme/ayu-dark.css',

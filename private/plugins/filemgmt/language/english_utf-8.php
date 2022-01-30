@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2018 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -37,8 +37,8 @@ $LANG_FM00 = array (
     'editor'            => 'Plugin Editor',
     'warning'           => 'De-Install Warning',
     'enabled'           => '<p style="padding: 15px 0px 5px 25px;">Plugin is installed and enabled.<br>Disable first if you want to De-Install it.</p><div style="padding:5px 0px 5px 25px;"><a href="'.$_CONF['site_admin_url'].'/plugins.php">Plugin Editor</a></div',
-    'WhatsNewLabel'    => 'Files',
-    'WhatsNewPeriod'   => ' last %s days',
+    'WhatsNewLabel'     => 'Files',
+    'WhatsNewPeriod'    => ' last %s days',
     'new_upload'        => 'New File submitted at ',
     'new_upload_body'   => 'A new file has been submitted to the upload queue at ',
     'details'           => 'File Details',
@@ -64,72 +64,81 @@ $LANG_FM02 = array(
 );
 
 $LANG_FILEMGMT = array(
-    'newpage' => "New Page",
-    'adminhome' => "Admin Home",
-    'plugin_name' => "File Management",
-    'searchlabel' => "File Listing",
-    'searchlabel_results' => "File Listing Results",
-    'downloads' => "Downloads",
-    'report' => "Top Downloads",
-    'usermenu1' => "Downloads",
-    'usermenu2' => "&nbsp;&nbsp;Top Rated",
-    'usermenu3' => "Upload a file",
-    'admin_menu' => "Filemgmt Admin",
-    'writtenby' => "Written By",
-    'date' => "Last Updated",
-    'title' => "Title",
-    'content' => "Content",
-    'hits' => "Hits",
-    'Filelisting' => "File Listing",
-    'DownloadReport' => "Download History for single file",
-    'StatsMsg1' => "Top Ten Accessed Files in Repository",
-    'StatsMsg2' => "It appears there are no files defined for the filemgmt plugin on this site or no one has ever accessed them.",
-    'usealtheader' => "Use Alt. Header",
-    'url' => "URL",
-    'edit' => "Edit",
-    'lastupdated' => "Last Updated",
-    'pageformat' => "Page Format",
-    'leftrightblocks' => "Left & Right Blocks",
-    'blankpage' => "Blank Page",
-    'noblocks' => "No Blocks",
-    'leftblocks' => "Left Blocks",
-    'addtomenu' => 'Add To Menu',
-    'label' => 'Label',
-    'nofiles' => 'Number of files in our repository (Downloads)',
-    'save' => 'save',
-    'preview' => 'preview',
-    'delete' => 'delete',
-    'cancel' => 'cancel',
-    'access_denied' => 'Access Denied',
-    'invalid_install' => 'Someone has tried to illegally access the File Management install/uninstall page.  User id: ',
-    'start_install' => 'Attempting to install the Filemgmt Plugin',
-    'start_dbcreate' => 'Attempting to create tables for Filemgmt plugin',
-    'install_skip' => '... skipped as per filemgmt.cfg',
-    'access_denied_msg' => 'You are illegally trying access the File Mgmt administration pages.  Please note that all attempts to illegally access this page are logged',
+    'newpage'               => "New Page",
+    'adminhome'             => "Admin Home",
+    'plugin_name'           => "File Management",
+    'searchlabel'           => "Downloads",
+    'searchlabel_results'   => "Downloads Results",
+    'downloads'             => "Downloads",
+    'report'                => "Top Downloads",
+    'usermenu1'             => "Downloads",
+    'usermenu2'             => "&nbsp;&nbsp;Top Rated",
+    'usermenu3'             => "Upload a file",
+    'admin_menu'            => "Filemgmt Admin",
+    'writtenby'             => "Written By",
+    'date'                  => "Last Updated",
+    'title'                 => "Title",
+    'content'               => "Content",
+    'hits'                  => "Hits",
+    'Filelisting'           => "File Listing",
+    'DownloadReport'        => "Download History for single file",
+    'StatsMsg1'             => "Top Ten Accessed Files in Repository",
+    'StatsMsg2'             => "It appears there are no files defined for the filemgmt plugin on this site or no one has ever accessed them.",
+    'usealtheader'          => "Use Alt. Header",
+    'url'                   => "URL",
+    'edit'                  => "Edit",
+    'lastupdated'           => "Last Updated",
+    'pageformat'            => "Page Format",
+    'leftrightblocks'       => "Left & Right Blocks",
+    'blankpage'             => "Blank Page",
+    'noblocks'              => "No Blocks",
+    'leftblocks'            => "Left Blocks",
+    'addtomenu'             => 'Add To Menu',
+    'label'                 => 'Label',
+    'nofiles'               => 'Number of files in our repository (Downloads)',
+    'save'                  => 'Save',
+    'preview'               => 'Preview',
+    'delete'                => 'Delete',
+    'cancel'                => 'Cancel',
+    'access_denied'         => 'Access Denied',
+    'invalid_install'       => 'Someone has tried to illegally access the File Management install/uninstall page.  User id: ',
+    'start_install'         => 'Attempting to install the Filemgmt Plugin',
+    'start_dbcreate'        => 'Attempting to create tables for Filemgmt plugin',
+    'install_skip'          => '... skipped as per filemgmt.cfg',
+    'access_denied_msg'     => 'You are illegally trying access the File Mgmt administration pages.  Please note that all attempts to illegally access this page are logged',
     'installation_complete' => 'Installation Complete',
     'installation_complete_msg' => 'The data structures for the File Mgmt plugin for glFusion have been successfully installed into your database!  If you ever need to uninstall this plugin, please read the README document that came with this plugin.',
-    'installation_failed' => 'Installation Failed',
+    'installation_failed'   => 'Installation Failed',
     'installation_failed_msg' => 'The installation of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
-    'system_locked' => 'System Locked',
-    'system_locked_msg' => 'The File Mgmt plugin has already been installed and is locked.  If you are trying to uninstall this plugin, please read the README document that shipped with this plugin',
-    'uninstall_complete' => 'Uninstall Complete',
+    'system_locked'         => 'System Locked',
+    'system_locked_msg'     => 'The File Mgmt plugin has already been installed and is locked.  If you are trying to uninstall this plugin, please read the README document that shipped with this plugin',
+    'uninstall_complete'    => 'Uninstall Complete',
     'uninstall_complete_msg' => 'The datastructures for the File Mgmt plugin have been successfully removed from your glFusion database<br><br>You will need to manually remove all files in your file repository.',
-    'uninstall_failed' => 'Uninstall Failed.',
-    'uninstall_failed_msg' => 'The uninstall of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
-    'install_noop' => 'Plugin Install',
-    'install_noop_msg' => 'The filemgmt plugin install executed but there was nothing to do.<br><br>Check your plugin install.cfg file.',
-    'all_html_allowed' => 'All HTML is allowed',
-    'no_new_files'  => 'No new files',
-    'no_comments'   => 'No new comments',
-    'more'          => '<em>more ...</em>',
-    'newly_uploaded' => 'Newly Uploaded',
-    'click_to_view' => 'Click here to view',
-    'no_file_uploaded' => 'No File Uploaded',
-    'description' => 'Description',
-    'category' => 'Category',
-    'err_req_fields' => 'Some required fields were not supplied',
-    'go_back' => 'Go Back',
-    'err_demomode' => 'Uploads are disabled in demo mode',
+    'uninstall_failed'      => 'Uninstall Failed.',
+    'uninstall_failed_msg'  => 'The uninstall of the File Mgmt plugin failed.  Please see your glFusion error.log file for diagnostic information',
+    'install_noop'          => 'Plugin Install',
+    'install_noop_msg'      => 'The filemgmt plugin install executed but there was nothing to do.<br><br>Check your plugin install.cfg file.',
+    'all_html_allowed'      => 'All HTML is allowed',
+    'no_new_files'          => 'No new files',
+    'no_comments'           => 'No new comments',
+    'more'                  => '<em>more ...</em>',
+    'newly_uploaded'        => 'Newly Uploaded',
+    'click_to_view'         => 'Click here to view',
+    'no_file_uploaded'      => 'No File Uploaded',
+    'description'           => 'Description',
+    'category'              => 'Category',
+    'err_req_fields'        => 'Some required fields were not supplied',
+    'go_back'               => 'Go Back',
+    'err_demomode'          => 'Uploads are disabled in demo mode',
+    'edit_category'         => 'Edit Category',
+    'create_category'       => 'Create Category',
+    'can_view'              => 'Can View',
+    'can_upload'            => 'Can Upload',
+    'delete_category'       => 'Delete Category',
+    'new_category'          => 'New Category',
+    'new_file'              => 'New File',
+    'remote_ip'             => 'Remote IP',
+    'back_to_listing'       => 'Back To Listing',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
@@ -143,6 +152,7 @@ $LANG_FILEMGMT_ERRORS = array(
     "1108" => "Duplicate file - already existing in filestore",
     "1109" => "File type not allowed",
     "1110" => "You must define and select a category for the uploaded file",
+    "1111" => "File Size exceeds site configured maximum size of %s",
     "9999" => "Unknown Error"
 );
 
@@ -249,7 +259,7 @@ define("_MD_NOSHOTS","No Thumbnails Available");
 define("_MD_EDITTHISDL","Edit This Download");
 
 define("_MD_LISTINGHEADING","<b>File Listing: There are %s files in our database</b>");
-define("_MD_LATESTLISTING","<b>Latest Listing:</b>");
+define("_MD_LATESTLISTING","Latest Listing");
 define("_MD_DESCRIPTIONC","Description:");
 define("_MD_EMAILC","Email: ");
 define("_MD_CATEGORYC","Category: ");
@@ -353,7 +363,7 @@ define("_MD_CATEGORYTITLE","File Listing - Category View");
 define("_MD_DLCONF","Downloads Configuration");
 define("_MD_GENERALSET","Configuration Settings");
 define("_MD_ADDMODFILENAME","Add new file");
-define ("_MD_ADDCATEGORYSNAP", 'Optional Image:<div style="font-size:8pt;">Top Level Categories only</div>');
+define ("_MD_ADDCATEGORYSNAP", 'Optional Image<div style="font-size:8pt;">Top Level Categories only</div>');
 define ("_MD_ADDIMAGENOTE", '<span style="font-size:8pt;">Image height will be resized to 50</span>');
 define("_MD_ADDMODCATEGORY","<b>Categories:</b> Add, Modify, and Delete Categories");
 define("_MD_DLSWAITING","Downloads Waiting for Validation");
@@ -370,8 +380,8 @@ define("_MD_DELETE","Delete");
 define("_MD_NOSUBMITTED","No New Submitted Downloads.");
 define("_MD_ADDMAIN","Add MAIN Category");
 define("_MD_TITLEC","Title: ");
-define("_MD_CATSEC", "View Access: ");
-define("_MD_UPLOADSEC", "Upload Access: ");
+define("_MD_CATSEC", "View Access");
+define("_MD_UPLOADSEC", "Upload Access");
 define("_MD_IMGURL","<br>Image Filename <font size='-2'> (located in your filemgmt_data/category_snaps directory - Image height will be resized to 50)</font>");
 define("_MD_ADD","Add");
 define("_MD_ADDSUB","Add SUB-Category");
@@ -403,7 +413,7 @@ define("_MD_NOMODREQ","No Download Modification Request.");
 define("_MD_DBUPDATED","Database Updated Successfully!");
 define("_MD_MODREQDELETED","Modification Request Deleted.");
 define("_MD_IMGURLMAIN",'Image<div style="font-size:8pt;">Image height will be resized to 50px</div>');
-define("_MD_PARENT","Parent Category:");
+define("_MD_PARENT","Parent Category");
 define("_MD_SAVE","Save Changes");
 define("_MD_CATDELETED","Category Deleted.");
 define("_MD_WARNING","WARNING: Are you sure you want to delete this Category and ALL its Files and Comments?");
