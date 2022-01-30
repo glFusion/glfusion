@@ -273,7 +273,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
         }
     }
 
-    if ($isModerator && Forum\Modules\Warning\Warning::featureEnabled()) {
+    $warningsEnabled = Forum\Modules\Warning\Warning::featureEnabled();
+    if ($isModerator && $warningsEnabled) {
         $warn_level = \Forum\Modules\Warning\Warning::getUserPercent($showtopic['uid']);
         if ($warn_level > 0) {
             $topictemplate->set_var('warn_level', $warn_level);
@@ -381,7 +382,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
             'mod_ban'       => $mod_perms['mod_ban'],
             'mod_lock'      => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] == 0),
             'mod_unlock'    => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] != 0),
-            'mod_warn'      => ($mod_perms['mod_edit']),
+            'mod_warn'      => ($mod_perms['mod_edit'] && $warningsEnabled),
             'has_mod_perms' => $isModerator,
             'topic_parent_id' => $showtopic['pid'],
     ));

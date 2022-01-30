@@ -1772,6 +1772,13 @@ function _ff_canPost( $forum ) {
     if (!SEC_inGroup($forum['grp_id'])) {
         return false;
     }
+    if (
+        Forum\Modules\Warning\Warning::featureEnabled() &&
+        Forum\UserInfo::getInstance()->getForumStatus() >= Forum\Status::SUSPEND
+    ) {
+        // User has been suspended from posting due to warning levels
+        return false;
+    }
     if ( $_FF_CONF['enable_user_rating_system'] ) {
         if ( COM_isAnonUser() ) {
             //Annon user can only post in forums with 0 or less
