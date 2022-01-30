@@ -21,7 +21,7 @@ $action = 'listlevels';
 $expected = array(
     // Actions
     'save', 'deletelevel', 'cancel', 'savewarning', 'savetype', 'savelevel',
-    'revokewarning',
+    'revokewarning', 'deletewarning', 'delitem',
     // Views
     'editlevel', 'edittype', 'listlevels', 'listtypes', 'warnuser',
     'viewwarning',
@@ -71,6 +71,11 @@ case 'savewarning':
     );
     break;
 
+case 'deletewarning':
+    Warning::Delete((int)$actionval);
+    echo COM_refresh($_SERVER['HTTP_REFERER']);
+    break;
+
 case 'revokewarning':
     $content = Warning::getInstance((int)$_POST['w_id'])
         ->withRevokedReason($_POST['revoked_reason'])
@@ -84,11 +89,11 @@ case 'revokewarning':
 
 case 'delitem':
     if (is_array($_POST['delitem'])) {
-        foreach ($_POST['delitem'] as $pfx_id) {
-            Forum\Prefix::Delete($pfx_id);
+        foreach ($_POST['delitem'] as $w_id) {
+            Warning::Delete($w_id);
         }
     }
-    echo COM_refresh($self);
+    echo COM_refresh($_SERVER['HTTP_REFERER']);
     break;
 
 case 'viewwarning':
