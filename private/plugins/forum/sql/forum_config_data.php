@@ -952,7 +952,7 @@ $forumConfigData = array(
     ),
 
     array(
-        'name' => 'enable_warnings',
+        'name' => 'warnings_enabled',
         'default_value' => 0,
         'type' => 'select',
         'subgroup' => 0,
@@ -964,7 +964,7 @@ $forumConfigData = array(
     ),
 
     array(
-        'name' => 'warning_max_points',
+        'name' => 'warnings_max_points',
         'default_value' => '100',
         'type' => 'text',
         'subgroup' => 0,
