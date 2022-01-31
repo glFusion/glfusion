@@ -722,6 +722,11 @@ function forum_chkUsercanPost() {
 function forum_chkUsercanAccess($secure=false) {
     global $_CONF, $_FF_CONF, $LANG_GF01, $LANG_GF02, $_USER;
 
+    if (SEC_isAdmin()) {
+        // Don't accidentally block system admins
+        return;
+    }
+
     $display = '';
     $U = Forum\UserInfo::getInstance($_USER['uid']);
     if ($U->isBanned()) {
