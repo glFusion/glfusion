@@ -1774,7 +1774,7 @@ function _ff_canPost( $forum ) {
     }
     if (
         Forum\Modules\Warning\Warning::featureEnabled() &&
-        Forum\UserInfo::getInstance()->getForumStatus() >= Forum\Status::SUSPEND
+        Forum\UserInfo::getInstance()->getForumStatus()['status'] >= Forum\Status::SUSPEND
     ) {
         // User has been suspended from posting due to warning levels
         return false;
