@@ -280,6 +280,7 @@ function forum_upgrade() {
             // no changes to db schema
 
         case '3.4.3' :
+        case '3.4.3.1' :
             $_SQL = array(
             "CREATE TABLE `{$_TABLES['ff_warnings']}` (
                 `w_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
