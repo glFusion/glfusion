@@ -274,7 +274,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
     }
 
     $warningsEnabled = Forum\Modules\Warning\Warning::featureEnabled();
-    if ($isModerator && $warningsEnabled) {
+    $canWarnUser = Forum\Modules\Warning\Warning::canWarnUser((int)$showtopic['uid']);
+    if ($warningsEnabled && $isModerator && $canWarnUser) {
         $warn_level = \Forum\Modules\Warning\Warning::getUserPercent($showtopic['uid']);
         if ($warn_level > 0) {
             $topictemplate->set_var('warn_level', $warn_level);
@@ -283,6 +284,7 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
         }
     } else {
         $topictemplate->clear_var('warn_level');
+        $canWarnUser = false;
     }
 
     $can_voteup = false;
@@ -382,7 +384,8 @@ function FF_showtopic($showtopic, $mode='', $onetwo=1, $page=1, $topictemplate =
             'mod_ban'       => $mod_perms['mod_ban'],
             'mod_lock'      => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] == 0),
             'mod_unlock'    => ($mod_perms['mod_edit'] && $showtopic['pid'] == 0 && $showtopic['locked'] != 0),
-            'mod_warn'      => ($mod_perms['mod_edit'] && $warningsEnabled),
+            'mod_warn'      => $canWarnUser,
+            'warn_enabled'  => $warningsEnabled,
             'has_mod_perms' => $isModerator,
             'topic_parent_id' => $showtopic['pid'],
     ));

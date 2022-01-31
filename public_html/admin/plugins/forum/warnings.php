@@ -80,10 +80,14 @@ case 'editwarning':
 case 'savewarning':
     $W = new Warning($_POST['w_id']);
     $W->Save($_POST);
-    echo COM_refresh(
-        $_CONF['site_url'] . '/forum/viewtopic.php?showtopic=' .
-        $W->getTopicId() . '#' . $W->getTopicId()
-    );
+    if (isset($_POST['return_url']) && !empty($_POST['return_url'])) {
+        echo COM_refresh($_POST['return_url']);
+    } else {
+        // This is the only return url that's likely to be used anyway...
+        echo COM_refresh(
+            $_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$tid&topic=$tid#tid"
+        );
+    }
     break;
 
 case 'deletewarning':
@@ -95,8 +99,8 @@ case 'revokewarning':
     $content = Warning::getInstance((int)$_POST['w_id'])
         ->withRevokedReason($_POST['revoked_reason'])
         ->Revoke();
-    if (isset($_POST['redirect_url']) && !empty($_POST['redirect_url'])) {
-        COM_refresh($_POST['redirect_url']);
+    if (isset($_POST['return_url']) && !empty($_POST['return_url'])) {
+        COM_refresh($_POST['return_url']);
     } else {
         COM_refresh($self . '?log');
     }

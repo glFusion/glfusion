@@ -24,6 +24,9 @@
 {!if likes_enabled}
 	<script src="{site_url}/forum/javascript/ajax_like.js"></script>
 {!endif}
+{!if warn_enabled}
+	<script src="{site_url}/forum/javascript/ajax_warn.js"></script>
+{!endif}
 {!endif}
 {!if !iframe}
 	<script>
@@ -441,7 +444,7 @@
 {!endif}
 {!if mod_warn}
 														<li>
-															<button name="modfunction" value="warnuser"><i class="uk-icon uk-icon-exclamation-triangle"></i>&nbsp;Warn User</button>
+															<button type="reset" name="modfunction" value="warnuser" onclick="forum_ajaxwarnform({topic_uid},{topic_id});return true;"><i class="uk-icon uk-icon-exclamation-triangle"></i>&nbsp;Warn User</button>
 														</li>
 {!endif}
 													</ul>
