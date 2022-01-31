@@ -43,6 +43,8 @@ if (!in_array('forum', $_PLUGINS)) {
     exit;
 }
 
+forum_chkUsercanAccess();
+
 // validate we have a logged in user..
 if ( COM_isAnonUser() ) {
     echo COM_refresh($_CONF['site_url'].'/users.php');

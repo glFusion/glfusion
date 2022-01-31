@@ -41,6 +41,8 @@ if (!in_array('forum', $_PLUGINS)) {
     exit;
 }
 
+forum_chkUsercanAccess();
+
 USES_forum_functions();
 USES_forum_format();
 USES_forum_topic();

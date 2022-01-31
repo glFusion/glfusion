@@ -34,6 +34,8 @@ if (!in_array('forum', $_PLUGINS)) {
     exit;
 }
 
+forum_chkUsercanAccess();
+
 if ( COM_isAnonUser() ) {
     COM_404();
     exit;

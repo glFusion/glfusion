@@ -47,6 +47,8 @@ USES_forum_functions();
 USES_forum_format();
 USES_forum_topic();
 
+forum_chkUsercanAccess();
+
 $display = '';
 
 $mytimer = new timerobject();
