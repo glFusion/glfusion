@@ -269,6 +269,7 @@ class WarningLevel
             'period_options' => Dates::getOptionList($this->wl_duration_period),
             'action_options' => Status::getOptionList($this->wl_action),
             'lang_edit' => $this->wl_id > 0 ? $LANG_GF01['EDIT'] : $LANG_GF01['create_new'],
+            'action_val' => $this->wl_action,
         ) );
 
         if ($this->wl_id != 0) {
@@ -376,7 +377,7 @@ class WarningLevel
         case 'delete':
             $retval = FieldList::delete(
                 array(
-                    'delete_url' => $base_url.'?deletelevel='.$A['wl_id'],
+                    'delete_url' => $base_url.'?dellevel='.$A['wl_id'],
                     'attr' => array(
                         'title'   => $LANG_ADMIN['delete'],
                         'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');"
