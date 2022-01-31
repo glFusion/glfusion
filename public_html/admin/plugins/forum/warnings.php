@@ -1,5 +1,17 @@
 <?php
 /**
+ * glFusion Forum Plugin
+ *
+ * @author      Lee Garner <lee@leegarner.com>
+ * @copyright   Copyright (c) 2021-2022 Lee Garner <lee@leegarner.com>
+ * @package     glfusion
+ * @version     v0.0.1
+ * @license     http://opensource.org/licenses/gpl-2.0.php
+ *              GNU Public License v2 or later
+ * @filesource
+ */
+
+/**
  * Administer forum warnings.
  */
 require_once '../../../lib-common.php';
@@ -16,12 +28,13 @@ if (!SEC_hasRights('forum.edit')) {
     COM_404();
     exit;
 }
+
 $action = 'listlevels';
 
 $expected = array(
     // Actions
     'save', 'deletelevel', 'cancel', 'savewarning', 'savetype', 'savelevel',
-    'revokewarning', 'deletewarning', 'delitem', 'dellevel',
+    'revokewarning', 'deletewarning', 'delitem', 'dellevel','deletetype',
     // Views
     'editlevel', 'edittype', 'listlevels', 'listtypes', 'warnuser',
     'viewwarning',
@@ -129,8 +142,6 @@ case 'savelevel':
     echo COM_refresh($_SERVER['HTTP_REFERER']);
     break;
 
-
-
 case 'savetype':
     $WT = WarningType::getInstance($_POST['wt_id']);
     if ($WT->Save($_POST)) {
@@ -141,6 +152,19 @@ case 'savetype':
     echo COM_refresh($self . '?listtypes');
     exit;
     break;
+
+case 'deletetype':
+
+    if (isset($_POST['deletetype']) && is_array($_POST['deletetype'])) {
+        foreach ($_POST['deletetype'] as $wt_id) {
+            WarningType::Delete($wt_id);
+        }
+    } else {
+        WarningType::Delete((int)$actionval);
+    }
+    echo COM_refresh($_CONF['site_admin_url'].'/plugins/forum/warnings.php?listtypes');
+    break;
+
 
 case 'listtypes':
     $content .= '<p>[ ' . COM_createLink(

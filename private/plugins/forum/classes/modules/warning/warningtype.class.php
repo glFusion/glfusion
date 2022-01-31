@@ -3,7 +3,7 @@
  * Class to handle forum warning types such as "spam", etc.
  *
  * @author      Lee Garner <lee@leegarner.com>
- * @copyright   Copyright (c) 2021 Lee Garner <lee@leegarner.com>
+ * @copyright   Copyright (c) 2021-2022 Lee Garner <lee@leegarner.com>
  * @package     glfusion
  * @version     v0.0.1
  * @license     http://opensource.org/licenses/gpl-2.0.php
@@ -239,11 +239,10 @@ class WarningType
     
         $db = Database::getInstance();
 
-        $sql = "DELETE FROM `{$_TABLES['ff_warningtypes']}`
-            WHERE wt_id = ?";
-        $stmt = $db->conn->prepare($sql)
-                         ->bindParam(1, $wt_id, Database::INTEGER)
-                         ->execute();
+        $sql = "DELETE FROM `{$_TABLES['ff_warningtypes']}` WHERE wt_id = ?";
+        $stmt = $db->conn->prepare($sql);
+        $stmt->bindParam(1, $wt_id, Database::INTEGER);
+        $stmt->execute();
     }
 
 
@@ -254,7 +253,7 @@ class WarningType
      */
     public function Edit()
     {
-        global $_CONF, $LANG_GF01;
+        global $_CONF, $LANG_GF01, $LANG_ADMIN;
 
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('editform', 'warningtype.thtml');
@@ -267,6 +266,11 @@ class WarningType
             'sel_' . $this->wt_expires_period => 'selected="selected"',
             'lang_edit' => $this->wt_id > 0 ? $LANG_GF01['EDIT'] : $LANG_GF01['create_new'],
         ) );
+
+        if ($this->wt_id != 0) {
+            $T->set_var('lang_delete',$LANG_ADMIN['delete']);
+        }
+
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
     }
@@ -324,7 +328,7 @@ class WarningType
             ),
         );
 
-        $options = array('chkdelete' => 'true', 'chkfield' => 'wt_id');
+        $options = array('chkdelete' => 'true', 'chkfield' => 'wt_id','chkname' => 'deletetype');
         $defsort_arr = array('field' => 'wt_points', 'direction' => 'asc');
         $query_arr = array(
             'table' => 'ff_warningtypes',
@@ -412,14 +416,20 @@ class WarningType
             if ($this->wt_id > 0) {
                 $qb->update($_TABLES['ff_warningtypes'])
                              ->where('wt_id = :wt_id');
+                $qb->set('wt_points', ':wt_points')
+                   ->set('wt_expires_qty', ':wt_expires_qty')
+                   ->set('wt_expires_period', ':wt_expires_period')
+                   ->set('wt_dscp', ':wt_dscp');
             } else {
-                $qb->insert($_TABLES['ff_warningtypes']);
+                $qb->insert($_TABLES['ff_warningtypes'])
+                   ->values (array(
+                        'wt_points' => ':wt_points',
+                        'wt_expires_qty' => ':wt_expires_qty',
+                        'wt_expires_period' => ':wt_expires_period',
+                        'wt_dscp' => ':wt_dscp'
+                   ));
             }
-            $qb->set('wt_points', ':wt_points')
-               ->set('wt_expires_qty', 'wt_expires_qty')
-               ->set('wt_expires_period', 'wt_expires_period')
-               ->set('wt_dscp', 'wt_dscp')
-               ->setParameter('wt_id', $this->wt_id)
+            $qb->setParameter('wt_id', $this->wt_id)
                ->setParameter('wt_points', $this->wt_points)
                ->setParameter('wt_expires_qty', $this->wt_expires_qty)
                ->setParameter('wt_expires_period', $this->wt_expires_period)

@@ -32,14 +32,17 @@
 		</div>
 	</div>
 
-	<div class="uk-form-row" align="center">
-		<div class="uk-form-controls">
-			<button type="submit" class="uk-button uk-button-success" name="savetype" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
-			<button type="reset" class="uk-button">{$LANG_GF01['reset']}</button>
-			<button type="submit" class="uk-button uk-button-danger" name="deletetype" value="{$LANG_ADMIN['delete']}"
-			onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');">{$LANG_ADMIN['delete']}</button>
-			<a class="uk-button uk-button-primary" href="{site_admin_url}/plugins/forum/warnings.php?listtypes">{$LANG_ADMIN['cancel']}</a>
-		</div>
+	<div class="uk-form-row">
+
+			<button type="submit" class="uk-button uk-button-success uk-align-left" name="savetype" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
+			<button type="reset" class="uk-button uk-align-left">{$LANG_GF01['reset']}</button>
+
+			<a class="uk-button uk-button-primary uk-align-left" href="{site_admin_url}/plugins/forum/warnings.php?listtypes">{$LANG_ADMIN['cancel']}</a>
+{!if lang_delete}
+			<button type="submit" class="uk-button uk-button-danger uk-align-right" name="deletetype" value="{wt_id}"
+			onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');">{lang_delete}</button>
+{!endif}
+
 	</div>
 
 </form>
