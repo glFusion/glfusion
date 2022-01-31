@@ -50,7 +50,11 @@ class Warning
 
     /** Timestamp when the warning expires.
      * @var integer */
-    private $expires = 0;
+    private $w_expires = 0;
+
+    /** User ID who issued the warning.
+     * @var integer */
+    private $w_issued_by = 0;
 
     /** Timestamp when the warning was revoked, if any.
      * @var integer */
@@ -86,6 +90,9 @@ class Warning
      */
     public function __construct($A='')
     {
+        global $_USER;
+
+        $this->w_issued_by = (int)$_USER['uid'];
         if (is_array($A)) {
             $this->setVars($A, true);
         } elseif (is_numeric($A)) {
@@ -240,6 +247,7 @@ class Warning
             $this->revoked_by = (int)$A['revoked_by'];
             $this->revoked_date = (int)$A['revoked_date'];
             $this->revoked_reason = $A['revoked_reason'];
+            $this->w_issued_by = (int)$A['w_issued_by'];
         }
         return $this;
     }
@@ -758,6 +766,7 @@ class Warning
                 'ts' => 'UNIX_TIMESTAMP()',
                 'w_points' => ':w_points',
                 'w_expires' => ':w_expires',
+                'w_issued_by' => ':w_issued_by',
                 'revoked_date' => ':revoked_date',
                 'revoked_by' => ':revoked_by',
                 'revoked_reason' => ':revoked_reason',
@@ -770,6 +779,7 @@ class Warning
                 ->setParameter('w_topic_id', $this->w_topic_id)
                 ->setParameter('w_points', $this->_WT->getPoints())
                 ->setParameter('w_expires', $expires)
+                ->setParameter('w_issued_by', $this->w_issued_by)
                 ->setParameter('revoked_date', $this->revoked_date)
                 ->setParameter('revoked_by', $this->revoked_by)
                 ->setParameter('revoked_reason', $this->revoked_reason)
@@ -848,7 +858,10 @@ class Warning
         if ($this->_WT === NULL) {
             $this->_WT = WarningType::getInstance($this->wt_id);
         }
+
+        // Get the user's current threshold percentage, including this warning.
         $percent = self::getUserPercent($this->w_uid);
+        // Get the warning level that has been reached with this warning.
         $WL = WarningLevel::getByPercent($percent);
         if ($WL->getID() < 1 || $WL->getAction() < 1) {
             // No matching warninglevel record found.
