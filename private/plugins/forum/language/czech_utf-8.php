@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by:
@@ -292,31 +292,31 @@ $LANG_GF01 = array(
     'warning_level' => 'Warning Level',
     'warning_types' => 'Warning Types',
     'warning_type' => 'Warning Type',
-    'log' => 'Log',
-    'month' => 'Month',
-    'year' => 'Year',
-    'week' => 'Week',
-    'day' => 'Day',
+    'log' => 'Protokol',
+    'month' => 'Měsíc',
+    'year' => 'Rok',
+    'week' => 'Týden',
+    'day' => 'Den',
     'months' => 'Months',
     'years' => 'Years',
     'weeks' => 'Weeks',
-    'days' => 'Days',
-    'dscp' => 'Description',
+    'days' => 'Dní',
+    'dscp' => 'Popis',
     'points' => 'Points',
     'issued' => 'Issued',
     'expires' => 'Expires',
     'expires_after'  => 'Expires After',
     'issued_by' => 'Issued By',
-    'status' => 'Status',
-    'username' => 'User Name',
+    'status' => 'Stav',
+    'username' => 'Jméno uživatele',
     'revoked_by' => 'Revoked by',
     'expired' => 'Expired',
-    'active' => 'Active',
+    'active' => 'Aktivní',
     'no_restriction' => 'No restriction',
     'user_banned' => 'User is banned from the forum',
     'user_suspended' => 'User\'s posting permission is suspended',
     'user_moderated' => 'User\'s forum posts are moderated',
-    'action' => 'Action',
+    'action' => 'Akce',
     'percent' => 'Percent',
     'admin_notes' => 'Administrative Notes',
     'revoke_reason' => 'Reason for Revocation',
@@ -327,8 +327,8 @@ $LANG_GF01 = array(
     'moderate' => 'Moderate Posts',
     'warn_text' => 'You have received a warning from a forum administrator.',
     'warn_email_subject' => 'Forum Warning Notification',
-    'lang_noreply' => 'This email was generated automatically. Please do not reply to this email.',
-    'none' => 'None',
+    'lang_noreply' => 'Tento email byl generován automaticky. Prosím, neodpovídej na něj.',
+    'none' => 'Žádná',
 );
 
 $LANG_GF02 = array(
@@ -1059,7 +1059,10 @@ $LANG_confignames['forum'] = array(
     'geshi_line_style' => 'GeSHi Line Number Style',
     'geshi_code_style' => 'GeSHi Code Block Style',
     'geshi_header_style' => 'GeSHi Header Block Style',
-
+    'exit_type' => 'Exit Type',
+    'likes_prf_limit' => 'Maximum number of Likes to show in profiles',
+    'warnings_enabled' => 'Enable Warning System',
+    'warnings_max_points' => 'Maximum points (to calculate warning level)',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1072,7 +1075,8 @@ $LANG_fs['forum'] = array(
     'ff_centerblock' => 'Nastavení středového bloku',
     'ff_latest_post_block' => 'Nastavení bloku posledního příspěvků',
     'ff_rank_settings' => 'Nastavení hodností',
-    'ff_attachments_settings' => 'Attachment Settings'
+    'ff_attachments_settings' => 'Attachment Settings',
+    'ff_features' => 'Vlastnosti',
 );
 
 $LANG_configSelect['forum'] = array(
@@ -1082,7 +1086,8 @@ $LANG_configSelect['forum'] = array(
     3 => array('noblocks'=>'Bez bloků', 'leftblocks'=>'Bloky nalevo', 'rightblocks'=>'Bloky vpravo', 'allblocks'=>'Right / Left Blocks'),
     4 => array('blockmenu'=>'Block Menu', 'navbar'=>'Nav Bar', 'none'=>'Žádná'),
     5 => array('DESC'=>'Sestupně', 'ASC'=>'Vzestupně'),
-    6 => array(1=>'Checked', 0=>'Unchecked')
+    6 => array(1=>'Checked', 0=>'Unchecked'),
+    7 => array('login' => 'Login Page', '404' => 'Page Not Found')
 );
 
 ?>

@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2021 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by:
@@ -292,31 +292,31 @@ $LANG_GF01 = array(
     'warning_level' => 'Warning Level',
     'warning_types' => 'Warning Types',
     'warning_type' => 'Warning Type',
-    'log' => 'Log',
-    'month' => 'Month',
-    'year' => 'Year',
-    'week' => 'Week',
-    'day' => 'Day',
+    'log' => 'Logi',
+    'month' => 'Miesiąc',
+    'year' => 'Rok',
+    'week' => 'Tydzień',
+    'day' => 'Dzień',
     'months' => 'Months',
     'years' => 'Years',
     'weeks' => 'Weeks',
-    'days' => 'Days',
-    'dscp' => 'Description',
+    'days' => 'Dni',
+    'dscp' => 'Opis',
     'points' => 'Points',
     'issued' => 'Issued',
     'expires' => 'Expires',
     'expires_after'  => 'Expires After',
     'issued_by' => 'Issued By',
     'status' => 'Status',
-    'username' => 'User Name',
+    'username' => 'Nazwa użytkownika',
     'revoked_by' => 'Revoked by',
     'expired' => 'Expired',
-    'active' => 'Active',
+    'active' => 'Aktywny',
     'no_restriction' => 'No restriction',
     'user_banned' => 'User is banned from the forum',
     'user_suspended' => 'User\'s posting permission is suspended',
     'user_moderated' => 'User\'s forum posts are moderated',
-    'action' => 'Action',
+    'action' => 'Akcje',
     'percent' => 'Percent',
     'admin_notes' => 'Administrative Notes',
     'revoke_reason' => 'Reason for Revocation',
@@ -327,8 +327,8 @@ $LANG_GF01 = array(
     'moderate' => 'Moderate Posts',
     'warn_text' => 'You have received a warning from a forum administrator.',
     'warn_email_subject' => 'Forum Warning Notification',
-    'lang_noreply' => 'This email was generated automatically. Please do not reply to this email.',
-    'none' => 'None',
+    'lang_noreply' => 'Ten e-mail został wygenerowany automatycznie. Prosimy nie odpowiadać na ten e-mail.',
+    'none' => 'Brak',
 );
 
 $LANG_GF02 = array(
@@ -1060,7 +1060,10 @@ $LANG_confignames['forum'] = array(
     'geshi_line_style' => 'GeSHi styl numeru linii',
     'geshi_code_style' => 'GeSHi styl bloku kodu',
     'geshi_header_style' => 'GeSHi styl bloku nagłówka',
-
+    'exit_type' => 'Exit Type',
+    'likes_prf_limit' => 'Maximum number of Likes to show in profiles',
+    'warnings_enabled' => 'Enable Warning System',
+    'warnings_max_points' => 'Maximum points (to calculate warning level)',
 );
 
 $LANG_configsubgroups['forum'] = array(
@@ -1073,7 +1076,8 @@ $LANG_fs['forum'] = array(
     'ff_centerblock' => 'Ustawienia bloku centralnego',
     'ff_latest_post_block' => 'Najnowsze wpisy ustawienia bloków',
     'ff_rank_settings' => 'Ustawienia rangi',
-    'ff_attachments_settings' => 'Ustawienia załączników'
+    'ff_attachments_settings' => 'Ustawienia załączników',
+    'ff_features' => 'Features',
 );
 
 $LANG_configSelect['forum'] = array(
@@ -1083,7 +1087,8 @@ $LANG_configSelect['forum'] = array(
     3 => array('noblocks'=>'Brak Bloków', 'leftblocks'=>'Lewe Bloki', 'rightblocks'=>'Prawe Bloki', 'allblocks'=>'Prawe / Lewe Bloki'),
     4 => array('blockmenu'=>'Bloki Menu', 'navbar'=>'Belka nawigacyjna', 'none'=>'Brak'),
     5 => array('DESC'=>'Malejąco', 'ASC'=>'Rosnąco'),
-    6 => array(1=>'Sprawdź', 0=>'Odznacz')
+    6 => array(1=>'Sprawdź', 0=>'Odznacz'),
+    7 => array('login' => 'Login Page', '404' => 'Page Not Found')
 );
 
 ?>
