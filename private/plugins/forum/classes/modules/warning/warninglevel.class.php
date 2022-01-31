@@ -3,7 +3,7 @@
  * Class to handle forum warning levels.
  *
  * @author      Lee Garner <lee@leegarner.com>
- * @copyright   Copyright (c) 2021 Lee Garner <lee@leegarner.com>
+ * @copyright   Copyright (c) 2021-2022 Lee Garner <lee@leegarner.com>
  * @package     glfusion
  * @version     v0.0.1
  * @license     http://opensource.org/licenses/gpl-2.0.php
@@ -242,11 +242,10 @@ class WarningLevel
 
         $db = Database::getInstance();
 
-        $sql = "DELETE FROM `{$_TABLES['ff_warninglevels']}`
-            WHERE wl_id = ?";
-        $stmt = $db->conn->prepare($sql)
-                         ->bindParam(1, $wl_id, Database::INTEGER)
-                         ->execute();
+        $sql = "DELETE FROM `{$_TABLES['ff_warninglevels']}` WHERE wl_id = ?";
+        $stmt = $db->conn->prepare($sql);
+        $stmt->bindParam(1, $wl_id, Database::INTEGER);
+        $stmt->execute();
     }
 
 
@@ -257,7 +256,7 @@ class WarningLevel
      */
     public function Edit()
     {
-        global $_CONF, $LANG_GF01;
+        global $_CONF, $LANG_GF01, $LANG_ADMIN;
 
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('editform', 'warninglevel.thtml');
@@ -271,6 +270,11 @@ class WarningLevel
             'action_options' => Status::getOptionList($this->wl_action),
             'lang_edit' => $this->wl_id > 0 ? $LANG_GF01['EDIT'] : $LANG_GF01['create_new'],
         ) );
+
+        if ($this->wl_id != 0) {
+            $T->set_var('lang_delete',$LANG_ADMIN['delete']);
+        }
+
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
     }
@@ -322,8 +326,10 @@ class WarningLevel
             ),
         );
 
-        $options = array('chkdelete' => 'true', 'chkfield' => 'wl_id');
+        $options = array('chkdelete' => 'true', 'chkfield' => 'wl_id', 'chkname' => 'dellevel');
+
         $defsort_arr = array('field' => 'wl_pct', 'direction' => 'asc');
+
         $query_arr = array(
             'table' => 'ff_warninglevels',
             'sql' => "SELECT * FROM {$_TABLES['ff_warninglevels']}",
@@ -335,7 +341,7 @@ class WarningLevel
         );
 
         $retval .= ADMIN_list(
-            'badges', array(__CLASS__, 'getAdminField'), $header_arr,
+            'warnlevel', array(__CLASS__, 'getAdminField'), $header_arr,
             $text_arr, $query_arr, $defsort_arr, '', '', $options, $form_arr
         );
         return $retval;
@@ -419,20 +425,29 @@ class WarningLevel
             if ($this->wl_id > 0) {
                 $qb->update($_TABLES['ff_warninglevels'])
                              ->where('wl_id = :wl_id');
+                $qb->set('wl_pct', ':wl_pct')
+                   ->set('wl_duration', ':wl_duration')
+                   ->set('wl_duration_qty', ':wl_duration_qty')
+                   ->set('wl_duration_period', ':wl_duration_period')
+                   ->set('wl_action', ':wl_action');
             } else {
-                $qb->insert($_TABLES['ff_warninglevels']);
+                $qb->insert($_TABLES['ff_warninglevels'])
+                    ->values(array(
+                        'wl_pct'    => ':wl_pct',
+                        'wl_duration'   => ':wl_duration',
+                        'wl_duration_qty'   => ':wl_duration_qty',
+                        'wl_duration_period'    => ':wl_duration_period',
+                        'wl_action'     => ':wl_action'
+                    ));
+
             }
-            $qb->set('wl_pct', ':wl_pct')
-               ->set('wl_duration', 'wl_duration')
-               ->set('wl_duration_qty', 'wl_duration_qty')
-               ->set('wl_duration_period', 'wl_duration_period')
-               ->set('wl_action', 'wl_action')
-               ->setParameter('wl_id', $this->wl_id)
+            $qb->setParameter('wl_id', $this->wl_id)
                ->setParameter('wl_pct', $this->wl_pct)
                ->setParameter('wl_duration', $this->wl_duration)
                ->setParameter('wl_duration_qty', $this->wl_duration_qty)
                ->setParameter('wl_duration_period', $this->wl_duration_period)
                ->setParameter('wl_action', $this->wl_action);
+
             $stmt = $qb->execute();
             return true;
         } catch(Throwable $e) {

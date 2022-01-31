@@ -21,12 +21,14 @@ $action = 'listlevels';
 $expected = array(
     // Actions
     'save', 'deletelevel', 'cancel', 'savewarning', 'savetype', 'savelevel',
-    'revokewarning', 'deletewarning', 'delitem',
+    'revokewarning', 'deletewarning', 'delitem', 'dellevel',
     // Views
     'editlevel', 'edittype', 'listlevels', 'listtypes', 'warnuser',
     'viewwarning',
     'log',
 );
+
+$actionval = 0;
 
 foreach ($expected as $provided) {
     if (isset($_POST[$provided])) {
@@ -107,11 +109,27 @@ case 'savelevel':
     if ($WL->Save($_POST)) {
         COM_setMsg($LANG_GF92['setsavemsg']);
     } else {
-        COM_setMsg('An error occurred', 'error');
+        COM_setMsg('An error occusrred', 'error');
     }
     echo COM_refresh($self . '?listlevels');
     exit;
     break;
+
+ case 'deletelevel':
+    WarningLevel::Delete((int)$actionval);
+    echo COM_refresh($_CONF['site_admin_url'].'/plugins/forum/warnings.php?listlevels');
+    break;
+
+ case 'dellevel':
+    if (is_array($_POST['dellevel'])) {
+        foreach ($_POST['dellevel'] as $w_id) {
+            WarningLevel::Delete($w_id);
+        }
+    }
+    echo COM_refresh($_SERVER['HTTP_REFERER']);
+    break;
+
+
 
 case 'savetype':
     $WT = WarningType::getInstance($_POST['wt_id']);
@@ -163,8 +181,7 @@ case 'log':
 
 case 'listlevels':
 default:
-    $content .= '<p>[ <a href="' . $_CONF['site_admin_url'] .
-    '/plugins/forum/warnings.php?editlevel">'.$LANG_GF01['create_new'].'</a> ]</p>';
+    $content .= '<p>[ <a href="' . $_CONF['site_admin_url'].'/plugins/forum/warnings.php?editlevel">'.$LANG_GF01['create_new'].'</a> ]</p>';
     $content .= WarningLevel::adminList();
     break;
 }

@@ -1,44 +1,50 @@
 {# begin {templatelocation} #}
+
 <h2>{lang_edit} {$LANG_GF01['warning_level']}</h2>
-<form uk-form action="{site_admin_url}/plugins/forum/warnings.php" method="post"
-	class="uk-form uk-form-horizontal">
-	<input type="hidden" name="wl_id" value="{wl_id}" />
 
-	<div class="uk-form-row">
-		<label class="uk-form-label" for="wl_pct">{$LANG_GF01['percent']}</label>
-		<div class="uk-form-controls">
-			<input class="uk-input uk-form-width-small" type="number" min="0" max="100" id="wl_pct" name="wl_pct" value="{wl_pct}" />
+<div class="uk-panel uk-panel-box">
+
+	<form uk-form action="{site_admin_url}/plugins/forum/warnings.php" method="post" class="uk-form uk-form-horizontal">
+		<input type="hidden" name="wl_id" value="{wl_id}" />
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="wl_pct">{$LANG_GF01['percent']}</label>
+			<div class="uk-form-controls">
+				<input class="uk-input uk-form-width-small" type="number" min="0" max="100" id="wl_pct" name="wl_pct" value="{wl_pct}" />
+			</div>
 		</div>
-	</div>
 
-	<div class="uk-form-row uk-margin">
-		<label class="uk-form-label" for="pfx_groups">{$LANG_GF01['action']}</label>
-		<div class="uk-form-controls">
-			<select class="uk-select uk-form-width-small" id="wl_action" name="wl_action">
-				{action_options}
-			</select>
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label" for="pfx_groups">{$LANG_GF01['action']}</label>
+			<div class="uk-form-controls">
+				<select class="uk-select uk-form-width-small" id="wl_action" name="wl_action">
+					{action_options}
+				</select>
+			</div>
 		</div>
-	</div>
 
-	<div class="uk-form-row uk-margin">
-		<label class="uk-form-label" for="pfx_groups">{$LANG_GF01['expires_after']}</label>
-		<div class="uk-form-controls">
-			<input class="uk-input uk-form-width-small" type="text" id="wl_duration_qty" name="wl_duration_qty" value="{wl_duration_qty}" />
-			<select id="wl_duration_period" name="wl_duration_period">
-				{period_options}
-			</select>
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label" for="pfx_groups">{$LANG_GF01['expires_after']}</label>
+			<div class="uk-form-controls">
+				<input class="uk-input uk-form-width-small" type="text" id="wl_duration_qty" name="wl_duration_qty" value="{wl_duration_qty}" />
+				<select id="wl_duration_period" name="wl_duration_period">
+					{period_options}
+				</select>
+			</div>
 		</div>
-	</div>
 
-	<div class="uk-form-row" align="center">
-		<div class="uk-form-controls">
-			<button type="submit" class="uk-button uk-button-success" name="savelevel" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
-			<button type="reset" class="uk-button">{$LANG_GF01['reset']}</button>
-			<button type="submit" class="uk-button uk-button-danger" name="deletelevel" value="{$LANG_ADMIN['delete']}"
-			onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');">{$LANG_ADMIN['delete']}</button>
-			<button type="submit" class="uk-button uk-button-primary" name="cancel" value="{$LANG_ADMIN['cancel']}">{$LANG_ADMIN['cancel']}</button>
+		<div class="uk-form-row uk-margin-large-top">
+			<button type="submit" class="uk-button uk-button-success uk-align-left" name="savelevel" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
+
+			<button type="reset" class="uk-button uk-align-left">{$LANG_GF01['reset']}</button>
+
+			
+			<button type="submit" class="uk-button uk-button-primary uk-align-left" name="cancel" value="{$LANG_ADMIN['cancel']}">{$LANG_ADMIN['cancel']}</button>
+{!if lang_delete}
+			<button type="submit" class="uk-button uk-button-danger uk-align-right" name="deletelevel" value="{wl_id}" onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');"> {lang_delete}</button>
+{!endif}
 		</div>
-	</div>
 
-</form>
+	</form>
+</div>
 {# end {templatelocation} #}
