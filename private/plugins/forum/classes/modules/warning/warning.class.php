@@ -3,7 +3,7 @@
  * Class to handle forum warning system.
  *
  * @author      Lee Garner <lee@leegarner.com>
- * @copyright   Copyright (c) 2021 Lee Garner <lee@leegarner.com>
+ * @copyright   Copyright (c) 2021-2022 Lee Garner <lee@leegarner.com>
  * @package     glfusion
  * @version     v0.0.1
  * @license     http://opensource.org/licenses/gpl-2.0.php
@@ -681,7 +681,7 @@ class Warning
             break;
 
         case 'w_issued_by':
-            $retval .= COM_getDisplayName($fieldvalue, $A['username'], $A['fullname']);
+            $retval .= COM_getDisplayName($fieldvalue);
             break;
 
         case 'ts':
@@ -730,7 +730,7 @@ class Warning
      */
     public function Save($A = array())
     {
-        global $_TABLES, $LANG_GF01;
+        global $_TABLES, $LANG_GF01, $_USER;
 
         if (!empty($A)) {
             $this->setVars($A, false);
@@ -763,6 +763,7 @@ class Warning
                 'revoked_reason' => ':revoked_reason',
                 'w_dscp' => ':w_dscp',
                 'w_notes' => ':w_notes',
+                'w_issued_by' => ':w_issued_by',
             ) )
                 ->setParameter('w_uid', $this->w_uid)
                 ->setParameter('wt_id', $this->wt_id)
@@ -774,7 +775,8 @@ class Warning
                 ->setParameter('revoked_reason', $this->revoked_reason)
                 ->setParameter('w_dscp', $this->w_dscp)
                 ->setParameter('w_notes', $this->w_notes)
-                ->setParameter('w_id', $this->w_id);
+                ->setParameter('w_id', $this->w_id)
+                ->setParameter('w_issued_by', $_USER['uid']);
             $stmt = $qb->execute();
             // Take action, if necessary
             $this->takeAction();
