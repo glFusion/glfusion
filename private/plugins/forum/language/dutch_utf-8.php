@@ -96,6 +96,7 @@ $LANG_GF01 = array(
     'TITLE' => 'Titel',
     'COMMENTS' => 'Reacties',
     'SUBMISSIONS' => 'Inzendingen',
+    'FORUMSUBMISSIONS' => 'Forum Submissions',
     'HTML_FILTER_MSG' => 'Gefilterde HTML Toegestaan',
     'HTML_FULL_MSG' => 'Alle HTML Toegestaan',
     'HTML_MSG' => 'HTML Toegestaan',
@@ -547,6 +548,7 @@ $LANG_GF02 = array(
     'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
     'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>',
     'msg_suspended' => 'Sorry, You have suspended from making entries.',
+    'msg_queued' => 'Your submission has been queued for approval.',
 );
 
 $LANG_GF03 = array(

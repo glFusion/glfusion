@@ -2381,19 +2381,19 @@ function plugin_privacy_export_forum_DISABLED($uid,$email='',$username='',$ip=''
  */
 function plugin_itemlist_forum($token='')
 {
-    global $_TABLES, $LANG29;
+    global $_TABLES, $LANG29, $LANG_GF01;
 
     if (SEC_hasRights('forum.edit')) {
         $plugin = new Plugin();
-        $plugin->submissionlabel = 'Forum Submissions';
+        $plugin->submissionlabel = $LANG_GF01['FORUMSUBMISSIONS'];
         $plugin->submissionhelpfile = '';
-        $plugin->getsubmissionssql = "SELECT id,t.subject,FROM_UNIXTIME(t.date) AS day, t.name"
+        $plugin->getsubmissionssql = "SELECT id,t.subject,FROM_UNIXTIME(t.date) AS day, t.name, t.uid"
             . " FROM {$_TABLES['ff_topic']} t"
             . " WHERE approved = 0"
             . " ORDER BY date ASC";
-        $plugin->addSubmissionHeading('Subject');
-        $plugin->addSubmissionHeading('Date');
-        $plugin->addSubmissionHeading('User Name');
+        $plugin->addSubmissionHeading($LANG_GF01['SUBJECT']);
+        $plugin->addSubmissionHeading($LANG_GF01['DATEADDED']);
+        $plugin->addSubmissionHeading($LANG_GF01['username']);
         $plugin->addSubmissionHeading($LANG29[46]);
         return $plugin;
     }
@@ -2414,7 +2414,6 @@ function plugin_itemlist_forum($token='')
 function plugin_moderationvalues_forum()
 {
     global $_TABLES;
-
     return array(
         'id',
         $_TABLES['ff_topic'],

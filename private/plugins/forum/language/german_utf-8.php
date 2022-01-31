@@ -96,6 +96,7 @@ $LANG_GF01 = array(
     'TITLE' => 'Titel',
     'COMMENTS' => 'Kommentare',
     'SUBMISSIONS' => 'Einsendungen',
+    'FORUMSUBMISSIONS' => 'Forum Submissions',
     'HTML_FILTER_MSG' => 'Gefiltertes HTML erlaubt',
     'HTML_FULL_MSG' => 'Alle HTML-Tags erlaubt',
     'HTML_MSG' => 'HTML erlaubt',
@@ -547,6 +548,7 @@ $LANG_GF02 = array(
     'text_notify_message' => 'Der neuen Beitrag "%s"", geschrieben von %s im Forum %s auf der Seite %s, interessiert dich vielleicht. Hier gehts sum Beitrag: %s',
     'html_notify_message' => 'Der neuen Beitrag "%s"", geschrieben von %s im Forum %s auf der Seite %s, interessiert dich vielleicht. Hier gehts sum Beitrag: <a href="%s">%s</a>',
     'msg_suspended' => 'Sorry, You have suspended from making entries.',
+    'msg_queued' => 'Your submission has been queued for approval.',
 );
 
 $LANG_GF03 = array(
