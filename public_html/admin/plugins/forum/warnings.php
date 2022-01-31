@@ -33,7 +33,7 @@ $action = 'listlevels';
 
 $expected = array(
     // Actions
-    'save', 'deletelevel', 'cancel', 'savewarning', 'savetype', 'savelevel',
+    'save', 'cancel', 'savewarning', 'savetype', 'savelevel',
     'revokewarning', 'deletewarning', 'delitem', 'dellevel','deletetype',
     // Views
     'editlevel', 'edittype', 'listlevels', 'listtypes', 'warnuser',
@@ -128,18 +128,15 @@ case 'savelevel':
     exit;
     break;
 
- case 'deletelevel':
-    WarningLevel::Delete((int)$actionval);
-    echo COM_refresh($_CONF['site_admin_url'].'/plugins/forum/warnings.php?listlevels');
-    break;
-
- case 'dellevel':
-    if (is_array($_POST['dellevel'])) {
-        foreach ($_POST['dellevel'] as $w_id) {
-            WarningLevel::Delete($w_id);
+case 'dellevel':
+    if (is_array($actionval)) {
+        foreach ($actionval as $wl_id) {
+            WarningLevel::Delete((int)$wl_id);
         }
+    } else {
+        WarningLevel::Delete((int)$actionval);
     }
-    echo COM_refresh($_SERVER['HTTP_REFERER']);
+    echo COM_refresh($_CONF['site_admin_url'].'/plugins/forum/warnings.php?listlevels');
     break;
 
 case 'savetype':
@@ -154,7 +151,6 @@ case 'savetype':
     break;
 
 case 'deletetype':
-
     if (isset($_POST['deletetype']) && is_array($_POST['deletetype'])) {
         foreach ($_POST['deletetype'] as $wt_id) {
             WarningType::Delete($wt_id);

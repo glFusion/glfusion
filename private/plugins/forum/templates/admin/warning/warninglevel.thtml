@@ -41,7 +41,7 @@
 			
 			<button type="submit" class="uk-button uk-button-primary uk-align-left" name="cancel" value="{$LANG_ADMIN['cancel']}">{$LANG_ADMIN['cancel']}</button>
 {!if lang_delete}
-			<button type="submit" class="uk-button uk-button-danger uk-align-right" name="deletelevel" value="{wl_id}" onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');"> {lang_delete}</button>
+			<button type="submit" class="uk-button uk-button-danger uk-align-right" name="dellevel" value="{wl_id}" onclick="return confirm('{$LANG_GF01['DELETECONFIRM']}');"> {lang_delete}</button>
 {!endif}
 		</div>
 
