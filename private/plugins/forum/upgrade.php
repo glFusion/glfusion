@@ -280,7 +280,8 @@ function forum_upgrade() {
             // no changes to db schema
 
         case '3.4.3' :
-            DB_query("CREATE TABLE `{$_TABLES['ff_warnings']}` (
+            $_SQL = array(
+            "CREATE TABLE `{$_TABLES['ff_warnings']}` (
                 `w_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                 `w_uid` int(11) unsigned NOT NULL DEFAULT 0,
                 `wt_id` int(11) unsigned NOT NULL DEFAULT 0,
@@ -296,16 +297,16 @@ function forum_upgrade() {
                 `w_notes` text NOT NULL DEFAULT '',
                 PRIMARY KEY (`w_id`),
                 KEY `uid_expires` (`w_uid`,`w_expires`)
-                ) ENGINE=MyISAM;");
-            DB_query("CREATE TABLE `{$_TABLES['ff_warningtypes']}` (
+                ) ENGINE=MyISAM;",
+            "CREATE TABLE `{$_TABLES['ff_warningtypes']}` (
                 `wt_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                 `wt_dscp` varchar(120) NOT NULL DEFAULT '',
                 `wt_points` smallint(5) unsigned NOT NULL DEFAULT 0,
                 `wt_expires_qty` int(5) unsigned NOT NULL DEFAULT 1,
                 `wt_expires_period` varchar(7) NOT NULL DEFAULT 'day',
                 PRIMARY KEY (`wt_id`)
-                ) ENGINE=MyISAM;");
-            DB_query("CREATE TABLE `{$_TABLES['ff_warninglevels']}` (
+                ) ENGINE=MyISAM;",
+            "CREATE TABLE `{$_TABLES['ff_warninglevels']}` (
                 `wl_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                 `wl_pct` int(3) unsigned NOT NULL DEFAULT 0,
                 `wl_action` smallint(5) unsigned NOT NULL DEFAULT 0,
@@ -314,15 +315,27 @@ function forum_upgrade() {
                 `wl_duration_period` varchar(7) NOT NULL DEFAULT 'day',
                 `wl_other` varchar(255) NOT NULL DEFAULT 'a:0{}',
                 PRIMARY KEY (`wl_id`)
-                ) ENGINE=MyISAM;");
-            DB_query("ALTER TABLE {$_TABLES['ff_userinfo']}
-               ADD `ban_expires` int(11) NOT NULL DEFAULT  0");
-            DB_query("ALTER TABLE {$_TABLES['ff_userinfo']}
-                ADD `suspend_expires` int(11) NOT NULL DEFAULT 0");
-            DB_query("ALTER TABLE {$_TABLES['ff_userinfo']}
-                ADD `moderate_expires` int(11) NOT NULL DEFAULT 0");
-            DB_query("ALTER TABLE {$_TABLES['ff_topic']}
-                ADD `approved` tinyint(1) unsigned NOT NULL DEFAULT 1");
+                ) ENGINE=MyISAM;",
+            "ALTER TABLE {$_TABLES['ff_userinfo']}
+               ADD `ban_expires` int(11) NOT NULL DEFAULT  0",
+            "ALTER TABLE {$_TABLES['ff_userinfo']}
+                ADD `suspend_expires` int(11) NOT NULL DEFAULT 0",
+            "ALTER TABLE {$_TABLES['ff_userinfo']}
+                ADD `moderate_expires` int(11) NOT NULL DEFAULT 0",
+            "ALTER TABLE {$_TABLES['ff_topic']}
+                ADD `approved` tinyint(1) unsigned NOT NULL DEFAULT 1",
+            );
+            if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
+                $use_innodb = true;
+            } else {
+                $use_innodb = false;
+            }
+            foreach ($_SQL AS $sql) {
+                if ($use_innodb) {
+                    $sql = str_replace('MyISAM', 'InnoDB', $sql);
+                }
+                DB_query($sql,1);
+            }
         default :
             forum_update_config();
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
