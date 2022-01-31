@@ -945,8 +945,8 @@ class Warning
                     $val = false;
                 }
             }
+            $retval[$uid] = $val;
         }
-        $retval[$uid] = $val;
         return $retval[$uid];
     }
 
