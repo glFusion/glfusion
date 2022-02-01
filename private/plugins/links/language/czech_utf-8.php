@@ -209,7 +209,7 @@ $LANG_LINKS_ADMIN = array(
 
 $LANG_LINKS_STATUS = array(
     100 => "Pokračovat",
-    101 => "Switching Protocols",
+    101 => "Přepínací protokoly",
     200 => "OK",
     201 => "Vytvořeno",
     202 => "Přijato",
