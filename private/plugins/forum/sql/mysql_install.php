@@ -283,7 +283,7 @@ $_SQL['ff_warnings'] = "CREATE TABLE `{$_TABLES['ff_warnings']}` (
   `revoked_date` int(11) unsigned NOT NULL DEFAULT 0,
   `revoked_by` int(11) unsigned NOT NULL DEFAULT 0,
   `revoked_reason` varchar(255) NOT NULL DEFAULT '',
-  `w_notes` text NOT NULL DEFAULT '',
+  `w_notes` text NOT NULL,
   PRIMARY KEY (`w_id`),
   KEY `uid_expires` (`w_uid`,`w_expires`)
 ) ENGINE=MyISAM;";
