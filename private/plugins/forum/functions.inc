@@ -25,6 +25,7 @@ if (!defined ('GVERSION')) {
 use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
+use \glFusion\Admin\AdminAction;
 
 // load the language file(s), including custom strings if any
 
@@ -2437,6 +2438,9 @@ function plugin_moderationapprove_forum($id, $owner_id=0)
 
     $sql = "UPDATE {$_TABLES['ff_topic']} SET approved=1 WHERE id = " . (int)$id;
     DB_query($sql);
+
+    AdminAction::write('forum','mod_approve',"Approved Forum post");
+
     return '';
 }
 
@@ -2453,4 +2457,25 @@ function plugin_moderationdelete_forum($id)
     global $_TABLES;
 
     DB_delete($_TABLES['ff_topic'], 'id', (int)$id);
+
+    AdminAction::write('forum','mod_delete',"Deleted Queued Forum post");
 }
+
+/**
+* Counts the items that are submitted
+*
+* @return   int     number of items in submission queue
+*
+*/
+function plugin_submissioncount_forum()
+{
+    global $_TABLES;
+
+    $retval = 0;
+    if (SEC_hasRights('fpri,.admin')) {
+        $retval = DB_count ($_TABLES['ff_topic'],'approved',0);
+    }
+
+    return $retval;
+}
+
