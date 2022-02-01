@@ -8,6 +8,7 @@
 
 ### Added
 
+- New moderation warning feature for the Forum plugin (Lee)
 - Disallowed names - you can now set user names that are not allowed on the site for both registration and anonymous names
 - Turkish Translation
 - New Feature Administration - see what feature / rights are associated to each group
