@@ -82,7 +82,7 @@ function forum_upgrade() {
             $c->add('bbcode_signature', TRUE, 'select',0, 0, 0, 37, true, 'forum');
             $c->add('use_wysiwyg_editor', false, 'select', 0, 2, 0, 85, true, 'forum');
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} ADD `rating_view` INT( 8 ) NOT NULL ,ADD `rating_post` INT( 8 ) NOT NULL",1);
-            DB_query("ALTER TABLE {$_TABLES['ff_userinfo']} ADD `rating` INT( 8 ) NOT NULL ");
+            DB_query("ALTER TABLE {$_TABLES['ff_userinfo']} ADD `rating` INT( 8 ) NOT NULL DEFAULT '0'");
             DB_query("ALTER TABLE {$_TABLES['ff_userinfo']} ADD signature MEDIUMTEXT" );
             DB_query("ALTER TABLE {$_TABLES['ff_userprefs']} ADD notify_full tinyint(1) NOT NULL DEFAULT '0' AFTER alwaysnotify");
             $sql = "CREATE TABLE IF NOT EXISTS {$_TABLES['ff_rating_assoc']} ( "
@@ -326,6 +326,8 @@ function forum_upgrade() {
             "ALTER TABLE {$_TABLES['ff_topic']}
                 ADD `approved` tinyint(1) unsigned NOT NULL DEFAULT 1",
             );
+            "ALTER TABLE {$_TABLES['ff_userinfo']} CHANGE `rating` `rating` INT( 8 ) NOT NULL DEFAULT '0'";
+
             if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'database_engine'") == 'InnoDB')) {
                 $use_innodb = true;
             } else {
