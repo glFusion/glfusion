@@ -96,6 +96,7 @@ $LANG_GF01 = array(
     'TITLE' => 'Título',
     'COMMENTS' => 'Comentarios',
     'SUBMISSIONS' => 'Propuestas',
+    'FORUMSUBMISSIONS' => 'Forum Submissions',
     'HTML_FILTER_MSG' => 'Filtered HTML Allowed',
     'HTML_FULL_MSG' => 'Todo HTML Permitido',
     'HTML_MSG' => 'HTML Permitido',
@@ -560,6 +561,7 @@ Para dejar de recibir notificaciones sobre este tema, vaya a %s, para cancelarlo
     'text_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: %s',
     'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>',
     'msg_suspended' => 'Sorry, You have suspended from making entries.',
+    'msg_queued' => 'Your submission has been queued for approval.',
 );
 
 $LANG_GF03 = array(

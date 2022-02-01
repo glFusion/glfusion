@@ -96,6 +96,7 @@ $LANG_GF01 = array(
     'TITLE' => 'Tytuł',
     'COMMENTS' => 'Komentarze',
     'SUBMISSIONS' => 'Zgłoszenia',
+    'FORUMSUBMISSIONS' => 'Forum Submissions',
     'HTML_FILTER_MSG' => 'Filtrowanie HTML dozwolone',
     'HTML_FULL_MSG' => 'Pełny HTML dozwolony',
     'HTML_MSG' => 'HTML dozwolone',
@@ -547,6 +548,7 @@ $LANG_GF02 = array(
     'text_notify_message' => 'Nowy wątek "%s"" został wysłany przez %s w %s na forum %s dyskusyjnym. Możesz go zobaczyć tutaj: %s',
     'html_notify_message' => 'Nowy wątek "%s"" został wysłany przez %s w %s na forum %s dyskusyjnym. Możesz go zobaczyć tutaj: <a href="%s">%s</a>',
     'msg_suspended' => 'Sorry, You have suspended from making entries.',
+    'msg_queued' => 'Your submission has been queued for approval.',
 );
 
 $LANG_GF03 = array(

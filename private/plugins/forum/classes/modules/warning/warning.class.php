@@ -50,7 +50,11 @@ class Warning
 
     /** Timestamp when the warning expires.
      * @var integer */
-    private $expires = 0;
+    private $w_expires = 0;
+
+    /** User ID who issued the warning.
+     * @var integer */
+    private $w_issued_by = 0;
 
     /** Timestamp when the warning was revoked, if any.
      * @var integer */
@@ -86,6 +90,9 @@ class Warning
      */
     public function __construct($A='')
     {
+        global $_USER;
+
+        $this->w_issued_by = (int)$_USER['uid'];
         if (is_array($A)) {
             $this->setVars($A, true);
         } elseif (is_numeric($A)) {
@@ -240,6 +247,7 @@ class Warning
             $this->revoked_by = (int)$A['revoked_by'];
             $this->revoked_date = (int)$A['revoked_date'];
             $this->revoked_reason = $A['revoked_reason'];
+            $this->w_issued_by = (int)$A['w_issued_by'];
         }
         return $this;
     }
@@ -497,18 +505,42 @@ class Warning
     }
 
 
+    /**
+     * Gets the warning form for modal display.
+     *
+     * @param   integer $uid    ID of user being warned
+     * @param   integer $t_id   Topic ID generating the warning
+     * @return  string      HTML for edit form
+     */
+    public static function getPopupForm(int $uid, int $t_id) : string
+    {
+        global $_CONF;
+
+        $W = new self;      // modal is only for new warnings
+        return $W->withUid($uid)
+                 ->withTopicId($t_id)
+                 ->withReturnUrl($_CONF['site_url'] . "/forum/viewtopic.php?showtopic=$t_id&topic=$t_id#$t_id")
+                 ->Edit(true);
+    }
+
 
     /**
      * Creates the edit form.
      *
      * @return  string      HTML for edit form
      */
-    public function Edit()
+    public function Edit(bool $popup=false)
     {
         global $_TABLES, $_CONF;
 
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
         $T->set_file('editform', 'editwarning.thtml');
+        if ($popup) {
+            $T->set_var(array(
+                'return_url' => $this->_return_url,
+                'is_modal' => true,
+            ) );
+        }
 
         $T->set_var(array(
             'w_id'      => $this->w_id,
@@ -518,7 +550,7 @@ class Warning
             'topic_id'  => $this->w_topic_id,
             'dscp'      => $this->w_dscp,
             'notes'     => $this->w_notes,
-            'can_revoke' => $this->wt_id > 0,
+            'can_revoke' => $this->w_id > 0,
          ) );
         $Types = WarningType::getAvailable();
         $T->set_block('editform', 'WarningTypes', 'wt');
@@ -758,6 +790,7 @@ class Warning
                 'ts' => 'UNIX_TIMESTAMP()',
                 'w_points' => ':w_points',
                 'w_expires' => ':w_expires',
+                'w_issued_by' => ':w_issued_by',
                 'revoked_date' => ':revoked_date',
                 'revoked_by' => ':revoked_by',
                 'revoked_reason' => ':revoked_reason',
@@ -770,6 +803,7 @@ class Warning
                 ->setParameter('w_topic_id', $this->w_topic_id)
                 ->setParameter('w_points', $this->_WT->getPoints())
                 ->setParameter('w_expires', $expires)
+                ->setParameter('w_issued_by', $this->w_issued_by)
                 ->setParameter('revoked_date', $this->revoked_date)
                 ->setParameter('revoked_by', $this->revoked_by)
                 ->setParameter('revoked_reason', $this->revoked_reason)
@@ -840,7 +874,7 @@ class Warning
     {
         global $_TABLES, $LANG_GF01;
 
-        if ($this->w_uid < 2 || SEC_inGroup('Root', $this->w_uid)) {
+        if (!self::canWarnUser($this->w_uid)) {
             // Can only act on logged-in users, and not administrators.
             return false;
         }
@@ -848,7 +882,10 @@ class Warning
         if ($this->_WT === NULL) {
             $this->_WT = WarningType::getInstance($this->wt_id);
         }
+
+        // Get the user's current threshold percentage, including this warning.
         $percent = self::getUserPercent($this->w_uid);
+        // Get the warning level that has been reached with this warning.
         $WL = WarningLevel::getByPercent($percent);
         if ($WL->getID() < 1 || $WL->getAction() < 1) {
             // No matching warninglevel record found.
@@ -880,6 +917,37 @@ class Warning
             COM_errorLog("SQL Error: $sql");
             return false;
         }
+    }
+
+
+    /**
+     * Check if a given user can be warned.
+     * Warnings don't apply to anonymous users or admins.
+     *
+     * @param   integer $uid    User ID to check
+     * @return  boolean     True if warnings cam be applied, False if not
+     */
+    public static function canWarnUser(?int $uid=NULL) : bool
+    {
+        global $_USER;
+        static $retval = array();
+
+        if ($uid === NULL) {
+            $uid = (int)$_USER['uid'];
+        }
+        if (!array_key_exists($uid, $retval)) {
+            $val = true;
+            if ($uid < 2 || SEC_inGroup('Root', $uid)) {
+                $val = false;
+            } else {
+                $perms = SEC_getUserPermissions('', $uid);
+                if (strstr($perms, 'forum.edit') !== false) {
+                    $val = false;
+                }
+            }
+            $retval[$uid] = $val;
+        }
+        return $retval[$uid];
     }
 
 }

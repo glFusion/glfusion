@@ -46,6 +46,11 @@ if (is_ajax()) {
             case "test":
                 test_function();
                 break;
+            case 'warn_getform':
+                $retval = Forum\Modules\Warning\Warning::getPopupForm((int)$_POST['uid'], (int)$_POST['t_id']);
+                echo $retval;
+                exit;
+                break;
         }
     } else {
         die();

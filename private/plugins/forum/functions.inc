@@ -722,6 +722,11 @@ function forum_chkUsercanPost() {
 function forum_chkUsercanAccess($secure=false) {
     global $_CONF, $_FF_CONF, $LANG_GF01, $LANG_GF02, $_USER;
 
+    if (SEC_isAdmin()) {
+        // Don't accidentally block system admins
+        return;
+    }
+
     $display = '';
     $U = Forum\UserInfo::getInstance($_USER['uid']);
     if ($U->isBanned()) {
@@ -1774,7 +1779,7 @@ function _ff_canPost( $forum ) {
     }
     if (
         Forum\Modules\Warning\Warning::featureEnabled() &&
-        Forum\UserInfo::getInstance()->getForumStatus() >= Forum\Status::SUSPEND
+        Forum\UserInfo::getInstance()->getForumStatus()['status'] >= Forum\Status::SUSPEND
     ) {
         // User has been suspended from posting due to warning levels
         return false;
@@ -2376,19 +2381,19 @@ function plugin_privacy_export_forum_DISABLED($uid,$email='',$username='',$ip=''
  */
 function plugin_itemlist_forum($token='')
 {
-    global $_TABLES, $LANG29;
+    global $_TABLES, $LANG29, $LANG_GF01;
 
     if (SEC_hasRights('forum.edit')) {
         $plugin = new Plugin();
-        $plugin->submissionlabel = 'Forum Submissions';
+        $plugin->submissionlabel = $LANG_GF01['FORUMSUBMISSIONS'];
         $plugin->submissionhelpfile = '';
-        $plugin->getsubmissionssql = "SELECT id,t.subject,FROM_UNIXTIME(t.date) AS day, t.name"
+        $plugin->getsubmissionssql = "SELECT id,t.subject,FROM_UNIXTIME(t.date) AS day, t.name, t.uid"
             . " FROM {$_TABLES['ff_topic']} t"
             . " WHERE approved = 0"
             . " ORDER BY date ASC";
-        $plugin->addSubmissionHeading('Subject');
-        $plugin->addSubmissionHeading('Date');
-        $plugin->addSubmissionHeading('User Name');
+        $plugin->addSubmissionHeading($LANG_GF01['SUBJECT']);
+        $plugin->addSubmissionHeading($LANG_GF01['DATEADDED']);
+        $plugin->addSubmissionHeading($LANG_GF01['username']);
         $plugin->addSubmissionHeading($LANG29[46]);
         return $plugin;
     }
@@ -2409,7 +2414,6 @@ function plugin_itemlist_forum($token='')
 function plugin_moderationvalues_forum()
 {
     global $_TABLES;
-
     return array(
         'id',
         $_TABLES['ff_topic'],

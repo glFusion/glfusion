@@ -48,7 +48,6 @@ function forum_index()
     /*
      * Initialize vars
      */
-
     $canPost = 0;
     $display = '';
     $pageBody = '';
@@ -753,7 +752,7 @@ $tcount = $db->conn->fetchColumn("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WH
         } else {
             $sql  = "SELECT topic.*,lp.name AS lpname,lp.id AS lpid FROM {$_TABLES['ff_topic']} topic LEFT JOIN {$_TABLES['ff_topic']} lp ON topic.last_reply_rec=lp.id WHERE topic.forum=".(int)$forum." AND topic.pid = 0 ";
         }
-        $sql .= "ORDER BY topic.sticky DESC, $sortOrder, topic.id DESC LIMIT $offset, $show";
+        $sql .= "AND topic.approved=1 ORDER BY topic.sticky DESC, $sortOrder, topic.id DESC LIMIT $offset, $show";
 
         $topicResults = DB_query($sql);
         $totalresults = DB_numRows($topicResults);

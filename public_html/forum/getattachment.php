@@ -20,6 +20,8 @@ require_once '../lib-common.php';
 
 use \glFusion\Log\Log;
 
+forum_chkUsercanAccess();
+
 $id = COM_applyFilter($_GET['id'], true);
 $sql = "SELECT filename,repository_id FROM {$_TABLES['ff_attachments']} WHERE id=".(int) $id.";";
 $res = DB_query($sql);

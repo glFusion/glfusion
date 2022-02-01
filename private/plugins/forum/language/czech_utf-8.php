@@ -96,6 +96,7 @@ $LANG_GF01 = array(
     'TITLE' => 'Titulek',
     'COMMENTS' => 'Komentáře',
     'SUBMISSIONS' => 'Příspěvky',
+    'FORUMSUBMISSIONS' => 'Forum Submissions',
     'HTML_FILTER_MSG' => 'Některé tagy HTML povoleny',
     'HTML_FULL_MSG' => 'Všechny tagy HTML povoleny',
     'HTML_MSG' => 'HTML povoleno',
@@ -547,6 +548,7 @@ $LANG_GF02 = array(
     'text_notify_message' => 'Nový článek "%s"" byl přidán %s do fóra %s na webu %s. Můžete jej zobrazit na: %s',
     'html_notify_message' => 'Nové téma "%s"" bylo přidáno %s do fóra %s na webu %s. Můžete ji zobrazit na: <a href="%s">%s</a>',
     'msg_suspended' => 'Sorry, You have suspended from making entries.',
+    'msg_queued' => 'Your submission has been queued for approval.',
 );
 
 $LANG_GF03 = array(

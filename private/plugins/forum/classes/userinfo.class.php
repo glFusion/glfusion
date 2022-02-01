@@ -180,16 +180,33 @@ class UserInfo
     }
 
 
+    /**
+     * Get the timestamp when the forum ban expires.
+     *
+     * @return  integer     Timestamp
+     */
     public function getBanExpiration() : int
     {
         return (int)$this->ban_expires;
     }
 
+
+    /**
+     * Get the timestamp when the moderation requirement expires.
+     *
+     * @return  integer     Timestamp
+     */
     public function getModerationExpiration() : int
     {
         return (int)$this->moderate_expires;
     }
 
+
+    /**
+     * Get the timestamp when the submission suspension expires.
+     *
+     * @return  integer     Timestamp
+     */
     public function getSuspensionExpiration() : int
     {
         return (int)$this->supend_expires;

@@ -1135,9 +1135,19 @@ function FF_saveTopic( $forumData, $postData, $action )
                 $sticky = 1;
             }
         }
+        if (
+            Forum\Modules\Warning\Warning::featureEnabled() &&
+            Forum\UserInfo::getInstance()->getForumStatus()['status'] >= Forum\Status::MODERATE
+        ) {
+            $approved = 0;
+            $submit_msg = 'msg_queued';
+        } else {
+            $approved = 1;
+            $submit_msg = 'msg19';
+        }
 
         if ( $action == 'savetopic') {
-            $fields = "forum,name,email,date,lastupdated,subject,comment,postmode,ip,mood,uid,pid,sticky,locked,status";
+            $fields = "forum,name,email,date,lastupdated,subject,comment,postmode,ip,mood,uid,pid,sticky,locked,status,approved";
             $sql  = "INSERT INTO {$_TABLES['ff_topic']} ($fields) ";
             $sql .= "VALUES (".(int) $forum."," .
                     "'".DB_escapeString($name)."'," .
@@ -1153,7 +1163,8 @@ function FF_saveTopic( $forumData, $postData, $action )
                     "0," .
                     (int) $sticky."," .
                     (int) $locked."," .
-                    (int) $status.")";
+                    (int) $status."," .
+                    (int) $approved . ")";
             DB_query($sql);
 
             // Find the id of the last inserted topic
@@ -1180,7 +1191,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
         } else if ( $action == 'savereply' ) {
 
-            $fields = "name,email,date,subject,comment,postmode,ip,mood,uid,pid,forum,status";
+            $fields = "name,email,date,subject,comment,postmode,ip,mood,uid,pid,forum,status,approved";
             $sql  = "INSERT INTO {$_TABLES['ff_topic']} ($fields) ";
             $sql .= "VALUES  (" .
                     "'".DB_escapeString($name)."'," .
@@ -1194,7 +1205,8 @@ function FF_saveTopic( $forumData, $postData, $action )
                     (int) $uid."," .
                     (int) $id."," .
                     (int) $forum."," .
-                    (int) $status.")";
+                    (int) $status."," .
+                    (int) $approved . ")";
             DB_query($sql);
             // Find the id of the last inserted topic
             $res = DB_query("SELECT max(id) AS lastid FROM {$_TABLES['ff_topic']}");
@@ -1219,7 +1231,7 @@ function FF_saveTopic( $forumData, $postData, $action )
             DB_query("DELETE FROM {$_TABLES['ff_log']} WHERE topic=".(int) $topicPID." and time > 0");
         } elseif ( $action == 'saveedit' || $action == 'savemod') {
             if ($action == 'savemod') {
-                $approve = ", approved = 1 ";
+                $approved = 1;
             }
             $sql = "UPDATE {$_TABLES['ff_topic']} SET " .
                    "subject='$subject'," .
@@ -1228,8 +1240,8 @@ function FF_saveTopic( $forumData, $postData, $action )
                    "mood='".DB_escapeString($mood)."'," .
                    "sticky=".(int) $sticky."," .
                    "locked=".(int) $locked."," .
-                   "status=".(int) $status." " .
-                   $approve .
+                   "status=".(int) $status."," .
+                   "approved=".(int) $approved." " .
                    "WHERE (id=".(int) $editid.")";
             DB_query($sql);
 
@@ -1295,13 +1307,17 @@ function FF_saveTopic( $forumData, $postData, $action )
             _ff_chknotifications($forum,$savedPostID,$uid);
         }
 
-        $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topicPID.'&topic='.$savedPostID.'#'.$savedPostID;
+        if ($action == 'savetopic' && $approved == 0) {
+            $link = $_CONF['site_url'].'/forum/index.php?forum='.$forum;
+        } else {
+            $link = $_CONF['site_url'].'/forum/viewtopic.php?showtopic='.$topicPID.'&topic='.$savedPostID.'#'.$savedPostID;
+        }
         if ( $uploadErrors != '' ) {
             $autorefresh = false;
         } else {
             $autorefresh = true;
         }
-        $retval .= FF_statusMessage($uploadErrors . $LANG_GF02['msg19'],$link,$LANG_GF02['msg19'],false,'',$autorefresh);
+        $retval .= FF_statusMessage($uploadErrors . $LANG_GF02[$submit_msg],$link,$LANG_GF02[$submit_msg],false,'',$autorefresh);
     } else {
         $retval .= _ff_alertMessage($LANG_GF02['msg18']);
     }

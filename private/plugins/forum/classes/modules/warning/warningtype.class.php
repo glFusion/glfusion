@@ -388,6 +388,10 @@ class WarningType
             $retval .= $A['wt_expires_qty'] . ' ' . Dates::getDscp($A['wt_expires_qty'], $A['wt_expires_period']);
             break;
 
+        case 'wt_points':
+            $retval .= (int)$fieldvalue;
+            break;
+
         default:
             $retval = $fieldvalue;
             break;
@@ -415,7 +419,7 @@ class WarningType
             $qb = $db->conn->createQueryBuilder();
             if ($this->wt_id > 0) {
                 $qb->update($_TABLES['ff_warningtypes'])
-                             ->where('wt_id = :wt_id');
+                   ->where('wt_id = :wt_id');
                 $qb->set('wt_points', ':wt_points')
                    ->set('wt_expires_qty', ':wt_expires_qty')
                    ->set('wt_expires_period', ':wt_expires_period')
