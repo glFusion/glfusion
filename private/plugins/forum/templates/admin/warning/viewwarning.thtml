@@ -57,8 +57,9 @@
 
 	<div class="uk-form-row" align="center">
 		<div class="uk-form-controls">
-			<button type="submit" class="uk-button uk-button-success" name="revokewarning">{$LANG_GF01['revoke']}</button>
-			<a class="uk-button uk-button-primary" name="cancel" href="{return_url}">{$LANG_ADMIN['cancel']}</a>
+			<button type="submit" class="uk-button uk-button-primary" name="revokewarning">{$LANG_GF01['revoke']}</button>
+			<a class="uk-button uk-button-default" name="cancel" href="{return_url}">{$LANG_ADMIN['cancel']}</a>
+			<button type="submit" class="uk-button uk-button-danger" name="deletewarning">{$LANG_ADMIN['delete']}</button>
 		</div>
 	</div>
 
