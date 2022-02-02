@@ -204,6 +204,11 @@ if ( isset($_USER['uid']) ) {
     $uid = 1;
 }
 
+if (SEC_hasRights('filemgmt.admin')) {
+    echo COM_refresh($_CONF['site_admin_url'].'/plugins/filemgmt/index.php?modDownload=0');
+    exit;
+}
+
 if (Filemgmt\Download::canSubmit()) {
     $groupsql = SEC_buildAccessSql();
     $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
