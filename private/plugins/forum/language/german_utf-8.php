@@ -549,6 +549,7 @@ $LANG_GF02 = array(
     'html_notify_message' => 'Der neuen Beitrag "%s"", geschrieben von %s im Forum %s auf der Seite %s, interessiert dich vielleicht. Hier gehts sum Beitrag: <a href="%s">%s</a>',
     'msg_suspended' => 'Sorry, You have suspended from making entries.',
     'msg_queued' => 'Your submission has been queued for approval.',
+    'msg_wt_inuse' => 'This warning type is in use, please delete all related warnings before attempting to remove this item.',
 );
 
 $LANG_GF03 = array(

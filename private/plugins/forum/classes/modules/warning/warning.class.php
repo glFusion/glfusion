@@ -579,8 +579,24 @@ class Warning
         USES_lib_admin();
 
         $uid = (int)$uid;
+        $wt_id = isset($_POST['w_type']) ? (int)$_POST['w_type'] : 0;
+        $activeonly = isset($_POST['w_active']) ? (int)$_POST['w_active'] : 0;
         $retval = '';
-        $form_arr = array();
+        $form_arr = array(
+        );
+        $filter = '<div class="uk-margin">' . $LANG_GF01['warning_type'] .
+            ': <select name="w_type" onchange="this.form.submit();">' .
+            '<option value="0">' . $LANG_GF01['ALL'] . '</option>' .
+            COM_optionList(
+                $_TABLES['ff_warningtypes'],
+                'wt_id,wt_dscp', $wt_id
+            ) . '</select>&nbsp;' .
+            $LANG_GF01['active'] . '&nbsp;<input type="checkbox" name="w_active" value="1" ' .
+            'onclick="this.form.submit();" ';
+        if ($activeonly) {
+            $filter .= 'checked="checked"';
+        }
+        $filter .= ' /></div>';
 
         $header_arr = array(
             array(
@@ -620,14 +636,8 @@ class Warning
                 'align' => 'left',
             ),
             array(
-                'text'  => $LANG_ADMIN['edit'],
+                'text'  => $LANG_GF01['revoke'] . '/' . $LANG_ADMIN['delete'],
                 'field' => 'edit',
-                'sort'  => false,
-                'align' => 'center',
-            ),
-            array(
-                'text'  => $LANG_ADMIN['delete'],
-                'field' => 'delete',
                 'sort'  => false,
                 'align' => 'center',
             ),
@@ -650,16 +660,20 @@ class Warning
             ON wt.wt_id = w.wt_id
             LEFT JOIN {$_TABLES['users']} u
             ON u.uid = w.w_uid
-            WHERE 1=1";
+            WHERE 1=1 ";
+        $where = '';
         if ($uid > 1) {
-            $sql .= " AND w_uid = $uid";
+            $where .= " AND w_uid = $uid";
+        }
+        if ($wt_id > 0) {
+            $where .= " AND w.wt_id = $wt_id";
         }
         if ($activeonly) {
-            $sql .= " AND w_expires > UNIX_TIMESTAMP()";
+            $where .= " AND w_expires > UNIX_TIMESTAMP()";
         }
         $query_arr = array('table' => 'ff_warnings',
-            'sql' => $sql,
-            'query_fields' => array('w_dscp', 'fullname', 'username'),
+            'sql' => $sql . $where,
+            'query_fields' => array('w_dscp', 'fullname', 'username', 'wt_dscp'),
         );
         $text_arr = array(
             'has_extras' => true,
@@ -669,7 +683,7 @@ class Warning
         $retval .= ADMIN_list(
             'warnings_user_admlist',
             array(__CLASS__, 'getAdminField'), $header_arr,
-            $text_arr, $query_arr, $defsort_arr, '', '', $options, $form_arr
+            $text_arr, $query_arr, $defsort_arr, $filter, '', $options, $form_arr
         );
         return $retval;
     }
@@ -696,18 +710,6 @@ class Warning
             $retval = FieldList::edit(
                 array(
                     'url' => $base_url . '?viewwarning=' .$A['w_id'],
-                )
-            );
-            break;
-
-        case 'delete':
-            $retval .= FieldList::delete(
-                array(
-                    'delete_url' => $base_url.'?deletewarning=' . $A['w_id'],
-                    'attr' => array(
-                        'title'   => $LANG_ADMIN['delete'],
-                        'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');"
-                    ),
                 )
             );
             break;
