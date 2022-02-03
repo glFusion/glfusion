@@ -36,30 +36,6 @@ if (!SEC_hasRights ('syndication.edit')) {
     exit;
 }
 
-/**
-* Toggle status of a feed from enabled to disabled and back
-*
-* @param    int     $fid    ID of the feed
-* @return   void
-*
-*/
-function FEED_toggleStatus($fid_arr, $feedarray)
-{
-    global $_TABLES;
-
-    if (isset($feedarray) && is_array($feedarray) ) {
-        foreach ($feedarray AS $feed => $junk ) {
-            $feed = intval($feed);
-            if ( isset($fid_arr[$feed]) ) {
-                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '1' WHERE fid = ".(int) $feed);
-            } else {
-                DB_query ("UPDATE {$_TABLES['syndication']} SET is_enabled = '0' WHERE fid = ".(int) $feed);
-            }
-        }
-        $c = Cache::getInstance()->deleteItemsByTag('story');
-    }
-    return;
-}
 
 /**
 * Get a list of feed formats from the feed parser factory.
@@ -736,15 +712,14 @@ if (isset($_POST['fid'])) {
 }
 
 if ($_CONF['backend'] && isset($_POST['feedenabler']) && SEC_checkToken()) {
+    $Feeds = Feed::getAll();
     $enabledfeeds = array();
     if (isset($_POST['enabledfeeds'])) {
         $enabledfeeds = $_POST['enabledfeeds'];
     }
-    $feedarray = array();
-    if ( isset($_POST['feedarray']) ) {
-        $feedarray = $_POST['feedarray'];
+    foreach ($Feeds as $fid=>$Feed) {
+        $Feed->toggleEnabled(isset($enabledfeeds[$fid]));
     }
-    FEED_toggleStatus($enabledfeeds, $feedarray);
 }
 
 switch ($action) {

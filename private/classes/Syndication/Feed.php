@@ -654,6 +654,8 @@ class Feed
     {
         global $_TABLES;
 
+        $db = Database::getInstance();
+
         if ($this->fid > 0) {
             $fullpath = $this->getFilePath();
             if (file_exists( $fullpath) ) {
@@ -672,6 +674,53 @@ class Feed
             );
             Log::write('system',Log::INFO,'...success');
         }
+    }
+
+
+    /**
+     * Toggle the feed's "enabled" status.
+     * If the feed is enabled here then the feed is generated.
+     * If the feed is disabled then the feed file is deleted.
+     * The status is checked so that nothing is done unless it is changed.
+     *
+     * @param   integer $newstat    New status to set
+     * @return  boolean     True if status changed, False if not
+     */
+    public function toggleEnabled(int $newstat) : bool
+    {
+        global $_TABLES;
+
+        $retval = false;
+        $newstat = (int)$newstat;
+        if ($newstat != $this->is_enabled) {
+            try {
+                $db = Database::getInstance();
+                $db->conn->executeUpdate(
+                "UPDATE {$_TABLES['syndication']} SET is_enabled = ? WHERE fid = ?",
+                    array(
+                        $newstat,
+                        $this->fid
+                    ),
+                    array(Database::INTEGER,Database::STRING)
+                );
+                $retval = true;
+            } catch (\Throwable $e) {
+                Log::write('system', Log::INFO, 'error toggling status for feed ' . $this->fid);
+            }
+        }
+        if ($retval) {      // a change was made
+            if ($newstat) {
+                // enabling a feed that was disabled
+                $this->Generate();
+            } else {
+                // disabling a feed, remove the feed file
+                $fullpath = $this->getFilePath();
+                if (file_exists( $fullpath) ) {
+                    @unlink ($fullpath);
+                }
+            }
+        }
+        return $retval;
     }
 
 
