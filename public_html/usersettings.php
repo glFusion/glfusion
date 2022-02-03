@@ -1550,6 +1550,8 @@ function updateAccountInfo($A)
             CUSTOM_userSave($_USER['uid']);
         }
 
+        $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
+
         PLG_userInfoChanged ((int)$_USER['uid']);
 
         // at this point, the user information has been saved, but now we're going to check to see if
@@ -1562,6 +1564,7 @@ function updateAccountInfo($A)
             } else {
                 $msg = 118;
             }
+            $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
         } else {
             if (isset($A['resynch']) ) {
                 if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0)) {
@@ -1584,13 +1587,12 @@ function updateAccountInfo($A)
                     $msg = 114; // Account saved but re-synch failed.
                     Log::write('system',Log::ERROR,$MESSAGE[$msg]);
                 }
+                $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
             }
         }
 
 //        PLG_profileExtrasSave ();
 //        PLG_profileSave();
-
-        $c = Cache::getInstance()->deleteItemsByTags(array('menu','userdata'));
 
         if ( $msg == 5 ) {
             COM_setMsg($MESSAGE[$msg],'info');
