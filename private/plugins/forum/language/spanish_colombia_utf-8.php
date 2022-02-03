@@ -562,6 +562,7 @@ Para dejar de recibir notificaciones sobre este tema, vaya a %s, para cancelarlo
     'html_notify_message' => 'A new topic "%s"" has been posted by %s in the %s forum on the %s website. You may view it at: <a href="%s">%s</a>',
     'msg_suspended' => 'Sorry, You have suspended from making entries.',
     'msg_queued' => 'Your submission has been queued for approval.',
+    'msg_wt_inuse' => 'This warning type is in use, please delete all related warnings before attempting to remove this item.',
 );
 
 $LANG_GF03 = array(

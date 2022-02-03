@@ -91,12 +91,18 @@ case 'savewarning':
     break;
 
 case 'deletewarning':
-    Warning::Delete((int)$actionval);
-    echo COM_refresh($_SERVER['HTTP_REFERER']);
+    if (isset($_POST['w_id'])) {
+        Warning::Delete((int)$_POST['w_id']);
+    }
+    if (isset($_POST['return_url']) && !empty($_POST['return_url'])) {
+        COM_refresh($_POST['return_url']);
+    } else {
+        COM_refresh($self . '?log');
+    }
     break;
 
 case 'revokewarning':
-    $content = Warning::getInstance((int)$_POST['w_id'])
+    Warning::getInstance((int)$_POST['w_id'])
         ->withRevokedReason($_POST['revoked_reason'])
         ->Revoke();
     if (isset($_POST['return_url']) && !empty($_POST['return_url'])) {

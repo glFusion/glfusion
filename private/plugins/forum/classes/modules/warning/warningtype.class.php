@@ -328,11 +328,15 @@ class WarningType
             ),
         );
 
+        $sql = "SELECT wt.*, (
+            SELECT count(*) FROM {$_TABLES['ff_warnings']} w WHERE w.wt_id = wt.wt_id
+            ) AS w_count
+            FROM {$_TABLES['ff_warningtypes']} wt";
         $options = array('chkdelete' => 'true', 'chkfield' => 'wt_id','chkname' => 'deletetype');
         $defsort_arr = array('field' => 'wt_points', 'direction' => 'asc');
         $query_arr = array(
             'table' => 'ff_warningtypes',
-            'sql' => "SELECT * FROM {$_TABLES['ff_warningtypes']}",
+            'sql' => $sql,
             'query_fields' => array(),
         );
         $text_arr = array(
@@ -359,7 +363,7 @@ class WarningType
      */
     public static function getAdminField($fieldname, $fieldvalue, $A, $icon_arr, $extra=array())
     {
-        global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $LANG_GF01;
+        global $_CONF, $LANG_ACCESS, $LANG_ADMIN, $LANG_GF01, $LANG_GF02;
 
         $retval = '';
         $base_url = $_CONF['site_admin_url'] . '/plugins/forum/warnings.php';
@@ -373,15 +377,22 @@ class WarningType
             );
             break;
         case 'delete':
-            $retval = FieldList::delete(
-                array(
-                    'delete_url' => $base_url.'?deletetype='.$A['wt_id'],
-                    'attr' => array(
-                        'title'   => $LANG_ADMIN['delete'],
-                        'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');"
-                    ),
-                )
-            );
+            if ((int)$A['w_count'] == 0) {
+                $retval = FieldList::delete(
+                    array(
+                        'delete_url' => $base_url.'?deletetype='.$A['wt_id'],
+                        'attr' => array(
+                            'title'   => $LANG_ADMIN['delete'],
+                            'onclick' => "return confirm('{$LANG_GF01['DELETECONFIRM']}');",
+                            'disabled' => true,
+                        ),
+                    )
+                );
+            } else {
+                $retval = FieldList::info(array(
+                    'title' => $LANG_GF02['msg_wt_inuse'],
+                ) );
+            }
             break;
 
         case 'wt_expires':
