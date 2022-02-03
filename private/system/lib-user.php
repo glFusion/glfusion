@@ -1228,7 +1228,7 @@ function USER_unmergeAccounts()
     $retval = false;
 
     $localUID = (int) filter_input(INPUT_POST, 'localuid', FILTER_SANITIZE_NUMBER_INT);
-    $localpwd  = $_POST['passwd'];
+    $localpwd  = $_POST['old_password'];
 
     $localUserInfo = $db->conn->fetchAssoc(
             "SELECT * FROM `{$_TABLES['users']}` WHERE uid=?",
@@ -1289,7 +1289,7 @@ function USER_mergeAccounts()
             array(Database::INTEGER)
     );
     if ($userData === false || $userData === null) {
-        Log::write('system',Log::WARNING,"ERROR: Attempting to merge local UID: " . $localUID. " with remote UID: " . $remoteUID . " failed due to uid mismatch");
+        Log::write('system',Log::WARNING,"Attempting to merge local UID: " . $localUID. " with remote UID: " . $remoteUID . " failed due to uid mismatch");
         echo COM_refresh($_CONF['site_url'].'/index.php');
     }
     if (SEC_check_hash($localpwd, $userData['passwd'])) {
