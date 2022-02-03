@@ -137,6 +137,8 @@ $LANG_FILEMGMT = array(
     'new_file'              => 'New File',
     'remote_ip'             => 'Benutzer IP',
     'back_to_listing'       => 'Back To Listing',
+    'remote_url'            => 'Remote-URL',
+    'file_missing'          => 'File Missing',
 );
 
 $LANG_FILEMGMT_ERRORS = array(

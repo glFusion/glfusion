@@ -275,7 +275,7 @@ $LANG_confignames['links'] = array(
     'default_permissions' => 'Výchozí oprávnění odkazů',
     'target_blank' => 'Otevřít odkazy v novém okně',
     'displayblocks' => 'Zobrazit bloky glFusion',
-    'submission'    => 'Link Submission',
+    'submission'    => 'Odkaz na příspěvek',
 );
 
 $LANG_configsubgroups['links'] = array(

@@ -139,6 +139,8 @@ $LANG_FILEMGMT = array(
     'new_file'              => 'Nový soubor',
     'remote_ip'             => 'Vzdálená IP',
     'back_to_listing'       => 'Zpět na seznam',
+    'remote_url'            => 'Vzdálený uživatel',
+    'file_missing'          => 'File Missing',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
