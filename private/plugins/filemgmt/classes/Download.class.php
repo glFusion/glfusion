@@ -659,6 +659,8 @@ class Download
             $snap_path = $_FM_CONF['SnapStore_tmp'];
         }
 
+        $fileurl = isset($A['fileurl']) ? COM_applyFilter($A['fileurl']) : '';
+
 // only want to do this for replacement files or new files...
 
 // we have a file to upload - so we need to process it.
@@ -716,11 +718,18 @@ class Download
                     $AddNewFile = true;
                 }
             }
+        }
+// this handles the remote URL
+        if (!empty($fileurl)) {
 
-            if ($upload->numFiles() == 0 && !$upload->areErrors() && !empty($fileurl)) {
-                $this-setUrl($fileurl);
+            $rc = (int) $this->validateUrl($fileurl);
+            Log::write('system',Log::DEBUG,'URL Validation returned ' . $rc);
+            if ($rc < 400) {
+                $this->setUrl($fileurl);
                 $size = 0;
                 $AddNewFile = true;
+            } else {
+                Log::write('system',Log::ERROR,'FileMgmt: Remote URL validation failed for ' . $fileurl);
             }
         }
 // end of new file upload
@@ -960,6 +969,7 @@ class Download
             'lang_filename' => _MD_DLFILENAME,
             'lang_filetitle' => _MD_FILETITLE,
             'lang_replfile' => (($this->lid === 0) ? 'File' : _MD_REPLFILENAME),
+            'lang_remote_url' => $LANG_FILEMGMT['remote_url'],
             'lang_homepage' => _MD_HOMEPAGEC,
             'lang_filesize' => _MD_FILESIZEC,
             'lang_bytes'    => _MD_BYTES,
@@ -1043,7 +1053,26 @@ class Download
         } else {
             $tFile = $_FM_CONF['FileStore'].$this->url;
         }
-        if (!file_exists($tFile)) {
+
+        $is_found = false;
+        $parts = parse_url($this->url);
+        if (!isset($parts['scheme'])) {
+            // Local file, check that the file exists
+            if ($_FM_CONF['outside_webroot']) {
+                $tFile = $_CONF['path'].'data/filemgmt_data/files/' . rawurldecode($this->url);
+            } else {
+                $tFile = $_FM_CONF['FileStore'] . rawurldecode($this->url);
+            }
+            $is_found = file_exists($tFile);
+            clearstatcache();
+        } else {
+            // Remote file, validate link or assume the file exists
+            $tFile = $this->url;
+            if (Download::validateUrl($this->url) < 400) {
+                $is_found = true;
+            }
+        }
+        if ($is_found === false) {
             $T->set_var('file_missing',true);
         } else {
             $T->unset_var('file_missing');
@@ -1501,12 +1530,30 @@ class Download
             } else {
                 $tFile = $_FM_CONF['FileStore'].$A['url'];
             }
-            if (!file_exists($tFile)) {
+
+            // Check if this is a local or remotely-hosted file.
+            $is_found = false;
+            $parts = parse_url($A['url']);
+            if (!isset($parts['scheme'])) {
+                // Local file, check that the file exists
+                if ($_FM_CONF['outside_webroot']) {
+                    $fullurl = $_CONF['path'].'data/filemgmt_data/files/' . rawurldecode($A['url']);
+                } else {
+                    $fullurl = $_FM_CONF['FileStore'] . rawurldecode($A['url']);
+                }
+                $is_found = file_exists($fullurl);
+                clearstatcache();
+            } else {
+                // Remote file, validate link or assume the file exists
+//                if (Download::validateUrl($A['url']) < 400) {
+                    $is_found = true;
+//                }
+            }
+            if ($is_found === false) {
                 $retval = $fieldvalue . ' <span class="fm-file-missing tooltip" title="'.$LANG_FM00['not_found'].'"><sup>**</sup></span>';
             } else {
                 $retval = $fieldvalue;
             }
-            clearstatcache();
             break;
 
         case 'date':
@@ -1899,4 +1946,46 @@ class Download
         $owner_select = $T->finish($T->get_var('output'));
         return $owner_select;
     }
+
+    /**
+     * Validate remote URL
+     *
+     * @return  string      status code
+     */
+    public static function validateUrl($url)
+    {
+        $retval = '';
+
+        set_time_limit(0);
+        $req=new \http_class;
+        $req->timeout=0;
+        $req->data_timeout=0;
+        $req->debug=0;
+        $req->html_debug=0;
+        $req->follow_redirect = 1;
+        $req->accept = "*/*";
+        $req->user_agent="Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)";
+        $error=$req->GetRequestArguments($url,$arguments);
+        $arguments["Headers"]["Pragma"]="nocache";
+
+        $error=$req->Open($arguments);
+        if ( $error != "" ) {
+            $retval = 404;
+        } else {
+            $headers=array();
+            $error=$req->SendRequest($arguments);
+            if ( $error != "" ) {
+                $retval = 404;;
+            } else {
+                $error=$req->ReadReplyHeaders($headers);
+                if ( $error != "") {
+                    $retval = 404;
+                } else {
+                    $retval = $req->response_status;
+                }
+            }
+        }
+        return $retval;
+    }
+
 }

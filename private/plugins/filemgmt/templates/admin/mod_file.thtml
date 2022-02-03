@@ -30,7 +30,7 @@
 				{url}
 				<input type="hidden" name="url" value="{url}" />
 {!if file_missing}
-				<span class="uk-text-danger uk-text-bold uk-margin-left">File Missing</span>
+				<span class="uk-text-danger uk-text-bold uk-margin-left">{$LANG_FILEMGMT[file_missing]}</span>
 {!endif}
 			</div>
 		</div>
@@ -39,6 +39,13 @@
 			<label class="uk-form-label">{lang_replfile}</label>
 			<div class="uk-form-controls">
                 <input type="file" name="newfile">
+			</div>
+		</div>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label">{lang_remote_url}</label>
+			<div class="uk-form-controls">
+				<input class="uk-form-width-large" type="text" name="fileurl" value="{fileurl}">
 			</div>
 		</div>
 
