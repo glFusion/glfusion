@@ -3069,11 +3069,6 @@ function COM_formatBlock( $A, $noboxes = false)
                 // Return nothing, just hide the block if its function is missing.
                 return '';
             }
-
-
-
-
-
         }
     }
 
@@ -3172,12 +3167,6 @@ function COM_rdfImport($bid, $rdfurl, $maxheadlines = 0)
          * the syndication file. Now we will sort out our display, and update
          * the block.
          */
-        if ($maxheadlines == 0) {
-            if (!empty($_CONF['syndication_max_headlines'])) {
-                $maxheadlines = $_CONF['syndication_max_headlines'];
-            }
-        }
-
         if ( $maxheadlines == 0 ) {
             $number_of_items = $feed->get_item_quantity();
         } else{

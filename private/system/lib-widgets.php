@@ -693,9 +693,6 @@ function WIDGET_tickerRSS($feedurl, $options = array() ) {
          * the block.
          */
         $maxheadlines = 50;
-        if (!empty($_CONF['syndication_max_headlines'])) {
-            $maxheadlines = $_CONF['syndication_max_headlines'];
-        }
 
         if ( $maxheadlines == 0 ) {
             $number_of_items = $feed->get_item_quantity();
