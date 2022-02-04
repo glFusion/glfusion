@@ -322,7 +322,7 @@ function FEED_edit($fid = 0, $type = '', $A = array())
             $A['topic'] = '::all';
             $A['header_tid'] = 'none';
             $A['format'] = 'RSS-2.0';
-            $A['limits'] = $_CONF['rdf_limit'];
+            $A['limits'] = 10;
             $A['content_length'] = $_CONF['rdf_storytext'];
             $A['title'] = $_CONF['site_name'];
             $A['description'] = $_CONF['site_slogan'];
