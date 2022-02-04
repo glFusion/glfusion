@@ -669,7 +669,8 @@ function WIDGET_tickerRSS($feedurl, $options = array() ) {
         'startEmpty'	    => true,    // Defines whether the elemtents should start outside of the visible area
         'hoverpause'	    => true,    // Pauses the animation if the user hovers over the ticker
         'transition'	    => 'linear', // The easing function used throughout for transitions 'linear' or 'ease'
-        'height'	        => '30px'   // The height of the ticker element. The string value needs to include the unit
+        'height'	        => '30px',  // The height of the ticker element. The string value needs to include the unit
+        'maxheadlines'      => 50       // maximum number of items to show
     );
 
     $optionsArray = array_merge($defaultOptions, $options);
@@ -692,7 +693,7 @@ function WIDGET_tickerRSS($feedurl, $options = array() ) {
          * the syndication file. Now we will sort out our display, and update
          * the block.
          */
-        $maxheadlines = 50;
+        $maxheadlines = $optionsArray['maxheadlines'];
 
         if ( $maxheadlines == 0 ) {
             $number_of_items = $feed->get_item_quantity();
