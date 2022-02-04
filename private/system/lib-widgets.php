@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2020 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans    mark AT glfusion DOT org
 *   Eric Warren      eakwarren AT gmail DOT com
 *   Joe Mucchiello   jmucchiello AT yahoo DOT com
@@ -72,7 +72,7 @@ function WIDGET_interface($function_name, $args='')
 
 
 function WIDGET_autotranslations($header=0) {
-    global $_CONF, $LANG_WIDGETS;
+    global $_CONF, $LANG_LOCALE, $LANG_WIDGETS;
 
     $isoLang = array(
                  'ar' => 'Arabic',
@@ -130,7 +130,7 @@ function WIDGET_autotranslations($header=0) {
 
             $T->set_var(array(
                 'key'   => $key,
-                'src_lng' => $_CONF['rdf_language'],
+                'src_lng' => isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US';
                 'lang' => $language,
                 'rand' => $randID,
             ));

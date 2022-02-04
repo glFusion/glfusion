@@ -302,7 +302,7 @@ function FEED_list()
 */
 function FEED_edit($fid = 0, $type = '', $A = array())
 {
-    global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $MESSAGE,$_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $LANG_LOCALE, $MESSAGE,$_IMAGE_TYPE;
 
     USES_lib_admin();
 
@@ -329,7 +329,7 @@ function FEED_edit($fid = 0, $type = '', $A = array())
             $A['feedlogo'] = '';
             $A['filename'] = '';
             $A['charset'] = $_CONF['default_charset'];
-            $A['language'] = $_CONF['rdf_language'];
+            $A['language'] = isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US';
             $A['is_enabled'] = 1;
             $A['updated'] = '';
             $A['update_info'] = '';
@@ -586,7 +586,7 @@ function FEED_newFeed()
 */
 function FEED_save($A)
 {
-    global $_CONF, $_TABLES, $LANG33;
+    global $_CONF, $_TABLES, $LANG33, $LANG_LOCALE;
 
     foreach ($A as $name => $value) {
         $A[$name] = $value;
@@ -638,7 +638,7 @@ function FEED_save($A)
         }
     }
     if (empty ($A['language'])) {
-        $A['language'] = $_CONF['rdf_language'];
+        $A['language'] = isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US';
         if (empty ($A['language'])) {
             $A['language'] = $_CONF['locale'];
         }
