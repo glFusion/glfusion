@@ -481,7 +481,11 @@ function _checkEnvironment()
     ));
 
     // extract syndication storage path
-    $feedPath = $_CONF['path_rss'];
+    if (empty($_CONF['path_rss'])) {
+        $feedPath = $_CONF['path_html'].'backend/';
+    } else {
+        $feedPath = $_CONF['path_rss'];
+    }
 
     $file_list = array( $_CONF['path_data'],
                         $_CONF['path_data'].'glfusion.lck',
@@ -499,7 +503,6 @@ function _checkEnvironment()
                         $_CONF['path_data'].'htmlpurifier/',
                         $_CONF['path_html'],
                         $feedPath,
-                        $_CONF['path_rss'].'xx',
                         $_CONF['path_images'],
                         $_CONF['path_images'].'articles/',
                         $_CONF['path_images'].'topics/',
@@ -599,11 +602,11 @@ function _checkEnvironment()
 
     $classCounter = 0;
     foreach ($file_list AS $path) {
-        $ok = _isWritable($path);
-        if ( !$ok ) {
+        $ok = (bool) _isWritable($path);
+        if ( $ok === false) {
             $T->set_var('location',$path);
-            $T->set_var('status', $ok ? $LANG_ENVCHK['ok'] : $LANG_ENVCHK['not_writable']);
-            $T->set_var('class', $ok ? 'tm-pass' : 'tm-fail');
+            $T->set_var('status', $ok === true ? $LANG_ENVCHK['ok'] : $LANG_ENVCHK['not_writable']);
+            $T->set_var('class', $ok === true ? 'tm-pass' : 'tm-fail');
             $T->set_var('rowclass',($classCounter % 2)+1);
             $classCounter++;
             $T->parse('perm','perms',true);
@@ -621,6 +624,7 @@ function _checkEnvironment()
         }
 ----------------------- */
     }
+
     // special test to see if we can create a directory under layout_cache...
     $rc = @mkdir($_CONF['path_data'].'layout_cache/test/');
     if (!$rc) {
