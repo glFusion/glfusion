@@ -339,6 +339,28 @@ function forum_upgrade() {
                 }
                 DB_query($sql,1);
             }
+            // default data for warnings
+            $_SQL = array();
+            $_SQL[] = "INSERT INTO `{$_TABLES['ff_warninglevels']}` (`wl_id`, `wl_pct`, `wl_action`, `wl_duration`, `wl_duration_qty`, `wl_duration_period`, `wl_other`)
+                    VALUES
+                        (18,20,1,86400,1,'day','a:0{}'),
+                        (19,60,2,1209600,2,'week','a:0{}'),
+                        (20,85,15,2592000,1,'month','a:0{}'),
+                        (21,99,127,86400,1,'day','a:0{}');";
+
+            $_SQL[] = "INSERT INTO `{$_TABLES['ff_warningtypes']}` (`wt_id`, `wt_dscp`, `wt_points`, `wt_expires_qty`, `wt_expires_period`)
+                       VALUES
+                        (8,'Spam',20,1,'day'),
+                        (9,'Inappropriate',30,1,'week'),
+                        (10,'Harassing Members',45,2,'month');";
+
+            foreach ($_SQL AS $sql) {
+                DB_query($sql,1);
+            }
+
+        case '3.4.3.2' : // internal dev version
+            // no changes
+
         default :
             forum_update_config();
             DB_query("ALTER TABLE {$_TABLES['ff_forums']} DROP INDEX forum_id",1);
