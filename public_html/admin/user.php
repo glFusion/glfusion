@@ -1228,7 +1228,7 @@ function USER_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
                 'title' => $LANG_ADMIN['delete'],
                 'onclick' => 'return doubleconfirm(\'' . $LANG28[104] . '\',\'' . $LANG28[109] . '\');',
             );
-            $args['url'] = $_CONF['site_admin_url'] . '/user.php'
+            $args['delete_url'] = $_CONF['site_admin_url'] . '/user.php'
                     . '?delete=x&amp;uid=' . $A['uid'] . '&amp;' . CSRF_TOKEN . '=' . $token;
 
             $retval = FieldList::delete($args);
