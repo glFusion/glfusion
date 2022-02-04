@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2003-2008 by the following authors:
@@ -711,7 +711,7 @@ if (isset($_POST['fid'])) {
     $fid = COM_applyFilter($_GET['fid'], true);
 }
 
-if ($_CONF['backend'] && isset($_POST['feedenabler']) && SEC_checkToken()) {
+if ( isset($_POST['feedenabler']) && SEC_checkToken() ) {
     $Feeds = Feed::getAll();
     $enabledfeeds = array();
     if (isset($_POST['enabledfeeds'])) {

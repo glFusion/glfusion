@@ -1013,39 +1013,37 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
         $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
     }
 
-    if ( $_CONF['backend'] == 1 ) { // add feed-link to header if applicable
-        $feed_topics= array();
-        if ( SESS_isSet('feedurl') ) {
-            $feed_topics = @unserialize(SESS_getVar('feedurl') );
-        }
-        if (!is_array($feed_topics)) {
-            // could be null if unserialize() fails, make sure it's an array
-            $feed_topics = array();
-        }
-        $feedtopic = $topic;
-        if (empty($feedtopic)) {
-            // ensure a good key for the feed_urls array
-            $feedtopic = 'all';
-        }
-        if (array_key_exists($feedtopic, $feed_topics)) {
-            $feed_links = $feed_topics[$feedtopic];
-        } else {
-            $feed_links = array();
-            $Feeds = glFusion\Syndication\Feed::getByHeaderTid($feedtopic);
-            foreach ($Feeds as $Feed) {
-                if (!empty($Feed->getFilename())) {
-                    $feed_links[] = '<link rel="alternate" type="application/'
-                        . $Feed->getMimeType()
-                        . '" href="' . $Feed->getUrl()
-                        . '" title="' . ucwords($Feed->getFormat())
-                        . ' Feed: ' . $Feed->getTitle() . '"/>';
-                }
-            }
-            $feed_urls[$feedtopic] = $feed_links;
-            SESS_setVar('feedurl',serialize($feed_topics));
-        }
-        $header->set_var( 'feed_url', implode( PHP_EOL, $feed_links ));
+    $feed_topics= array();
+    if ( SESS_isSet('feedurl') ) {
+        $feed_topics = @unserialize(SESS_getVar('feedurl') );
     }
+    if (!is_array($feed_topics)) {
+        // could be null if unserialize() fails, make sure it's an array
+        $feed_topics = array();
+    }
+    $feedtopic = $topic;
+    if (empty($feedtopic)) {
+        // ensure a good key for the feed_urls array
+        $feedtopic = 'all';
+    }
+    if (array_key_exists($feedtopic, $feed_topics)) {
+        $feed_links = $feed_topics[$feedtopic];
+    } else {
+        $feed_links = array();
+        $Feeds = glFusion\Syndication\Feed::getByHeaderTid($feedtopic);
+        foreach ($Feeds as $Feed) {
+            if (!empty($Feed->getFilename())) {
+                $feed_links[] = '<link rel="alternate" type="application/'
+                    . $Feed->getMimeType()
+                    . '" href="' . $Feed->getUrl()
+                    . '" title="' . ucwords($Feed->getFormat())
+                    . ' Feed: ' . $Feed->getTitle() . '"/>';
+            }
+        }
+        $feed_urls[$feedtopic] = $feed_links;
+        SESS_setVar('feedurl',serialize($feed_topics));
+    }
+    $header->set_var( 'feed_url', implode( PHP_EOL, $feed_links ));
 
     $relLinks = array();
     if ( !COM_onFrontpage() ) {
@@ -1856,12 +1854,10 @@ function COM_rdfUpToDateCheck( $updated_type = '', $updated_topic = '', $updated
 {
     global $_CONF;
 
-    if ( $_CONF['backend'] > 0 ) {
-        $Feeds = glFusion\Syndication\Feed::getEnabled($updated_type);
-        foreach ($Feeds as $Feed) {
-            if (!$Feed->updateCheck($updated_type, $updated_id)) {
-                $Feed->Generate();
-            }
+    $Feeds = glFusion\Syndication\Feed::getEnabled($updated_type);
+    foreach ($Feeds as $Feed) {
+        if (!$Feed->updateCheck($updated_type, $updated_id)) {
+            $Feed->Generate();
         }
     }
 }
