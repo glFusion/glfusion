@@ -84,7 +84,7 @@ $LANG_FILEMGMT = array(
     'DownloadReport'        => "Stáhnout historii jednoho souboru",
     'StatsMsg1'             => "Top Ten přístupných souborů v úložišti",
     'StatsMsg2'             => "Vypadá to, že v úložišti (filemgmt plugin) nejsou na těchto stránkách žádné soubory nebo k nim není přístup.",
-    'usealtheader'          => "Use Alt. Header",
+    'usealtheader'          => "Použít všechny záhlaví",
     'url'                   => "URL",
     'edit'                  => "Editovat",
     'lastupdated'           => "Naposledy aktualizováno",
@@ -140,7 +140,7 @@ $LANG_FILEMGMT = array(
     'remote_ip'             => 'Vzdálená IP',
     'back_to_listing'       => 'Zpět na seznam',
     'remote_url'            => 'Vzdálený uživatel',
-    'file_missing'          => 'File Missing',
+    'file_missing'          => 'Chybějící soubor',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
@@ -196,7 +196,7 @@ $LANG_confignames['filemgmt'] = array(
     'outside_webroot'       => 'Uložit soubory mimo webový kořenový adresář',
     'enable_rating'         => 'Povolit hodnocení příspěvků',
     'displayblocks'         => 'Zobrazit bloky glFusion',
-    'silent_edit_default'   => 'Silent Edit Default',
+    'silent_edit_default'   => 'Výchozí nastavení úprav na pozadí',
     'extensions_map'        => 'Extenze souboru použitá pro stahování',
     'EmailOption'           => 'Odesílatel e-mailu při schválení?',
 );
