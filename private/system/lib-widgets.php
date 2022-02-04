@@ -130,7 +130,7 @@ function WIDGET_autotranslations($header=0) {
 
             $T->set_var(array(
                 'key'   => $key,
-                'src_lng' => isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US';
+                'src_lng' => isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US',
                 'lang' => $language,
                 'rand' => $randID,
             ));
