@@ -2804,6 +2804,7 @@ $LANG_confignames['Core'] = array(
     'aftersave_user' => 'Na Opslaan Gebruiker',
     'show_right_blocks' => 'Rechter Blokken Altijd Tonen?',
     'showfirstasfeatured' => 'Toon eerste Artikel als Featured?',
+    'path_rss' => 'Path to store RSS feeds',
     'copyrightyear' => 'Copyright Jaar',
     'image_lib' => 'Afbeeldingsbibliotheek',
     'path_to_mogrify' => 'Pad naar Mogrify',

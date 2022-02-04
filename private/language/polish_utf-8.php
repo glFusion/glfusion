@@ -2808,6 +2808,7 @@ $LANG_confignames['Core'] = array(
     'aftersave_user' => 'Po zapisaniu idź do',
     'show_right_blocks' => 'Pokaz bloki',
     'showfirstasfeatured' => 'Wyróżnij artykuł',
+    'path_rss' => 'Ścieżka do przechowywania kanałów RSS',
     'copyrightyear' => 'Copyright Year',
     'image_lib' => 'Ustawienia',
     'path_to_mogrify' => 'Path do GraphicsMagick / ImageMagick',

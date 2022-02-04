@@ -2804,6 +2804,7 @@ $LANG_confignames['Core'] = array(
     'aftersave_user' => 'Nach dem Benutzer speichern',
     'show_right_blocks' => 'Immer rechte Blöcke anzeigen',
     'showfirstasfeatured' => 'Ersten Artikel als Hauptartikel',
+    'path_rss' => 'Path to store RSS feeds',
     'copyrightyear' => 'Copyright Jahr',
     'image_lib' => 'Image-Library',
     'path_to_mogrify' => 'Pfad zu ImageMagick',

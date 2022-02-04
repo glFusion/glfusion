@@ -2804,6 +2804,7 @@ $LANG_confignames['Core'] = array(
     'aftersave_user' => 'Tallennuksen Jälkeen Käyttäjä',
     'show_right_blocks' => 'Näytä Aina Oikea Lohkot?',
     'showfirstasfeatured' => 'Näytä Ensimmäinen Juttu Pääjuttuna?',
+    'path_rss' => 'Path to store RSS feeds',
     'copyrightyear' => 'Copyright Vuosi',
     'image_lib' => 'Kuvakirjasto',
     'path_to_mogrify' => 'Polku Mogrifyyn',

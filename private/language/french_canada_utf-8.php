@@ -2804,6 +2804,7 @@ $LANG_confignames['Core'] = array(
     'aftersave_user' => 'After Saving User',
     'show_right_blocks' => 'Always Show Right Blocks',
     'showfirstasfeatured' => 'Show First Story as Featured',
+    'path_rss' => 'Path to store RSS feeds',
     'copyrightyear' => 'Copyright Year',
     'image_lib' => 'Image Library',
     'path_to_mogrify' => 'Path to ImageMagick',

@@ -2804,6 +2804,7 @@ $LANG_confignames['Core'] = array(
     'aftersave_user' => 'Po uložení uživatele',
     'show_right_blocks' => 'Vždy zobrazit pravé bloky',
     'showfirstasfeatured' => 'Zobrazit první příběh jako zvýrazněný',
+    'path_rss' => 'Cesta k uložení RSS kanálů',
     'copyrightyear' => 'Rok autorského práva',
     'image_lib' => 'Knihovna obrázků',
     'path_to_mogrify' => 'Cesta ke spustitelným souborům Grafika / ImageMagick',

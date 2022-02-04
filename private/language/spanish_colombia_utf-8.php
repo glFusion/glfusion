@@ -2804,6 +2804,7 @@ $LANG_confignames['Core'] = array(
     'aftersave_user' => 'Después de Guardar el Usuario',
     'show_right_blocks' => 'Mostrar siempre Bloques a la derecha',
     'showfirstasfeatured' => 'Mostrar la primera Noticia como Destacada',
+    'path_rss' => 'Path to store RSS feeds',
     'copyrightyear' => 'Mostrar año de Copyright',
     'image_lib' => 'Librería de Imágenes',
     'path_to_mogrify' => 'Ruta para Mogrify',
