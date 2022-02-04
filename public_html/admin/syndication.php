@@ -323,7 +323,7 @@ function FEED_edit($fid = 0, $type = '', $A = array())
             $A['header_tid'] = 'none';
             $A['format'] = 'RSS-2.0';
             $A['limits'] = 10;
-            $A['content_length'] = $_CONF['rdf_storytext'];
+            $A['content_length'] = 1;
             $A['title'] = $_CONF['site_name'];
             $A['description'] = $_CONF['site_slogan'];
             $A['feedlogo'] = '';
