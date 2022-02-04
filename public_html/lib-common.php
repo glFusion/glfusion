@@ -1108,17 +1108,12 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     }
     $header->set_var('page_title_and_site_name', $title_and_name);
 
-//    $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . PHP_EOL;
-    $rdf = substr_replace( $_CONF['path_rss'], $_CONF['site_url'], 0,strlen( $_CONF['path_html'] ) - 1 ) . '/'.$_CONF['rdf_file'].PHP_EOL;
-
     list($cacheFile,$style_cache_url) = COM_getStyleCacheLocation();
     list($cacheFile,$js_cache_url) = COM_getJSCacheLocation();
 
     $header->set_var(array(
         'site_name'     => $_CONF['site_name'],
         'site_slogan'   => $_CONF['site_slogan'],
-        'rdf_file'      => $rdf,
-        'rss_url'       => $rdf,
         'css_url'       => $_CONF['layout_url'] . '/style.css',
         'theme'         => $_USER['theme'],
         'style_cache_url'   => $style_cache_url,
@@ -1302,11 +1297,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $theme->set_var( 'site_mail', "mailto:{$_CONF['site_mail']}" );
     $theme->set_var( 'site_slogan', $_CONF['site_slogan'] );
-
-    $rdf = substr_replace( $_CONF['rdf_file'], $_CONF['site_url'], 0,
-                          strlen( $_CONF['path_html'] ) - 1 ) . PHP_EOL;
-    $theme->set_var( 'rdf_file', $rdf );
-    $theme->set_var( 'rss_url', $rdf );
 
     $year = date( 'Y' );
     $copyrightyear = $year;

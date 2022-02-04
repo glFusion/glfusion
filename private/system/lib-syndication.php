@@ -506,8 +506,6 @@ function SYND_updateFeediCal( $A )
             $filename = $A['filename'];
         } else {
             $filename = 'glfusion.rss';
-//            $pos = strrpos( $_CONF['rdf_file'], '/' );
-//            $filename = substr( $_CONF['rdf_file'], $pos + 1 );
         }
 
         $content = PLG_getFeedContent($A['type'], $A['fid'], $link, $data, $format[0], $format[1], $A);
