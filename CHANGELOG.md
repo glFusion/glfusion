@@ -68,6 +68,7 @@
 
 ### Removed
 
+- Removed all Content Syndication configuration fields as they are redundant. All Content Syndication settings are configured per feed in the Content Syndication admin.
 - The ability to exclude content - users had the option to select authors, topics and blocks they did not want to view - this was disabled by default - this capability has now been fully removed
 - Removed mediaelement.js - now use native HTML 5 audio / video
 - Removed all Flash / SWF / FLV media support in Media Gallery
