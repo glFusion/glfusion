@@ -302,19 +302,18 @@ if (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
         $story_options[] = COM_createLink($LANG11[3], $printUrl, array('rel' => 'nofollow'));
     }
 
-    if ($_CONF['backend'] == 1) {
-        $Feeds = glFusion\Syndication\Feed::getEnabled('article', $story->get('tid'));
-        foreach ($Feeds as $Feed) {
-            $story_options[] = COM_createLink(
-                $Feed->getTitle(),
-                $Feed->getUrl(),
-                array(
-                    'type' => $Feed->getMimeType(),
-                    'class' => '',
-                )
-            );
-        }
+    $Feeds = glFusion\Syndication\Feed::getEnabled('article', $story->get('tid'));
+    foreach ($Feeds as $Feed) {
+        $story_options[] = COM_createLink(
+            $Feed->getTitle(),
+            $Feed->getUrl(),
+            array(
+                'type' => $Feed->getMimeType(),
+                'class' => '',
+            )
+        );
     }
+
     if (($_CONF['trackback_enabled'] || $_CONF['pingback_enabled'] ||
             $_CONF['ping_enabled']) && SEC_hasRights('story.ping') &&
         ($story->get('draft_flag') == 0) &&

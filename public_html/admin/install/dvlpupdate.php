@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -1166,7 +1166,7 @@ function glfusion_200()
     if (!empty($cfg_path_themes) && $path_themes == $cfg_path_themes) {
         $c->set('path_themes','','Core');
     }
-
+/* - removing - no longer using this
     // create new path_rss
     $pos = strrpos($_CONF['rdf_file'],'/');
     if ($pos !== false) {
@@ -1183,7 +1183,7 @@ function glfusion_200()
             }
         }
     }
-
+-- */
     // clean up the group assignment table
     DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id='2'",1);
     DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE ug_main_grp_id='13'",1);

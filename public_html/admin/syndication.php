@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2003-2008 by the following authors:
@@ -302,7 +302,7 @@ function FEED_list()
 */
 function FEED_edit($fid = 0, $type = '', $A = array())
 {
-    global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $MESSAGE,$_IMAGE_TYPE;
+    global $_CONF, $_TABLES, $LANG33, $LANG_ADMIN, $LANG_LOCALE, $MESSAGE,$_IMAGE_TYPE;
 
     USES_lib_admin();
 
@@ -322,14 +322,14 @@ function FEED_edit($fid = 0, $type = '', $A = array())
             $A['topic'] = '::all';
             $A['header_tid'] = 'none';
             $A['format'] = 'RSS-2.0';
-            $A['limits'] = $_CONF['rdf_limit'];
-            $A['content_length'] = $_CONF['rdf_storytext'];
+            $A['limits'] = 10;
+            $A['content_length'] = 1;
             $A['title'] = $_CONF['site_name'];
             $A['description'] = $_CONF['site_slogan'];
             $A['feedlogo'] = '';
             $A['filename'] = '';
             $A['charset'] = $_CONF['default_charset'];
-            $A['language'] = $_CONF['rdf_language'];
+            $A['language'] = isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US';
             $A['is_enabled'] = 1;
             $A['updated'] = '';
             $A['update_info'] = '';
@@ -586,7 +586,7 @@ function FEED_newFeed()
 */
 function FEED_save($A)
 {
-    global $_CONF, $_TABLES, $LANG33;
+    global $_CONF, $_TABLES, $LANG33, $LANG_LOCALE;
 
     foreach ($A as $name => $value) {
         $A[$name] = $value;
@@ -638,7 +638,7 @@ function FEED_save($A)
         }
     }
     if (empty ($A['language'])) {
-        $A['language'] = $_CONF['rdf_language'];
+        $A['language'] = isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US';
         if (empty ($A['language'])) {
             $A['language'] = $_CONF['locale'];
         }
@@ -711,7 +711,7 @@ if (isset($_POST['fid'])) {
     $fid = COM_applyFilter($_GET['fid'], true);
 }
 
-if ($_CONF['backend'] && isset($_POST['feedenabler']) && SEC_checkToken()) {
+if ( isset($_POST['feedenabler']) && SEC_checkToken() ) {
     $Feeds = Feed::getAll();
     $enabledfeeds = array();
     if (isset($_POST['enabledfeeds'])) {

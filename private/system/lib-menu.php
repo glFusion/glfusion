@@ -533,7 +533,7 @@ function getAdminMenu()
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
 
-            if (( $_CONF['backend'] == 1 ) && SEC_hasRights( 'syndication.edit' )) {
+            if ( SEC_hasRights( 'syndication.edit' )) {
                 $url = $_CONF['site_admin_url'] . '/syndication.php';
                 $count = $db->conn->fetchColumn(
                     "SELECT COUNT(*) FROM `{$_TABLES['syndication']}`",

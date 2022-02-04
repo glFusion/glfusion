@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Eric Warren     eric AT glfusion DOT org
 *
@@ -499,7 +499,7 @@ function _checkEnvironment()
                         $_CONF['path_data'].'htmlpurifier/',
                         $_CONF['path_html'],
                         $feedPath,
-                        $_CONF['path_rss']. $_CONF['rdf_file'],
+                        $_CONF['path_rss'].'xx',
                         $_CONF['path_images'],
                         $_CONF['path_images'].'articles/',
                         $_CONF['path_images'].'topics/',

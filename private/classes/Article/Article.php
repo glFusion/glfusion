@@ -2689,12 +2689,11 @@ class Article
         global $_CONF;
 
         $retval = '';
-        if ($_CONF['backend'] > 0) {
-            $Feeds = Feed::getEnabled('article', $this->tid);
-            if (count($Feeds) > 0) {
-                $Feed = array_pop($Feeds);
-                $retval = $Feed->getUrl();
-            }
+
+        $Feeds = Feed::getEnabled('article', $this->tid);
+        if (count($Feeds) > 0) {
+            $Feed = array_pop($Feeds);
+            $retval = $Feed->getUrl();
         }
         return $retval;
     }
