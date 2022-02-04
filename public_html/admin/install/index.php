@@ -2428,6 +2428,10 @@ function INST_upgradeAlert( )
         'hiddenfields'          => _buildHiddenFields(),
     ));
 
+/*
+
+// let the permission check panel handle this
+
     if ( (@file_exists('../../siteconfig.php') && !@file_exists('../../data/siteconfig.php') ) ||
         (@file_exists($_GLFUSION['path_private'].'db-config.php') && !@file_exists($_GLFUSION['path_private'].'data/db-config.php')) ) {
         // check to see if the required public_html/data/ directory exists
@@ -2461,7 +2465,7 @@ function INST_upgradeAlert( )
             $T->set_var('permission_error',$error_messages);
         }
     }
-
+*/
     $T->parse('output','page');
 
     $retval =  $T->finish($T->get_var('output'));
