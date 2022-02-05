@@ -101,6 +101,7 @@ if ( isset($_POST['cancel']) ) {
 
 $content = '';
 switch ($op) {
+/*
 case "comment":
     filemgmt_comments($firstcomment);
     break;
@@ -113,6 +114,7 @@ case "addCat":
 case "addSubCat":
     addSubCat();
     break;
+*/
 case "saveDownload":
     $status = Filemgmt\Download::getInstance($_POST['lid'])->save($_POST);
     switch ($status) {
@@ -159,9 +161,11 @@ case "ignoreBrokenLink":
 case 'reportBrokenLink':
     $content .= Filemgmt\BrokenLink::showForm($opval);
     break;
+/*
 case "approve":
     approve();
     break;
+*/
 case "delVote":
     RATING_deleteVote($opval);
     $lid = (int)$_GET['lid'];
@@ -188,16 +192,18 @@ case 'saveCat':
 case "modCatS":
     $status = Filemgmt\Category::getInstance($_POST['cid'])->save($_POST);
     COM_refresh("{$_FM_CONF['admin_url']}/index.php?categoryConfigAdmin");
-    modCatS();
+//    modCatS();
     break;
 case 'modDownload':
     $content .= Filemgmt\Download::getInstance($opval)->edit();
     break;
-case "modDownloadS":
+/*
+    case "modDownloadS":
 //    echo "here";die;
     modDownloadS();
     break;
-case "delDownload":
+*/
+    case "delDownload":
     if (Filemgmt\Download::getInstance($opval)->delete()) {
         COM_setMsg(_MD_FILEDELETED);
     } else {
