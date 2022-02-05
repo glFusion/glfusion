@@ -2218,7 +2218,7 @@ function SEC_loginForm($use_options = array())
 
     $options = array_merge($default_options, $use_options);
 
-    $loginform = new Template($_CONF['path_layout'] . 'users');
+    $loginform = new Template(array($_CONF['path_layout'] . 'users', $_CONF['path_layout']));
     $loginform->set_file('login', 'loginform.thtml');
 
     $loginform->set_var('form_action', $options['form_action']);
@@ -2305,7 +2305,7 @@ function SEC_loginForm($use_options = array())
         } else {
             $html_oauth = '';
             foreach ($modules as $service) {
-                $loginform->set_file('oauth_login', '../loginform_oauth.thtml');
+                $loginform->set_file('oauth_login', 'loginform_oauth.thtml');
                 $loginform->set_var('oauth_service', $service);
                 if ($service === 'facebook') {
                     $loginform->set_var('oauth_service-postfix', '-official');
