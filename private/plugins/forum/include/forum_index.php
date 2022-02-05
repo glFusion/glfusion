@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -540,9 +540,9 @@ $tcount = $db->conn->fetchColumn("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WH
             	            $lastpostmsgDate  = '<span class="forumtxt">' . $LANG_GF01['ON']. '</span>' .$lastdate;
                 	        if($B['uid'] > 1) {
                                 $lastposterName = $B['name'];
-                        	    $by = '<a href="' .$_CONF['site_url']. '/users.php?mode=profile&amp;uid=' .$B['uid']. '">' .$lastposterName. '</a>';
+                        	    $by = '<a href="' .$_CONF['site_url']. '/users.php?mode=profile&amp;uid=' .$B['uid']. '">' .COM_getDisplayName($B['uid']). '</a>';
         	                } else {
-            	                $by = $B['name'];
+            	                $by = htmlspecialchars($B['name']);
                 	        }
                     	    $lastpostmsgBy = $LANG_GF01['BY']. $by;
                         	$forumlisting->set_var (array(
@@ -887,10 +887,10 @@ $tcount = $db->conn->fetchColumn("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WH
             // Check if user is an anonymous poster
             if ($record['uid'] > 1) {
                 $showuserlink = '<span class="replypagination">';
-                $showuserlink .= '<a href="'.$_CONF['site_url'].'/users.php?mode=profile&amp;uid='.$record['uid'].'">'.$record['name'];
+                $showuserlink .= '<a href="'.$_CONF['site_url'].'/users.php?mode=profile&amp;uid='.$record['uid'].'">'.COM_getDisplayName($record['uid']);
                 $showuserlink .= '</a></span>';
             } else {
-                $showuserlink= $record['name'];
+                $showuserlink= htmlspecialchars($record['name']);
             }
 
             if ($record['last_reply_rec'] > 0) {
@@ -1001,7 +1001,7 @@ $tcount = $db->conn->fetchColumn("SELECT COUNT(uid) FROM {$_TABLES['ff_log']} WH
                     'topicinfo'     => $topicinfo,
                     'topic_id'      => $record['id'],
                     'subject'       => $subject,
-                    'author'        => $record['uid'] > 1 ? '<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $record['uid'] . '">' . $record['name'] . '</a>' : $record['name'],
+                    'author'        => $record['uid'] > 1 ? '<a href="' . $_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $record['uid'] . '">' . COM_getDisplayName($record['uid']) . '</a>' : htmlspecialchars($record['name']),
                     'fullsubject'   => $record['subject'],
                     'gotomsg'       => $gotomsg,
                     'displaypageslink'  => $displaypageslink,
