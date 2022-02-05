@@ -315,8 +315,8 @@ function STORY_global_save()
     $global_sql = '';
     $msg = '';
 
-    $filter_topic  = filter_input(INPUT_POST,'tid',FILTER_SANITIZE_STRING); //COM_applyFilter($_POST['tid']);
-    $move_to_topic = filter_input(INPUT_POST,'move_to_topic',FILTER_SANITIZE_STRING); //COM_applyFilter($_POST['move_to_topic']);
+    $filter_topic  = COM_applyFilter($_POST['tid']);
+    $move_to_topic = COM_applyFilter($_POST['move_to_topic']);
     $on_frontpage  = filter_input(INPUT_POST,'frontpage',FILTER_SANITIZE_NUMBER_INT); //COM_applyFilter($_POST['frontpage'],true);
     $comment       = filter_input(INPUT_POST,'comment',FILTER_SANITIZE_NUMBER_INT); //COM_applyFilter($_POST['comment'],true);
     $trackback     = filter_input(INPUT_POST,'trackback',FILTER_SANITIZE_NUMBER_INT); //COM_applyFilter($_POST['trackback'],true);
@@ -765,7 +765,7 @@ switch ($action) {
             COM_setMsg('Invalid Story ID','error',true);
             echo COM_refresh($_CONF['site_admin_url'].'/moderation.php');
         } else {
-            $sid = (string) filter_input(INPUT_GET,'sid',FILTER_SANITIZE_STRING);
+            $sid = (string) COM_applyFilter($_GET['sid']);
 
             $article = new Article();
             if ($article->retrieveSubmission($sid) === Article::STORY_LOADED_OK) {
@@ -785,7 +785,7 @@ switch ($action) {
             COM_setMsg('Invalid Story ID','error',true);
             $pageBody = STORY_list();
         } else {
-            $sid = (string) filter_input(INPUT_GET,'sid',FILTER_SANITIZE_STRING);
+            $sid = (string) COM_applyFilter($_GET['sid']);
 
             $article = new Article();
             if ($article->retrieveArticleFromDB($sid) === Article::STORY_LOADED_OK) {
@@ -853,7 +853,7 @@ switch ($action) {
             COM_setMsg($LANG24[42],'error',true);
             $pageBody = STORY_list();
         } else {
-            $sid = (string) filter_input(INPUT_GET,'sid',FILTER_SANITIZE_STRING);
+            $sid = (string) COM_applyFilter($_GET['sid']);
 
             $article = new Article();
             if ($article->retrieveArticleFromDB($sid) === Article::STORY_LOADED_OK) {

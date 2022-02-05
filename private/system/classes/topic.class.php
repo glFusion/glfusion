@@ -28,6 +28,7 @@
 
 use \glFusion\Log\Log;
 use \glFusion\Article\Article;
+use \glFusion\Cache\Cache;
 
 class Topic
 {
@@ -812,7 +813,7 @@ class Topic
         // update feed(s) and Older Stories block
         COM_rdfUpToDateCheck('article', $this->tid);
         COM_olderStuff();
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+        $c = Cache::getInstance()->deleteItemsByTag('menu');
         COM_setMessage(13);
         return true;
     }
@@ -880,7 +881,7 @@ class Topic
         // Update feed(s) and Older Stories block
         COM_rdfUpToDateCheck('article');
         COM_olderStuff();
-        $c = glFusion\Cache::getInstance()->deleteItemsByTag('menu');
+        $c = Cache::getInstance()->deleteItemsByTag('menu');
         COM_setMessage(14);
         return true;
     }
@@ -1059,7 +1060,7 @@ class Topic
                 DB_query("UPDATE {$_TABLES['stories']} SET
                             featured = 0,
                             frontpage = 0,
-                            statuscode = " . STORY_ARCHIVE_ON_EXPIRE .
+                            statuscode = " . Article::STORY_ARCHIVE_ON_EXPIRE .
                         " WHERE tid = '{$db_tid}'");
             }
             DB_query("UPDATE {$_TABLES['topics']}

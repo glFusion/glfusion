@@ -950,7 +950,7 @@ class UploadDownload
                 $ext = substr($ext, 1);
             }
             $ext = trim(strtolower($ext));
-            if (!in_array($arr[$mime], $ext)) {
+            if (!in_array($ext, $arr[$mime])) {
                 $arr[$mime][] = $ext;
             }
         }
@@ -1436,7 +1436,7 @@ class UploadDownload
      */
     public function setJpegQuality($quality)
     {
-        return $This;
+        return $this;
     }
 
 

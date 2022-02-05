@@ -233,7 +233,7 @@ class OAuthConsumer
             $checkName = $db->getItem($_TABLES['users'], 'username', array('username' => $loginname),array(Database::STRING));
             if (!empty($checkName)) {
                 if (function_exists('CUSTOM_uniqueRemoteUsername')) {
-                    $loginname = CUSTOM_uniqueRemoteUsername(loginname, $remoteservice);
+                    $loginname = CUSTOM_uniqueRemoteUsername($loginname);
                 }
                 if (strcasecmp($checkName,$loginname) === 0) {
                     $loginname = USER_uniqueUsername($loginname);

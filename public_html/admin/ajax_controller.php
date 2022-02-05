@@ -15,6 +15,7 @@
 require_once '../lib-common.php';
 
 use \glFusion\Log\Log;
+use \glFusion\Cache\Cache;
 
 if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
@@ -335,7 +336,7 @@ function SP_toggleStatus($enabledstaticpages, $sp_idarray)
                 PLG_itemSaved($sp_id,'staticpages');
             }
         }
-        glFusion\Cache::getInstance()->deleteItemsByTag('staticpage');
+        Cache::getInstance()->deleteItemsByTag('staticpage');
         $retval['statusMessage'] = 'StaticPage state has been toggled.';
         $retval['errorCode'] = 0;
 

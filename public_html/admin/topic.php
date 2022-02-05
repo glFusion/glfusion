@@ -77,7 +77,7 @@ function TOPIC_menu($action = '', $title = '')
  */
 function TOPIC_getListField($fieldname, $fieldvalue, $A, $icon_arr, $extra)
 {
-    global $_CONF, $LANG_ADMIN, $LANG27, $_IMAGE_TYPE;
+    global $_CONF, $LANG_ADMIN, $LANG21, $LANG27, $_IMAGE_TYPE;
 
     $retval = '';
     $token = $extra['token'];

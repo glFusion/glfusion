@@ -40,7 +40,7 @@ if (!SEC_hasRights('menu.admin')) {
 
 function MB_displayMenuList( )
 {
-    global $_CONF, $_USER, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN,$LANG_MB_MENU_TYPES;
+    global $_CONF, $_USER, $_GROUPS, $_TABLES, $LANG_MB01, $LANG_MB_ADMIN, $LANG_ADMIN,$LANG_MB_MENU_TYPES;
 
     $retval = '';
     $menuArray = array();
@@ -415,7 +415,7 @@ function MB_saveEditMenu()
         $errors++;
         $errMsg .= $LANG_MB01['menu_name_error'];
     } else {
-        $menuname = filter_input(INPUT_POST,'menuname',FILTER_SANITIZE_STRING);
+        $menuname = COM_applyFilter($_POST['menuname']);
         if (strstr($menuname,' ' ) !== false) {
             $errors++;
             $errMsg .= $LANG_MB01['menu_name_space'];;
@@ -427,7 +427,7 @@ function MB_saveEditMenu()
     }
 
     $menu_id    = filter_input(INPUT_POST, 'menu_id',FILTER_SANITIZE_NUMBER_INT);
-    $menuname   = filter_input(INPUT_POST, 'menuname', FILTER_SANITIZE_STRING);
+    $menuname   = COM_applyFilter($_POST['menuname']);
     $menutype   = filter_input(INPUT_POST, 'menutype', FILTER_SANITIZE_NUMBER_INT);
     $menuactive = isset($_POST['menuactive']) ? filter_input(INPUT_POST,'menuactive',FILTER_SANITIZE_NUMBER_INT) : 0;
     $menugroup  = filter_input(INPUT_POST,'group',FILTER_SANITIZE_NUMBER_INT);

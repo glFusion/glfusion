@@ -477,7 +477,7 @@ class downloader
         }
 
         if(!is_file($this->_sourceDirectory . $fileName)) {
-            echo "<br>{$this->sourceDirectory}{$filename} does not exist";
+            echo "<br>{$this->sourceDirectory}{$fileName} does not exist";
         }
 
 

@@ -202,7 +202,7 @@ class Feed
         }
         if (!empty($tid)) {
             $where .= ' AND topic = ?';
-            $params[] = $topic;
+            $params[] = $tid;
             $types[] = Database::STRING;
         }
 
@@ -228,7 +228,7 @@ class Feed
         }
         try {
             $stmt = $db->conn->executeQuery($sql, $params, $types);
-        } catch(Throwable $e) {
+        } catch(\Throwable $e) {
             return $retval;
         }
         $data = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -598,7 +598,7 @@ class Feed
                 $limitsql = '';
                 $where .= " AND date >= DATE_SUB(?,INTERVAL ? HOUR)";
                 $params[] = $_CONF['_now']->toMySQL(true);
-                $params[] = (int)substr($limit, 0, -1);
+                $params[] = (int)substr($this->limit, 0, -1);
                 $types[]  = Database::STRING;
                 $types[]  = Database::INTEGER;
             } else {
@@ -629,7 +629,7 @@ class Feed
         $current = implode( ',', $sids );
 
         if (self::$DEBUG) {
-            Log::write('system',Log::DEBUG,"Update check for topic $tid: comparing new list ($current) with old list ($update_info)");
+            Log::write('system',Log::DEBUG,"Update check for topic $tid: comparing new list ($current) with old list ($this->update_info)");
         }
         $rc = ($current != $this->update_info) ? false : true;
         return $rc;

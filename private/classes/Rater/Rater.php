@@ -647,6 +647,8 @@ class Rater
     {
         global $_TABLES;
 
+        $db = Database::getInstance();
+
         $db->conn->delete(
             $_TABLES['rating'],
             array('type' => $type, 'item_id' => $item_id),
@@ -703,8 +705,8 @@ class Rater
             array($item_id, $type),
             array(Database::STRING, Database::STRING)
         );
-        $total_votes = (int)$votes['total_votes'];
-        $total_rating = (int)$votes['total_votes'];
+//        $total_votes = (int)$votes['total_votes'];
+//        $total_rating = (int)$votes['total_votes'];
         if ($total_votes > 0) {
             // If this was not the only vote, recalculate
             $new_rating = $total_rating / $total_votes;

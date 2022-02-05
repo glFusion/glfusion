@@ -203,9 +203,7 @@ class MyTextSanitizer
             $text = strip_tags($text, $allowed);
             $text = $this->makeClickable($text);
         }
-        if ( $smiley == 1 ) {
-            $text = $this->smiley($text);
-        }
+
         if ( $bbcode == 1 ) {
             $text = $this->xoopsCodeDecode($text);
         }
@@ -227,9 +225,7 @@ class MyTextSanitizer
             $text = strip_tags($text, $allowed);
             $text = $this->makeClickable($text);
         }
-        if ( $smiley == 1 ) {
-            $text = $this->smiley($text);
-        }
+ 
         if ( $bbcode == 1 ) {
             $text = $this->xoopsCodeDecode($text);
         }

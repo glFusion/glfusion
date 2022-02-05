@@ -448,6 +448,8 @@ class User
     {
         global $_TABLES, $_FF_CONF, $LANG_GF00, $LANG_GF02, $_CONF;
 
+        $display = '';
+
         //Check is anonymous users can post
         if ($_FF_CONF['registered_to_post'] && COM_isAnonUser() ){
             $display  = COM_siteHeader();
@@ -492,8 +494,8 @@ class User
 
         if (Moderator::hasPerm($topic['forum'], $uid, 'mod_edit')) {
             $options[] = array('editpost', $LANG_GF03['edit']);
-            if ($forum['pid'] == 0) {
-                if ($forum['locked'] == 0) {
+            if ($topic['pid'] == 0) {
+                if ($topic['locked'] == 0) {
                     $options[] = array('locktopic', $LANG_GF03['lock_topic']);
                 } else {
                     $options[] = array('unlocktopic', $LANG_GF03['unlock_topic']);
@@ -507,7 +509,7 @@ class User
         if (Moderator::hasPerm($topic['forum'], $uid, 'mod_ban')) {
             $options[] = array('banip', $LANG_GF03['ban']);
         }
-        if ($forum['pid'] == 0) {
+        if ($topic['pid'] == 0) {
             if (Moderator::hasPerm($topic['forum'], $uid, 'mod_move')) {
                 $options[] = array('movetopic', $LANG_GF03['move']);
                 $options[] = array('mergetopic', $LANG_GF03['merge_topic']);

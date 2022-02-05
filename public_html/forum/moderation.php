@@ -380,8 +380,8 @@ function moderator_mergePost($topic_id,$topic_parent_id,$forum_id, $move_to_foru
             // now call PLG_itemSaved() for the new topic
             // id = (int) movetopic['id']
             // type = forum
-            PLG_itemDelete($movetopic['id'],'forum');
-            PLG_itemSaves($movetopic['id'],'forum');
+            PLG_itemDeleted($movetopic['id'],'forum');
+            PLG_itemSaved($movetopic['id'],'forum');
 
         }
         // Update any topic subscription records - need to change the forum ID record

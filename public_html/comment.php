@@ -53,7 +53,7 @@ function _getReferer()
     $referer = @htmlspecialchars($referer,ENT_COMPAT, COM_getEncodingt());
     if ( strstr($referer,'comment.php') !== false ) {
         if ( isset($_REQUEST['sid']) && isset($_REQUEST['type']) ) {
-            $referer = PLG_getCommentUrlId($type);
+            $referer = PLG_getCommentUrlId($_REQUEST['type']);
         }
     }
     return $referer;
@@ -68,7 +68,7 @@ function _getReferer()
  */
 function handleSubmit()
 {
-    global $_PLUGINS;
+    global $_CONF, $_PLUGINS;
 
     $display = '';
 
@@ -298,7 +298,7 @@ function handleEdit($mod = false, $admin = false)
 
     if ( !isset($A['postmode']) || $A['postmode'] == NULL || $A['postmode'] == '') {
         //get format mode
-        if ( preg_match( '/<.*>/', $commenttext ) != 0 ){
+        if ( preg_match( '/<.*>/', $A['comment'] ) != 0 ){
             $postmode = 'html';
         } else {
             $postmode = 'plaintext';
@@ -695,7 +695,7 @@ if ( isset($_POST['cancel'] ) ) {
             $sid     = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
             $pid     = COM_applyFilter ($_POST['pid'],true);
             $postmode = COM_applyFilter($_POST['postmode']);
-            $title   = strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING));
+            $title   = strip_tags(COM_applyFilter($_POST['title']));
             $title   = '';
             $mode    = COM_applyFilter($_POST['mode']);
 

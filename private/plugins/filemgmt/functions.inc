@@ -1216,6 +1216,8 @@ function plugin_privacy_export_filemgmt_DISABLED($uid,$email='',$username='',$ip
 
     $retval = '';
 
+    $db = Database::getInstance();
+
     $exportFields = array('lid','title','url','homepage','version','submitter','date','permalink');
 
     try {
@@ -1224,12 +1226,12 @@ function plugin_privacy_export_filemgmt_DISABLED($uid,$email='',$username='',$ip
             array($uid),
             array(Database::INTEGER)
         );
-    } catch(Throwable $e) {
+    } catch(\Throwable $e) {
         // Ignore errors or failed attempts
     }
 
-    $result = DB_query($sql);
-    $rows = DB_fetchAll($result);
+//    $result = DB_query($sql);
+//    $rows = DB_fetchAll($result);
 
     $retval .= "<files>\n";
 

@@ -183,7 +183,8 @@ class dbBackup
             if (is_array($a_name)) {
                 $result = array();
                 reset($a_name);
-                while(list($key, $val) = each($a_name))
+                while(list($key,$val) = key($a_name))
+//                while(list($key, $val) = each($a_name))
                     $result[$key] = '`' . $val . '`';
                 return $result;
             } else {
@@ -461,12 +462,12 @@ class dbBackup
                         } else {
                             if (strcmp($value,'0000-00-00 00:00:00')==0) $value = '1999-01-01 00:00:00';
                             if (strcmp($value,'0000-00-00')==0) $value = '1999-01-01';
-                            $values[] = "'" . str_replace($search, $replace, DB_escapeString($value)) . "'";
+                            $values[] = "'" . str_replace($search, $replace, (string) DB_escapeString($value)) . "'";
                         }
                     } else {
                         if (strcmp($value,'0000-00-00 00:00:00')==0) $value = '1999-01-01 00:00:00';
                         if (strcmp($value,'0000-00-00')==0) $value = '1999-01-01';
-                        $values[] = "'" . str_replace($search, $replace, DB_escapeString($value)) . "'";
+                        $values[] = "'" . str_replace($search, $replace, (string) DB_escapeString($value)) . "'";
                     }
                 }
             }
@@ -715,7 +716,7 @@ class dbBackup
     {
         global $_VARS, $_CONF;
 
-        if ( $filename == '' || !filename ) return false;
+        if ( $filename == '' || !$filename ) return false;
         $diskfile = $this->backup_dir . $filename;
         $recipient = $_VARS['_dbback_sendto'];
         if (!file_exists($diskfile)) {

@@ -14,6 +14,7 @@
 namespace Filemgmt;
 
 use \glFusion\Database\Database;
+use \glFusion\Log\Log;
 
 /**
  * Class for product categories.
@@ -197,11 +198,11 @@ class Category
                     $fileExtension = strtolower($uploaded_file['extension']);
                     if (array_key_exists($fileExtension, $_FM_CONF['extensions_map'])) {
                         if ($_FM_CONF['extensions_map'][$fileExtension] == 'reject' ) {
-                            Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$uploadfilename);
+                            Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$filename);
                             ErrorHandler::show("1109");
                         } else {
                             $fileExtension = $_FM_CONF['extensions_map'][$fileExtension];
-                            $pos = strrpos($url,'.') + 1;
+                            $pos = strrpos($this->imgurl,'.') + 1;
                             $this->url = strtolower(substr($this->url, 0,$pos)) . $fileExtension;
 
                             $pos2 = strrpos($filename,'.') + 1;
@@ -236,9 +237,6 @@ class Category
             if (!DB_error()) {
                 if ($this->isNew) {
                     $this->cid = DB_insertID();
-                }
-                if (isset($_POST['old_parent']) && $_POST['old_parent'] != $this->pid) {
-                    self::rebuildTree();
                 }
                 /*if (isset($_POST['old_grp']) && $_POST['old_grp'] > 0 &&
                         $_POST['old_grp'] != $this->grp_access) {
@@ -280,7 +278,7 @@ class Category
             );
             $stmt->execute();
             $records = $stmt->fetchAll(Database::ASSOCIATIVE);
-        } catch(Throwable $e) {
+        } catch(\Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }

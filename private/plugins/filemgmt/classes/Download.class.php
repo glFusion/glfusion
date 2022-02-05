@@ -201,7 +201,7 @@ class Download
                 array($id),
                 array(Database::INTEGER)
             );
-        } catch(Throwable $e) {
+        } catch(\Throwable $e) {
             return false;
         }
         $data = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -244,7 +244,7 @@ class Download
 
         try {
             $stmt = $db->conn->executeQuery($sql);
-        } catch(Throwable $e) {
+        } catch(\Throwable $e) {
             return array();
         }
         return $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -704,11 +704,11 @@ class Download
                     $fileExtension = strtolower(substr($filename, $pos));
                     if (array_key_exists($fileExtension, $_FM_CONF['extensions_map'])) {
                         if ($_FM_CONF['extensions_map'][$fileExtension] == 'reject' ) {
-                            Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$uploadfilename);
+                            Log::write('system',Log::ERROR, 'AddNewFile - New Upload file is rejected by config rule: ' .$filename);
                             ErrorHandler::show("1109");
                         } else {
                             $fileExtension = $_FM_CONF['extensions_map'][$fileExtension];
-                            $pos = strrpos($url,'.') + 1;
+                            $pos = strrpos($this->url,'.') + 1;
                             $this->url = strtolower(substr($this->url, 0,$pos)) . $fileExtension;
 
                             $pos2 = strrpos($filename,'.') + 1;
@@ -1206,7 +1206,7 @@ class Download
      */
     public function approve()
     {
-        global $_TABLES, $_FM_CONF;
+        global $_TABLES, $_FM_CONF, $_CONF;
 
         $AddNewFile = false;
         /*$tmpnames = explode(';', $this->platform);

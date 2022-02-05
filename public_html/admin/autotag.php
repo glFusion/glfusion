@@ -191,7 +191,7 @@ function AT_save($tag, $old_tag, $description, $is_enabled, $is_function, $repla
 
     $db = Database::getInstance();
 
-    $old_tag = filter_var($old_tag,FILTER_SANITIZE_STRING); // COM_applyFilter($old_tag);
+    $old_tag = COM_applyFilter($old_tag);
 
     // Check for unique tag ID
     $duplicate_tag = false;
@@ -954,9 +954,10 @@ function ATP_permEdit()
 
 function ATP_permSave()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $LANG_AM, $VERBOSE;
+    global $_CONF, $_TABLES, $_USER, $LANG_ACCESS, $LANG_AM, $MESSAGE, $VERBOSE;
 
     $retval = '';
+    $page = '';
 
     $db = Database::getInstance();
 

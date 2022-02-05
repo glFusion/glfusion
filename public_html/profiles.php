@@ -502,7 +502,9 @@ function _createMailStory( $sid )
         COM_404();
     }
 
-    $output = STORY_LOADED_OK;
+    $args = array();
+
+    $output = Article::STORY_LOADED_OK;
     $result = PLG_invokeService('story', 'get', $args, $output, $svc_msg);
 
     $T = new Template($_CONF['path_layout'] . 'article');

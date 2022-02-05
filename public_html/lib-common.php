@@ -737,10 +737,12 @@ require_once $_CONF['path_system'].'lib-menu.php';
 // Set the current topic in both the global var and Topic class
 // during transition
 if (isset( $_GET['topic'])) {
-    $topic = (string) filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
+//    $topic = (string) filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
+    $topic = (string) htmlspecialchars($_GET['topic']);
     Topic::setCurrent($topic);
 } else if (isset( $_POST['topic'])) {
-    $topic = (string) filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_STRING);
+//    $topic = (string) filter_input(INPUT_POST, 'topic', FILTER_SANITIZE_STRING);
+    $topic = (string) htmlspecialchars($_POST['topic']);
     Topic::setCurrent($topic);
 } else {
     $topic = '';
@@ -991,17 +993,21 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
     // get topic if not on home page
     if ( !isset( $_GET['topic'] )) {
         if ( isset( $_GET['story'] )) {
-            $sid = (string) filter_input(INPUT_GET, 'story', FILTER_SANITIZE_STRING);
+//            $sid = (string) filter_input(INPUT_GET, 'story', FILTER_SANITIZE_STRING);
+            $sid = htmlspecialchars($_GET['story']);
         } elseif ( isset( $_GET['sid'] )) {
-            $sid = (string) filter_input(INPUT_GET, 'sid', FILTER_SANITIZE_STRING);
+//            $sid = (string) filter_input(INPUT_GET, 'sid', FILTER_SANITIZE_STRING);
+            $sid = htmlspecialchars($_GET['sid']);
         } elseif ( isset( $_POST['story'] )) {
-            $sid = (string) filter_input(INPUT_POST, 'story', FILTER_SANITIZE_STRING);
+//            $sid = (string) filter_input(INPUT_POST, 'story', FILTER_SANITIZE_STRING);
+            $sid = htmlspecialchars($_POST['story']);
         }
         if ( empty( $sid ) && $_CONF['url_rewrite'] &&
 //@FIXME - use COM_getCurrentURL() for consistency
                 ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
             COM_setArgNames( array( 'story', 'mode' ));
-            $sid = (string) filter_var(COM_getArgument('story'),FILTER_SANITIZE_STRING);
+//            $sid = (string) filter_var(COM_getArgument('story'),FILTER_SANITIZE_STRING);
+            $sid = (string) htmlspecialchars(COM_getArgument('story'));
         }
         if ( !empty( $sid )) {
             $db = Database::getInstance();
@@ -1010,12 +1016,13 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
             $topic = $stmt->fetchColumn();
         }
     } else {
-        $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
+//        $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
+        $topic = htmlspecialchars($_GET['topic']);
     }
 
     $feed_topics= array();
     if ( SESS_isSet('feedurl') ) {
-        $feed_topics = @unserialize(SESS_getVar('feedurl') );
+        $feed_topics = @unserialize((string) SESS_getVar('feedurl') );
     }
     if (!is_array($feed_topics)) {
         // could be null if unserialize() fails, make sure it's an array
@@ -1203,16 +1210,20 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     // get topic if not on home page
     if ( !isset( $_GET['topic'] )) {
         if ( isset( $_GET['story'] )) {
-            $sid = filter_input(INPUT_GET, 'story', FILTER_SANITIZE_STRING);
+//            $sid = filter_input(INPUT_GET, 'story', FILTER_SANITIZE_STRING);
+            $sid = htmlspecialchars($_GET['story']);
         } elseif ( isset( $_GET['sid'] )) {
-            $sid = filter_input(INPUT_GET, 'sid', FILTER_SANITIZE_STRING);
+//            $sid = filter_input(INPUT_GET, 'sid', FILTER_SANITIZE_STRING);
+            $sid = htmlspecialchars($_GET['sid']);
         } elseif ( isset( $_POST['story'] )) {
-            $sid = filter_input(INPUT_POST, 'story', FILTER_SANITIZE_STRING);
+//            $sid = filter_input(INPUT_POST, 'story', FILTER_SANITIZE_STRING);
+            $sid = htmlspecialchars($_POST['story']);
         }
         if ( empty( $sid ) && $_CONF['url_rewrite'] &&
                 ( strpos( $_SERVER['PHP_SELF'], 'article.php' ) !== false )) {
             COM_setArgNames( array( 'story', 'mode' ));
-            $sid = filter_var(COM_getArgument( 'story' ), FILTER_SANITIZE_STRING);
+//            $sid = filter_var(COM_getArgument( 'story' ), FILTER_SANITIZE_STRING);
+            $sid = htmlspecialchars(COM_getArgument('story'));
         } if ( !empty( $sid )) {
             $db = Database::getInstance();
             $stmt = $db->conn->prepare("SELECT tid FROM `{$_TABLES['stories']}` WHERE sid=?");
@@ -1221,7 +1232,8 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
             $topic = $stmt->fetchColumn();
         }
     } else {
-        $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
+//        $topic = filter_input(INPUT_GET, 'topic', FILTER_SANITIZE_STRING);
+        $topic = htmlspecialchars($_GET['topic']);
     }
     if ( !isset($_GET['ncb'])) {
         $theme->set_var('cb',true);
@@ -1433,13 +1445,14 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     if ( $msg > 0 ) {
         $plugin = '';
         if (isset ($_GET['plugin'])) {
-            $plugin = filter_input(INPUT_GET, 'plugin', FILTER_SANITIZE_STRING);
+//            $plugin = filter_input(INPUT_GET, 'plugin', FILTER_SANITIZE_STRING);
+            $plugin = htmlspecialchars($_GET['plugin']);
         }
         $msgTxt = COM_showMessage ($msg, $plugin,'',0,'info');
     }
 
     if ( SESS_isSet('glfusion.infoblock') ) {
-        $fullMsgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
+        $fullMsgArray = @unserialize((string) SESS_getVar('glfusion.infoblock'));
         foreach ($fullMsgArray AS $msgArray) {
             if (is_array($msgArray)) {
                 if ( !isset($msgArray['msg'] ) ) $msgArray['msg'] = '';
@@ -1809,6 +1822,8 @@ function COM_checkList($table, $selection, $where = '', $selected = '', $fieldna
 
 function COM_debug( $A )
 {
+    $retval = '';
+
     if ( !empty( $A )) {
         $retval .= PHP_EOL . '<pre><p>---- DEBUG ----</p>';
 
@@ -1975,7 +1990,7 @@ function COM_showTopics( $topic='' )
             $retval .= $sections->parse( 'item', 'option' );
         }
     }
-
+    $storycount = array();
     if ( $_CONF['showstorycount'] ) {
         $sql = "SELECT tid, COUNT(*) AS count FROM `{$_TABLES['stories']}` "
              . 'WHERE (draft_flag = 0) AND (date <= "'.$_CONF['_now']->toMySQL(true).'") '
@@ -2019,11 +2034,12 @@ function COM_showTopics( $topic='' )
         $sections->set_var( 'option_label', $topicname );
 
         $countstring = '';
+        $submissioncount = array();
         if ( $_CONF['showstorycount'] || $_CONF['showsubmissioncount'] ) {
             $countstring .= '(';
 
             if ( $_CONF['showstorycount'] ) {
-                if ( empty( $storycount[$A['tid']] )) {
+                if ( !isset($storycount[$A['tid']]) || empty( $storycount[$A['tid']] )) {
                     $countstring .= 0;
                 } else {
                     $countstring .= COM_numberFormat( $storycount[$A['tid']] );
@@ -2808,7 +2824,7 @@ function COM_olderStuff()
     $string = '';
     $dt = new Date();
 
-    while ($A = $stmt->fetch()) {
+     while ($A = $stmt->fetch()) {
         $dt->setTimestamp($A['day']);
         $daycheck = $dt->format("z",true);
         if ( $day != $daycheck ) {
@@ -3320,7 +3336,7 @@ function COM_getPassword( $loginname )
 
     $passwd = $db->conn->fetchColumn("SELECT passwd FROM `{$_TABLES['users']}` WHERE username = ?",array($loginname),0);
 
-    if ($paswd === false) {
+    if ($passwd === false) {
         $tmp = $LANG01[32] . ": '" . $loginname . "'";
         Log::write('system',Log::ERROR, $tmp);
         $passwd = '';
@@ -3769,7 +3785,7 @@ function COM_setMsg( $msg, $type='info', $persist=0 )
 {
     $currentMsgArray = array();
     if ( SESS_isSet('glfusion.infoblock') ) {
-        $currentMsgArray = @unserialize(SESS_getVar('glfusion.infoblock'));
+        $currentMsgArray = @unserialize((string) SESS_getVar('glfusion.infoblock'));
     }
 
     $msgArray = array(
@@ -5029,8 +5045,8 @@ function COM_dateDiff( $interval, $date1, $date2 )
 
     switch( $interval ) {
         case "y":
-            list($year1, $month1, $day1) = split('-', date('Y-m-d', $date1));
-            list($year2, $month2, $day2) = split('-', date('Y-m-d', $date2));
+            list($year1, $month1, $day1) = explode('-', date('Y-m-d', $date1));
+            list($year2, $month2, $day2) = explode('-', date('Y-m-d', $date2));
             $time1 = (date('H',$date1)*3600) + (date('i',$date1)*60) + (date('s',$date1));
             $time2 = (date('H',$date2)*3600) + (date('i',$date2)*60) + (date('s',$date2));
             $diff = $year2 - $year1;
@@ -5047,8 +5063,8 @@ function COM_dateDiff( $interval, $date1, $date2 )
             }
             break;
         case "m":
-            list($year1, $month1, $day1) = split('-', date('Y-m-d', $date1));
-            list($year2, $month2, $day2) = split('-', date('Y-m-d', $date2));
+            list($year1, $month1, $day1) = explode('-', date('Y-m-d', $date1));
+            list($year2, $month2, $day2) = explode('-', date('Y-m-d', $date2));
             $time1 = (date('H',$date1)*3600) + (date('i',$date1)*60) + (date('s',$date1));
             $time2 = (date('H',$date2)*3600) + (date('i',$date2)*60) + (date('s',$date2));
             $diff = ($year2 * 12 + $month2) - ($year1 * 12 + $month1);

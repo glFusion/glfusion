@@ -263,7 +263,7 @@ function SFS_delUsers()
                     print "We would delete userid " . $uid . " here<br />";
                 } else {
                     if (!USER_deleteAccount($uid)) {
-                        $msg .= "<strong>{$LANG28[2]} $delitem {$LANG28[70]}</strong><br/>\n";
+                        $msg .= "<strong>{$LANG28[2]} $uid {$LANG28[70]}</strong><br/>\n";
                     }
                 }
             }

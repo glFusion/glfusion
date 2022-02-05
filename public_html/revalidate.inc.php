@@ -34,7 +34,7 @@ if ( isset($_POST['type']) ) {
 $desturl = '';
 if ( SESS_isSet('glfusion.auth.dest') ) {
     $desturl = SESS_getVar('glfusion.auth.dest');
-    if (substr($desturl, 0, strlen($_CONF['site_url'])) != $_CONF['site_url']) {
+    if (substr((string) $desturl, 0, strlen($_CONF['site_url'])) != $_CONF['site_url']) {
         $desturl = $_CONF['site_url'];
     }
     SESS_unSet('glfusion.auth.dest');
@@ -135,7 +135,7 @@ function _rebuild_data()
     if ( SESS_isSet('glfusion.auth.file')) {
         $filedata = SESS_getVar('glfusion.auth.file');
         SESS_unSet('glfusion.auth.file');
-        $file_array = unserialize($filedata);
+        $file_array = unserialize((string) $filedata);
     }
     $filedata = '';
     if (empty($_FILES) && isset($file_array) && is_array($file_array) ) {

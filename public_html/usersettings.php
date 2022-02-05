@@ -426,7 +426,7 @@ function confirmAccountDelete ($form_reqid)
         '',
         COM_getBlockTemplate ('_msg_block', 'header')
     );
-    $T = new Template($CONF['path_layout'] . '/preferences');
+    $T = new Template($_CONF['path_layout'] . '/preferences');
     $T->set_file('form', 'conf_del_account.thtml');
     $T->set_var('reqid', $reqid);
     $T->parse('output', 'form');
@@ -1041,10 +1041,7 @@ function saveuser($A)
 
     PLG_userInfoChanged ((int)$_USER['uid']);
 
-    // at this point, the user information has been saved, but now we're going to check to see if
-    // the user has requested resynchronization with their remoteservice account or to unlink their remote account
     $msg = 5; // default msg = Your account information has been successfully saved
-
 
     PLG_profileExtrasSave ();
     PLG_profileSave();
@@ -1098,7 +1095,7 @@ function userprofile ($user, $msg = 0)
     $display_name = @htmlspecialchars(COM_getDisplayName($user, $A['username'],$A['fullname']),ENT_COMPAT,COM_getEncodingt());
 
     if ($msg > 0) {
-        $retval .= COM_showMessage($msg, $plugin,'',0,'info');
+        $retval .= COM_showMessage($msg, '','',0,'info');
     }
 
     // format date/time to user preference
@@ -1756,7 +1753,6 @@ $display = '';
 if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     switch ($mode) {
     case 'updateaccount' :
-
         if ( SEC_checkToken() ) {
             $display .= updateAccountInfo($_POST);
         } else {
@@ -1764,18 +1760,9 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
         }
         break;
     case 'saveuser':
-        // validate the password is correct.
+        // all panels except user / password panel
         $account_type = DB_getItem ($_TABLES['users'], 'account_type', "uid = {$_USER['uid']}");
         $service = DB_getItem ($_TABLES['users'], 'remoteservice', "uid = {$_USER['uid']}");
-
-/*
-
-        $current_password = DB_getItem($_TABLES['users'], 'passwd',"uid = {$_USER['uid']}");
-        if (empty($_POST['passwd']) || !SEC_check_hash($_POST['passwd'],$current_password)) {
-            COM_setMsg($MESSAGE[83],'error');
-            return COM_refresh ($_CONF['site_url'].'/usersettings.php');
-        }
-*/
         savepreferences ($_POST);
         $display .= saveuser($_POST);
         break;
@@ -1783,7 +1770,6 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
     case 'confirmdelete':
         if (($_CONF['allow_account_delete'] == 1) && ($_USER['uid'] > 1)) {
             $accountId = COM_applyFilter ($_POST['account_id']);
-
             $current_password = DB_getItem($_TABLES['users'],'passwd',"uid=".(int)$_USER['uid']);
             if (!empty ($accountId)) {
                 $display .= confirmAccountDelete ($accountId);
@@ -1813,70 +1799,6 @@ if (isset ($_USER['uid']) && ($_USER['uid'] > 1)) {
         COM_setMsg( $MESSAGE[5], 'info',false );
         $display = COM_refresh ($_CONF['site_url'].'/usersettings.php');
         break;
-
-    case 'synch':
-        // This case is the result of a callback from an OAuth service.
-        // The user has made a request to resynch their glFusion user account with the remote OAuth service
-        if ($_CONF['user_login_method']['oauth'] && (strpos($_USER['remoteservice'], 'oauth.') === 0) && isset($_GET['oauth_login'])) {
-            $msg = 5;
-
-            $modules = SEC_collectRemoteOAuthModules();
-            $active_service = (count($modules) == 0) ? false : in_array(substr($_GET['oauth_login'], 6), $modules);
-            if (!$active_service) {
-                $status = -1;
-                $msg = 114; // resynch with remote account has failed but your other account information has been successfully saved.
-            } else {
-                $query = array_merge($_GET, $_POST);
-                $service = $query['oauth_login'];
-                $consumer = new OAuthConsumer($service);
-
-                if($service == 'oauth.facebook') {
-                    // facebook resynchronizations are simple to perform
-                    $oauth_userinfo = $consumer->refresh_userinfo();
-                    if (empty($oauth_userinfo)) {
-                        $msg = 114; // Account saved but re-synch failed.
-                        Log::write('system',Log::ERROR,$MESSAGE[$msg]);
-                    } else {
-                        $consumer->resyncUserData($oauth_userinfo);
-                    }
-                } else {
-                    // other OAuth services are more complex
-                    // setup what we need to callback and authenticate
-                    $callback_query_string = $consumer->getCallback_query_string();
-                    $cancel_query_string = $consumer->getCancel_query_string();
-                    $callback_url = $_CONF['site_url'] . '/usersettings.php?mode=synch&oauth_login=' . $service;
-
-                    // authenticate with the remote service
-                    if (!isset($query[$callback_query_string]) && (empty($cancel_query_string) || !isset($query[$cancel_query_string]))) {
-                        $msg = 114; // Resynch with remote account has failed but other account information has been successfully saved
-                    // elseif the callback query string is set, then we have successfully authenticated
-                    } elseif (isset($query[$callback_query_string])) {
-                        $oauth_userinfo = $consumer->sreq_userinfo_response($query);
-                        if (empty($oauth_userinfo)) {
-                            $msg = 111; // Authentication error.
-                        } else {
-                            $consumer->resyncUserData($oauth_userinfo);
-                        }
-                    } elseif (!empty($cancel_query_string) && isset($query[$cancel_query_string])) {
-                        $msg = 112; // Certification has been cancelled.
-                    } else {
-                        $msg = 91; // You specified an invalid identity URL.
-                    }
-                }
-            }
-
-            if ($msg == 5) {
-                COM_setMsg( $MESSAGE[5], 'info',false );
-                $display = COM_refresh ($_CONF['site_url'] . '/users.php?mode=profile&amp;uid=' . $_USER['uid']);
-            } else {
-                COM_setMsg( $MESSAGE[$msg], 'error',true );
-                Log::write('system',Log::ERROR,$MESSAGE[$msg]);
-                $display = COM_refresh ($_CONF['site_url'] . '/usersettings.php');
-            }
-            break;
-        }
-
-        // If OAuth is disabled, drop into default case
 
     default: // also if $mode == 'edit', 'preferences', or 'comments'
         $display .= COM_siteHeader('menu', $LANG04[16]);

@@ -850,7 +850,7 @@ function USER_createuser($info = array())
 
     // is there a custom user check
     if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userCheck')) {
-        $msg = CUSTOM_userCheck ($username, $email);
+        $msg = CUSTOM_userCheck ($data['username'], $data['email']);
         if (is_array($msg)) {
             $validationErrors += count($msg);
             array_merge($errorMessages, $msg);
@@ -1338,7 +1338,7 @@ function userLogout()
 */
 function _userGetpassword()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG04;
+    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG12;
 
     $retval = '';
 
@@ -1364,7 +1364,7 @@ function _userNewpwd()
     $db = Database::getInstance();
 
     $uid    = (int) filter_input(INPUT_GET,'uid',FILTER_SANITIZE_NUMBER_INT);
-    $reqid  = COM_sanitizeID(filter_input(INPUT_GET,'rid',FILTER_SANITIZE_STRING));
+    $reqid  = COM_sanitizeID(COM_applyFilter($_GET['rid']));
 
     if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($reqid) && (strlen ($reqid) == 16)) {
         $valid = $db->getCount ($_TABLES['users'], array ('uid', 'pwrequestid'),
@@ -1391,11 +1391,11 @@ function _userSetnewpwd()
     $retval = '';
     if ((empty($_POST['passwd'])) || ($_POST['passwd'] != $_POST['passwd_conf'])) {
         $uid = (int) filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT);
-        $reqid = COM_sanitizeID(filter_input(INPUT_POST,'rid',FILTER_SANITIZE_STRING));
+        $reqid = COM_sanitizeID(COM_applyFilter($_POST['rid']));
         echo COM_refresh ($_CONF['site_url'].'/users.php?mode=newpwd&amp;uid='.$uid.'&amp;rid='.$reqid);
     } else {
         $uid    = (int) filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT);
-        $reqid  = COM_sanitizeID(filter_input(INPUT_POST,'rid',FILTER_SANITIZE_STRING));
+        $reqid  = COM_sanitizeID(COM_applyFilter($_POST['rid']));
 
         if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($reqid) && (strlen($reqid) == 16)) {
 
@@ -1500,7 +1500,7 @@ function _userVerify()
     $db = Database::getInstance();
 
     $uid = (int) filter_input(INPUT_GET,'u',FILTER_SANITIZE_NUMBER_INT);
-    $vid = filter_input(INPUT_GET,'vid',FILTER_SANITIZE_STRING);
+    $vid = COM_applyFilter($_GET['vid']);
 
     if (!empty ($uid) && is_numeric ($uid) && ($uid > 1) && !empty ($vid) && (strlen ($vid) == 32)) {
         $U = $db->conn->fetchAssoc(
@@ -1577,7 +1577,7 @@ function _userVerify()
 
 function _userGetnewtoken()
 {
-    global $_CONF, $_TABLES, $_USER, $LANG04;
+    global $_CONF, $_TABLES, $_USER, $LANG04, $LANG12;
 
     $retval = '';
 

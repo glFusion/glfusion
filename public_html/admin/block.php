@@ -645,7 +645,7 @@ function BLOCK_list()
 */
 function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $tid, $rdfurl, $rdfupdated, $rdflimit, $phpblockfn, $onleft, $owner_id, $group_id, $perm_owner, $perm_group, $perm_members, $perm_anon, $is_enabled, $allow_autotags)
 {
-    global $_CONF, $_TABLES, $LANG01, $LANG21, $MESSAGE;
+    global $_CONF, $_USER, $_TABLES, $LANG01, $LANG21, $MESSAGE;
 
     $retval = '';
 

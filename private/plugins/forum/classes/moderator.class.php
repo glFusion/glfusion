@@ -50,7 +50,7 @@ class Moderator
     public static function getInstance($mod_id)
     {
         $mod_id = (int)$mod_id;
-        if (!array_key_exists(self::$cache[$mod_id])) {
+        if (!array_key_exists($mod_id, self::$cache)) {
             self::$cache[$mod_id] = new self($mod_id);
         }
         return self::$cache[$mod_id];

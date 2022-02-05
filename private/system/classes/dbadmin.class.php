@@ -146,7 +146,7 @@ class dbAdmin
             $this->ajaxHandler->setResponse('result','ok');
             $this->ajaxHandler->sendResponse();
         }
-        return $errorcode;
+        return $errorCode;
     }
 
     public function processColumn( $table, $column )
@@ -158,7 +158,7 @@ class dbAdmin
             $this->ajaxHandler->setResponse('result','ok');
             $this->ajaxHandler->sendResponse();
         }
-        return $errorcode;
+        return $errorCode;
     }
 
     public function finish()

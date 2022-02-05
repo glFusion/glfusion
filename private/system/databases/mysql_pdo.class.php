@@ -960,7 +960,7 @@ class database
      */
     public function dbExecute($sth, $inputParms)
     {
-        return $sth->execute($inputParams);
+        return $sth->execute($inputParms);
     }
 }
 

@@ -59,7 +59,8 @@ $pageBody .= glfusion_SecurityCheck();
 
 $topic = Topic::currentID();
 if (isset($_GET['topic'])) {
-    $requestedTopic = filter_input(INPUT_GET,'topic',FILTER_SANITIZE_STRING);
+//    $requestedTopic = filter_input(INPUT_GET,'topic',FILTER_SANITIZE_STRING);
+    $requestedTopic = COM_applyFilter($_GET['topic']);
     if (strtolower($requestedTopic) != strtolower($topic)) {
         COM_404();
     }
@@ -183,7 +184,8 @@ $msg = COM_getMessage();
 if ( $msg > 0 ) {
     $plugin = '';
     if (isset ($_GET['plugin'])) {
-        $plugin = (string) filter_input(INPUT_GET, 'plugin', FILTER_SANITIZE_STRING);
+//        $plugin = (string) filter_input(INPUT_GET, 'plugin', FILTER_SANITIZE_STRING);
+        $plugin = COM_applyFilter($_GET['plugin']);
         if (!in_array($plugin,$_PLUGINS)) {
             $plugin = '';
         }

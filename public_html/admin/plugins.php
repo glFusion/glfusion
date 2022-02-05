@@ -907,9 +907,9 @@ function PLUGINS_processUpload()
     }
     if ( $pluginTmpDir == '' ) {
         $permError = 1;
-        $permErrorLisg .= 'Unable to locate temporary plugin directory';
+        $permErrorList .= 'Unable to locate temporary plugin directory';
         $fs->deleteDir($_CONF['path_data'].$tmp);
-        return PLUGINS_uploadError($errorMessage);
+        return PLUGINS_uploadError($permErrorList);
     }
 
     // test copy to proper directories
@@ -1058,9 +1058,9 @@ function PLUGINS_post_uploadProcess() {
     }
     if ( $pluginTmpDir == '' ) {
         $permError = 1;
-        $permErrorLisg .= 'Unable to locate temporary plugin directory';
+        $permErrorList .= 'Unable to locate temporary plugin directory';
         $fs->deleteDir($_CONF['path_data'].$tmp);
-        return PLUGINS_uploadError($errorMessage);
+        return PLUGINS_uploadError($permErrorList);
     }
 
     $rc = $fs->dirCopy($pluginTmpDir, $_CONF['path'].'plugins/'.$pluginData['id']);

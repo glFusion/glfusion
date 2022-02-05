@@ -130,6 +130,7 @@ class dbConvertUTF8 extends dbAdmin
                 $this->logError($table,$name);
             }
         } else if (strcasecmp(substr($type,0,4), "CHAR") === 0) {
+            $size = $mat[1];
             $sql = "ALTER TABLE {$table} MODIFY `{$name}` CHAR({$size}) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null;
             try {
                 $stmt = $db->conn->executeQuery($sql);
@@ -139,6 +140,7 @@ class dbConvertUTF8 extends dbAdmin
                 $this->logError($table,$name);
             }
         } else if (strcasecmp(substr($type,0,7), "VARCHAR") === 0) {
+            $size = $mat[1];
             $sql = "ALTER TABLE {$table} MODIFY `{$name}` VARCHAR({$size}) CHARACTER SET ".$this->toCharset." COLLATE ".$this->toCollation.$null;
             try {
                 $stmt = $db->conn->executeQuery($sql);

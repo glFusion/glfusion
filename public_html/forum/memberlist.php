@@ -88,7 +88,7 @@ function _ff_getListField_memberlist($fieldname, $fieldvalue, $A, $icon_arr)
             break;
         case 'pm' :
             if ($_FF_CONF['use_pm_plugin']) {
-                $pmplugin_link = forumPLG_getPMlink($siteMembers['username']);
+                $pmplugin_link = forumPLG_getPMlink($A['username']);
                 $retval = '<a href="'.$pmplugin_link.'"><img src="'._ff_getImage('pm').'" alt="PM"/></a>';
             }
             break;

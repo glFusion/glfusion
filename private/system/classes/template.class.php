@@ -1089,7 +1089,7 @@ class Template
     private function mod_echo($val, $modifier = '')
     {
         if (array_key_exists($val, $this->nocache) && $this->unknowns == 'PHP') {
-            if (empty($modifier) && !is_numeric($modifer) ) {
+            if (empty($modifier) && !is_numeric($modifier) ) {
                 return '<?php echo $this->val_echo(\''.$val.'\'); ?>';
             } else {
                 return '<?php echo $this->mod_echo(\''.$val.'\',\''.$modifier.'\'); ?>';

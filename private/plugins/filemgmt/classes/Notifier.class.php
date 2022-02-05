@@ -13,6 +13,8 @@
  */
 namespace Filemgmt;
 
+use \glFusion\Log\Log;
+
 /**
  * Notification methods.
  * @package filemgmt
@@ -103,7 +105,7 @@ class Notifier
         }
 
         // build the template...
-        $T = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
+        $T = new \Template($_CONF['path'] . 'plugins/filemgmt/templates');
         $T->set_file ('email', 'notifyemail.thtml');
 
         $T->set_var(array(
@@ -122,7 +124,7 @@ class Notifier
         $T->parse('output','email');
         $body .= $T->finish($T->get_var('output'));
 
-        $groups = Group::withFeature('filemgmt.admin');
+        $groups = \Group::withFeature('filemgmt.admin');
         if (count ($groups) == 0) {
             $groupList = '1';   // use Root group if none others fit
         } else {

@@ -1029,7 +1029,7 @@ function FF_saveTopic( $forumData, $postData, $action )
         }
     }
     if (isset($postData['name']) && $postData['name'] != '') {
-        $name = _ff_preparefordb(@htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($postData['name'])))),ENT_QUOTES,COM_getEncodingt()),'text');
+        $name = (string) _ff_preparefordb(@htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($postData['name'])))),ENT_QUOTES,COM_getEncodingt()),'text');
         $name = urldecode($name);
     } else {
         $okToSave = false;

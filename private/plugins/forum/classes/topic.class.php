@@ -253,6 +253,8 @@ class Topic
 
     public function updateHits() : self
     {
+        global $_TABLES;
+
         self::executeSQL(
             "UPDATE {$_TABLES['ff_topic']}
             SET views = views+1
@@ -264,11 +266,13 @@ class Topic
 
     public function updateReplies(?int $count=1) : self
     {
+        global $_TABLES;
+        
         if ($count == NULL) {
             $count  = 1;
         }
         $count = (int)$count;
-        self::exececuteSQL(
+        self::executeSQL(
             "UPDATE {$_TABLES['ff_topic']}
             SET replies = replies + $count
             WHERE id = {$this->id}"

@@ -200,7 +200,7 @@ function SubmissionSave()
         sendNotification ($article);
     }
 
-    $c = \glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('menu');
     $c->deleteItemsByTag('whatsnew');
     echo COM_refresh( $_CONF['site_url'] . '/index.php?msg=2' );

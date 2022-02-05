@@ -1390,7 +1390,6 @@ function USER_save($uid)
     $db = Database::getInstance();
 
     if ($_USER_VERBOSE) Log::write('system',Log::DEBUG,"**** entering USER_save()****");
-    if ($_USER_VERBOSE) Log::write('system',Log::DEBUG,"group size at beginning = " . sizeof($groups));
 
     $uid            = COM_applyFilter($_POST['uid'],true);
     if ( $uid == 0 ) {
@@ -1440,7 +1439,7 @@ function USER_save($uid)
     }
 
     if ( $uid == 1 ) {
-        return USER_list();
+        return USER_list(0);
     }
 
     if ( $uid == '' || $uid < 2 || $newuser == 1 ) {
@@ -2170,7 +2169,7 @@ function USER_sendReminders()
 */
 function USER_importExec()
 {
-    global $_CONF, $_TABLES, $LANG04, $LANG28;
+    global $_CONF, $_TABLES, $LANG04, $LANG27, $LANG28;
 
     // Setting this to true will cause import to print processing status to
     // webpage and to the error.log file
@@ -2458,7 +2457,7 @@ switch($action) {
         if ( $uid == 1 ) {
             $display .= COM_siteHeader('menu', $LANG28[11]);
             $display .= COM_showMessageFromParameter();
-            $display .= USER_list();
+            $display .= USER_list(0);
             $display .= COM_siteFooter();
         } else {
             $display .= USER_edit($uid, $msg);

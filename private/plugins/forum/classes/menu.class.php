@@ -96,7 +96,7 @@ class Menu
     {
         global $_USER;
 
-        $T = new Template;
+        $T = new \Template;
         $T->set_file('title', 'forum_title.thtml');
         $T->set_var(array(
             'title' => $page_title,
@@ -104,12 +104,14 @@ class Menu
             'link_admin' => plugin_ismoderator_forum(),
             'link_account' => ($page != 'account' && $_USER['uid'] > 1),
         ) );
+/*
         if ($page != 'cart' && Cart::getCartID()) {
             $item_count = Cart::getInstance()->hasItems();
             if ($item_count) {
                 $T->set_var('link_cart', $item_count);
             }
         }
+*/
         return $T->parse('', 'title');
     }
 
@@ -123,14 +125,14 @@ class Menu
      */
     public static function siteHeader($title='', $meta='')
     {
-        global $LANG_SHOP;
+        global $_FF_CONF, $LANG_GF00;
 
         $retval = '';
         if ($title == '') {
-            $title = $LANG_SHOP['main_title'];
+            $title = $LANG_GF00['plugin_label'];
         }
 
-        switch(Config::get('displayblocks')) {
+        switch($_FF_CONF['showblocks']) {
         case 2:     // right only
         case 0:     // none
             $retval .= COM_siteHeader('none', $title, $meta);
@@ -141,10 +143,6 @@ class Menu
         default :
             $retval .= COM_siteHeader('menu', $title, $meta);
             break;
-        }
-
-        if (!Config::get('forum_enabled')) {
-            $retval .= '<div class="uk-alert uk-alert-danger">' . $LANG_SHOP['forum_closed'] . '</div>';
         }
         return $retval;
     }
@@ -157,9 +155,11 @@ class Menu
      */
     public static function siteFooter()
     {
+        global $_FF_CONF;
+
         $retval = '';
 
-        switch(Config::get('displayblocks')) {
+        switch($_FF_CONF['showblocks']) {
         case 2 : // right only
         case 3 : // left and right
             $retval .= COM_siteFooter();

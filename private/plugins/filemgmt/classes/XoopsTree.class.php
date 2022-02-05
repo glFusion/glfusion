@@ -37,6 +37,8 @@
 // +--------------------------------------------------------------------------+
 namespace Filemgmt;
 
+use \glFusion\Database\Database;
+
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
@@ -160,12 +162,16 @@ class XoopsTree
     //returns an array of ALL parent ids for a given id($sel_id)
     public function getAllParentId($sel_id,$order="",$idarray = array())
     {
+
+        $db = Database::getInstance();
+
         $sql = "SELECT $this->pid FROM $this->table WHERE $this->id = '$sel_id'";
         if ( $order != "" ) {
             $sql .= " ORDER BY $order";
         }
-        $result=$this->db->query($sql);
-        list($r_id) = $this->db->fetchRow($result);
+
+        $result=DB_query($sql);
+        list($r_id) = DB_fetchArray($result);
         if ( $r_id == 0 ) {
             return $idarray;
         }

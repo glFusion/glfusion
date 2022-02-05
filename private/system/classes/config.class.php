@@ -627,7 +627,7 @@ class config
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
-            $db->dbError($e->getMessage(),$sql);
+            $db->dbError($e->getMessage(),$q_string);
         }
 
         $data = $stmt->fetchAll();
@@ -771,7 +771,7 @@ class config
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
-            $db->dbError($e->getMessage(),$sql);
+            $db->dbError($e->getMessage(),$q_string);
         }
         $data = $stmt->fetchAll(Database::ASSOCIATIVE);
         $retval = array();
@@ -1606,13 +1606,13 @@ class config
                     $fieldset_num = $row['fieldset'];
                     $tabID = '';
                     $value = $fieldset;
-                    $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
+                    $label = $groupname . " &raquo; " .  $fieldset;
                 } else {
                     if ( !isset($LANG_confignames[$group][$row['name']])) continue;
                     $confname = $row['name'];
-                    $label = $groupname . " &raquo; " . $subgroup . " &raquo; " . $fieldset;
+                    $label = $groupname . " &raquo; " .  $fieldset;
                     $value = $LANG_confignames[$group][$row['name']];
-                    $tabID = 'sg_'.$fieldset_id;
+                    $tabID = '';
                 }
                 $confArray[] = array('value' => $value,
                                      'data' => array( 'confvar' => $confname,
