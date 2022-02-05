@@ -76,8 +76,8 @@ if (($op == 'banip') && ($ip != '')) {
         $ips_unban->set_var ('phpself', $_CONF['site_admin_url'] .'/plugins/forum/ips.php');
         $ips_unban->set_var ('deletenote1', sprintf($LANG_GF93['deleteforumnote1'], $forumname));
         $ips_unban->set_var ('deletenote2', $LANG_GF93['deleteforumnote21']);
-        $ips_unban->set_var ('mode', banip);
-        $ips_unban->set_var ('sure', yes);
+        $ips_unban->set_var ('mode', 'banip');
+        $ips_unban->set_var ('sure', 'yes');
         $ips_unban->set_var ('ip', $ip);
         $ips_unban->set_var ('msg1', $LANG_GF96['banip']);
         $ips_unban->set_var ('msg2', sprintf($LANG_GF96['banipmsg'], $ip));
