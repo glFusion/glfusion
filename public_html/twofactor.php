@@ -116,7 +116,7 @@ function tfaDownload()
     $retval = array();
 
     $sql = "SELECT code FROM {$_TABLES['tfa_backup_codes']} "
-        . "WHERE (uid = {$this->uid}) AND (used = 0) "
+        . "WHERE (uid = {$_USER['uid']}) AND (used = 0) "
         . "ORDER BY code";
     $result = DB_query($sql);
 
