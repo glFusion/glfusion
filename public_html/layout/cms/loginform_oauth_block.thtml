@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 <li>
   <a href="{site_url}/users.php?oauth_login={oauth_service}" rel="nofollow">
-      <button type="button" class="login-with-btn login-with-icon login-btn-dark login-with-{oauth_service}-icon" data-uk-tooltip title="Login with {oauth_service_display}" rel="nofollow"></button>
+      <button type="button" class="login-with-btn login-with-icon login-btn-dark login-with-{oauth_service}-icon" data-uk-tooltip="{ delay:250 }" title="{$LANG04[194]} {oauth_service_display}" rel="nofollow"></button>
   </a>
   </li>
 {# end {templatelocation} #}
