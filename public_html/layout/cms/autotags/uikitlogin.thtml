@@ -10,8 +10,10 @@
 </div>
 <div id="modalOpen" class="uk-modal">
     <div class="uk-modal-dialog uk-modal-dialog-medium">
-        <a href="#" class="uk-modal-close uk-close"></a>
-        {login_form}
+        <div class="uk-panel uk-panel-box">
+            <a href="#" class="uk-modal-close uk-close"></a>
+            {login_form}
+        </div>
     </div>
 </div>
 <script>
