@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 <script src="{site_url}/javascript/pwd_strength.js"></script>
 
-<div class="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
+<div class="uk-panel uk-panel-box">
 	{start_block}
 
 {!if oauth_login}
