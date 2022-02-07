@@ -2472,7 +2472,7 @@ function plugin_submissioncount_forum()
     global $_TABLES;
 
     $retval = 0;
-    if (SEC_hasRights('fpri,.admin')) {
+    if (SEC_hasRights('forum.admin')) {
         $retval = DB_count ($_TABLES['ff_topic'],'approved',0);
     }
 
