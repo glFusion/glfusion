@@ -241,7 +241,7 @@ define("_MD_SEARCH","Hledej");
 define("_MD_MAIN","Hlavní");
 define("_MD_SUBMITFILE","Pošli soubor");
 define("_MD_POPULAR","Oblíbený");
-define("_MD_POP", "Pop");   // abbrevision for listing badge
+define("_MD_POP", "Vyskočit");   // abbrevision for listing badge
 define("_MD_NEW","Nový");
 define("_MD_TOPRATED","Nejvyšší hodnocení");
 

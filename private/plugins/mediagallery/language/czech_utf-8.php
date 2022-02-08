@@ -848,7 +848,7 @@ $LANG_MG03 = array (
     'xp_pub_help3'          => 'Otevřete na svém počítači složku se soubory, které chcete nahrát do Media Gallery.  Vyberte obrázky nebo složky a pak odkaz v levém menu "Publikování na webu...". Pak budete vyzvání k přihlášení do MG a k výběru cílového alba pro vaše soubory.',
     'setup'                 => 'Nastavení',
     'publishing'            => 'Publikování',
-    'enroll_title'          => 'Member Album Self Enrollment',
+    'enroll_title'          => 'Automatické vytvoření alba uživatele',
     'overview'              => 'Přehled',
     'terms'                 => 'Termíny a podmínky',
     'member_album_overview' => 'Členská alba vám umožní svobodně mít vaše vlastní Album Media Gallery, nad kterým máte částečnou kontrolu. Existuje několik nadřazených  funkcí  například pro  všeobecné nastaven stránky, které nemůžete vykonávat, jako je učinit vaše album Hlavní  album ale většina administrativních funkcí je vám k dispozici.',
@@ -935,12 +935,12 @@ $LANG_MG04 = array (
     'component_configuration' => 'Konfigurace komponenty',
     'compressed_bits_per_pixel' => 'Komprese Bitů na Pixel',
     'compression'           => 'Komprese',
-    'continuous_taking_bracket' => 'Continuous Taking Bracket',
+    'continuous_taking_bracket' => 'Seriové snímky',
     'contrast'              => 'Kontrast',
     'converter'             => 'Převodník',
     'copyright'             => 'Autorská práva',
     'custom_functions'      => 'Vlastní funkce',
-    'customer_render'       => 'Customer Render',
+    'customer_render'       => 'Uživatelská ůprava',
     'datetime'              => 'Datum/Čas',
     'digital_zoom'          => 'Digitální Zoom',
     'digital_zoom_ratio'    => 'Digitální poměr zoomu',
@@ -1004,7 +1004,7 @@ $LANG_MG04 = array (
     'picture_info'          => 'Informace o obrázku',
     'picture_mode'          => 'Režim obrázku',
     'planar_configuration'  => 'Konfigurace planární',
-    'predictor'             => 'Predictor',
+    'predictor'             => 'Předpověď',
     'primary_chromaticities' => 'Primární chromacita',
     'quality'               => 'Kvalita',
     'reference_bw'          => 'Referenční čená/bílá',
@@ -1119,7 +1119,7 @@ $LANG_MG04 = array (
     'unknown_or_auto'           => 'Neznámé nebo automatické',
     'daylight'                  => 'Denní světlo',
     'flourescent'               => 'Flourescent',
-    'tungsten'                  => 'Tungsten',
+    'tungsten'                  => 'Výbojka',
     'flash'                     => 'Blesk',
     'standard_a'                => 'Standardní světlo A',
     'standard_b'                => 'Standardní světlo B',
@@ -1133,12 +1133,12 @@ $LANG_MG04 = array (
     'no_compression'            => 'Bez komprese',
     'jpeg_compression'          => 'JPEG komprese',
     'not_defined'               => 'Není definováno',
-    'one_chip_color_area_sensor'    => 'One Chip Color Area Sensor',
-    'two_chip_color_area_sensor'    => 'Two Chip Color Area Sensor',
-    'three_chip_color_area_sensor'  => 'Three Chip Color Area Sensor',
-    'color_sequential_area_sensor'  => 'Color Sequential Area Sensor',
-    'trilinear_sensor'              => 'Trilinear Sensor',
-    'color_sequential_linear_sensor'    => 'Color Sequential Linear Sensor',
+    'one_chip_color_area_sensor'    => 'Jednosenzorový čipu barevné plochy',
+    'two_chip_color_area_sensor'    => 'Dvousenzorový čip barevné plochy',
+    'three_chip_color_area_sensor'  => 'Třísenzorový čip barevné plochy',
+    'color_sequential_area_sensor'  => 'Barevné sekvenční snímače',
+    'trilinear_sensor'              => 'Trilinearní Sensor',
+    'color_sequential_linear_sensor'    => 'Barevný sekvenční lineární senzor',
     'monochrome'                    => 'Monochromní',
     'rgb'                           => 'RGB',
     'ycbcr'                         => 'YCbCr',
@@ -1148,9 +1148,9 @@ $LANG_MG04 = array (
     'directly_photographed'         => 'Přímo fotografováno',
     // flash
     'flash_00'              => 'Blesk nespustil',
-    'flash_01'              => 'Flash Fired',
-    'flash_05'              => 'Strobe return light not detected',
-    'flash_07'              => 'Strobe returned light detected',
+    'flash_01'              => 'Blesk spuštěný',
+    'flash_05'              => 'Odražené světlo nebylo zjištěno',
+    'flash_07'              => 'Odražené světlo bylo zjištěno',
     'flash_09'              => 'Blesk spuštěn, povinný režim blesku',
     'flash_13'              => 'Blesk stisknut, automatický režim, odraz světla nebylo zjištěn',
     'flash_15'              => 'Blesk spuštěn, automatický režim, odraz světla detekován',
@@ -1174,7 +1174,7 @@ $LANG_MG04 = array (
 // Slideshow transitions
 
 $LANG_MG05 = array (
-    'blend'                 => 'Blend',
+    'blend'                 => 'Smíchat',
     'blinds'                => 'Blinds',
     'checkerboard'          => 'Checkerboard',
     'diagonal'              => 'Úhlopříčně',
@@ -1183,9 +1183,9 @@ $LANG_MG05 = array (
     'iris'                  => 'Iris clona',
     'pinwheel'              => 'Pinwheel',
     'pixelate'              => 'Pixelizace',
-    'radial'                => 'Radial',
+    'radial'                => 'Kruhové',
     'rain'                  => 'Déšť',
-    'slide'                 => 'Slide',
+    'slide'                 => 'Snímek',
     'snow'                  => 'Sníh',
     'spiral'                => 'Spirála',
     'stretch'               => 'Roztáhnout',
@@ -1237,28 +1237,28 @@ $LANG_MG07 = array (
     'height_help'               => 'Velikost okna přehrávání',
     'width_help'                => 'Velikost okna přehrávání',
     'menu'                      => 'Menu',
-    'menu_help'                 => 'Displays the full menu, allowing the user a variety of options to enhance or control playback.',
+    'menu_help'                 => 'Zobrazí plnou nabídku, která uživateli umožňuje vylepšit nebo ovládat přehrávání.',
     'quality'                   => 'Kvalita',
-    'quality_help'              => 'Playback Quality',
-    'flash_vars'                => 'Flash Variables',
+    'quality_help'              => 'Kvalita přehrávání',
+    'flash_vars'                => 'Proměnné Blesku',
     'auto_ref'                  => 'Auto Ref',
-    'auto_ref_help'             => 'When set to On, the AUTOREF attribute causes any movie to load immediately, without waiting for a mouse click.',
-    'controller'                => 'Controller',
-    'controller_help'           => 'When set to On, the movie controller will be displayed.',
-    'kiosk_mode'                => 'Kiosk Mode',
-    'kiosk_mode_help'           => 'When Kiosk Mode is On, the plug-in does not include its pop-up menu in the movie controller and does not allow drag and drop to save the movie.',
-    'scale'                     => 'Scale',
-    'scale_help'                => 'Scale can be either TOFIT, ASPECT of Normal.  If set to ToFit, the moview is scaled to fit the embedded box as specified by height and width.  If set to Aspect, the movie will be scaled to fit the embedded box while maintaining the aspect ratio. If set to Normal, the movie will play the size it was saved.',
-    'swf_scale_help'            => 'Default (Show all) makes the entire movie visible in the specified area without distortion, while maintaining the original aspect ratio of the movie. Borders may appear on two sides of the movie. No Border scales the movie to fill the specified area, without distortion but possibly with some cropping, while maintaining the original aspect ratio of the movie.  Exact Fit makes the entire movie visible in the specified area without trying to preserve the original aspect ratio. Distortion may occur.',
-    'wmode'                     => 'Window Mode',
-    'wmode_help'                => 'Sets the Window Mode property of the Flash movie for transparency, layering, and positioning in the browser.',
+    'auto_ref_help'             => 'Je-li nastaveno na On, atribut AUTOREF způsobí okamžité načtení filmu, aniž by čekal na kliknutí myši.',
+    'controller'                => 'Ovladač',
+    'controller_help'           => 'Je-li nastaveno na Zapnuto, zobrazí se ovladač filmu.',
+    'kiosk_mode'                => 'Režim Kiosk',
+    'kiosk_mode_help'           => 'Při zapnutí režimu Kiosk zásuvný modul neobsahuje vyskakovací menu v ovladači filmu a neumožňuje přetažení souboru pro uložení filmu.',
+    'scale'                     => 'Měřítko',
+    'scale_help'                => 'Měřítko může být buď TOFIT, ASPECT nebo Normal. Je-li nastaveno na ToFit, video  se zmenší, aby se vešlo  do vloženého rámečku podle výšky a šířky. Je-li nastaveno na Aspect, film bude zmenšen tak, aby odpovídal vloženému rámečku při zachování poměru stran. Je-li nastaveno na Normal, film bude hrát v původní velikosti.',
+    'swf_scale_help'            => 'Výchozí nastavení ( Show all)  činí celý film viditelný v určené oblasti bez zkreslení a zároveň zachovává původní poměr stran filmu. Hranice se mohou objevit na dvou stranách filmu.   Okraje se nemění  k vyplnění zadané oblasti, aby nedošlo k deformaci, ale vyplnění  je to možné  s   ořezem. při zachování původního poměru stran filmu. Přesná korekce  (Exact Fit) ukazuje celý film ve stanovené oblasti, aniž by se   zachoval původní poměr stran. Může docházet ke zkreslení.',
+    'wmode'                     => 'Režim okna',
+    'wmode_help'                => 'Nastaví vlastnost režimu okna Flash souboru pro transparentnost, vrstvu a umístění v prohlížeči.',
     'loop'                      => 'Smyčka',
-    'loop_help'                 => 'Specifies whether the movie repeats indefinitely or stops when it reaches the last frame',
+    'loop_help'                 => 'Určuje, zda se smyčka filmu opakuje, nebo se zastaví, když dosáhne posledního snímku',
     'always'                    => 'Vždy',
-    'sameDomain'                => 'SameDomain',
-    'never'                     => 'Never',
-    'asa'                       => 'Allow Script Access',
-    'asa_help'                  => 'This parameter controls whether ActionScript in a SWF is permitted to call JavaScript in the HTML page that contains it.',
+    'sameDomain'                => 'Stejná doména',
+    'never'                     => 'Nikdy',
+    'asa'                       => 'Povolit přístup ke skriptu',
+    'asa_help'                  => 'Tento parametr určuje, zda ActionScript ve SWF může volat JavaScript na HTML stránce, která jej obsahuje.',
     'bgcolor'                   => 'Barva pozadí',
     'bgcolor_help'              => 'Nastaví barvu pozadí pro přehrávání',
     'clsid'                     => 'ID třídy objektu',
@@ -1283,7 +1283,7 @@ $LANG_MG07 = array (
 
 $LANG_MG08 = array (
     'success'               => 'Media Gallery Plugin byl úspěšně nainstalován.',
-    'review'                => 'Please review the <b>System Options</b> and the <b>System Defaults</b> to complete the installation and configuration.',
+    'review'                => 'Zkontrolujte <b>Systemové volby </b> and the <b>System standartního nastavení</b> k provedení instalace a konfigurace.',
     'support'               => 'Pro Media Gallery podporu navštivte webovou stránku glFusion na <a href="http://www.glfusion.org">www.glfusion.org</a>.<br/><br/>Také k dispozici na stránce podpory Media Gallery je:<ul><li>Dokumentace Wiki</li><li>fóra podpory</li><li>Seznam oznámení pro <b>bezpečnost</b> a aktualizace oznámení</li><li>.. a mnohem více</li></ul>',
 );
 
@@ -1301,7 +1301,7 @@ $LANG_MG09 = array (
     11                      => 'Atributy globálního alba byly úspěšně aplikovány',
     12                      => 'Možnosti alba uživatele byly úspěšně uloženy',
     13                      => 'Vybraná uživatelská alba úspěšně vytvořena',
-    14                      => 'Member Album Gallery Flag Has Been Successfully Reset',
+    14                      => 'Medium galerie člena byla úspěšně obnovena',
     15                      => 'Vybraná alba byla úspěšně smazána',
     16                      => 'Kvóty uživatele byly úspěšně obnoveny',
     17                      => 'Vybrané soubory byly odstraněny',
@@ -1319,23 +1319,23 @@ $LANG_MG10 = array (
 
 $LANG_MG_AUTOTAG = array(
     'desc_album'                => 'HTML: vykresluje odkaz obrázku s náhledem na Media Album. Použití: [album:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#album" target="_blank">options</a>}]',
-    'desc_alink'                => 'Link: to a Media Album.  link_text defaults to the Album name. usage: [alink:<i>album_id</i> {link_text}]',
-    'desc_audio'                => 'HTML: renders an audio Media player with or without a thumbnail image.  usage: [audio:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#audio" target="_blank">options</a>}]',
-    'desc_fslideshow'           => 'HTML: renders a flash image Media slideshow. usage: [fslideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#fslideshow" target="_blank">options</a>}]',
-    'desc_image'                => 'HTML: (Deprecated) Use the [media:] Autotag instead.',
-    'desc_img'                  => 'HTML: renders raw HTML image tag for an image Media thumbnail. usage: [img:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#img" target="_blank">options</a>}]',
+    'desc_alink'                => 'Odkaz: na Media Album. Výchozí odkaz na název alba odkaz_text. Použití: [alink:<i>album_id</i> {link_text}]',
+    'desc_audio'                => 'HTML: vykresluje audio Media přehrávač s náhledovým obrázkem nebo bez něj. Použití: [audio:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#audio" target="_blank">options</a>}]',
+    'desc_fslideshow'           => 'HTML: vykreslí flash soubor Media slideshow. používání: [fslideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#fslideshow" target="_blank">options</a>}]',
+    'desc_image'                => 'HTML: (zamítnuto) Použijte místo toho [media:] Autotag.',
+    'desc_img'                  => 'HTML: vykresluje raw HTML tag obrázku pro náhled médií. použijte: [img:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#img" target="_blank">options</a>}]',
     'desc_media'                => 'HTML: vykresluje předmět média (obecný účel). Použití: [media:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#media" target="_blank">options</a>}]',
     'desc_mlink'                => 'Odkaz: na mediální položku. (pouze text) použijte: [mlink:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#mlink" target="_blank">options</a>}]',
-    'desc_oimage'               => 'HTML: (Deprecated) Use the [media:] Autotag instead.',
-    'desc_playall'              => 'HTML: renders an audio Media player which plays an entire Album. usage: [playall:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#playall" target="_blank">options</a>}]',
-    'desc_slideshow'            => 'HTML: renders a JS-based image Media slideshow. usage: [slideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#slideshow" target="_blank">options</a>}]',
-    'desc_video'                => 'HTML: renders an video player for any local or remote video Media. usage:[video:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#video" target="_blank">options</a>}',
-    'desc_download'             => 'Link: to a Media item to allow user download.  link_text defaults to the media caption.  usage: [download:<i>media_id</i> {link_text}]',
+    'desc_oimage'               => 'HTML: (zamítnuto) Použijte místo toho [media:] Autotag.',
+    'desc_playall'              => 'HTML: vykresluje audio Media přehrávač, který hraje celé album. Použití: [playall:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#playall" target="_blank">options</a>}]',
+    'desc_slideshow'            => 'HTML: vykreslí JS-based image slideshow. Použití: [slideshow:<i>album_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#slideshow" target="_blank">options</a>}]',
+    'desc_video'                => 'HTML: vykreslí video přehrávač pro jakékoliv lokální nebo vzdálené video médium. používání:[video:<i>media_id</i> {<a href="http://www.glfusion.org/wiki/glfusion:mediagallery:glfusion_integration#video" target="_blank">možnosti</a>}',
+    'desc_download'             => 'Odkaz: na položku médií pro umožnění stahování uživatele. Výchozí hodnota je odkaz pro název média. Použití: [download:<i>media_id</i> {link_text}]',
 );
 
-$PLG_mediagallery_MESSAGE1 = 'Media Gallery plugin upgrade: Update completed successfully.';
-$PLG_mediagallery_MESSAGE2 = 'Media Gallery plugin upgrade: We are unable to update this version automatically. Refer to the plugin documentation.';
-$PLG_mediagallery_MESSAGE3 = 'Media Gallery plugin upgrade failed - check error.log';
+$PLG_mediagallery_MESSAGE1 = 'Aktualizace Media Gallery pluginu: Aktualizace byla úspěšně dokončena.';
+$PLG_mediagallery_MESSAGE2 = 'Aktualizace pluginu Media Gallery: Tuto verzi nelze aktualizovat automaticky. Vraťte se do dokumentace pluginu.';
+$PLG_mediagallery_MESSAGE3 = 'Aktualizace pluginu Media Gallery se nezdařila - zkontrolujte chyby.log';
 $PLG_mediagallery_MESSAGE4 = 'Díky za ohodnocení položky MG';
 $PLG_mediagallery_MESSAGE5 = 'Bohužel, položka byla tebou hodnocena';
 $PLG_mediagallery_MESSAGE6 = 'Při záznamu hlasování došlo k chybě - uvědom, prosím, systémového administrátora';
@@ -1343,6 +1343,6 @@ $PLG_mediagallery_MESSAGE7 = 'Nebyla nalezena položka pro zpracování.';
 $PLG_mediagallery_MESSAGE8 = 'E-pohlednice byla poslána.';
 $PLG_mediagallery_MESSAGE9 = 'Při posílání e-pohlednice se objevila chyba. Prosím, kontaktuj administrátora';
 $PLG_mediagallery_MESSAGE10 = 'Chyba při náhradě souboru, detaily jsou v souboru error.log';
-$PLG_mediagallery_MESSAGE520 = 'You have been subscribed to this notification feed.';
+$PLG_mediagallery_MESSAGE520 = 'Byli jste přihlášeni k odběru tohoto kanálu.';
 $PLG_mediagallery_MESSAGE521 = 'Byl jste úspěšně odhlášen z oznamovacího kanálu.';
 ?>
