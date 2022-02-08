@@ -464,6 +464,11 @@ function getAdminMenu()
                 $label =  $LANG_MB01['menu_builder'];
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
+            if ( SEC_inGroup( 'Root' )) {
+                $url = $_CONF['site_admin_url'] . '/feature.php';
+                $label =  $LANG01[131];
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
 
             if (SEC_hasRights('logo.admin')) {
                 $url = $_CONF['site_admin_url'] . '/themes.php';
