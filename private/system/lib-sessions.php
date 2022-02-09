@@ -181,7 +181,7 @@ function SESS_sessionCheck()
     session_id($sessid);
     session_start();
 
-    $count = SESS_getVar('session.counter');
+    $count = (int) SESS_getVar('session.counter');
     $count++;
     SESS_setVar('session.counter',$count);
     $gc_check = $count % 10;
@@ -485,7 +485,7 @@ function SESS_endUserSession($userid)
         try {
             $db->conn->delete($_TABLES['sessions'],array('uid' => $userid),array(Database::INTEGER));
     } catch(Throwable $e) {
-            $db->dbError($e->getMessage(),$sql);
+            $db->dbError($e->getMessage(),'');
         }
 		if (session_id()) {
 			session_unset();
@@ -497,7 +497,7 @@ function SESS_endUserSession($userid)
             try {
                 $db->conn->delete($_TABLES['sessions'], array('md5_sess_id' => $sess));
             } catch(Throwable $e) {
-                $db->dbError($e->getMessage(),$sql);
+                $db->dbError($e->getMessage(),'');
             }
         }
 		if (session_id()) {
@@ -678,7 +678,7 @@ function SESS_completeLogin($uid, $authenticated = 1)
         if (defined('DVLP_DEBUG')) {
             throw($e);
         }
-        $db->dbError($e->getMessage(),$sql);
+        $db->dbError($e->getMessage(),'');
     }
 
     if ( $_CONF['allow_user_themes'] ) {
