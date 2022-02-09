@@ -990,7 +990,8 @@ class Download
             'security_token' => SEC_createToken(),
             'redirect'      => $this->_editmode,
             'cancel_url'    => $cancel_url,
-            'redirect_url'  => $_SERVER['HTTP_REFERER'].'#fileid_'.$this->lid,
+//            'redirect_url'  => $_SERVER['HTTP_REFERER'].'#fileid_'.$this->lid,
+            'redirect_url'  => '',
             'lang_approve'  => _MD_APPROVEREQ,
         ));
         if ($this->lid === 0) {
