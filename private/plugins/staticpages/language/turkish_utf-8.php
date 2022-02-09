@@ -173,7 +173,7 @@ $LANG_configSelect['staticpages'] = array(
     9 => array('item'=>'Sayfaya Yönlendir', 'list'=>'Yönetici Listesini Görüntüle', 'plugin'=>'Genel Listeyi Görüntüle', 'home'=>'Ana Ekranı Görüntüle', 'admin'=>'Ekran Yöneticisi'),
     12 => array(0=>'Erişim yok', 2=>'Salt Okunur', 3=>'Okunur/Yazılır'),
     13 => array(1=>'Etkin', 0=>'Devre dışı'),
-    17 => array(0=>'Yorum Ekleme ızinsiz', 1=>'Yorum Ekleme ızinli'),
+    17 => array(0=>'Yorumlar Etkin', 1=>'Yorumlar Devre Dışı'),
 );
 
 ?>

@@ -106,8 +106,8 @@ $LANG_fs['captcha'] = array(
 );
 
 $LANG_configSelect['captcha'] = array(
-    0 => array(1=>'True', 0=>'False'),
-    1 => array(true=>'True', false=>'False'),
+    0 => array(1=>'Doğru', 0=>'False'),
+    1 => array(true=>'Doğru', false=>'False'),
     2 => array(0=>'GD Libs', 3=>'reCAPTCHA', 6=>'Matematik Denklemi'),
     4 => array('default'=>'Varsayılan','simple'=>'Temel'),
     5 => array('jpg'=>'JPG','png'=>'PNG'),

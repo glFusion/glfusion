@@ -145,8 +145,8 @@ $LANG_CAL_ADMIN = array(
     15 => 'Bitiş Tarihi',
     16 => '',
     17 => "Haklarına sahip olmadığınız bir etkinliğe erişmeye çalışıyorsunuz.  Bu girişim günlüğe kaydedildi.  Lütfen <a href=\"{$_CONF['site_admin_url']}/plugins/calendar/index.php\"> etkinlik yönetimi ekranına geri dönün </a>.",
-    18 => '',
-    19 => '',
+    18 => 'Boş satır',
+    19 => 'Boş satır',
     20 => 'kaydet',
     21 => 'vazgeç',
     22 => 'sil',
@@ -156,7 +156,7 @@ $LANG_CAL_ADMIN = array(
     26 => 'Toplu Etkinlik Yöneticisi',
     27 => 'Bunlar, veritabanınızdaki şu tarihten daha eski olaylardır ',
     28 => ' ay.  Dönemi istediğiniz gibi güncelleyin ve ardından Listeyi Güncelle öğesine tıklayın.  Görüntülenen sonuçlardan bir veya daha fazla olay seçin ve ardından bu eski olayları veritabanınızdan kaldırmak için aşağıdaki Sil simgesine tıklayın.  Yalnızca bu sayfada görüntülenen ve seçilen etkinlikler silinecektir.',
-    29 => '',
+    29 => 'Boş satır',
     30 => 'Listeyi Güncelle',
     31 => 'Seçili TÜM kullanıcıları kalıcı olarak silmek istediğinizden emin misiniz?',
     32 => 'Tümünü Listele',
@@ -229,11 +229,11 @@ $LANG_fs['calendar'] = array(
 );
 
 $LANG_configSelect['calendar'] = array(
-    0 => array(1=> 'True', 0 => 'False'),
-    1 => array(true => 'True', false => 'False'),
+    0 => array(1=> 'Doğru', 0 => 'False'),
+    1 => array(true => 'Doğru', false => 'False'),
     6 => array(12 => '12', 24 => '24'),
-    9 => array('item'=>'Etkinliğe Yönlendir', 'list'=>'Yönetici Listesini Görüntüle', 'plugin'=>'Takvimi Görüntüle', 'home'=>'Display Home', 'admin'=>'Display Admin'),
-    12 => array(0=>'No access', 2=>'Salt Okunur', 3=>'Read-Write'),
+    9 => array('item'=>'Etkinliğe Yönlendir', 'list'=>'Yönetici Listesini Görüntüle', 'plugin'=>'Takvimi Görüntüle', 'home'=>'Ana Ekranı Görüntüle', 'admin'=>'Ekran Yöneticisi'),
+    12 => array(0=>'Erişim yok', 2=>'Salt Okunur', 3=>'Okunur/Yazılır'),
     13 => array(0=>'Sol Bloklar', 1=>'Sağ Bloklar', 2=>'Sol ve Sağ Bloklar', 3=>'Hiçbiri')
 );
 

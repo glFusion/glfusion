@@ -289,10 +289,10 @@ $LANG_fs['links'] = array(
 );
 
 $LANG_configSelect['links'] = array(
-    0 => array(1=>'True', 0=>'False'),
-    1 => array(true=>'True', false=>'False'),
-    9 => array('item'=>'Bağlantılı Siteye Yönlendirme', 'list'=>'Yönetici Listesini Görüntüle', 'plugin'=>'Genel Listeyi Görüntüle', 'home'=>'Display Home', 'admin'=>'Display Admin'),
-    12 => array(0=>'No access', 2=>'Salt Okunur', 3=>'Read-Write'),
+    0 => array(1=>'Doğru', 0=>'False'),
+    1 => array(true=>'Doğru', false=>'False'),
+    9 => array('item'=>'Bağlantılı Siteye Yönlendirme', 'list'=>'Yönetici Listesini Görüntüle', 'plugin'=>'Genel Listeyi Görüntüle', 'home'=>'Ana Ekranı Görüntüle', 'admin'=>'Ekran Yöneticisi'),
+    12 => array(0=>'Erişim yok', 2=>'Salt Okunur', 3=>'Okunur/Yazılır'),
     13 => array(0=>'Sol Bloklar', 1=>'Sağ Bloklar', 2=>'Sol ve Sağ Bloklar', 3=>'Hiçbiri'),
     14 => array(0=>'Hiçbiri', 1=>'Yalnızca Giriş Yapan Kullanıcılar', 2=>'Kimse', 3=>'Hiçbiri')
 
