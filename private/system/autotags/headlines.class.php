@@ -18,6 +18,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Database\Database;
 use \glFusion\Article\Article;
+use \glFusion\Cache\Cache;
 
 class autotag_headlines extends BaseAutotag {
 
@@ -162,7 +163,7 @@ class autotag_headlines extends BaseAutotag {
             $storyimage = 2;
         }
 
-        $c = \glFusion\Cache::getInstance();
+        $c = Cache::getInstance();
         $key = 'headlines__'.$uniqueID.'_'.$c->securityHash(true,true);
         if ( $c->has($key) ) {
             return $c->get($key);
@@ -189,7 +190,7 @@ class autotag_headlines extends BaseAutotag {
             ->from($_TABLES['stories'],'s')
             ->leftJoin('s',$_TABLES['users'],'u','s.uid=u.uid')
             ->leftJoin('s',$_TABLES['topics'],'t','s.tid=t.tid')
-            ->where('date <= NOW()')
+            ->where('date <= "'.$_CONF['_now']->toMySQL(false).'"')
             ->andWhere('draft_flag = 0')
             ->orderBy($sortby, $orderby);
 
