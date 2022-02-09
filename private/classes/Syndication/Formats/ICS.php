@@ -12,6 +12,8 @@
  */
 namespace glFusion\Syndication\Formats;
 
+use \glFusion\Log\Log;
+
 
 /**
  * ICS Feed class.
