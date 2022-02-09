@@ -48,7 +48,7 @@ function plugin_autotags_article( $op, $content = '', $autotag = '')
         switch ($content) {
             case 'story' :
                 return 'story auto tag';
-                beak;
+                break;
             case 'story_introtext' :
                 return 'story_introtext autotag';
                 break;
@@ -141,7 +141,7 @@ function plugin_savecomment_article($title, $comment, $id, $pid, $postmode)
                                      array(Database::INTEGER, Database::STRING)
             );
         } catch(Throwable $e) {
-            $db->error($e->getMessage());
+            $db->con->error($e->getMessage());
         }
         COM_olderStuff(); // update comment count in Older Stories block
         $retval = COM_refresh(COM_buildUrl($_CONF['site_url']
