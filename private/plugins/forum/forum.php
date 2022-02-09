@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2010 by the following authors:
@@ -30,7 +30,7 @@ $_FF_CONF = array();
 
 $_FF_CONF['pi_name']            = 'forum';
 $_FF_CONF['pi_display_name']    = 'Forum';
-$_FF_CONF['pi_version']         = '3.4.3.2';
+$_FF_CONF['pi_version']         = '3.4.4';
 $_FF_CONF['gl_version']         = '2.0.0';
 $_FF_CONF['pi_url']             = 'https://www.glfusion.org/';
 
