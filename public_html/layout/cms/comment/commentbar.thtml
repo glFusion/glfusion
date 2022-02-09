@@ -8,7 +8,7 @@
 
 <div class="uk-text-center uk-margin-bottom">
 	<ul class="tm-article-meta uk-text-center">
-		<li>{start_storylink_anchortag}<strong>{story_title}</strong>{end_storylink_anchortag}</li>
+		<li><strong>{story_title}</strong></li>
 		<li>{num_comments} {lang_comments}</li>
 
 		{!if subscribe}
