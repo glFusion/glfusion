@@ -101,44 +101,30 @@ if ( isset($_POST['cancel']) ) {
 
 $content = '';
 switch ($op) {
-/*
-case "comment":
-    filemgmt_comments($firstcomment);
-    break;
-case "delNewDownload":
-    delNewDownload();
-    break;
-case "addCat":
-    addCat();
-    break;
-case "addSubCat":
-    addSubCat();
-    break;
-*/
 case "saveDownload":
     $status = Filemgmt\Download::getInstance($_POST['lid'])->save($_POST);
     switch ($status) {
-    case Status::UPL_NODEMO:
-        COM_setMsg($LANG_FILEMGMT['err_demomode'], 'error');
-        break;
-    case Status::UPL_DUPFILE:
-        COM_setMsg(_MD_NEWDLADDED_DUPFILE, 'error');
-        break;
-    case Status::UPL_DUPSNAP:
-        COM_setMsg(_MD_NEWDLADDED_DUPSNAP, 'error');
-        break;
-    case Status::UPL_UPDATED:
-        COM_setMsg(_MD_DLUPDATED);
-        break;
-    case Status::OK:
-        COM_setMsg(_MD_NEWDLADDED);
-        break;
-    case Status::UPL_ERROR:
-    default:
-        COM_setMsg(_MD_ERRUPLOAD, 'error');
-        break;
+        case Status::UPL_NODEMO:
+            COM_setMsg($LANG_FILEMGMT['err_demomode'], 'error');
+            break;
+        case Status::UPL_DUPFILE:
+            COM_setMsg(_MD_NEWDLADDED_DUPFILE, 'error');
+            break;
+        case Status::UPL_DUPSNAP:
+            COM_setMsg(_MD_NEWDLADDED_DUPSNAP, 'error');
+            break;
+        case Status::UPL_UPDATED:
+            COM_setMsg(_MD_DLUPDATED);
+            break;
+        case Status::OK:
+            COM_setMsg(_MD_NEWDLADDED);
+            break;
+        case Status::UPL_ERROR:
+        default:
+            COM_setMsg(_MD_ERRUPLOAD, 'error');
+            break;
     }
-    if (isset($_POST['redirect_url'])) {
+    if (isset($_POST['redirect_url']) && $_POST['redirect_url'] != '') {
         COM_refresh($_POST['redirect_url']);
     } else {
         COM_refresh($_FM_CONF['admin_url'] . '/index.php');
@@ -161,11 +147,7 @@ case "ignoreBrokenLink":
 case 'reportBrokenLink':
     $content .= Filemgmt\BrokenLink::showForm($opval);
     break;
-/*
-case "approve":
-    approve();
-    break;
-*/
+
 case "delVote":
     RATING_deleteVote($opval);
     $lid = (int)$_GET['lid'];
@@ -192,18 +174,13 @@ case 'saveCat':
 case "modCatS":
     $status = Filemgmt\Category::getInstance($_POST['cid'])->save($_POST);
     COM_refresh("{$_FM_CONF['admin_url']}/index.php?categoryConfigAdmin");
-//    modCatS();
     break;
+
 case 'modDownload':
     $content .= Filemgmt\Download::getInstance($opval)->edit();
     break;
-/*
-    case "modDownloadS":
-//    echo "here";die;
-    modDownloadS();
-    break;
-*/
-    case "delDownload":
+
+case "delDownload":
     if (Filemgmt\Download::getInstance($opval)->delete()) {
         COM_setMsg(_MD_FILEDELETED);
     } else {
@@ -221,7 +198,6 @@ case 'dl_bulk':
     break;
 case "categoryConfigAdmin":
     $content .= Filemgmt\Category::adminList();
-    //categoryConfigAdmin();
     break;
 case "newfileConfigAdmin":
     $content .= Filemgmt\Download::getInstance(0)->edit();
