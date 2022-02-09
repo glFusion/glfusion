@@ -408,9 +408,9 @@ function DB_numFields($recordset)
 */
 function DB_fieldName($recordset,$fnumber)
 {
-    if ($recordSet === false || $recordSet === null) return '';
+    if ($recordset === false || $recordset === null) return '';
 
-    $meta = $recordset->getColumnMeta($fieldNumber);
+    $meta = $recordset->getColumnMeta($fnumber);
     if (isset($meta['name'])) return $meta['name'];
     return '';
 }
