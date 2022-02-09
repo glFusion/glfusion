@@ -1993,7 +1993,7 @@ function COM_showTopics( $topic='' )
     $storycount = array();
     if ( $_CONF['showstorycount'] ) {
         $sql = "SELECT tid, COUNT(*) AS count FROM `{$_TABLES['stories']}` "
-             . 'WHERE (draft_flag = 0) AND (date <= "'.$_CONF['_now']->toMySQL(true).'") '
+             . 'WHERE (draft_flag = 0) AND (date <= "'.$_CONF['_now']->toMySQL(false).'") '
              . $db->getPermSQL( 'AND' )
              . ' GROUP BY tid';
 
@@ -2803,8 +2803,8 @@ function COM_olderStuff()
         $stmt = $db->conn->query("SELECT sid,tid,title,comments,UNIX_TIMESTAMP(date) AS day
                 FROM {$_TABLES['stories']}
                 WHERE (perm_anon = 2) AND ((frontpage = 1 OR (frontpage = 2
-                  AND frontpage_date >= ".$db->conn->quote($_CONF['_now']->toMySQL(true)).")))
-                  AND (date <= '".$_CONF['_now']->toMySQL(true)."')
+                  AND frontpage_date >= ".$db->conn->quote($_CONF['_now']->toMySQL(false)).")))
+                  AND (date <= '".$_CONF['_now']->toMySQL(false)."')
                   AND (draft_flag = 0)" . $db->getTopicSQL( 'AND', 1 )
                   . " ORDER BY featured DESC, date DESC
                   LIMIT ".(int)$_CONF['limitnews'].", ".(int)$_CONF['limitnews']);
@@ -3517,8 +3517,8 @@ function COM_whatsNewBlock( $help = '', $title = '', $position = '' )
         // Find the newest stories
 
         $sql = "SELECT * FROM `{$_TABLES['stories']}`
-                WHERE (date >= (date_sub('".$_CONF['_now']->toMySQL(true)."', INTERVAL ? SECOND)))
-                AND (date <= '".$_CONF['_now']->toMySQL(true)."')
+                WHERE (date >= (date_sub('".$_CONF['_now']->toMySQL(false)."', INTERVAL ? SECOND)))
+                AND (date <= '".$_CONF['_now']->toMySQL(false)."')
                 AND (draft_flag = 0)" . $archsql . $db->getPermSQL( 'AND' ) . $topicsql . $db->getLangSQL( 'sid', 'AND' )
                 . " ORDER BY date DESC";
 
