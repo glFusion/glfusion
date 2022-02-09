@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2018-2021 by the following authors:
+*  Copyright (C) 2018-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -745,7 +745,7 @@ class Article
             $this->errors[] = $LANG24[24];
             Log::write('system',Log::ERROR,$e->getMessage());
             $retval = false;
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             // general error
             $db->conn->rollback();
             $this->errors[] = $LANG24[25];
@@ -865,7 +865,7 @@ class Article
                 $db->conn->rollback();
                 $this->errors[] = $LANG24[24];
                 $retval = false;
-            } catch (Throwable $e) {
+            } catch (\Throwable $e) {
                 $db->conn->rollback();
                 $this->errors[] = 'There was an error saving the data...';
                 Log::write('system',Log::ERROR,$e->getMessage());
@@ -1113,7 +1113,7 @@ class Article
                   );
 
         if ($access === 0) {
-            return STORY_PERMISSION_DENIED;
+            return $this::STORY_PERMISSION_DENIED;
         }
 
         if ($this->checkTopicAccess()) {
@@ -2914,7 +2914,7 @@ class Article
 // failsafe - if user does not have access to any topics - they shouldn't be here.
         if ( $allowedTopicList == '' ) {
             $display .= COM_showMessageText(sprintf($LANG24[42],$_CONF['site_admin_url']),$LANG_ACCESS['accessdenied'],true,'error');
-            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to access story $sid. No allowed topics.");
+            Log::write('system',Log::ERROR,"User {$_USER['username']} tried to access story " . $this->getEditItem('sid') . ". No allowed topics.");
             return $display;
         }
 
