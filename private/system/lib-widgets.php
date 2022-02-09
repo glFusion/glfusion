@@ -231,9 +231,9 @@ function WIDGET_UIKITslider( $dataArray )
         foreach($pData AS $A) {
 	        $title = htmlspecialchars($A['sp_title']);
 	        $order = array_search($A['sp_id'],$page_ids); // find proper order
-	        $pages[$order] = array('sp_id' => $A['sp_id'],'content' => $content, 'title' => $title, 'index' => $order+1);
+	        $pages[$order] = array('sp_id' => $A['sp_id'],'content' => $A['content'], 'title' => $title, 'index' => $order+1);
 
-	        $T->set_var('slide',$content);
+	        $T->set_var('slide',$A['content']);
             $T->set_var('slidecounter',$slideCounter);
 
             $T->parse('p', 'pages',true);
