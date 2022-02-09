@@ -2118,7 +2118,7 @@ function CMT_sendReport ($cid, $type)
     $db = Database::getInstance();
 
     $username = $db->conn->fetchColumn("SELECT username FROM `{$_TABLES['users']}` WHERE uid=?",
-                    array($USER['uid'],0,array(Database::INTEGER)));
+                    array($_USER['uid'],0,array(Database::INTEGER)));
 
 
     $A = $db->conn->fetchAssoc("SELECT uid,title,comment,sid,ipaddress FROM `{$_TABLES['comments']}`
@@ -2367,7 +2367,7 @@ function plugin_getiteminfo_comment($id, $what, $uid = 0, $options = array())
     try {
         $stmt = $db->conn->executeQuery($sql,$sqlParams,$sqlTypes);
     } catch(Throwable $e) {
-        $throw($e);
+        throw($e);
     }
 
     $retval = array();
