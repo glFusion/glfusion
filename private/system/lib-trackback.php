@@ -19,6 +19,7 @@ if (!defined ('GVERSION')) {
     die('This file can not be used on its own!');
 }
 
+use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 
 // result codes for TRB_saveTrackbackComment
@@ -293,7 +294,7 @@ function TRB_saveTrackbackComment($sid, $type, $url, $title = '', $blog = '', $e
     if ($type == 'article') {
         DB_query("UPDATE {$_TABLES['stories']} SET trackbacks = trackbacks + 1 WHERE (sid = '$sid')");
     }
-    $c = glFusion\Cache::getInstance();
+    $c = Cache::getInstance();
     $c->deleteItemsByTag('whatsnew');
     $c->deleteItemsByTag('story_'.$sid);
     return $comment_id;
@@ -312,7 +313,7 @@ function TRB_deleteTrackbackComment($cid)
 
     $cid = DB_escapeString($cid);
     DB_delete($_TABLES['trackback'], 'cid', $cid);
-    $c = glFusion\Cache::getInstance()->deleteItemsByTag('whatsnew');
+    $c = Cache::getInstance()->deleteItemsByTag('whatsnew');
 }
 
 /**
@@ -822,7 +823,7 @@ function TRB_detectTrackbackUrl($url)
         $http->ReadReplyHeaders($headers);
         if ( $http->response_status == 200 ) {
             $error = $http->ReadWholeReplyBody($page);
-            if ( $error != "" && strlen($body) === 0 ) {
+            if ( $error != "" && strlen($page) === 0 ) {
                 Log::write('system',Log::ERROR,"Trackback Detect TRB URL: unable to retrieve response body");
                 return false;
             }
