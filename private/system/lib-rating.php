@@ -37,6 +37,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
+use \glFusion\Rater\Rater;
 
 /*
  * We will check when they rate the item if they have already
@@ -76,7 +77,7 @@ function RATING_ratingBar($type, $id, $total_votes, $total_value, $voted=0, $uni
 
     global $_USER, $_TABLES, $_CONF, $LANG13;
 
-    return \glFusion\Rater::create($type, $id)
+    return Rater::create($type, $id)
         ->withSize($size)
         ->withStatic($static)
         ->withUnits($units)
@@ -192,7 +193,7 @@ function RATING_getVoteData( $type, $item_id='', $sort='ratingdate', $sortdir = 
 
     global $_TABLES;
 
-    return \glFusion\Rater::create($type, $item_id)
+    return Rater::create($type, $item_id)
         ->voteSortBy($sort)
         ->voteSortDir($sortdir)
         ->getVoteData($filterArray);
@@ -336,47 +337,8 @@ function RATING_resetRating( $type, $item_id )
 */
 function RATING_deleteVote( $voteID )
 {
-    glFusion\Rater\Rater::deleteVote($voteID);
+    Rater::deleteVote($voteID);
     return;
-
-    global $_TABLES;
-
-    return \glFusion\Rater::create($type, $id)
-        ->deleteVote($voteID);
-
-    $retval = false;
-
-    $result = DB_query("SELECT * FROM {$_TABLES['rating_votes']} WHERE id=".$voteID);
-    if ( DB_numRows($result) > 0 ) {
-        $row = DB_fetchArray($result);
-        $item_id = $row['item_id'];
-        $type = $row['type'];
-        $user_rating = $row['rating'];
-
-        list($rating_id, $current_rating, $current_votes) = RATING_getRating( $type, $item_id );
-
-        if ( $current_votes > 0 ) {
-            $tresult = DB_query("SELECT SUM( rating ),COUNT( item_id ) FROM  {$_TABLES['rating_votes']} WHERE item_id = ".$item_id." AND type='".$type."'");
-            list($total_rating,$total_votes) = DB_fetchArray($tresult);
-            $new_total_rating = $total_rating - $user_rating;
-            $new_total_votes  = $total_votes  - 1;
-            if ( $new_total_rating > 0 && $new_total_votes > 0 ) {
-                $new_rating = $new_total_rating / $new_total_votes;
-                $votes = $new_total_votes;
-            } else {
-                $new_rating = 0;
-                $new_total_votes = 0;
-                $votes = 0;
-            }
-            $new_rating = sprintf("%2.02f",$new_rating);
-            $sql = "UPDATE {$_TABLES['rating']} SET votes=".$new_total_votes.", rating='".DB_escapeString($new_rating)."' WHERE id = ".$rating_id;
-            DB_query($sql);
-            DB_delete($_TABLES['rating_votes'],'id',$voteID);
-            PLG_itemRated( $type, $item_id, $new_rating, $votes );
-            $retval = true;
-        }
-    }
-    return $retval;
 }
 
 /**
