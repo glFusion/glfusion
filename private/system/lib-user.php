@@ -614,7 +614,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
 
     // call custom registration function and plugins
     if ($_CONF['custom_registration'] && (function_exists ('CUSTOM_userCreate'))) {
-        CUSTOM_userCreate ($uid,$batchimport);
+        CUSTOM_userCreate ($uid);
     }
     if ( function_exists('CUSTOM_userCreateHook') ) {
         CUSTOM_userCreateHook($uid);
