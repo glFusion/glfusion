@@ -74,7 +74,7 @@ class Feature
 
         try {
             $stmt = $db->conn->executeQuery($sql,array($ft_name),array(DATABASE::STRING));
-        } catch(Throwable $e) {
+        } catch(\Throwable $e) {
             return new self;
         }
         $data = $stmt->fetch(Database::ASSOCIATIVE);
@@ -110,7 +110,7 @@ class Feature
 
         try {
             $stmt = $db->conn->executeQuery($sql,array($ft_id),array(DATABASE::INTEGER));
-        } catch(Throwable $e) {
+        } catch(\Throwable $e) {
             return new self;
         }
         $data = $stmt->fetch(Database::ASSOCIATIVE);
@@ -193,7 +193,7 @@ class Feature
 
             try {
                 $stmt = $db->conn->query($sql);
-            } catch(Throwable $e) {
+            } catch(\Throwable $e) {
                 return array();
             }
             $data = $stmt->fetchAll(DATABASE::ASSOCIATIVE);
@@ -242,7 +242,7 @@ class Feature
 
                 try {
                     $stmt = $db->conn->executeQuery($sql,array($this->ft_id),array(DATABASE::INTEGER));
-                } catch(Throwable $e) {
+                } catch(\Throwable $e) {
                     return array();
                 }
                 $data = $stmt->fetchAll(DATABASE::ASSOCIATIVE);
@@ -283,7 +283,7 @@ class Feature
 
                 try {
                     $stmt = $db->conn->executeQuery($sql,array($ft_id),array(DATABASE::INTEGER));
-                } catch(Throwable $e) {
+                } catch(\Throwable $e) {
                     return array();
                 }
                 $data = $stmt->fetchAll(DATABASE::ASSOCIATIVE);
@@ -419,7 +419,7 @@ class Feature
         $status = true;
         try {
             $stmt = $db->conn->executeQuery($sql,$dataArray,$typeArray);
-        } catch(Throwable $e) {
+        } catch(\Throwable $e) {
             $status = false;
         }
         if ($isNew) {
@@ -434,7 +434,7 @@ class Feature
 
                 try {
                     $db->conn->delete($_TABLES['access'],array('acc_ft_id' => $this->ft_id),array(DATABASE::INTEGER));
-                } catch(Throwable $e) {
+                } catch(\Throwable $e) {
                     throw($e);
                 }
             }
@@ -447,7 +447,7 @@ class Feature
                 $sql = "INSERT INTO `{$_TABLES['access']}` VALUES $vals";
                 try {
                     $db->conn->query($sql);
-                } catch (Throwable $e) {
+                } catch (\Throwable $e) {
                     throw($e);
                 }
             }
