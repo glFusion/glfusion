@@ -1460,7 +1460,7 @@ function PLG_moveUser($originalUID, $destinationUID)
 
     $function = 'CUSTOM_user_move';
     if (function_exists($function)) {
-        $function($uid);
+        $function($originalUID, $destinationUID);
     }
 }
 
@@ -1590,7 +1590,7 @@ function PLG_groupChanged ($grp_id, $mode)
 
     $function = 'CUSTOM_group_changed';
     if (function_exists($function)) {
-        $function($uid);
+        $function($grp_id, $mode);
     }
 }
 
@@ -2349,6 +2349,10 @@ function PLG_getFeedContent($plugin, $feed, &$link, &$update_data, $feedType, $f
 
 function PLG_getFeedContent2(object $Feed) : array
 {
+    global $_PLUGINS;
+
+    $plugin = $Feed->getType();
+
     if ($plugin == 'custom') {
         $function = 'CUSTOM_getfeedcontent2';
         if (function_exists($function)) {
@@ -2360,7 +2364,7 @@ function PLG_getFeedContent2(object $Feed) : array
         if (in_array ($plugin, $pluginTypes)) {
             $function = 'plugin_getfeedcontent_' . $plugin;
             if (function_exists ($function)) {
-                $content = $function ($feed, $link, $update_data, $feedType, $feedVersion, $A);
+                $content = $function ($Feed->getFilename(), $link, $update_data, $feedType, $feedVersion, $A);
             }
         }
     }
@@ -2980,6 +2984,7 @@ function PLG_getBlocks($side, $topic='')
     global $_PLUGINS;
 
     $ret = array();
+    $cust_items = '';
     foreach ($_PLUGINS as $pi_name) {
         $function = 'plugin_getBlocks_' . $pi_name;
         if (function_exists($function)) {
