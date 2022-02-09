@@ -695,7 +695,7 @@ if ( isset($_POST['cancel'] ) ) {
             $sid     = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
             $pid     = COM_applyFilter ($_POST['pid'],true);
             $postmode = COM_applyFilter($_POST['postmode']);
-            $title   = strip_tags(COM_applyFilter($_POST['title']));
+//            $title   = strip_tags(COM_applyFilter($_POST['title']));
             $title   = '';
             $mode    = COM_applyFilter($_POST['mode']);
 
@@ -860,7 +860,7 @@ if ( isset($_POST['cancel'] ) ) {
                         if ($type == 'article') {
 
                             $title = $db->conn->fetchColumn(
-                                        "SELECT sid FROM `{$_TABLES['stories']}`
+                                        "SELECT title FROM `{$_TABLES['stories']}`
                                          WHERE sid=? " . $db->getPermSQL('AND') . $db->getTopicSQL('AND'),
                                         array(
                                             $sid
@@ -877,6 +877,7 @@ if ( isset($_POST['cancel'] ) ) {
                         $title = str_replace ( '&quot;', '"', $title );
                         $title = str_replace ( '&lt;', '<', $title );
                         $title = str_replace ( '&gt;', '>', $title );
+                        $title = htmlspecialchars($title);
                     }
 
                     if ( isset($_CONF['comment_engine']) && $_CONF['comment_engine'] != 'internal') {
