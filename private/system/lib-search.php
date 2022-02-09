@@ -113,7 +113,7 @@ function plugin_itemdeleted_search($id, $type, $children='')
         $id = explode(',', $children);
     }
     \glFusion\Search::RemoveDoc($type, $id);
-    $c = \glFusion\Cache::getInstance()->deleteItemsByTag('searchcache');
+    $c = Cache::getInstance()->deleteItemsByTag('searchcache');
 }
 
 
