@@ -287,14 +287,14 @@ function forum_upgrade() {
                 `w_uid` int(11) unsigned NOT NULL DEFAULT 0,
                 `wt_id` int(11) unsigned NOT NULL DEFAULT 0,
                 `w_topic_id` int(1) unsigned NOT NULL DEFAULT 0,
-                `w_dscp` varchar(255) NOT NULL DEFAULT '',
+                `w_dscp` text NOT NULL,
                 `ts` int(11) unsigned NOT NULL DEFAULT 0,
                 `w_points` int(5) unsigned NOT NULL DEFAULT 0,
                 `w_expires` int(11) unsigned NOT NULL DEFAULT 0,
                 `w_issued_by` int(11) unsigned NOT NULL DEFAULT 0,
                 `revoked_date` int(11) unsigned NOT NULL DEFAULT 0,
                 `revoked_by` int(11) unsigned NOT NULL DEFAULT 0,
-                `revoked_reason` varchar(255) NOT NULL DEFAULT '',
+                `revoked_reason` text NOT NULL,
                 `w_notes` text NOT NULL,
                 PRIMARY KEY (`w_id`),
                 KEY `uid_expires` (`w_uid`,`w_expires`)
@@ -360,6 +360,10 @@ function forum_upgrade() {
 
         case '3.4.3.2' : // internal dev version
             // no changes
+
+        case '3.4.4' :
+            DB_query("ALTER TABLE {$_TABLES['ff_warnings']} CHANGE `w_dscp` `w_dscp` TEXT NOT NULL;");
+            DB_query("ALTER TABLE {$_TABLES['ff_warnings']} CHANGE `revoked_reason` `revoked_reason` TEXT NOT NULL;");
 
         default :
             forum_update_config();

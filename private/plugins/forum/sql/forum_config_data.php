@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -953,7 +953,7 @@ $forumConfigData = array(
 
     array(
         'name' => 'warnings_enabled',
-        'default_value' => 0,
+        'default_value' => 1,
         'type' => 'select',
         'subgroup' => 0,
         'fieldset' => 5,
