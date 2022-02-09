@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2014-2021 by the following authors:
+*  Copyright (C) 2014-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -256,7 +256,7 @@ class autotag_headlines extends BaseAutotag {
 
         if ( $frontpage == 1 ) {
             $queryBuilder->andWhere('frontpage = 1 OR (frontpage = 2 AND frontpage_date >= '.
-              $queryBuilder->createNamedParameter($_CONF['_now']->toMySQL(true),Database::STRING) . ')'
+              $queryBuilder->createNamedParameter($_CONF['_now']->toMySQL(false),Database::STRING) . ')'
             );
         }
 
