@@ -720,7 +720,7 @@ class Theme
      * @deprecated - functions are handled by AJAX now
      * @return  array   Array of file information, possibly for future ajax
      */
-    public static function saveLogos() : array
+    public static function saveLogos() : void
     {
         global $_CONF;
 
