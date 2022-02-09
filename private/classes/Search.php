@@ -23,6 +23,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
+use \glFusion\Cache\Cache;
 
 global $_CONF;
 
@@ -299,8 +300,8 @@ class Search
                         array($type,$item_id_arr),
                         array(Database::STRING, Database::PARAM_STR_ARRAY)
             );
-        } catch(Throwable $e) {
-            Log::write('system',Log::ERROR,"Search: Error removing $type, ID $item_id_str");
+        } catch(\Throwable $e) {
+            Log::write('system',Log::ERROR,"Search: Error removing $type, ID $item_id_arr");
             return false;
         }
 
@@ -375,7 +376,7 @@ class Search
 
         try {
             $count = $db->conn->executeUpdate($sql,$params,$types);
-        } catch(Throwable $e) {
+        } catch(\Throwable $e) {
             Log::write('system',Log::ERROR,"Search RemoveComments Error: $parent_type, ID $item_id");
             $retval = false;
         }
@@ -462,7 +463,7 @@ class Search
 
         $db = Database::getInstance();
 
-        $start = ($this->page - 1) * $_CONF['search_per_page'];
+        $start = ((int) $this->page - 1) * $_CONF['search_per_page'];
 
         $p = array();
         $pt = array();
@@ -607,7 +608,7 @@ class Search
                 }
 
                 if ($this->searchDays > 0) {
-                    $daysback = time() - ($this->searchDays * 86400);
+                    $daysback = time() - ((int) $this->searchDays * 86400);
                     $limitType .= ' AND ts > ' . (int)$daysback;
                 }
 
@@ -649,7 +650,7 @@ class Search
             $searchtimer->setPercision(4);
             $searchtimer->startTimer();
             $searchKey = md5($sql . implode(',',$p)) . '_'.$start;
-            $c = \glFusion\Cache::getInstance();
+            $c = Cache::getInstance();
             if ($c->has($searchKey)) {
                 $cacheResults = $c->get($searchKey);
                 $this->totalResults = $cacheResults['totalresults'];
@@ -762,7 +763,7 @@ class Search
         $T = new \Template($_CONF['path_layout'] . 'search');
         $T->set_file ('page','searchresults.thtml');
 
-        $T->set_var('query', urlencode($this->query));
+        $T->set_var('query', urlencode((string)$this->query));
 
         if ($this->totalResults == 0) {
             if ($this->query == '' && $this->searchAuthor == 0) {
@@ -784,11 +785,11 @@ class Search
 
         $T->set_block('page','searchresults','sr');
 
-        $resultCounter = ($this->page * $_CONF['search_per_page']) - ($_CONF['search_per_page'] - 1);
+        $resultCounter = ((int)$this->page * $_CONF['search_per_page']) - ($_CONF['search_per_page'] - 1);
         foreach ($this->results as $row) {
             $dt->setTimestamp($row['ts']);
 
-            $type_url = $_CONF['site_url'].'/search.php?mode=search&amp;q=' . urlencode($this->query).'&amp;type='.urlencode($row['type']);
+            $type_url = $_CONF['site_url'].'/search.php?mode=search&amp;q=' . urlencode((string)$this->query).'&amp;type='.urlencode($row['type']);
 
             $T->set_var(array(
                 'title'     => $row['title'],
@@ -814,12 +815,12 @@ class Search
             $resultCounter++;
         }
 
-        $num_pages = ceil($this->totalResults / $_CONF['search_per_page']);
+        $num_pages = ceil((int) $this->totalResults / $_CONF['search_per_page']);
 
-        $base_url = $_CONF['site_url'].'/search.php?mode=search&amp;q=' . urlencode($this->query);
+        $base_url = $_CONF['site_url'].'/search.php?mode=search&amp;q=' . urlencode((string)$this->query);
 
         if ($this->itemType != "") {
-            $base_url .= '&amp;type='.urlencode($this->itemType);
+            $base_url .= '&amp;type='.urlencode((string)$this->itemType);
         }
         if ($this->searchAuthor > 0) {
             $base_url .= '&amp;author='.(int) $this->searchAuthor;
@@ -828,14 +829,14 @@ class Search
             $base_url .= '&amp;st='.(int) $this->searchDays;
         }
         if ($this->searchType != 'any') {
-            $base_url .= '&amp;keyType='.urlencode($this->searchType);
+            $base_url .= '&amp;keyType='.urlencode((string)$this->searchType);
         }
 
         $pagination = COM_printPageNavigation($base_url, $this->page, $num_pages);
         $T->set_var('google_paging', $pagination);
 
         if ($this->totalResults > 0) {
-            $first = (($this->page - 1) * $_CONF['search_per_page']) + 1;
+            $first = (((int) $this->page - 1) * $_CONF['search_per_page']) + 1;
             $last = min($first + $_CONF['search_per_page'] - 1, $this->totalResults);
             $T->set_var('showing_results',
                 sprintf($LANG_SEARCH_UI['showing_results'], COM_numberFormat($first), COM_numberFormat($last), COM_numberFormat($this->totalResults)));
@@ -863,7 +864,8 @@ class Search
 
         // Verify current user my use the search form
         if (! self::SearchAllowed()) {
-            return self::getAccessDeniedMessage();
+            COM_refresh($_CONF['site_url']);
+//            return self::getAccessDeniedMessage();
         }
 
         $T = new \Template($_CONF['path_layout'].'search');
@@ -876,7 +878,7 @@ class Search
         $T->set_var(array(
             'lang_search'           => $LANG_SEARCH_UI['search'],
             'lang_search_site'      => sprintf($LANG09[1],$_CONF['site_name']),
-            'query'                 => htmlspecialchars($this->query),
+            'query'                 => htmlspecialchars((string) $this->query),
         ));
 
         $T->set_var(array(
