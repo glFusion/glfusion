@@ -417,6 +417,8 @@ function ADMIN_list($component, $fieldfunction, $header_arr, $text_arr,
 
     $db = Database::getInstance();
 
+    $num_pages = 0;
+
     // retrieve the query
     if (isset($_GET['q'])) {
         $query = strip_tags($_GET['q']);
