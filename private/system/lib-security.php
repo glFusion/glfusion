@@ -1320,7 +1320,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
     }
 
     if (isset($_tokenKey) && !empty($_tokenKey) ) {
-        return $tokenKey;
+        return $_tokenKey;
     }
 
     $db = Database::getInstance();
@@ -1661,7 +1661,7 @@ function SEC_checkTokenGeneral($token,$action='general',$uid=0)
     }
 
     if(trim($token) != '') {
-        $token = filter_var($token,FILTER_SANITIZE_STRING);
+        $token = COM_applyFilter($token); // filter_var($token,FILTER_SANITIZE_STRING);
 
         $stmt = $db->conn->executeQuery(
                     "SELECT ((DATE_ADD(created, INTERVAL ttl SECOND) < ?)
@@ -2026,14 +2026,14 @@ function SEC_tokenreauthform($message = '',$destination = '')
 
     $userid = 0;
     if (isset ($_COOKIE[$_CONF['cookie_name']])) {
-        $userid = filter_var($_COOKIE[$_CONF['cookie_name']],FILTER_SANITIZE_STRING);
+        $userid = COM_applyFilter($_COOKIE[$_CONF['cookie_name']]); // filter_var($_COOKIE[$_CONF['cookie_name']],FILTER_SANITIZE_STRING);
         if (empty ($userid) || ($userid == 'deleted')) {
             $userid = 0;
         } else {
             $userid = (int) filter_var($userid, FILTER_SANITIZE_NUMBER_INT);
         }
     } elseif ( isset($_POST['token_ref']) ) {
-        $userid = filter_input(INPUT_POST,'token_ref',FILTER_SANITIZE_STRING);
+        $userid = COM_applyFilter($_POST['token_ref']); // filter_input(INPUT_POST,'token_ref',FILTER_SANITIZE_STRING);
         if (empty ($userid) || ($userid == 'deleted')) {
             $userid = 0;
         } else {
