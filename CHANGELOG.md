@@ -1,5 +1,15 @@
 # glFusion CMS Long Term Support ChangeLog
 
+## v1.7.11 (in development)
+
+### Fixed
+
+- Story getItemInfo() used the incorrect date to pull data.
+
+### Changed
+
+- Upgraded htmlawed to latest release
+
 ## v1.7.10 (January 1, 2022)
 
 ### Changed
