@@ -18,7 +18,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Log\Log;
 
-global $_DB_dbms;
+global $_DB_dbms, $_CP_CONF;
 
 require_once $_CONF['path'].'plugins/captcha/functions.inc';
 require_once $_CONF['path'].'plugins/captcha/captcha.php';

@@ -18,7 +18,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Log\Log;
 
-global $_DB_dbms;
+global $_DB_dbms, $_BB2_CONF;
 
 require_once $_CONF['path'].'plugins/bad_behavior2/functions.inc';
 require_once $_CONF['path'].'plugins/bad_behavior2/bad_behavior2.php';

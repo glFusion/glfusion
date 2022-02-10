@@ -22,7 +22,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-global $_DB_dbms;
+global $_DB_dbms, $_PO_CONF;
 
 require_once $_CONF['path'].'plugins/polls/functions.inc';
 require_once $_CONF['path'].'plugins/polls/polls.php';

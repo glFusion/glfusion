@@ -24,7 +24,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Log\Log;
 
-global $_DB_dbms;
+global $_DB_dbms, $_FF_CONF;
 
 require_once $_CONF['path'].'plugins/forum/functions.inc';
 require_once $_CONF['path'].'plugins/forum/forum.php';

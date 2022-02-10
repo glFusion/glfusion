@@ -18,7 +18,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Log\Log;
 
-global $_DB_dbms;
+global $_DB_dbms, $_MG_CONF;
 
 require_once $_CONF['path'].'plugins/mediagallery/mediagallery.php';
 require_once $_CONF['path'].'plugins/mediagallery/sql/mysql_install.php';

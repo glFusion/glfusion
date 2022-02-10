@@ -21,7 +21,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-global $_DB_dbms;
+global $_DB_dbms, $_SPX_CONF;
 
 require_once $_CONF['path'].'plugins/spamx/functions.inc';
 require_once $_CONF['path'].'plugins/spamx/spamx.php';

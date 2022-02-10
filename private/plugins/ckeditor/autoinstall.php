@@ -18,7 +18,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Log\Log;
 
-global $_DB_dbms;
+global $_DB_dbms, $_CK_CONF;
 
 require_once $_CONF['path'].'plugins/ckeditor/functions.inc';
 require_once $_CONF['path'].'plugins/ckeditor/ckeditor.php';
