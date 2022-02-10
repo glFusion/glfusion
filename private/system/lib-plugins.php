@@ -2898,6 +2898,10 @@ function PLG_itemDeleted($id, $type, $children = null)
 
     USES_lib_comment();
 
+    if (!isset($_PLUGINS) || !is_array($_PLUGINS)) {
+        $_PLUGINS = array();
+    }
+
     $pluginTypes = array_merge($pluginTypes, $_PLUGINS);
     foreach ($pluginTypes as $pi_name) {
         $function = 'plugin_itemdeleted_' . $pi_name;
