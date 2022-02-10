@@ -173,7 +173,7 @@ function SESS_sessionCheck()
     session_id($sessid);
     session_start();
 
-    $count = SESS_getVar('session.counter');
+    $count = (int) SESS_getVar('session.counter');
     $count++;
     SESS_setVar('session.counter',$count);
     $gc_check = $count % 10;
