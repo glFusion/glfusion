@@ -2478,6 +2478,7 @@ function INST_upgradeAlert( )
  */
 
 $_SYSTEM['no_cache_config'] = true;
+$percent_complete = 100;
 
 /*
  * The driver, based on inputs received, we'll decide what to do and where to go
