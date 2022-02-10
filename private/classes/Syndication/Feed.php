@@ -216,7 +216,7 @@ class Feed
      * @param   string  $where  Optional SQL filter string
      * @return  array       Array of instantiated child objects
      */
-    private static function _execQuery(?string $where='', ?array $params, ?array $types) : array
+    private static function _execQuery(?string $where='', ?array $params = array(), ?array $types = array()) : array
     {
         global $_TABLES;
 
