@@ -180,7 +180,7 @@ function getMenuTemplate($menutype, $menuname) {
             $template_file = 'menu_vertical_simple';
             break;
         default:
-            return $retval;
+            return null;
             break;
     }
     //see if custom template exists
