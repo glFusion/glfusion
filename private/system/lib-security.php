@@ -1126,7 +1126,7 @@ function SEC_createToken($ttl = TOKEN_TTL)
     }
 
     if (isset($_tokenKey) && !empty($_tokenKey) ) {
-        return $tokenKey;
+        return $_tokenKey;
     }
 
     $uid = isset($_USER['uid']) ? $_USER['uid'] : 1;
