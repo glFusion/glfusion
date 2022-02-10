@@ -86,7 +86,7 @@ class AdminList extends Theme
                 'theme_name'    => $Theme->getName(),
                 'is_default'    => $Theme->getName() == self::DEFAULT_NAME,
                 'type_sel_' . $Theme->getLogoType() => 'selected="selected"',
-                'slogan_sel_' . $Theme->displaySlogan() => 'selected="selected"',
+                'slogan_sel_' . $Theme->getSiteSloganType() => 'selected="selected"',
                 'img_path'      => $img_path,
                 'img_url'       => $img_url,
                 'type_sel'      => $Theme->getLogoType(),

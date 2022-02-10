@@ -311,6 +311,17 @@ class Theme
         return (int)$this->logo_type;
     }
 
+    /**
+     * Get the display_site_slogan.
+     *
+     * @return  integer     display_site_slogan type flag
+     */
+    public function getSiteSloganType() : int
+    {
+        return (int)$this->display_site_slogan;
+    }
+
+
 
     /**
      * Set the theme name.
