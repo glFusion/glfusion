@@ -40,7 +40,7 @@ $_MG_CONF = array();
 $_MG_CONF['pi_name']            = 'mediagallery';
 $_MG_CONF['pi_display_name']    = 'Media Gallery';
 $_MG_CONF['pi_version']         = '2.1.4';
-$_MG_CONF['gl_version']         = '1.7.10';
+$_MG_CONF['gl_version']         = '1.7.11';
 $_MG_CONF['pi_url']             = 'https://www.glfusion.org/';
 
 $_MG_table_prefix = $_DB_table_prefix;
