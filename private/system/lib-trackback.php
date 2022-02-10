@@ -835,7 +835,7 @@ function TRB_detectTrackbackUrl($url)
         $http->ReadReplyHeaders($headers);
         if ( $http->response_status == 200 ) {
             $error = $http->ReadWholeReplyBody($page);
-            if ( $error != "" && strlen($body) === 0 ) {
+            if ( $error != "" && strlen($page) === 0 ) {
                 COM_errorLog("Trackback Detect TRB URL: unable to retrieve response body");
                 return false;
             }
