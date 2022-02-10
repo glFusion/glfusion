@@ -326,9 +326,9 @@ $_SQL['d6'] = "INSERT INTO {$_TABLES['ff_ranks']} VALUES
 
 // Seed the warning types and levels
 $_SQL['d7'] = "INSERT INTO `{$_TABLES['ff_warningtypes']}` VALUES
-    (1,'Spam',20,2592000,1,'month'),
-    (2,'Inappropriate',30,2592000,1,'month'),
-    (3,'Harrassing Members',45,5184000,2,'month');";
+    (1,'Spam',20,1,'month'),
+    (2,'Inappropriate',30,1,'month'),
+    (3,'Harrassing Members',45,2,'month');";
 $_SQL['d8'] = "INSERT INTO `{$_TABLES['ff_warninglevels']}` VALUES
     (1,20,1,604800,1,'week',''),
     (2,60,2,5184000,2,'month','a:0{}'),
