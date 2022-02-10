@@ -339,7 +339,7 @@ function INSTALLER_fail($pluginName,$rev)
             // no step
         } elseif (is_array($sql)) {
             if (array_key_exists('type', $sql)) {
-                $function = 'INSTALLER_fail_'.$type;
+                $function = 'INSTALLER_fail_'.$pluginName;
                 if (function_exists($function)) {
                     COM_errorlog("AutoInstall: FAIL: calling $function");
                     $function($sql);
