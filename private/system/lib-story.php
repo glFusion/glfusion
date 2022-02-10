@@ -952,7 +952,7 @@ function STORY_getItemInfo($sid, $what, $uid = 0, $options = array())
     } else {
         $where = " WHERE (sid = '" . DB_escapeString($sid) . "') AND";
     }
-    $where .= ' (date <= "'.$_CONF['_now']->toMySQL(true).'")';
+    $where .= ' (date <= "'.$_CONF['_now']->toMySQL(false).'")';
     if ($uid > 0) {
         $permSql = COM_getPermSql('AND', $uid)
                  . COM_getTopicSql('AND', $uid);
