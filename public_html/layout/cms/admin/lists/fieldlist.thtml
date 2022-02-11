@@ -196,9 +196,13 @@
 {!!set btn_style 'uk-button-primary' !!}
 {!!elseif {style} == 'danger' !!}
 {!!set btn_style 'uk-button-danger' !!}
+{!else}
+{!!set btn_style 'uk-button-default' !!}
 {!endif}
 {!!if {size} == 'mini' !!}
 {!!set btn_size 'uk-button-mini' !!}
+{!else}
+{!!set btn_size '' !!}
 {!endif}
     <button type="{type}" name="{button_name}" class="uk-button {btn_size} {btn_style} {other_cls}"
     <!-- BEGIN attr -->
