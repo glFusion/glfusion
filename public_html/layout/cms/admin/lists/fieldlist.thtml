@@ -177,10 +177,10 @@
 <!-- END field-radio -->
 
 <!-- BEGIN field-select -->
-<select ""
+<select data-type="select"
 	<!-- BEGIN attr -->
 	{name}="{value}"
-	<!-- END attr -->a
+	<!-- END attr -->
 	>
 	<!-- BEGIN options -->
 	<option value="{value}" {!if selected}selected="selected"{!endif} {!if disabled}disabled="disabled"{!endif} {other}>{opt_name}</option>
