@@ -2,7 +2,7 @@
 /**
  * @package    glFusion CMS
  *
- * @copyright   Copyright (C) 2014-2016 by the following authors
+ * @copyright   Copyright (C) 2014-2022 by the following authors
  *              Mark R. Evans          mark AT glfusion DOT org
  *
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
@@ -28,7 +28,7 @@ class autotag_uikitlogin extends BaseAutotag {
         $retval = '';
         $modal = 0;
 
-        if ( $p1 != 0 && $p1 != 1 ) $p1 = 1;
+        if ( $p1 != 0 && $p1 != 1 ) $p1 = 0;
 
         $modal = (int) $p1;
         if ( $modal != 0 && $modal != 1) $modal = 0;
@@ -48,7 +48,7 @@ class autotag_uikitlogin extends BaseAutotag {
                 $retval .= '<button class="uk-button uk-button-success tm-button-login" type="button" data-uk-modal="{target:\'#modalOpen\'}">'.$LANG01[58].'</button></div>';
                 $retval .= '<div id="modalOpen" class="uk-modal">';
                 $retval .= '<div class="uk-modal-dialog uk-modal-dialog-medium"><a href="#" class="uk-modal-close uk-close"></a>';
-                $retval .= SEC_loginForm($options);
+                $retval .= '<div class="uk-panel uk-panel-box">'.SEC_loginForm($options).'</div>';
                 $retval .= '</div></div>';
                 $retval .= "
                 <script>

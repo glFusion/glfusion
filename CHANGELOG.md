@@ -6,6 +6,7 @@
 
 - Story getItemInfo() used the incorrect date to pull data.
 - Several minor bug fixes related to typos or incorrect variable references
+- Login button did not open login modal
 
 ### Changed
 
