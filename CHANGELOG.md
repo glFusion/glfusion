@@ -10,6 +10,9 @@
 
 ### Changed
 
+- Oauth Icons have all been updated - the styles from style.css will need to be copied to any custom themes you have
+    Look for ``/* new authentication buttons */`` in style.css and copy until ``/* end of oauth icons / buttons */``
+    Templates loginform_oauth.thtml and loginform_oauth_block.thtml have been updated with the new styles
 - Upgraded htmlawed to latest release
 
 ## v1.7.10 (January 1, 2022)

@@ -1,6 +1,7 @@
 {# begin {templatelocation} #}
-<a href="{site_url}/users.php?oauth_login={oauth_service}" class="uk-button login-social login-{oauth_service}" rel="nofollow">
-  <i class="uk-icon-{oauth_service}{oauth_service-postfix}"></i>
-  {$LANG04[194]}{oauth_service_display}
+<a href="{site_url}/users.php?oauth_login={oauth_service}" rel="nofollow">
+  <button type="button" class="login-with-btn login-btn-dark login-with-{oauth_service}-btn">
+      {$LANG04[194]}{oauth_service_display}
+  </button>
 </a>
 {# end {templatelocation} #}
