@@ -559,12 +559,12 @@ function service_get_staticpages($args, &$output, &$svc_msg)
                 $failflg = DB_getItem ($_TABLES['staticpage'], 'sp_nf', "sp_id='$page'");
             }
             if ($failflg) {
-                if ($mode !== 'autotag') {
+                if ($mode !== 'autotag' && $mode !== 'comment') {
                     $output = COM_siteHeader ('menu');
                 }
                 $output .= SEC_loginRequiredForm();
 
-                if ($mode !== 'autotag') {
+                if ($mode !== 'autotag' && $mode !== 'comment') {
                     $output .= COM_siteFooter ();
                 }
             } else {
