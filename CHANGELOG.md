@@ -4,6 +4,7 @@
 
 ### Fixed
 
+- Header / footer would show twice on staticpages when accessing via the comment view and login is required when user not logged in
 - Story getItemInfo() used the incorrect date to pull data.
 - Several minor bug fixes related to typos or incorrect variable references
 - Login button did not open login modal
