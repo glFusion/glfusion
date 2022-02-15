@@ -15,6 +15,7 @@
     Look for ``/* new authentication buttons */`` in style.css and copy until ``/* end of oauth icons / buttons */``
     Templates loginform_oauth.thtml and loginform_oauth_block.thtml have been updated with the new styles
 - Upgraded htmlawed to latest release
+- Removed the slider_checkbox style as it was not compatible with latest browsers
 
 ## v1.7.10 (January 1, 2022)
 
