@@ -98,9 +98,9 @@ function _checkEnvironment()
     } else {
         $T->set_var('class','tm-pass');
     }
-    $T->set_var('recommended','8.0.0+');
+    $T->set_var('recommended',PHP_REC_VERSION.'+');
 
-    $phpnotes = sprintf($LANG_ENVCHK['php_req_version'],'7.4.0');
+    $phpnotes = sprintf($LANG_ENVCHK['php_req_version'],PHP_MIN_VERSION);
     if ( !_phpUpToDate() ) {
         $phpnotes .= '<br><span class="tm-fail">'.$LANG_ENVCHK['phpendoflife'].'</span>';
     }

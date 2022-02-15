@@ -27,9 +27,14 @@ if (strpos(strtolower($_SERVER['PHP_SELF']), 'lib-common.php') !== false) {
     die('This file can not be used on its own!');
 }
 
-// we must have PHP v7.3 or greater
-if (version_compare(PHP_VERSION,'7.4.0','<')) {
-    die('glFusion requires PHP version 7.4.0 or greater.');
+if (!defined('PHP_MIN_VERSION')) {
+    define('PHP_MIN_VERSION', '7.4.0');
+    define('PHP_REC_VERSION', '8.0.0');
+}
+
+// Check for proper version of PHP
+if (version_compare(PHP_VERSION, PHP_MIN_VERSION, '<')) {
+    die('glFusion requires PHP version ' . PHP_MIN_VERSION . ' or greater.');
 }
 
 if (!defined ('GVERSION')) {
