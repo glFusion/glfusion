@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by:
@@ -452,9 +452,9 @@ $LANG_GF02 = array(
     'msg127' => 'Number of lines to display in search results',
     'msg128' => 'Members Per Page:',
     'msg129' => 'For the Members listing screen',
-    'msg130' => 'View Anonymous Posts:',
+    'msg130' => 'View Anonymous Posts',
     'msg131' => 'Setting of No will filter out anonymous posts',
-    'msg132' => 'Always Notify:',
+    'msg132' => 'Auto Notify on New / Reply Posts',
     'msg133' => 'Setting of Yes will enable auto notifcation for any topics you create or reply',
     'msg134' => 'Subscription Added',
     'msg135' => 'You will now be notified of all posts to this forum.',
