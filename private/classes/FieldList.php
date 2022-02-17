@@ -638,7 +638,7 @@ class FieldList
             'value' => '',
             'size' => '',   // mini
             'style' => '',  // success, danger, etc.
-            'type' => '',   // submit, reset, etc.
+            'type' => 'submit',   // submit, reset, etc.
             'class' => '',  // additional classes
         );
         $args = array_merge($def_args, $args);
@@ -648,13 +648,13 @@ class FieldList
 
         $t->set_var(array(
             'button_name' => $args['name'],
-            'button-value' => $args['value'],
+            'button_value' => $args['value'],
             'size' => $args['size'],
             'style' => $args['style'],
             'type' => $args['type'],
             'other_cls' => $args['class'],
+            'text' => $args['text'],
         ) );
-        $t->set_var('text',$args['text']);
 
         if (isset($args['attr']) && is_array($args['attr'])) {
             $t->set_block('field-button','attr','attributes');
