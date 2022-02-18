@@ -799,7 +799,7 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
 				            // now the player specific items.
 				    		$F = new Template( MG_getTemplatePath(0) );
 				           	$F->set_file(array('player' => 'flvfp.thtml'));
-				           	$playImage = $_MG_CONF['assets_url'].'/placeholder_video_w.svg';
+				           	$playImage = $_MG_CONF['mediaobjects_url'].'/placeholder_video_w.svg';
 				        	if ( $autoplay == 1 ) {  // auto start
 				        		$playButton = '';
 				        	} else {
@@ -1347,8 +1347,8 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                             }
                         }
                     } else {
-                        $tnImage = $_MG_CONF['assets_url'] . '/placeholder.svg';
-                        $tnFileName = $_MG_CONF['path_assets'] . 'placeholder.svg';
+                        $tnImage = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                        $tnFileName = $_MG_CONF['path_mediaobjects'] . 'placeholder.svg';
                     }
                 }
                 if (!empty($tnFileName)) {
@@ -1357,8 +1357,8 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                     $media_size = false;
                 }
                 if ( $media_size == false ) {
-                    $tnImage = $_MG_CONF['assets_url'] . '/placeholder.svg';
-                    $tnFileName = $_MG_CONF['path_assets'] . 'placeholder.svg';
+                    $tnImage = $_MG_CONF['mediaobjects_url'] . '/placeholder.svg';
+                    $tnFileName = $_MG_CONF['path_mediaobjects'] . 'placeholder.svg';
                     $media_size = array(200,200);
                 }
                 if ( $width > 0 && $height == 0 ) {
@@ -1593,8 +1593,8 @@ function _mg_autotags ( $op, $content = '', $autotag = '') {
                         $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
                         $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
                     } else {
-                        $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
-                        $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
+                        $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
+                        $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
                     }
 
                     if ( $autotag['tag'] == 'img' ) {
