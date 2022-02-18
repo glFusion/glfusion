@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by:
@@ -454,7 +454,7 @@ $LANG_GF02 = array(
     'msg129' => 'Jäsen Lista Ikkunaan',
     'msg130' => 'Näytä Tuntemattomien Viestit:',
     'msg131' => 'Asetus Ei suodattaa pois tuntemattomien viestit',
-    'msg132' => 'Ilmoita Aina:',
+    'msg132' => 'Auto Notify on New / Reply Posts',
     'msg133' => 'Asetus Kyllä ottaa käyttöön automaattisen ilmoituksen kaikista aiheista jotka luot tai joihin vastaat',
     'msg134' => 'Tilaus Lisätty',
     'msg135' => 'Sinulle ilmoitetaan kaikista viesteistä tähän keskusteluun.',

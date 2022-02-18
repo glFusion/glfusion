@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by:
@@ -454,7 +454,7 @@ $LANG_GF02 = array(
     'msg129' => 'For the Members listing screen',
     'msg130' => 'Bekijk Anonieme Inzendingen:',
     'msg131' => 'Indien Nee worden anonieme berichten niet getoond',
-    'msg132' => 'Waarschuw Altijd:',
+    'msg132' => 'Auto Notify on New / Reply Posts',
     'msg133' => 'Setting of Yes will enable auto notifcation for any topics you create or reply',
     'msg134' => 'Abonnement Toegevoegd',
     'msg135' => 'U wordt vanaf nu gewaarschuwd als er in dit Forum nieuwe berichten worden geplaatst.',

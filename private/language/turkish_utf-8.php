@@ -2981,6 +2981,7 @@ $LANG_confignames['Core'] = array(
 $LANG_configsubgroups['Core'] = array(
     'sg_site' => 'Site',
     'sg_stories' => 'Yazı ve Geri İzleme',
+    'sg_comments' => 'Yorumlar',
     'sg_theme' => 'Tema',
     'sg_blocks' => 'Bloklar',
     'sg_users' => 'Kullanıcılar ve Gönderimler',

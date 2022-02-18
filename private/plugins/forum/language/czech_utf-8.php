@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by:
@@ -454,7 +454,7 @@ $LANG_GF02 = array(
     'msg129' => 'Seznam pro členy',
     'msg130' => 'Zobrazit anonymní příspěvky:',
     'msg131' => 'Nastavení Ne bude filtrovat anonymní příspěvky',
-    'msg132' => 'Vždy oznámit:',
+    'msg132' => 'Automatické upozornění na nové příspěvky / odpovědi',
     'msg133' => 'Nastavení Ano umožní automatické upozornění na témata, která vytvoříte nebo odpovíte',
     'msg134' => 'Předplatné přidáno',
     'msg135' => 'Nyní budete upozorněni na všechny příspěvky na toto fórum.',

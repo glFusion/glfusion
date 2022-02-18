@@ -2981,6 +2981,7 @@ $LANG_confignames['Core'] = array(
 $LANG_configsubgroups['Core'] = array(
     'sg_site' => 'Web',
     'sg_stories' => 'Články a Trackback',
+    'sg_comments' => 'Komentáře',
     'sg_theme' => 'Grafické téma',
     'sg_blocks' => 'Bloky',
     'sg_users' => 'Uživatelé a příspěvky',

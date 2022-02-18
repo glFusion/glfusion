@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by:
@@ -454,7 +454,7 @@ $LANG_GF02 = array(
     'msg129' => 'Dla ekranu z listą użytkowników',
     'msg130' => 'Zobacz anonimowe posty:',
     'msg131' => 'Ustawienie nie spowoduje odfiltrowanie anonimowych postów',
-    'msg132' => 'Zawsze powiadamiaj:',
+    'msg132' => 'Auto Notify on New / Reply Posts',
     'msg133' => 'Ustawienie tak umożliwi automatyczne powiadamianie o dowolnie tworzonych wątkach lub odpowiedziach',
     'msg134' => 'Dodano subskrypcję',
     'msg135' => 'Zostaniesz powiadomiony o wszystkich wpisach na tym forum.',

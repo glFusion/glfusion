@@ -2981,6 +2981,7 @@ $LANG_confignames['Core'] = array(
 $LANG_configsubgroups['Core'] = array(
     'sg_site' => 'Sivusto',
     'sg_stories' => 'Jutut ja Paluuviitteet',
+    'sg_comments' => 'Kommentit',
     'sg_theme' => 'Ulkoasu',
     'sg_blocks' => 'Lohkot',
     'sg_users' => 'Käyttäjät ja Lähetetyt',

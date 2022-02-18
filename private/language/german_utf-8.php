@@ -2981,6 +2981,7 @@ $LANG_confignames['Core'] = array(
 $LANG_configsubgroups['Core'] = array(
     'sg_site' => 'Seiteninfo &amp; Konfiguration',
     'sg_stories' => 'Artikel &amp; Track-Pingback',
+    'sg_comments' => 'Kommentare',
     'sg_theme' => 'Design &amp; Darstellung',
     'sg_blocks' => 'Blöcke &amp; Einstellungen',
     'sg_users' => 'Benutzer &amp; Beiträge',
