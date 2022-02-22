@@ -148,7 +148,7 @@ function plugin_autotags_mediagallery ( $op, $content = '', $autotag = '') {
         switch ($content) {
             case 'album' :
                 return $LANG_MG_AUTOTAG['desc_album'];
-                beak;
+                break;
             case 'media' :
                 return $LANG_MG_AUTOTAG['desc_media'];
                 break;
