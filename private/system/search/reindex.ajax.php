@@ -20,6 +20,7 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
+use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 use \glFusion\Admin\AdminAction;
 
@@ -81,7 +82,7 @@ function SEARCH_removeOldContentAjax()
 
 function SEARCH_getContentListAjax()
 {
-    global $_CONF, $_PLUGINS;
+    global $_CONF, $_PLUGINS, $_TABLES;
 
     if ( !COM_isAjax()) die();
 
@@ -92,12 +93,32 @@ function SEARCH_getContentListAjax()
     $contentList = array();
     $retval = array();
 
+     // ensure we are a search admin user
+     if (!SEC_hasRights('search.admin')) {
+        die();
+    }
+
+    $sql = "SELECT DISTINCT {$_TABLES['users']}.uid "
+    ."FROM {$_TABLES['group_assignments']},{$_TABLES['users']} "
+    ."WHERE {$_TABLES['users']}.uid > 1 "
+    ."AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid "
+    ."AND ({$_TABLES['group_assignments']}.ug_main_grp_id IN (1)) LIMIT 1";
+
+    $db = Database::getInstance();
+    $db_key = 'searchadmin_'.MD5($sql);
+    $stmt = $db->conn->executeCacheQuery($sql,array(),array(),new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $db_key));
+    $rootUID = $db->conn->fetchColumn($sql);
+    $stmt->closeCursor();
+    if ($rootUID === null || $rootUID === false) {
+        die();
+    }
+
     $infoFields = 'id,search,search_index';
     if ($_CONF['search_summarize_discussions'] == true) {
         $infoFields = 'summary,id,search,search_index';
     }
 
-    $rc = PLG_getItemInfo($type,'*',$infoFields);
+    $rc = PLG_getItemInfo($type,'*',$infoFields, $rootUID);
     foreach ( $rc AS $id ) {
         $contentList[] = $id;
     }
@@ -116,7 +137,7 @@ function SEARCH_getContentListAjax()
 
 function SEARCH_indexContentItemAjax()
 {
-    global $_CONF, $_PLUGINS;
+    global $_CONF, $_TABLES, $_PLUGINS;
 
     if ( !COM_isAjax()) die();
 
@@ -130,11 +151,31 @@ function SEARCH_indexContentItemAjax()
     $contentList = array();
     $retval = array();
 
+    // ensure we are a search admin user
+    if (!SEC_hasRights('search.admin')) {
+        die();
+    }
+
+    $sql = "SELECT DISTINCT {$_TABLES['users']}.uid "
+    ."FROM {$_TABLES['group_assignments']},{$_TABLES['users']} "
+    ."WHERE {$_TABLES['users']}.uid > 1 "
+    ."AND {$_TABLES['users']}.uid = {$_TABLES['group_assignments']}.ug_uid "
+    ."AND ({$_TABLES['group_assignments']}.ug_main_grp_id IN (1)) LIMIT 1";
+
+    $db = Database::getInstance();
+    $db_key = 'searchadmin_'.MD5($sql);
+    $stmt = $db->conn->executeCacheQuery($sql,array(),array(),new \Doctrine\DBAL\Cache\QueryCacheProfile(3600, $db_key));
+    $rootUID = $db->conn->fetchColumn($sql);
+    $stmt->closeCursor();
+    if ($rootUID === null || $rootUID === false) {
+        die();
+    }
+
     $infoFields = 'id,date,title,searchidx,author,author_name,hits,perms,search_index,reindex,status';
     if ($_CONF['search_summarize_discussions'] == true) {
         $infoFields = 'summary,id,date,title,searchidx,author,author_name,hits,perms,search_index,reindex,status';
     }
-    $contentInfo = PLG_getItemInfo($type,$id,'summary,id,date,title,searchidx,author,author_name,hits,perms,search_index,reindex,status');
+    $contentInfo = PLG_getItemInfo($type,$id,'summary,id,date,title,searchidx,author,author_name,hits,perms,search_index,reindex,status',$rootUID);
 
     if ( is_array($contentInfo) && count($contentInfo) > 0 &&
             (!isset($contentInfo['status']) || $contentInfo['status'] == 1) ) {
@@ -174,7 +215,7 @@ function SEARCH_indexContentItemAjax()
         Log::write('system',Log::DEBUG,'Search Indexer: Unable to retrieve data for ID: '.$id.' Type::'.$type);
     }
     $retval['errorCode'] = 0;
-    $retval['statusMessage'] = 'Content Item Index Successful';
+    $retval['statusMessage'] = 'Content Item Indexed Successful';
 
     $return["js"] = json_encode($retval);
 
