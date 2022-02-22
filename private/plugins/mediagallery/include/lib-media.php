@@ -1249,7 +1249,7 @@ function MG_displayMediaImage( $mediaObject, $full, $sortOrder, $comments, $sort
     } else {
         $pid = 0;
     }
-    if ( @method_exists($MG_albums[$aid],'getOffset') ) {
+    if ( isset($MG_albums[$aid]) && @method_exists($MG_albums[$aid],'getOffset') ) {
         $aOffset = $MG_albums[$aid]->getOffset();
     } else {
         $aOffset = -1;
