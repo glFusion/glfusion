@@ -195,7 +195,7 @@ function SEC_isModerator()
 */
 function SEC_isAdmin()
 {
-    return SEC_hasRights('system.root,story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
+    return SEC_hasRights('system.root,story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,search.admin,actions.admin,autotag.admin,cache.admin,database.admin,env.admin,logo.admin,menu.admin,social.admin,upgrade.admin','OR') OR (count(PLG_getAdminOptions()) > 0) OR SEC_inGroup('Root');
 }
 
 
@@ -1096,18 +1096,24 @@ function SEC_setDefaultPermissions (&$A, $use_permissions = array ())
 * @param   string  $field     Optional field name, default is 'grp_access'
 * @return  string  $groupsql  Formatted SQL string to be appended in calling script SQL statement
 */
-function SEC_buildAccessSql ($clause = 'AND', $field = 'grp_access')
+function SEC_buildAccessSql ($clause = 'AND', $field = 'grp_access', $uid = 0)
 {
     global $_GROUPS;
 
-    if (empty ($_GROUPS)) {
-        $_GROUPS = SEC_getUserGroups();
+    if ($uid == 0) {
+        if (empty ($_GROUPS)) {
+            $userGroups = SEC_getUserGroups();
+        } else {
+            $userGroups = $_GROUPS;
+        }
+    } else {
+        $userGroups = SEC_getUserGroups($uid);
     }
     $groupsql = '';
-    if (count($_GROUPS) == 1) {
-        $groupsql .= " $clause $field = '" . current($_GROUPS) ."'";
+    if (count($userGroups) == 1) {
+        $groupsql .= " $clause $field = '" . current($userGroups) ."'";
     } else {
-        $groupsql .= " $clause $field IN (" . implode(',',array_values($_GROUPS)) .")";
+        $groupsql .= " $clause $field IN (" . implode(',',array_values($userGroups)) .")";
     }
 
     return $groupsql;
