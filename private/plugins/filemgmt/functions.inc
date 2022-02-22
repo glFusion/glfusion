@@ -1069,8 +1069,8 @@ function plugin_getiteminfo_filemgmt($id, $what, $uid = 0, $options = array())
         $where = " WHERE detail.lid = '" . DB_escapeString($id) . "' ";
         $permOp = 'AND';
     }
-
-    $groupsql = SEC_buildAccessSql();
+    $groupsql = SEC_buildAccessSql ('AND', 'grp_access', $uid);
+//    $groupsql = SEC_buildAccessSql();
 
     $sql = "SELECT " . implode(',', $fields)
             . ",b.* FROM {$_TABLES['filemgmt_filedetail']} AS detail LEFT JOIN {$_TABLES['filemgmt_filedesc']} AS description "
