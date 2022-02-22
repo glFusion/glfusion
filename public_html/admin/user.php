@@ -1712,7 +1712,7 @@ function USER_save($uid)
             }
 
             // remove user from all groups that the User Admin is a member of
-            $UserAdminGroups = SEC_getUserGroups ();
+            $UserAdminGroups = SEC_getUserGroups ($uid);
             $whereGroup = 'ug_main_grp_id IN ('
                         . implode (',', $UserAdminGroups) . ')';
             DB_query("DELETE FROM {$_TABLES['group_assignments']} WHERE (ug_uid = $uid) AND " . $whereGroup);
@@ -1806,7 +1806,7 @@ function USER_save($uid)
         echo $retval;
         exit;
     }
-    Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'userdata','user_' . $uid));
+    Cache::getInstance()->deleteItemsByTags(array('menu', 'users', 'userdata','user_' . $uid,'groups','group','user_group'));
 
     if ($_USER_VERBOSE) Log::write('system',Log::DEBUG,"***************leaving USER_save()*****************",1);
 
