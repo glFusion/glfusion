@@ -2521,7 +2521,7 @@ function plugin_moderationvalues_comment()
 */
 function plugin_itemlist_comment($token)
 {
-    global $_CONF, $_TABLES, $_USER, $LANG_TSTM01;
+    global $_CONF, $_TABLES, $_USER;
     global $LANG01, $LANG24, $LANG29, $LANG_ADMIN, $_IMAGE_TYPE;
 
     $retval = '';
