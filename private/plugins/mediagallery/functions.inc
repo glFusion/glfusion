@@ -335,7 +335,7 @@ function plugin_autotags_mediagallery ( $op, $content = '', $autotag = '') {
         switch ($content) {
             case 'album' :
                 return $LANG_MG_AUTOTAG['desc_album'];
-                beak;
+                break;
             case 'media' :
                 return $LANG_MG_AUTOTAG['desc_media'];
                 break;
@@ -1581,11 +1581,15 @@ function plugin_subscription_email_format_mediagallery($category,$track_id,$post
 */
 function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array())
 {
-    global $_CONF, $_TABLES, $MG_albums, $_MG_CONF, $LANG_MG00;
+    global $_CONF, $_TABLES, $_USER, $MG_albums, $_MG_CONF, $LANG_MG00;
+
     MG_initAlbums();
     $properties = explode(',', $what);
     $fields = array();
 
+    if ($uid == 0) {
+        $uid = $_USER['uid'];
+    }
     foreach ($properties as $p) {
         switch ($p) {
             case 'date' :
@@ -1647,19 +1651,17 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
         $permOp = '';
     }
     $sql = "SELECT " . implode(',', $fields)
-            . ",album_id FROM {$_TABLES['mg_media']} a LEFT JOIN {$_TABLES['mg_media_albums']} b ON a.media_id=b.media_id " . $where;
+            . ",b.album_id,c.group_id,c.perm_owner,c.perm_group,c.perm_members,c.perm_anon FROM {$_TABLES['mg_media']} a LEFT JOIN {$_TABLES['mg_media_albums']} b ON a.media_id=b.media_id LEFT JOIN {$_TABLES['mg_albums']} c ON b.album_id = c.album_id " . $where;
     if ($id != '*') {
         $sql .= ' LIMIT 1';
     }
     $result = DB_query($sql);
     $numRows = DB_numRows($result);
-
     $retval = array();
     for ($i = 0; $i < $numRows; $i++) {
         $A = DB_fetchArray($result);
-
         $aid = $A['album_id'];
-        if ( isset($MG_albums[$aid]) && $MG_albums[$aid]->access > 0 ) {
+        if (SEC_inGroup('Root',$uid) || (isset($MG_albums[$aid]) && $MG_albums[$aid]->access > 0 )) {
             $props = array();
             foreach ($properties as $p) {
                 switch ($p) {
@@ -1718,11 +1720,11 @@ function plugin_getiteminfo_mediagallery($id, $what, $uid = 0, $options = array(
                     case 'perms' :
                         $props['perms'] = array(
                             'owner_id' => $A['media_user_id'],
-                            'group_id' => $MG_albums[$aid]->group_id,
-                            'perm_owner' => $MG_albums[$aid]->perm_owner,
-                            'perm_group' => $MG_albums[$aid]->perm_group,
-                            'perm_members' => $MG_albums[$aid]->perm_members,
-                            'perm_anon' => $MG_albums[$aid]->perm_anon,
+                            'group_id' => $A['group_id'], // $MG_albums[$aid]->group_id,
+                            'perm_owner' => $A['perm_owner'], // $MG_albums[$aid]->perm_owner,
+                            'perm_group' => $A['perm_group'], // $MG_albums[$aid]->perm_group,
+                            'perm_members' => $A['perm_members'], // $MG_albums[$aid]->perm_members,
+                            'perm_anon' => $A['perm_anon'], // $MG_albums[$aid]->perm_anon,
                         );
                         break;
                     default:
