@@ -332,7 +332,7 @@ function getUserMenu()
         $plugin_options = PLG_getAdminOptions();
         $num_plugins = count($plugin_options);
         if (SEC_isModerator() OR
-                SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit', 'OR') OR
+                SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,search.admin', 'OR') OR
                 ($num_plugins > 0))
         {
             $url = $_CONF['site_admin_url'] . '/index.php';
@@ -381,7 +381,7 @@ function getAdminMenu()
         $plugin_options = PLG_getAdminOptions();
         $num_plugins = count( $plugin_options );
 
-        if ( SEC_isModerator() OR SEC_hasRights( 'story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,social.admin', 'OR' ) OR ( $num_plugins > 0 ) ) {
+        if ( SEC_isModerator() OR SEC_hasRights( 'story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,search.admin,actions.admin,autotag.admin,cache.admin,database.admin,env.admin,logo.admin,menu.admin,social.admin,upgrade.admin', 'OR' ) OR ( $num_plugins > 0 ) ) {
             // what's our current URL?
             $elementUrl = COM_getCurrentURL();
 
