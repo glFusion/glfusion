@@ -25,7 +25,7 @@ USES_lib_admin();
 $display = '';
 $pi_title = $LANG_SEARCH_ADMIN['search_admin'];
 
-if (!SEC_inGroup('Root')) {
+if (!SEC_hasRights('search.admin')) {
     COM_accessLog("User {$_USER['username']} tried to access the Search admin screen.");
     COM_404();
     exit;
