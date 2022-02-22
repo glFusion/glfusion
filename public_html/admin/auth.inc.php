@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -95,7 +95,7 @@ if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['
 if ($status == USER_ACCOUNT_ACTIVE) {
     SESS_completeLogin($uid);
     $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
-    if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
+    if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,search.admin,actions.admin,autotag.admin,cache.admin,database.admin,env.admin,logo.admin,menu.admin,social.admin,upgrade.admin','OR')
              && (count(PLG_getAdminOptions()) == 0)) {
         COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
         if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
@@ -224,7 +224,7 @@ if ($status == USER_ACCOUNT_ACTIVE) {
     $_REQUEST = array_merge($_GET, $_POST);
 
   // we have a logged in user - make sure they have permissions to be here...
-} else if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
+} else if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,search.admin,actions.admin,autotag.admin,cache.admin,database.admin,env.admin,logo.admin,menu.admin,social.admin,upgrade.admin','OR')
          && (count(PLG_getAdminOptions()) == 0)) {
     COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
     if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
