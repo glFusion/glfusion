@@ -1018,6 +1018,7 @@ function COM_siteHeader($what = 'menu', $pagetitle = '', $headercode = '' )
             $db = Database::getInstance();
             $stmt = $db->conn->prepare("SELECT tid FROM `{$_TABLES['stories']}` WHERE sid=?");
             $stmt->bindParam(1,$sid,Database::STRING);
+            $stmt->execute();
             $topic = $stmt->fetchColumn();
         }
     } else {
