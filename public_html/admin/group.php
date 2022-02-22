@@ -826,12 +826,14 @@ function GROUP_save($grp_id, $grp_name, $grp_descr, $grp_admin, $grp_gl_core, $g
             GROUP_applyDefault($grp_id, $grp_applydefault_add);
         }
 
+        Cache::getInstance()->deleteItemsByTags(array('menu', 'users','userdata','user', 'user_group','groups', 'group_' . $grp_id));
+
         if ($new_group) {
             PLG_groupChanged ($grp_id, 'new');
         } else {
             PLG_groupChanged ($grp_id, 'edit');
         }
-        Cache::getInstance()->deleteItemsByTags(array('menu', 'user_group','groups', 'group_' . $grp_id));
+
         COM_setMessage(49);
         $url = $_CONF['site_admin_url'] . '/group.php';
         $url .= (isset($_POST['chk_showall']) && ($_POST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
@@ -1422,6 +1424,7 @@ function GROUP_saveUsers($grp_id, $grp_members)
             }
         }
     }
+    Cache::getInstance()->deleteItemsByTags(array('menu', 'users','userdata','user', 'user_group','groups', 'group_' . $grp_id));
     COM_setMessage(49);
     $url = $_CONF['site_admin_url'] . '/group.php';
     $url .= (isset($_REQUEST['chk_showall']) && ($_REQUEST['chk_showall'] == 1)) ? '?chk_showall=1' : '';
