@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2017-2021 by the following authors:
+*  Copyright (C) 2017-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *
@@ -599,6 +599,10 @@ class Database
             }
         }
 
+        if (SEC_inGroup('Root', $uid)) {
+            return '';
+        }
+
         $UserGroups = array();
         if ((empty( $_USER['uid']) && ($uid == 1)) || ($uid == $_USER['uid'])) {
             if (empty($_GROUPS)) {
@@ -613,10 +617,6 @@ class Database
             // this shouldn't really happen, but if it does, handle user
             // like an anonymous user
             $uid = 1;
-        }
-
-        if (SEC_inGroup('Root', $uid)) {
-            return '';
         }
 
         $UserGroups = array_map('intval', $UserGroups);
@@ -841,7 +841,7 @@ class Database
 
         try {
             $stmt = $this->conn->query($sql);
-        } catch(Throwable $e) {
+        } catch(\Throwable $e) {
             if (defined('DVLP_DEBUG')) {
                 throw($e);
             }
@@ -873,6 +873,11 @@ class Database
     {
         global $_GROUPS;
 
+        if (SEC_inGroup('Root')) {
+            if (stristr($clause,'WHERE') !== false) {
+                return $clause . ' 1=1 ';
+            }
+        }
         if (empty ($_GROUPS)) {
             $_GROUPS = SEC_getUserGroups();
         }
