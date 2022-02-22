@@ -1372,7 +1372,12 @@ function plugin_profilesave_forum($uid = 0 )
 */
 function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
 {
-    global $_CONF, $_TABLES, $LANG_GF00;
+    global $_CONF, $_FF_CONF, $_USER, $_TABLES, $LANG_GF00;
+
+    if ($uid == 0) {
+        $uid = $_USER['uid'];
+    }
+
     $buildingSearchIndex = false;
     $batchreindex = false;
     $summary = false;
@@ -1424,6 +1429,9 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
             case 'hits' :
                 $fields[] = 'a.views';
                 break;
+            case 'perms' :
+                $fields[] = 'a.uid';
+                break;
             default:
                 break;
         }
@@ -1463,7 +1471,7 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
         $permOp = ' AND ';
     }
     $groups = array ();
-    $usergroups = SEC_getUserGroups();
+    $usergroups = SEC_getUserGroups($uid);
     foreach ($usergroups as $group) {
         $groups[] = $group;
     }
@@ -1541,16 +1549,35 @@ function plugin_getiteminfo_forum($id, $what, $uid = 0, $options = array())
                 case 'hits' :
                     $props['hits'] = $A['views'];
                     break;
-                case 'perms' :
-                    $grpPerm = SEC_inGroup($A['grp_id'],1) ? 2 : 0;
+               case 'perms' :
+                    // Default to the post owner and forum access group with
+                    // read access for all
                     $props['perms'] = array(
-                        'owner_id' => $A['uid'],
-                        'group_id' => $A['grp_id'],
-                        'perm_owner' => $grpPerm,
-                        'perm_group' => $grpPerm,
-                        'perm_members' => $grpPerm,
-                        'perm_anon' => $grpPerm,
+                        'owner_id'      => $A['uid'],
+                        'group_id'      => $A['grp_id'],
+                        'perm_owner'    => 2,
+                        'perm_group'    => 2,
+                        'perm_members'  => 2,
+                        'perm_anon'     => 2,
                     );
+                    switch ($A['grp_id']) {
+                    case 2:  // all users
+                        // check login required...
+                        if ( $_CONF['loginrequired'] == 1 || $_FF_CONF['registration_required'] == 1 ) {
+                            $props['perms']['perm_anon'] = 0;
+                        }
+                        // otherwise - all users keep perm_member and perm_anon
+                        break;
+                    case 13: // Logged-in-users
+                        // Logged-in users implies all groups except anon
+                        $props['perms']['perm_anon'] = 0;
+                        break;
+                    default:
+                        // Single group ID has access
+                        $props['perms']['perm_anon'] = 0;
+                        $props['perms']['perm_members'] = 0;
+                        break;
+                    }
                     break;
                 default:
                     $props[$p] = '';
