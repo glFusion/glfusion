@@ -904,7 +904,7 @@
         },
         {
             "name": "phpclasses/oauth-api",
-            "version": "1.0.114",
+            "version": "1.0.115",
             "dist": {
                 "type": "zip",
                 "url": "https://www.phpclasses.org/install/package/oauth-api.zip"
@@ -946,16 +946,16 @@
         },
         {
             "name": "phpfastcache/phpfastcache",
-            "version": "8.1.0",
+            "version": "8.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPSocialNetwork/phpfastcache.git",
-                "reference": "20f802ea9e54dfa08a72b51736265177c71ff6e0"
+                "reference": "80a139c05a2800a0879dc6ecbcd7bd6c256769b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/20f802ea9e54dfa08a72b51736265177c71ff6e0",
-                "reference": "20f802ea9e54dfa08a72b51736265177c71ff6e0",
+                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/80a139c05a2800a0879dc6ecbcd7bd6c256769b9",
+                "reference": "80a139c05a2800a0879dc6ecbcd7bd6c256769b9",
                 "shasum": ""
             },
             "require": {
@@ -1048,7 +1048,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPSocialNetwork/phpfastcache/issues",
-                "source": "https://github.com/PHPSocialNetwork/phpfastcache/tree/8.1.0"
+                "source": "https://github.com/PHPSocialNetwork/phpfastcache/tree/8.1.1"
             },
             "funding": [
                 {
@@ -1060,20 +1060,20 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2022-01-05T21:08:59+00:00"
+            "time": "2022-02-21T20:43:49+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.5.3",
+            "version": "v6.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "baeb7cde6b60b1286912690ab0693c7789a31e71"
+                "reference": "c0d9f7dd3c2aa247ca44791e9209233829d82285"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/baeb7cde6b60b1286912690ab0693c7789a31e71",
-                "reference": "baeb7cde6b60b1286912690ab0693c7789a31e71",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/c0d9f7dd3c2aa247ca44791e9209233829d82285",
+                "reference": "c0d9f7dd3c2aa247ca44791e9209233829d82285",
                 "shasum": ""
             },
             "require": {
@@ -1086,10 +1086,10 @@
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
                 "doctrine/annotations": "^1.2",
                 "php-parallel-lint/php-console-highlighter": "^0.5.0",
-                "php-parallel-lint/php-parallel-lint": "^1.3",
+                "php-parallel-lint/php-parallel-lint": "^1.3.1",
                 "phpcompatibility/php-compatibility": "^9.3.5",
                 "roave/security-advisories": "dev-latest",
-                "squizlabs/php_codesniffer": "^3.6.0",
+                "squizlabs/php_codesniffer": "^3.6.2",
                 "yoast/phpunit-polyfills": "^1.0.0"
             },
             "suggest": {
@@ -1130,7 +1130,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.5.3"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.5.4"
             },
             "funding": [
                 {
@@ -1138,20 +1138,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-25T16:34:11+00:00"
+            "time": "2022-02-17T08:19:04+00:00"
         },
         {
             "name": "phpxmlrpc/phpxmlrpc",
-            "version": "4.6.0",
+            "version": "4.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gggeek/phpxmlrpc.git",
-                "reference": "b9401ffa2174663e376dcbb3aadba09eb62d8d19"
+                "reference": "5f47934cdf3c7d989ab4c5a11d9c08d1d55a8380"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gggeek/phpxmlrpc/zipball/b9401ffa2174663e376dcbb3aadba09eb62d8d19",
-                "reference": "b9401ffa2174663e376dcbb3aadba09eb62d8d19",
+                "url": "https://api.github.com/repos/gggeek/phpxmlrpc/zipball/5f47934cdf3c7d989ab4c5a11d9c08d1d55a8380",
+                "reference": "5f47934cdf3c7d989ab4c5a11d9c08d1d55a8380",
                 "shasum": ""
             },
             "require": {
@@ -1162,12 +1162,9 @@
                 "phpxmlrpc/extras": "<= 0.6.3"
             },
             "require-dev": {
-                "docbook/docbook-xsl": "^1.79",
                 "ext-curl": "*",
                 "ext-dom": "*",
                 "ext-mbstring": "*",
-                "ext-xsl": "*",
-                "indeyets/pake": "^1.99",
                 "phpunit/phpunit": "^5.0 || ^8.5.14",
                 "phpunit/phpunit-selenium": "*",
                 "yoast/phpunit-polyfills": "*"
@@ -1177,8 +1174,7 @@
                 "ext-mbstring": "Needed to allow reception of requests/responses in character sets other than ASCII,LATIN-1,UTF-8",
                 "ext-zlib": "Needed for sending compressed requests and receiving compressed responses, if cURL is not available",
                 "phpxmlrpc/extras": "Adds more featured Server classes and other useful bits",
-                "phpxmlrpc/jsonrpc": "Adds support for the JSON-RPC protocol",
-                "sami/sami": "Required for doc generation using pake. Version constraints: ^3.3 || ^4.1"
+                "phpxmlrpc/jsonrpc": "Adds support for the JSON-RPC protocol"
             },
             "type": "library",
             "autoload": {
@@ -1199,9 +1195,9 @@
             ],
             "support": {
                 "issues": "https://github.com/gggeek/phpxmlrpc/issues",
-                "source": "https://github.com/gggeek/phpxmlrpc/tree/4.6.0"
+                "source": "https://github.com/gggeek/phpxmlrpc/tree/4.6.1"
             },
-            "time": "2021-12-09T18:28:20+00:00"
+            "time": "2022-02-15T17:51:11+00:00"
         },
         {
             "name": "psr/cache",
