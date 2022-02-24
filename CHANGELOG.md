@@ -16,6 +16,9 @@
     Templates loginform_oauth.thtml and loginform_oauth_block.thtml have been updated with the new styles
 - Upgraded htmlawed to latest release
 - Removed the slider_checkbox style as it was not compatible with latest browsers
+- Updated CKEditor to v4.17.2
+- Updated phpclasses/oauth-api (1.0.113 => 1.0.115)
+- Updated phpxmlrpc/phpxmlrpc (4.6.0 => 4.6.1)
 
 ## v1.7.10 (January 1, 2022)
 
