@@ -1513,6 +1513,10 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $current_fusion_version = '1.8.0';
 
+        case '1.7.11' :
+
+            $current_fusion_version = '1.8.0';
+
         case '1.8.0' : // internal development release
             $_SQL = array();
             $_SQL = array(
