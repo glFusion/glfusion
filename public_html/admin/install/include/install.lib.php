@@ -1676,7 +1676,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
         case '2.0.0' :
 
-            $current_fusion_verison = '2.0.0';
+            $current_fusion_verison = '2.0.1';
 
         default:
             DB_query("REPLACE INTO {$_TABLES['vars']} SET value='".$current_fusion_version."',name='glfusion'",1);
