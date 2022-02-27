@@ -1,4 +1,4 @@
-/*! glFusion CMS v1.7.8 | https://www.glfusion.org | (c) 2018-2019 glFusion | GNU GPL v2 License */
+/*! glFusion CMS v1.7.11 | https://www.glfusion.org | (c) 2018-2022 glFusion | GNU GPL v2 License */
 $(window).load(function(){pf()});
 $('[data-uk-switcher]').on('show.uk.switcher', function(event, area) {pf();});
 $('[data-uk-tab]').on('click', function(event, active_item, previous_item) {pf();});
