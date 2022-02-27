@@ -1,5 +1,7 @@
 # glFusion v2 CMS ChangeLog
 
+## v2.0.1
+
 ## v2.0.0 (February 27, 2022)
 
 ### Changed

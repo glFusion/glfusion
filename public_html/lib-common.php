@@ -38,7 +38,7 @@ if (version_compare(PHP_VERSION, PHP_MIN_VERSION, '<')) {
 }
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '2.0.0');
+    define('GVERSION', '2.0.1');
 }
 
 define('PATCHLEVEL','.pl0');

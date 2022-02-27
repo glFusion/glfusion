@@ -19,7 +19,7 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 @ini_set('opcache.enable','0');
 if (!defined('GVERSION')) {
-    define('GVERSION', '2.0.0');
+    define('GVERSION', '2.0.1');
 }
 
 define('SESSION_EXPIRED',           1);
@@ -748,7 +748,7 @@ function INST_checkEnvironment($private_path='')
     } else {
         $T->set_var('status','<span class="uk-text-success">'.phpversion().'</span>');
     }
-    $T->set_var('recommended','7.3+');
+    $T->set_var('recommended','7.4+');
     $T->set_var('notes',sprintf($LANG_INSTALL['php_req_version'],SUPPORTED_PHP_VER));
     $T->parse('env','envs',true);
 

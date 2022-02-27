@@ -38,7 +38,7 @@ global $_DB_table_prefix, $_TABLES, $_CP_CONF;
 $_CP_CONF['pi_name']            = 'captcha';
 $_CP_CONF['pi_display_name']    = 'CAPTCHA';
 $_CP_CONF['pi_version']         = '3.7.0';
-$_CP_CONF['gl_version']         = '2.0.0';
+$_CP_CONF['gl_version']         = '2.0.1';
 $_CP_CONF['pi_url']             = 'https://www.glfusion.org/';
 
 // Database table definitions
