@@ -1,1 +1,10 @@
 *** dummy entry ***
+[2022-02-27 11:50:44]       127.0.0.1 DEBUG: Starting CRON  
+[2022-02-27 11:50:45]       127.0.0.1 DEBUG: Running last_scheduled_run items.  
+[2022-02-27 11:50:45]       127.0.0.1 DEBUG: Running PLG_runScheduledTasks.  
+[2022-02-27 11:50:45]       127.0.0.1 DEBUG: CRON: Running PLG_runScheduledTask for bad_behavior2  
+[2022-02-27 11:50:45]       127.0.0.1 DEBUG: CRON: Running PLG_runScheduledTask for sitemap  
+[2022-02-27 11:50:45]       127.0.0.1 DEBUG: CRON: Running PLG_runScheduledTask for socialshare  
+[2022-02-27 11:50:45]       127.0.0.1 INFO: SocialShare Plugin: Running cache refresh.  
+[2022-02-27 11:50:46]       127.0.0.1 DEBUG: Updating last_maint_run date / time  
+[2022-02-27 11:50:54]       127.0.0.1 WARNING: CAPTCHA: An invalid CAPTCHA string was entered in loginform - IP Address: 127.0.0.1  
