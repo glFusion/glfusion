@@ -5,6 +5,7 @@
 ### Changed
 
 - glFusion v2 requires PHP v7.4 or newer
+- Default location of notification messages is top-center for new installations
 - FileMgmt Plugin internals reworked - improved template use, layout and overall code improvements (Lee)
 - FileMgmt Plugin support url_rewrite on download links - if you need rewrite rules for your web server, implement for visit.php - see [glFusion URL Rewrite docs](https://www.glfusion.org/wiki/glfusion:configuration:site) for more details
 - Syndication System internals reworked - improved overall code and modernized (Lee)
