@@ -2,7 +2,9 @@
 
 ## Supported Versions
 
-glFusion v1.7.x is a Long Term Support (LTS) release, which means we will continue to support this version while glFusion v2.0 is in development, providing quarterly bug and security releases as needed.
+glFusion v2 is the active version of glFusion under development with new features and enhnacements.
+
+glFusion v1.7.x is a Long Term Support (LTS) release, which means we will continue to support this version into the future with bug fixes providing quarterly bug and security updates as needed.
 
 | Version | Supported          |
 | ------- | ------------------ |
