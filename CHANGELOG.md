@@ -2,6 +2,10 @@
 
 ## v2.0.1
 
+### Fixed
+
+- story and story_introtext autotags did not honor the provided link text
+
 ## v2.0.0 (February 27, 2022)
 
 ### Changed

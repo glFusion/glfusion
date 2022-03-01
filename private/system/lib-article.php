@@ -56,6 +56,7 @@ function plugin_autotags_article( $op, $content = '', $autotag = '')
                 return '';
         }
     } else if ($op == 'parse') {
+        $linktext = $autotag['parm2'];
         if ($autotag['tag'] == 'story') {
             $parm1_parts = explode('#', $autotag['parm1']);
             $autotag['parm1'] = COM_applyFilter ($autotag['parm1']);
