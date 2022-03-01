@@ -5,6 +5,7 @@
 ### Fixed
 
 - story and story_introtext autotags did not honor the provided link text
+- Media Gallery search did not return proper image thumbnail
 
 ## v2.0.0 (February 27, 2022)
 

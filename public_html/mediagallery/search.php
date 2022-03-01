@@ -327,11 +327,13 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
     // --- set the default thumbnail
 
     $default_thumbnail = 'generic.png';
+    $thumbnailFound = false;
     switch( $M['media_type'] ) {
         case 0 :    // standard image
             foreach ($_MG_CONF['validExtensions'] as $ext ) {
                 if ( file_exists($_MG_CONF['path_mediaobjects'] . 'tn/'.  $M['media_filename'][0] . '/' . $M['media_filename'] . $ext) ) {
                     $default_thumbnail = 'tn/' . $M['media_filename'][0] . '/' . $M['media_filename'] . $ext;
+                    $thumbnailFound = true;
                     break;
                 }
             }
@@ -440,8 +442,13 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
             $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
         }
     } else {
-        $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
-        $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
+        if ($thumbnailFound) {
+            $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+        } else {
+            $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+            $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
+        }
     }
 
     $resolution_x = 0;
@@ -554,10 +561,10 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
 
     $media_size        = @getimagesize($media_thumbnail_file);
 
-    if ( $media_size == false ) {
+    if ( $media_size === false ) {
         $default_thumbnail    = 'missing.png';
-        $media_thumbnail      = $_MG_CONF['mediaobjects_url'] . '/' . $default_thumbnail;
-        $media_thumbnail_file = $_MG_CONF['path_mediaobjects'] . $default_thumbnail;
+        $media_thumbnail      = $_MG_CONF['assets_url'] . '/' . $default_thumbnail;
+        $media_thumbnail_file = $_MG_CONF['path_assets'] . $default_thumbnail;
         $media_size           = @getimagesize($media_thumbnail_file);
     }
 
@@ -594,7 +601,7 @@ function MG_searchDisplayThumb( $M, $sortOrder, $id, $page, $force=0 ) {
             $tn_height = 150;
             break;
     }
-    if ( $media_size[0] > $media_size[1] ) {
+    if ( $media_size !== false && $media_size[0] > $media_size[1] ) {
         $ratio = $media_size[0] / $tn_height;
         $newwidth = $tn_height;
         $newheight = round($media_size[1] / $ratio);
