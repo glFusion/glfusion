@@ -117,7 +117,8 @@ class Config extends ConfigurationOption
             if ($diff = array_diff(['host', 'port', 'saslUser', 'saslPassword'], array_keys($server))) {
                 throw new PhpfastcacheInvalidConfigurationException('Missing keys for memcached server: ' . implode(', ', $diff));
             }
-            if ($diff = array_diff(array_keys($server), ['host', 'port', 'saslUser', 'saslPassword'])) {
+//            if ($diff = array_diff(array_keys($server), ['host', 'port', 'saslUser', 'saslPassword'])) {
+            if ($diff = array_diff(array_keys($server), ['path', 'host', 'port', 'saslUser', 'saslPassword'])) {
                 throw new PhpfastcacheInvalidConfigurationException('Unknown keys for memcached server: ' . implode(', ', $diff));
             }
             if (!is_string($server['host'])) {
