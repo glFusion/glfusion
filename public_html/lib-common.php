@@ -220,6 +220,9 @@ if (isset($_SYSTEM['site_enabled']) && !$_SYSTEM['site_enabled']) {
 
 require_once $_CONF['path_language'] . COM_getLanguage() . '.php';
 
+if (!isset($_CONF['timezone']) || empty($_CONF['timezone'])) {
+    $_CONF['timezone'] = date_default_timezone_get();
+}
 @date_default_timezone_set($_CONF['timezone']);
 if ( setlocale( LC_ALL, $_CONF['locale'] ) === false ) {
     setlocale( LC_TIME, $_CONF['locale'] );
