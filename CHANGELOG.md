@@ -1,11 +1,14 @@
 # glFusion v2 CMS ChangeLog
 
-## v2.0.1
+## v2.0.1 (In development)
 
 ### Fixed
 
 - story and story_introtext autotags did not honor the provided link text
 - Media Gallery search did not return proper image thumbnail
+- Do not prompt Root users for CAPTCHA if logged in via OAuth (Bumped version to 3.7.1)
+- Fixed caching configuration for memcached to allow sockets
+- Fixed issue if timezone was not set in the configuration
 
 ## v2.0.0 (February 27, 2022)
 
