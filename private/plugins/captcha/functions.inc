@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2021 by the following authors:
+*  Copyright (C) 2002-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -258,7 +258,12 @@ function plugin_templatesetvars_captcha($ctype, &$template)
     if ( COM_isAnonUser() ) {
         $_USER['uid'] = 1;
     }
-    if ( $ctype == 'token' || ($_CP_CONF['anonymous_only'] && COM_isAnonUser() ) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
+    if ( $ctype == 'token' ||
+        ($_CP_CONF['anonymous_only'] && COM_isAnonUser() ) ||
+        $_CP_CONF['anonymous_only'] == 0 ||
+        ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) &&
+        !SEC_inGroup('Root')
+        ) {
 
         if ( $_CP_CONF['gfxDriver'] == 3 && $jsLoaded == false ) {
             $outputHandle = outputHandler::getInstance();
@@ -318,7 +323,11 @@ function plugin_commentPreSave_captcha($uid, $title, $comment, $sid, $pid, $type
         $uid = $_USER['uid'];
     }
 
-    if ( ($_CP_CONF['anonymous_only'] && $uid < 2) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
+    if ( ($_CP_CONF['anonymous_only'] && $uid < 2) ||
+        $_CP_CONF['anonymous_only'] == 0 ||
+        ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) &&
+        !SEC_inGroup('Root')
+        ) {
         if ( isset($_POST['captcha']) ) {
             $str = COM_applyFilter($_POST['captcha']);
         } else {
@@ -418,7 +427,11 @@ function plugin_itemPreSave_captcha( $ctype='registration', $content='' ) {
     if ( COM_isAnonUser() ) {
         $_USER['uid'] = 1;
     }
-    if ( ($_CP_CONF['anonymous_only'] && COM_isAnonUser() ) || $_CP_CONF['anonymous_only'] == 0 || ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) ) {
+    if ( ($_CP_CONF['anonymous_only'] && COM_isAnonUser() ) ||
+          $_CP_CONF['anonymous_only'] == 0 ||
+          ($_CP_CONF['remoteusers'] == 1 && SEC_inGroup("Remote Users") ) &&
+          !SEC_inGroup('Root')
+          ) {
         if ( isset($_POST['captcha']) ) {
             $response = COM_applyFilter($_POST['captcha']);
         } else {
