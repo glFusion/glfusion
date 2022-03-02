@@ -137,7 +137,7 @@ final class Cache
                 if ($_CONF['cache_memcached_socket'] != '') {
                     $servers['path'] = $_CONF['cache_memcached_socket'];
                     $servers['host'] = '';
-+                   $servers['port'] = 0;
+                    $servers['port'] = 0;
                 } else {
                     $servers['host'] = $_CONF['cache_memcached_host'];
                     $servers['port'] = (int) $_CONF['cache_memcached_port'];
