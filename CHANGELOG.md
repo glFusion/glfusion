@@ -6,9 +6,16 @@
 
 - story and story_introtext autotags did not honor the provided link text
 - Media Gallery search did not return proper image thumbnail
-- Do not prompt Root users for CAPTCHA if logged in via OAuth (Bumped version to 3.7.1)
+- Do not prompt Root users for CAPTCHA if logged in via OAuth (Bumped CAPTCHA version to 3.7.1)
 - Fixed caching configuration for memcached to allow sockets
-- Fixed issue if timezone was not set in the configuration
+- Use server timezone if not specified in glFusion configuration
+- The [code] bbcode was improperly decoding entities (such as converting &nbsp; to a space)
+- Resolved a PHP v8 SpamX Blacklist compatibility issue
+- Resolved issue with WYSIWYG editor removing empty blocks
+
+### Changed
+
+- Improved the WYSIWYG editor display so it better matches the final layout
 
 ## v2.0.0 (February 27, 2022)
 
