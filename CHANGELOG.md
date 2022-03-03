@@ -14,6 +14,7 @@
 - Resolved issue with WYSIWYG editor removing empty blocks
 - Forum plugin: Preview of post did not use the full forum styling
 - FileMgmt plugin: Improved layout of ordered / un-ordered lists
+- FileMgmt plugin: Improved handling of category selection - remember category between page loads
 
 ### Changed
 
