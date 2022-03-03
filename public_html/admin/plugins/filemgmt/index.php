@@ -9,7 +9,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2004 by the following authors:
@@ -208,9 +208,13 @@ case "listNewDownloads":
 case 'files':
 default:
     $op = 'files';
-    //$content .= mydownloads();
-    if (isset($_REQUEST['cat'])) {
-        $cat = $_REQUEST['cat'];
+
+    if (isset($_POST['cat'])) {
+        $cat = COM_applyFilter($_POST['cat']);
+    } elseif (isset($_GET['cat'])) {
+        $cat = COM_applyFilter($_GET['cat']);
+    } elseif (SESS_isSet('filemgmt.cat')) {
+        $cat = (int) SESS_getVar('filemgmt.cat');
     } else {
         $cat = 0;
     }
