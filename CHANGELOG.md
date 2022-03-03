@@ -12,6 +12,8 @@
 - The [code] bbcode was improperly decoding entities (such as converting &nbsp; to a space)
 - Resolved a PHP v8 SpamX Blacklist compatibility issue
 - Resolved issue with WYSIWYG editor removing empty blocks
+- Forum plugin: Preview of post did not use the full forum styling
+- FileMgmt plugin: Improved layout of ordered / un-ordered lists
 
 ### Changed
 
