@@ -68,9 +68,9 @@ class BlackList extends BaseCommand
         // named entities
         $comment = html_entity_decode($comment);
         // decimal notation
-        $comment = preg_replace_callback('/&#(\d+);/m', array($this, 'callbackDecimal'), $comment);
+        $comment = @preg_replace_callback('/&#(\d+);/m', array($this, 'callbackDecimal'), $comment);
         // hex notation
-        $comment = preg_replace_callback('/&#x([a-f0-9]+);/mi', array($this, 'callbackHex'), $comment);
+        $comment = @preg_replace_callback('/&#x([a-f0-9]+);/mi', array($this, 'callbackHex'), $comment);
          $ans = 0;
         for ($i = 1; $i <= $nrows; $i++) {
             list ($val) = DB_fetchArray ($result);
