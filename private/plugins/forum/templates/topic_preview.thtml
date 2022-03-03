@@ -4,7 +4,7 @@
 <div class="uk-alert-danger">{error_msg}</div>
 {!endif}
 
-<div class="forum-wrapper"> <!-- main wrapper -->
+<div class="forum-wrapper tm-forum-wrapper"> <!-- main wrapper -->
 
 	<div class="topic-navigation">
 		<h2 class="uk-margin-small">{lang_postpreview}</h2>
