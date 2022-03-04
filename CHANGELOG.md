@@ -1,13 +1,13 @@
 # glFusion v2 CMS ChangeLog
 
-## v2.0.1 (In development)
+## v2.0.1 (March XX, 2022)
 
 ### Fixed
 
 - story and story_introtext autotags did not honor the provided link text
 - Media Gallery search did not return proper image thumbnail
 - Do not prompt Root users for CAPTCHA if logged in via OAuth (Bumped CAPTCHA version to 3.7.1)
-- Fixed caching configuration for memcached to allow sockets
+- Fixed caching configuration for memcached to allow sockets - phpfastcache/phpfastcache (8.1.1 => 8.1.2)
 - Use server timezone if not specified in glFusion configuration
 - The [code] bbcode was improperly decoding entities (such as converting &nbsp; to a space)
 - Resolved a PHP v8 SpamX Blacklist compatibility issue
@@ -15,7 +15,8 @@
 - Forum plugin: Preview of post did not use the full forum styling
 - FileMgmt plugin: Improved layout of ordered / un-ordered lists
 - FileMgmt plugin: Improved handling of category selection - remember category between page loads
-- Fixed issue with story save not properly checking featured / comments settings
+- Fixed issue with story save not properly applying featured / comments settings
+- Resolved issue where future featured stories were not being added to the index page at the specified time
 
 ### Changed
 
