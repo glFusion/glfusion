@@ -11,6 +11,7 @@ return array(
     'AVCSequenceParameterSetReader' => $vendorDir . '/james-heinrich/getid3/getid3/module.audio-video.flv.php',
     'AtomCreator03' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator03.php',
     'AtomCreator10' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/AtomCreator10.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'FeedCreator' => $vendorDir . '/openpsa/universalfeedcreator/lib/Creator/FeedCreator.php',
     'FeedDate' => $vendorDir . '/openpsa/universalfeedcreator/lib/Element/FeedDate.php',
     'FeedHtmlField' => $vendorDir . '/openpsa/universalfeedcreator/lib/Element/FeedHtmlField.php',

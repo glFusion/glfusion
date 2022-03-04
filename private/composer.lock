@@ -946,16 +946,16 @@
         },
         {
             "name": "phpfastcache/phpfastcache",
-            "version": "8.1.1",
+            "version": "8.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPSocialNetwork/phpfastcache.git",
-                "reference": "80a139c05a2800a0879dc6ecbcd7bd6c256769b9"
+                "reference": "c328625bdf35376278819075e3b72b3b2702f775"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/80a139c05a2800a0879dc6ecbcd7bd6c256769b9",
-                "reference": "80a139c05a2800a0879dc6ecbcd7bd6c256769b9",
+                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/c328625bdf35376278819075e3b72b3b2702f775",
+                "reference": "c328625bdf35376278819075e3b72b3b2702f775",
                 "shasum": ""
             },
             "require": {
@@ -1048,7 +1048,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPSocialNetwork/phpfastcache/issues",
-                "source": "https://github.com/PHPSocialNetwork/phpfastcache/tree/8.1.1"
+                "source": "https://github.com/PHPSocialNetwork/phpfastcache/tree/8.1.2"
             },
             "funding": [
                 {
@@ -1060,7 +1060,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2022-02-21T20:43:49+00:00"
+            "time": "2022-03-04T21:35:40+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

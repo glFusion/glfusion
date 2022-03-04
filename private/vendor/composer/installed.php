@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '3589c8d7f07a255316764d03d9e05c8f655088e4',
+        'reference' => 'af6011c72e6912bd507f48d61fd615c2e08835b2',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '3589c8d7f07a255316764d03d9e05c8f655088e4',
+            'reference' => 'af6011c72e6912bd507f48d61fd615c2e08835b2',
             'dev_requirement' => false,
         ),
         'aziraphale/email-address-validator' => array(
@@ -164,12 +164,12 @@
             'dev_requirement' => false,
         ),
         'phpfastcache/phpfastcache' => array(
-            'pretty_version' => '8.1.1',
-            'version' => '8.1.1.0',
+            'pretty_version' => '8.1.2',
+            'version' => '8.1.2.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpfastcache/phpfastcache',
             'aliases' => array(),
-            'reference' => '80a139c05a2800a0879dc6ecbcd7bd6c256769b9',
+            'reference' => 'c328625bdf35376278819075e3b72b3b2702f775',
             'dev_requirement' => false,
         ),
         'phpmailer/phpmailer' => array(
