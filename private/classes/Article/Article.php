@@ -432,6 +432,7 @@ class Article
         $db = Database::getInstance();
 
         $retval = true;
+        $originalSID = false;
 
         // reset errors
         $this->errors = [];
@@ -737,8 +738,6 @@ class Article
             // done - commit the changes
             $ret = $db->conn->commit();
 
-            PLG_itemSaved($this->sid, 'article',$originalSID);
-
         } catch(\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
             // duplicate sid
             $db->conn->rollback();
@@ -754,6 +753,7 @@ class Article
         }
 
         if ($retval !== false) {
+            PLG_itemSaved($this->sid, 'article',$originalSID);
             $rc = $this->saveImages();
             if ( $rc !== true ) {
                 return false;
