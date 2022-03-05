@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'af6011c72e6912bd507f48d61fd615c2e08835b2',
+        'reference' => '5512b9c3306d8afc8b2216257da03b703cfc9b2d',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'af6011c72e6912bd507f48d61fd615c2e08835b2',
+            'reference' => '5512b9c3306d8afc8b2216257da03b703cfc9b2d',
             'dev_requirement' => false,
         ),
         'aziraphale/email-address-validator' => array(
@@ -173,12 +173,12 @@
             'dev_requirement' => false,
         ),
         'phpmailer/phpmailer' => array(
-            'pretty_version' => 'v6.5.4',
-            'version' => '6.5.4.0',
+            'pretty_version' => 'v6.6.0',
+            'version' => '6.6.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpmailer/phpmailer',
             'aliases' => array(),
-            'reference' => 'c0d9f7dd3c2aa247ca44791e9209233829d82285',
+            'reference' => 'e43bac82edc26ca04b36143a48bde1c051cfd5b1',
             'dev_requirement' => false,
         ),
         'phpxmlrpc/phpxmlrpc' => array(
