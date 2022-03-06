@@ -990,8 +990,8 @@ class Download
             'security_token' => SEC_createToken(),
             'redirect'      => $this->_editmode,
             'cancel_url'    => $cancel_url,
-//            'redirect_url'  => $_SERVER['HTTP_REFERER'].'#fileid_'.$this->lid,
-            'redirect_url'  => '',
+            'redirect_url'  => $_SERVER['HTTP_REFERER'].'#fileid_'.$this->lid,
+//            'redirect_url'  => '',
             'lang_approve'  => _MD_APPROVEREQ,
         ));
         if ($this->lid === 0) {
@@ -1377,7 +1377,8 @@ class Download
         );
         $text_arr = array(
             'has_extras' => true,
-            'form_url'   => $_FM_CONF['admin_url'] . '/index.php?cat=' . (int)$cid,
+//            'form_url'   => $_FM_CONF['admin_url'] . '/index.php?cat=' . (int)$cid,
+            'form_url'   => $_FM_CONF['admin_url'] . '/index.php',
             'help_url'   => ''
         );
         $options = array(
@@ -1429,6 +1430,7 @@ class Download
             $text_arr, $query_arr, $defsort_arr,$filter, '', $options
         );
         $display .= COM_endBlock();
+        SESS_setVar('filemgmt.cat',$cid);
         return $display;
     }
 

@@ -1196,6 +1196,32 @@ function glfusion_200()
     \glFusion\Admin\AdminAction::write('system','dvlpupdate','System has been updated to latest glFusion version using DvlpUpdate.');
 }
 
+function glfusion_201()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+
+    static $alreadyRun = 0;
+
+    if ($alreadyRun > 0) {
+        print "already been run - why is it calling twice???";
+        exit;
+    }
+    $alreadyRun++;
+
+    $c = config::get_instance();
+    $db = Database::getInstance();
+
+    $_SQL = array();
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='2.0.1',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='2.0.1' WHERE name='glfusion'",1);
+
+    \glFusion\Admin\AdminAction::write('system','dvlpupdate','System has been updated to latest glFusion version using DvlpUpdate.');
+}
+
 function _getHtmlPath()
 {
     $path = str_replace('\\', '/', __FILE__);
@@ -1536,7 +1562,7 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br>';
 
-glfusion_200();
+glfusion_201();
 
 $retval .= 'Performing Configuration upgrades if necessary...<br>';
 

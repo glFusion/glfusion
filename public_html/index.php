@@ -247,7 +247,7 @@ if (!empty($topic)) {
             $queryBuilder->expr()->eq('frontpage',1),
             $queryBuilder->expr()->andX(
                 $queryBuilder->expr()->eq('frontpage',2),
-                $queryBuilder->expr()->gte('frontpage_date',$_CONF['_now']->toUnix())
+                $queryBuilder->expr()->gte('frontpage_date',"'".$_CONF['_now']->toMySQL(false)."'")
             )
         )
     );
@@ -292,7 +292,7 @@ $orderBy = $story_sort . ' ' . $story_sort_dir;
 
 //@TODO vet / validate these 2 vars...
 $queryBuilder->addOrderBy($story_sort,$story_sort_dir);
-
+//print $queryBuilder->getSQL();exit;
 // clone the primary query so we can execute
 // a query to get total story count - we are overriding
 // the SELECT statement to use just the count

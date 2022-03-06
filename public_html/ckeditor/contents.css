@@ -19,9 +19,13 @@ body
 	margin: 20px;
 }
 
+.cke_contents {
+	padding: 10px !important;
+}
+
 .cke_editable
 {
-	font-size: 13px;
+	font-size: 14px;
 	line-height: 1.6;
 
 	/* Fix for missing scrollbars with RTL texts. (#10488) */
@@ -206,3 +210,5 @@ a > img {
 	max-height: 1080px;
 	margin:0 auto;
 }
+
+p { margin: 5px !important; }

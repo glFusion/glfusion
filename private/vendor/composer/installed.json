@@ -988,17 +988,17 @@
         },
         {
             "name": "phpfastcache/phpfastcache",
-            "version": "8.1.1",
-            "version_normalized": "8.1.1.0",
+            "version": "8.1.2",
+            "version_normalized": "8.1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPSocialNetwork/phpfastcache.git",
-                "reference": "80a139c05a2800a0879dc6ecbcd7bd6c256769b9"
+                "reference": "c328625bdf35376278819075e3b72b3b2702f775"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/80a139c05a2800a0879dc6ecbcd7bd6c256769b9",
-                "reference": "80a139c05a2800a0879dc6ecbcd7bd6c256769b9",
+                "url": "https://api.github.com/repos/PHPSocialNetwork/phpfastcache/zipball/c328625bdf35376278819075e3b72b3b2702f775",
+                "reference": "c328625bdf35376278819075e3b72b3b2702f775",
                 "shasum": ""
             },
             "require": {
@@ -1032,7 +1032,7 @@
                 "phpfastcache/phpssdb": "~1.0.0",
                 "predis/predis": "^1.1"
             },
-            "time": "2022-02-21T20:43:49+00:00",
+            "time": "2022-03-04T21:35:40+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1093,7 +1093,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPSocialNetwork/phpfastcache/issues",
-                "source": "https://github.com/PHPSocialNetwork/phpfastcache/tree/8.1.1"
+                "source": "https://github.com/PHPSocialNetwork/phpfastcache/tree/8.1.2"
             },
             "funding": [
                 {
@@ -1109,17 +1109,17 @@
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.5.4",
-            "version_normalized": "6.5.4.0",
+            "version": "v6.6.0",
+            "version_normalized": "6.6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "c0d9f7dd3c2aa247ca44791e9209233829d82285"
+                "reference": "e43bac82edc26ca04b36143a48bde1c051cfd5b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/c0d9f7dd3c2aa247ca44791e9209233829d82285",
-                "reference": "c0d9f7dd3c2aa247ca44791e9209233829d82285",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/e43bac82edc26ca04b36143a48bde1c051cfd5b1",
+                "reference": "e43bac82edc26ca04b36143a48bde1c051cfd5b1",
                 "shasum": ""
             },
             "require": {
@@ -1146,7 +1146,7 @@
                 "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
                 "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
             },
-            "time": "2022-02-17T08:19:04+00:00",
+            "time": "2022-02-28T15:31:21+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1178,7 +1178,7 @@
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
             "support": {
                 "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.5.4"
+                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.6.0"
             },
             "funding": [
                 {

@@ -124,9 +124,9 @@ CKEDITOR.stylesSet.add( 'cms', [
 ] );
 
 // Theme specific styles to load into the styles combo.
-CKEDITOR.stylesSet.add( 'default', [
-	{name: 'Alert',element: 'span',attributes: {'class':'uk-alert uk-alert-danger'}},
-	{name: 'Info',element: 'span',attributes: {'class':'uk-alert uk-alert-info'}},
-
-] );
+//CKEDITOR.stylesSet.add( 'default', [
+//	{name: 'Alert',element: 'span',attributes: {'class':'uk-alert uk-alert-danger'}},
+//	{name: 'Info',element: 'span',attributes: {'class':'uk-alert uk-alert-info'}},
+//
+//] );
 

@@ -18,6 +18,9 @@ div.fm_record {
 	border-radius:5px;
 	margin-top:10px;
 }
+.fm_record p {
+	margin:0;
+}
 
 .fm-file-missing {
 	color: red;

@@ -2,9 +2,9 @@
     <id>captcha</id>
     <name>CAPTCHA</name>
     <description>CAPTCHA Security Plugin</description>
-    <version>3.7.0</version>
-    <glfusionversion>2.0.0</glfusionversion>
-    <phpversion>7.0.0</phpversion>
+    <version>3.7.1</version>
+    <glfusionversion>2.0.1</glfusionversion>
+    <phpversion>7.4.0</phpversion>
     <url>http://www.glfusion.org</url>
     <maintainer>Mark R. Evans</maintainer>
 </plugin>

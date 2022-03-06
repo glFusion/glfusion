@@ -432,6 +432,7 @@ class Article
         $db = Database::getInstance();
 
         $retval = true;
+        $originalSID = false;
 
         // reset errors
         $this->errors = [];
@@ -467,27 +468,27 @@ class Article
             $this->statuscode = $this::STORY_ARCHIVE_ON_EXPIRE;
         }
 
-        if ( $this->featured != 1 ) {
+        if ( (int) $this->featured != 1 ) {
             $this->featured = 0;
         }
         if ( $this->statuscode == '' ) {
             $this->statuscode = 0;
         }
-        if ( $this->owner_id == '' || $this->owner_id == 1) {
+        if ( $this->owner_id == '' || (int) $this->owner_id == 1) {
             $this->owner_id = $_USER['uid'];
         }
 
-        if ($this->cmt_close_flag === 0) {
+        if ( (int) $this->cmt_close_flag == 0) {
             $comment_expire = null;
         } else {
             $comment_expire = $this->comment_expire->toMySQL(false);
         }
-        if ($this->frontpage !== 2) {
+        if ((int) $this->frontpage != 2) {
             $frontpage_date = null;
         } else {
             $frontpage_date = $this->frontpage_date->toMySQL(false);
         }
-        if ($this->statuscode == 0) {
+        if ((int) $this->statuscode == 0) {
             $expire_date = null;
         } else {
             $expire_date = $this->expire->toMySQL(false);
@@ -501,10 +502,10 @@ class Article
             /* if a featured, non-draft, that goes live straight away, unfeature
              * other stories in same topic:
              */
-            if ($this->featured == 1) {
+            if ((int) $this->featured == 1) {
                 // there can only be one non-draft featured story
-                if ($this->draft_flag == 0 && $this->date->toUnix() <= time()) {
-                    if ( $this->frontpage == 1 || $this->frontpage == 2 ) {
+                if ((int) $this->draft_flag == 0 && $this->date->toUnix() <= time()) {
+                    if ( (int) $this->frontpage == 1 || (int) $this->frontpage == 2 ) {
                         // un-feature any featured frontpage story
                         $db->conn->executeUpdate(
                             "UPDATE `{$_TABLES['stories']}` SET featured = 0
@@ -534,7 +535,7 @@ class Article
             }
 
             // existing story - check the SID to see if it has changed
-            if ($this->id !== 0) {
+            if ($this->id != 0) {
                 // check if the SID has changed..
 
                 $originalSID = $db->getItem(
@@ -737,8 +738,6 @@ class Article
             // done - commit the changes
             $ret = $db->conn->commit();
 
-            PLG_itemSaved($this->sid, 'article',$originalSID);
-
         } catch(\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
             // duplicate sid
             $db->conn->rollback();
@@ -754,6 +753,7 @@ class Article
         }
 
         if ($retval !== false) {
+            PLG_itemSaved($this->sid, 'article',$originalSID);
             $rc = $this->saveImages();
             if ( $rc !== true ) {
                 return false;
@@ -813,7 +813,7 @@ class Article
         } else {
             $this->uid = $_USER['uid'];
         }
-        if ( $this->featured != 1 ) {
+        if ( (int) $this->featured != 1 ) {
             $this->featured = 0;
         }
         if ( $this->statuscode == '' ) {
@@ -1067,7 +1067,7 @@ class Article
                     $storyVars['perm_anon']
                   );
 
-        if ($access === 0) {
+        if ($access == 0) {
             return $this::STORY_PERMISSION_DENIED;
         }
 
@@ -1112,7 +1112,7 @@ class Article
                     $this->perm_anon
                   );
 
-        if ($access === 0) {
+        if ($access == 0) {
             return $this::STORY_PERMISSION_DENIED;
         }
 
@@ -1633,7 +1633,7 @@ class Article
                         $this->frontpage_date = new \Date($value,$_USER['tzid']);
                     } else {
                         // source is DB
-                        if ($value == NULL || empty($value) || $value == '1000-01-01 00:00:00') {
+                        if ($value === NULL || empty($value) || $value == '1000-01-01 00:00:00') {
                             $value = time() + 2592000;
                         }
                         $dtTmp = new \Date($value,null);
@@ -1868,7 +1868,7 @@ class Article
                 break;
 
             case 'draft_flag' :
-                $retval = (bool) $this->draft_flag;
+                $retval = (int) $this->draft_flag;
                 break;
 
             case 'tid' :

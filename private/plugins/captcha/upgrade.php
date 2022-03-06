@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2021 by the following authors:
+*  Copyright (C) 2002-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -122,6 +122,9 @@ function captcha_upgrade()
                 $c = config::get_instance();
                 $c->set('gfxDriver',6,'captcha');
             }
+
+        case '3.7.0' :
+            // no changes
 
         default :
             captcha_update_config();

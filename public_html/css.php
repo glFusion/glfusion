@@ -15,7 +15,7 @@
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '2.0.0');
+    define('GVERSION', '2.0.1');
 }
 require_once 'data/siteconfig.php';
 if ( !isset($_GET['t']) ) {

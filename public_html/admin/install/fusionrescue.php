@@ -14,7 +14,7 @@
 
 error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
-define('GVERSION','2.0.0');
+define('GVERSION','2.0.1');
 
 if ( !file_exists('../../data/siteconfig.php')) die('Unable to locate siteconfig.php');
 

@@ -38,6 +38,6 @@ global $_DB_table_prefix, $_TABLES, $_CK_CONF;
 $_CK_CONF['pi_name']            = 'ckeditor';
 $_CK_CONF['pi_display_name']    = 'CKEditor';
 $_CK_CONF['pi_version']         = '1.2.0';
-$_CK_CONF['gl_version']         = '2.0.0';
+$_CK_CONF['gl_version']         = '2.0.1';
 $_CK_CONF['pi_url']             = 'https://www.glfusion.org/';
 ?>
