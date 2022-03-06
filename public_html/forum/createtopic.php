@@ -984,7 +984,7 @@ function FF_saveTopic( $forumData, $postData, $action )
         $editAllowed = false;
         if (forum_modPermission($forumData['forum'],$_USER['uid'],'mod_edit')) {
             $editAllowed = true;
-\glFusion\Admin\AdminAction::write('forum','edit_topic','Edit Topic: '.$editid . ' :: '.$postData['subject']);
+            \glFusion\Admin\AdminAction::write('forum','edit_topic','Edit Topic: '.$editid . ' :: '.$postData['subject']);
         } else {
             if ($_FF_CONF['allowed_editwindow'] > 0) {
                 $t1 = DB_getItem($_TABLES['ff_topic'],'date',"id=".(int) $editid);
@@ -1261,6 +1261,8 @@ function FF_saveTopic( $forumData, $postData, $action )
 
         $c = Cache::getInstance();
         $c->deleteItemsByTag('forumcb');
+        $c->deleteItemsByTag('forumindex');
+        $c->deleteItemsByTag('f_');
 
         if ( !COM_isAnonUser() ) {
             //NOTIFY - Checkbox variable in form set to "on" when checked and they don't already have subscribed to forum or topic

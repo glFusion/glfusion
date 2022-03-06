@@ -18,6 +18,7 @@
 - Fixed issue with story save not properly applying featured / comments settings
 - Resolved issue where future featured stories were not being added to the index page at the specified time
 - Fixed uninitialized variable error on new story save
+- Forum attachments using the lightbox attribute would not show immediately (were getting cached incorrectly)
 
 ### Changed
 

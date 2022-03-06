@@ -1,52 +1,29 @@
 <?php
-// +--------------------------------------------------------------------------+
-// | Forum Plugin for glFusion CMS                                            |
-// +--------------------------------------------------------------------------+
-// | format.inc.php                                                           |
-// |                                                                          |
-// | General formatting routines                                              |
-// +--------------------------------------------------------------------------+
-// | Copyright (C) 2008-2018 by the following authors:                        |
-// |                                                                          |
-// | Mark R. Evans          mark AT glfusion DOT org                          |
-// | Eric M. Kingsley       kingsley AT trains-n-town DOTcom                  |
-// |                                                                          |
-// | Copyright (C) 2000-2008 by the following authors:                        |
-// |                                                                          |
-// | Authors: Blaine Lang       - blaine AT portalparts DOT com               |
-// |                              www.portalparts.com                         |
-// | Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com              |
-// | Prototype & Concept :        Mr.GxBlock, www.gxblock.com                 |
-// +--------------------------------------------------------------------------+
-// |                                                                          |
-// | This program is free software; you can redistribute it and/or            |
-// | modify it under the terms of the GNU General Public License              |
-// | as published by the Free Software Foundation; either version 2           |
-// | of the License, or (at your option) any later version.                   |
-// |                                                                          |
-// | This program is distributed in the hope that it will be useful,          |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of           |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            |
-// | GNU General Public License for more details.                             |
-// |                                                                          |
-// | You should have received a copy of the GNU General Public License        |
-// | along with this program; if not, write to the Free Software Foundation,  |
-// | Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.          |
-// |                                                                          |
-// +--------------------------------------------------------------------------+
+/**
+* glFusion CMS - Forum Plugin
+*
+* General Formatting routines
+*
+* @license GNU General Public License version 2 or later
+*     http://www.opensource.org/licenses/gpl-license.php
+*
+*  Copyright (C) 2008-2022 by the following authors:
+*   Mark R. Evans       mark AT glfusion DOT org
+*   Eric M. Kingsley    kingsley AT trains-n-town DOT com
+*
+*  Based on prior work Copyright (C) 2000-2008 by the following authors:
+*   Blaine Lang          blaine AT portalparts DOT com
+*                        www.portalparts.com
+*   Version 1.0 co-developer:    Matthew DeWyer, matt@mycws.com
+*   Prototype & Concept :        Mr.GxBlock, www.gxblock.com
+*
+*/
 
 // this file can't be used on its own
 if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-// Magic url types
-/*
-define('MAGIC_URL_EMAIL', 1);
-define('MAGIC_URL_FULL', 2);
-define('MAGIC_URL_LOCAL', 3);
-define('MAGIC_URL_WWW', 4);
-*/
 define('DISABLE_BBCODE',1);
 define('DISABLE_SMILIES',2);
 define('DISABLE_URLPARSE',4);
@@ -172,7 +149,7 @@ function FF_formatTextBlock($str,$postmode='html',$mode='',$status=0,$query='')
 
     $enableCache = false;
     $cacheTTL = 0;
-    if ($mode != 'preview') {
+    if ($mode != 'preview' && $mode != 'text') {
         $enableCache = true;
         $cacheTTL = 3600;
     }
