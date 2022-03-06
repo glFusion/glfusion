@@ -17,10 +17,12 @@
 - FileMgmt plugin: Improved handling of category selection - remember category between page loads
 - Fixed issue with story save not properly applying featured / comments settings
 - Resolved issue where future featured stories were not being added to the index page at the specified time
+- Fixed uninitialized variable error on new story save
 
 ### Changed
 
 - Improved the WYSIWYG editor display so it better matches the final layout
+- Improved on several error messages to provide a user friendly message
 
 ## v2.0.0 (February 27, 2022)
 

@@ -2675,7 +2675,7 @@ function COM_emailNotification( $msgData = array() )
 
     // ensure we have something to send...
     if ( !isset($msgData['htmlmessage']) && !isset($msgData['textmessage']) ) {
-        Log::write('system',Log::ERROR,"COM_emailNotification() - No message data provided");
+        Log::write('system',Log::WARNING,"COM_emailNotification() - No message text was provided - nothing to send.");
         return false; // no message defined
     }
     if ( empty($msgData['htmlmessage']) && empty($msgData['textmessage']) ) {
@@ -2683,7 +2683,7 @@ function COM_emailNotification( $msgData = array() )
         return false; // no text in either...
     }
     if ( !isset($msgData['subject']) || empty($msgData['subject']) ) {
-        Log::write('system',Log::ERROR,"COM_emailNotification() - No subject provided");
+        Log::write('system',Log::WARNING,"COM_emailNotification() - No email subject was provided - not sending notification.");
         return false; // must have a subject
     }
 
@@ -5550,8 +5550,7 @@ function COM_getLanguageId($language = '')
 
         if ($lang_id === false) {
             // that looks like a misconfigured $_CONF['language_files'] array
-            Log::write('system',Log::ERROR,'Language "' . $language . '" not found in $_CONF[\'language_files\'] array!');
-
+            Log::write('system',Log::WARNING,'Language "' . $language . '" not found in Multiple Language Support configured language files.');
             $lang_id = ''; // not much we can do here ...
         }
     }
