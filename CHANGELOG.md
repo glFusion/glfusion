@@ -19,6 +19,7 @@
 - Resolved issue where future featured stories were not being added to the index page at the specified time
 - Fixed uninitialized variable error on new story save
 - Forum attachments using the lightbox attribute would not show immediately (were getting cached incorrectly)
+- Media Gallery Plugin: Resolved issue where the Lightbox slideshow did not display when viewing a media item
 
 ### Changed
 
