@@ -6170,7 +6170,7 @@ if ($counter > 12) {
 SESS_setVar('404counter',$counter);
 */
 
-    if ( isset($_CONF['enable_404_logging']) || $_CONF['enable_404_logging'] == true ) {
+    if ( isset($_CONF['enable_404_logging']) && $_CONF['enable_404_logging'] == true ) {
         if (!isset($_USER['uid']) || !isset($_USER['username'])) {
             $_USER['username'] = 'anonymous';
         }
