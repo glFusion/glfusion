@@ -1,0 +1,181 @@
+{# begin {templatelocation} #}
+<script src="{site_url}/javascript/spectrum.js"></script>
+<link rel="stylesheet" href="{site_url}/javascript/spectrum.css" />
+<script>
+function showhideTypeDiv(sel)
+{
+	if (sel == "img") {
+		$("#type_img").css("display", "");
+		$("#type_css").css("display", "none");
+	} else {
+		$("#type_img").css("display", "none");
+		$("#type_css").css("display", "");
+	}
+}
+$(document).ready(function() {
+	showhideTypeDiv("{type}");
+});
+</script>
+
+<form action="{site_admin_url}/badges.php" method="post"
+	enctype="multipart/form-data"
+	class="uk-form uk-form-horizontal">
+	<input type="hidden" name="bid" value="{bid}" />
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="badge_grp">{$LANG_GF01['badge_grp']}</label>
+		<div class="uk-form-controls">
+			<select id="badge_grp" name="badge_grp">
+				<option value="">--None--</option>
+				{grp_sel}
+			</select>
+			<input class="uk-input uk-form-width-medium" type="text" id="badge_grp_txt" name="badge_grp_txt" value="" placeholder="{$LANG_ADMIN['create_new']}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="order">{$LANG_GF93['order']}</label>
+		<div class="uk-form-controls">
+			<input class="uk-input uk-form-width-small" type="text" id="order" name="sortorder" value="{order}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="gl_grp">{$LANG_ADMIN['site_grp']}</label>
+		<div class="uk-form-controls">
+			<select class="uk-select uk-form-width-medium" name="gl_grp">
+				{grp_select}
+			</select>
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="dscp">{$LANG_ADMIN['description']}</label>
+		<div class="uk-form-controls">
+			<input class="uk-input" type="text" id="dscp" name="dscp" size="40" value="{dscp}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label">{$LANG_ADMIN['badge_type']}</label>
+		<div class="uk-form-controls">
+			<input class="uk-radio" name="type" type="radio" value="img" {chk_img} onclick="showhideTypeDiv('img');" /> {$LANG_ADMIN['badge_image']}
+			&nbsp;&nbsp;&nbsp;<input class="uk-radio" name="type" type="radio" value="css" {chk_css} onclick="showhideTypeDiv('css');" /> CSS
+		</div>
+	</div>
+
+	<div id="type_img" class="uk-form-row uk-margin" style="display:none">
+		<label class="uk-form-label" for="image">{$LANG_ADMIN['badge_image']}</label>
+		<div class="uk-form-controls">
+{!if image_sel}
+			<select name="image">
+			{image_sel}
+			</select>
+{!endif}
+			<input id="imgfile" name="badge_imgfile"type="file" accept="image/*" />
+		</div>
+	</div>
+
+	<div id="type_css" class="uk-form-row uk-margin" style="display:none">
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">{$LANG_ADMIN['sample_color']}</label>
+			<div class="uk-form-controls">
+				<span id="sample" class="uk-badge ff-badge" style="background-color:{bgcolor};color:{fgcolor};">
+					{$LANG_GF01['sample_color']}
+				</span>
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label" for=bgcolor>{$LANG_ADMIN['bgcolor']}</label>
+			<div class="uk-form-controls">
+				<input class="uk-input uk-form-width-medium" type="text" id="bgcolor" name="bgcolor" value="{bgcolor}">
+			</div>
+		</div>
+
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label" for=fgcolor>{$LANG_ADMIN['fgcolor']}</label>
+			<div class="uk-form-controls">
+				<input class="uk-input uk-form-width-medium" type="text" id="fgcolor" name="fgcolor" value="{fgcolor}">
+			</div>
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="enabled">{$LANG_ADMIN['enabled']}</label>
+		<div class="uk-form-controls">
+			<input class="uk-checkbox" type="checkbox" id="enabled" name="enabled" value="1" {ena_chk}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="inherit">{$LANG_ADMIN['incl_inherited']}</label>
+		<div class="uk-form-controls">
+			<input class="uk-checkbox" type="checkbox" id="inherit" name="inherit" value="1" {inherit_chk}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label"></label>
+		<div class="uk-form-controls">
+			<button type="submit" class="uk-button uk-button-success" name="save" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
+			<button type="reset" class="uk-button">{$LANG_ADMIN['reset']}</button>
+			<button type="submit" class="uk-button uk-button-danger" name="delete" value="{$LANG_ADMIN['delete']}"
+			onclick="return confirm('{$LANG_ADMIN['delete_confirm']}');">{$LANG_ADMIN['delete']}</button>
+			<a href="{site_admin_url}/badges.php" class="uk-button uk-button-primary">{$LANG_ADMIN['cancel']}</a>
+		</div>
+	</div>
+
+</form>
+<script>
+	$("#fgcolor").spectrum({
+		color: "{fgcolor}",
+		preferredFormat: "hex",
+		change: function(color) {
+			$('#sample').css('color',color.toHexString())
+		},
+	showPaletteOnly: true,
+	togglePaletteOnly: true,
+	togglePaletteMoreText: '{$LANG_GF01['more']}',
+	togglePaletteLessText: '{$LANG_GF01['less']}',
+	cancelText: '{$LANG_ADMIN['cancel']}',
+	chooseText: '{$LANG_GF01['choose']}',
+	showInput: true,
+	palette: [
+		["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+		["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+		["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"],
+		["#ea9999","#f9cb9c","#ffe599","#b6d7a8","#a2c4c9","#9fc5e8","#b4a7d6","#d5a6bd"],
+		["#e06666","#f6b26b","#ffd966","#93c47d","#76a5af","#6fa8dc","#8e7cc3","#c27ba0"],
+		["#c00","#e69138","#f1c232","#6aa84f","#45818e","#3d85c6","#674ea7","#a64d79"],
+		["#900","#b45f06","#bf9000","#38761d","#134f5c","#0b5394","#351c75","#741b47"],
+		["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
+	]
+	});
+	$("#bgcolor").spectrum({
+		color: "{bgcolor}",
+		preferredFormat: "hex",
+		preferredFormat: "hex",
+		change: function(color) {
+			$('#sample').css('background',color.toHexString())
+		},
+	showPaletteOnly: true,
+	togglePaletteOnly: true,
+	togglePaletteMoreText: '{$LANG_GF01['more']}',
+	togglePaletteLessText: '{$LANG_GF01['less']}',
+	cancelText: '{$LANG_ADMIN['cancel']}',
+	chooseText: '{$LANG_GF01['choose']}',
+	showInput: true,
+	palette: [
+		["#000","#444","#666","#999","#ccc","#eee","#f3f3f3","#fff"],
+		["#f00","#f90","#ff0","#0f0","#0ff","#00f","#90f","#f0f"],
+		["#f4cccc","#fce5cd","#fff2cc","#d9ead3","#d0e0e3","#cfe2f3","#d9d2e9","#ead1dc"],
+		["#ea9999","#f9cb9c","#ffe599","#b6d7a8","#a2c4c9","#9fc5e8","#b4a7d6","#d5a6bd"],
+		["#e06666","#f6b26b","#ffd966","#93c47d","#76a5af","#6fa8dc","#8e7cc3","#c27ba0"],
+		["#c00","#e69138","#f1c232","#6aa84f","#45818e","#3d85c6","#674ea7","#a64d79"],
+		["#900","#b45f06","#bf9000","#38761d","#134f5c","#0b5394","#351c75","#741b47"],
+		["#600","#783f04","#7f6000","#274e13","#0c343d","#073763","#20124d","#4c1130"]
+	]
+	});
+</script>
+{# end {templatelocation} #}

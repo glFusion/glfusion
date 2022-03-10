@@ -1675,6 +1675,34 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             $current_fusion_version = '2.0.0';
 
         case '2.0.0' :
+            $_SQL[] = "CREATE TABLE `{$_TABLES['badges']}` (
+              `bid` int(11) NOT NULL AUTO_INCREMENT,
+              `badge_grp` varchar(20) NOT NULL DEFAULT '',
+              `sortorder` int(3) NOT NULL DEFAULT 999,
+              `enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
+              `inherit` tinyint(1) unsigned NOT NULL DEFAULT 1,
+              `gl_grp` mediumint(8) NOT NULL,
+              `type` varchar(10) DEFAULT 'img',
+              `data` varchar(255) DEFAULT NULL,
+              `dscp` varchar(40) DEFAULT NULL,
+              PRIMARY KEY (`bid`),
+              KEY `grp` (`badge_grp`,`sortorder`)
+            ) ENGINE=MyISAM";
+            if ($use_innodb) {
+                $statements = count($_SQL);
+                for ($i = 0; $i < $statements; $i++) {
+                    $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+                }
+            }
+            $_SQL[] = "INSERT INTO {$_TABLES['badges']}
+                (`bid`, `badge_grp`, `sortorder`, `enabled`, `gl_grp`, `type`, `data`, `dscp`)
+                VALUES
+i               (1, '1_site', 20, 1, 13, 'css', 'a:2:{s:7:\"fgcolor\";s:7:\"#ffffff\";s:7:\"bgcolor\";s:7:\"#009dd8\";}', 'Site Member'),
+                (2, '1_site', 10, 1, 1, 'css', 'a:2:{s:7:\"fgcolor\";s:7:\"#ffffff\";s:7:\"bgcolor\";s:7:\"#ff0000\";}', 'Site Admin');";
+
+            foreach ($_SQL as $sql) {
+                DB_query($sql,1);
+            }
 
             $current_fusion_version = '2.0.1';
 

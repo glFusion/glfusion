@@ -26,6 +26,7 @@ $_TABLES['article_images']      = $_DB_table_prefix . 'article_images';
 $_TABLES['autotag_perm']        = $_DB_table_prefix . 'autotag_perm';
 $_TABLES['autotag_usage']       = $_DB_table_prefix . 'autotag_usage';
 $_TABLES['autotags']            = $_DB_table_prefix . 'autotags';
+$_TABLES['badges']              = $_DB_table_prefix . 'badges';
 $_TABLES['blocks']              = $_DB_table_prefix . 'blocks';
 $_TABLES['commentcodes']        = $_DB_table_prefix . 'commentcodes';
 $_TABLES['commentedits']        = $_DB_table_prefix . 'commentedits';

@@ -1,0 +1,4 @@
+{# begin {templatelocation} #}
+<script src="{site_url}/javascript/ajax_toggle.js"></script>
+{admin_list}
+{# end {templatelocation} #}

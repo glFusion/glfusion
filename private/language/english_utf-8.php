@@ -144,6 +144,7 @@ $LANG01 = array(
     129 => 'Configuration',
     130 => 'Webservices',			// depreciated
     131 => 'Features',
+    132 => 'Badges',
     500 => 'Please remove the admin/install/ directory after installing or upgrading your site!',
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
@@ -2049,6 +2050,20 @@ $LANG_ADMIN = array(
     'feature_list' => 'Feature List',
     'core_only' => 'Show Only Core Features',
     'assigned_groups' => 'Assigned Groups',
+    'order' => 'Order',
+    'badge_type' => 'Badge Type',
+    'badge_grp' => 'Badge Group',
+    'badge_image' => 'Badge Image',
+    'site_grp' => 'Site Group',
+    'delete_confirm' => 'Are you sure you want to delete this item?',
+    'item_updated' => 'The item has been updated.',
+    'update_failed' => 'The update failed. Check the error log.',
+    'description' => 'Description',
+    'save_error' => 'There was an error saving the item.',
+    'bgcolor' => 'Background Color',
+    'fgcolor' => 'Foreground Color',
+    'sample_color' => 'Sample Color',
+    'incl_inherited' => 'Include Inherited Membership?',
 );
 
 ###############################################################################

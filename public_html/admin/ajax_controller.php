@@ -21,6 +21,26 @@ if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];
         switch ( $action ) {
+            case 'admin_toggle':
+                switch ($_POST['component']) {
+                case 'badges':
+                    $oldval = (int)$_POST['oldval'];
+                    $newval = glFusion\Badges\Badge::Toggle(
+                        (int)$_POST['id'],
+                        $_POST['field'],
+                        $oldval
+                    );
+                    break;
+                }
+                $status = $newval != $oldval;   // success if changed
+                $retval = array(
+                    'status' => $status,
+                    'message' => $status ? $LANG_ADMIN['item_updated'] : $LANG_ADMIN['update_failed'],
+                    'newval' => $newval,
+                );
+                echo json_encode($retval);
+                exit;
+                break;
             case "test":
                 test_function();
                 break;

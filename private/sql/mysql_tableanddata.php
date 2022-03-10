@@ -732,6 +732,21 @@ $_SQL[] = "CREATE TABLE `{$_TABLES['search_stats']}` (
 ) ENGINE=MyISAM;
 ";
 
+$_SQL[] = "CREATE TABLE `{$_TABLES['badges']}` (
+  `bid` int(11) NOT NULL AUTO_INCREMENT,
+  `badge_grp` varchar(20) NOT NULL DEFAULT '',
+  `sortorder` int(3) NOT NULL DEFAULT 999,
+  `enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `inherit` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `gl_grp` mediumint(8) NOT NULL,
+  `type` varchar(10) DEFAULT 'css',
+  `data` varchar(255) DEFAULT NULL,
+  `dscp` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`bid`),
+  KEY `grp` (`badge_grp`,`sortorder`)
+) ENGINE=MyISAM;
+";
+
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (1,3) ";    // story.edit to Story Admin
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (2,3) ";    // story.moderate to  Story Admin
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (3,3) ";    // story.submit to Story Admin
@@ -1046,4 +1061,9 @@ $_DATA[] = "INSERT INTO " . $_TABLES['autotags'] . " (tag, description, is_enabl
 $_DATA[] = "INSERT INTO {$_TABLES['themes']} (theme, logo_type, display_site_slogan) VALUES
     ('_default', 2, 0),
     ('cms', -1, -1)";
+
+$_DATA[] = "INSERT INTO {$_TABLES['badges']} (`bid`, `badge_grp`, `sortorder`, `enabled`, `gl_grp`, `type`, `data`, `dscp`) VALUES
+    (1, '1_site', 20, 1, 13, 'css', 'a:2:{s:7:\"fgcolor\";s:7:\"#ffffff\";s:7:\"bgcolor\";s:7:\"#009dd8\";}', 'Site Member'),
+    (2, '1_site', 10, 1, 1, 'css', 'a:2:{s:7:\"fgcolor\";s:7:\"#ffffff\";s:7:\"bgcolor\";s:7:\"#ff0000\";}', 'Site Admin');";
+
 ?>

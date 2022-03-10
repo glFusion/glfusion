@@ -1935,10 +1935,12 @@ function forumPLG_getMemberBadge($uid) {
         return $cache[$uid];
     }
 
-    $badges = Forum\Badge::getUserBadges($uid);
+    //$badges = Forum\Badge::getUserBadges($uid);
+    $badges = glFusion\Badges\Badge::getUserBadges($uid);
     $badge_urls = array();
     foreach ($badges as $badge) {
-        $badge_urls[] = $badge->html;
+        //$badge_urls[] = $badge->html;
+        $badge_urls[] = $badge->getBadgeHTML();
     }
     $retval .= implode('<br />', $badge_urls);
 
