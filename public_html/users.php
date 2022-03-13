@@ -23,6 +23,9 @@ require_once 'lib-common.php';
 
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
+use \glFusion\Auth;
+use \glFusion\Auth\Status;
+use \Delight\Cookie\Session;
 
 USES_lib_user();
 
@@ -898,103 +901,111 @@ function USER_createuser($info = array())
             $retval = emailpassword ($data['username'],$data['passwd']);
         }
     } else {
-        // oauth user
-        $users = SESS_getVar('users');
-        $userinfo = SESS_getVar('userinfo');
+//@TODO - this could be a remote user (i.e.; LDAP - we assume oauth but this may not be true).
 
-        if ( !isset($users['homepage']) ) $users['homepage'] = '';
-        $users['homepage'] = COM_truncate($users['homepage'],255);
+        // validate the access token prior to creating the user
+        $oauth = new \glFusion\Auth\AuthOauth($info['oauth_service']);
+        $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=' . $info['oauth_service'];
+        $oauth->setRedirectURL($callback_url);
+
+        $is_valid_token = $oauth->checkAccessToken();
+        if ( $is_valid_token === true ) {
+            $userinfo   = $oauth->getOauthUserinfo();
+            $users      = $oauth->getUserData($userinfo);
+
+            if ( !isset($users['homepage']) ) $users['homepage'] = '';
+            $users['homepage'] = COM_truncate($users['homepage'],255);
 
 //@TODO - fix the var names
-        $uid = USER_createAccount($data['username'], $data['email'], '', $data['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
+            $uid = USER_createAccount($data['username'], $data['email'], '', $data['fullname'], $users['homepage'], $users['remoteusername'], $users['remoteservice']);
 //@TODO should probably display an error
-        if ( $uid == NULL ) {
-            Log::write('system',Log::ERROR,"USER_createAccount() failed to return valid UID");
-            echo COM_refresh($_CONF['site_url']);
-        }
+            if ( $uid == NULL ) {
+                Log::write('system',Log::ERROR,"USER_createAccount() failed to return valid UID");
+                echo COM_refresh($_CONF['site_url']);
+            }
 
-        $oauth = new OAuthConsumer($info['oauth_service']);
+            if (is_array($users)) {
+                $oauth->_DBupdate_users($uid, $users);
+            }
+            if (is_array($userinfo)) {
+                $oauth->_DBupdate_userinfo($uid, $userinfo);
+            }
+//@TODO - end of todo
+            $status = $db->getItem($_TABLES['users'],'status',array('uid' => $uid),array(Database::INTEGER));
+            $remote_grp = $db->getItem($_TABLES['groups'], 'grp_id', array('grp_name' => 'Remote Users'), array(Database::STRING));
 
-        if (is_array($users)) {
-            $oauth->_DBupdate_users($uid, $users);
-        }
-        if (is_array($userinfo)) {
-            $oauth->_DBupdate_userinfo($uid, $userinfo);
-        }
-
-        $status = $db->getItem($_TABLES['users'],'status',array('uid' => $uid),array(Database::INTEGER));
-        $remote_grp = $db->getItem($_TABLES['groups'], 'grp_id', array('grp_name' => 'Remote Users'), array(Database::STRING));
-
-        $db->conn->insert(
-                $_TABLES['group_assignments'],
-                array(
-                    'ug_main_grp_id' => $remote_grp,
-                    'ug_uid' => $uid
-                ),
-                array(
-                    Database::INTEGER,
-                    Database::INTEGER
-                )
-        );
-
-        if ( isset($users['socialuser']) ) {
-            $social_row = $db->conn->fetchAssoc(
-                            "SELECT * FROM `{$_TABLES['social_follow_services']}`
-                             WHERE service_name=? AND enabled=1",
-                            array($users['socialservice']),
-                            array(Database::STRING)
+            $db->conn->insert(
+                    $_TABLES['group_assignments'],
+                    array(
+                        'ug_main_grp_id' => $remote_grp,
+                        'ug_uid' => $uid
+                    ),
+                    array(
+                        Database::INTEGER,
+                        Database::INTEGER
+                    )
             );
-            if ($social_row !== false && $social_row !== null) {
-                $sql  = "REPLACE INTO `{$_TABLES['social_follow_user']}` (ssid,uid,ss_username)
-                         VALUES (?, ?, ?)";
-                try {
-                    $db->conn->executeUpdate(
-                            $sql,
-                            array(
-                                $social_row['ssid'],
-                                $uid,
-                                $users['socialuser']
-                            ),
-                            array(
-                                Database::STRING,
-                                Database::INTEGER,
-                                Database::STRING
-                            )
-                    );
-                } catch(Throwable $e) {
-                    // ignore error
+
+            if ( isset($users['socialuser']) ) {
+                $social_row = $db->conn->fetchAssoc(
+                                "SELECT * FROM `{$_TABLES['social_follow_services']}`
+                                WHERE service_name=? AND enabled=1",
+                                array($users['socialservice']),
+                                array(Database::STRING)
+                );
+                if ($social_row !== false && $social_row !== null) {
+                    $sql  = "REPLACE INTO `{$_TABLES['social_follow_user']}` (ssid,uid,ss_username)
+                            VALUES (?, ?, ?)";
+                    try {
+                        $db->conn->executeUpdate(
+                                $sql,
+                                array(
+                                    $social_row['ssid'],
+                                    $uid,
+                                    $users['socialuser']
+                                ),
+                                array(
+                                    Database::STRING,
+                                    Database::INTEGER,
+                                    Database::STRING
+                                )
+                        );
+                    } catch(Throwable $e) {
+                        // ignore error
+                    }
+                }
+            }
+
+            // check and see if we need to merge the account
+            if (isset($data['email']) && $data['email'] != '') {
+                $row = $db->conn->fetchAssoc(
+                            "SELECT * FROM `{$_TABLES['users']}`
+                            WHERE account_type = ".LOCAL_USER." AND email=? AND uid > 1",
+                            array($data['email']),
+                            array(Database::STRING)
+                );
+                if ($row !== false && $row !== null) {
+                    $remoteUID = $uid;
+                    $localUID  = $row['uid'];
+                    $mergeAccount = 1;
                 }
             }
         }
 
-        // check and see if we need to merge the account
-        if (isset($data['email']) && $data['email'] != '') {
-            $row = $db->conn->fetchAssoc(
-                        "SELECT * FROM `{$_TABLES['users']}`
-                         WHERE account_type = ".LOCAL_USER." AND email=? AND uid > 1",
-                        array($data['email']),
-                        array(Database::STRING)
-            );
-            if ($row !== false && $row !== null) {
-                $remoteUID = $uid;
-                $localUID  = $row['uid'];
-                $mergeAccount = 1;
+        if ($_CONF['usersubmission'] == 1) {
+            if ((int) ($db->getItem ($_TABLES['users'], 'status', array('uid' =>  $uid),Database::INTEGER)) == USER_ACCOUNT_AWAITING_APPROVAL) {
+                echo COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
             }
         }
-    }
 
-    if ($_CONF['usersubmission'] == 1) {
-        if ((int) ($db->getItem ($_TABLES['users'], 'status', array('uid' =>  $uid),Database::INTEGER)) == USER_ACCOUNT_AWAITING_APPROVAL) {
-            echo COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
+//@TODO - we need to leverage the Auth class to finalize the login
+//        if ( $uid != null ) {
+//            SESS_completeLogin($uid,0);
+//        }
+
+        if ( $mergeAccount ) {
+            USER_mergeAccountScreen($remoteUID, $localUID);
         }
-    }
-
-    if ( $uid != null ) {
-        SESS_completeLogin($uid,0);
-    }
-
-    if ( $mergeAccount ) {
-        USER_mergeAccountScreen($remoteUID, $localUID);
     }
 
     echo COM_refresh($_CONF['site_url']);
@@ -1288,33 +1299,13 @@ function userLogout()
 {
     global $_CONF, $_TABLES, $_USER, $_COOKIE;
 
-    $db = Database::getInstance();
+    $_UserInstance = new Auth\Auth();
 
-    if (!empty ($_USER['uid']) AND $_USER['uid'] > 1) {
-        try {
-            $db->conn->update(
-                        $_TABLES['users'],
-                        array('remote_ip' => ''),
-                        array('uid' => $_USER['uid'])
-            );
-        } catch(Throwable $e) {
-            // ignore any errors
-        }
-        SESS_endUserSession ($_USER['uid']);
-        PLG_logoutUser ($_USER['uid']);
-    }
-    SEC_setCookie ($_CONF['cookie_session'], '', time() - 10000,
-                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                   $_CONF['cookiesecure'],true);
-    SEC_setCookie ($_CONF['cookie_password'], '', time() - 10000,
-                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                   $_CONF['cookiesecure'],true);
-    SEC_setCookie ($_CONF['cookie_name'], '', time() - 10000,
-                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                   $_CONF['cookiesecure'],true);
+    $_UserInstance->logOut();
+    PLG_logoutUser ($_USER['uid']);
     if ( isset($_COOKIE['token'])) {
         $token = $_COOKIE['token'];
-        $db->conn->delete(
+        Database::getInstance()->conn->delete(
                     $_TABLES['tokens'],
                     array('token' => $token),
                     array(Database::STRING)
@@ -1323,7 +1314,7 @@ function userLogout()
                        $_CONF['cookie_path'], $_CONF['cookiedomain'],
                        $_CONF['cookiesecure'],true);
     }
-    $db->conn->delete($_TABLES['tokens'],array('owner_id' => $_USER['uid']),array(Database::INTEGER));
+    Database::getInstance()->conn->delete($_TABLES['tokens'],array('owner_id' => $_USER['uid']),array(Database::INTEGER));
     echo COM_refresh($_CONF['site_url'] . '/index.php?msg=8');
 }
 
@@ -1627,24 +1618,31 @@ function validateTFA()
     if (!isset($_CONF['enable_twofactor']) || !$_CONF['enable_twofactor']) {
         return true;
     }
-    $_USER['uid'] = (int) COM_applyFilter($_POST['uid'],true);
+    $retval = false;
+
+    $_UserInstance = new Auth\Auth();
+
+    $_USER['uid'] = (int) filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT);
+
     if ( _sec_checkToken() ) {
-        // Check login speed limit
-        COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
-        if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
+        try {
+            // throttle the specified resource or feature to *3* requests per *120* seconds
+            $_UserInstance->throttle([ 'tfa_validation' ], 3, 120);
+        }
+        catch (\glFusion\Auth\TooManyRequestsException $e) {
+            // operation cancelled
             displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
-        } else {
-            COM_updateSpeedlimit('login');
-            $tfaCode = COM_applyFilter($_POST['tfacode']);
-            $tfa = \TwoFactor::getInstance($_USER['uid']);
-            if ($tfa->validateCode($tfaCode)) {
-                return true;
-            } else {
-                return false;
-            }
+            exit;
+        }
+
+        $tfaCode = COM_applyFilter($_POST['tfacode']);
+        $tfa = \TwoFactor::getInstance($_USER['uid']);
+        if ($tfa->validateCode($tfaCode)) {
+            Session::delete('2fa_attempt');
+            $retval = true;
         }
     }
-    return false;
+    return $retval;
 }
 
 
@@ -1711,11 +1709,8 @@ switch ($mode) {
         $local_login = false;
         $newTwitter  = false;
         $authenticated = 0;
-        // prevent dictionary attacks on passwords
-        COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
-        if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
-            displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
-        }
+
+        $_UserInstance = new Auth\Auth();
 
         $loginname = '';
         if (isset ($_POST['loginname'])) {
@@ -1735,91 +1730,75 @@ switch ($mode) {
         }
 
         $uid = '';
+        /** Check for local login first */
         if (!empty($loginname) && !empty($passwd) && empty($service)) {
             if (empty($service) && $_CONF['user_login_method']['standard']) {
 
-                // check captcha here
-                $msg = PLG_itemPreSave ('loginform', $loginname);
-                if (!empty ($msg)) {
-                    COM_setMsg($msg,'error');
+                try {
+                    $_UserInstance->loginWithUsername($loginname, $passwd,0,array($_UserInstance,'userLoginBeforeSuccess'));
+                    $status = $_UserInstance->getStatus();
+                } catch (Auth\InvalidPasswordException | Auth\UnknownUsernameException $e) {
+                    COM_setMsg($MESSAGE[81],'error');
                     $status = -2;
-                } else {
-                    COM_updateSpeedlimit('login');
-                    $status = SEC_authenticate($loginname, $passwd, $uid);
-                    if ($status == USER_ACCOUNT_ACTIVE) {
-                        $local_login = true;
-                    }
+                } catch (Auth\TooManyRequestsException $e) {
+                    displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
+                } catch (Auth\AttemptCancelledException $e) {
+                    // the attempt was cancelled - possibly CAPTCHA failed or other validation before login failed
+                    $status = -2;
+                } catch (Auth\AccountPendingReviewException $e) {
+                    $status = USER_ACCOUNT_AWAITING_APPROVAL;
+                } catch (Auth\EmailNotVerifiedException $e) {
+                    $status = USER_ACCOUNT_AWAITING_VERIFICATION;
+                }
+
+                if ($status == Status::NORMAL) {
+                    $local_login = true;
                 }
             } else {
-                Log::write('system',Log::ERROR,"ERROR: Username and Password were posted, but local authentication is disabled - check configuration settings");
+                Log::write('system',Log::ERROR,"ERROR: Username and Password were provided, but local authentication is disabled - check configuration settings");
                 $status = -2;
             }
+            // begin distributed (3rd party) remote authentication method
 
-        // begin distributed (3rd party) remote authentication method
-
-        } elseif (!empty($loginname) && $_CONF['user_login_method']['3rdparty'] &&
+        }
+        /** Check for 3rd party login */
+        elseif (!empty($loginname) && $_CONF['user_login_method']['3rdparty'] &&
             ($_CONF['usersubmission'] == 0) && ($service != '')) {
             COM_updateSpeedlimit('login');
             //pass $loginname by ref so we can change it ;-)
             $status = SEC_remoteAuthentication($loginname, $passwd, $service, $uid);
 
         // end distributed (3rd party) remote authentication method
-
-        // begin OAuth authentication method(s)
-
-        } elseif ($_CONF['user_login_method']['oauth'] && isset($_GET['oauth_login'])) {
-            if ( !SESS_isSet('oauth_redirect') && isset($_SERVER['HTTP_REFERER']) ) {
-                if ( substr($_SERVER['HTTP_REFERER'], 0,strlen($_CONF['site_url'])) == $_CONF['site_url']) {
-                    SESS_setVar('oauth_redirect',$_SERVER['HTTP_REFERER']);
-                }
+        }
+        /** check for Oauth Login */
+        elseif ($_CONF['user_login_method']['oauth'] && isset($_GET['oauth_login'])) {
+            try {
+                $_UserInstance->loginWithOauth(0, array($_UserInstance,'userLoginBeforeSuccess'));
+                $status = $_UserInstance->getStatus();
+            } catch (\Throwable $e) {
+                COM_updateSpeedlimit('login');
+                Log::write('system',Log::ERROR,"OAuth Error: " . $e->getMessage());
+                COM_setMsg($MESSAGE[111],'error');
             }
-            $modules = SEC_collectRemoteOAuthModules();
-            $active_service = (count($modules) == 0) ? false : in_array(COM_applyFilter($_GET['oauth_login']), $modules);
-            if (!$active_service) {
-                $status = -1;
-                Log::write('system',Log::ERROR,"OAuth login failed - there was no consumer available for the service:" . COM_applyFilter($_GET['oauth_login']));
-            } else {
-                $query = array_merge($_GET, $_POST);
-                $service = COM_applyFilter($query['oauth_login']);
+        //  end OAuth authentication method
 
-                COM_clearSpeedlimit($_CONF['login_speedlimit'], $service);
-                if ( COM_checkSpeedlimit($service, $_CONF['login_attempts']) > 0 ) {
-                    displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
-                }
+        }
+        // check if we are authenticating the multi factor authentication
+        elseif ($mode == 'tfa' ) {
+            $authenticated = 1;
 
-                $consumer = new OAuthConsumer($service);
-
-                $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=' . $service;
-
-                $consumer->setRedirectURL($callback_url);
-                $oauth_userinfo = $consumer->authenticateUser();
-                if ( $oauth_userinfo === false ) {
-                    COM_updateSpeedlimit('login');
-                    Log::write('system',Log::ERROR,"OAuth Error: " . $consumer->error);
-                    COM_setMsg($MESSAGE[111],'error');
-                } else {
-                    if ($consumer->doFinalLogin($oauth_userinfo,$status,$uid) === null) {
-                        Log::write('system',Log::ERROR,"Oauth: Error creating new user in OAuth authentication");
-                        COM_setMsg($MESSAGE[111],'error');
-                    }
-                    $_SERVER['HTTP_REFERER'] = SESS_getVar('oauth_redirect');
-                    SESS_unSet('oauth_redirect');
-                }
-            }
-
-        //  end OAuth authentication method(s)
-
-        } elseif ($mode == 'tfa' ) {
-            if ( !validateTFA() ) {
-                $authenticated = 0;
-                COM_setMsg($LANG_TFA['error_invalid_code'],'error',true);
-            } else {
-                $authenticated = 1;
-            }
             $uid = (int) filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT);
 
+            try {
+                $_UserInstance->authenticateUserTFA($uid);
+            } catch (\Throwable $e) {
+                $authenticated = 0;
+                COM_setMsg($LANG_TFA['error_invalid_code'],'error',true);
+                SEC_2FAForm($uid);
+            }
+
             $row = $db->conn->fetchAssoc(
-                    "SELECT status,account_type FROM `{$_TABLES['users']}` WHERE uid=?",
+                    "SELECT * FROM `{$_TABLES['users']}` WHERE uid=?",
                     array($uid),
                     array(Database::INTEGER)
             );
@@ -1834,7 +1813,7 @@ switch ($mode) {
         }
 
         if ($status == USER_ACCOUNT_ACTIVE || $status == USER_ACCOUNT_AWAITING_ACTIVATION ) { // logged in AOK.
-            SESS_completeLogin($uid,$authenticated);
+//            SESS_completeLogin($uid,$authenticated);
             $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
             $_RIGHTS = explode( ',', SEC_getUserPermissions() );
             if ($_SYSTEM['admin_session'] > 0 && $local_login ) {
@@ -1859,10 +1838,10 @@ switch ($mode) {
                     }
                 }
             }
-            SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
-                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                           $_CONF['cookiesecure'],false);
-            COM_resetSpeedlimit('login');
+//            SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
+//                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
+//                           $_CONF['cookiesecure'],false);
+//            COM_resetSpeedlimit('login');
 
             // we are now fully logged in, let's see if there is someplace we need to go....
             // First, check for a landing page supplied by the form or global config
@@ -1902,7 +1881,9 @@ switch ($mode) {
             } else {
                 echo COM_refresh ($_CONF['site_url'] . '/index.php');
             }
-        } else {
+        }
+        // user account is not active or awaiting initial login
+        else {
             $msg = COM_getMessage();
             if ($msg > 0) {
                 $pageBody .= COM_showMessage($msg,'','',0,'info');

@@ -23,6 +23,8 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
+use \glFusion\Auth\Auth;
+use \glFusion\Auth\Session;
 
 USES_lib_user();
 

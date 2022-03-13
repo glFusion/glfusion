@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -632,4 +632,83 @@ function _doSiteConfigUpgrade() {
     return $retval;
 }
 
+// legacy authentication code
+/**
+*
+* Borrowed from the phpBB3 project
+*
+* Portable PHP password hashing framework.
+*
+* Written by Solar Designer <solar at openwall.com> in 2004-2006 and placed in
+* the public domain.
+*
+* There's absolutely no warranty.
+*
+* The homepage URL for this framework is:
+*
+*   http://www.openwall.com/phpass/
+*
+* Please be sure to update the Version line if you edit this file in any way.
+* It is suggested that you leave the main version number intact, but indicate
+* your project name (after the slash) and add your own revision information.
+*
+* Please do not change the "private" password hashing method implemented in
+* here, thereby making your hashes incompatible.  However, if you must, please
+* change the hash type identifier (the "$P$") to something different.
+*
+* Obviously, since this code is in the public domain, the above are not
+* requirements (there can be none), but merely suggestions.
+*
+*
+* Hash the password
+*/
+function _hash($password)
+{
+    $itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+    $random_state = _unique_id();
+    $random = '';
+    $count = 6;
+
+    if (($fh = @fopen('/dev/urandom', 'rb'))) {
+        $random = fread($fh, $count);
+        fclose($fh);
+    }
+
+    if (strlen($random) < $count) {
+        $random = '';
+
+        for ($i = 0; $i < $count; $i += 16) {
+            $random_state = md5(_unique_id() . $random_state);
+            $random .= pack('H*', md5($random_state));
+        }
+        $random = substr($random, 0, $count);
+    }
+
+    $hash = _hash_crypt_private($password, _hash_gensalt_private($random, $itoa64), $itoa64);
+
+    if (strlen($hash) == 34) {
+        return $hash;
+    }
+
+    return md5($password);
+}
+
+/**
+* Check for correct password
+*
+* @param string $password The password in plain text
+* @param string $hash The stored password hash
+*
+* @return bool Returns true if the password is correct, false if not.
+*/
+function _check_hash($password, $hash)
+{
+    $itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    if (strlen($hash) == 34) {
+        return (_hash_crypt_private($password, $hash, $itoa64) === $hash) ? true : false;
+    }
+
+    return (md5($password) === $hash) ? true : false;
+}
 ?>
