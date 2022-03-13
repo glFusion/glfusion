@@ -157,6 +157,7 @@ if (!empty($topic)) {
 }
 
 $U['maxstories'] = 0;
+if (!isset($_USER['maxstories'])|| $_USER['maxstories'] == null) $_USER['maxstories'] = 0;
 if (!COM_isAnonUser()) {
     $U['maxstories'] = $_USER['maxstories'];
 }
