@@ -1,5 +1,11 @@
 # glFusion v2 CMS ChangeLog
 
+## v2.1.0
+
+### Changed
+
+- New authentication engine and session handler
+
 ## v2.0.1 (March 6, 2022)
 
 ### Fixed
