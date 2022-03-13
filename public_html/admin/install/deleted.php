@@ -86,6 +86,12 @@ $obsoletePublicDir = array(
 );
 
 $obsoletePrivateFiles = array(
+
+// 2.1.0
+
+    'system/classes/oauthconsumer.class.php',
+
+
 // 2.0.0
 
     'system/classes/search.class.php',

@@ -19,7 +19,7 @@ error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
 
 @ini_set('opcache.enable','0');
 if (!defined('GVERSION')) {
-    define('GVERSION', '2.0.1');
+    define('GVERSION', '2.1.0');
 }
 
 define('SESSION_EXPIRED',           1);
