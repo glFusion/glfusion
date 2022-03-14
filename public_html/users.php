@@ -1813,16 +1813,13 @@ switch ($mode) {
         }
 
         if ($status == USER_ACCOUNT_ACTIVE || $status == USER_ACCOUNT_AWAITING_ACTIVATION ) { // logged in AOK.
+            $_USER = $_UserInstance->getUserData();
             $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
             $_RIGHTS = explode( ',', SEC_getUserPermissions() );
 
             if ((int) $_SYSTEM['admin_session'] > 0 && $local_login ) {
-                if (SEC_isModerator() || SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
-                         || (count(PLG_getAdminOptions()) > 0)) {
-
-                    $_SESSION[$_UserInstance::SESSION_FIELD_ADMIN_SESSION] = \time() + $_SYSTEM['admin_session'];
-//                    $admin_token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
-//                    SEC_setCookie('token',$admin_token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
+                if (SEC_isModerator() || SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') || (count(PLG_getAdminOptions()) > 0)) {
+                    Session::set($_UserInstance::SESSION_FIELD_ADMIN_SESSION,\time() + $_SYSTEM['admin_session']);
                 }
             }
             if ( !isset($_USER['theme']) ) {
