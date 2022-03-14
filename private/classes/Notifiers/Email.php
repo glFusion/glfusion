@@ -174,8 +174,8 @@ class Email extends \glFusion\Notifier
         }
         return $retval;
     }
-    
-    
+
+
     /**
      * A notification system that is a bit kinder to the mail server.
      *
@@ -274,61 +274,64 @@ class Email extends \glFusion\Notifier
             $mail->FromName = $_CONF['site_name'];
         }
 
-        if (is_string($msgData['to'])) {
-            // Compatibility with single-address COM_mail()
-            $msgData['to'] = array(
-                array(
-                    'email' => $msgData['to'],
-                    'name' => '',
-                )
-            );
-        }
-        if ( is_array($msgData['to']) ) {
-            foreach ($msgData['to'] AS $to) {
-                if ( is_array($to) ) {
-                    if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
-                        $mail->addAddress($to['email'],$to['name']);
-                    }
-                } else {
-                    if ( COM_isEmail($to) ) {
-                        if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
-                            $mail->addAddress($to);
+        if (isset($msgData['to'])) {
+            if ( is_array($msgData['to']) ) {
+                foreach ($msgData['to'] AS $to) {
+                    if ( is_array($to) ) {
+                        if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
+                            $mail->addAddress($to['email'],$to['name']);
+                        }
+                    } else {
+                        if ( COM_isEmail($to) ) {
+                            if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
+                                $mail->addAddress($to);
+                            }
                         }
                     }
-                }
 
-                $queued++;
-                if ( $queued >= $maxEmailsPerSend ) {
-                    if (!$mail->Send()) {
-                        Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
+                    $queued++;
+                    if ( $queued >= $maxEmailsPerSend ) {
+                        if (!$mail->Send()) {
+                            Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
+                        }
+                        $queued = 0;
+                        $mail->ClearBCCs();
                     }
-                    $queued = 0;
-                    $mail->ClearBCCs();
                 }
+            } else {
+                // Compatibility with single-address COM_mail()
+                $msgData['to'] = array(
+                    array(
+                        'email' => $msgData['to'],
+                        'name' => '',
+                    )
+                );
             }
         }
 
-        if ( is_array($msgData['bcc']) ) {
-            foreach ($msgData['bcc'] AS $to) {
-                if ( is_array($to) ) {
-                    if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
-                        $mail->addBCC($to['email'],$to['name']);
-                    }
-                } else {
-                    if ( COM_isEmail($to) ) {
-                        if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
-                            $mail->addBCC($to);
+        if (isset($msgData['bcc'])) {
+            if ( is_array($msgData['bcc']) ) {
+                foreach ($msgData['bcc'] AS $to) {
+                    if ( is_array($to) ) {
+                        if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
+                            $mail->addBCC($to['email'],$to['name']);
+                        }
+                    } else {
+                        if ( COM_isEmail($to) ) {
+                            if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
+                                $mail->addBCC($to);
+                            }
                         }
                     }
-                }
 
-                $queued++;
-                if ( $queued >= $maxEmailsPerSend ) {
-                    if (!$mail->Send()) {
-                        Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
+                    $queued++;
+                    if ( $queued >= $maxEmailsPerSend ) {
+                        if (!$mail->Send()) {
+                            Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
+                        }
+                        $queued = 0;
+                        $mail->ClearBCCs();
                     }
-                    $queued = 0;
-                    $mail->ClearBCCs();
                 }
             }
         }
