@@ -24,7 +24,7 @@ if (!defined ('GVERSION')) {
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 use \glFusion\Auth\Auth;
-use \glFusion\Auth\Session;
+use \Delight\Cookie\Session;
 
 USES_lib_user();
 
@@ -53,119 +53,73 @@ if ( substr($destination, 0,strlen($_CONF['site_url'])) != $_CONF['site_url']) {
     $destination = $_CONF['site_admin_url'] . '/index.php';
 }
 
-if ( !COM_isAnonUser() ) {
-    $currentUID = $_USER['uid'];
-} else {
-    $currentUID = 1;
-}
-// is user sending credentials?
-if ( isset($_POST['loginname']) && !empty($_POST['loginname']) && isset($_POST['passwd']) && !empty($_POST['passwd']) ) {
-    COM_updateSpeedlimit('login');
-    $loginname = $_POST['loginname'];
-    if ( !USER_validateUsername($loginname,1) ) {
-        $status = '';
-        $message = $LANG20[2];
-    } else {
-        $passwd = $_POST['passwd'];
-        if ($_CONF['user_login_method']['3rdparty'] &&
-            isset($_POST['service']) && !empty($_POST['service'])) {
-            /* Distributed Authentication */
-            $service = $_POST['service'];
-            // safety check to ensure this user is really a known remote user
+$userManager = new Auth();
 
-            $safetyCheckUid = $db->conn->fetchColumn(
-                    "SELECT uid
-                        FROM `{$_TABLES['users']}`
-                        WHERE remoteusername=? AND remoteservice=?",
-                    array($loginname,$service),
-                    0,
-                    array(Database::STRING,Database::STRING)
-            );
-            if ($safetyCheckUid === false || $safetyCheckUid === null) {
-                $status = -1;
-            } else {
-                $status = SEC_remoteAuthentication($loginname, $passwd, $service, $uid);
-            }
-        } else {
-            $status = SEC_authenticate($loginname, $passwd, $uid);
-        }
-        if ( $status != USER_ACCOUNT_ACTIVE ) {
-            $message = $LANG20[2];
-        }
-    }
+if ($userManager->isLoggedIn() === false) {
+    Log::write('system',Log::WARNING,'auth.inc.php :: user not logged in');
+    // punt - we are not logged in...
+    COM_setMsg($LANG20[6],'error');
+    COM_refresh($_CONF['site_url']);
 }
-if ($status == USER_ACCOUNT_ACTIVE) {
-    SESS_completeLogin($uid);
-    $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
-    if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,search.admin,actions.admin,autotag.admin,cache.admin,database.admin,env.admin,logo.admin,menu.admin,social.admin,upgrade.admin','OR')
+
+if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,search.admin,actions.admin,autotag.admin,cache.admin,database.admin,env.admin,logo.admin,menu.admin,social.admin,upgrade.admin','OR')
              && (count(PLG_getAdminOptions()) == 0)) {
-        COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
-        if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
-            if ( isset($_POST['token_filedata']) ) {
-                $filedata = urldecode($_POST['token_filedata']);
-                SEC_cleanupFiles($filedata);
-            }
-            $display = COM_siteHeader('menu', $LANG12[26])
-                    . COM_startBlock($LANG12[26], '')
-                    . $LANG04[112]
-                    . COM_endBlock()
-                    . COM_siteFooter();
-            echo $display;
-            exit;
+    // user is not an admin
+    Log::write('system',Log::WARNING,'auth.inc.php :: user not an admin user');
+    COM_setMsg($LANG20[6],'error');
+    COM_refresh($_CONF['site_url']);
+}
+
+if (isset($_POST['passwd'])) {
+    // we are sending our new password
+    try {
+        if ($userManager->reconfirmPassword($_POST['passwd']) === false) {
+            Log::write('system',Log::WARNING,'auth.inc.php :: password not valid.');
+            COM_setMsg($LANG20[3],'error');
+            // rinse and repeat
+            COM_refresh($destination);
         }
-        $method = '';
-        if (isset($_POST['token_requestmethod'])) {
-            $method = COM_applyFilter($_POST['token_requestmethod']);
+    } catch (\glFusion\Auth\NotLoggedInException $e) {
+        // user not logged in
+        Log::write('system',Log::WARNING,'auth.inc.php :: password validation failed since user was not logged in');
+        COM_setMsg($LANG20[6],'error');
+        COM_refresh($_CONF['site_url']);
+        exit;
+    } catch (\glFusion\Auth\TooManyRequestsException $e) {
+        if (Session::has('admin.files')) {
+            $filedata = json_decode(Session::take('admin.files'),true);
+            SEC_cleanupFiles($filedata);
+            Session::delete('admin.get');
+            Session::delete('admin.post');
+            Session::delete('admin.method');
         }
-        $postdata = '';
-        if (isset($_POST['token_postdata'])) {
-            $postdata = urldecode($_POST['token_postdata']);
-        }
-        $getdata = '';
-        if (isset($_POST['token_getdata'])) {
-            $getdata = urldecode($_POST['token_getdata']);
-        }
-        $filedata = '';
-        if ( isset($_POST['token_filedata']) ) {
-            $filedata = urldecode($_POST['token_filedata']);
-        }
-        $display  = COM_siteHeader('menu');
-        $display .= SEC_reauthform($destination,$LANG20[9],$method,$postdata,$getdata,$filedata);
-        $display .= COM_siteFooter();
-        echo $display;
+        Log::write('system',Log::WARNING,'auth.inc.php :: password validation hit the throttle mark');
+        COM_setMsg('Administrative access has been locked out for '. $e->getCode() . ' seconds - please try again later','error');
+        @header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
+        @header('Status: 403 Forbidden');
+        $retval = COM_siteHeader('menu', $LANG12[26])
+                . COM_showMessageText($LANG04[112],$LANG12[26],false,'error')
+                . COM_siteFooter();
+        echo $retval;
         exit;
     }
-    COM_resetSpeedlimit('login', $_SERVER['REAL_ADDR']);
-    if ( $_SYSTEM['admin_session'] != 0 ) {
-        $token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
-        SEC_setCookie('token',$token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
+    // all good - so let it go forth...need to rebuild the environment
+    if (Session::has('admin.post')) {
+        $post = Session::take('admin.post');
+        $_POST = json_decode($post,true);
     }
-    if ( $currentUID != $_USER['uid'] ) {
-        // remove tokens for previous user
-        if ( $currentUID > 1 ) {
-            $db->conn->delete($_TABLES['tokens'],array('owner_id' => $currentUID),array(Database::INTEGER));
-        }
-        echo COM_refresh($destination);
-        exit;
+    if (Session::has('admin.get')) {
+        $get = Session::take('admin.get');
+        $_GET = json_decode($get,true);
+    }
+    if (Session::has('admin.method')) {
+        $_SERVER['REQUEST_METHOD'] = Session::take('admin.method');
+    }
+    if (Session::has('admin.files')) {
+        $filedata = Session::take('admin.files');
+        $file_array = json_decode($filedata,true);
     }
 
-    $method = '';
-    if (isset($_POST['token_requestmethod'])) {
-        $method = COM_applyFilter($_POST['token_requestmethod']);
-    }
-    $postdata = '';
-    if (isset($_POST['token_postdata'])) {
-        $postdata = urldecode($_POST['token_postdata']);
-    }
-    $getdata = '';
-    if (isset($_POST['token_getdata'])) {
-        $getdata = urldecode($_POST['token_getdata']);
-    }
-    $filedata = '';
-    if ( isset($_POST['token_filedata']) ) {
-        $filedata = urldecode($_POST['token_filedata']);
-        $file_array = unserialize($filedata);
-    }
     if (empty($_FILES) && (isset($file_array) && is_array($file_array) ) ) {
         foreach ($file_array as $fkey => $file) {
             if ( isset($file['name']) && is_array($file['name']) ) {
@@ -206,106 +160,41 @@ if ($status == USER_ACCOUNT_ACTIVE) {
             }
         }
     }
-    $_POST = array();
-    $_GET  = array();
-    $_SERVER['REQUEST_METHOD'] = $method;
-    $_POST = unserialize($postdata);
-    $_GET =  unserialize($getdata);
-    if (!is_array($_POST) ) {
-        $_POST = array();
-    }
-    if (!is_array($_GET) ) {
-        $_GET = array();
-    }
-    // refresh the token (easier to create new one than try to fake referer)
-    if ( @array_key_exists(CSRF_TOKEN, $_POST) || @array_key_exists(CSRF_TOKEN,$_GET) ) {
-        $newToken = SEC_createToken();
-        $_POST[CSRF_TOKEN] = $newToken;
-        $_GET[CSRF_TOKEN] = $newToken;
-    }
-    $_REQUEST = array_merge($_GET, $_POST);
-
-  // we have a logged in user - make sure they have permissions to be here...
-} else if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,search.admin,actions.admin,autotag.admin,cache.admin,database.admin,env.admin,logo.admin,menu.admin,social.admin,upgrade.admin','OR')
-         && (count(PLG_getAdminOptions()) == 0)) {
-    COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
-    if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
-        if ( isset($_POST['token_filedata']) ) {
-            $filedata = urldecode($_POST['token_filedata']);
-            SEC_cleanupFiles($filedata);
-        }
-        $retval = COM_siteHeader('menu', $LANG12[26])
-                . COM_startBlock($LANG12[26], '')
-                . $LANG04[112]
-                . COM_endBlock()
-                . COM_siteFooter();
-        echo $retval;
-        exit;
-    }
-
-    $method = '';
-    if (isset($_POST['token_requestmethod'])) {
-        $method = COM_applyFilter($_POST['token_requestmethod']);
-    }
-    $postdata = '';
-    if (isset($_POST['token_postdata'])) {
-        $postdata = urldecode($_POST['token_postdata']);
-    }
-    $getdata = '';
-    if (isset($_POST['token_getdata'])) {
-        $getdata = urldecode($_POST['token_getdata']);
-    }
-    $filedata = '';
-    if ( isset($_POST['token_filedata']) ) {
-        $filedata = urldecode($_POST['token_filedata']);
-    }
-    $display .= COM_siteHeader('menu');
-    $options = array(
-        'title'   => $LANG_LOGIN[1],
-        'message' => $LANG20[9]
-    );
-    $display .=  SEC_loginForm($options);
-    $display .= COM_siteFooter();
-    echo $display;
-    exit;
-} else {
-    if ( isset($_COOKIE['token']) ) {
-        $token = COM_applyFilter($_COOKIE['token']);
-        if ( $message == '' )
-            $message = $LANG20[8];
-    } else {
-        if ($message == '' )
-            $message = $LANG20[9];
-        $token = '';
-    }
+    Session::set($userManager::SESSION_FIELD_ADMIN_SESSION, \time() + $_SYSTEM['admin_session']);
 }
-if ( $_SYSTEM['admin_session'] != 0 ) {
-    // validate admin token
-    if ( !SEC_checkTokenGeneral($token,'administration') ) {
 
-        $method = '';
-        if (isset($_POST['token_requestmethod'])) {
-            $method = COM_applyFilter($_POST['token_requestmethod']);
-        } else {
-            $method   = strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' ? 'GET' : 'POST';
-        }
-        $postdata = '';
-        if (isset($_POST['token_postdata'])) {
-            $postdata = urldecode($_POST['token_postdata']);
-        } else {
-            $postdata = serialize($_POST);
-        }
-        $getdata = '';
-        if (isset($_POST['token_getdata'])) {
-            $getdata = urldecode($_POST['token_getdata']);
-        } else {
-            $getdata  = serialize($_GET);
-        }
-        $filedata = '';
-        if ( isset($_POST['token_filedata']) ) {
-            $filedata = urldecode($_POST['token_filedata']);
-        }
+if ( $_SYSTEM['admin_session'] != 0 || $userManager->isRemembered() ) {
+    // we require a session or we need a password since our primary session is 'remembered'
 
+    // need to check the admin session to see if the time is still good
+    $adminSession = 0;
+    if (Session::has($userManager::SESSION_FIELD_ADMIN_SESSION)) {
+        $adminSession = Session::get($userManager::SESSION_FIELD_ADMIN_SESSION);
+    }
+    if ((($adminSession + $_SYSTEM['admin_session']) < \time()) || $userManager->isRemembered() ) {
+        try {
+            $userManager->throttle([ 'reconfirmPassword', $userManager->getIpAddress() ], 3, (60 * 60), 4, true);
+        } catch (\glFusion\Auth\TooManyRequestsException $e) {
+            if (Session::has('admin.files')) {
+                $filedata = json_decode(Session::get('admin.files'),true);
+                SEC_cleanupFiles($filedata);
+                Session::delete('admin.get');
+                Session::delete('admin.post');
+                Session::delete('admin.method');
+            }
+            COM_setMsg('Administrative access has been locked out for '. $e->getCode() . ' seconds - please try again later','error');
+            COM_refresh($_CONF['site_url']);
+        }
+        // save everything so we can rebuild after getting the correct password
+        if (isset($_POST) && count($_POST) > 0) {
+            Session::set('admin.post', json_encode($_POST));
+        }
+        if (isset($_GET) && count($_GET) > 0) {
+            Session::set('admin.get',json_encode($_GET));
+        }
+        if (isset($_SERVER['REQUEST_METHOD'])) {
+            Session::set('admin.method', $_SERVER['REQUEST_METHOD']);
+        }
         if (! empty($_FILES)) {
             foreach ($_FILES as $key => $file) {
                 if ( is_array($file['name']) ) {
@@ -324,52 +213,13 @@ if ( $_SYSTEM['admin_session'] != 0 ) {
                     }
                 }
             }
-            $filedata = serialize($_FILES);
+            Session::set('admin.files',json_encode($_FILES));
         }
-        COM_clearSpeedlimit($_CONF['login_speedlimit'], 'login');
-        if (COM_checkSpeedlimit('login', $_CONF['login_attempts']) > 0) {
-
-            SEC_cleanupFiles($filedata);
-
-            $retval = COM_siteHeader('menu', $LANG12[26])
-                    . COM_startBlock($LANG12[26], '')
-                    . $LANG04[112]
-                    . COM_endBlock()
-                    . COM_siteFooter();
-            echo $retval;
-            exit;
-        }
-        $username = isset($_USER['username']) ? $_USER['username'] : '';
-
+        // build the reauth form
         $display .= COM_siteHeader();
-        $display .= SEC_reauthform($destination,$message,$method,$postdata,$getdata,$filedata);
+        $display .= SEC_reauthform2($destination,$message, 'Please enter your password below.');
         $display .= COM_siteFooter();
         echo $display;
         exit;
-    } else {
-        // re-init the token...
-        if ( $token != '' ) {
-            try {
-                $db->conn->update(
-                    $_TABLES['tokens'],
-                    array(
-                        'created' => $_CONF['_now']->toMySQL(true)
-                    ),
-                    array(
-                        'token'=> $token
-                    ),
-                    array(
-                        Database::STRING,
-                        Database::STRING
-                    )
-                );
-            } catch(Throwable $e) {
-                Log::write('system',Log::WARNING,'Unable to update CSRF token in re-authentication');
-            }
-        }
     }
 }
-if ( $_CONF['allow_user_themes'] == 0 ) {
-    $_USER['theme'] = $_CONF['theme'];
-}
-?>

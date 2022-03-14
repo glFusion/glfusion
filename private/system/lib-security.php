@@ -2157,6 +2157,50 @@ function SEC_reauthform($desturl, $message = '',$method = '', $postdata = '', $g
     return SEC_loginForm($options);
 }
 
+/**
+* Display login form and ask user to re-authenticate
+*
+* @param    string  $desturl    URL to return to after authentication
+* @param    string  $method     original request method: POST or GET
+* @param    string  $postdata   serialized POST data
+* @param    string  $getdata    serialized GET data
+* @param    string  $filedata   serialized FILE data
+* @return   string              HTML for the authentication form
+*
+*/
+function SEC_reauthform2($desturl, $message = '', $prompt = '')
+{
+    global $LANG20, $LANG_ADMIN;
+
+    $hidden = '';
+
+    if ( $desturl != '' ) {
+        $hidden .= '<input type="hidden" name="token_returnurl" value="'.urlencode($desturl).'"/>' . LB;
+    }
+
+    $quotes = array('/"/',"/'/");
+    $replacements = array('%22','%27');
+    $desturl = preg_replace($quotes,$replacements,$desturl);
+
+    $options = array(
+        'forgotpw_link'   => false,
+        'newreg_link'     => false,
+        'oauth_login'     => false,
+        'plugin_vars'     => false,
+        'password_only'   => true,
+        'prefill_user'    => COM_isAnonUser() ? false : true,
+        'title'           => $LANG20[1],
+        'message'         => $message,
+        'prompt'          => $prompt,
+        'footer_message'  => $LANG20[6],
+        'button_text'     => $LANG_ADMIN['authenticate'],
+        'form_action'     => $desturl,
+        'hidden_fields'   => $hidden
+    );
+
+    return SEC_loginForm($options);
+}
+
 
 /**
 * Display a "to access this area you need to be logged in" message
@@ -2208,12 +2252,14 @@ function SEC_loginForm($use_options = array())
         'verification_link' => false,   // resend verification?
         'plugin_vars'       => true,    // call PLG_templateSetVars?
         'prefill_user'      => false,   // prefill username of current user
+        'password_only'     => false,   // only prompt for password
 
         // default texts
         'title'             => sprintf($LANG04[65],$_CONF['site_name']), // Login to site
         'message'           => '', // $LANG04[66], // Please enter username
         'footer_message'    => '',
         'button_text'       => $LANG04[80], // Login
+        'prompt'            => '',
 
         // action
         'form_action' => $_CONF['site_url'].'/users.php',
@@ -2232,13 +2278,19 @@ function SEC_loginForm($use_options = array())
 
     $loginform->set_var('start_block_loginagain',COM_startBlock($options['title']));
     $loginform->set_var('lang_message', $options['message']);
+    $loginform->set_var('lang_prompt', $options['prompt']);
     if ($options['newreg_link'] == false || $_CONF['disable_new_user_registration']) {
         $loginform->set_var('lang_newreglink', '');
     } else {
         $loginform->set_var('lang_newreglink', sprintf($LANG04[123],$_CONF['site_url']));
     }
 
-    $loginform->set_var('lang_username', $LANG04[2]);
+    if ($options['password_only'] == false) {
+        $loginform->set_var('lang_username', $LANG04[2]);
+    } else {
+        $loginform->set_var('lang_username', '');
+    }
+
     $loginform->set_var('lang_password', $LANG01[57]);
     if ($options['forgotpw_link']) {
         $loginform->set_var('lang_forgetpassword', $LANG04[25]);

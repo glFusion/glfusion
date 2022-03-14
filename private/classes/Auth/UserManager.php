@@ -49,6 +49,8 @@ abstract class UserManager {
 	const SESSION_FIELD_FORCE_LOGOUT = 'auth_force_logout';
 	/** @var string session field for the timezone of the user who is currently signed in (if any) */
 	const SESSION_FIELD_TIMEZONE = 'auth_timezone';
+	/** @var string session field for admin session (if needed) */
+	const SESSION_FIELD_ADMIN_SESSION = 'auth_admin_session';
 
 
 	/** @var PdoDatabase the database connection to operate on */

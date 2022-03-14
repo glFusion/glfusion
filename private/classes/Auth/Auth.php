@@ -451,11 +451,13 @@ final class Auth extends UserManager {
 
 			$this->throttle([ 'reconfirmPassword', $this->getIpAddress() ], 3, (60 * 60), 4, true);
 
+			$uid = $this->getUserId();
+
 			try {
                 $expectedHash = Database::getInstance()->conn->fetchColumn(
-                    "SELECT password FROM {$_TABLES['users']} WHERE uid = ?",
-                    array($this->getUserId()),
-                    array(Database::INTEGER)
+                    "SELECT passwd FROM {$_TABLES['users']} WHERE uid = ?",
+                    array($uid),
+                    0
                 );
 			}
 			catch (\Throwable $e) {
@@ -467,6 +469,8 @@ final class Auth extends UserManager {
 
 				if (!$validated) {
 					$this->throttle([ 'reconfirmPassword', $this->getIpAddress() ], 3, (60 * 60), 4, false);
+				} else {
+					Session::set(self::SESSION_FIELD_REMEMBERED,false);
 				}
 
 				return $validated;
@@ -510,6 +514,7 @@ final class Auth extends UserManager {
 			unset($_SESSION[self::SESSION_FIELD_REMEMBERED]);
 			unset($_SESSION[self::SESSION_FIELD_LAST_RESYNC]);
 			unset($_SESSION[self::SESSION_FIELD_FORCE_LOGOUT]);
+			unset($_SESSION[self::SESSION_FIELD_ADMIN_SESSION]);
 		}
 	}
 
