@@ -7136,5 +7136,6 @@ if ( isset($_POST['token_revalidate']) ) {
     require_once $_CONF['path_html'].'revalidate.inc.php';
 }
 
-glFusion\Notifier::Register('email', 'glFusion\\Notifiers\\Email', 'E-Mail');
+glFusion\Notifier::Register('email', 'glFusion\\Notifiers\\Email', $LANG04[5]);
+
 ?>
