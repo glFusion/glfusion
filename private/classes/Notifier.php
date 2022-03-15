@@ -53,6 +53,10 @@ abstract class Notifier
      * @var string */
     protected $textmessage = '';
 
+    /** Expiration timestamp, if supported.
+     * @var integer */
+    protected $exp_ts = 2208988799;     // 2039-12-31 23:59:59 UTC
+
 
     /**
      * Set some common defaults.
@@ -155,12 +159,49 @@ abstract class Notifier
     }
 
 
+    /**
+     * Set the expiration timestamp, for methods that support it.
+     *
+     * @param   integer $ts     Message expiration as a Unix timestamp
+     * @return  objec   $this
+     */
+    public function setExpiration(int $ts) : self
+    {
+        $this->exp_ts = $ts;
+        return $this;
+    }
+
+
+    /**
+     * Get the expiration timestamp.
+     *
+     * return   integer     Expiration timestamp
+     */
+    public function getExpiration() : int
+    {
+        return $this->exp_ts;
+    }
+
+
+    /**
+     * Get the user object.
+     *
+     * @param   integer $uid    User ID
+     * @return  object      User object
+     */
     protected function getUser(int $uid) : User
     {
         return User::getInstance($uid);
     }
 
 
+    /**
+     * Register a notification method.
+     *
+     * @param   string  $key    Short description, e.g. plugin name
+     * @param   string  $cls    Class name, e.g. PM\Notifier
+     * @param   string  $dscp   Description
+     */
     public static function Register(string $key, string $cls, ?string $dscp=NULL) : void
     {
         self::$_providers[$key] = array(
@@ -183,6 +224,10 @@ abstract class Notifier
 
     /**
      * Get an instance of a provider class.
+     * The default `email` provider is returned if the requested key
+     * is not available. If a plugin needs to take other action when
+     * the requested provider is not available, it should call
+     * Notifier::exists($key) first to check.
      *
      * @param   string  $key    Provider ID key
      * @return  object  Provider object
@@ -198,6 +243,27 @@ abstract class Notifier
         }
         if ($retval === NULL) {
             $retval = new Notifiers\Email;
+        }
+        return $retval;
+    }
+
+
+    /**
+     * Check if a provider is available.
+     * This allows plugins to take other action if the default email
+     * notification is not desired.
+     *
+     * @param   string  $key    Provider ID key
+     * @return  boolean     True if provider is available
+     */
+    public static function exists(string $key) : bool
+    {
+        $retval = false;
+        if (array_key_exists($key, self::$_providers)) {
+            $cls = self::$_providers[$key]['cls'];
+            if (class_exists($cls)) {
+                $retval = true;
+            }
         }
         return $retval;
     }
