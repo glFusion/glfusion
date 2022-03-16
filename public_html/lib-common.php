@@ -1639,7 +1639,6 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
 
     $db = Database::getInstance();
     $stmt = $db->conn->query($sql);
-
     $retval = '';
     while ($A = $stmt->fetch()) {
         $retval .= '<option value="' . $A[0] . '"';
@@ -2553,114 +2552,18 @@ function COM_formatEmailAddress( $name, $address )
 */
 function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority = 0, $cc = '', $altBody = '' )
 {
-    global $_CONF, $_VARS;
-
-    $subject = substr( $subject, 0, strcspn( $subject, "\r\n" ));
-    $subject = COM_emailEscape( $subject );
-
-    if ( function_exists( 'CUSTOM_mail' )) {
-        return CUSTOM_mail( $to, $subject, $message, $from, $html, $priority, $cc );
-    }
-
-    $mail = new PHPMailer();
-    $mail->SetLanguage('en');
-    $mail->CharSet = COM_getCharset();
-    $mail->XMailer = 'glFusion CMS v' . GVERSION . ' (https://www.glfusion.org)';
-    if ($_CONF['mail_backend'] == 'smtp' ) {
-        $mail->IsSMTP();
-        $mail->Host     = $_CONF['mail_smtp_host'];
-        $mail->Port     = $_CONF['mail_smtp_port'];
-        if ( $_CONF['mail_smtp_secure'] != 'none' ) {
-            $mail->SMTPSecure = $_CONF['mail_smtp_secure'];
-        }
-        if ( $_CONF['mail_smtp_auth'] ) {
-            $mail->SMTPAuth   = true;
-            $mail->Username = $_CONF['mail_smtp_username'];
-            $mail->Password = $_CONF['mail_smtp_password'];
-        }
-        $mail->Mailer = "smtp";
-
-    } elseif ($_CONF['mail_backend'] == 'sendmail') {
-        $mail->Mailer = "sendmail";
-        $mail->Sendmail = $_CONF['mail_sendmail_path'];
+    $msgData = array(
+        'to' => $to,
+        'from' => $from,
+        'subject' => $subject,
+        'bcc' => $cc,
+    );
+    if ($html) {
+        $msgData['htmlmessage'] = $message;
     } else {
-        $mail->Mailer = "mail";
+        $msgData['textmessage'] = $message;
     }
-    $mail->WordWrap = 76;
-    $mail->IsHTML($html);
-    $mail->Body = $message;
-
-    if ( $altBody != '' ) {
-        $mail->AltBody = $altBody;
-    }
-
-    $mail->Subject = $subject;
-
-    if (is_array($from) && isset($from[0]) && $from[0] != '' ) {
-        if ( $_CONF['use_from_site_mail'] == 1 ) {
-            $mail->From = $_CONF['site_mail'];
-            $mail->AddReplyTo($from[0]);
-        } else {
-            if ( filter_var($from[0], FILTER_VALIDATE_EMAIL) ) {
-                $mail->From = $from[0];
-            } else {
-                $mail->From = $_CONF['noreply_mail'];
-            }
-        }
-    } else {
-        $mail->From = $_CONF['noreply_mail'];
-    }
-
-    if ( is_array($from) && isset($from[1]) && $from[1] != '' ) {
-        $mail->FromName = $from[1];
-    } else {
-        $mail->FromName = $_CONF['site_name'];
-    }
-    if ( is_array($to) && isset($to[0]) && $to[0] != '' ) {
-        if ( isset($to[1]) && $to[1] != '' ) {
-            if ( filter_var($to[0], FILTER_VALIDATE_EMAIL) ) {
-                $mail->AddAddress($to[0],$to[1]);
-            }
-        } else {
-            if ( filter_var($to[0], FILTER_VALIDATE_EMAIL) ) {
-                $mail->AddAddress($to[0]);
-            }
-        }
-    } else {
-        // assume old style....
-        if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
-            $mail->AddAddress($to);
-        }
-    }
-
-    if ( isset($cc[0]) && $cc[0] != '' ) {
-        if ( isset($cc[1]) && $cc[1] != '' ) {
-            if ( filter_var($cc[0], FILTER_VALIDATE_EMAIL) ) {
-                $mail->AddCC($cc[0],$cc[1]);
-            }
-        } else {
-            if ( filter_var($cc[0], FILTER_VALIDATE_EMAIL) ) {
-                $mail->AddCC($cc[0]);
-            }
-        }
-    } else {
-        // assume old style....
-        if ( isset($cc) && $cc != '' ) {
-            if ( filter_var($cc, FILTER_VALIDATE_EMAIL) ) {
-                $mail->AddCC($cc);
-            }
-        }
-    }
-
-    if ( $priority ) {
-        $mail->Priority = 1;
-    }
-
-    if (!$mail->Send()) {
-        Log::write('system',Log::ERROR,$mail->ErrorInfo);
-        return false;
-    }
-    return true;
+    return glFusion\Notifiers\Email::sendNotification($msgData);
 }
 
 /*
@@ -2668,130 +2571,10 @@ function COM_mail( $to, $subject, $message, $from = '', $html = false, $priority
  */
 function COM_emailNotification( $msgData = array() )
 {
-    global $_CONF, $_VARS;
-
-    // define the maximum number of emails allowed per bcc
-    $maxEmailsPerSend = 10;
-
-    // ensure we have something to send...
-    if ( !isset($msgData['htmlmessage']) && !isset($msgData['textmessage']) ) {
-        Log::write('system',Log::WARNING,"COM_emailNotification() - No message text was provided - nothing to send.");
-        return false; // no message defined
-    }
-    if ( empty($msgData['htmlmessage']) && empty($msgData['textmessage']) ) {
-        Log::write('system',Log::ERROR,"COM_emailNotification() - Empty message data provided");
-        return false; // no text in either...
-    }
-    if ( !isset($msgData['subject']) || empty($msgData['subject']) ) {
-        Log::write('system',Log::WARNING,"COM_emailNotification() - No email subject was provided - not sending notification.");
-        return false; // must have a subject
-    }
-
-    $queued = 0;
-
-    $subject = substr( $msgData['subject'], 0, strcspn( $msgData['subject'], "\r\n" ));
-    $subject = COM_emailEscape( $subject );
-
-    $mail = new PHPMailer();
-    $mail->SetLanguage('en');
-    $mail->CharSet = COM_getCharset();
-    if ($_CONF['mail_backend'] == 'smtp' ) {
-        $mail->IsSMTP();
-        $mail->Host     = $_CONF['mail_smtp_host'];
-        $mail->Port     = $_CONF['mail_smtp_port'];
-        if ( $_CONF['mail_smtp_secure'] != 'none' ) {
-            $mail->SMTPSecure = $_CONF['mail_smtp_secure'];
-        }
-        if ( $_CONF['mail_smtp_auth'] ) {
-            $mail->SMTPAuth   = true;
-            $mail->Username = $_CONF['mail_smtp_username'];
-            $mail->Password = $_CONF['mail_smtp_password'];
-        }
-        $mail->Mailer = "smtp";
-
-    } elseif ($_CONF['mail_backend'] == 'sendmail') {
-        $mail->Mailer = "sendmail";
-        $mail->Sendmail = $_CONF['mail_sendmail_path'];
-    } else {
-        $mail->Mailer = "mail";
-    }
-    $mail->WordWrap = 76;
-
-    if ( isset($msgData['htmlmessage']) && !empty($msgData['htmlmessage']) ) {
-        $mail->IsHTML(true);
-        $mail->Body = $msgData['htmlmessage'];
-        if ( isset($msgData['textmessage']) && !empty($msgData['textmessage']) ) {
-            $mail->AltBody = $msgData['textmessage'];
-        }
-    } else {
-        $mail->IsHTML(false);
-        if ( isset($msgData['textmessage']) && !empty($msgData['textmessage']) ) {
-            $mail->Body = $msgData['textmessage'];
-        }
-    }
-    $mail->Subject = $subject;
-
-    if ( isset($msgData['embeddedImage']) && is_array($msgData['embeddedImage'])) {
-        foreach ($msgData['embeddedImage'] AS $embeddedImage ) {
-            $mail->AddEmbeddedImage(
-                $embeddedImage['file'],
-                $embeddedImage['name'],
-                $embeddedImage['filename'],
-                $embeddedImage['encoding'],
-                $embeddedImage['mime']
-            );
-        }
-    }
-
-    if ( is_array($msgData['from'])) {
-        if ( filter_var($msgData['from']['email'], FILTER_VALIDATE_EMAIL) ) {
-            $mail->From = $msgData['from']['email'];
-        } else {
-            $mail->From = $_CONF['noreply_mail'];
-        }
-        $mail->FromName = $msgData['from']['name'];
-
-    } else {
-        if ( filter_var($msgData['from'], FILTER_VALIDATE_EMAIL) ) {
-            $mail->From = $msgData['from'];
-        } else {
-            $mail->From = $_CONF['noreply_mail'];
-        }
-        $mail->FromName = $_CONF['site_name'];
-    }
-
-    $queued = 0;
-    if ( is_array($msgData['to']) ) {
-        foreach ($msgData['to'] AS $to) {
-            if ( is_array($to) ) {
-                if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
-                    $mail->AddBCC($to['email'],$to['name']);
-                }
-            } else {
-                if ( COM_isEmail($to) ) {
-                    if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
-                        $mail->AddBCC($to);
-                    }
-                }
-            }
-
-            $queued++;
-            if ( $queued >= $maxEmailsPerSend ) {
-                if (!$mail->Send()) {
-                    Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
-                }
-                $queued = 0;
-                $mail->ClearBCCs();
-            }
-        }
-    }
-    if ( $queued > 0 ) {
-        if ( !@$mail->Send() ) {
-            Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
-            return false;
-        }
-    }
-    return true;
+    // This function historically uses BCC only, so make it act the same.
+    $msgData['bcc'] = $msgData['to'];
+    unset($msgData['to']);
+    return glFusion\Notifiers\Email::sendNotification($msgData);
 }
 
 /**
@@ -7352,4 +7135,7 @@ if ( function_exists('CUSTOM_splashpage') ) {
 if ( isset($_POST['token_revalidate']) ) {
     require_once $_CONF['path_html'].'revalidate.inc.php';
 }
+
+glFusion\Notifier::Register('email', 'glFusion\\Notifiers\\Email', $LANG04[5]);
+
 ?>
