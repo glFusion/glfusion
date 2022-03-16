@@ -23,8 +23,10 @@ require_once 'lib-common.php';
 
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
-use \glFusion\Auth;
-use \glFusion\Auth\Status;
+use \glFusion\User;
+use \glFusion\User\UserAuth;
+use \glfusion\User\Exceptions;
+use \glFusion\User\Status;
 use \Delight\Cookie\Session;
 
 USES_lib_user();
@@ -904,7 +906,7 @@ function USER_createuser($info = array())
 //@TODO - this could be a remote user (i.e.; LDAP - we assume oauth but this may not be true).
 
         // validate the access token prior to creating the user
-        $oauth = new \glFusion\Auth\AuthOauth($info['oauth_service']);
+        $oauth = new \glFusion\User\UserAuthOauth($info['oauth_service']);
         $callback_url = $_CONF['site_url'] . '/users.php?oauth_login=' . $info['oauth_service'];
         $oauth->setRedirectURL($callback_url);
 
@@ -1299,7 +1301,7 @@ function userLogout()
 {
     global $_CONF, $_TABLES, $_USER, $_COOKIE;
 
-    $_UserInstance = new Auth\Auth();
+    $_UserInstance = new User\UserAuth();
 
     $_UserInstance->logOut();
     PLG_logoutUser ($_USER['uid']);
@@ -1620,7 +1622,7 @@ function validateTFA()
     }
     $retval = false;
 
-    $_UserInstance = new Auth\Auth();
+    $_UserInstance = new User\UserAuth();
 
     $_USER['uid'] = (int) filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT);
 
@@ -1629,7 +1631,7 @@ function validateTFA()
             // throttle the specified resource or feature to *3* requests per *120* seconds
             $_UserInstance->throttle([ 'tfa_validation' ], 3, 120);
         }
-        catch (\glFusion\Auth\TooManyRequestsException $e) {
+        catch (\glFusion\User\Exceptions\TooManyRequestsException $e) {
             // operation cancelled
             displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
             exit;
@@ -1710,7 +1712,7 @@ switch ($mode) {
         $newTwitter  = false;
         $authenticated = 0;
 
-        $_UserInstance = new Auth\Auth();
+        $_UserInstance = new User\UserAuth();
 
         $loginname = '';
         if (isset ($_POST['loginname'])) {
@@ -1737,18 +1739,20 @@ switch ($mode) {
                 try {
                     $_UserInstance->loginWithUsername($loginname, $passwd,0,array($_UserInstance,'userLoginBeforeSuccess'));
                     $status = $_UserInstance->getStatus();
-                } catch (Auth\InvalidPasswordException | Auth\UnknownUsernameException $e) {
+                } catch (\glFusion\User\Exceptions\InvalidPasswordException | \glFusion\User\Exceptions\UnknownUsernameException $e) {
                     COM_setMsg($MESSAGE[81],'error');
                     $status = -2;
-                } catch (Auth\TooManyRequestsException $e) {
+                } catch (User\Exceptions\TooManyRequestsException $e) {
                     displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
-                } catch (Auth\AttemptCancelledException $e) {
+                } catch (User\Exceptions\AttemptCancelledException $e) {
                     // the attempt was cancelled - possibly CAPTCHA failed or other validation before login failed
                     $status = -2;
-                } catch (Auth\AccountPendingReviewException $e) {
+                } catch (User\Exceptions\AccountPendingReviewException $e) {
                     $status = USER_ACCOUNT_AWAITING_APPROVAL;
-                } catch (Auth\EmailNotVerifiedException $e) {
+                } catch (User\Exceptions\EmailNotVerifiedException $e) {
                     $status = USER_ACCOUNT_AWAITING_VERIFICATION;
+                    COM_setMsg($LANG04[177],'error');
+                    COM_refresh($_CONF['site_url']);
                 }
 
                 if ($status == Status::NORMAL) {
@@ -1775,6 +1779,10 @@ switch ($mode) {
             try {
                 $_UserInstance->loginWithOauth(0, array($_UserInstance,'userLoginBeforeSuccess'));
                 $status = $_UserInstance->getStatus();
+            } catch (User\Exceptions\EmailNotVerifiedException $e) {
+                $status = USER_ACCOUNT_AWAITING_VERIFICATION;
+                COM_setMsg($LANG04[177],'error');
+                COM_refresh($_CONF['site_url']);
             } catch (\Throwable $e) {
                 COM_updateSpeedlimit('login');
                 Log::write('system',Log::ERROR,"OAuth Error: " . $e->getMessage());

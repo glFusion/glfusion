@@ -23,7 +23,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
-use \glFusion\Auth\Auth;
+use \glFusion\User\UserAuth;
 use \Delight\Cookie\Session;
 
 USES_lib_user();
@@ -53,13 +53,13 @@ if ( substr($destination, 0,strlen($_CONF['site_url'])) != $_CONF['site_url']) {
     $destination = $_CONF['site_admin_url'] . '/index.php';
 }
 
-$userManager = new Auth();
+$userManager = new UserAuth();
 
 if ($userManager->isLoggedIn() === false) {
     Log::write('system',Log::WARNING,'auth.inc.php :: user not logged in');
     // punt - we are not logged in...
     COM_setMsg($LANG20[6],'error');
-    COM_refresh($_CONF['site_url']);
+    COM_refresh($_CONF['site_url'].'/users.php');
 }
 
 if (!SEC_isModerator() && !SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit,search.admin,actions.admin,autotag.admin,cache.admin,database.admin,env.admin,logo.admin,menu.admin,social.admin,upgrade.admin','OR')
@@ -79,13 +79,13 @@ if (isset($_POST['passwd'])) {
             // rinse and repeat
             COM_refresh($destination);
         }
-    } catch (\glFusion\Auth\NotLoggedInException $e) {
+    } catch (\glFusion\User\Exceptions\NotLoggedInException $e) {
         // user not logged in
         Log::write('system',Log::WARNING,'auth.inc.php :: password validation failed since user was not logged in');
         COM_setMsg($LANG20[6],'error');
         COM_refresh($_CONF['site_url']);
         exit;
-    } catch (\glFusion\Auth\TooManyRequestsException $e) {
+    } catch (\glFusion\User\Exceptions\TooManyRequestsException $e) {
         if (Session::has('admin.files')) {
             $filedata = json_decode(Session::take('admin.files'),true);
             SEC_cleanupFiles($filedata);
@@ -174,7 +174,7 @@ if ( $_SYSTEM['admin_session'] != 0 || $userManager->isRemembered() ) {
     if ((($adminSession + $_SYSTEM['admin_session']) < \time()) || $userManager->isRemembered() ) {
         try {
             $userManager->throttle([ 'reconfirmPassword', $userManager->getIpAddress() ], 3, (60 * 60), 4, true);
-        } catch (\glFusion\Auth\TooManyRequestsException $e) {
+        } catch (\glFusion\User\Exceptions\TooManyRequestsException $e) {
             if (Session::has('admin.files')) {
                 $filedata = json_decode(Session::get('admin.files'),true);
                 SEC_cleanupFiles($filedata);
@@ -217,7 +217,7 @@ if ( $_SYSTEM['admin_session'] != 0 || $userManager->isRemembered() ) {
         }
         // build the reauth form
         $display .= COM_siteHeader();
-        $display .= SEC_reauthform2($destination,$message, 'Please enter your password below.');
+        $display .= SEC_reauthform2($destination,$message, $LANG04[111]);
         $display .= COM_siteFooter();
         echo $display;
         exit;

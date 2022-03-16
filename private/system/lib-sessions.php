@@ -22,7 +22,7 @@ if (!defined ('GVERSION')) {
 use glFusion\Database\Database;
 use glFusion\Cache\Cache;
 use glFusion\Log\Log;
-use glFusion\Auth;
+use glFusion\User;
 
 // ensure cookie domain is properly initialized
 
@@ -82,7 +82,7 @@ function SESS_sessionCheck()
     $sessid = false;
     session_name($_CONF['cookie_session']);
 
-    $_UserInstance = new \glFusion\Auth\Auth();
+    $_UserInstance = new \glFusion\User\UserAuth();
     $_USER = $_UserInstance->getUserData();
 
     unset($_USER['passwd']);
