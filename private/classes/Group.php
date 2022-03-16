@@ -438,11 +438,11 @@ class Group
         return $groups[$feature];
     }
 
-  /**
-    *   Gets an array of all groups available
-    *
-    *   @return array           Array of grp_name=>grp_id
-    */
+    /**
+     * Gets an array of all groups available.
+     *
+     * @return array           Array of grp_name=>grp_id
+     */
     public static function getAllAvailable()
     {
         global $_TABLES, $_USER, $_SEC_VERBOSE;

@@ -37,7 +37,7 @@ foreach ($expected as $provided) {
         $actionval = $_POST[$provided];
         break;
     } elseif (isset($_GET[$provided])) {
-    	$action = $provided;
+        $action = $provided;
         $actionval = $_GET[$provided];
         break;
     }
@@ -99,39 +99,39 @@ exit;
 
 
 /**
-     * Create a menu for the admin interface.
-     *
-     * @param   string  $view   View to mark as active
-     * @return  string      HTML for admin menu
-     */
-    function badges_AdminMenu($view='list')
-    {
-        global $_CONF, $LANG_ADMIN, $LANG01;
+ * Create a menu for the admin interface.
+ *
+ * @param   string  $view   View to mark as active
+ * @return  string      HTML for admin menu
+ */
+function badges_AdminMenu($view='list')
+{
+    global $_CONF, $LANG_ADMIN, $LANG01;
 
-        USES_lib_admin();
+    USES_lib_admin();
 
-        $menu_arr = array(
-            array(
-                'url' => $_CONF['site_admin_url'] . '/badges.php',
-                'text' => $LANG01[132],
-                'active'=> $view == 'list',
-            ),
-            array(
-                'url' => $_CONF['site_admin_url'] . '/badges.php?edit',
-                'text' => $LANG_ADMIN['create_new'],
-            ),
-            array(
-                'url' => $_CONF['site_admin_url'].'/index.php',
-                'text' => $LANG_ADMIN['admin_home'],
-            ),
-        );
-        $retval = ADMIN_createMenu(
-            $menu_arr,
-            '',
-            $_CONF['layout_url'] . '/images/icons/badges.png',
-        );
-        return $retval;
-    }
+    $menu_arr = array(
+        array(
+            'url' => $_CONF['site_admin_url'] . '/badges.php',
+            'text' => $LANG01[132],
+            'active'=> $view == 'list',
+        ),
+        array(
+            'url' => $_CONF['site_admin_url'] . '/badges.php?edit',
+            'text' => $LANG_ADMIN['create_new'],
+        ),
+        array(
+            'url' => $_CONF['site_admin_url'].'/index.php',
+            'text' => $LANG_ADMIN['admin_home'],
+        ),
+    );
+    $retval = ADMIN_createMenu(
+        $menu_arr,
+        '',
+        $_CONF['layout_url'] . '/images/icons/badges.png',
+    );
+    return $retval;
+}
 
 
 /**
