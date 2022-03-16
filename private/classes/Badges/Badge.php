@@ -362,7 +362,7 @@ class Badge
      * @param  integer  $uid    ID of user
      * @return array       Array of all user badge objects
      */
-    public static function getUserBadges($uid)
+    public static function getUserBadges(int $uid) : array
     {
         global $_CONF;
 
@@ -402,7 +402,7 @@ class Badge
      * @param   string  $b_grp  Badge group, default if not specified
      * @return  string      HTML for badge, empty string if not found
      */
-    public static function getSingle(int $uid, ?string $grp=NULL) : string
+    public static function getSingle(int $uid, ?string $grp=NULL) : self
     {
         if ($grp === NULL) {
             $grp = self::DEF_GRP;
@@ -411,7 +411,7 @@ class Badge
         $Badges = self::getUserBadges($uid);
         foreach ($Badges as $Badge) {
             if ($Badge->getBadgeGroup() == $grp) {
-                $retval = $Badge->getBadgeHTML();
+                $retval = $Badge;
                 break;
             }
         }
@@ -425,7 +425,7 @@ class Badge
      *
      * @return  string  HTML for badge
      */
-    public function getBadgeHTML() : string
+    public function getHTML() : string
     {
         global $_CONF;
 
