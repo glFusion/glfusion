@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
-<script src="{site_url}/javascript/spectrum.js"></script>
-<link rel="stylesheet" href="{site_url}/javascript/spectrum.css" />
+<script src="{site_url}/javascript/addons/spectrum.js"></script>
+<link rel="stylesheet" href="{site_url}/javascript/addons/spectrum.css" />
 <script>
 function showhideTypeDiv(sel)
 {
