@@ -59,7 +59,7 @@ class UserAuthOauth
         if (strpos($service, 'oauth.') === 0) {
             $service = str_replace("oauth.", "", $service);
         }
-Log::write('system',Log::DEBUG,'Using service ' . $service);
+
         $this->service = $service;
     	$this->client = new \oauth_client_class;
     	$this->client->configuration_file = $_CONF['path'].'vendor/phpclasses/oauth-api/oauth_configuration.json';

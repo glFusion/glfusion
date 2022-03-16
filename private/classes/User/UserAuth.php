@@ -36,15 +36,12 @@ use glFusion\Database\Database;
 use glFusion\Log\Log;
 
 /** Component that provides all features and utilities for secure authentication of individual users */
-final class UserAuth extends UserManager {
+final class UserAuth extends User {
 
 	const COOKIE_PREFIXES = [ Cookie::PREFIX_SECURE, Cookie::PREFIX_HOST ];
 	const COOKIE_CONTENT_SEPARATOR = '~';
 
-	/** @var string the user's current IP address */
-	private $ipAddress;
-	/** @var bool whether throttling should be enabled (e.g. in production) or disabled (e.g. during development) */
-	private $throttling;
+
 	/** @var int the interval in seconds after which to resynchronize the session data with its authoritative source in the database */
 	private $sessionResyncInterval;
 	/** @var string the name of the cookie used for the 'remember me' feature */
@@ -200,7 +197,6 @@ final class UserAuth extends UserManager {
 
 			// if a remember cookie is set
 			if (isset($_COOKIE[$this->rememberCookieName])) {
-Log::write('system',Log::DEBUG,'Remember Cookie is set');
 				// assume the cookie and its contents to be invalid until proven otherwise
 				$valid = false;
 
@@ -218,22 +214,17 @@ Log::write('system',Log::DEBUG,'Remember Cookie is set');
                         );
 					}
                     catch(\Throwable $e) {
-                        throw new DatabaseError($e->getMessage());
+                        throw new Exceptions\DatabaseError($e->getMessage());
 					}
 
 					if (!empty($rememberData)) {
 						if ($rememberData['expires'] >= \time()) {
                             if (\password_verify($parts[1], $rememberData['token'])) {
 								// the cookie and its contents have now been proven to be valid
-Log::write('system',Log::DEBUG,'Remember cookie is valid');
 								$valid = true;
 								$this->onLoginSuccessful($rememberData['user'], $rememberData['email'], $rememberData['username'], $rememberData['status'], $rememberData['roles_mask'], $rememberData['force_logout'], true);
 							}
-						} else {
-							Log::write('system',Log::DEBUG,'Remember cookie has expired');
 						}
-					} else {
-						Log::write('system',Log::DEBUG,'No remember me data found in DB');
 					}
 				}
 
@@ -242,8 +233,6 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 					// mark the cookie as such to prevent any further futile attempts
 					$this->setRememberCookie('', '', \time() + 60 * 60 * 24 * 365.25);
 				}
-			} else {
-				Log::write('system',Log::DEBUG,'No remember cookie found');
 			}
 		}
 	}
@@ -259,7 +248,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 
 			// if it's time for resynchronization
 			if (($_SESSION[self::SESSION_FIELD_LAST_RESYNC] + $this->sessionResyncInterval) <= \time()) {
-				Log::write('system',Log::DEBUG,'resyncing session');
+				Log::write('system',Log::DEBUG,'UserAuth() :: Resyncing Session Data');
 				// fetch the authoritative data from the database again
 				try {
 
@@ -270,7 +259,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
                     );
 				}
 				catch (\Throwable $e) {
-					throw new DatabaseError($e->getMessage());
+					throw new Exceptions\DatabaseError($e->getMessage());
 				}
 
 				// if the user's data has been found
@@ -304,87 +293,6 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 				}
 			}
 		}
-	}
-
-	/**
-	 * Attempts to sign up a user
-	 *
-	 * If you want the user's account to be activated by default, pass `null` as the callback
-	 *
-	 * If you want to make the user verify their email address first, pass an anonymous function as the callback
-	 *
-	 * The callback function must have the following signature:
-	 *
-	 * `function ($selector, $token)`
-	 *
-	 * Both pieces of information must be sent to the user, usually embedded in a link
-	 *
-	 * When the user wants to verify their email address as a next step, both pieces will be required again
-	 *
-	 * @param string $email the email address to register
-	 * @param string $password the password for the new account
-	 * @param string|null $username (optional) the username that will be displayed
-	 * @param callable|null $callback (optional) the function that sends the confirmation email to the user
-	 * @return int the ID of the user that has been created (if any)
-	 * @throws InvalidEmailException if the email address was invalid
-	 * @throws InvalidPasswordException if the password was invalid
-	 * @throws UserAlreadyExistsException if a user with the specified email address already exists
-	 * @throws TooManyRequestsException if the number of allowed attempts/requests has been exceeded
-	 * @throws AuthError if an internal problem occurred (do *not* catch)
-	 *
-	 * @see confirmEmail
-	 * @see confirmEmailAndSignIn
-	 */
-	public function register($email, $password, $username = null, callable $callback = null) {
-		$this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
-		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
-
-		$newUserId = $this->createUserInternal(false, $email, $password, $username, $callback);
-
-		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, false);
-
-		return $newUserId;
-	}
-
-	/**
-	 * Attempts to sign up a user while ensuring that the username is unique
-	 *
-	 * If you want the user's account to be activated by default, pass `null` as the callback
-	 *
-	 * If you want to make the user verify their email address first, pass an anonymous function as the callback
-	 *
-	 * The callback function must have the following signature:
-	 *
-	 * `function ($selector, $token)`
-	 *
-	 * Both pieces of information must be sent to the user, usually embedded in a link
-	 *
-	 * When the user wants to verify their email address as a next step, both pieces will be required again
-	 *
-	 * @param string $email the email address to register
-	 * @param string $password the password for the new account
-	 * @param string|null $username (optional) the username that will be displayed
-	 * @param callable|null $callback (optional) the function that sends the confirmation email to the user
-	 * @return int the ID of the user that has been created (if any)
-	 * @throws InvalidEmailException if the email address was invalid
-	 * @throws InvalidPasswordException if the password was invalid
-	 * @throws UserAlreadyExistsException if a user with the specified email address already exists
-	 * @throws DuplicateUsernameException if the specified username wasn't unique
-	 * @throws TooManyRequestsException if the number of allowed attempts/requests has been exceeded
-	 * @throws AuthError if an internal problem occurred (do *not* catch)
-	 *
-	 * @see confirmEmail
-	 * @see confirmEmailAndSignIn
-	 */
-	public function registerWithUniqueUsername($email, $password, $username = null, callable $callback = null) {
-		$this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
-		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
-
-		$newUserId = $this->createUserInternal(true, $email, $password, $username, $callback);
-
-		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, false);
-
-		return $newUserId;
 	}
 
 	/**
@@ -445,11 +353,11 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 				);
 			}
 			catch (\Throwable $e) {
-				throw new DatabaseError($e->getMessage());
+				throw new Exceptions\DatabaseError($e->getMessage());
 			}
 
 			if (empty($userData)) {
-				throw new UnknownIdException();
+				throw new Exceptions\UnknownIdException();
 			}
 
 			if ((int) $userData['verified'] === 1 && ($userData['status'] == Status::NORMAL || $userData['status'] == 1)) {
@@ -473,28 +381,28 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			}
 			else {
 				if ($userData['verified'] != 1) {
-					throw new EmailNotVerifiedException();
+					throw new Exceptions\EmailNotVerifiedException();
 				}
                 switch ($userData['status']) {
 					case Status::ARCHIVED :
 					case Status::LOCKED :
 					case Status::SUSPENDED :
 					case Status::BANNED :
-                        throw new UnknownIdException();
+                        throw new Exceptions\UnknownIdException();
                         break;
                     case Status::PENDING_REVIEW :
-						throw new AccountPendingReviewException();
+						throw new Exceptions\AccountPendingReviewException();
                         break;
                     default :
-                        throw new AuthError();
+                        throw new Exceptions\AuthError();
                         break;
                 }
-				throw new AuthError();
+				throw new Exceptions\AuthError();
 			}
 		}
 		// anonymous user
 		else {
-			throw new NotLoggedInException();
+			throw new Exceptions\NotLoggedInException();
 		}
 	}
 
@@ -522,7 +430,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			try {
 				$password = self::validatePassword($password);
 			}
-			catch (InvalidPasswordException $e) {
+			catch (Exceptions\InvalidPasswordException $e) {
 				return false;
 			}
 
@@ -538,7 +446,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
                 );
 			}
 			catch (\Throwable $e) {
-				throw new DatabaseError($e->getMessage());
+				throw new Exceptions\DatabaseError($e->getMessage());
 			}
 
 			if (!empty($expectedHash)) {
@@ -553,11 +461,11 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 				return $validated;
 			}
 			else {
-				throw new NotLoggedInException();
+				throw new Exceptions\NotLoggedInException();
 			}
 		}
 		else {
-			throw new NotLoggedInException();
+			throw new Exceptions\NotLoggedInException();
 		}
 	}
 
@@ -603,7 +511,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 	 */
 	public function logOutEverywhereElse() {
 		if (!$this->isLoggedIn()) {
-			throw new NotLoggedInException();
+			throw new Exceptions\NotLoggedInException();
 		}
 
 		// determine the expiry date of any locally existing remember directive
@@ -641,7 +549,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 	 */
 	public function logOutEverywhere() {
 		if (!$this->isLoggedIn()) {
-			throw new NotLoggedInException();
+			throw new Exceptions\NotLoggedInException();
 		}
 
 		// schedule a forced logout in all sessions
@@ -696,7 +604,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
             );
 		}
 		catch (\Throwable $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		$this->setRememberCookie($selector, $token, $expires);
@@ -737,7 +645,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 		$result = $cookie->save();
 
 		if ($result === false) {
-			throw new HeadersAlreadySentError();
+			throw new Exceptions\HeadersAlreadySentError();
 		}
 
 		// if we've been deleting the cookie above
@@ -769,7 +677,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
             );
 		}
 		catch (\Throwable $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		parent::onLoginSuccessful($userId, $email, $username, $status, $roles, $forceLogout, $remembered);
@@ -792,7 +700,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 		$result = $cookie->delete();
 
 		if ($result === false) {
-			throw new HeadersAlreadySentError();
+			throw new Exceptions\HeadersAlreadySentError();
 		}
 	}
 
@@ -828,7 +736,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 //			);
 		}
 		catch (\Throwable $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		if (!empty($confirmationData)) {
@@ -847,7 +755,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 //						);
 					}
 					catch (\Throwable $e) {
-						throw new DatabaseError($e->getMessage());
+						throw new Exceptions\DatabaseError($e->getMessage());
 					}
 
 					// mark the email address as verified (and possibly update it to the new address given)
@@ -873,10 +781,10 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 					}
                     catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
 //					catch (IntegrityConstraintViolationException $e) {
-						throw new UserAlreadyExistsException();
+						throw new Exceptions\UserAlreadyExistsException();
 					}
 					catch (\Throwable $e) {
-						throw new DatabaseError($e->getMessage());
+						throw new Exceptions\DatabaseError($e->getMessage());
 					}
 
 					// if the user is currently signed in
@@ -896,7 +804,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 						);
 					}
 					catch (\Error $e) {
-						throw new DatabaseError($e->getMessage());
+						throw new Exceptions\DatabaseError($e->getMessage());
 					}
 
 					// if the email address has not been changed but simply been verified
@@ -911,15 +819,15 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 					];
 				}
 				else {
-					throw new TokenExpiredException();
+					throw new Exceptions\TokenExpiredException();
 				}
 			}
 			else {
-				throw new InvalidSelectorTokenPairException();
+				throw new Exceptions\InvalidSelectorTokenPairException();
 			}
 		}
 		else {
-			throw new InvalidSelectorTokenPairException();
+			throw new Exceptions\InvalidSelectorTokenPairException();
 		}
 	}
 
@@ -978,7 +886,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			$this->changePasswordWithoutOldPassword($newPassword);
 		}
 		else {
-			throw new InvalidPasswordException();
+			throw new Exceptions\InvalidPasswordException();
 		}
 	}
 
@@ -998,10 +906,10 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			try {
 				$this->logOutEverywhereElse();
 			}
-			catch (NotLoggedInException $ignored) {}
+			catch (Exceptions\NotLoggedInException $ignored) {}
 		}
 		else {
-			throw new NotLoggedInException();
+			throw new Exceptions\NotLoggedInException();
 		}
 	}
 
@@ -1041,11 +949,11 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 				);
 			}
 			catch (\Error $e) {
-				throw new DatabaseError($e->getMessage());
+				throw new Exceptions\DatabaseError($e->getMessage());
 			}
 
 			if ((int) $existingUsersWithNewEmail !== 0) {
-				throw new UserAlreadyExistsException();
+				throw new Exceptions\UserAlreadyExistsException();
 			}
 
 			try {
@@ -1055,12 +963,12 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 				);
 			}
 			catch (\Error $e) {
-				throw new DatabaseError($e->getMessage());
+				throw new Exceptions\DatabaseError($e->getMessage());
 			}
 
 			// ensure that at least the current (old) email address has been verified before proceeding
 			if ((int) $verified !== 1) {
-				throw new EmailNotVerifiedException();
+				throw new Exceptions\EmailNotVerifiedException();
 			}
 
 			$this->throttle([ 'requestEmailChange', 'userId', $this->getUserId() ], 1, (60 * 60 * 24));
@@ -1069,7 +977,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			$this->createConfirmationRequest($this->getUserId(), $newEmail, $callback);
 		}
 		else {
-			throw new NotLoggedInException();
+			throw new Exceptions\NotLoggedInException();
 		}
 	}
 
@@ -1143,11 +1051,11 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			);
 		}
 		catch (\Error $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		if ($latestAttempt === null) {
-			throw new ConfirmationRequestNotFound();
+			throw new Exceptions\ConfirmationRequestNotFound();
 		}
 
 		$this->throttle([ 'resendConfirmation', 'userId', $latestAttempt['user_id'] ], 1, (60 * 60 * 6));
@@ -1214,12 +1122,12 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 
 		// ensure that the account has been verified before initiating a password reset
 		if ((int) $userData['verified'] !== 1) {
-			throw new EmailNotVerifiedException();
+			throw new Exceptions\EmailNotVerifiedException();
 		}
 
 		// do not allow a password reset if the user has explicitly disabled this feature
 		if ((int) $userData['resettable'] !== 1) {
-			throw new ResetDisabledException();
+			throw new Exceptions\ResetDisabledException();
 		}
 
 		$openRequests = $this->throttling ? (int) $this->getOpenPasswordResetRequests($userData['id']) : 0;
@@ -1231,7 +1139,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			$this->createPasswordResetRequest($userData['id'], $requestExpiresAfter, $callback);
 		}
 		else {
-			throw new TooManyRequestsException('', $requestExpiresAfter);
+			throw new Exceptions\TooManyRequestsException('', $requestExpiresAfter);
 		}
 	}
 
@@ -1279,7 +1187,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 		// if neither an email address nor a username has been provided
 		else {
 			// we can't do anything here because the method call has been invalid
-			throw new EmailOrUsernameRequiredError();
+			throw new Exceptions\EmailOrUsernameRequiredError();
 		}
         if ($userData === false) {
 			$this->throttle([ 'attemptToLogin', $this->getIpAddress() ], 4, (60 * 5), null, false);
@@ -1290,7 +1198,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			elseif (isset($username)) {
 				$this->throttle([ 'attemptToLogin', 'username', $username ], 500, (60 * 60 * 24), null, false);
 			}
-			throw new UnknownUsernameException();
+			throw new Exceptions\UnknownUsernameException();
         }
 
 		$password = self::validatePassword($password);
@@ -1338,23 +1246,23 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			}
 			else {
 				if ($userData['verified'] != 1) {
-					throw new EmailNotVerifiedException();
+					throw new Exceptions\EmailNotVerifiedException();
 				}
                 switch ($userData['status']) {
 					case Status::ARCHIVED :
 					case Status::LOCKED :
 					case Status::SUSPENDED :
 					case Status::BANNED :
-                        throw new UnknownIdException();
+                        throw new Exceptions\UnknownIdException();
                         break;
                     case Status::PENDING_REVIEW :
-						throw new AccountPendingReviewException();
+						throw new Exceptions\AccountPendingReviewException();
                         break;
                     default :
-                        throw new AuthError();
+                        throw new Exceptions\AuthError();
                         break;
                 }
-				throw new AuthError();
+				throw new Exceptions\AuthError();
 			}
 		}
 		else {
@@ -1368,7 +1276,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			}
 
 			// we cannot authenticate the user due to the password being wrong
-			throw new InvalidPasswordException();
+			throw new Exceptions\InvalidPasswordException();
 		}
 	}
 
@@ -1403,14 +1311,14 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
                 );
             }
             catch (\Throwable $e) {
-                throw new DatabaseError($e->getMessage());
+                throw new Exceptions\DatabaseError($e->getMessage());
             }
             $rememberDuration = $userData['cookietimeout'];
 		}
 		// if neither an email address nor a username has been provided
 		else {
 			// we can't do anything here because the method call has been invalid
-			throw new EmailOrUsernameRequiredError();
+			throw new Exceptions\EmailOrUsernameRequiredError();
 		}
         if ($userData === false) {
 			$this->throttle([ 'attemptToLogin', $this->getIpAddress() ], 4, (60 * 5), null, false);
@@ -1422,7 +1330,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 				$this->throttle([ 'attemptToLogin', 'username', $username ], 500, (60 * 60 * 24), null, false);
 			}
 
-            throw new UnknownUsernameException();
+            throw new Exceptions\UnknownUsernameException();
         }
 		if (validateTFA() == true) {
             if ((int) $userData['verified'] === 1 && $userData['status'] == 3) {
@@ -1442,7 +1350,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
                 return;
 			}
 			else {
-				throw new EmailNotVerifiedException();
+				throw new Exceptions\EmailNotVerifiedException();
 			}
 		} else {
 			$this->throttle([ 'attemptToLogin', $this->getIpAddress() ], 4, (60 * 60), 5, false);
@@ -1454,7 +1362,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 				$this->throttle([ 'attemptToLogin', 'username', $username ], 500, (60 * 60 * 24), null, false);
 			}
 			// we cannot authenticate the user due to the 2FA being wrong
-			throw new TwoFactorVerificationException();
+			throw new Exceptions\TwoFactorVerificationException();
 		}
 	}
 
@@ -1547,7 +1455,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 		$active_service = (count($modules) == 0) ? false : in_array($service, $modules);
 		if (!$active_service) {
 			Log::write('system',Log::ERROR,"OAuth login failed - there was no consumer available for the service:" . $service);
-			throw new InvalidOauthProviderException();
+			throw new Exceptions\InvalidOauthProviderException();
 		}
 		$consumer = new \glFusion\User\UserAuthOauth($service);
 
@@ -1606,13 +1514,13 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 					// this happens if onBeforeSuccess fails
 					else {
 						$this->inOauth = false;
-						throw new AttemptCancelledException();
+						throw new Exceptions\AttemptCancelledException();
 					}
 				}
 				// user is not verified or status is not active
 				else {
 					Log::write('system',Log::DEBUG,'User is not verified or status is not 3');
-					throw new EmailNotVerifiedException();
+					throw new Exceptions\EmailNotVerifiedException();
 				}
 			}
 			// first time the user has logged into glFusion via Oauth
@@ -1651,7 +1559,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 				exit;
 			}
 		} else {
-			throw new OauthProviderException();
+			throw new Exceptions\OauthProviderException();
 		}
 	}
 
@@ -1677,14 +1585,14 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			);
 		}
 		catch (\Throwable $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		if (!empty($userData)) {
 			return $userData;
 		}
 		else {
-			throw new InvalidEmailException();
+			throw new Exceptions\InvalidEmailException();
 		}
 	}
 
@@ -1713,7 +1621,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			}
 		}
 		catch (\Error $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 	}
 
@@ -1751,14 +1659,14 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			);
 		}
 		catch (\Error $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		if (\is_callable($callback)) {
 			$callback($selector, $token);
 		}
 		else {
-			throw new MissingCallbackError();
+			throw new Exceptions\MissingCallbackError();
 		}
 	}
 
@@ -1795,7 +1703,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			);
 		}
 		catch (\Error $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		if (!empty($resetData)) {
@@ -1813,7 +1721,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 							);
 						}
 						catch (\Error $e) {
-							throw new DatabaseError($e->getMessage());
+							throw new Exceptions\DatabaseError($e->getMessage());
 						}
 
 						return [
@@ -1822,19 +1730,19 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 						];
 					}
 					else {
-						throw new TokenExpiredException();
+						throw new Exceptions\TokenExpiredException();
 					}
 				}
 				else {
-					throw new InvalidSelectorTokenPairException();
+					throw new Exceptions\InvalidSelectorTokenPairException();
 				}
 			}
 			else {
-				throw new ResetDisabledException();
+				throw new Exceptions\ResetDisabledException();
 			}
 		}
 		else {
-			throw new InvalidSelectorTokenPairException();
+			throw new Exceptions\InvalidSelectorTokenPairException();
 		}
 	}
 
@@ -1909,14 +1817,14 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 			$this->resetPassword($selector, $token, null);
 
 			// we should already be in one of the `catch` blocks now so this is not expected
-			throw new AuthError();
+			throw new Exceptions\AuthError();
 		}
 		// if the password is the only thing that's invalid
-		catch (InvalidPasswordException $ignored) {
+		catch (Exceptions\InvalidPasswordException $ignored) {
 			// the password can be reset
 		}
 		// if some other things failed (as well)
-		catch (AuthException $e) {
+		catch (Exceptions\AuthException $e) {
 			// re-throw the exception
 			throw $e;
 		}
@@ -1943,7 +1851,7 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 
 			return true;
 		}
-		catch (AuthException $e) {
+		catch (Exceptions\AuthException $e) {
 			return false;
 		}
 	}
@@ -1971,11 +1879,11 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 				);
 			}
 			catch (\Error $e) {
-				throw new DatabaseError($e->getMessage());
+				throw new Exceptions\DatabaseError($e->getMessage());
 			}
 		}
 		else {
-			throw new NotLoggedInException();
+			throw new Exceptions\NotLoggedInException();
 		}
 	}
 
@@ -1997,11 +1905,11 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 				return (int) $enabled === 1;
 			}
 			catch (\Error $e) {
-				throw new DatabaseError($e->getMessage());
+				throw new Exceptions\DatabaseError($e->getMessage());
 			}
 		}
 		else {
-			throw new NotLoggedInException();
+			throw new Exceptions\NotLoggedInException();
 		}
 	}
 
@@ -2247,136 +2155,9 @@ Log::write('system',Log::DEBUG,'Remember cookie is valid');
 		}
 	}
 
-	/**
-	 * Returns the user's current IP address
-	 *
-	 * @return string the IP address (IPv4 or IPv6)
-	 */
-	public function getIpAddress() {
-		return $this->ipAddress;
-	}
 
-	/**
-	 * Performs throttling or rate limiting using the token bucket algorithm (inverse leaky bucket algorithm)
-	 *
-	 * @param array $criteria the individual criteria that together describe the resource that is being throttled
-	 * @param int $supply the number of units to provide per interval (>= 1)
-	 * @param int $interval the interval (in seconds) for which the supply is provided (>= 5)
-	 * @param int|null $burstiness (optional) the permitted degree of variation or unevenness during peaks (>= 1)
-	 * @param bool|null $simulated (optional) whether to simulate a dry run instead of actually consuming the requested units
-	 * @param int|null $cost (optional) the number of units to request (>= 1)
-	 * @param bool|null $force (optional) whether to apply throttling locally (with this call) even when throttling has been disabled globally (on the instance, via the constructor option)
-	 * @return float the number of units remaining from the supply
-	 * @throws TooManyRequestsException if the actual demand has exceeded the designated supply
-	 * @throws AuthError if an internal problem occurred (do *not* catch)
-	 */
-	public function throttle(array $criteria, $supply, $interval, $burstiness = null, $simulated = null, $cost = null, $force = null) {
-        global $_TABLES;
-		// validate the supplied parameters and set appropriate defaults where necessary
-		$force = ($force !== null) ? (bool) $force : false;
 
-		if (!$this->throttling && !$force) {
-			return $supply;
-		}
 
-		// generate a unique key for the bucket (consisting of 44 or fewer ASCII characters)
-		$key = Base64::encodeUrlSafeWithoutPadding(
-			\hash(
-				'sha256',
-				\implode("\n", $criteria),
-				true
-			)
-		);
-
-		// validate the supplied parameters and set appropriate defaults where necessary
-		$burstiness = ($burstiness !== null) ? (int) $burstiness : 1;
-		$simulated = ($simulated !== null) ? (bool) $simulated : false;
-		$cost = ($cost !== null) ? (int) $cost : 1;
-
-		$now = \time();
-
-		// determine the volume of the bucket
-		$capacity = $burstiness * (int) $supply;
-
-		// calculate the rate at which the bucket is refilled (per second)
-		$bandwidthPerSecond = (int) $supply / (int) $interval;
-
-		try {
-            $bucket = Database::getInstance()->conn->fetchAssoc(
-                'SELECT tokens, replenished_at FROM ' . $_TABLES['users_throttling'] . ' WHERE bucket = ?',
-                [ $key ],
-                [ Database::STRING ]
-            );
-		}
-		catch (\Throwable $e) {
-			throw new DatabaseError($e->getMessage());
-		}
-
-		if ($bucket === null) {
-			$bucket = [];
-		}
-
-		// initialize the number of tokens in the bucket
-		$bucket['tokens'] = isset($bucket['tokens']) ? (float) $bucket['tokens'] : (float) $capacity;
-		// initialize the last time that the bucket has been refilled (as a Unix timestamp in seconds)
-		$bucket['replenished_at'] = isset($bucket['replenished_at']) ? (int) $bucket['replenished_at'] : $now;
-
-		// replenish the bucket as appropriate
-		$secondsSinceLastReplenishment = \max(0, $now - $bucket['replenished_at']);
-		$tokensToAdd = $secondsSinceLastReplenishment * $bandwidthPerSecond;
-		$bucket['tokens'] = \min((float) $capacity, $bucket['tokens'] + $tokensToAdd);
-		$bucket['replenished_at'] = $now;
-
-		$accepted = $bucket['tokens'] >= $cost;
-
-		if (!$simulated) {
-			if ($accepted) {
-				// remove the requested number of tokens from the bucket
-				$bucket['tokens'] = \max(0, $bucket['tokens'] - $cost);
-			}
-
-			// set the earliest time after which the bucket *may* be deleted (as a Unix timestamp in seconds)
-			$bucket['expires_at'] = $now + \floor($capacity / $bandwidthPerSecond * 2);
-
-			// merge the updated bucket into the database
-			try {
-                $affected = Database::getInstance()->conn->update(
-                    $_TABLES['users_throttling'],
-                    $bucket,
-                    [ 'bucket' => $key ],
-                    [ Database::STRING ]
-                );
-			}
-			catch (\Throwable $e) {
-				throw new DatabaseError($e->getMessage());
-			}
-
-			if ($affected === 0) {
-				$bucket['bucket'] = $key;
-
-				try {
-                    Database::getInstance()->conn->insert(
-                        $_TABLES['users_throttling'],
-                        $bucket
-                    );
-				}
-                catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $ignored) {}
-				catch (\Throwable $e) {
-					throw new DatabaseError($e->getMessage());
-				}
-			}
-		}
-
-		if ($accepted) {
-			return $bucket['tokens'];
-		}
-		else {
-			$tokensMissing = $cost - $bucket['tokens'];
-			$estimatedWaitingTimeSeconds = \ceil($tokensMissing / $bandwidthPerSecond);
-
-			throw new TooManyRequestsException('', $estimatedWaitingTimeSeconds);
-		}
-	}
 
 	/**
 	 * Returns the component that can be used for administrative tasks

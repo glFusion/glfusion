@@ -12,7 +12,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-use glFusion\User\Exceptions;
 use Delight\Base64\Base64;
 use Delight\Cookie\Session;
 use glFusion\Database\Database;
@@ -24,7 +23,12 @@ use glFusion\Log\Log;
  *
  * @internal
  */
-abstract class UserManager {
+abstract class User {
+
+  	/** @var string the user's current IP address */
+	private $ipAddress;
+	/** @var bool whether throttling should be enabled (e.g. in production) or disabled (e.g. during development) */
+	private $throttling;
 
 	/** @var string session field for whether the client is currently signed in */
 	const SESSION_FIELD_LOGGED_IN = 'auth_logged_in';
@@ -134,7 +138,7 @@ abstract class UserManager {
 				// if any user with that username does already exist
 				if ($occurrencesOfUsername > 0) {
 					// cancel the operation and report the violation of this requirement
-					throw new DuplicateUsernameException();
+					throw new Exceptions\DuplicateUsernameException();
 				}
 			}
 		}
@@ -163,10 +167,10 @@ abstract class UserManager {
 		}
 		// if we have a duplicate entry
 		catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
-			throw new UserAlreadyExistsException();
+			throw new Exceptions\UserAlreadyExistsException();
 		}
 		catch (\Error $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		$newUserId = (int) Database::getInstance()->conn->lastInsertId();
@@ -197,11 +201,11 @@ abstract class UserManager {
 			);
 
 			if ($affected === 0) {
-				throw new UnknownIdException();
+				throw new Exceptions\UnknownIdException();
 			}
 		}
 		catch (\Error $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 	}
 
@@ -259,19 +263,19 @@ abstract class UserManager {
             );
 		}
 		catch (\Throwable $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		if (empty($users)) {
             return false;
-			throw new UnknownUsernameException();
+			throw new Exceptions\UnknownUsernameException();
 		}
 		else {
 			if (\count($users) === 1) {
 				return $users[0];
 			}
 			else {
-				throw new AmbiguousUsernameException();
+				throw new Exceptions\AmbiguousUsernameException();
 			}
 		}
 	}
@@ -285,13 +289,13 @@ abstract class UserManager {
 	 */
 	protected static function validateEmailAddress($email) {
 		if (empty($email)) {
-			throw new InvalidEmailException();
+			throw new Exceptions\InvalidEmailException();
 		}
 
 		$email = \trim($email);
 
 		if (!\filter_var($email, \FILTER_VALIDATE_EMAIL)) {
-			throw new InvalidEmailException();
+			throw new Exceptions\InvalidEmailException();
 		}
 
 		return $email;
@@ -306,13 +310,13 @@ abstract class UserManager {
 	 */
 	protected static function validatePassword($password) {
 		if (empty($password)) {
-			throw new InvalidPasswordException();
+			throw new Exceptions\InvalidPasswordException();
 		}
 
 		$password = \trim($password);
 
 		if (\strlen($password) < 1) {
-			throw new InvalidPasswordException();
+			throw new Exceptions\InvalidPasswordException();
 		}
 
 		return $password;
@@ -342,7 +346,7 @@ abstract class UserManager {
             foreach ($domains as $domain) {
                 $domain = trim($domain);
                 if (preg_match ("#$domain#i", $email_domain)) {
-                    throw new DisallowedDomainException();
+                    throw new Exceptions\DisallowedDomainException();
                 }
             }
         }
@@ -391,14 +395,14 @@ abstract class UserManager {
             );
 		}
 		catch (\Error $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		if (\is_callable($callback)) {
 			$callback($selector, $token);
 		}
 		else {
-			throw new MissingCallbackError();
+			throw new Exceptions\MissingCallbackError();
 		}
 	}
 
@@ -427,7 +431,7 @@ abstract class UserManager {
             );
 		}
 		catch (\Throwable $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 	}
 
@@ -456,10 +460,141 @@ abstract class UserManager {
             );
 		}
 		catch (\Throwable $e) {
-			throw new DatabaseError($e->getMessage());
+			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 		exit;
 	}
+
+    /**
+	 * Performs throttling or rate limiting using the token bucket algorithm (inverse leaky bucket algorithm)
+	 *
+	 * @param array $criteria the individual criteria that together describe the resource that is being throttled
+	 * @param int $supply the number of units to provide per interval (>= 1)
+	 * @param int $interval the interval (in seconds) for which the supply is provided (>= 5)
+	 * @param int|null $burstiness (optional) the permitted degree of variation or unevenness during peaks (>= 1)
+	 * @param bool|null $simulated (optional) whether to simulate a dry run instead of actually consuming the requested units
+	 * @param int|null $cost (optional) the number of units to request (>= 1)
+	 * @param bool|null $force (optional) whether to apply throttling locally (with this call) even when throttling has been disabled globally (on the instance, via the constructor option)
+	 * @return float the number of units remaining from the supply
+	 * @throws TooManyRequestsException if the actual demand has exceeded the designated supply
+	 * @throws AuthError if an internal problem occurred (do *not* catch)
+	 */
+	public function throttle(array $criteria, $supply, $interval, $burstiness = null, $simulated = null, $cost = null, $force = null) {
+        global $_TABLES;
+		// validate the supplied parameters and set appropriate defaults where necessary
+		$force = ($force !== null) ? (bool) $force : false;
+
+		if (!$this->throttling && !$force) {
+			return $supply;
+		}
+
+		// generate a unique key for the bucket (consisting of 44 or fewer ASCII characters)
+		$key = Base64::encodeUrlSafeWithoutPadding(
+			\hash(
+				'sha256',
+				\implode("\n", $criteria),
+				true
+			)
+		);
+
+		// validate the supplied parameters and set appropriate defaults where necessary
+		$burstiness = ($burstiness !== null) ? (int) $burstiness : 1;
+		$simulated = ($simulated !== null) ? (bool) $simulated : false;
+		$cost = ($cost !== null) ? (int) $cost : 1;
+
+		$now = \time();
+
+		// determine the volume of the bucket
+		$capacity = $burstiness * (int) $supply;
+
+		// calculate the rate at which the bucket is refilled (per second)
+		$bandwidthPerSecond = (int) $supply / (int) $interval;
+
+		try {
+            $bucket = Database::getInstance()->conn->fetchAssoc(
+                'SELECT tokens, replenished_at FROM ' . $_TABLES['users_throttling'] . ' WHERE bucket = ?',
+                [ $key ],
+                [ Database::STRING ]
+            );
+		}
+		catch (\Throwable $e) {
+			throw new Exceptions\DatabaseError($e->getMessage());
+		}
+
+		if ($bucket === null) {
+			$bucket = [];
+		}
+
+		// initialize the number of tokens in the bucket
+		$bucket['tokens'] = isset($bucket['tokens']) ? (float) $bucket['tokens'] : (float) $capacity;
+		// initialize the last time that the bucket has been refilled (as a Unix timestamp in seconds)
+		$bucket['replenished_at'] = isset($bucket['replenished_at']) ? (int) $bucket['replenished_at'] : $now;
+
+		// replenish the bucket as appropriate
+		$secondsSinceLastReplenishment = \max(0, $now - $bucket['replenished_at']);
+		$tokensToAdd = $secondsSinceLastReplenishment * $bandwidthPerSecond;
+		$bucket['tokens'] = \min((float) $capacity, $bucket['tokens'] + $tokensToAdd);
+		$bucket['replenished_at'] = $now;
+
+		$accepted = $bucket['tokens'] >= $cost;
+
+		if (!$simulated) {
+			if ($accepted) {
+				// remove the requested number of tokens from the bucket
+				$bucket['tokens'] = \max(0, $bucket['tokens'] - $cost);
+			}
+
+			// set the earliest time after which the bucket *may* be deleted (as a Unix timestamp in seconds)
+			$bucket['expires_at'] = $now + \floor($capacity / $bandwidthPerSecond * 2);
+
+			// merge the updated bucket into the database
+			try {
+                $affected = Database::getInstance()->conn->update(
+                    $_TABLES['users_throttling'],
+                    $bucket,
+                    [ 'bucket' => $key ],
+                    [ Database::STRING ]
+                );
+			}
+			catch (\Throwable $e) {
+				throw new Exceptions\DatabaseError($e->getMessage());
+			}
+
+			if ($affected === 0) {
+				$bucket['bucket'] = $key;
+
+				try {
+                    Database::getInstance()->conn->insert(
+                        $_TABLES['users_throttling'],
+                        $bucket
+                    );
+				}
+                catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $ignored) {}
+				catch (\Throwable $e) {
+					throw new Exceptions\DatabaseError($e->getMessage());
+				}
+			}
+		}
+
+		if ($accepted) {
+			return $bucket['tokens'];
+		}
+		else {
+			$tokensMissing = $cost - $bucket['tokens'];
+			$estimatedWaitingTimeSeconds = \ceil($tokensMissing / $bandwidthPerSecond);
+
+			throw new Exceptions\TooManyRequestsException('', $estimatedWaitingTimeSeconds);
+		}
+	}
+
+	/**
+	 * Returns the user's current IP address
+	 *
+	 * @return string the IP address (IPv4 or IPv6)
+	 */
+	public function getIpAddress() {
+		return $this->ipAddress;
+	}	
 
 	/**
 	 * Builds a (qualified) full table name from an optional qualifier, an optional prefix, and the table name itself

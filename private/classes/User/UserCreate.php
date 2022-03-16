@@ -22,14 +22,16 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own!');
 }
 
-use \glFusion\User;
-use \glFusion\User\Exceptions;
-use \glFusion\Database\Database;
-use \glFusion\Cache\GlFusionCache;
-use \Doctrine\DBAL\DBALException;
-use \glFusion\Log\Log;
+use glFusin\User\UserAuthOauth;
+use glFusion\User\Status;
+use glFusion\User\Exception;
+use Delight\Base64\Base64;
+use Delight\Cookie\Cookie;
+use Delight\Cookie\Session;
+use glFusion\Database\Database;
+use glFusion\Log\Log;
 
-class UserCreate extends UserManager
+class UserCreate extends User
 {
     /** @var core data fields provided by user */
     protected $userDataFields = ['username','email','passwd','fullname','homepage','remoteusername','service'];
@@ -42,6 +44,87 @@ class UserCreate extends UserManager
     {
 
     }
+
+	/**
+	 * Attempts to sign up a user
+	 *
+	 * If you want the user's account to be activated by default, pass `null` as the callback
+	 *
+	 * If you want to make the user verify their email address first, pass an anonymous function as the callback
+	 *
+	 * The callback function must have the following signature:
+	 *
+	 * `function ($selector, $token)`
+	 *
+	 * Both pieces of information must be sent to the user, usually embedded in a link
+	 *
+	 * When the user wants to verify their email address as a next step, both pieces will be required again
+	 *
+	 * @param string $email the email address to register
+	 * @param string $password the password for the new account
+	 * @param string|null $username (optional) the username that will be displayed
+	 * @param callable|null $callback (optional) the function that sends the confirmation email to the user
+	 * @return int the ID of the user that has been created (if any)
+	 * @throws InvalidEmailException if the email address was invalid
+	 * @throws InvalidPasswordException if the password was invalid
+	 * @throws UserAlreadyExistsException if a user with the specified email address already exists
+	 * @throws TooManyRequestsException if the number of allowed attempts/requests has been exceeded
+	 * @throws AuthError if an internal problem occurred (do *not* catch)
+	 *
+	 * @see confirmEmail
+	 * @see confirmEmailAndSignIn
+	 */
+	public function register($email, $password, $username = null, callable $callback = null) {
+		$this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
+		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
+
+		$newUserId = $this->createUserInternal(false, $email, $password, $username, $callback);
+
+		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, false);
+
+		return $newUserId;
+	}
+
+	/**
+	 * Attempts to sign up a user while ensuring that the username is unique
+	 *
+	 * If you want the user's account to be activated by default, pass `null` as the callback
+	 *
+	 * If you want to make the user verify their email address first, pass an anonymous function as the callback
+	 *
+	 * The callback function must have the following signature:
+	 *
+	 * `function ($selector, $token)`
+	 *
+	 * Both pieces of information must be sent to the user, usually embedded in a link
+	 *
+	 * When the user wants to verify their email address as a next step, both pieces will be required again
+	 *
+	 * @param string $email the email address to register
+	 * @param string $password the password for the new account
+	 * @param string|null $username (optional) the username that will be displayed
+	 * @param callable|null $callback (optional) the function that sends the confirmation email to the user
+	 * @return int the ID of the user that has been created (if any)
+	 * @throws InvalidEmailException if the email address was invalid
+	 * @throws InvalidPasswordException if the password was invalid
+	 * @throws UserAlreadyExistsException if a user with the specified email address already exists
+	 * @throws DuplicateUsernameException if the specified username wasn't unique
+	 * @throws TooManyRequestsException if the number of allowed attempts/requests has been exceeded
+	 * @throws AuthError if an internal problem occurred (do *not* catch)
+	 *
+	 * @see confirmEmail
+	 * @see confirmEmailAndSignIn
+	 */
+	public function registerWithUniqueUsername($email, $password, $username = null, callable $callback = null) {
+		$this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
+		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
+
+		$newUserId = $this->createUserInternal(true, $email, $password, $username, $callback);
+
+		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, false);
+
+		return $newUserId;
+	}
 
     /**
 	 * Attempts to sign up a user
@@ -126,7 +209,7 @@ class UserCreate extends UserManager
             $data['email'] = $data['oauth_email'];
         }
         if ($data['email'] !== $data['email_conf']) {
-            throw new EmailConfirmationMismatchException();
+            throw new Exceptions\EmailConfirmationMismatchException();
         }
 
         $data['email'] = self::validateEmailAddress($data['email']);
@@ -167,7 +250,7 @@ class UserCreate extends UserManager
 
         if ( $_CONF['user_reg_fullname'] == 2) {
             if (empty($data['fullname'])) {
-                throw new InvaidFullnameException();
+                throw new Exceptions\InvaidFullnameException();
             }
         }
 
