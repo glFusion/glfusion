@@ -1,20 +1,26 @@
 <?php
 /**
-*   Class to handle user badges.
-*
-*   @author     Lee Garner <lee@leegarner.com>
-*   @copyright  Copyright (c) 2022 Lee Garner <lee@leegarner.com>
-*   @package    glfusion
-*   @version    0.0.1
-*   @license    http://opensource.org/licenses/gpl-2.0.php
-*               GNU Public License v2 or later
-*   @filesource
-*/
+ * Class to handle user badges.
+ *
+ * @author     Lee Garner <lee@leegarner.com>
+ * @copyright  Copyright (c) 2022 Lee Garner <lee@leegarner.com>
+ * @package    glfusion
+ * @version    v0.0.1
+ * @license    http://opensource.org/licenses/gpl-2.0.php
+ *              GNU Public License v2 or later
+ * @filesource
+ */
 namespace glFusion\Badges;
 use glFusion\Group;
 use glFusion\Log\Log;
 use glFusion\Database\Database;
+use glFusion\Cache\Cache;
 
+
+/**
+ * User Badge class.
+ * @package glfusion
+ */
 class Badge
 {
     /** Default foreground and background colors for CSS-type badges
@@ -27,13 +33,16 @@ class Badge
      */
     private const DEF_GRP = '1_site';
 
+    /** Cache tags affecting user group membership.
+     * @var array */
+    private static $cache_tags = array('badges', 'user_group', 'groups');
+
     private $bid = 0;
     private $enabled = 1;
     private $inherit = 1;
     private $order = 999;  // set to last in list
     private $badge_grp = '';
     private $gl_grp = 13;
-    private $data = array();
     private $type = 'img';
     private $bgcolor = self::DEF_BG;
     private $fgcolor = self::DEF_FG;
@@ -85,7 +94,7 @@ class Badge
 
         $db = Database::getInstance();
         try {
-            $stmt = $db->conn->executeQuery( 
+            $stmt = $db->conn->executeQuery(
                 "SELECT * FROM {$_TABLES['badges']}
                 WHERE bid = ?",
                 array($id),
@@ -121,7 +130,6 @@ class Badge
 
         $this->type = $A['type'];
         if ($from_db) {
-            $this->enabled = $A['enabled'];
             if ($this->type == 'css') {
                 $data = @unserialize($A['data']);
                 if (is_array($data)) {
@@ -359,9 +367,12 @@ class Badge
         global $_CONF;
 
         static $retval = array();
+        $cache_key = 'badges_' . $uid;
         $uid = (int)$uid;
         if (array_key_exists($uid, $retval)) {
             return $retval[$uid];
+        } elseif (Cache::getInstance()->has($cache_key)) {
+            return Cache::getInstance()->get($cache_key);
         }
 
         $badge_groups = self::getAll();
@@ -372,16 +383,14 @@ class Badge
             foreach ($badge_group as $grp_id=>$badge) {
                 $grps = $badge->inheritGroup() ? $all_grps : $assigned_grps;
                 if (in_array($grp_id, $grps)) {
-                    $badge->getBadgeHTML();
-                    if ($badge->html != '') {
-                        $retval[$uid][] = $badge;
-                    }
+                    $retval[$uid][] = $badge;
                     if ($badge->getBadgeGroup() != '') {
                         break;
                     }
                 }
             }
         }
+        Cache::getInstance()->set($cache_key, $retval, self::$cache_tags);
         return $retval[$uid];
     }
 
@@ -713,6 +722,7 @@ class Badge
         try {
             $stmt = $db->conn->executeUpdate($sql, $params, $types);
             self::reOrder($this->badge_grp);
+            Cache::getInstance()->deleteItemsByTags(self::$cache_tags);
             return '';
         } catch (\Throwable $e) {
             Log::write('system', Log::ERROR, $e->getMessage());
