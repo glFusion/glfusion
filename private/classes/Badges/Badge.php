@@ -37,18 +37,21 @@ class Badge
      * @var array */
     private static $cache_tags = array('badges', 'user_group', 'groups');
 
-    private $bid = 0;
+    private $id = 0;
+    private $bg_id = 1;
     private $enabled = 1;
     private $inherit = 1;
-    private $order = 999;  // set to last in list
-    private $badge_grp = '';
+    private $order = 9999;  // set to last in list
     private $gl_grp = 13;
     private $type = 'img';
+    private $dscp = '';
+
     private $bgcolor = self::DEF_BG;
     private $fgcolor = self::DEF_FG;
-    private $dscp = '';
     private $image = '';
     private $html = NULL;
+
+    private $bg_name = '';
 
 
     /**
@@ -95,8 +98,11 @@ class Badge
         $db = Database::getInstance();
         try {
             $stmt = $db->conn->executeQuery(
-                "SELECT * FROM {$_TABLES['badges']}
-                WHERE bid = ?",
+                "SELECT b.*, bg.bg_name
+                FROM {$_TABLES['badges']} b
+                LEFT JOIN {$_TABLES['badge_groups']} bg
+                ON b.b_bg_id = bg.bg_id
+                WHERE b_id = ?",
                 array($id),
                 array(Database::INTEGER)
             );
@@ -119,25 +125,24 @@ class Badge
      */
     public function setVars(array $A, bool $from_db = true) : self
     {
-        $this->setBid($A['bid'])
-             ->setEnabled(isset($A['enabled']) ? $A['enabled'] : 0)
-             ->setInherit(isset($A['inherit']) ? $A['inherit'] : 0)
-             ->setOrder($A['sortorder'])
-             ->setBadgeGroup($A['badge_grp'])
-             ->setSiteGroup((int)$A['gl_grp'])
-             ->setType($A['type'])
-             ->setDscp($A['dscp']);
+        $this->setBid((int)$A['b_id'])
+             ->setEnabled(isset($A['b_enabled']) ? $A['b_enabled'] : 0)
+             ->setInherit(isset($A['b_inherit']) ? $A['b_inherit'] : 0)
+             ->setOrder((int)$A['b_order'])
+             ->setBadgeGroup((int)$A['b_bg_id'])
+             ->setSiteGroup((int)$A['b_gl_grp'])
+             ->setType($A['b_type'])
+             ->setDscp($A['b_dscp']);
 
-        $this->type = $A['type'];
         if ($from_db) {
             if ($this->type == 'css') {
-                $data = @unserialize($A['data']);
+                $data = @unserialize($A['b_data']);
                 if (is_array($data)) {
                     $this->fgcolor = isset($data['fgcolor']) ? $data['fgcolor'] : self::DEF_FG;
                     $this->bgcolor = isset($data['bgcolor']) ? $data['bgcolor'] : self::DEF_BG;
                 }
             } else {
-                $this->image = $A['data'];
+                $this->image = $A['b_data'];
             }
         } else {
             $this->fgcolor = isset($A['fgcolor']) ? $A['fgcolor'] : self::DEF_FG;
@@ -157,27 +162,14 @@ class Badge
      */
     public function setBid(int $id) : self
     {
-        $this->bid = (int)$id;
+        $this->id = (int)$id;
         return $this;
     }
 
 
     public function getBid() : int
     {
-        return (int)$this->bid;
-    }
-
-
-    /**
-     * Set the badge group name.
-     *
-     * @param   string  $grp    Group name
-     * @return  object  $this
-     */
-    public function setGroup(string $grp) : self
-    {
-        $this->badge_grp = $grp;
-        return $this;
+        return (int)$this->id;
     }
 
 
@@ -268,12 +260,12 @@ class Badge
     /**
      * Set the badge group name for grouping badges.
      *
-     * @param   string  $name   Group name
+     * @param   integer $id     Group record ID
      * @return  object  $this
      */
-    public function setBadgeGroup(string $name) : self
+    public function setBadgeGroup(int $id) : self
     {
-        $this->badge_grp = $name;
+        $this->bg_id = $id;
         return $this;
     }
 
@@ -285,7 +277,7 @@ class Badge
      */
     public function getBadgeGroup() : string
     {
-        return $this->badge_grp;
+        return $this->bg_id;
     }
 
 
@@ -314,7 +306,7 @@ class Badge
 
 
     /**
-     * Gets an array of all the badge groups.
+     * Gets an array of all the badges.
      *
      * @param  boolean $enabled    True to get only enabled badges
      * @return array           Array of grp_name=>grp_id
@@ -323,36 +315,48 @@ class Badge
     {
         global $_TABLES;
 
-        static $cache = array();
+        static $local = array();
         $enabled = $enabled ? 1 : 0;    // change to int
+        $cache_key = 'badges_enabled_' . $enabled;
 
-        if (!array_key_exists($enabled, $cache)) {
-            $cache[$enabled] = array();
-            $db = Database::getInstance();
-            $sql = "SELECT b.*, g.grp_name
+        if (!array_key_exists($enabled, $local)) {
+            $local[$enabled] = array();
+            $Cache = Cache::getInstance();
+            if ($Cache->has($cache_key)) {
+                $local[$enabled] = $Cache->get($cache_key);
+            } else {
+                $db = Database::getInstance();
+                $sql = "SELECT b.*, g.grp_name
                     FROM {$_TABLES['badges']} b
+                    LEFT JOIN {$_TABLES['badge_groups']} bg
+                        ON bg.bg_id = b.b_bg_id
                     LEFT JOIN {$_TABLES['groups']} g
-                        ON g.grp_id = b.gl_grp ";
-            if ($enabled) {
-                $sql .= "WHERE enabled = 1";
-            }
-            $sql .= " ORDER BY b.badge_grp ASC, b.sortorder ASC";
-            try {
-                $stmt = $db->conn->executeQuery($sql);
-                $data = $stmt->fetchAll(Database::ASSOCIATIVE);
-            } catch (\Throwable $e) {
-                return $cache[$enabled];
-            }
-            $cbrk = NULL;
-            foreach ($data as $A) {
-                if ($cbrk != $A['badge_grp']) {
-                    $cache[$enabled][$A['badge_grp']] = array();
-                    $cbrk = $A['badge_grp'];
+                        ON g.grp_id = b.b_gl_grp ";
+                if ($enabled) {
+                    $sql .= "WHERE b.b_enabled = 1 AND bg.bg_enabled = 1";
                 }
-                $cache[$enabled][$A['badge_grp']][$A['gl_grp']] = new self($A);
+                $sql .= " ORDER BY bg.bg_order ASC, b.b_order ASC";
+                try {
+                    $stmt = $db->conn->executeQuery($sql);
+                    $data = $stmt->fetchAll(Database::ASSOCIATIVE);
+                } catch (\Throwable $e) {
+                    Log::write('system', Log::ERROR, $e->getMessage());
+                    $data = NULL;
+                }
+                if (is_array($data)) {
+                    $cbrk = -1;
+                    foreach ($data as $A) {
+                        if ($cbrk != $A['b_bg_id']) {
+                            $local[$enabled][$A['b_bg_id']] = array();
+                            $cbrk = $A['b_bg_id'];
+                        }
+                        $local[$enabled][$A['b_bg_id']][$A['b_id']] = new self($A);
+                    }
+                }
+                $Cache->set($cache_key, $local[$enabled], self::$cache_tags);
             }
         }
-        return $cache[$enabled];
+        return $local[$enabled];
     }
 
 
@@ -372,25 +376,27 @@ class Badge
         if (array_key_exists($uid, $retval)) {
             return $retval[$uid];
         } elseif (Cache::getInstance()->has($cache_key)) {
-            return Cache::getInstance()->get($cache_key);
+            $retval[$uid] = Cache::getInstance()->get($cache_key);
+            return $retval[$uid];
         }
 
-        $badge_groups = self::getAll();
+        $badges = self::getAll();
+        $BadgeGroups = BadgeGroup::getAll();
         $retval[$uid] = array();
         $all_grps = Group::getAll($uid);
         $assigned_grps = Group::getAssigned($uid);
-        foreach ($badge_groups as $id=>$badge_group) {
+        foreach ($badges as $id=>$badge_group) {
             foreach ($badge_group as $grp_id=>$badge) {
                 $grps = $badge->inheritGroup() ? $all_grps : $assigned_grps;
                 if (in_array($grp_id, $grps)) {
                     $retval[$uid][] = $badge;
-                    if ($badge->getBadgeGroup() != '') {
+                    if ($badge->getBadgeGroup() > 0 && $BadgeGroups[$badge->getBadgeGroup()]->isSingular()) {
                         break;
                     }
                 }
             }
         }
-        Cache::getInstance()->set($cache_key, $retval, self::$cache_tags);
+        Cache::getInstance()->set($cache_key, $retval[$uid], self::$cache_tags);
         return $retval[$uid];
     }
 
@@ -435,17 +441,15 @@ class Badge
         }
 
         // Description for title and display text, fallback to GL group name
-        $dscp = $this->dscp == '' ? $this->badge_grp : $this->dscp;
+        $dscp = $this->dscp == '' ? $this->bg_name : $this->dscp;
         $this->html = '';
         switch ($this->type) {
         case 'css':
-            //$tpl_filename = 'badge_css.thtml';
             $url = '';
             break;
         case 'img':
         default:
-            //$tpl_filename = 'badge_img.thtml';
-            $url = $this->getImageUrl();
+        $url = $this->getImageUrl();
             break;
         }
         $T = new \Template($_CONF['path_layout']);
@@ -513,8 +517,8 @@ class Badge
         foreach ($badge_groups[$badge_group] as $badge) {
             if ($badge->getOrder() != $order) {
                 $sql = "UPDATE {$_TABLES['badges']}
-                        SET sortorder = ?
-                        WHERE bid = ?";
+                        SET b_order = ?
+                        WHERE b_id = ?";
                 try {
                     $stmt = $db->conn->executeUpdate(
                         $sql,
@@ -560,8 +564,8 @@ class Badge
         $Badge = self::getById((int)$id);
         $db = Database::getInstance();
         $sql = "UPDATE {$_TABLES['badges']}
-                SET sortorder = sortorder $oper 11
-                WHERE bid = ?";
+                SET b_order = b_order $oper 11
+                WHERE b_id = ?";
         try {
             $stmt = $db->conn->executeUpdate(
                 $sql,
@@ -587,20 +591,20 @@ class Badge
         $T = new \Template($_CONF['path_layout'] . 'admin/badges/');
         $T->set_file('editform', 'editor.thtml');
         $T->set_var(array(
-            'bid'     => $this->bid,
-            'grp'    => $this->badge_grp,
+            'id'       => $this->id,
+            'bg_options' => BadgeGroup::optionList($this->bg_id),
             'grp_select' => COM_optionList(
                 $_TABLES['groups'], 'grp_id,grp_name', $this->gl_grp
             ),
             'image_sel' => $this->_getImageSelection($this->image),
             'order'  => $this->order,
-            'grp_sel' => COM_optionList(
+            /*'grp_sel' => COM_optionList(
                     $_TABLES['badges'],
                     'DISTINCT badge_grp,badge_grp',
                     $this->badge_grp,
                     0,
                     "badge_grp <> ''"
-                ),
+            ),*/
             'ena_chk'   => $this->enabled ? 'checked="checked"' : '',
             'inherit_chk' => $this->inherit ? 'checked="checked"' : '',
             'chk_' . $this->type => 'checked="checked"',
@@ -678,28 +682,32 @@ class Badge
             }
         }
 
+        if (isset($A['badge_grp_txt']) && !empty($A['badge_grp_txt'])) {
+            $this->bg_id = BadgeGroup::createFromName($A['badge_grp_txt']);
+        }
+
         $db = Database::getInstance();
-        if ($this->bid > 0) {
+        if ($this->id > 0) {
             $sql1 = "UPDATE {$_TABLES['badges']} SET ";
-            $sql3 = ' WHERE bid = :bid';
+            $sql3 = ' WHERE b_id = :b_id';
         } else {
             $sql1 = "INSERT INTO {$_TABLES['badges']} SET ";
             $sql3 = '';
         }
 
-        $sql2 = "badge_grp = :badge_grp,
-            sortorder = :sortorder,
-            enabled = :enabled,
-            inherit = :inherit,
-            gl_grp = :gl_grp,
-            data = :data,
-            type = :type,
-            dscp = :dscp";
+        $sql2 = "b_bg_id = :bg_id,
+            b_order = :order,
+            b_enabled = :enabled,
+            b_inherit = :inherit,
+            b_gl_grp = :gl_grp,
+            b_data = :data,
+            b_type = :type,
+            b_dscp = :dscp";
         $sql = $sql1 . $sql2 . $sql3;
         $params = array(
-            'bid' => $this->bid,
-            'badge_grp' => $this->badge_grp,
-            'sortorder' => $this->order,
+            'b_id' => $this->id,
+            'bg_id' => $this->bg_id,
+            'order' => $this->order,
             'enabled' => $this->enabled,
             'inherit' => $this->inherit,
             'gl_grp' => $this->gl_grp,
@@ -709,7 +717,7 @@ class Badge
         );
         $types = array(
             Database::INTEGER,
-            Database::STRING,
+            Database::INTEGER,
             Database::INTEGER,
             Database::INTEGER,
             Database::INTEGER,
@@ -721,7 +729,7 @@ class Badge
 
         try {
             $stmt = $db->conn->executeUpdate($sql, $params, $types);
-            self::reOrder($this->badge_grp);
+            self::reOrder($this->bg_id);
             Cache::getInstance()->deleteItemsByTags(self::$cache_tags);
             return '';
         } catch (\Throwable $e) {
@@ -777,7 +785,7 @@ class Badge
         try {
             $db->conn->delete(
                 $_TABLES['badges'],
-                array('bid' => $bid),
+                array('b_id' => $bid),
                 array(Database::INTEGER)
             );
         } catch (\Throwable $e) {
@@ -809,8 +817,8 @@ class Badge
             try {
                 $stmt = $db->conn->executeUpdate(
                     "UPDATE {$_TABLES['badges']}
-                    SET $field = ?
-                    WHERE bid = ?",
+                    SET b_{$field} = ?
+                    WHERE b_id = ?",
                     array($newval, $id),
                     array(Database::INTEGER, Database::INTEGER)
                 );

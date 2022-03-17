@@ -1,6 +1,6 @@
 {# begin {templatelocation} #}
-<script src="{site_url}/javascript/addons/spectrum.js"></script>
-<link rel="stylesheet" href="{site_url}/javascript/addons/spectrum.css" />
+<script src="{site_url}/javascript/addons/spectrum/spectrum.js"></script>
+<link rel="stylesheet" href="{site_url}/javascript/addons/spectrum/spectrum.css" />
 <script>
 function showhideTypeDiv(sel)
 {
@@ -17,17 +17,16 @@ $(document).ready(function() {
 });
 </script>
 
-<form action="{site_admin_url}/badges.php" method="post"
+<form uk-form action="{site_admin_url}/badges.php" method="post"
 	enctype="multipart/form-data"
 	class="uk-form uk-form-horizontal">
-	<input type="hidden" name="bid" value="{bid}" />
+	<input type="hidden" name="b_id" value="{id}" />
 
 	<div class="uk-form-row uk-margin">
-		<label class="uk-form-label" for="badge_grp">{$LANG_GF01['badge_grp']}</label>
+		<label class="uk-form-label">{$LANG_GF01['badge_grp']}</label>
 		<div class="uk-form-controls">
-			<select id="badge_grp" name="badge_grp">
-				<option value="">--None--</option>
-				{grp_sel}
+			<select id="badge_grp" name="b_bg_id">
+				{bg_options}
 			</select>
 			<input class="uk-input uk-form-width-medium" type="text" id="badge_grp_txt" name="badge_grp_txt" value="" placeholder="{$LANG_ADMIN['create_new']}" />
 		</div>
@@ -36,14 +35,14 @@ $(document).ready(function() {
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="order">{$LANG_GF93['order']}</label>
 		<div class="uk-form-controls">
-			<input class="uk-input uk-form-width-small" type="text" id="order" name="sortorder" value="{order}" />
+			<input class="uk-input uk-form-width-small" type="text" id="order" name="b_order" value="{order}" />
 		</div>
 	</div>
 
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="gl_grp">{$LANG_ADMIN['site_grp']}</label>
 		<div class="uk-form-controls">
-			<select class="uk-select uk-form-width-medium" name="gl_grp">
+			<select class="uk-select uk-form-width-medium" name="b_gl_grp">
 				{grp_select}
 			</select>
 		</div>
@@ -52,15 +51,15 @@ $(document).ready(function() {
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="dscp">{$LANG_ADMIN['description']}</label>
 		<div class="uk-form-controls">
-			<input class="uk-input" type="text" id="dscp" name="dscp" size="40" value="{dscp}" />
+			<input class="uk-input" type="text" id="dscp" name="b_dscp" size="40" value="{dscp}" />
 		</div>
 	</div>
 
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label">{$LANG_ADMIN['badge_type']}</label>
 		<div class="uk-form-controls">
-			<input class="uk-radio" name="type" type="radio" value="img" {chk_img} onclick="showhideTypeDiv('img');" /> {$LANG_ADMIN['badge_image']}
-			&nbsp;&nbsp;&nbsp;<input class="uk-radio" name="type" type="radio" value="css" {chk_css} onclick="showhideTypeDiv('css');" /> CSS
+			<input class="uk-radio" name="b_type" type="radio" value="img" {chk_img} onclick="showhideTypeDiv('img');" /> {$LANG_ADMIN['badge_image']}
+			&nbsp;&nbsp;&nbsp;<input class="uk-radio" name="b_type" type="radio" value="css" {chk_css} onclick="showhideTypeDiv('css');" /> CSS
 		</div>
 	</div>
 

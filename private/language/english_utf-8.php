@@ -145,6 +145,7 @@ $LANG01 = array(
     130 => 'Webservices',			// depreciated
     131 => 'Features',
     132 => 'Badges',
+    133 => 'Badge Groups',
     500 => 'Please remove the admin/install/ directory after installing or upgrading your site!',
     501 => 'Root Debug is Enabled',
     502 => 'No fail SQL is Enabled',
@@ -2064,6 +2065,8 @@ $LANG_ADMIN = array(
     'fgcolor' => 'Foreground Color',
     'sample_color' => 'Sample Color',
     'incl_inherited' => 'Include Inherited Membership?',
+    'badge_singular' => 'Single Badge',
+    'group_name' => 'Group Name',
 );
 
 ###############################################################################

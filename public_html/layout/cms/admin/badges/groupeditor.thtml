@@ -1,0 +1,47 @@
+{# begin {templatelocation} #}
+<form uk-form action="{site_admin_url}/badges.php" method="post"
+	enctype="multipart/form-data"
+	class="uk-form uk-form-horizontal">
+	<input type="hidden" name="bg_id" value="{bg_id}" />
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="name">{$LANG_ADMIN['name']}</label>
+		<div class="uk-form-controls">
+			<input class="uk-input" type="text" id="name" name="bg_name" size="40" value="{bg_name}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="order">{$LANG_GF93['order']}</label>
+		<div class="uk-form-controls">
+			<input class="uk-input uk-form-width-small" type="text" id="order" name="bg_order" value="{bg_order}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="enabled">{$LANG_ADMIN['enabled']}</label>
+		<div class="uk-form-controls">
+			<input class="uk-checkbox" type="checkbox" id="enabled" name="bg_enabled" value="1" {ena_chk}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label" for="inherit">{$LANG_ADMIN['incl_inherited']}</label>
+		<div class="uk-form-controls">
+			<input class="uk-checkbox" type="checkbox" id="inherit" name="bg_singular" value="1" {sing_chk}" />
+		</div>
+	</div>
+
+	<div class="uk-form-row uk-margin">
+		<label class="uk-form-label"></label>
+		<div class="uk-form-controls">
+			<button type="submit" class="uk-button uk-button-success" name="bgsave" value="{$LANG_ADMIN['save']}">{$LANG_ADMIN['save']}</button>
+			<button type="reset" class="uk-button">{$LANG_ADMIN['reset']}</button>
+			<button type="submit" class="uk-button uk-button-danger" name="bgdelete" value="{$LANG_ADMIN['delete']}"
+			onclick="return confirm('{$LANG_ADMIN['delete_confirm']}');">{$LANG_ADMIN['delete']}</button>
+			<a href="{site_admin_url}/badges.php?badgegroups" class="uk-button uk-button-primary">{$LANG_ADMIN['cancel']}</a>
+		</div>
+	</div>
+
+</form>
+{# end {templatelocation} #}

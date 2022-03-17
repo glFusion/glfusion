@@ -31,6 +31,14 @@ if (is_ajax()) {
                         $oldval
                     );
                     break;
+                case 'badgegroups':
+                    $oldval = (int)$_POST['oldval'];
+                    $newval = glFusion\Badges\BadgeGroup::Toggle(
+                        (int)$_POST['id'],
+                        $_POST['field'],
+                        $oldval
+                    );
+                    break;
                 }
                 $status = $newval != $oldval;   // success if changed
                 $retval = array(
