@@ -115,7 +115,7 @@ class User
 
     /** Account Status.
      * @var integer */
-    private $status = self::AWAITING_ACTIVATION
+    private $status = self::AWAITING_ACTIVATION;
 
     /** Account Type (local, remote).
      * @var integer */
@@ -378,7 +378,7 @@ class User
             $stmt = $qb->execute();
             $userData = $stmt->fetchAll(Database::ASSOCIATIVE);
         } catch (Throwable $e) {
-            Log::write('system', Log::ERROR, $e->getMessage();
+            Log::write('system', Log::ERROR, $e->getMessage());
             $userData = array();
         }
         return $userData;
