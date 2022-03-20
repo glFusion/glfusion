@@ -30,6 +30,11 @@ class Email extends \glFusion\Notifier
      * @var string */
     private $_from_email = '';
 
+    /** Define the maximum number of emails allowed per sendign.
+     * @var integer */
+    private static $maxEmailsPerSend = 10;
+
+
 
     /**
      * Set any defaults and call the parent constructor.
@@ -186,9 +191,6 @@ class Email extends \glFusion\Notifier
     {
         global $_CONF, $_VARS;
 
-        // define the maximum number of emails allowed per bcc
-        $maxEmailsPerSend = 10;
-
         // ensure we have something to send...
         if ( !isset($msgData['htmlmessage']) && !isset($msgData['textmessage']) ) {
             Log::write('system',Log::WARNING,"COM_emailNotification() - No message text was provided - nothing to send.");
@@ -278,63 +280,54 @@ class Email extends \glFusion\Notifier
             if ( is_array($msgData['to']) ) {
                 foreach ($msgData['to'] AS $to) {
                     if ( is_array($to) ) {
-                        if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
-                            $mail->addAddress($to['email'],$to['name']);
-                            $queued++;
-                        }
+                        $email = self::getArrayVar($to, 'email');
+                        $name = self::getArrayVar($to, 'name');
                     } else {
-                        if ( COM_isEmail($to) ) {
-                            if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
-                                $mail->addAddress($to);
-                                $queued++;
-                            }
-                        }
+                        $email = $to;
+                        $name = '';
+                    }
+                    if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
+                        $mail->addAddress($email,$name);
+                        $queued++;
                     }
 
-                    if ( $queued >= $maxEmailsPerSend ) {
+                    if ( $queued >= self::$maxEmailsPerSend ) {
                         if (!@$mail->Send()) {
                             Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
                         }
                         $queued = 0;
-                        $mail->ClearBCCs();
+                        $mail->clearAddresses();
                     }
                 }
             } else {
-                // Compatibility with single-address COM_mail()
-                // No need to check the queue size since there's only one address
-                $msgData['to'] = array(
-                    array(
-                        'email' => $msgData['to'],
-                        'name' => '',
-                    )
-                );
+                // Compatibility with single-address COM_mail().
+                // No need to check the queue size for sending.
+                $mail->addAddress($msgData['to']);
                 $queued++;
             }
         }
 
         if (isset($msgData['bcc'])) {
             if ( is_array($msgData['bcc']) ) {
-                foreach ($msgData['bcc'] AS $to) {
-                    if ( is_array($to) ) {
-                        if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
-                            $mail->addBCC($to['email'],$to['name']);
-                            $queued++;
-                        }
+                foreach ($msgData['bcc'] AS $bcc) {
+                    if ( is_array($bcc) ) {
+                        $email = self::getArrayVar($bcc, 'email');
+                        $name = self::getArrayVar($bcc, 'name');
                     } else {
-                        if ( COM_isEmail($to) ) {
-                            if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
-                                $mail->addBCC($to);
-                                $queued++;
-                            }
-                        }
+                        $email = $bcc;
+                        $name = '';
+                    }
+                    if ( filter_var($email, FILTER_VALIDATE_EMAIL) ) {
+                        $mail->addBCC($email, $name);
+                        $queued++;
                     }
 
-                    if ( $queued >= $maxEmailsPerSend ) {
+                    if ( $queued >= self::$maxEmailsPerSend ) {
                         if (!@$mail->Send()) {
                             Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
                         }
                         $queued = 0;
-                        $mail->ClearBCCs();
+                        $mail->clearBCCs();
                     }
                 }
             }
@@ -346,6 +339,24 @@ class Email extends \glFusion\Notifier
             }
         }
         return true;
+    }
+
+
+    /**
+     * Helper to get the value for an array key, if it exists.
+     *
+     * @param   array   $A      Array containing values
+     * @param   string  $key    Key to find
+     * @param   string  $def    Default value if not found
+     * @return  string      Value of key, or default
+     */
+    private static function getArrayVar(array $A, string $key, string $def = '') : string
+    {
+        if (is_array($A) && array_key_exists($key, $A)) {
+            return $A[$key];
+        } else {
+            return $def;
+        }
     }
 
 }
