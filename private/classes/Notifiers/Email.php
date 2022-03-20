@@ -280,18 +280,19 @@ class Email extends \glFusion\Notifier
                     if ( is_array($to) ) {
                         if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
                             $mail->addAddress($to['email'],$to['name']);
+                            $queued++;
                         }
                     } else {
                         if ( COM_isEmail($to) ) {
                             if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
                                 $mail->addAddress($to);
+                                $queued++;
                             }
                         }
                     }
 
-                    $queued++;
                     if ( $queued >= $maxEmailsPerSend ) {
-                        if (!$mail->Send()) {
+                        if (!@$mail->Send()) {
                             Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
                         }
                         $queued = 0;
@@ -300,12 +301,14 @@ class Email extends \glFusion\Notifier
                 }
             } else {
                 // Compatibility with single-address COM_mail()
+                // No need to check the queue size since there's only one address
                 $msgData['to'] = array(
                     array(
                         'email' => $msgData['to'],
                         'name' => '',
                     )
                 );
+                $queued++;
             }
         }
 
@@ -315,18 +318,19 @@ class Email extends \glFusion\Notifier
                     if ( is_array($to) ) {
                         if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
                             $mail->addBCC($to['email'],$to['name']);
+                            $queued++;
                         }
                     } else {
                         if ( COM_isEmail($to) ) {
                             if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
                                 $mail->addBCC($to);
+                                $queued++;
                             }
                         }
                     }
 
-                    $queued++;
                     if ( $queued >= $maxEmailsPerSend ) {
-                        if (!$mail->Send()) {
+                        if (!@$mail->Send()) {
                             Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
                         }
                         $queued = 0;
@@ -339,7 +343,6 @@ class Email extends \glFusion\Notifier
         if ( $queued > 0 ) {
             if ( !@$mail->Send() ) {
                 Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
-                return false;
             }
         }
         return true;
