@@ -29,10 +29,6 @@ class Badge
     private const DEF_BG = '#009dd8';
     private const DEF_FG = '#ffffff';
 
-    /** Default badge group when getting only a single badge.
-     */
-    private const DEF_GRP = '1_site';
-
     /** Cache tags affecting user group membership.
      * @var array */
     private static $cache_tags = array('badges', 'user_group', 'groups');
@@ -129,7 +125,7 @@ class Badge
              ->setEnabled(isset($A['b_enabled']) ? $A['b_enabled'] : 0)
              ->setInherit(isset($A['b_inherit']) ? $A['b_inherit'] : 0)
              ->setOrder((int)$A['b_order'])
-             ->setBadgeGroup((int)$A['b_bg_id'])
+             ->setBadgeGroupId((int)$A['b_bg_id'])
              ->setSiteGroup((int)$A['b_gl_grp'])
              ->setType($A['b_type'])
              ->setDscp($A['b_dscp']);
@@ -143,6 +139,9 @@ class Badge
                 }
             } else {
                 $this->image = $A['b_data'];
+            }
+            if (isset($A['bg_name'])) {
+                $this->bg_name = $A['bg_name'];
             }
         } else {
             $this->fgcolor = isset($A['fgcolor']) ? $A['fgcolor'] : self::DEF_FG;
@@ -258,12 +257,12 @@ class Badge
 
 
     /**
-     * Set the badge group name for grouping badges.
+     * Set the badge group ID.
      *
      * @param   integer $id     Group record ID
      * @return  object  $this
      */
-    public function setBadgeGroup(int $id) : self
+    public function setBadgeGroupId(int $id) : self
     {
         $this->bg_id = $id;
         return $this;
@@ -271,13 +270,24 @@ class Badge
 
 
     /**
-     * Get the badge group name.
+     * Get the badge group ID.
      *
      * @return  string      Group name for grouping badges
      */
-    public function getBadgeGroup() : string
+    public function getBadgeGroupId() : string
     {
         return $this->bg_id;
+    }
+
+
+    /**
+     * Get the Badge Group name.
+     *
+     * @return  string      Group name
+     */
+    public function getBadgeGroupName() : string
+    {
+        return $this->bg_name;
     }
 
 
@@ -306,7 +316,7 @@ class Badge
 
 
     /**
-     * Gets an array of all the badges.
+     * Gets an array of all the badges, in an array indexed by group name.
      *
      * @param  boolean $enabled    True to get only enabled badges
      * @return array           Array of grp_name=>grp_id
@@ -326,7 +336,8 @@ class Badge
                 $local[$enabled] = $Cache->get($cache_key);
             } else {
                 $db = Database::getInstance();
-                $sql = "SELECT b.*, g.grp_name
+                    //g.grp_name
+                $sql = "SELECT b.*, bg.*
                     FROM {$_TABLES['badges']} b
                     LEFT JOIN {$_TABLES['badge_groups']} bg
                         ON bg.bg_id = b.b_bg_id
@@ -344,7 +355,7 @@ class Badge
                     $data = NULL;
                 }
                 if (is_array($data)) {
-                    $cbrk = -1;
+                    $cbrk = '';
                     foreach ($data as $A) {
                         if ($cbrk != $A['b_bg_id']) {
                             $local[$enabled][$A['b_bg_id']] = array();
@@ -363,15 +374,16 @@ class Badge
     /**
      * Gets an array of all the user badges.
      *
-     * @param  integer  $uid    ID of user
+     * @param   integer $uid    ID of user
+     * @param   integer $grp_id Optional group limiter
      * @return array       Array of all user badge objects
      */
-    public static function getUserBadges(int $uid) : array
+    public static function getUserBadges(int $uid, ?int $grp_id = NULL) : array
     {
         global $_CONF;
 
         static $retval = array();
-        $cache_key = 'badges_' . $uid;
+        $cache_key = 'badges_' . $uid . '_' . $grp_id;
         $uid = (int)$uid;
         if (array_key_exists($uid, $retval)) {
             return $retval[$uid];
@@ -381,6 +393,10 @@ class Badge
         }
 
         $badges = self::getAll();
+        if ($grp_id !== NULL && array_key_exists($grp_id, $badges)) {
+            $badges = array($grp_id => $badges[$grp_id]);
+        }
+
         $BadgeGroups = BadgeGroup::getAll();
         $retval[$uid] = array();
         $all_grps = Group::getAll($uid);
@@ -390,7 +406,9 @@ class Badge
                 $grps = $badge->inheritGroup() ? $all_grps : $assigned_grps;
                 if (in_array($grp_id, $grps)) {
                     $retval[$uid][] = $badge;
-                    if ($badge->getBadgeGroup() > 0 && $BadgeGroups[$badge->getBadgeGroup()]->isSingular()) {
+                    if (
+                        $badge->getBadgeGroupId() > 0 &&
+                        $BadgeGroups[$badge->getBadgeGroupId()]->isSingular()) {
                         break;
                     }
                 }
@@ -403,23 +421,31 @@ class Badge
 
     /**
      * Get a single user badge from a given group.
+     * Only one badge is returned regardless of the group setting.
      *
      * @param   integer $uid    User ID
-     * @param   string  $b_grp  Badge group, default if not specified
+     * @param   integer $grp_id Badge group name, default if not specified
      * @return  string      HTML for badge, empty string if not found
      */
-    public static function getSingle(int $uid, ?string $grp=NULL) : self
+    public static function getSingle(int $uid, ?int $grp_id=NULL) : self
     {
-        if ($grp === NULL) {
-            $grp = self::DEF_GRP;
+        global $_CONF;
+
+        if ($grp_id === NULL && isset($_CONF['badge_primary_grp'])) {
+            $grp_id = $_CONF['badge_primary_grp'];
         }
-        $retval = '';
-        $Badges = self::getUserBadges($uid);
+
+        $retval = NULL;
+        $Badges = self::getUserBadges($uid, $grp_id);
         foreach ($Badges as $Badge) {
-            if ($Badge->getBadgeGroup() == $grp) {
+            if (empty($grp) || $Badge->getBadgeGroupId() == $grp_id) {
                 $retval = $Badge;
                 break;
             }
+        }
+        if ($retval === NULL) {
+            // return an empty object to not break the requester.
+            $retval = new self;
         }
         return $retval;
     }
@@ -435,6 +461,10 @@ class Badge
     {
         global $_CONF;
 
+        if ($this->id == 0) {
+            return '';
+        }
+
         // If html is defined at all, return it.
         if ($this->html !== NULL) {
             return $this->html;
@@ -447,9 +477,11 @@ class Badge
         case 'css':
             $url = '';
             break;
-        case 'img':
         default:
-        $url = $this->getImageUrl();
+            $url = $this->getImageUrl();
+            if (empty($url)) {
+                return '';
+            }
             break;
         }
         $T = new \Template($_CONF['path_layout']);
@@ -479,7 +511,7 @@ class Badge
         global $_CONF;
 
         $retval = '';
-        if ($this->type == 'img') {
+        if ($this->type == 'img' && !empty($this->image)) {
             // Using an array is a holdover from the Forum badges,
             // but makes it easy to add layout paths later.
             $paths = array(
@@ -488,9 +520,8 @@ class Badge
             );
 
             foreach ($paths as $path=>$url) {
-                if (file_exists($path . $this->image)) {
-                    $url .= $this->image;
-                    $retval = $url;
+                if (($path . $this->image)) {
+                    $retval = $url . $this->image;
                     break;
                 }
             }
@@ -572,7 +603,7 @@ class Badge
                 array($id),
                 array(Database::INTEGER)
             );
-            self::reOrder($Badge->getBadgeGroup());
+            self::reOrder($Badge->getBadgeGroupId());
         } catch (\Throwable $e) {
             Log::write('system',Log::ERROR,'Badge::moveRow() SQL error: '.$e->getMessage());
         }

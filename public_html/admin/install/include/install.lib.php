@@ -1677,7 +1677,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
         case '2.0.0' :
             $_SQL[] = "CREATE TABLE `{$_TABLES['badges']}` (
               `bid` int(11) NOT NULL AUTO_INCREMENT,
-              `badge_grp` varchar(20) NOT NULL DEFAULT '',
+              `bg_id` int(11) unsigned NOT NULL DEFAULT 1,
               `sortorder` int(3) NOT NULL DEFAULT 999,
               `enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
               `inherit` tinyint(1) unsigned NOT NULL DEFAULT 1,
@@ -1686,7 +1686,17 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
               `data` varchar(255) DEFAULT NULL,
               `dscp` varchar(40) DEFAULT NULL,
               PRIMARY KEY (`bid`),
-              KEY `grp` (`badge_grp`,`sortorder`)
+              KEY `grp` (`bg_id`,`sortorder`)
+            ) ENGINE=MyISAM";
+            $_SQL[] = "CREATE TABLE `{$_TABLES['badge_groups']}` (
+              `bg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `bg_order` int(4) DEFAULT 9999,
+              `bg_name` varchar(128) NOT NULL DEFAULT '',
+              `bg_singular` tinyint(1) unsigned NOT NULL DEFAULT 1,
+              `bg_enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
+              PRIMARY KEY (`bg_id`),
+              UNIQUE KEY `bg_name` (`bg_name`),
+              KEY `orderby` (`bg_order`)
             ) ENGINE=MyISAM";
             if ($use_innodb) {
                 $statements = count($_SQL);
@@ -1694,14 +1704,27 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                     $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
                 }
             }
-            $_SQL[] = "INSERT INTO {$_TABLES['badges']}
-                (`bid`, `badge_grp`, `sortorder`, `enabled`, `gl_grp`, `type`, `data`, `dscp`)
-                VALUES
-i               (1, '1_site', 20, 1, 13, 'css', 'a:2:{s:7:\"fgcolor\";s:7:\"#ffffff\";s:7:\"bgcolor\";s:7:\"#009dd8\";}', 'Site Member'),
-                (2, '1_site', 10, 1, 1, 'css', 'a:2:{s:7:\"fgcolor\";s:7:\"#ffffff\";s:7:\"bgcolor\";s:7:\"#ff0000\";}', 'Site Admin');";
+            // Add the default badge group
+            $_SQL[] = "INSERT INTO {$_TABLES['badge_groups']} SET bg_name = 'Miscellaneous'";
+            // Collect any user-defined badge groups from Forum
+            $_SQL[] = "INSERT INTO {$_TABLES['badge_groups']} (bg_name)
+                (SELECT DISTINCT(fb_grp) FROM {$_TABLES['ff_badges']} WHERE fb_grp <> '')";
+            // Move forum badges that have an empty group name into group #1
+            $_SQL[] = "INSERT INTO {$_TABLES['badges']} (
+                SELECT 0, 1, b.fb_order, b.fb_enabled, b.fb_inherited, b.fb_gl_grp,
+                b.fb_type, b.fb_data, b.fb_dscp FROM {$_TABLES['ff_badges']} b
+                WHERE b.fb_grp = '')";
+
+           // Move forum badges that have a group name into the new core badge groups
+            $_SQL[] = "INSERT INTO {$_TABLES['badges']} (
+                SELECT 0, g.bg_id, b.fb_order, b.fb_enabled, b.fb_inherited, b.fb_gl_grp,
+                b.fb_type, b.fb_data, b.fb_dscp FROM {$_TABLES['ff_badges']} b
+                LEFT JOIN {$_TABLES['badge_groups']} g ON g.bg_name = b.fb_grp
+                WHERE b.fb_grp <> '')";
 
             foreach ($_SQL as $sql) {
-                DB_query($sql,1);
+                echo "$sql\n";
+                DB_query($sql,0);
             }
 
             $current_fusion_version = '2.0.1';
