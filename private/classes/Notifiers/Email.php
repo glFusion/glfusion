@@ -30,10 +30,9 @@ class Email extends \glFusion\Notifier
      * @var string */
     private $_from_email = '';
 
-    /** Define the maximum number of emails allowed per sendign.
+    /** Define the maximum number of emails allowed per sending.
      * @var integer */
     private static $maxEmailsPerSend = 10;
-
 
 
     /**
@@ -42,9 +41,9 @@ class Email extends \glFusion\Notifier
     public function __construct()
     {
         global $_CONF;
+        parent::__construct();
         $this->_from_email = $_CONF['noreply_mail'];
         $this->from_name = $_CONF['site_name'];
-        parent::__construct();
     }
 
 
@@ -57,25 +56,6 @@ class Email extends \glFusion\Notifier
     public function setFromEmail(string $email) : self
     {
         $this->_from_email = $email;
-        return $this;
-    }
-
-
-    /**
-     * Override the base function to include the email address.
-     *
-     * @param   integer $uid    User ID
-     * @param   string  $name   User Name
-     * @param   string  $email  Email address
-     * @return  object  $this
-     */
-    public function addRecipient(int $uid, ?string $name=NULL, ?string $email=NULL) : self
-    {
-        $this->recipients[$uid] = array(
-            'uid' => $uid,
-            'name' => $name,
-            'email' => $email,
-        );
         return $this;
     }
 
@@ -98,6 +78,7 @@ class Email extends \glFusion\Notifier
         return $this;
     }
 
+
     /**
      * Send an email notification to the recipient.
      *
@@ -108,66 +89,25 @@ class Email extends \glFusion\Notifier
         global $_CONF, $_VARS;
 
         $retval = false;
-        $to = array();
-        $bcc = array();
 
-        // Create the recipient list
-        foreach ($this->recipients as $uid=>$data) {
-            // If either email or name are missing, get them from the User table.
-            if (empty($data['email']) || empty($data['name'])) {
-                $U = $this->getUser($uid);
-                if ($U->uid == 0) {
-                    // Didn't get a valid user object
-                    continue;
-                }
-                // Set missing values from the user object
-                if (empty($data['email'])) {
-                    $data['email'] = $U->email;
-                }
-                if (empty($data['name'])) {
-                    $data['name'] = $U->fullname;
-                }
-            }
-            // Finally, the email address must be present.
-            if (!empty($data['email'])) {
-                $to[] = array(
-                    'email' => $data['email'],
-                    'name' => $data['name'],
-                );
-            }
-        }
+        // Create the To and BCC lists
+        $to = $this->prepareRecipients($this->recipients);
+        $bcc = $this->prepareRecipients($this->bcc);
 
-        // Create the BCC recipient list
-        foreach ($this->bcc as $uid=>$data) {
-            // If either email or name are missing, get them from the User table.
-            if (empty($data['email']) || empty($data['name'])) {
-                $U = $this->getUser($uid);
-                if ($U->uid == 0) {
-                    // Didn't get a valid user object
-                    continue;
-                }
-                // Set missing values from the user object
-                if (empty($data['email'])) {
-                    $data['email'] = $U->email;
-                }
-                if (empty($data['name'])) {
-                    $data['name'] = $U->fullname;
-                }
-            }
-            // Finally, the email address must be present.
-            if (!empty($data['email'])) {
-                $bcc[] = array(
-                    'email' => $data['email'],
-                    'name' => $data['name'],
-                );
-            }
+        // Create the text message version if not supplied
+        if (empty($this->textmessage) && !empty($this->htmlmessage)) {
+            $html2txt = new \Html2Text\Html2Text($this->htmlmessage, false);
+            $this->setMessage($html2txt->get_text(), false);
         }
 
         if (!empty($to) || !empty($bcc)) {
             $msgData = array(
                 'to' => $to,
                 'bcc' => $bcc,
-                'from' => $this->_from_email,
+                'from' => array(
+                    'email' => $this->_from_email,
+                    'name' => $this->from_name,
+                ),
                 'htmlmessage' => $this->htmlmessage,
                 'textmessage' => $this->textmessage,
                 'subject' => $this->subject,
@@ -260,21 +200,23 @@ class Email extends \glFusion\Notifier
             }
         }
 
-        if ( is_array($msgData['from'])) {
-            if ( filter_var($msgData['from']['email'], FILTER_VALIDATE_EMAIL) ) {
-                $mail->From = $msgData['from']['email'];
+        $from_email = $_CONF['noreply_mail'];
+        $from_name = $_CONF['site_name'];
+        if (isset($msgData['from'])) {
+            if (is_array($msgData['from'])) {
+                $from_email = self::getArrayVar($msgData['from'], 'email', $from_email);
+                $from_name = self::getArrayVar($msgData['from'], 'name', $from_name);
             } else {
-                $mail->From = $_CONF['noreply_mail'];
+                $from_email = $msgData['from'];
             }
-            $mail->FromName = $msgData['from']['name'];
-        } else {
-            if ( filter_var($msgData['from'], FILTER_VALIDATE_EMAIL) ) {
-                $mail->From = $msgData['from'];
-            } else {
-                $mail->From = $_CONF['noreply_mail'];
-            }
-            $mail->FromName = $_CONF['site_name'];
         }
+        if ( filter_var($from_email, FILTER_VALIDATE_EMAIL) ) {
+            $mail->From = $from_email;
+        } else {
+            // Bad from address, revert back to the default
+            $mail->From = $_CONF['noreply_mail'];
+        }
+        $mail->FromName = $from_name;
 
         if (isset($msgData['to'])) {
             if ( is_array($msgData['to']) ) {
@@ -357,6 +299,45 @@ class Email extends \glFusion\Notifier
         } else {
             return $def;
         }
+    }
+
+
+    /**
+     * Get the email addresses ready for sending.
+     *
+     * @param   array   $users  Array of user info from recipients or bcc
+     * @return  array   Array of prepped addresses
+     */
+    protected function prepareRecipients(array $users) : array
+    {
+        $retval = array();
+
+        // Create the recipient list
+        foreach ($users as $data) {
+            // If either email or name are missing, get them from the User table.
+            if ((empty($data['email']) || empty($data['name'])) && $data['uid'] > 1) {
+                $U = $this->getUser((int)$data['uid']);
+                if ($U->uid == 0) {
+                    // Didn't get a valid user object
+                    continue;
+                }
+                // Set missing values from the user object
+                if (empty($data['email'])) {
+                    $data['email'] = $U->email;
+                }
+                if (empty($data['name'])) {
+                    $data['name'] = $U->fullname;
+                }
+            }
+            // Finally, the email address must be present.
+            if (!empty($data['email'])) {
+                $retval[] = array(
+                    'email' => $data['email'],
+                    'name' => $data['name'],
+                );
+            }
+        }
+        return $retval;
     }
 
 }
