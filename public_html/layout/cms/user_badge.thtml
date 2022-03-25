@@ -1,7 +1,7 @@
 {# begin {templatelocation} #}
 {!if badge_url}
-<img src="{badge_url}" class="tooltip" title="{title}" />
+{badge_url}
 {!else}
-<span class="uk-badge tm-badge tooltip" title="{title}" style="background-color:{bgcolor};color:{fgcolor};">{dscp}</span>
+<span class="uk-badge tm-badge tooltip" title="{title}" style="background-color:{bgcolor};color:{fgcolor};">{text}</span>
 {!endif}
 {# end {templatelocation} #}

@@ -7,9 +7,15 @@ function showhideTypeDiv(sel)
 	if (sel == "img") {
 		$("#type_img").css("display", "");
 		$("#type_css").css("display", "none");
-	} else {
+		$("#type_html").css("display", "none");
+	} else if (sel == "css") {
 		$("#type_img").css("display", "none");
 		$("#type_css").css("display", "");
+		$("#type_html").css("display", "none");
+	} else if (sel == "html") {
+		$("#type_img").css("display", "none");
+		$("#type_css").css("display", "none");
+		$("#type_html").css("display", "");
 	}
 }
 $(document).ready(function() {
@@ -25,7 +31,7 @@ $(document).ready(function() {
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label">{$LANG_GF01['badge_grp']}</label>
 		<div class="uk-form-controls">
-			<select id="badge_grp" name="b_bg_id">
+			<select class="uk-select uk-form-width-medium" id="badge_grp" name="b_bg_id">
 				{bg_options}
 			</select>
 			<input class="uk-input uk-form-width-medium" type="text" id="badge_grp_txt" name="badge_grp_txt" value="" placeholder="{$LANG_ADMIN['create_new']}" />
@@ -60,6 +66,8 @@ $(document).ready(function() {
 		<div class="uk-form-controls">
 			<input class="uk-radio" name="b_type" type="radio" value="img" {chk_img} onclick="showhideTypeDiv('img');" /> {$LANG_ADMIN['badge_image']}
 			&nbsp;&nbsp;&nbsp;<input class="uk-radio" name="b_type" type="radio" value="css" {chk_css} onclick="showhideTypeDiv('css');" /> CSS
+			&nbsp;&nbsp;&nbsp;<input class="uk-radio" name="b_type" type="radio" value="html" {chk_html} onclick="showhideTypeDiv('html');" /> HTML
+			&nbsp;&nbsp;&nbsp;<input class="uk-radio" name="b_type" type="radio" value="url" {chk_url} onclick="showhideTypeDiv('html');" /> Image URL
 		</div>
 	</div>
 
@@ -67,7 +75,7 @@ $(document).ready(function() {
 		<label class="uk-form-label" for="image">{$LANG_ADMIN['badge_image']}</label>
 		<div class="uk-form-controls">
 {!if image_sel}
-			<select name="image">
+			<select class="uk-select uk-form-width-medium" name="image">
 			{image_sel}
 			</select>
 {!endif}
@@ -100,17 +108,26 @@ $(document).ready(function() {
 		</div>
 	</div>
 
+	<div id="type_html" class="uk-form-row uk-margin" style="display:none">
+		<div class="uk-form-row uk-margin">
+			<label class="uk-form-label">HTML / URL</label>
+			<div class="uk-form-controls">
+				<textarea rows="4" class="uk-form-width-large" name="html">{html}</textarea>
+			</div>
+		</div>
+	</div>
+
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="enabled">{$LANG_ADMIN['enabled']}</label>
 		<div class="uk-form-controls">
-			<input class="uk-checkbox" type="checkbox" id="enabled" name="enabled" value="1" {ena_chk}" />
+			<input class="uk-checkbox" type="checkbox" id="enabled" name="b_enabled" value="1" {ena_chk}" />
 		</div>
 	</div>
 
 	<div class="uk-form-row uk-margin">
 		<label class="uk-form-label" for="inherit">{$LANG_ADMIN['incl_inherited']}</label>
 		<div class="uk-form-controls">
-			<input class="uk-checkbox" type="checkbox" id="inherit" name="inherit" value="1" {inherit_chk}" />
+			<input class="uk-checkbox" type="checkbox" id="inherit" name="b_inherit" value="1" {inherit_chk}" />
 		</div>
 	</div>
 

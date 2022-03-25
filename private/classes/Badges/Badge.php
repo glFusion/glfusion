@@ -45,7 +45,7 @@ class Badge
     private $bgcolor = self::DEF_BG;
     private $fgcolor = self::DEF_FG;
     private $image = '';
-    private $html = NULL;
+    private $final_html = NULL;
 
     private $bg_name = '';
 
@@ -131,22 +131,37 @@ class Badge
              ->setDscp($A['b_dscp']);
 
         if ($from_db) {
-            if ($this->type == 'css') {
+            switch ($this->type) {
+            case 'css':
                 $data = @unserialize($A['b_data']);
                 if (is_array($data)) {
                     $this->fgcolor = isset($data['fgcolor']) ? $data['fgcolor'] : self::DEF_FG;
                     $this->bgcolor = isset($data['bgcolor']) ? $data['bgcolor'] : self::DEF_BG;
                 }
-            } else {
+                break;
+            case 'img':
+            case 'html':
+            case 'url':
                 $this->image = $A['b_data'];
+                break;
             }
             if (isset($A['bg_name'])) {
                 $this->bg_name = $A['bg_name'];
             }
         } else {
-            $this->fgcolor = isset($A['fgcolor']) ? $A['fgcolor'] : self::DEF_FG;
-            $this->bgcolor = isset($A['bgcolor']) ? $A['bgcolor'] : self::DEF_BG;
-            $this->image = $A['image'];
+            switch ($this->type) {
+            case 'css':
+                $this->fgcolor = isset($A['fgcolor']) ? $A['fgcolor'] : self::DEF_FG;
+                $this->bgcolor = isset($A['bgcolor']) ? $A['bgcolor'] : self::DEF_BG;
+                break;
+            case 'img':
+                $this->image = $A['image'];
+                break;
+            case 'html':
+            case 'url':
+                $this->image = $A['html'];
+                break;
+            }
         }
 
         return $this;
@@ -166,6 +181,11 @@ class Badge
     }
 
 
+    /**
+     * Get the badge record ID. Can be used to verify a badge was read from DB.
+     *
+     * @return  integer     Badge ID
+     */
     public function getBid() : int
     {
         return (int)$this->id;
@@ -231,7 +251,7 @@ class Badge
 
 
     /**
-     * Set the badge type, either `img` or `css`.
+     * Set the badge type, `img`, `css`, 'html' or 'url'.
      *
      * @param   string  $type   Badge type
      * @return  object  $this
@@ -453,7 +473,7 @@ class Badge
 
     /**
      * Get the final HTML to display the badge.
-     * Returns the HTML and also sets $this->html as a cache.
+     * Returns the HTML and also sets $this->final_html as a cache.
      *
      * @return  string  HTML for badge
      */
@@ -466,37 +486,49 @@ class Badge
         }
 
         // If html is defined at all, return it.
-        if ($this->html !== NULL) {
-            return $this->html;
+        if ($this->final_html !== NULL) {
+            return $this->final_html;
         }
 
         // Description for title and display text, fallback to GL group name
         $dscp = $this->dscp == '' ? $this->bg_name : $this->dscp;
-        $this->html = '';
+        $this->final_html = '';
+        $url = '';
         switch ($this->type) {
         case 'css':
-            $url = '';
             break;
-        default:
+        case 'html':
+            $url = $this->image;
+            break;
+        case 'url':
+        case 'img':
             $url = $this->getImageUrl();
             if (empty($url)) {
                 return '';
+            } else {
+                $url = COM_createImage(
+                    $url,
+                    $dscp,
+                    array('title'=>$dscp, 'class'=>'tooltip')
+                );
             }
             break;
+        default:
+            return '';
         }
         $T = new \Template($_CONF['path_layout']);
         $T->set_file('badge', 'user_badge.thtml');
         $T->set_var(array(
             'title' => $dscp,
             'alt'   => $dscp,
-            'dscp'  => $dscp,
+            'text'  => $dscp,
             'badge_url' => $url,
             'fgcolor'   => $this->fgcolor,
             'bgcolor'   => $this->bgcolor,
         ) );
         $T->parse('output','badge');
-        $this->html = $T->finish($T->get_var('output'));
-        return $this->html;
+        $this->final_html = $T->finish($T->get_var('output'));
+        return $this->final_html;
     }
 
 
@@ -511,19 +543,23 @@ class Badge
         global $_CONF;
 
         $retval = '';
-        if ($this->type == 'img' && !empty($this->image)) {
-            // Using an array is a holdover from the Forum badges,
-            // but makes it easy to add layout paths later.
-            $paths = array(
-                $_CONF['path_html'] . 'data/badges/' =>
-                    $_CONF['site_url'] . '/data/badges/',
-            );
+        if (!empty($this->image)) {
+            if ($this->type == 'img') {
+                // Using an array is a holdover from the Forum badges,
+                // but makes it easy to add layout paths later.
+                $paths = array(
+                    $_CONF['path_html'] . 'data/badges/' =>
+                        $_CONF['site_url'] . '/data/badges/',
+                );
 
-            foreach ($paths as $path=>$url) {
-                if (($path . $this->image)) {
-                    $retval = $url . $this->image;
-                    break;
+                foreach ($paths as $path=>$url) {
+                    if (($path . $this->image)) {
+                        $retval = $url . $this->image;
+                        break;
+                    }
                 }
+            } elseif ($this->type == 'url') {
+                $retval = $this->image;
             }
         }
         return $retval;
@@ -629,13 +665,6 @@ class Badge
             ),
             'image_sel' => $this->_getImageSelection($this->image),
             'order'  => $this->order,
-            /*'grp_sel' => COM_optionList(
-                    $_TABLES['badges'],
-                    'DISTINCT badge_grp,badge_grp',
-                    $this->badge_grp,
-                    0,
-                    "badge_grp <> ''"
-            ),*/
             'ena_chk'   => $this->enabled ? 'checked="checked"' : '',
             'inherit_chk' => $this->inherit ? 'checked="checked"' : '',
             'chk_' . $this->type => 'checked="checked"',
@@ -643,6 +672,8 @@ class Badge
             'type' => $this->type,
             'fgcolor' => $this->fgcolor,
             'bgcolor' => $this->bgcolor,
+            // don't just show the image filename in the html field
+            'html' => $this->type == 'img' ? '' : htmlspecialchars($this->image),
         ) );
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
@@ -692,12 +723,14 @@ class Badge
 
         // Handle the file upload, if any. The _handleUpload() function
         // should return the filename. If it is empty then an error occurred.
-        if ($this->type == 'css') {
+        switch ($this->type) {
+        case 'css':
             $data = @serialize(array(
                 'fgcolor' => $this->fgcolor,
                 'bgcolor' => $this->bgcolor,
             ) );
-        } else {
+            break;
+        case 'img':
             if (
                 isset($_FILES['badge_imgfile']['name']) &&
                 !empty($_FILES['badge_imgfile']['name'])
@@ -711,6 +744,11 @@ class Badge
             } else {
                 $data = $this->image;
             }
+            break;
+        case 'html':
+        case 'url':
+            $data = $this->image;
+            break;
         }
 
         if (isset($A['badge_grp_txt']) && !empty($A['badge_grp_txt'])) {
