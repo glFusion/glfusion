@@ -30,7 +30,7 @@ if (!SEC_hasRights('user.edit')) {
 $action = 'list';
 $expected = array(
     'save', 'delete', 'cancel', 'move', 'bgsave', 'bgmove', 'bgdelete', 'delitem',
-    'edit', 'list', 'badgegroups', 'bgedit',
+    'edit', 'list', 'badgegroups', 'bgedit', 'showhtml',
 );
 foreach ($expected as $provided) {
     if (isset($_POST[$provided])) {
@@ -118,6 +118,19 @@ case 'save':
 
 case 'badgegroups':
     $content .= BadgeGroup_Adminlist();
+    break;
+
+case 'showhtml':
+    $B = Badge::getById($actionval);
+    if ($B->getBid() > 0) {
+        header('Content-type: text/html');
+        echo '<html><body><pre>' .
+            htmlentities($B->getHTML()) .
+            '</pre></body></html>';
+    } else {
+        echo COM_404();
+    }
+    exit;
     break;
 
 case 'list':
@@ -224,7 +237,9 @@ function Badge_AdminList()
             'sort'  => false,
         ),
         array(
-            'text'  => $LANG_ADMIN['badge_image'],
+            'text'  => $LANG_ADMIN['badge_image'] . '&nbsp' . FieldList::info(array(
+                'title' => $LANG_ADMIN['badge_click_html'],
+            )),
             'field' => 'data',
             'sort'  => false,
         ),
@@ -469,7 +484,15 @@ function Badges_getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
 
     case 'data':
         $badge = new Badge($A);
-        $retval = $badge->getHTML();
+        $html = $badge->getHTML();
+        $popup_url = $base_url . '?showhtml=' . $A['b_id'];
+        $retval = COM_createLink(
+            $html,
+            '#!',
+            array(
+                'onclick' => "popupWindow('$popup_url', 'HTML', 640, 480, 1)",
+            )
+        );
         break;
 
     default:

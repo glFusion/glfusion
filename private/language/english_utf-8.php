@@ -2067,6 +2067,7 @@ $LANG_ADMIN = array(
     'incl_inherited' => 'Include Inherited Membership?',
     'badge_singular' => 'Single Badge',
     'group_name' => 'Group Name',
+    'badge_click_html' => 'Click the badge to view the HTML',
 );
 
 ###############################################################################
