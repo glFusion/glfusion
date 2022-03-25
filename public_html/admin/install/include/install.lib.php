@@ -1674,7 +1674,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $current_fusion_version = '2.0.0';
 
-        case '2.0.0' :
+        case '2.0.1' :
             $_SQL[] = "CREATE TABLE `{$_TABLES['badges']}` (
               `bid` int(11) NOT NULL AUTO_INCREMENT,
               `bg_id` int(11) unsigned NOT NULL DEFAULT 1,
@@ -1683,7 +1683,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
               `inherit` tinyint(1) unsigned NOT NULL DEFAULT 1,
               `gl_grp` mediumint(8) NOT NULL,
               `type` varchar(10) DEFAULT 'img',
-              `data` varchar(255) DEFAULT NULL,
+              `data` text DEFAULT NULL,
               `dscp` varchar(40) DEFAULT NULL,
               PRIMARY KEY (`bid`),
               KEY `grp` (`bg_id`,`sortorder`)
