@@ -30,6 +30,10 @@ class Email extends \glFusion\Notifier
      * @var string */
     private $_from_email = '';
 
+    /** Define the maximum number of emails allowed per sending.
+     * @var integer */
+    private static $maxEmailsPerSend = 10;
+
 
     /**
      * Set any defaults and call the parent constructor.
@@ -37,9 +41,9 @@ class Email extends \glFusion\Notifier
     public function __construct()
     {
         global $_CONF;
+        parent::__construct();
         $this->_from_email = $_CONF['noreply_mail'];
         $this->from_name = $_CONF['site_name'];
-        parent::__construct();
     }
 
 
@@ -52,25 +56,6 @@ class Email extends \glFusion\Notifier
     public function setFromEmail(string $email) : self
     {
         $this->_from_email = $email;
-        return $this;
-    }
-
-
-    /**
-     * Override the base function to include the email address.
-     *
-     * @param   integer $uid    User ID
-     * @param   string  $name   User Name
-     * @param   string  $email  Email address
-     * @return  object  $this
-     */
-    public function addRecipient(int $uid, ?string $name=NULL, ?string $email=NULL) : self
-    {
-        $this->recipients[$uid] = array(
-            'uid' => $uid,
-            'name' => $name,
-            'email' => $email,
-        );
         return $this;
     }
 
@@ -93,6 +78,7 @@ class Email extends \glFusion\Notifier
         return $this;
     }
 
+
     /**
      * Send an email notification to the recipient.
      *
@@ -103,66 +89,25 @@ class Email extends \glFusion\Notifier
         global $_CONF, $_VARS;
 
         $retval = false;
-        $to = array();
-        $bcc = array();
 
-        // Create the recipient list
-        foreach ($this->recipients as $uid=>$data) {
-            // If either email or name are missing, get them from the User table.
-            if (empty($data['email']) || empty($data['name'])) {
-                $U = $this->getUser($uid);
-                if ($U->uid == 0) {
-                    // Didn't get a valid user object
-                    continue;
-                }
-                // Set missing values from the user object
-                if (empty($data['email'])) {
-                    $data['email'] = $U->email;
-                }
-                if (empty($data['name'])) {
-                    $data['name'] = $U->fullname;
-                }
-            }
-            // Finally, the email address must be present.
-            if (!empty($data['email'])) {
-                $to[] = array(
-                    'email' => $data['email'],
-                    'name' => $data['name'],
-                );
-            }
-        }
+        // Create the To and BCC lists
+        $to = $this->prepareRecipients($this->recipients);
+        $bcc = $this->prepareRecipients($this->bcc);
 
-        // Create the BCC recipient list
-        foreach ($this->bcc as $uid=>$data) {
-            // If either email or name are missing, get them from the User table.
-            if (empty($data['email']) || empty($data['name'])) {
-                $U = $this->getUser($uid);
-                if ($U->uid == 0) {
-                    // Didn't get a valid user object
-                    continue;
-                }
-                // Set missing values from the user object
-                if (empty($data['email'])) {
-                    $data['email'] = $U->email;
-                }
-                if (empty($data['name'])) {
-                    $data['name'] = $U->fullname;
-                }
-            }
-            // Finally, the email address must be present.
-            if (!empty($data['email'])) {
-                $bcc[] = array(
-                    'email' => $data['email'],
-                    'name' => $data['name'],
-                );
-            }
+        // Create the text message version if not supplied
+        if (empty($this->textmessage) && !empty($this->htmlmessage)) {
+            $html2txt = new \Html2Text\Html2Text($this->htmlmessage, false);
+            $this->setMessage($html2txt->get_text(), false);
         }
 
         if (!empty($to) || !empty($bcc)) {
             $msgData = array(
                 'to' => $to,
                 'bcc' => $bcc,
-                'from' => $this->_from_email,
+                'from' => array(
+                    'email' => $this->_from_email,
+                    'name' => $this->from_name,
+                ),
                 'htmlmessage' => $this->htmlmessage,
                 'textmessage' => $this->textmessage,
                 'subject' => $this->subject,
@@ -185,9 +130,6 @@ class Email extends \glFusion\Notifier
     public static function sendNotification(array $msgData=array()) : bool
     {
         global $_CONF, $_VARS;
-
-        // define the maximum number of emails allowed per bcc
-        $maxEmailsPerSend = 10;
 
         // ensure we have something to send...
         if ( !isset($msgData['htmlmessage']) && !isset($msgData['textmessage']) ) {
@@ -258,79 +200,76 @@ class Email extends \glFusion\Notifier
             }
         }
 
-        if ( is_array($msgData['from'])) {
-            if ( filter_var($msgData['from']['email'], FILTER_VALIDATE_EMAIL) ) {
-                $mail->From = $msgData['from']['email'];
+        $from_email = $_CONF['noreply_mail'];
+        $from_name = $_CONF['site_name'];
+        if (isset($msgData['from'])) {
+            if (is_array($msgData['from'])) {
+                $from_email = self::getArrayVar($msgData['from'], 'email', $from_email);
+                $from_name = self::getArrayVar($msgData['from'], 'name', $from_name);
             } else {
-                $mail->From = $_CONF['noreply_mail'];
+                $from_email = $msgData['from'];
             }
-            $mail->FromName = $msgData['from']['name'];
-        } else {
-            if ( filter_var($msgData['from'], FILTER_VALIDATE_EMAIL) ) {
-                $mail->From = $msgData['from'];
-            } else {
-                $mail->From = $_CONF['noreply_mail'];
-            }
-            $mail->FromName = $_CONF['site_name'];
         }
+        if ( filter_var($from_email, FILTER_VALIDATE_EMAIL) ) {
+            $mail->From = $from_email;
+        } else {
+            // Bad from address, revert back to the default
+            $mail->From = $_CONF['noreply_mail'];
+        }
+        $mail->FromName = $from_name;
 
         if (isset($msgData['to'])) {
             if ( is_array($msgData['to']) ) {
                 foreach ($msgData['to'] AS $to) {
                     if ( is_array($to) ) {
-                        if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
-                            $mail->addAddress($to['email'],$to['name']);
-                        }
+                        $email = self::getArrayVar($to, 'email');
+                        $name = self::getArrayVar($to, 'name');
                     } else {
-                        if ( COM_isEmail($to) ) {
-                            if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
-                                $mail->addAddress($to);
-                            }
-                        }
+                        $email = $to;
+                        $name = '';
+                    }
+                    if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
+                        $mail->addAddress($email,$name);
+                        $queued++;
                     }
 
-                    $queued++;
-                    if ( $queued >= $maxEmailsPerSend ) {
-                        if (!$mail->Send()) {
+                    if ( $queued >= self::$maxEmailsPerSend ) {
+                        if (!@$mail->Send()) {
                             Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
                         }
                         $queued = 0;
-                        $mail->ClearBCCs();
+                        $mail->clearAddresses();
                     }
                 }
             } else {
-                // Compatibility with single-address COM_mail()
-                $msgData['to'] = array(
-                    array(
-                        'email' => $msgData['to'],
-                        'name' => '',
-                    )
-                );
+                // Compatibility with single-address COM_mail().
+                // No need to check the queue size for sending.
+                $mail->addAddress($msgData['to']);
+                $queued++;
             }
         }
 
         if (isset($msgData['bcc'])) {
             if ( is_array($msgData['bcc']) ) {
-                foreach ($msgData['bcc'] AS $to) {
-                    if ( is_array($to) ) {
-                        if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
-                            $mail->addBCC($to['email'],$to['name']);
-                        }
+                foreach ($msgData['bcc'] AS $bcc) {
+                    if ( is_array($bcc) ) {
+                        $email = self::getArrayVar($bcc, 'email');
+                        $name = self::getArrayVar($bcc, 'name');
                     } else {
-                        if ( COM_isEmail($to) ) {
-                            if ( filter_var($to, FILTER_VALIDATE_EMAIL) ) {
-                                $mail->addBCC($to);
-                            }
-                        }
+                        $email = $bcc;
+                        $name = '';
+                    }
+                    if ( filter_var($email, FILTER_VALIDATE_EMAIL) ) {
+                        $mail->addBCC($email, $name);
+                        $queued++;
                     }
 
-                    $queued++;
-                    if ( $queued >= $maxEmailsPerSend ) {
-                        if (!$mail->Send()) {
+                    if ( $queued >= self::$maxEmailsPerSend ) {
+                        if (!@$mail->Send()) {
                             Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
                         }
                         $queued = 0;
-                        $mail->ClearBCCs();
+                        $mail->clearBCCs();
                     }
                 }
             }
@@ -339,10 +278,66 @@ class Email extends \glFusion\Notifier
         if ( $queued > 0 ) {
             if ( !@$mail->Send() ) {
                 Log::write('system',Log::ERROR,"Send Email returned: " . $mail->ErrorInfo);
-                return false;
             }
         }
         return true;
+    }
+
+
+    /**
+     * Helper to get the value for an array key, if it exists.
+     *
+     * @param   array   $A      Array containing values
+     * @param   string  $key    Key to find
+     * @param   string  $def    Default value if not found
+     * @return  string      Value of key, or default
+     */
+    private static function getArrayVar(array $A, string $key, string $def = '') : string
+    {
+        if (is_array($A) && array_key_exists($key, $A)) {
+            return $A[$key];
+        } else {
+            return $def;
+        }
+    }
+
+
+    /**
+     * Get the email addresses ready for sending.
+     *
+     * @param   array   $users  Array of user info from recipients or bcc
+     * @return  array   Array of prepped addresses
+     */
+    protected function prepareRecipients(array $users) : array
+    {
+        $retval = array();
+
+        // Create the recipient list
+        foreach ($users as $data) {
+            // If either email or name are missing, get them from the User table.
+            if ((empty($data['email']) || empty($data['name'])) && $data['uid'] > 1) {
+                $U = $this->getUser((int)$data['uid']);
+                if ($U->uid == 0) {
+                    // Didn't get a valid user object
+                    continue;
+                }
+                // Set missing values from the user object
+                if (empty($data['email'])) {
+                    $data['email'] = $U->email;
+                }
+                if (empty($data['name'])) {
+                    $data['name'] = $U->fullname;
+                }
+            }
+            // Finally, the email address must be present.
+            if (!empty($data['email'])) {
+                $retval[] = array(
+                    'email' => $data['email'],
+                    'name' => $data['name'],
+                );
+            }
+        }
+        return $retval;
     }
 
 }

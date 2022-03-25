@@ -115,7 +115,7 @@ class User
 
     /** Account Status.
      * @var integer */
-    private $status = self::AWAITING_ACTIVATION
+    private $status = self::AWAITING_ACTIVATION;
 
     /** Account Type (local, remote).
      * @var integer */
@@ -335,7 +335,7 @@ class User
             LIMIT 1";*/
         $db = Database::getInstance();
         try {
-            $userData = $qb->select('users.*', 'userprefs.*', 'userinfo.*')
+            $userData = $qb->select('u.*', 'up.*', 'ui.*')
                            ->from($_TABLES['users'], 'u')
                            ->leftJoin('u', $_TABLES['userprefs'], 'up', 'u.uid=up.uid')
                            ->leftJoin('u', $_TABLES['userinfo'], 'ui', 'u.uid=ui.uid')
@@ -378,7 +378,7 @@ class User
             $stmt = $qb->execute();
             $userData = $stmt->fetchAll(Database::ASSOCIATIVE);
         } catch (Throwable $e) {
-            Log::write('system', Log::ERROR, $e->getMessage();
+            Log::write('system', Log::ERROR, $e->getMessage());
             $userData = array();
         }
         return $userData;
