@@ -79,7 +79,7 @@ abstract class Notifier
      */
     public function addRecipient(int $uid, ?string $name=NULL, ?string $email=NULL)
     {
-        $this->recipients[$uid] = array(
+        $this->recipients[] = array(
             'uid' => $uid,
             'name' => $name,
             'email' => $email,
@@ -98,7 +98,7 @@ abstract class Notifier
      */
     public function addBCC(int $uid, ?string $name=NULL, ?string $email=NULL)
     {
-        $this->bcc[$uid] = array(
+        $this->bcc[] = array(
             'uid' => $uid,
             'name' => $name,
             'email' => $email,
@@ -273,7 +273,7 @@ abstract class Notifier
      * Send the notification.
      * Must be implemented by child classes.
      */
-    abstract public function Send();
+    abstract public function send();
 
 }
 

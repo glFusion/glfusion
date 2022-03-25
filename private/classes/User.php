@@ -335,7 +335,7 @@ class User
             LIMIT 1";*/
         $db = Database::getInstance();
         try {
-            $userData = $qb->select('users.*', 'userprefs.*', 'userinfo.*')
+            $userData = $qb->select('u.*', 'up.*', 'ui.*')
                            ->from($_TABLES['users'], 'u')
                            ->leftJoin('u', $_TABLES['userprefs'], 'up', 'u.uid=up.uid')
                            ->leftJoin('u', $_TABLES['userinfo'], 'ui', 'u.uid=ui.uid')
