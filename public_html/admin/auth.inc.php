@@ -24,6 +24,7 @@ if (!defined ('GVERSION')) {
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 use \glFusion\User\UserAuth;
+use \glFusion\User\UserInterface;
 use \Delight\Cookie\Session;
 
 USES_lib_user();
@@ -172,6 +173,10 @@ if ( $_SYSTEM['admin_session'] != 0 || $userManager->isRemembered() ) {
         $adminSession = Session::get($userManager::SESSION_FIELD_ADMIN_SESSION);
     }
     if ((($adminSession + $_SYSTEM['admin_session']) < \time()) || $userManager->isRemembered() ) {
+
+        if ($adminSession + $_SYSTEM['admin_session'] < \time()) Log::write('system',Log::DEBUG,'Admin session expired');
+        if ($userManager->isRemembered()) Log::write('system',Log::DEBUG,'User logged in via remember me - require password authentication.');
+
         try {
             $userManager->throttle([ 'reconfirmPassword', $userManager->getIpAddress() ], 3, (60 * 60), 4, true);
         } catch (\glFusion\User\Exceptions\TooManyRequestsException $e) {
@@ -215,9 +220,10 @@ if ( $_SYSTEM['admin_session'] != 0 || $userManager->isRemembered() ) {
             }
             Session::set('admin.files',json_encode($_FILES));
         }
+        Log::write('system',Log::DEBUG,'Calling UserInterface::reauthForm()');
         // build the reauth form
         $display .= COM_siteHeader();
-        $display .= SEC_reauthform2($destination,$message, $LANG04[111]);
+        $display .= UserInterface::reauthForm($destination,$message, $LANG04[111]);
         $display .= COM_siteFooter();
         echo $display;
         exit;
