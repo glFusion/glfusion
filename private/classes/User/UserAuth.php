@@ -28,7 +28,6 @@ if (!defined ('GVERSION')) {
 
 use glFusin\User\UserAuthOauth;
 use glFusion\User\Status;
-use glFusion\User\Exception;
 use Delight\Base64\Base64;
 use Delight\Cookie\Cookie;
 use Delight\Cookie\Session;
@@ -160,6 +159,185 @@ final class UserAuth extends User {
 		}
 		return $myrow;
     }
+
+	/**
+	 * This either logs in the user or throws the appropriate error and redirects to the proper place.
+	 */
+	public function userLocalLoginController()
+	{
+		global $_CONF, $MESSAGE, $LANG04, $LANG12;
+
+		$options = array();
+
+		// user has submitted a username and password with no service or local service
+
+		// need to validate CSRF token
+
+		// validate we accept local logins
+		if ($_CONF['user_login_method']['standard'] != 1) {
+			die('Local Login is disabled');
+//			throw new Exceptions\LocalLoginServiceDisabledException();
+		}
+
+		$loginname = filter_input(\INPUT_POST, 'loginname', \FILTER_UNSAFE_RAW);
+		$passwd    = filter_input(\INPUT_POST,'passwd', \FILTER_UNSAFE_RAW);
+
+		if (empty($loginname) || empty($passwd)) {
+			COM_setMsg($MESSAGE[81],'error');
+			UserInterface::loginPage();
+		}
+
+		try {
+			self::loginWithUsername($loginname, $passwd,0,array($this,'userLoginBeforeSuccess'));
+
+		} catch (Exceptions\InvalidPasswordException | Exceptions\UnknownUsernameException $e) {
+			COM_setMsg($MESSAGE[81],'error');
+			UserInterface::loginPage();
+
+		} catch (Exceptions\TooManyRequestsException $e) {
+			displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
+
+		} catch (Exceptions\AttemptCancelledException $e) {
+			// the attempt was cancelled - possibly CAPTCHA failed or other validation before login failed
+			UserInterface::loginPage();
+
+		} catch (Exceptions\AccountPendingReviewException $e) {
+			$options['title']   = $LANG04[116]; // account awaiting activation
+			$options['message'] = $LANG04[117]; // your account is currently awaiting activation by an admin
+			$options['forgotpw_link']      = false;
+			$options['newreg_link']        = false;
+			$options['verification_link']  = false;
+			UserInterface::loginPage($options);
+
+		} catch (Exceptions\EmailNotVerifiedException $e) {
+			$options['title']   = $LANG04[116]; // account awaiting activation
+			$options['message'] = $LANG04[177]; // your account is currently awaiting verification
+			$options['forgotpw_link']      = false;
+			$options['newreg_link']        = false;
+			$options['verification_link']  = true;
+			UserInterface::loginPage($options);
+
+		} catch (\Throwable $e) {
+			// some other error - so we abort...
+			die('UserAuth.php :: unknown error in loginWithUsername() ' . $e->getMessage());
+		}
+
+		// finalize local login by passing true
+		$this->userFinalLogin(true);
+
+	}
+
+	/**
+	 * Oauth Login Controller
+	 */
+	public function userOauthLoginController()
+	{
+		global $_CONF, $MESSAGE, $LANG04, $LANG12;
+
+		// validate we accept oauth logins
+		if ($_CONF['user_login_method']['oauth'] != 1) {
+			die('Oauth Login is disabled');
+//			throw new Exceptions\OauthLoginServiceDisabledException();
+		}
+
+		try {
+			self::loginWithOauth(0, array($this,'userLoginBeforeSuccess'));
+		} catch (Exceptions\EmailNotVerifiedException $e) {
+			COM_setMsg($LANG04[177],'error');
+			COM_refresh($_CONF['site_url']);
+		} catch (\Throwable $e) {
+			Log::write('system',Log::ERROR,"OAuth Error: " . $e->getMessage());
+			COM_setMsg($MESSAGE[111],'error');
+			UserInterface::loginPage();
+		}
+
+		// finalize oauth login - pass false as this is not local
+		$this->userFinalLogin(false);
+	}
+
+
+		/**
+		 * this is called after a user has been authenticated and sets up all the user information
+		 * needed to have a user authenticated to the system.
+		 */
+	private function userFinalLogin($local_login = false)
+	{
+		global $_CONF, $_USER, $_GROUPS, $_RIGHTS, $_SYSTEM;
+
+		$status = $this->getStatus();
+
+        if ($status == Status::NORMAL || $status == USER_ACCOUNT_AWAITING_ACTIVATION ) { // logged in AOK.
+            $_USER = $this->getUserData();
+            $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
+            $_RIGHTS = explode( ',', SEC_getUserPermissions() );
+
+            if ((int) $_SYSTEM['admin_session'] > 0 && $local_login ) {
+                if (SEC_isModerator() || SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR') || (count(PLG_getAdminOptions()) > 0)) {
+                    Session::set(self::SESSION_FIELD_ADMIN_SESSION,\time() + $_SYSTEM['admin_session']);
+                }
+            }
+            if ( !isset($_USER['theme']) ) {
+                $_USER['theme'] = $_CONF['theme'];
+                $_CONF['path_layout'] = $_CONF['path_themes'] . $_USER['theme'] . '/';
+                $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $_USER['theme'];
+                if ( $_CONF['allow_user_themes'] == 1 ) {
+                    if ( isset( $_COOKIE[$_CONF['cookie_theme']] ) ) {
+                        $theme = COM_sanitizeFilename($_COOKIE[$_CONF['cookie_theme']], true);
+                        if ( is_dir( $_CONF['path_themes'] . $theme )) {
+                            $_USER['theme'] = $theme;
+                            $_CONF['path_layout'] = $_CONF['path_themes'] . $theme . '/';
+                            $_CONF['layout_url'] = $_CONF['site_url'] . '/layout/' . $theme;
+                        }
+                    }
+                }
+            }
+			// need to go with the cookie manager
+
+            SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
+                           $_CONF['cookie_path'], $_CONF['cookiedomain'],
+                           $_CONF['cookiesecure'],false);
+//            COM_resetSpeedlimit('login');
+
+            // we are now fully logged in, let's see if there is someplace we need to go....
+            // First, check for a landing page supplied by the form or global config
+            foreach (array($_POST, $_CONF) as $A) {
+                if (isset($A['login_landing']) && !empty($A['login_landing'])) {
+                    if ($A['login_landing'][0] != '/') {
+                        $A['login_landing'] = '/' . $A['login_landing'];
+                    }
+                    COM_refresh($_CONF['site_url'] . $A['login_landing']);
+                }
+            }
+
+            if ( SESS_isSet('login_referer') ) {
+                $_SERVER['HTTP_REFERER'] = SESS_getVar('login_referer');
+                SESS_unSet('login_referer');
+            }
+            if (!empty($_SERVER['HTTP_REFERER'])
+                    && (strstr($_SERVER['HTTP_REFERER'], '/users.php') === false)
+                    && (substr($_SERVER['HTTP_REFERER'], 0,
+                            strlen($_CONF['site_url'])) == $_CONF['site_url'])) {
+                $indexMsg = $_CONF['site_url'] . '/index.php?msg=';
+                if (substr ($_SERVER['HTTP_REFERER'], 0, strlen ($indexMsg)) == $indexMsg) {
+                    echo COM_refresh ($_CONF['site_url'] . '/index.php');
+                } else {
+                    // If user is trying to login - force redirect to index.php
+                    if (strstr ($_SERVER['HTTP_REFERER'], 'mode=login') === false) {
+                    // if article - we need to ensure we have the story
+                        if ( substr($_SERVER['HTTP_REFERER'], 0,strlen($_CONF['site_url'])) == $_CONF['site_url']) {
+                            echo COM_refresh (COM_sanitizeUrl($_SERVER['HTTP_REFERER']));
+                        } else {
+                            echo COM_refresh($_CONF['site_url'].'/index.php');
+                        }
+                    } else {
+                        echo COM_refresh ($_CONF['site_url'] . '/index.php');
+                    }
+                }
+            } else {
+                echo COM_refresh ($_CONF['site_url'] . '/index.php');
+            }
+        }
+	}
 
 	/** Improves the application's security over HTTP(S) by setting specific headers */
 	private function enhanceHttpSecurity() {
@@ -704,6 +882,8 @@ final class UserAuth extends User {
 		}
 	}
 
+
+//@TODO - move to userCreate?
 	/**
 	 * Confirms an email address (and activates the account) by supplying the correct selector/token pair
 	 *
@@ -726,21 +906,17 @@ final class UserAuth extends User {
 
 		try {
             $confirmationData = Database::getInstance()->conn->fetchAssoc(
-				"SELECT a.id, a.user_id, a.email AS new_email, a.token, a.expires, b.email AS old_email FROM {$_TABLES['users_confirmations']} AS a JOIN {$_TABLES['users']}0 AS b ON b.id = a.user_id WHERE a.selector = ?",
+				"SELECT a.id, a.user_id, a.email AS new_email, a.token, a.expires, b.email AS old_email FROM {$_TABLES['users_confirmations']} AS a JOIN {$_TABLES['users']} AS b ON b.uid = a.user_id WHERE a.selector = ?",
     			[ $selector ],
                 [ DATABASE::STRING ]
             );
-//			$confirmationData = $this->db->selectRow(
-//				'SELECT a.id, a.user_id, a.email AS new_email, a.token, a.expires, b.email AS old_email FROM ' . $this->makeTableName('users_confirmations') . ' AS a JOIN ' . $this->makeTableName('users') . ' AS b ON b.id = a.user_id WHERE a.selector = ?',
-//				[ $selector ]
-//			);
 		}
 		catch (\Throwable $e) {
 			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
 		if (!empty($confirmationData)) {
-			if (_check_hash($token, $confirmationData['token'])) {
+			if (\password_verify($token, $confirmationData['token'])) {
 				if ($confirmationData['expires'] >= \time()) {
 					// invalidate any potential outstanding password reset requests
 					try {
@@ -749,10 +925,6 @@ final class UserAuth extends User {
                             [ 'user' => $confirmationData['user_id'] ],
                             [ Database::INTEGER ]
                         );
-//						$this->db->delete(
-//							$this->makeTableNameComponents('users_resets'),
-//							[ 'user' => $confirmationData['user_id'] ]
-//						);
 					}
 					catch (\Throwable $e) {
 						throw new Exceptions\DatabaseError($e->getMessage());
@@ -766,22 +938,12 @@ final class UserAuth extends User {
 								'email' => $confirmationData['new_email'],
 								'verified' => 1
 							],
-							[ 'id' => $confirmationData['user_id'] ],
+							[ 'uid' => $confirmationData['user_id'] ],
                             [ Database::STRING, Database::INTEGER]
                         );
-
-//						$this->db->update(
-//							$this->makeTableNameComponents('users'),
-//							[
-//								'email' => $confirmationData['new_email'],
-//								'verified' => 1
-//							],
-//							[ 'id' => $confirmationData['user_id'] ]
-//						);
 					}
                     catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
-//					catch (IntegrityConstraintViolationException $e) {
-						throw new Exceptions\UserAlreadyExistsException();
+						throw new Exceptions\DuplicateEmailException();
 					}
 					catch (\Throwable $e) {
 						throw new Exceptions\DatabaseError($e->getMessage());
@@ -798,9 +960,10 @@ final class UserAuth extends User {
 
 					// consume the token just being used for confirmation
 					try {
-						$this->db->delete(
-							$this->makeTableNameComponents('users_confirmations'),
-							[ 'id' => $confirmationData['id'] ]
+						Database::getInstance()->conn->delete(
+							$_TABLES['users_confirmations'],
+							[ 'id' => $confirmationData['id'] ],
+							[ Database::INTEGER]
 						);
 					}
 					catch (\Error $e) {
@@ -831,6 +994,7 @@ final class UserAuth extends User {
 		}
 	}
 
+//@TODO - move to userCreate?
 	/**
 	 * Confirms an email address and activates the account by supplying the correct selector/token pair
 	 *
@@ -857,13 +1021,13 @@ final class UserAuth extends User {
 
 				$userData = $this->getUserDataByEmailAddress(
 					$emailBeforeAndAfter[1],
-					[ 'id', 'email', 'username', 'status', 'roles_mask', 'force_logout' ]
+					[ 'uid', 'email', 'username', 'status', 'roles_mask', 'force_logout' ]
 				);
 
-				$this->onLoginSuccessful($userData['id'], $userData['email'], $userData['username'], $userData['status'], $userData['roles_mask'], $userData['force_logout'], true);
+				$this->onLoginSuccessful($userData['uid'], $userData['email'], $userData['username'], $userData['status'], $userData['roles_mask'], $userData['force_logout'], true);
 
 				if ($rememberDuration !== null) {
-					$this->createRememberDirective($userData['id'], $rememberDuration);
+					$this->createRememberDirective($userData['uid'], $rememberDuration);
 				}
 			}
 		}
@@ -1046,7 +1210,7 @@ final class UserAuth extends User {
 	private function resendConfirmationForColumnValue($columnName, $columnValue, callable $callback) {
 		try {
 			$latestAttempt = $this->db->selectRow(
-				'SELECT user_id, email FROM ' . $this->makeTableName('users_confirmations') . ' WHERE ' . $columnName . ' = ? ORDER BY id DESC LIMIT 1 OFFSET 0',
+				'SELECT uid, email FROM ' . $this->makeTableName('users_confirmations') . ' WHERE ' . $columnName . ' = ? ORDER BY id DESC LIMIT 1 OFFSET 0',
 				[ $columnValue ]
 			);
 		}
@@ -1366,6 +1530,7 @@ final class UserAuth extends User {
 		}
 	}
 
+	/** hook function used by login */
 	public function userLoginBeforeSuccess($uid)
 	{
 		global $_CONF, $_TABLES;
@@ -1414,6 +1579,7 @@ final class UserAuth extends User {
 		$this->throttle([ 'attemptToLogin', $this->getIpAddress() ], 4, (60 * 5), null, true);
 		$this->authenticateOauthInternal($rememberDuration, $onBeforeSuccess);
 	}
+
 
 	private function authenticateOauthInternal($rememberDuration = null, callable $onBeforeSuccess = null) {
 		global $_CONF, $_TABLES;
@@ -1464,6 +1630,7 @@ final class UserAuth extends User {
 		$oauth_userinfo = $consumer->authenticateUser();
 
 		if ($oauth_userinfo !== false) {
+
 			// fields for users table
 //@TODO
 			$users      = $consumer->getUserData($oauth_userinfo); // this pull info back from the oauth provider - in oauthconsumer.class
@@ -1525,6 +1692,10 @@ final class UserAuth extends User {
 			}
 			// first time the user has logged into glFusion via Oauth
 			else {
+
+//should we call userCreate() instead - no because this calls the user registration form and
+// then hooks into userCreate().
+
 				Log::write('system',Log::DEBUG,'Authenticated Oauth user was not found in local glFusion users table');
 				// new user
 				if (!isset($users['loginname']) || empty($users['loginname'])) {
@@ -1577,11 +1748,14 @@ final class UserAuth extends User {
 	 * @throws AuthError if an internal problem occurred (do *not* catch)
 	 */
 	private function getUserDataByEmailAddress($email, array $requestedColumns) {
+		global $_TABLES;
+
 		try {
 			$projection = \implode(', ', $requestedColumns);
-			$userData = $this->db->selectRow(
-				'SELECT ' . $projection . ' FROM ' . $this->makeTableName('users') . ' WHERE email = ?',
-				[ $email ]
+			$userData = Database::getInstance()->conn->fetchAssoc(
+				'SELECT ' . $projection . ' FROM ' . $_TABLES['users'] . ' WHERE email = ?',
+				[ $email ],
+				[ DATABASE::STRING]
 			);
 		}
 		catch (\Throwable $e) {
