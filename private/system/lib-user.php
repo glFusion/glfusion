@@ -41,7 +41,7 @@ function USER_deleteAccount($uid)
     global $_CONF, $_TABLES, $_USER;
 
     $uid = (int) $uid;
-
+Log::write('system',Log::DEBUG,'Deleting user id ' . $uid);
     $db = Database::getInstance();
 
     // first some checks ...
@@ -80,7 +80,7 @@ function USER_deleteAccount($uid)
     }
 
     // log the user out
-    SESS_endUserSession ($uid);
+//    SESS_endUserSession ($uid);
 
     // Ok, now delete everything related to this user
 
@@ -414,11 +414,6 @@ function USER_sendActivationEmail_v2 ($selector, $token)
     global $_CONF, $_SYSTEM, $_TABLES, $LANG04;
 
     $userManager = new Auth();
-
-
-
-
-
 
     if ( !isset($_SYSTEM['verification_token_ttl']) ) {
         $_SYSTEM['verification_token_ttl'] = 86400;
