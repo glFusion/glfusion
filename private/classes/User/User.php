@@ -176,7 +176,7 @@ abstract class User {
 		$newUserId = (int) Database::getInstance()->conn->lastInsertId();
 
 		if ($verified === 0) {
-			$this->createConfirmationRequest($newUserId, $email, $callback);
+			$this->createConfirmationRequest($newUserId, $email);
 		}
 
 		return $newUserId;
@@ -294,6 +294,8 @@ abstract class User {
 
 		$email = \trim($email);
 
+		$email = substr($email,0,96);
+
 		if (!\filter_var($email, \FILTER_VALIDATE_EMAIL)) {
 			throw new Exceptions\InvalidEmailException();
 		}
@@ -368,8 +370,9 @@ abstract class User {
 	 * @param callable $callback the function that sends the confirmation email to the user
 	 * @throws AuthError if an internal problem occurred (do *not* catch)
 	 */
-	protected function createConfirmationRequest($userId, $email, callable $callback) {
+	protected function createConfirmationRequest($userId, $email) {
 		global $_TABLES;
+
 		$selector = self::createRandomString(16);
 		$token = self::createRandomString(16);
 		$tokenHashed = \password_hash($token, \PASSWORD_DEFAULT);
@@ -398,12 +401,54 @@ abstract class User {
 			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
-		if (\is_callable($callback)) {
-			$callback($selector, $token);
-		}
-		else {
-			throw new Exceptions\MissingCallbackError();
-		}
+		self::sendConfirmationRequest($selector,$token,$email);
+
+//		if (\is_callable($callback)) {
+//			$callback($selector, $token);
+//		}
+//		else {
+//			throw new Exceptions\MissingCallbackError();
+//		}
+	}
+
+	protected function sendConfirmationRequest($selector,$token,$email)
+	{
+		global $_CONF, $_SYSTEM, $LANG04;
+
+		$activationLink = $_CONF['site_url'].'/users.php?mode=verify&amp;s='.$selector.'&amp;t='.$token;
+Log::write('system',Log::DEBUG,'In sendConfirmationRequest');
+		$T = new \Template($_CONF['path_layout'].'email/');
+		$T->set_file(array(
+			'html_msg'   => 'newuser_template_html.thtml',
+			'text_msg'   => 'newuser_template_text.thtml'
+		));
+		$T->set_var(array(
+			'url'                   => $activationLink,
+			'lang_site_or_password' => $LANG04[171],
+			'site_link_url'         => $_CONF['site_url'],
+			'lang_activation'       => sprintf($LANG04[172],($_SYSTEM['verification_token_ttl']/3600)),
+			'lang_button_text'      => $LANG04[203],
+			'localuser'             => true,
+		));
+
+		$T->parse ('output', 'html_msg');
+		$mailhtml = $T->finish($T->get_var('output'));
+
+		$T->parse ('output', 'text_msg');
+		$mailtext = $T->finish($T->get_var('output'));
+		$isHTML = true;
+
+		$msgData['htmlmessage'] = $mailhtml;
+		$msgData['textmessage'] = $mailtext;
+		$msgData['subject'] = $_CONF['site_name'] . ': ' . $LANG04[16];
+
+		$to = array();
+// taking out the from for now - it is causing issues with the new Notify class
+//		$from = array();
+//		$from = COM_formatEmailAddress( $_CONF['site_name'], $_CONF['noreply_mail'] );
+		$to = COM_formatEmailAddress('',$email);
+		Log::write('system',Log::DEBUG,'About to send confirmation request');
+		$rc = COM_mail( $to, $msgData['subject'], $msgData['htmlmessage'], '', $isHTML, 0,'', $msgData['textmessage'] );
 	}
 
 	/**
@@ -594,7 +639,7 @@ abstract class User {
 	 */
 	public function getIpAddress() {
 		return $this->ipAddress;
-	}	
+	}
 
 	/**
 	 * Builds a (qualified) full table name from an optional qualifier, an optional prefix, and the table name itself
