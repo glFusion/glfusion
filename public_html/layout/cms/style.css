@@ -2805,3 +2805,7 @@ img.themeAdminImage {
 	max-height:50px;
 }
 
+span.tm-badge {
+	background-image: unset;
+}
+

@@ -1,0 +1,7 @@
+{# begin {templatelocation} #}
+{!if badge_url}
+{badge_url}
+{!else}
+<span class="uk-badge tm-badge tooltip" title="{title}" style="background-color:{bgcolor};color:{fgcolor};">{text}</span>
+{!endif}
+{# end {templatelocation} #}

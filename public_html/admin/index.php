@@ -300,6 +300,12 @@ function commandcontrol()
             'lang' => $LANG01[131],
             'image' => $_CONF['layout_url'] . '/images/icons/feature.' . $_IMAGE_TYPE,
         ),
+        $LANG01[132] => array(
+            'condition' => SEC_hasRights('system.root'),
+            'url' =>$_CONF['site_admin_url'] . '/badges.php',
+            'lang' => $LANG01[132],
+            'image' => $_CONF['layout_url'] . '/images/icons/badges.' . $_IMAGE_TYPE,
+        ),
     );
 
     // now add the plugins
