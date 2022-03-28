@@ -26,9 +26,9 @@
 	</div>
 
 	<div class="uk-form-row uk-margin">
-		<label class="uk-form-label" for="inherit">{$LANG_ADMIN['incl_inherited']}</label>
+		<label class="uk-form-label" for="single">{$LANG_ADMIN['badge_singular']}</label>
 		<div class="uk-form-controls">
-			<input class="uk-checkbox" type="checkbox" id="inherit" name="bg_singular" value="1" {sing_chk}" />
+			<input class="uk-checkbox" type="checkbox" id="single" name="bg_singular" value="1" {sing_chk}" />
 		</div>
 	</div>
 
