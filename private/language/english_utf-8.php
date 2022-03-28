@@ -2068,6 +2068,7 @@ $LANG_ADMIN = array(
     'badge_singular' => 'Single Badge',
     'group_name' => 'Group Name',
     'badge_click_html' => 'Click the badge to view the HTML',
+    'badge_management' => 'Badge Management',
 );
 
 ###############################################################################
