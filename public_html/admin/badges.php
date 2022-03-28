@@ -139,9 +139,11 @@ default:
     break;
 }
 
-$display = COM_siteHeader();
+$display = COM_siteHeader('menu', $LANG_ADMIN['badge_management']);
+$display .= COM_startBlock($LANG_ADMIN['badge_management'], '', COM_getBlockTemplate('_admin_block', 'header'));
 $display .= badges_AdminMenu($action);
 $display .= $content;
+$display .= COM_endBlock(COM_getBlockTemplate('_admin_block', 'footer'));
 $display .= COM_siteFooter();
 echo $display;
 exit;
