@@ -148,15 +148,15 @@ class UserInterface {
         }
 
         $loginform->set_var('lang_password', $LANG01[57]);
-        if ($options['forgotpw_link']) {
+        if ($options['forgotpw_link'] === true) {
             $loginform->set_var('lang_forgetpassword', $LANG04[25]);
             $forget = COM_createLink($LANG04[25], $_CONF['site_url']
                                                 . '/users.php?mode=getpassword',
                                     array('rel' => 'nofollow'));
             $loginform->set_var('forgetpassword_link', $forget);
         } else {
-            $loginform->set_var('lang_forgetpassword', '');
-            $loginform->set_var('forgetpassword_link', '');
+            $loginform->unset_var('lang_forgetpassword');
+            $loginform->unset_var('forgetpassword_link');
         }
 
         $loginform->set_var('lang_login', $options['button_text']);
@@ -299,7 +299,7 @@ class UserInterface {
             'oauth_login'     => false,
             'plugin_vars'     => false,
             'password_only'   => true,
-            'prefill_user'    => COM_isAnonUser() ? false : true,
+            'prefill_user'    => false,
             'title'           => $LANG20[1],
             'message'         => $message,
             'prompt'          => $prompt,
@@ -349,12 +349,12 @@ class UserInterface {
 
     // new functions to support new registration system
 
-    function registrationPage($data, $messages = '')
+    static public function registrationPage($data = array(), $messages = '')
     {
         $display = '';
 
         $display = COM_siteHeader('menu');
-        $display .= USER_registrationForm($data,$messages);
+        $display .= self::registrationForm($data,$messages);
         $display .= COM_siteFooter();
         echo $display;
         exit;
@@ -368,7 +368,7 @@ class UserInterface {
     * @param    string  $referrer   page to send user to after registration
     * @return   string  HTML for user registration page
     */
-    public function registrationForm($info = array(), $messages = array())
+    static public function registrationForm($info = array(), $messages = array())
     {
         global $_CONF, $_USER, $LANG01, $LANG04;
 
@@ -498,6 +498,73 @@ class UserInterface {
         $retval .= $T->finish($T->get_var('output'));
 
         return $retval;
+    }
+
+
+    /**
+    * Display a form where the user can request a new token.
+    *
+    * @param uid       int      user id
+    * @return          string   new token form
+    *
+    */
+    static public function newTokenForm ()
+    {
+        global $_CONF, $_TABLES, $LANG01, $LANG04;
+
+        $tokenform = new \Template ($_CONF['path_layout'] . 'users');
+        $tokenform->set_file ('newtoken', 'newtoken.thtml');
+        $tokenform->set_var (array(
+                'user_id'       => 1, // $uid,
+                'lang_explain'  => $LANG04[175],
+                'lang_username' => $LANG04[2],
+                'lang_password' => $LANG01[57],
+                'lang_submit'   => $LANG04[169]));
+
+        $retval = COM_startBlock ($LANG04[169]);
+        $retval .= $tokenform->finish ($tokenform->parse ('output', 'newtoken'));
+        $retval .= COM_endBlock ();
+
+        echo COM_siteHeader();
+        echo $retval;
+        echo COM_siteFooter();
+        exit;
+        return $retval;
+    }
+
+    /**
+    * Shows the password retrieval form
+    *
+    * @return   string  HTML for form used to retrieve user's password
+    *
+    */
+    static public function getPasswordForm()
+    {
+        global $_CONF, $LANG04;
+
+        $form = '';
+
+        $user_templates = new \Template($_CONF['path_layout'] . 'users');
+        $user_templates->set_file('form', 'getpasswordform.thtml');
+        $user_templates->set_var(array(
+            'start_block_forgetpassword'    => COM_startBlock($LANG04[25]),
+            'lang_instructions'             => $LANG04[26],
+            'lang_username'                 => $LANG04[2],
+            'lang_email'                    => $LANG04[5],
+            'lang_emailpassword'            => $LANG04[28],
+            'end_block'                     => COM_endBlock()
+        ));
+
+        PLG_templateSetVars('forgotpassword',$user_templates);
+
+        $user_templates->parse('output', 'form');
+
+        $form .= $user_templates->finish($user_templates->get_var('output'));
+
+        echo COM_siteHeader();
+        echo $form;
+        echo COM_siteFooter();
+        exit;
     }
 
 

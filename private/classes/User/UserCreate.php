@@ -455,8 +455,8 @@ class UserCreate extends User
                 $db->conn->rollBack();
                 throw new Exceptions\UserAlreadyExistsException();
             } catch(\Throwable $e) {
-                Log::write('system',Log::ERROR,"Error inserting user into USERS table :: " . $e->getMessage());
                 $db->conn->rollBack();
+                Log::write('system',Log::ERROR,"Error inserting user into USERS table :: " . $e->getMessage());
                 return null;
             }
 

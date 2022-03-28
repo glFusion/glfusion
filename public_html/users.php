@@ -38,16 +38,16 @@ use \glFusion\User\Status;
 use \Delight\Cookie\Session;
 
 /**
- * What we know:
- *
  *  Nothing passed - no get vars and no post vars
  *      - show login form - unless already logged in
  * METHOD = post -
- *      - we are trying to login or do something else
+ *      - we are trying to login, set new password, validate TFA, verify account
  * METHOD = GET - need to see what we got
  *      - oauth_login = do the oauth login stuff
- * mode = everything else
- */
+ *      - create new user
+ *      - request new activation email
+ *      - request forgotten password
+*/
 
 $method = filter_input(\INPUT_SERVER, 'REQUEST_METHOD', \FILTER_UNSAFE_RAW);
 if ($method == '' || empty($method)) {
@@ -66,6 +66,9 @@ switch ($method) {
     case 'POST' :
         $mode = filter_input(\INPUT_POST, 'mode', \FILTER_UNSAFE_RAW);
 
+        // validate CSRF here - any post should have a token - no token or invalid token - abort
+
+
         switch ($mode) {
             case 'login' :
                 try {
@@ -80,8 +83,17 @@ switch ($method) {
                 break;
             case 'create' :
                 // user is submitting their create credentials
-
+                $userRegister = new UserCreate();
+                try {
+                    $uid = $userRegister->registerUser($_POST);
+                } catch (\Throwable $e) {
+                    UserInterface::registrationPage($_POST,$e->getMessage());
+                }
                 break;
+
+            case 'getnewtoken' :
+                // user is requesting a new token
+
 
             default :
                 // we don't know what they want
@@ -128,6 +140,33 @@ switch ($method) {
                     Log::write('system',Log::DEBUG,'users.php :: Oauth Login Error: ' . $e->getMessage());
                 }
                 COM_refresh($_CONF['site_url']);
+                break;
+
+            case 'getnewtoken' :
+                if ($userManager->isLoggedIn()) {
+                    Log::write('system',Log::DEBUG,'users.php :: Request New Token :: User is already logged in - redirecting to usersettings.php');
+                    COM_refresh($_CONF['site_url'].'/usersettings.php');
+                    exit;
+                }
+                UserInterface::newTokenForm();
+                break;
+
+            case 'getpassword' :
+                if ($userManager->isLoggedIn()) {
+                    Log::write('system',Log::DEBUG,'users.php :: Forgot Password :: User is already logged in - redirecting to usersettings.php');
+                    COM_refresh($_CONF['site_url'].'/usersettings.php');
+                    exit;
+                }
+                UserInterface::getPasswordForm();
+                break;
+
+            case 'new' :
+                if ($userManager->isLoggedIn()) {
+                    Log::write('system',Log::DEBUG,'users.php :: Forgot Password :: User is already logged in - redirecting to usersettings.php');
+                    COM_refresh($_CONF['site_url'].'/usersettings.php');
+                    exit;
+                }
+                UserInterface::registrationPage();
                 break;
 
             default :
