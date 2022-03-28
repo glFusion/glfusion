@@ -733,17 +733,29 @@ $_SQL[] = "CREATE TABLE `{$_TABLES['search_stats']}` (
 ";
 
 $_SQL[] = "CREATE TABLE `{$_TABLES['badges']}` (
-  `bid` int(11) NOT NULL AUTO_INCREMENT,
-  `badge_grp` varchar(20) NOT NULL DEFAULT '',
-  `sortorder` int(3) NOT NULL DEFAULT 999,
-  `enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
-  `inherit` tinyint(1) unsigned NOT NULL DEFAULT 1,
-  `gl_grp` mediumint(8) NOT NULL,
-  `type` varchar(10) DEFAULT 'css',
-  `data` varchar(255) DEFAULT NULL,
-  `dscp` varchar(40) DEFAULT NULL,
-  PRIMARY KEY (`bid`),
-  KEY `grp` (`badge_grp`,`sortorder`)
+  `b_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `b_bg_id` int(11) unsigned NOT NULL DEFAULT 1,
+  `b_order` int(4) NOT NULL DEFAULT 9999,
+  `b_enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `b_inherit` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `b_gl_grp` mediumint(8) NOT NULL DEFAULT 0,
+  `b_type` varchar(10) NOT NULL DEFAULT 'img',
+  `b_data` text DEFAULT NULL,
+  `b_dscp` varchar(40) NOT NULL DEFAULT '',
+  PRIMARY KEY (`b_id`),
+  KEY `grp` (`b_bg_id`,`b_order`)
+) ENGINE=MyISAM;
+";
+
+$_SQL[] = "CREATE TABLE `{$_TABLES['badge_groups']}` (
+  `bg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `bg_order` int(4) DEFAULT 9999,
+  `bg_name` varchar(128) NOT NULL DEFAULT '',
+  `bg_singular` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  `bg_enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  PRIMARY KEY (`bg_id`),
+  UNIQUE KEY `bg_name` (`bg_name`),
+  KEY `orderby` (`bg_order`)
 ) ENGINE=MyISAM;
 ";
 
@@ -1062,8 +1074,10 @@ $_DATA[] = "INSERT INTO {$_TABLES['themes']} (theme, logo_type, display_site_slo
     ('_default', 2, 0),
     ('cms', -1, -1)";
 
-$_DATA[] = "INSERT INTO {$_TABLES['badges']} (`bid`, `badge_grp`, `sortorder`, `enabled`, `gl_grp`, `type`, `data`, `dscp`) VALUES
-    (1, '1_site', 20, 1, 13, 'css', 'a:2:{s:7:\"fgcolor\";s:7:\"#ffffff\";s:7:\"bgcolor\";s:7:\"#009dd8\";}', 'Site Member'),
-    (2, '1_site', 10, 1, 1, 'css', 'a:2:{s:7:\"fgcolor\";s:7:\"#ffffff\";s:7:\"bgcolor\";s:7:\"#ff0000\";}', 'Site Admin');";
+$_DATA[] = "INSERT INTO {$_TABLES['badge_groups']}
+    (bg_order, bg_name, bg_singular) VALUES (10, 'Miscellaneous', 0)";
+$_DATA[] = "INSERT INTO {$_TABLES['badges']} (`b_id`, `b_bg_id`, `b_order`, `b_enabled`, `b_gl_grp`, `b_type`, `b_data`, `b_dscp`) VALUES
+    (1, 1, 10, 1, 1, 'css', 'a:2:{s:7:\"fgcolor\";s:7:\"#ffffff\";s:7:\"bgcolor\";s:7:\"#ff0000\";}', 'Site Admin'),
+    (2, 1, 20, 1, 13, 'css', 'a:2:{s:7:\"fgcolor\";s:7:\"#ffffff\";s:7:\"bgcolor\";s:7:\"#009dd8\";}', 'Site Member')";
 
 ?>
