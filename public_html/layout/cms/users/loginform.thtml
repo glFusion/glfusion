@@ -41,9 +41,11 @@
 				<div class="uk-form-row uk-margin">
 					<button type="submit" class="uk-width-1-1 uk-button uk-button-primary uk-button-large">{lang_login}</button>
 				</div>
+{!if lang_forgetpassword}
 				<div class="uk-form-row uk-text-small">
 					<a class="uk-float-right uk-link uk-link-muted" href="{site_url}/users.php?mode=getpassword" rel="nofollow">{$LANG04[189]}</a><i class="uk-icon-user uk-float-right uk-margin-small-right"></i>
 				</div>
+{!endif}
        	<div class="uk-form-row uk-text-small">
           <a href="{site_url}/users.php?mode=getnewtoken" rel="nofollow">{lang_verification}</a>
         </div>

@@ -32,9 +32,11 @@
 		<a class="uk-link uk-link-muted" href="{site_url}/users.php?mode=new" rel="nofollow"><i class="uk-icon-user">&nbsp;</i>{$LANG12[3]}</a>
 {!endif}
 	</div>
+{!if lang_forgetpassword}
 	<div class="uk-form-row">
 		<i class="uk-icon-question">&nbsp;</i><a class="uk-link uk-link-muted" href="{site_url}/users.php?mode=getpassword" rel="nofollow">{$LANG04[189]}</a>
 	</div>
+{!endif}
 {!if oauth_login}
 	<div class="uk-flex uk-flex-center uk-margin">
 		<ul class="uk-grid uk-flex uk-flex-center uk-grid-small">
