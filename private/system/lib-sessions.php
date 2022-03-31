@@ -22,7 +22,7 @@ if (!defined ('GVERSION')) {
 use glFusion\Database\Database;
 use glFusion\Cache\Cache;
 use glFusion\Log\Log;
-use glFusion\User;
+use glFusion\User\UserAuth;
 
 // ensure cookie domain is properly initialized
 
@@ -75,14 +75,14 @@ $_CONTEXT = array();
 */
 function SESS_sessionCheck()
 {
-    global $_CONF, $_TABLES, $_USER, $_SYSTEM;
+    global $_CONF, $_USER;
 
     unset($_USER);
-    $userdata = array();
-    $sessid = false;
+
+
     session_name($_CONF['cookie_session']);
 
-    $_UserInstance = new \glFusion\User\UserAuth();
+    $_UserInstance = new UserAuth();
     $_USER = $_UserInstance->getUserData();
 
     unset($_USER['passwd']);
@@ -103,7 +103,7 @@ function SESS_sessionCheck()
 * @return       string      Session ID
 *
 */
-function SESS_newSession($userid, $remote_ip, $lifespan)
+function SESS_newSession_REMOVE($userid, $remote_ip, $lifespan)
 {
     global $_TABLES, $_CONF;
 
@@ -194,7 +194,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
 * @param        string      $remote_ip      Used to pull session we need
 * @return       int         User ID
 */
-function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
+function SESS_getUserIdFromSession_REMOVE($sessid, $cookietime, $remote_ip)
 {
     global $_CONF, $_TABLES;
 
@@ -272,7 +272,7 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
 * @return       boolean     always true for some reason
 *
 */
-function SESS_updateSessionTime($sessid)
+function SESS_updateSessionTime_REMOVE($sessid)
 {
     global $_TABLES;
 
@@ -298,7 +298,7 @@ function SESS_updateSessionTime($sessid)
 * @return       boolean     Always true
 *
 */
-function SESS_endUserSession($userid)
+function SESS_endUserSession_REMOVE($userid)
 {
     global $_TABLES, $_CONF;
 
@@ -342,7 +342,7 @@ function SESS_endUserSession($userid)
 * @return       array       returns user's data in an array
 *
 */
-function SESS_getUserData($username)
+function SESS_getUserData_REMOVE($username)
 {
     global $_TABLES;
 
@@ -377,7 +377,7 @@ function SESS_getUserData($username)
 * @return   array               returns user's data in an array
 *
 */
-function SESS_getUserDataFromId($userid)
+function SESS_getUserDataFromId_REMOVE($userid)
 {
     global $_TABLES;
 
@@ -425,7 +425,7 @@ function SESS_getUserDataFromId($userid)
 * @return   none
 *
 */
-function SESS_completeLogin($uid, $authenticated = 1)
+function SESS_completeLogin_REMOVE($uid, $authenticated = 1)
 {
     global $_TABLES, $_CONF, $_SYSTEM, $_USER;
 
