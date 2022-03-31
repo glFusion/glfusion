@@ -492,50 +492,49 @@ function PLUGINS_getListField($fieldname, $fieldvalue, $A, $icon_arr, $token)
 
         case 'control':
             if (!$installed) {
-                $attr['title'] = $LANG32[60];
-                $attr['onclick'] = 'return confirm(\'' . $LANG32[80] . '\');';
-                $retval = COM_createLink($icon_arr['add'],
-                    $_CONF['site_admin_url'] . '/plugins/' . $A['pi_name'] . '/install.php'
+                $retval = FieldList::add(array(
+                    'url' => $_CONF['site_admin_url'] . '/plugins/' . $A['pi_name'] . '/install.php'
                     . '?action=install'
-                    . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
+                    . '&amp;' . CSRF_TOKEN . '=' . $token,
+                    'attr' => array(
+                        'title' => $LANG32[60],
+                        'onclick' => "return confirm('{$LANG32[80]}');",
+                    ),
+                ) );
             } else {
-                if ($enabled) {
-                    $switch = ' checked="checked"';
-                    $title = 'title="' . $LANG_ADMIN['disable'] . '" ';
-                } else {
-                    $switch = '';
-                    $title = 'title="' . $LANG_ADMIN['enable'] . '" ';
-                }
-                $retval = '<input type="checkbox" name="enabledplugins[' . $A['pi_name'] . ']"'
-                    . ' onclick="submit()" value="1"' . $switch
-                    . $title
-                    . XHTML . ">";
+                $retval = FieldList::checkbox(array(
+                    'name' => "enabledplugins[{$A['pi_name']}]",
+                    'onclick' => "submit()",
+                    'value' => "1",
+                    'class' => 'tooltip',
+                    'title' => $enabled ? $LANG_ADMIN['disable'] : $LANG_ADMIN['enable'],
+                    'checked' => $enabled,
+                ) );
                 $retval .= '<input type="hidden" name="pluginarray['.$A['pi_name'].']" value="1" />';
             }
             break;
 
         case 'version':
+            if ($installed) {
+                $retval = $A['pi_version'];
                 if ($update) {
-                    $retval = $A['pi_version'] . '&nbsp;';
-                    $attr['title'] = $LANG32[38];
-                    $attr['onclick'] = 'return confirm(\'' . $LANG32[77] . '\');';
-                    $attr['style'] = 'vertical-align:top;';
-                    $retval .= COM_createLink($icon_arr['update'],
-                        $_CONF['site_admin_url'] . '/plugins.php'
-                        . '?update=x'
-                        . '&amp;pi_name=' . $A['pi_name']
-                        . '&amp;' . CSRF_TOKEN . '=' . $token, $attr);
-                    $retval .= '&nbsp;<span class="warning">'
-                        . $A['pi_code_version']
-                        . '</span><br>';
-                } elseif ($enabled) {
-                    $retval = $A['pi_version'];
-                } elseif (!$installed) {
-                    $retval = '<span class="disabledfield">' . $A['pi_code_version'] . '</span>';
-                } else {
-                    $retval = '<span class="disabledfield">' . $A['pi_version'] . '</span>';
+                    $retval .= '&nbsp;' . FieldList::update(array(
+                        'url' => $_CONF['site_admin_url'] . '/plugins.php'
+                            . '?update=x'
+                            . '&amp;pi_name=' . $A['pi_name']
+                            . '&amp;' . CSRF_TOKEN . '=' . $token,
+                        'attr' => array(
+                            'title' => $LANG32[38],
+                            'onclick' => "return confirm('{$LANG32[77]}');",
+                            'style' => 'vertical-align:top;',
+                        ),
+                    ) );
+                    $retval .= '&nbsp;' . $A['pi_code_version'];
                 }
-                break;
+            } else {
+                $retval = $A['pi_code_version'];
+            }
+            break;
 
         case 'info':
             $tip = $A['name']
