@@ -726,6 +726,7 @@ if ( !COM_isAnonUser() ) {
     $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
     $_GROUPS['All Users'] = 2;
     $_GROUPS['Logged-in Users'] = 13;
+    unset($_GROUPS['Non-Logged-in Users']);
 } else {
     $_GROUPS = SEC_getUserGroups( 1 );
     $_GROUPS['All Users'] = 2;
@@ -3657,6 +3658,11 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='inf
         case 'warning' :
             $class = 'alert-block';
             break;
+        case 'modal' :
+            $type = 'modal';
+            $class ='';
+            break;
+
         default :
             $type  = 'info';
             $class = 'alert-info';
