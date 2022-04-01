@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2011-2019 by the following authors:
+*  Copyright (C) 2011-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -20,6 +20,13 @@
 if (!defined ('GVERSION')) {
     die('This file can not be used on its own.');
 }
+
+use \glFusion\Database\Database;
+use \glFusion\Log\Log;
+use \glFusion\User\UserAuth;
+use \glFusion\User\UserInterface;
+use \Delight\Cookie\Session;
+
 
 USES_lib_user();
 
@@ -41,49 +48,44 @@ if ( SESS_isSet('glfusion.auth.dest') ) {
 }
 
 $display = '';
+
+$userManager = $_USER['instance'];
+
 switch ($mode) {
     case 'user' :
-        $oldUserID = $_USER['uid'];
-        $status = -2;
-        COM_clearSpeedlimit($_CONF['login_speedlimit'], 'tokenexpired');
-        if (COM_checkSpeedlimit('tokenexpired', $_CONF['login_attempts']) > 0) {
-            echo COM_refresh($_CONF['site_url']);
+
+        try {
+            if ($userManager->reconfirmPassword($_POST['passwd']) === false) {
+                Log::write('system',Log::WARNING,'revalidate.inc.php :: password not valid.');
+                $display .= COM_siteHeader('menu');
+                $display .= SEC_tokenreauthForm($LANG_ACCESS['validation_failed'],$desturl);
+                $display .= COM_siteFooter();
+                echo $display;
+                exit;
+            }
+        } catch (\glFusion\User\Exceptions\NotLoggedInException $e) {
+            // user not logged in
+            Log::write('system',Log::WARNING,'revalidate.inc.php :: password validation failed since user was not logged in');
+            COM_setMsg($LANG20[6],'error');
+            COM_refresh($_CONF['site_url']);
+            exit;
+        } catch (\glFusion\User\Exceptions\TooManyRequestsException $e) {
+            Log::write('system',Log::WARNING,'auth.inc.php :: password validation hit the throttle mark');
+            Session::delete('glfusion.auth.get');
+            Session::delete('glfusion.auth.post');
+            Session::delete('glfusion.auth.method');
+            Session::delete('glfusion.auth.files');
+
+            @header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden');
+            @header('Status: 403 Forbidden');
+            $retval = COM_siteHeader('menu', $LANG12[26])
+                    . COM_showMessageText($LANG04[112],$LANG12[26],false,'error')
+                    . COM_siteFooter();
+            echo $retval;
             exit;
         }
-        $loginname = '';
-        if (isset ($_POST['loginname'])) {
-            $loginname = $_POST['loginname'];
-            if ( !USER_validateUsername($loginname,true) ) {
-                $loginname = '';
-            }
-        }
-        $passwd = '';
-        if (isset ($_POST['passwd'])) {
-            $passwd = $_POST['passwd'];
-        }
-        $uid = '';
-        if (!empty($loginname) && !empty($passwd)) {
-            COM_updateSpeedlimit('tokenexpired');
-            $status = SEC_authenticate($loginname, $passwd, $uid);
-        }
-        if ( $status == USER_ACCOUNT_ACTIVE ) {
-            $uid = DB_getItem($_TABLES['users'],'uid','username="'.DB_escapeString($loginname).'"');
-            if ( $uid != $oldUserID) {
-                $authenticated = 0;
-            } else {
-                $authenticated = 1;
-            }
-            SESS_completeLogin($uid,$authenticated);
-            _rebuild_data();
-            unset($_POST['loginname']);
-            COM_clearSpeedlimit(0, 'tokenexpired');
-        } else {
-            $display .= COM_siteHeader();
-            $display .= SEC_tokenreauthForm($LANG_ACCESS['validation_failed'],$desturl);
-            $display .= COM_siteFooter();
-            echo $display;
-            exit;
-        }
+        _rebuild_data();
+
         break;
     case 'other' :
         COM_clearSpeedlimit($_CONF['login_speedlimit'], 'tokenexpired');
@@ -114,31 +116,25 @@ switch ($mode) {
 
 function _rebuild_data()
 {
-    global $_CONF;
+    global $_CONF, $_POST, $_GET, $_FILES;
 
-    $method = '';
-    if ( SESS_isSet('glfusion.auth.method') ) {
-        $method = SESS_getVar('glfusion.auth.method');
-        SESS_unSet('glfusion.auth.method');
+    if (Session::has('glfusion.auth.post')) {
+        $post = Session::take('glfusion.auth.post');
+        $_POST = json_decode($post,true);
     }
-    $postdata = '';
-    if (SESS_isSet('glfusion.auth.post')) {
-        $postdata = SESS_getVar('glfusion.auth.post');
-        SESS_unSet('glfusion.auth.post');
+    if (Session::has('glfusion.auth.get')) {
+        $get = Session::take('glfusion.auth.get');
+        $_GET = json_decode($get,true);
     }
-    $getdata = '';
-    if (SESS_isSet('glfusion.auth.get')) {
-        $getdata = SESS_getVar('glfusion.auth.get');
-        SESS_unSet('glfusion.auth.get');
+    if (Session::has('aglfusion.auth.method')) {
+        $_SERVER['REQUEST_METHOD'] = Session::take('glfusion.auth.method');
     }
-    $filedata = '';
-    if ( SESS_isSet('glfusion.auth.file')) {
-        $filedata = SESS_getVar('glfusion.auth.file');
-        SESS_unSet('glfusion.auth.file');
-        $file_array = unserialize((string) $filedata);
+    if (Session::has('glfusion.auth.file')) {
+        $filedata = Session::take('glfusion.auth.file');
+        $file_array = json_decode($filedata,true);
     }
-    $filedata = '';
-    if (empty($_FILES) && isset($file_array) && is_array($file_array) ) {
+
+    if (empty($_FILES) && (isset($file_array) && is_array($file_array) ) ) {
         foreach ($file_array as $fkey => $file) {
             if ( isset($file['name']) && is_array($file['name']) ) {
                 foreach($file AS $key => $data) {
@@ -178,11 +174,6 @@ function _rebuild_data()
             }
         }
     }
-    $_POST = array();
-    $_GET  = array();
-    $_SERVER['REQUEST_METHOD'] = $method;
-    $_POST = unserialize($postdata);
-    $_GET =  unserialize($getdata);
 
     if (!is_array($_POST)) $_POST = array();
     if (!is_array($_GET)) $_GET = array();

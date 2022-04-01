@@ -25,6 +25,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
+use \Delight\Cookie\Session;
 
 if ( !isset($_SYSTEM['token_ttl']) ) $_SYSTEM['token_ttl'] = 1200;
 
@@ -281,6 +282,7 @@ function SEC_hasTopicAccess($tid)
             array($tid),
             array(Database::STRING)
     );
+    if ($A == null or $A == false) return 0;
 
     return SEC_hasAccess($A['owner_id'],$A['group_id'],$A['perm_owner'],$A['perm_group'],$A['perm_members'],$A['perm_anon']);
 }
@@ -1432,10 +1434,17 @@ function SEC_checkToken()
     if ( substr($destination, 0,strlen($_CONF['site_url'])) != $_CONF['site_url']) {
         $destination = $_CONF['site_url'] . '/index.php';
     }
-    $method   = strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' ? 'GET' : 'POST';
-    $postdata = serialize($_POST);
-    $getdata  = serialize($_GET);
-    $filedata = '';
+
+    // save everything so we can rebuild after getting the correct password
+    if (isset($_POST) && count($_POST) > 0) {
+        Session::set('glfusion.auth.post', json_encode($_POST));
+    }
+    if (isset($_GET) && count($_GET) > 0) {
+        Session::set('glfusion.auth.get',json_encode($_GET));
+    }
+    if (isset($_SERVER['REQUEST_METHOD'])) {
+        Session::set('glfusion.auth.method', $_SERVER['REQUEST_METHOD']);
+    }
     if (! empty($_FILES)) {
         foreach ($_FILES as $key => $file) {
             if ( is_array($file['name']) ) {
@@ -1454,14 +1463,7 @@ function SEC_checkToken()
                 }
             }
         }
-        $filedata = serialize($_FILES);
-    }
-    SESS_setVar('glfusion.auth.method',$method);
-    SESS_setVar('glfusion.auth.dest',$destination);
-    SESS_setVar('glfusion.auth.post',$postdata);
-    SESS_setVar('glfusion.auth.get',$getdata);
-    if ( !empty($filedata) ) {
-        SESS_setVar('glfusion.auth.file',$filedata);
+        Session::set('glfusion.auth.file',json_encode($_FILES));
     }
 
     $display = COM_siteHeader();
@@ -2074,7 +2076,8 @@ function SEC_tokenreauthform($message = '',$destination = '')
         'footer_message'  => $LANG_ACCESS['token_expired_footer'],
         'button_text'     => $LANG_ADMIN['authenticate'],
         'form_action'     => $destination,
-        'hidden_fields'   => $hidden
+        'hidden_fields'   => $hidden,
+        'password_only'     => true
     );
     return SEC_loginForm($options);
 }
