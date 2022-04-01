@@ -53,6 +53,9 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
             'Doctrine\\DBAL\\' => 14,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\' => 16,
+            'Delight\\Http\\' => 13,
+            'Delight\\Cookie\\' => 15,
+            'Delight\\Base64\\' => 15,
         ),
     );
 
@@ -129,6 +132,18 @@ class ComposerStaticInitc386980c286ff2b2668a199a73d9e63b
         'Doctrine\\Common\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/event-manager/lib/Doctrine/Common',
+        ),
+        'Delight\\Http\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/delight-im/http/src',
+        ),
+        'Delight\\Cookie\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/delight-im/cookie/src',
+        ),
+        'Delight\\Base64\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/delight-im/base64/src',
         ),
     );
 

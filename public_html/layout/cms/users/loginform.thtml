@@ -20,11 +20,18 @@
 {!else}
 		<div class="uk-width-medium-4-4">
 {!endif}
+{!if lang_prompt}
+			<p class="uk-text-bold uk-text-large">{lang_prompt}</p>
+{!else}
 			<p class="uk-text-bold uk-text-large">{$LANG04[66]}</p>
+{!endif}
 			<form action="{form_action}" method="post" class="uk-panel uk-panel-box uk-form uk-align-center tm-loginform" style="max-width:250px;">
+<input type="hidden" name="mode" value="login">
+{!if lang_username}
 				<div class="uk-form-row">
 					<input class="uk-width-1-1 uk-form-large" type="text" placeholder="{lang_username}" name="loginname" value="{loginname}" required autofocus>
 				</div>
+{!endif}
 				<div class="uk-form-row">
 					<input class="uk-width-1-1 uk-form-large" type="password" placeholder="{lang_password}" name="passwd">
 				</div>
@@ -34,9 +41,11 @@
 				<div class="uk-form-row uk-margin">
 					<button type="submit" class="uk-width-1-1 uk-button uk-button-primary uk-button-large">{lang_login}</button>
 				</div>
+{!if lang_forgetpassword}
 				<div class="uk-form-row uk-text-small">
 					<a class="uk-float-right uk-link uk-link-muted" href="{site_url}/users.php?mode=getpassword" rel="nofollow">{$LANG04[189]}</a><i class="uk-icon-user uk-float-right uk-margin-small-right"></i>
 				</div>
+{!endif}
        	<div class="uk-form-row uk-text-small">
           <a href="{site_url}/users.php?mode=getnewtoken" rel="nofollow">{lang_verification}</a>
         </div>

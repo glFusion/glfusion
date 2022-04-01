@@ -4,7 +4,12 @@
 		$.UIkit.notify('{message}',{status:'success', pos:'{position}', timeout: {timeout} });
 	});
 </script>
+{!!elseif {type}=='modal' !!}
+<script>
+UIkit.modal.alert("{message}");
+</script>
 {!else}
+
 {!!if {type}=='error' !!}
   {!!set class 'uk-alert-danger' !!}
 {!else}

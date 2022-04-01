@@ -189,7 +189,7 @@ class Group
                         array(Database::INTEGER)
                         );
 
-        } catch(Throwable $e) {
+        } catch(\Throwable $e) {
             // Ignore errors or failed attempts
         }
 
@@ -275,7 +275,7 @@ class Group
                                 array(Database::PARAM_INT_ARRAY)
                                 );
 
-                } catch(Throwable $e) {
+                } catch(\Throwable $e) {
                     // Ignore errors or failed attempts
                 }
                 $data = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -299,6 +299,7 @@ class Group
         $groups['All Users'] = 2;
         if ($uid > 1) {
             $groups['Logged-in Users'] = 13;
+            unset($groups['Non-Logged-in Users']);
         }
 
         ksort($groups);

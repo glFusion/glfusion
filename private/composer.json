@@ -16,7 +16,9 @@
         "eluceo/ical": "^0.16.1",
         "monolog/monolog": "^2.2",
         "doctrine/dbal": "^2.12",
-        "phpclasses/oauth-api": "^1.0"
+        "phpclasses/oauth-api": "^1.0",
+        "delight-im/cookie": "^3.4",
+        "delight-im/base64": "^1.0"
     },
     "repositories": [
         {

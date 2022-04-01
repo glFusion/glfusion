@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2009-2021 by the following authors:
+*  Copyright (C) 2009-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 *  Based on prior work Copyright (C) 2000-2008 by the following authors:
@@ -22,6 +22,7 @@ if (!defined ('GVERSION')) {
 use glFusion\Database\Database;
 use glFusion\Cache\Cache;
 use glFusion\Log\Log;
+use glFusion\User\UserAuth;
 
 // ensure cookie domain is properly initialized
 
@@ -39,24 +40,14 @@ if (empty ($_CONF['cookiedomain'])) {
     }
 }
 
-if (version_compare(PHP_VERSION, '7.3.0') >= 0 ) {
-    session_set_cookie_params(array(
-        'lifetime' => 0,
-        'path' => $_CONF['cookie_path'],
-        'domain' => $_CONF['cookiedomain'],
-        'secure' => $_CONF['cookiesecure'],
-        'httponly' => true,
-        'samesite' => 'Lax',
-    ));
-} else {
-    session_set_cookie_params(
-        0,
-        $_CONF['cookie_path'],
-        $_CONF['cookiedomain'],
-        $_CONF['cookiesecure'],
-        true
-    );
-}
+session_set_cookie_params(array(
+    'lifetime' => 0,
+    'path' => $_CONF['cookie_path'],
+    'domain' => $_CONF['cookiedomain'],
+    'secure' => $_CONF['cookiesecure'],
+    'httponly' => true,
+    'samesite' => 'Lax',
+));
 
 // Need to destroy any existing sessions started with session.auto_start
 if (session_id()) {
@@ -64,11 +55,9 @@ if (session_id()) {
 	session_destroy();
 }
 
-// disable transparent sid support
-ini_set('session.use_trans_sid', '0');
-if ( !isset($_CONF['cookie_session']) || $_CONF['cookie_session'] == '' ) $_CONF['cookie_session'] = 'glfsc';
-session_name($_CONF['cookie_session']); // cookie name
 $_SERVER['REMOTE_USER'] = 'anonymous';
+
+session_name($_CONF['cookie_session']);
 $_USER = SESS_sessionCheck();
 
 $_CONTEXT = array();
@@ -86,186 +75,20 @@ $_CONTEXT = array();
 */
 function SESS_sessionCheck()
 {
-    global $_CONF, $_TABLES, $_USER, $_SYSTEM;
+    global $_CONF, $_USER;
 
     unset($_USER);
-    $userdata = array();
-    $sessid = false;
 
-    $db = Database::getInstance();
 
-    // initialize the standard user record data
-    $userdata['uid'] = 1;
-    $userdata['theme'] = $_CONF['theme'];
-    $userdata['tzid'] = $_CONF['timezone'];
-    $userdata['language'] = $_CONF['language'];
+    session_name($_CONF['cookie_session']);
 
-    $_USER = $userdata;
+    $_UserInstance = new UserAuth();
+    $_USER = $_UserInstance->getUserData();
 
-    $userid = 0;
-    $mintime = time() - $_CONF['session_cookie_timeout'];
-    $request_ip = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
-
-    if (isset ($_COOKIE[$_CONF['cookie_session']]) && strlen($_COOKIE[$_CONF['cookie_session']]) < 33 ) {
-        $sessid = COM_applyFilter ($_COOKIE[$_CONF['cookie_session']]);
-        // get userid from the session id (must look in database) - 0 means no active session or we
-        // have an IP mismatch
-        $userid = (int) SESS_getUserIdFromSession($sessid, $_CONF['session_cookie_timeout'], $request_ip);
-        if ($userid > 1) { // found a valid session record and user id
-            $userdata = SESS_getUserDataFromId($userid);
-            if ( $userdata !== false ) {
-                $status = $userdata['status'];
-                if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
-                    $_USER = $userdata;
-                    $_SERVER['REMOTE_USER'] = $_USER['username'];
-                    SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
-                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                                   $_CONF['cookiesecure'],false);
-                    // cycle session
-                }
-            } else {
-                $userid = 0;
-            }
-        }
-    }
-
-    // we only get here if no valid session was found (either user or anonymous)
-
-    if ( $userid == 0 ) {
-        $userid = SESS_checkRememberMe();
-        if ($userid > 1) {
-            $userdata = SESS_getUserDataFromId($userid);
-            // Check user status
-            if ( $userdata !== false ) {
-                $status = $userdata['status'];
-                if (($status == USER_ACCOUNT_ACTIVE) || ($status == USER_ACCOUNT_AWAITING_ACTIVATION)) {
-                    $_USER = $userdata;
-                    $_SERVER['REMOTE_USER'] = $_USER['username'];
-                    SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
-                                   $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                                   $_CONF['cookiesecure'],false);
-                    // Create new session and write cookie
-                    $sessid = SESS_newSession($userid,$request_ip, $_CONF['session_cookie_timeout']);
-                    if ( $sessid === false ) {
-                        die('ERROR: Unable to create session');
-                    }
-                }
-            } else {
-                $userid == 0;
-            }
-        }
-
-        if ( $userid == 0 ) {
-            $row = $db->conn->fetchAssoc(
-                    "SELECT md5_sess_id, start_time FROM `{$_TABLES['sessions']}` WHERE "
-                    . "(md5_sess_id = ?) AND (remote_ip = ?) AND (start_time > ?) AND (uid = 1)",
-                    array($sessid, $request_ip,$mintime),
-                    array(Database::STRING,Database::STRING,Database::INTEGER)
-            );
-            if ($row) {
-                $sessid = $row['md5_sess_id'];
-                if ( $row['start_time'] + 60 < time() ) {
-                    SESS_updateSessionTime($sessid);
-                }
-            } else {
-                $sessid = SESS_newSession(1, $request_ip, $_CONF['session_cookie_timeout']);
-                if ( $sessid === false ) {
-                    die('ERROR: Unable to create session');
-                }
-            }
-        }
-    }
-
-    if (empty($sessid)) $sessid = _createID();
-
-    session_id($sessid);
-    session_start();
-
-    $count = (int) SESS_getVar('session.counter');
-    $count++;
-    SESS_setVar('session.counter',$count);
-    $gc_check = $count % 10;
-
-    // set new current url and previous url session vars here
-    $currentURL = COM_getCurrentURL();
-    $previousURL = SESS_getVar('session.currenturl');
-
-    SESS_setVar('session.currenturl',$currentURL);
-    SESS_setVar('session.previousurl',$previousURL);
-    if (!isset($_SERVER['HTTP_REFERER'])) {
-        $_SERVER['HTTP_REFERER'] = $_CONF['site_url'];
-    }
-
-    // failsafe
-    if ( $_CONF['allow_user_themes'] == 0 ) {
-        $_USER['theme'] = $_CONF['theme'];
-    }
-    if ($_USER['tzid'] == '' ) {
-        $_USER['tzid'] = $_CONF['timezone'];
-    }
-
-    if ( $gc_check == 0 ) {
-        $expirytime = (int) (time() - $_CONF['session_cookie_timeout']);
-        $deleteSQL = "DELETE FROM {$_TABLES['sessions']} WHERE (start_time < ?)";
-        $db->conn->executeUpdate($deleteSQL,array($expirytime),array(Database::INTEGER));
-    }
+    unset($_USER['passwd']);
+    unset($_USER['tfa_secret']);
 
     return $_USER;
-}
-
-
-/**
-* Check remember me cookie
-*
-* Checks the long term cookie to determine if user can auto login.
-*
-* @return       string      userid or 0 if none found
-*
-*/
-function SESS_checkRememberMe()
-{
-    global $_CONF, $_TABLES, $_USER, $_SYSTEM;
-
-    $userid = 0;
-
-    $db = Database::getInstance();
-
-    if (isset ($_COOKIE[$_CONF['cookie_name']])) {
-        $userid = COM_applyFilter($_COOKIE[$_CONF['cookie_name']]);
-        if (empty ($userid) || ($userid == 'deleted')) {
-            $userid = 0;
-        } else {
-            $userid = (int) $userid;
-            $cookie_token = '';
-            if ($userid > 1) {
-                $ipmatch = false;
-                $remote_ip = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';
-                $rip = $db->getItem($_TABLES['users'],'remote_ip',array('uid'=>$userid),array(Database::INTEGER));
-/*
-                $rip = $db->conn->fetchColumn(
-                    "SELECT remote_ip FROM `{$_TABLES['users']}` WHERE uid=?",
-                    array($userid),0
-                );
-*/
-                if ($rip) {
-                    $cookie_token = isset($_COOKIE[$_CONF['cookie_password']]) ? COM_applyFilter($_COOKIE[$_CONF['cookie_password']]) : '';
-                    $ipmatch = _ipCheck( $rip, $remote_ip );
-                }
-            }
-            if (empty ($cookie_token) || ($ipmatch == false ) || (!SEC_checkTokenGeneral($cookie_token,'ltc',$userid))) {
-                // Invalid remember settings - clear all the cookies
-                $userid = 0;
-
-                SEC_setCookie ($_CONF['cookie_name'], '', time() - 3600,
-                               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                               $_CONF['cookiesecure'],true);
-                SEC_setCookie ($_CONF['cookie_password'], '', time() - 3600,
-                               $_CONF['cookie_path'], $_CONF['cookiedomain'],
-                               $_CONF['cookiesecure'],true);
-            }
-        }
-    }
-    return $userid;
 }
 
 /**
@@ -280,7 +103,7 @@ function SESS_checkRememberMe()
 * @return       string      Session ID
 *
 */
-function SESS_newSession($userid, $remote_ip, $lifespan)
+function SESS_newSession_REMOVE($userid, $remote_ip, $lifespan)
 {
     global $_TABLES, $_CONF;
 
@@ -371,7 +194,7 @@ function SESS_newSession($userid, $remote_ip, $lifespan)
 * @param        string      $remote_ip      Used to pull session we need
 * @return       int         User ID
 */
-function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
+function SESS_getUserIdFromSession_REMOVE($sessid, $cookietime, $remote_ip)
 {
     global $_CONF, $_TABLES;
 
@@ -449,7 +272,7 @@ function SESS_getUserIdFromSession($sessid, $cookietime, $remote_ip)
 * @return       boolean     always true for some reason
 *
 */
-function SESS_updateSessionTime($sessid)
+function SESS_updateSessionTime_REMOVE($sessid)
 {
     global $_TABLES;
 
@@ -475,7 +298,7 @@ function SESS_updateSessionTime($sessid)
 * @return       boolean     Always true
 *
 */
-function SESS_endUserSession($userid)
+function SESS_endUserSession_REMOVE($userid)
 {
     global $_TABLES, $_CONF;
 
@@ -519,7 +342,7 @@ function SESS_endUserSession($userid)
 * @return       array       returns user's data in an array
 *
 */
-function SESS_getUserData($username)
+function SESS_getUserData_REMOVE($username)
 {
     global $_TABLES;
 
@@ -554,7 +377,7 @@ function SESS_getUserData($username)
 * @return   array               returns user's data in an array
 *
 */
-function SESS_getUserDataFromId($userid)
+function SESS_getUserDataFromId_REMOVE($userid)
 {
     global $_TABLES;
 
@@ -602,10 +425,11 @@ function SESS_getUserDataFromId($userid)
 * @return   none
 *
 */
-function SESS_completeLogin($uid, $authenticated = 1)
+function SESS_completeLogin_REMOVE($uid, $authenticated = 1)
 {
     global $_TABLES, $_CONF, $_SYSTEM, $_USER;
 
+    return;
     $db = Database::getInstance();
 
     $request_ip = (!empty($_SERVER['REAL_ADDR'])) ? htmlspecialchars($_SERVER['REAL_ADDR']) : '';

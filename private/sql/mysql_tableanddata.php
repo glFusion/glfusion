@@ -649,6 +649,10 @@ CREATE TABLE {$_TABLES['users']} (
   account_type smallint(5) unsigned NOT NULL default '1',
   num_reminders tinyint(1) NOT NULL default 0,
   remote_ip varchar(45) NOT NULL default '',
+  verified tinyint(1) unsigned NOT NULL DEFAULT '0',
+  resettable tinyint(1) unsigned NOT NULL DEFAULT '1',
+  roles_mask int(10) unsigned NOT NULL DEFAULT '0',
+  force_logout mediumint(7) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY  (uid),
   KEY LOGIN (uid,passwd,username),
   INDEX users_username(username),
@@ -657,6 +661,58 @@ CREATE TABLE {$_TABLES['users']} (
   INDEX users_passwd(passwd),
   INDEX users_pwrequestid(pwrequestid)
 ) ENGINE=MyISAM
+";
+
+$_SQL[] = "
+CREATE TABLE `{$_TABLES['users_confirmations']}` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `user_id` int(10) unsigned NOT NULL,
+    `email` varchar(249) NOT NULL,
+    `selector` varchar(16) NOT NULL,
+    `token` varchar(255) NOT NULL,
+    `expires` int(10) unsigned NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `selector` (`selector`),
+    KEY `email_expires` (`email`,`expires`),
+    KEY `user_id` (`user_id`)
+) ENGINE=MyISAM;
+";
+
+$_SQL[] = "
+CREATE TABLE `{$_TABLES['users_remembered']}` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    `user` int(10) unsigned NOT NULL,
+    `selector` varchar(24) NOT NULL,
+    `token` varchar(255) NOT NULL,
+    `expires` int(10) unsigned NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `selector` (`selector`),
+    KEY `user` (`user`)
+) ENGINE=MyISAM;
+";
+
+$_SQL[] = "
+CREATE TABLE `{$_TABLES['users_resets']}` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    `user` int(10) unsigned NOT NULL,
+    `selector` varchar(20) NOT NULL,
+    `token` varchar(255) NOT NULL,
+    `expires` int(10) unsigned NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `selector` (`selector`),
+    KEY `user_expires` (`user`,`expires`)
+) ENGINE=MyISAM;
+";
+
+$_SQL[] = "
+CREATE TABLE `{$_TABLES['users_throttling']}` (
+    `bucket` varchar(44) NOT NULL,
+    `tokens` float unsigned NOT NULL,
+    `replenished_at` int(10) unsigned NOT NULL,
+    `expires_at` int(10) unsigned NOT NULL,
+    PRIMARY KEY (`bucket`),
+    KEY `expires_at` (`expires_at`)
+) ENGINE=MyISAM;
 ";
 
 $_SQL[] = "
@@ -993,7 +1049,7 @@ $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastemailedsto
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_scheduled_run','') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('last_maint_run','') ";
 //$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('spamx.counter','0') ";
-$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','2.0.1') ";
+$_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('glfusion','2.1.0') ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (0,'Trackback Enabled') ";
 $_DATA[] = "INSERT INTO {$_TABLES['trackbackcodes']} (code, name) VALUES (-1,'Trackback Disabled') ";

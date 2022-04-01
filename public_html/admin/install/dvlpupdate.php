@@ -1222,6 +1222,160 @@ function glfusion_201()
     \glFusion\Admin\AdminAction::write('system','dvlpupdate','System has been updated to latest glFusion version using DvlpUpdate.');
 }
 
+function glfusion_210()
+{
+    global $_TABLES, $_CONF,$_VARS, $_FF_CONF, $_SPX_CONF, $_PLUGINS, $LANG_AM, $use_innodb, $_DB_table_prefix, $_CP_CONF;
+
+    require_once $_CONF['path_system'].'classes/config.class.php';
+
+    static $alreadyRun = 0;
+
+    if ($alreadyRun > 0) {
+        print "already been run - why is it calling twice???";
+        exit;
+    }
+    $alreadyRun++;
+
+    $c = config::get_instance();
+    $db = Database::getInstance();
+
+    $_SQL = array();
+
+    $_SQL[] = "ALTER TABLE `{$_TABLES['users']}` ADD `verified` tinyint(1) unsigned NOT NULL DEFAULT '0';";
+    $_SQL[] = "ALTER TABLE `{$_TABLES['users']}` ADD `resettable` tinyint(1) unsigned NOT NULL DEFAULT '1';";
+    $_SQL[] = "ALTER TABLE `{$_TABLES['users']}` ADD `roles_mask` int(10) unsigned NOT NULL DEFAULT '0';";
+    $_SQL[] = "ALTER TABLE `{$_TABLES['users']}` ADD `force_logout` mediumint(7) unsigned NOT NULL DEFAULT '0';";
+
+    $_SQL[] = "
+        CREATE TABLE IF NOT EXISTS `{$_TABLES['users_confirmations']}` (
+            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+            `user_id` int(10) unsigned NOT NULL,
+            `email` varchar(249) NOT NULL,
+            `selector` varchar(16) NOT NULL,
+            `token` varchar(255) NOT NULL,
+            `expires` int(10) unsigned NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `selector` (`selector`),
+            KEY `email_expires` (`email`,`expires`),
+            KEY `user_id` (`user_id`)
+        ) ENGINE=MyISAM;
+    ";
+
+    $_SQL[] = "
+        CREATE TABLE IF NOT EXISTS `{$_TABLES['users_remembered']}` (
+            `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            `user` int(10) unsigned NOT NULL,
+            `selector` varchar(24) NOT NULL,
+            `token` varchar(255) NOT NULL,
+            `expires` int(10) unsigned NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `selector` (`selector`),
+            KEY `user` (`user`)
+        ) ENGINE=MyISAM;
+    ";
+
+    $_SQL[] = "
+        CREATE TABLE IF NOT EXISTS `{$_TABLES['users_resets']}` (
+            `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            `user` int(10) unsigned NOT NULL,
+            `selector` varchar(20) NOT NULL,
+            `token` varchar(255) NOT NULL,
+            `expires` int(10) unsigned NOT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `selector` (`selector`),
+            KEY `user_expires` (`user`,`expires`)
+        ) ENGINE=MyISAM;
+    ";
+
+    $_SQL[] = "
+        CREATE TABLE IF NOT EXISTS `{$_TABLES['users_throttling']}` (
+            `bucket` varchar(44) NOT NULL,
+            `tokens` float unsigned NOT NULL,
+            `replenished_at` int(10) unsigned NOT NULL,
+            `expires_at` int(10) unsigned NOT NULL,
+            PRIMARY KEY (`bucket`),
+            KEY `expires_at` (`expires_at`)
+        ) ENGINE=MyISAM;
+    ";
+
+    foreach ($_SQL AS $sql) {
+        if ($use_innodb) {
+            $sql = str_replace('MyISAM', 'InnoDB', $sql);
+        }
+        DB_query($sql,1);
+    }
+
+    DB_query("UPDATE {$_TABLES['users']} SET verified=1",1);
+    DB_query("UPDATE {$_TABLES['users']} SET status=3 WHERE status=1",1);
+    DB_query("UPDATE {$_TABLES['users']} SET status=3 WHERE status=4",1);
+
+    $have_badges = DB_checkTableExists('badges');
+    $_SQL = [];
+    $_SQL[] = "CREATE TABLE `{$_TABLES['badges']}` (
+      `b_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      `b_bg_id` int(11) unsigned NOT NULL DEFAULT 1,
+      `b_order` int(4) NOT NULL DEFAULT 9999,
+      `b_enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
+      `b_inherit` tinyint(1) unsigned NOT NULL DEFAULT 1,
+      `b_gl_grp` mediumint(8) NOT NULL DEFAULT 0,
+      `b_type` varchar(10) NOT NULL DEFAULT 'img',
+      `b_data` text DEFAULT NULL,
+      `b_dscp` varchar(40) NOT NULL DEFAULT '',
+      PRIMARY KEY (`b_id`),
+      KEY `grp` (`b_bg_id`,`b_order`)
+    ) ENGINE=MyISAM";
+    $_SQL[] = "CREATE TABLE `{$_TABLES['badge_groups']}` (
+      `bg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      `bg_order` int(4) DEFAULT 9999,
+      `bg_name` varchar(128) NOT NULL DEFAULT '',
+      `bg_singular` tinyint(1) unsigned NOT NULL DEFAULT 1,
+      `bg_enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
+      PRIMARY KEY (`bg_id`),
+      UNIQUE KEY `bg_name` (`bg_name`),
+      KEY `orderby` (`bg_order`)
+    ) ENGINE=MyISAM";
+    if ($use_innodb) {
+        $statements = count($_SQL);
+        for ($i = 0; $i < $statements; $i++) {
+            $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+            DB_query($_SQL[$i], 1);
+        }
+    }
+
+    // Only add badge records if creating the table.
+    if (!$have_badges) {
+        $_SQL = array();
+        // Add the default badge group
+        $_SQL[] = "INSERT INTO {$_TABLES['badge_groups']}
+            (bg_order, bg_name, bg_singular) VALUES (10, 'Miscellaneous', 0)";
+        // Collect any user-defined badge groups from Forum.
+        $_SQL[] = "INSERT INTO {$_TABLES['badge_groups']} (bg_name)
+            (SELECT DISTINCT(fb_grp) FROM {$_TABLES['ff_badges']} WHERE fb_grp <> '')";
+
+        // Move forum badges that have an empty group name into group #1
+        $_SQL[] = "INSERT INTO {$_TABLES['badges']} (
+            SELECT 0, 1, b.fb_order, b.fb_enabled, b.fb_inherited, b.fb_gl_grp,
+            b.fb_type, b.fb_data, b.fb_dscp FROM {$_TABLES['ff_badges']} b
+            WHERE b.fb_grp = '')";
+       // Move forum badges that have a group name into the new badge groups
+        $_SQL[] = "INSERT INTO {$_TABLES['badges']} (
+            SELECT 0, g.bg_id, b.fb_order, b.fb_enabled, b.fb_inherited, b.fb_gl_grp,
+            b.fb_type, b.fb_data, b.fb_dscp FROM {$_TABLES['ff_badges']} b
+            LEFT JOIN {$_TABLES['badge_groups']} g ON g.bg_name = b.fb_grp
+            WHERE b.fb_grp <> '')";
+        foreach ($_SQL as $sql) {
+            DB_query($sql, 1);
+        }
+    }
+
+
+    // update version number
+    DB_query("INSERT INTO {$_TABLES['vars']} SET value='2.1.0',name='glfusion'",1);
+    DB_query("UPDATE {$_TABLES['vars']} SET value='2.1.0' WHERE name='glfusion'",1);
+
+    \glFusion\Admin\AdminAction::write('system','dvlpupdate','System has been updated to latest glFusion version using DvlpUpdate.');
+}
+
 function _getHtmlPath()
 {
     $path = str_replace('\\', '/', __FILE__);
@@ -1562,7 +1716,7 @@ if (($_DB_dbms == 'mysql') && (DB_getItem($_TABLES['vars'], 'value', "name = 'da
 
 $retval .= 'Performing database upgrades if necessary...<br>';
 
-glfusion_201();
+glfusion_210();
 
 $retval .= 'Performing Configuration upgrades if necessary...<br>';
 

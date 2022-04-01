@@ -25,6 +25,9 @@ if (!defined ('GVERSION')) {
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 use \glFusion\Cache\Cache;
+use \glFusion\Auth\Auth;
+use \glFusion\Auth\Status;
+use \Delight\Cookie\Session;
 
 /**
 * Delete a user account
@@ -38,7 +41,7 @@ function USER_deleteAccount($uid)
     global $_CONF, $_TABLES, $_USER;
 
     $uid = (int) $uid;
-
+Log::write('system',Log::DEBUG,'Deleting user id ' . $uid);
     $db = Database::getInstance();
 
     // first some checks ...
@@ -77,7 +80,7 @@ function USER_deleteAccount($uid)
     }
 
     // log the user out
-    SESS_endUserSession ($uid);
+//    SESS_endUserSession ($uid);
 
     // Ok, now delete everything related to this user
 
@@ -404,6 +407,123 @@ function USER_sendActivationEmail ($username, $useremail)
     return COM_mail ($to, $subject, $mailtext, $from);
 }
 
+
+/** Send Activation Email */
+function USER_sendActivationEmail_v2 ($selector, $token)
+{
+    global $_CONF, $_SYSTEM, $_TABLES, $LANG04;
+
+    $userManager = new Auth();
+
+    if ( !isset($_SYSTEM['verification_token_ttl']) ) {
+        $_SYSTEM['verification_token_ttl'] = 86400;
+    }
+
+    $activation_link = '';
+    $remoteuser = 0;
+
+    $uid = (int) $uid;
+
+    $db = Database::getInstance();
+
+    $storedPassword = $db->getItem($_TABLES['users'],'passwd',array('uid' => $uid),array(Database::INTEGER));
+    $userStatus     = $db->getItem($_TABLES['users'],'status',array('uid' => $uid),array(Database::INTEGER));
+    if ( $passwd == '' && substr($storedPassword,0,4) == '$H$9' ) {
+        // no need to update password
+    } else {
+        if ( $passwd == '' ) {
+            $passwd = SEC_generateStrongPassword(12,'lud');
+        }
+        $passwd2 = SEC_encryptPassword($passwd);
+        $db->conn->update($_TABLES['users'],array('passwd' => $passwd2),array('uid' => $uid));
+    }
+
+    $remoteservice = $db->getItem($_TABLES['users'],'remoteservice',array('uid' => $uid));
+    if ( $remoteservice != '' && $remoteservice != null ) {
+        $remoteuser = 1;
+    }
+
+    if (file_exists ($_CONF['path_data'] . 'welcome_email.txt')) {
+        $template = new Template ($_CONF['path_data']);
+        $template->set_file (array ('mail' => 'welcome_email.txt'));
+        $template->set_var ('auth_info',
+                            "$LANG04[2]: $username\n$LANG04[4]: $passwd");
+        $template->set_var ('site_url', $_CONF['site_url']);
+        $template->set_var ('site_name', $_CONF['site_name']);
+        $template->set_var ('site_slogan', $_CONF['site_slogan']);
+        $template->set_var ('lang_text1', sprintf($LANG04[15],$_CONF['site_name']));
+        $template->set_var ('lang_text2', $LANG04[14]);
+        $template->set_var ('lang_username', $LANG04[2]);
+        $template->set_var ('lang_password', $LANG04[4]);
+        $template->set_var ('username', $username);
+        $template->set_var ('password', $passwd);
+        $template->set_var ('name', COM_getDisplayName ($uid));
+        $template->parse ('output', 'mail');
+        $mailhtml = $template->get_var ('output');  // actually text
+        $mailtext = '';         // not used
+        $isHTML = false;
+    } else {
+        $T = new Template($_CONF['path_layout'].'email/');
+        $T->set_file(array(
+            'html_msg'   => 'newuser_template_html.thtml',
+            'text_msg'   => 'newuser_template_text.thtml'
+        ));
+        if ($remoteuser == 1) {
+            $T->set_var(array(
+                'url'                   => $_CONF['site_url'].'/usersettings.php',
+                'lang_site_or_password' => $LANG04[171],
+                'site_link_url'         => $_CONF['site_url'],
+                'lang_activation'       => sprintf($LANG04[206],$_CONF['site_name']),
+                'lang_button_text'      => '',
+                'passwd'                => '',
+            ));
+        } else if ( $userStatus == USER_ACCOUNT_AWAITING_VERIFICATION ) {
+            $verification_id = USER_createActivationToken($uid,$username);
+
+            $T->set_var(array(
+                'url'                   => $_CONF['site_url'].'/users.php?mode=verify&vid='.$verification_id.'&u='.$uid,
+                'lang_site_or_password' => $LANG04[171],
+                'site_link_url'         => $_CONF['site_url'],
+                'lang_activation'       => sprintf($LANG04[172],($_SYSTEM['verification_token_ttl']/3600)),
+                'lang_button_text'      => $LANG04[203],
+                'localuser'             => true,
+            ));
+        } else {
+            $T->set_var(array(
+                'url'                   => $_CONF['site_url'].'/usersettings.php',
+                'lang_site_or_password' => $LANG04[4],
+                'site_link_url'         => '',
+                'lang_activation'       => $LANG04[14],
+                'lang_button_text'      => 'Change Password',
+                'passwd'                => $passwd,
+                'localuser'             => true,
+            ));
+        }
+        $T->set_var(array(
+            'title'         =>  $_CONF['site_name'] . ': ' . $LANG04[16],
+            'site_name'     =>  $_CONF['site_name'],
+            'username'      =>  $username,
+        ));
+        $T->parse ('output', 'html_msg');
+        $mailhtml = $T->finish($T->get_var('output'));
+
+        $T->parse ('output', 'text_msg');
+        $mailtext = $T->finish($T->get_var('output'));
+        $isHTML = true;
+    }
+    $msgData['htmlmessage'] = $mailhtml;
+    $msgData['textmessage'] = $mailtext;
+    $msgData['subject'] = $_CONF['site_name'] . ': ' . $LANG04[16];
+
+    $to = array();
+    $from = array();
+    $from = COM_formatEmailAddress( $_CONF['site_name'], $_CONF['noreply_mail'] );
+    $to = COM_formatEmailAddress('',$useremail);
+
+    return COM_mail( $to, $msgData['subject'], $msgData['htmlmessage'], $from, $isHTML, 0,'', $msgData['textmessage'] );
+
+}
+
 /**
 * Create a new user
 *
@@ -521,44 +641,7 @@ function USER_createAccount ($username, $email, $passwd = '', $fullname = '', $h
             $db->conn->rollBack();
             return NULL;
         }
-/* - May 2021 - no longer need to assign users to these groups
 
-        // Add user to Logged-in group (i.e. members) and the All Users group
-        $loggedInUsersGrp = $db->getItem ($_TABLES['groups'], 'grp_id',
-                                        array('grp_name' => 'Logged-in Users'));
-
-        $all_grp = $db->getItem ($_TABLES['groups'], 'grp_id',
-                                        array('grp_name'=>'All Users'));
-
-        $db->conn->beginTransaction();
-        try {
-            $db->conn->insert($_TABLES['group_assignments'],
-                              array(
-                                'ug_main_grp_id' => $loggedInUsersGrp,
-                                'ug_uid' => $uid
-                               ),
-                               array(
-                                Database::INTEGER,
-                                Database::INTEGER
-                               )
-            );
-
-            $db->conn->insert($_TABLES['group_assignments'],
-                              array(
-                                'ug_main_grp_id' => $all_grp,
-                                'ug_uid' => $uid
-                              ),
-                              array(
-                                Database::INTEGER,
-                                Database::INTEGER
-                              )
-            );
-            $db->conn->commit();
-        } catch(Throwable $e) {
-            $db->conn->rollBack();
-            return null;
-        }
-*/
         // any default groups?
         $stmt = $db->conn->query("SELECT grp_id FROM `{$_TABLES['groups']}` WHERE grp_default=1");
         $grpDefaults = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -1186,6 +1269,7 @@ function USER_mergeAccountScreen( $remoteUID, $localUID, $msg='' )
     );
     // if no user is found
     if ($row === null || $row === false) {
+        Log::write('system',Log::WARNING,'User attempted to merge account but no user found in DB.');
         echo COM_refresh($_CONF['site_url'].'/index.php');
     }
 
@@ -1279,6 +1363,8 @@ function USER_mergeAccounts()
 
     $db = Database::getInstance();
 
+    $userManagerRemote = new Auth();
+
     $remoteUID = (int) filter_input(INPUT_POST, 'remoteuid', FILTER_SANITIZE_NUMBER_INT);
     $localUID  = (int) filter_input(INPUT_POST, 'localuid', FILTER_SANITIZE_NUMBER_INT);
     $localpwd  = $_POST['localp'];
@@ -1292,6 +1378,7 @@ function USER_mergeAccounts()
         Log::write('system',Log::WARNING,"Attempting to merge local UID: " . $localUID. " with remote UID: " . $remoteUID . " failed due to uid mismatch");
         echo COM_refresh($_CONF['site_url'].'/index.php');
     }
+// the one area I want to update - need to NOT use this security check
     if (SEC_check_hash($localpwd, $userData['passwd'])) {
         // password is valid
         $remoteUserData = $db->conn->fetchAssoc(
@@ -1336,20 +1423,32 @@ function USER_mergeAccounts()
         $cacheKey = (string) 'userdata_'.(int)$_USER['uid'];
         Cache::getInstance()->delete($cacheKey);
 
-        SESS_completeLogin($localUID);
+        // now we need to destory the remote session
+        // create a new one for the local user
+
+        $userManagerRemote->logOutEverywhere();
+
+        $userManagerLocal = new Auth();
+
+        try {
+            $userManagerLocal->finalizeLogin($localUID);
+        } catch (UnknownIdException $e) {
+
+        } catch (EmailNotVerifiedException $e) {
+
+        } catch (AccountPendingReviewException $e) {
+
+        }
+        $_USER = $userManagerLocal->getUserData();
         $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
         $_RIGHTS = explode( ',', SEC_getUserPermissions() );
         if ($_SYSTEM['admin_session'] > 0 && $local_login ) {
             if (SEC_isModerator() || SEC_hasRights('story.edit,block.edit,topic.edit,user.edit,plugin.edit,user.mail,syndication.edit','OR')
                      || (count(PLG_getAdminOptions()) > 0)) {
-                $admin_token = SEC_createTokenGeneral('administration',$_SYSTEM['admin_session']);
-                SEC_setCookie('token',$admin_token,0,$_CONF['cookie_path'],$_CONF['cookiedomain'],$_CONF['cookiesecure'],true);
+                Session::set($_UserInstance::SESSION_FIELD_ADMIN_SESSION,\time() + $_SYSTEM['admin_session']);
             }
         }
         COM_resetSpeedlimit('login');
-
-        // log the user out
-        SESS_endUserSession ($remoteUID);
 
         // Let plugins know a user is being merged
         PLG_moveUser($remoteUID, $_USER['uid']);

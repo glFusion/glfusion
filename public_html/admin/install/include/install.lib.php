@@ -1709,7 +1709,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             // Only add badge records if creating the table.
             if (!$have_badges) {
-                $_SQ = array();
+                $_SQL = array();
                 // Add the default badge group
                 $_SQL[] = "INSERT INTO {$_TABLES['badge_groups']}
                     (bg_order, bg_name, bg_singular) VALUES (10, 'Miscellaneous', 0)";
@@ -1731,6 +1731,76 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 foreach ($_SQL as $sql) {
                     DB_query($sql, 1);
                 }
+            }
+
+            $current_fusion_version = '2.1.0';
+
+        case '2.0.1' :
+
+            $_SQL = array();
+
+            $_SQL[] = "ALTER TABLE `{$_TABLES['users']}` ADD `verified` tinyint(1) unsigned NOT NULL DEFAULT '0';";
+            $_SQL[] = "ALTER TABLE `{$_TABLES['users']}` ADD `resettable` tinyint(1) unsigned NOT NULL DEFAULT '1';";
+            $_SQL[] = "ALTER TABLE `{$_TABLES['users']}` ADD `roles_mask` int(10) unsigned NOT NULL DEFAULT '0';";
+            $_SQL[] = "ALTER TABLE `{$_TABLES['users']}` ADD `force_logout` mediumint(7) unsigned NOT NULL DEFAULT '0';";
+        
+            $_SQL[] = "
+                CREATE TABLE IF NOT EXISTS `{$_TABLES['users_confirmations']}` (
+                    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                    `user_id` int(10) unsigned NOT NULL,
+                    `email` varchar(249) NOT NULL,
+                    `selector` varchar(16) NOT NULL,
+                    `token` varchar(255) NOT NULL,
+                    `expires` int(10) unsigned NOT NULL,
+                    PRIMARY KEY (`id`),
+                    UNIQUE KEY `selector` (`selector`),
+                    KEY `email_expires` (`email`,`expires`),
+                    KEY `user_id` (`user_id`)
+                ) ENGINE=MyISAM;
+            ";
+        
+            $_SQL[] = "
+                CREATE TABLE IF NOT EXISTS `{$_TABLES['users_remembered']}` (
+                    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                    `user` int(10) unsigned NOT NULL,
+                    `selector` varchar(24) NOT NULL,
+                    `token` varchar(255) NOT NULL,
+                    `expires` int(10) unsigned NOT NULL,
+                    PRIMARY KEY (`id`),
+                    UNIQUE KEY `selector` (`selector`),
+                    KEY `user` (`user`)
+                ) ENGINE=MyISAM;
+            ";
+        
+            $_SQL[] = "
+                CREATE TABLE IF NOT EXISTS `{$_TABLES['users_resets']}` (
+                    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                    `user` int(10) unsigned NOT NULL,
+                    `selector` varchar(20) NOT NULL,
+                    `token` varchar(255) NOT NULL,
+                    `expires` int(10) unsigned NOT NULL,
+                    PRIMARY KEY (`id`),
+                    UNIQUE KEY `selector` (`selector`),
+                    KEY `user_expires` (`user`,`expires`)
+                ) ENGINE=MyISAM;
+            ";
+        
+            $_SQL[] = "
+                CREATE TABLE IF NOT EXISTS `{$_TABLES['users_throttling']}` (
+                    `bucket` varchar(44) NOT NULL,
+                    `tokens` float unsigned NOT NULL,
+                    `replenished_at` int(10) unsigned NOT NULL,
+                    `expires_at` int(10) unsigned NOT NULL,
+                    PRIMARY KEY (`bucket`),
+                    KEY `expires_at` (`expires_at`)
+                ) ENGINE=MyISAM;
+            ";
+        
+            foreach ($_SQL AS $sql) {
+                if ($use_innodb) {
+                    $sql = str_replace('MyISAM', 'InnoDB', $sql);
+                }
+                DB_query($sql,1);
             }
 
             $current_fusion_version = '2.1.0';

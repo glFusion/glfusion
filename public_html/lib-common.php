@@ -38,7 +38,7 @@ if (version_compare(PHP_VERSION, PHP_MIN_VERSION, '<')) {
 }
 
 if (!defined ('GVERSION')) {
-    define('GVERSION', '2.0.1');
+    define('GVERSION', '2.1.0');
 }
 
 define('PATCHLEVEL','.pl0');
@@ -726,6 +726,7 @@ if ( !COM_isAnonUser() ) {
     $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
     $_GROUPS['All Users'] = 2;
     $_GROUPS['Logged-in Users'] = 13;
+    unset($_GROUPS['Non-Logged-in Users']);
 } else {
     $_GROUPS = SEC_getUserGroups( 1 );
     $_GROUPS['All Users'] = 2;
@@ -3657,6 +3658,11 @@ function COM_showMessageText($message, $title = '', $persist = false, $type='inf
         case 'warning' :
             $class = 'alert-block';
             break;
+        case 'modal' :
+            $type = 'modal';
+            $class ='';
+            break;
+
         default :
             $type  = 'info';
             $class = 'alert-info';
