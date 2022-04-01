@@ -204,6 +204,8 @@ class Search
         }
         if (!isset($content['title'])) $content['title'] = '';
 
+        $owner_id = isset($content['author']) : (int)$content['author'] : 2;
+
         if ((!isset($content['author_name']) || empty($content['author_name']))
               && is_numeric($content['author']) && $content['author'] > 0
         ) {
@@ -251,7 +253,7 @@ class Search
                         $ts,
                         $grp_access,
                         $indexTitle,
-                        $content['author'],
+                        $owner_id,
                         $content['author_name']
                     ),
                     array(
