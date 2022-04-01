@@ -116,7 +116,9 @@ final class UserAuth extends User {
 		);
 	}
 
-    /** Pulls the full glFusion record */
+    /**
+     *	Builds out the $_USER data items
+     */
     public function getUserData()
     {
         global $_TABLES;
@@ -492,6 +494,8 @@ final class UserAuth extends User {
 			// if it's time for resynchronization
 			if (($_SESSION[self::SESSION_FIELD_LAST_RESYNC] + $this->sessionResyncInterval) <= \time()) {
 				Log::write('system',Log::DEBUG,'UserAuth() :: Resyncing Session Data');
+				// update sessions table
+				$this->updateSessionTable($this->getUserId());
 				// fetch the authoritative data from the database again
 				try {
 
@@ -582,73 +586,7 @@ final class UserAuth extends User {
 
 		$this->authenticateUserInternal($password, null, $username, $rememberDuration, $onBeforeSuccess);
 	}
-/* --------------------------
-	public function finalizeLogin($uid)
-	{
-		global $_TABLES;
 
-		if ($uid > 1) {
-			try {
-				$userData = Database::getInstance()->conn->fetchAssoc(
-					"SELECT uid,email,passwd,cookietimeout,verified,username,status,roles_mask,force_logout FROM " . $_TABLES['users'] . " WHERE uid = ?",
-					[ $uid ],
-					[ Database::INTEGER ]
-				);
-			}
-			catch (\Throwable $e) {
-				throw new Exceptions\DatabaseError($e->getMessage());
-			}
-
-			if (empty($userData)) {
-				throw new Exceptions\UnknownIdException();
-			}
-
-			if ((int) $userData['verified'] === 1 && ($userData['status'] == Status::NORMAL || $userData['status'] == 1)) {
-				$this->onLoginSuccessful($userData['uid'], $userData['email'], $userData['username'], $userData['status'], $userData['roles_mask'], $userData['force_logout'], false);
-
-				$rememberDuration = $userData['cookietimeout'];
-
-				// continue to support the old parameter format
-				if ($rememberDuration === true) {
-					$rememberDuration = 60 * 60 * 24 * 28;
-				}
-				elseif ($rememberDuration === false) {
-					$rememberDuration = null;
-				}
-
-				if ($rememberDuration !== null) {
-					$this->createRememberDirective($userData['uid'], $rememberDuration);
-				}
-
-				return;
-			}
-			else {
-				if ($userData['verified'] != 1) {
-					throw new Exceptions\EmailNotVerifiedException();
-				}
-                switch ($userData['status']) {
-					case Status::ARCHIVED :
-					case Status::LOCKED :
-					case Status::SUSPENDED :
-					case Status::BANNED :
-                        throw new Exceptions\UnknownIdException();
-                        break;
-                    case Status::PENDING_REVIEW :
-						throw new Exceptions\AccountPendingReviewException();
-                        break;
-                    default :
-                        throw new Exceptions\AuthError();
-                        break;
-                }
-				throw new Exceptions\AuthError();
-			}
-		}
-		// anonymous user
-		else {
-			throw new Exceptions\NotLoggedInException();
-		}
-	}
------- */
 	/**
 	 * Attempts to confirm the currently signed-in user's password again
 	 *
@@ -909,7 +847,6 @@ final class UserAuth extends User {
 
 	protected function onLoginSuccessful($userId, $email, $username, $status, $roles, $forceLogout, $remembered) {
         global $_CONF, $_TABLES;
-
 		// update the timestamp of the user's last login
 		try {
             Database::getInstance()->conn->update(
@@ -929,6 +866,28 @@ final class UserAuth extends User {
 		}
 
 		parent::onLoginSuccessful($userId, $email, $username, $status, $roles, $forceLogout, $remembered);
+		$this->updateSessionTable($userId);
+	}
+
+	private function updateSessionTable($uid)
+	{
+		global $_TABLES;
+
+		$db = Database::getInstance();
+
+		$sess_id = session_id();
+		$time = time();
+
+		$sql = "INSERT INTO {$_TABLES['sessions']} (md5_sess_id,uid,start_time) VALUES(?,?,?) ON DUPLICATE KEY UPDATE start_time = ?";
+
+		$stmt = $db->conn->prepare($sql);
+		$stmt->bindValue(1,$sess_id);
+		$stmt->bindValue(2,$uid);
+		$stmt->bindValue(3,$time);
+		$stmt->bindValue(4,$time);
+		try {
+			$resultSet = $stmt->executeQuery();
+		} catch (\Throwable $ignore) {}
 	}
 
 	/**
