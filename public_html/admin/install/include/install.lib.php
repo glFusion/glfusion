@@ -1674,66 +1674,6 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             $current_fusion_version = '2.0.0';
 
-        case '2.0.1' :
-            $have_badges = DB_checkTableExists('badges');
-            $_SQL[] = "CREATE TABLE `{$_TABLES['badges']}` (
-              `b_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-              `b_bg_id` int(11) unsigned NOT NULL DEFAULT 1,
-              `b_order` int(4) NOT NULL DEFAULT 9999,
-              `b_enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
-              `b_inherit` tinyint(1) unsigned NOT NULL DEFAULT 1,
-              `b_gl_grp` mediumint(8) NOT NULL DEFAULT 0,
-              `b_type` varchar(10) NOT NULL DEFAULT 'img',
-              `b_data` text DEFAULT NULL,
-              `b_dscp` varchar(40) NOT NULL DEFAULT '',
-              PRIMARY KEY (`b_id`),
-              KEY `grp` (`b_bg_id`,`b_order`)
-            ) ENGINE=MyISAM";
-            $_SQL[] = "CREATE TABLE `{$_TABLES['badge_groups']}` (
-              `bg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-              `bg_order` int(4) DEFAULT 9999,
-              `bg_name` varchar(128) NOT NULL DEFAULT '',
-              `bg_singular` tinyint(1) unsigned NOT NULL DEFAULT 1,
-              `bg_enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
-              PRIMARY KEY (`bg_id`),
-              UNIQUE KEY `bg_name` (`bg_name`),
-              KEY `orderby` (`bg_order`)
-            ) ENGINE=MyISAM";
-            if ($use_innodb) {
-                $statements = count($_SQL);
-                for ($i = 0; $i < $statements; $i++) {
-                    $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
-                    DB_query($_SQL[$i], 0);
-                }
-            }
-
-            // Only add badge records if creating the table.
-            if (!$have_badges) {
-                $_SQL = array();
-                // Add the default badge group
-                $_SQL[] = "INSERT INTO {$_TABLES['badge_groups']}
-                    (bg_order, bg_name, bg_singular) VALUES (10, 'Miscellaneous', 0)";
-                // Collect any user-defined badge groups from Forum.
-                $_SQL[] = "INSERT INTO {$_TABLES['badge_groups']} (bg_name)
-                    (SELECT DISTINCT(fb_grp) FROM {$_TABLES['ff_badges']} WHERE fb_grp <> '')";
-
-                // Move forum badges that have an empty group name into group #1
-                $_SQL[] = "INSERT INTO {$_TABLES['badges']} (
-                    SELECT 0, 1, b.fb_order, b.fb_enabled, b.fb_inherited, b.fb_gl_grp,
-                    b.fb_type, b.fb_data, b.fb_dscp FROM {$_TABLES['ff_badges']} b
-                    WHERE b.fb_grp = '')";
-               // Move forum badges that have a group name into the new badge groups
-                $_SQL[] = "INSERT INTO {$_TABLES['badges']} (
-                    SELECT 0, g.bg_id, b.fb_order, b.fb_enabled, b.fb_inherited, b.fb_gl_grp,
-                    b.fb_type, b.fb_data, b.fb_dscp FROM {$_TABLES['ff_badges']} b
-                    LEFT JOIN {$_TABLES['badge_groups']} g ON g.bg_name = b.fb_grp
-                    WHERE b.fb_grp <> '')";
-                foreach ($_SQL as $sql) {
-                    DB_query($sql, 1);
-                }
-            }
-
-            $current_fusion_version = '2.1.0';
 
         case '2.0.1' :
 
@@ -1802,6 +1742,76 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 }
                 DB_query($sql,1);
             }
+
+            // new badges capabilities
+
+            $_SQL = array();
+
+            $have_badges = DB_checkTableExists('badges');
+            $_SQL[] = "CREATE TABLE `{$_TABLES['badges']}` (
+              `b_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `b_bg_id` int(11) unsigned NOT NULL DEFAULT 1,
+              `b_order` int(4) NOT NULL DEFAULT 9999,
+              `b_enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
+              `b_inherit` tinyint(1) unsigned NOT NULL DEFAULT 1,
+              `b_gl_grp` mediumint(8) NOT NULL DEFAULT 0,
+              `b_type` varchar(10) NOT NULL DEFAULT 'img',
+              `b_data` text DEFAULT NULL,
+              `b_dscp` varchar(40) NOT NULL DEFAULT '',
+              PRIMARY KEY (`b_id`),
+              KEY `grp` (`b_bg_id`,`b_order`)
+            ) ENGINE=MyISAM";
+
+            $_SQL[] = "CREATE TABLE `{$_TABLES['badge_groups']}` (
+              `bg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `bg_order` int(4) DEFAULT 9999,
+              `bg_name` varchar(128) NOT NULL DEFAULT '',
+              `bg_singular` tinyint(1) unsigned NOT NULL DEFAULT 1,
+              `bg_enabled` tinyint(1) unsigned NOT NULL DEFAULT 1,
+              PRIMARY KEY (`bg_id`),
+              UNIQUE KEY `bg_name` (`bg_name`),
+              KEY `orderby` (`bg_order`)
+            ) ENGINE=MyISAM";
+
+            if ($use_innodb) {
+                $statements = count($_SQL);
+                for ($i = 0; $i < $statements; $i++) {
+                    $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
+                    DB_query($_SQL[$i], 1);
+                }
+            }
+
+            // Only add badge records if creating the table.
+            if (!$have_badges) {
+                $_SQL = array();
+                // Add the default badge group
+                $_SQL[] = "INSERT INTO {$_TABLES['badge_groups']}
+                    (bg_order, bg_name, bg_singular) VALUES (10, 'Miscellaneous', 0)";
+                // Collect any user-defined badge groups from Forum.
+                $_SQL[] = "INSERT INTO {$_TABLES['badge_groups']} (bg_name)
+                    (SELECT DISTINCT(fb_grp) FROM {$_TABLES['ff_badges']} WHERE fb_grp <> '')";
+
+                // Move forum badges that have an empty group name into group #1
+                $_SQL[] = "INSERT INTO {$_TABLES['badges']} (
+                    SELECT 0, 1, b.fb_order, b.fb_enabled, b.fb_inherited, b.fb_gl_grp,
+                    b.fb_type, b.fb_data, b.fb_dscp FROM {$_TABLES['ff_badges']} b
+                    WHERE b.fb_grp = '')";
+               // Move forum badges that have a group name into the new badge groups
+                $_SQL[] = "INSERT INTO {$_TABLES['badges']} (
+                    SELECT 0, g.bg_id, b.fb_order, b.fb_enabled, b.fb_inherited, b.fb_gl_grp,
+                    b.fb_type, b.fb_data, b.fb_dscp FROM {$_TABLES['ff_badges']} b
+                    LEFT JOIN {$_TABLES['badge_groups']} g ON g.bg_name = b.fb_grp
+                    WHERE b.fb_grp <> '')";
+
+
+                foreach ($_SQL as $sql) {
+                    DB_query($sql, 1);
+                }
+            }
+
+            DB_query("UPDATE {$_TABLES['users']} SET verified=1",1);
+            DB_query("UPDATE {$_TABLES['users']} SET status=3 WHERE status=1",1);
+            DB_query("UPDATE {$_TABLES['users']} SET status=3 WHERE status=4",1);
 
             $current_fusion_version = '2.1.0';
 
