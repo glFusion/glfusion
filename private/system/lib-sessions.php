@@ -79,11 +79,12 @@ function SESS_sessionCheck()
 
     unset($_USER);
 
-
     session_name($_CONF['cookie_session']);
 
     $_UserInstance = new UserAuth();
     $_USER = $_UserInstance->getUserData();
+
+    $_USER['instance'] = $_UserInstance;
 
     unset($_USER['passwd']);
     unset($_USER['tfa_secret']);
