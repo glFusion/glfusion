@@ -102,6 +102,33 @@ while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
     }
 }
 
+// clean up sessions
+$expirytime = (time() - 600);
+
+$deleteSQL = "DELETE FROM `{$_TABLES['sessions']}` WHERE (start_time < ?)";
+$stmt = $db->conn->prepare($deleteSQL);
+$stmt->bindValue(1,$expirytime,Database::INTEGER);
+try {
+    $stmt->execute();
+} catch (\Throwable $ignore) {}
+// clean up remembered
+$expireTime = (time() + 600);
+$deleteSQL = "DELETE FROM `{$_TABLES['users_remembered']}` WHERE (exipres < ?)";
+$stmt = $db->conn->prepare($deleteSQL);
+$stmt->bindValue(1,$expireTime,Database::INTEGER);
+try {
+    $stmt->execute();
+} catch (\Throwable $ignore) {}
+// clean up throttle
+$expireTime = (time() + 3600);
+$deleteSQL = "DELETE FROM `{$_TABLES['users_throttling']}` WHERE (exipres_at < ?)";
+$stmt = $db->conn->prepare($deleteSQL);
+$stmt->bindValue(1,$expireTime,Database::INTEGER);
+try {
+    $stmt->execute();
+} catch (\Throwable $ignore) {}
+Log::write('system',Log::DEBUG,'Completed Clean up activities');
+
 if ( $_CONF['cron_schedule_interval'] > 0  ) {
     if (( $_VARS['last_scheduled_run'] + $_CONF['cron_schedule_interval'] ) <= time()) {
         Log::write('system',Log::DEBUG,'Running last_scheduled_run items.');
