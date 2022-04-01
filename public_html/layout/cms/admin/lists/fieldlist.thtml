@@ -41,6 +41,15 @@
     </a>
 <!-- END field-approve -->
 
+<!-- BEGIN field-add -->
+    <a href="{url}"
+    <!-- BEGIN attr -->
+    {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-plus-circle uk-text-success"></i>
+    </a>
+<!-- END field-add -->
+
 <!-- BEGIN field-delete -->
     <a href="{delete_url}"
     <!-- BEGIN attr -->
@@ -210,5 +219,13 @@
     <!-- END attr -->
     >{text}</button>
 <!-- END field-button -->
- 
+
+<!-- BEGIN field-update -->
+    <a href="{url}"
+    <!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-arrow-circle-up uk-text-success"></i></a>
+<!-- END field-update -->
+
 {# end admin fields #}
