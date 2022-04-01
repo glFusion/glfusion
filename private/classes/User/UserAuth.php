@@ -26,7 +26,6 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-use glFusin\User\UserAuthOauth;
 use glFusion\User\Status;
 use Delight\Base64\Base64;
 use Delight\Cookie\Cookie;
@@ -176,7 +175,7 @@ final class UserAuth extends User {
 		// validate we accept local logins
 		if ($_CONF['user_login_method']['standard'] != 1) {
 			die('Local Login is disabled');
-//			throw new Exceptions\LocalLoginServiceDisabledException();
+			throw new Exceptions\LocalLoginServiceDisabledException();
 		}
 
 		$loginname = filter_input(\INPUT_POST, 'loginname', \FILTER_UNSAFE_RAW);
@@ -219,6 +218,7 @@ final class UserAuth extends User {
 
 		} catch (\Throwable $e) {
 			// some other error - so we abort...
+			Log::write('system',Log::ERROR,'UserAuth.php::userLocalLoginController() - Unknown error has occurred :: ' . $e->getMessage());
 			die('UserAuth.php :: unknown error in loginWithUsername() ' . $e->getMessage());
 		}
 
@@ -232,41 +232,103 @@ final class UserAuth extends User {
 	 */
 	public function userOauthLoginController()
 	{
-		global $_CONF, $MESSAGE, $LANG04, $LANG12;
+		global $_CONF, $MESSAGE, $LANG04;
 
 		// validate we accept oauth logins
 		if ($_CONF['user_login_method']['oauth'] != 1) {
-			die('Oauth Login is disabled');
-//			throw new Exceptions\OauthLoginServiceDisabledException();
+			throw new Exceptions\OauthLoginServiceDisabledException();
 		}
 
 		try {
 			self::loginWithOauth(0, array($this,'userLoginBeforeSuccess'));
+		} catch (Exceptions\AccountPendingReviewException $e) {
+			COM_setMsg($LANG04[117],'modal');
+			COM_refresh($_CONF['site_url']);
 		} catch (Exceptions\EmailNotVerifiedException $e) {
-			COM_setMsg($LANG04[177],'error');
+			COM_setMsg($LANG04[177],'modal');
 			COM_refresh($_CONF['site_url']);
 		} catch (\Throwable $e) {
 			Log::write('system',Log::ERROR,"OAuth Error: " . $e->getMessage());
 			COM_setMsg($MESSAGE[111],'error');
 			UserInterface::loginPage();
 		}
-
 		// finalize oauth login - pass false as this is not local
 		$this->userFinalLogin(false);
 	}
 
+	/**
+	 * User is requesting a new confirmation email be sent
+	 *
+	 * @TODO - 	current implementation will only work with local accounts
+	 *			need to rework to allow email verification for Oauth accounts
+	 *
+	 */
 
-		/**
-		 * this is called after a user has been authenticated and sets up all the user information
-		 * needed to have a user authenticated to the system.
-		 */
+	/**
+	 * @return [type]
+	 */
+	public function userResendConfirmationController()
+	{
+		global $_CONF,$_TABLES,$LANG20;
+
+		// this can throw TooManyRequestsException
+        $this->throttle([ 'resendConfirmation', $this->getIpAddress() ], 4, (60 * 60 * 24 * 7), 2, true);
+
+		// user has requested a new confirmation email be send
+
+		$username = filter_input(\INPUT_POST,'username',\FILTER_UNSAFE_RAW);
+		$password = filter_input(\INPUT_POST,'passwd',\FILTER_UNSAFE_RAW);
+
+		// look up user
+
+		try {
+			$userData = Database::getInstance()->conn->fetchAssoc(
+				"SELECT uid, email, username, passwd, status, verified, force_logout FROM {$_TABLES['users']} WHERE username = ?",
+				array($username),
+				array(Database::STRING)
+			);
+		} catch (\Throwable $e) {
+			throw new Exceptions\DatabaseError($e->getMessage());
+		}
+
+		if ($userData == null) {
+			COM_setMsg($LANG20[3],'error');
+			UserInterface::newTokenForm();
+		}
+
+        $this->throttle([ 'resendConfirmation', 'userId', $userData['uid'] ], 1, (60 * 60 * 6));
+
+		if (_check_hash($password, $userData['passwd'])) {
+			// ready to send a new confirmation email
+			try {
+				$this->resendConfirmationForEmail($userData['email'], array($this,'sendConfirmationRequest'));
+			} catch (Exceptions\ConfirmationRequestNotFound $e) {
+				COM_setMsg('No email verification request was found. Please contact the site administrator for assistnace','error');
+				COM_refresh($_CONF['site_url'].'/index.php');
+			}
+		}
+		// invalid password - try one more time?  Need to ensure we have throttling.
+		else {
+			COM_setMsg($LANG20[3],'error');
+			UserInterface::newTokenForm();
+		}
+	}
+
+
+	/**
+	 * this is called after a user has been authenticated and sets up all the user information
+	 * needed to have a user authenticated to the system.
+	 *
+	 * @param  boolean $local_login 	If the user is a local user
+	 * @return no return - will redirect to the proper landing spot
+	 */
 	private function userFinalLogin($local_login = false)
 	{
 		global $_CONF, $_USER, $_GROUPS, $_RIGHTS, $_SYSTEM;
 
 		$status = $this->getStatus();
 
-        if ($status == Status::NORMAL || $status == USER_ACCOUNT_AWAITING_ACTIVATION ) { // logged in AOK.
+        if ($status == Status::NORMAL || $status == USER_ACCOUNT_AWAITING_ACTIVATION ) {
             $_USER = $this->getUserData();
             $_GROUPS = SEC_getUserGroups( $_USER['uid'] );
             $_RIGHTS = explode( ',', SEC_getUserPermissions() );
@@ -296,7 +358,6 @@ final class UserAuth extends User {
             SEC_setCookie ($_CONF['cookie_language'], $_USER['language'], time() + 31536000,
                            $_CONF['cookie_path'], $_CONF['cookiedomain'],
                            $_CONF['cookiesecure'],false);
-//            COM_resetSpeedlimit('login');
 
             // we are now fully logged in, let's see if there is someplace we need to go....
             // First, check for a landing page supplied by the form or global config
@@ -337,6 +398,7 @@ final class UserAuth extends User {
                 echo COM_refresh ($_CONF['site_url'] . '/index.php');
             }
         }
+		COM_refresh($_CONF['site_url'].'/index.php');
 	}
 
 	/** Improves the application's security over HTTP(S) by setting specific headers */
@@ -415,6 +477,9 @@ final class UserAuth extends User {
 		}
 	}
 
+	/**
+	 * @return null
+	 */
 	private function resyncSessionIfNecessary() {
         global $_TABLES;
 		// if the user is signed in
@@ -517,7 +582,7 @@ final class UserAuth extends User {
 
 		$this->authenticateUserInternal($password, null, $username, $rememberDuration, $onBeforeSuccess);
 	}
-
+/* --------------------------
 	public function finalizeLogin($uid)
 	{
 		global $_TABLES;
@@ -583,7 +648,7 @@ final class UserAuth extends User {
 			throw new Exceptions\NotLoggedInException();
 		}
 	}
-
+------ */
 	/**
 	 * Attempts to confirm the currently signed-in user's password again
 	 *
@@ -678,6 +743,10 @@ final class UserAuth extends User {
 			unset($_SESSION[self::SESSION_FIELD_LAST_RESYNC]);
 			unset($_SESSION[self::SESSION_FIELD_FORCE_LOGOUT]);
 			unset($_SESSION[self::SESSION_FIELD_ADMIN_SESSION]);
+			// what other session fields?
+			unset($_SESSION['admin.method']);
+			unset($_SESSION['local_login']);
+
 		}
 	}
 
@@ -840,6 +909,7 @@ final class UserAuth extends User {
 
 	protected function onLoginSuccessful($userId, $email, $username, $status, $roles, $forceLogout, $remembered) {
         global $_CONF, $_TABLES;
+
 		// update the timestamp of the user's last login
 		try {
             Database::getInstance()->conn->update(
@@ -1024,11 +1094,14 @@ final class UserAuth extends User {
 					[ 'uid', 'email', 'username', 'status', 'roles_mask', 'force_logout' ]
 				);
 
-				$this->onLoginSuccessful($userData['uid'], $userData['email'], $userData['username'], $userData['status'], $userData['roles_mask'], $userData['force_logout'], true);
+// do this instead - it checks the status and other things.
+				$this->finalizeLogin($userData['uid']);
 
-				if ($rememberDuration !== null) {
-					$this->createRememberDirective($userData['uid'], $rememberDuration);
-				}
+//				$this->onLoginSuccessful($userData['uid'], $userData['email'], $userData['username'], $userData['status'], $userData['roles_mask'], $userData['force_logout'], true);
+
+//				if ($rememberDuration !== null) {
+//					$this->createRememberDirective($userData['uid'], $rememberDuration);
+//				}
 			}
 		}
 
@@ -1208,9 +1281,11 @@ final class UserAuth extends User {
 	 * @throws AuthError if an internal problem occurred (do *not* catch)
 	 */
 	private function resendConfirmationForColumnValue($columnName, $columnValue, callable $callback) {
+		global $_TABLES;
+
 		try {
-			$latestAttempt = $this->db->selectRow(
-				'SELECT uid, email FROM ' . $this->makeTableName('users_confirmations') . ' WHERE ' . $columnName . ' = ? ORDER BY id DESC LIMIT 1 OFFSET 0',
+			$latestAttempt = Database::getInstance()->conn->fetchAssoc(
+				'SELECT user_id, email FROM ' . $_TABLES['users_confirmations'] . ' WHERE ' . $columnName . ' = ? ORDER BY id DESC LIMIT 1 OFFSET 0',
 				[ $columnValue ]
 			);
 		}
@@ -1218,7 +1293,7 @@ final class UserAuth extends User {
 			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
-		if ($latestAttempt === null) {
+		if ($latestAttempt == null) {
 			throw new Exceptions\ConfirmationRequestNotFound();
 		}
 
@@ -1281,7 +1356,7 @@ final class UserAuth extends User {
 
 		$userData = $this->getUserDataByEmailAddress(
 			$email,
-			[ 'id', 'verified', 'resettable' ]
+			[ 'uid', 'verified', 'resettable' ]
 		);
 
 		// ensure that the account has been verified before initiating a password reset
@@ -1294,13 +1369,13 @@ final class UserAuth extends User {
 			throw new Exceptions\ResetDisabledException();
 		}
 
-		$openRequests = $this->throttling ? (int) $this->getOpenPasswordResetRequests($userData['id']) : 0;
+		$openRequests = $this->throttling ? (int) $this->getOpenPasswordResetRequests($userData['uid']) : 0;
 
 		if ($openRequests < $maxOpenRequests) {
 			$this->throttle([ 'requestPasswordReset', $this->getIpAddress() ], 4, (60 * 60 * 24 * 7), 2);
-			$this->throttle([ 'requestPasswordReset', 'user', $userData['id'] ], 4, (60 * 60 * 24 * 7), 2);
+			$this->throttle([ 'requestPasswordReset', 'user', $userData['uid'] ], 4, (60 * 60 * 24 * 7), 2);
 
-			$this->createPasswordResetRequest($userData['id'], $requestExpiresAfter, $callback);
+			$this->createPasswordResetRequest($userData['uid'], $requestExpiresAfter, $callback);
 		}
 		else {
 			throw new Exceptions\TooManyRequestsException('', $requestExpiresAfter);
@@ -1375,6 +1450,7 @@ final class UserAuth extends User {
 //				$this->updatePasswordInternal($userData['id'], $password);
 //			}
 			if ((int) $userData['verified'] === 1 && ($userData['status'] == Status::NORMAL || $userData['status'] == 1)) {
+				Session::set('local_login',true);
 				if (!isset($onBeforeSuccess) || (\is_callable($onBeforeSuccess) && $onBeforeSuccess($userData['uid']) === true)) {
 					$this->onLoginSuccessful($userData['uid'], $userData['email'], $userData['username'], $userData['status'], $userData['roles_mask'], $userData['force_logout'], false);
 
@@ -1496,8 +1572,9 @@ final class UserAuth extends User {
 
             throw new Exceptions\UnknownUsernameException();
         }
-		if (validateTFA() == true) {
-            if ((int) $userData['verified'] === 1 && $userData['status'] == 3) {
+
+		if ($this->validateTFA() == true) {
+            if ((int) $userData['verified'] === 1 && $userData['status'] == Status::NORMAL) {
                 $this->onLoginSuccessful($userData['uid'], $userData['email'], $userData['username'], $userData['status'], $userData['roles_mask'], $userData['force_logout'], false);
 
                 // continue to support the old parameter format
@@ -1511,6 +1588,8 @@ final class UserAuth extends User {
                 if ($rememberDuration !== null && $rememberDuration != 0) {
                     $this->createRememberDirective($userData['uid'], $rememberDuration);
                 }
+				$local_login = (bool) Session::get('local_login');
+				$this->userFinalLogin($local_login);
                 return;
 			}
 			else {
@@ -1528,6 +1607,44 @@ final class UserAuth extends User {
 			// we cannot authenticate the user due to the 2FA being wrong
 			throw new Exceptions\TwoFactorVerificationException();
 		}
+	}
+
+	/**
+	 * Determines if the passed TFA token is valie
+	 *
+	 * @return boolean true if the token is valid, false if not
+	 */
+	private function validateTFA()
+	{
+		global $_CONF, $LANG12, $LANG04;
+
+		if (!isset($_CONF['enable_twofactor']) || !$_CONF['enable_twofactor']) {
+			return true;
+		}
+		$retval = false;
+
+		$_USER['uid'] = (int) filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT);
+
+		if ( _sec_checkToken() ) {
+			try {
+				// throttle the specified resource or feature to *3* requests per *120* seconds
+				$this->throttle([ 'tfa_validation' ], 3, 120);
+			}
+			catch (\glFusion\User\Exceptions\TooManyRequestsException $e) {
+				// operation cancelled
+				displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
+				exit;
+			}
+
+			$tfaCode = COM_applyFilter($_POST['tfacode']);
+			$tfa = \TwoFactor::getInstance($_USER['uid']);
+			if ($tfa->validateCode($tfaCode)) {
+				Session::delete('2fa_attempt');
+				Session::delete('tfa');
+				$retval = true;
+			}
+		}
+		return $retval;
 	}
 
 	/** hook function used by login */
@@ -1551,11 +1668,12 @@ final class UserAuth extends User {
 				$userInfo['tfa_enabled'] && function_exists('hash_hmac')) {
 			if ( !SESS_isSet('login_referer')) {
 				if ( isset($_SERVER['HTTP_REFERER'])) {
-					SESS_setVar('login_referer',$_SERVER['HTTP_REFERER']);
+					Session::set('login_referer',$_SERVER['HTTP_REFERER']);
 				}
 			}
 			Session::set('2fa_attempt',1);
-			SEC_2FAForm($uid);
+			Session::set('tfa',$uid);
+			UserInterface::TFAvalidationPage($uid);
 		}
 		return true;
 	}
@@ -1643,14 +1761,14 @@ final class UserAuth extends User {
 						"SELECT uid,email,passwd,cookietimeout,verified,username,status,roles_mask,force_logout FROM `{$_TABLES['users']}`
 							WHERE remoteusername = ?
 								AND remoteservice = ?",
-						array(
+						[
 							$users['remoteusername'],
 							$users['remoteservice']
-						),
-						array(
+						],
+						[
 							Database::STRING,
 							Database::STRING
-						)
+						]
 			);
 			if ($userData !== false && $userData !== null) {
 				Log::write('system',Log::DEBUG,'Oauth user found in glFusion user table: '. $userData['uid']);
@@ -1658,6 +1776,7 @@ final class UserAuth extends User {
 				// populate the $_USER record and do the final login
 				if ((int) $userData['verified'] === 1 && ($userData['status'] == 3 || $userData['status'] == 1)) {
 					$this->inOauth = true;
+					Session::set('local_login',false);
 					if (!isset($onBeforeSuccess) || (\is_callable($onBeforeSuccess) && $onBeforeSuccess($userData['uid']) === true)) {
 						$this->inOauth = false;
 						$this->onLoginSuccessful($userData['uid'], $userData['email'], $userData['username'], $userData['status'], $userData['roles_mask'], $userData['force_logout'], false);
@@ -1686,8 +1805,12 @@ final class UserAuth extends User {
 				}
 				// user is not verified or status is not active
 				else {
-					Log::write('system',Log::DEBUG,'User is not verified or status is not 3');
-					throw new Exceptions\EmailNotVerifiedException();
+					Log::write('system',Log::DEBUG,'User is not verified or status is not 3 :: ' . $userData['status']);
+					if ($userData['status'] === Status::PENDING_REVIEW) {
+						throw new Exceptions\AccountPendingReviewException();
+					} else {
+						throw new Exceptions\EmailNotVerifiedException();
+					}
 				}
 			}
 			// first time the user has logged into glFusion via Oauth
@@ -1725,8 +1848,9 @@ final class UserAuth extends User {
 					'oauth_homepage'    => $users['homepage'],
 					'oauth_service'     => $service,
 				);
-				$page = USER_registrationForm($userData);
-				echo COM_siteHeader('menu') . $page . COM_siteFooter();
+				UserInterface::registrationPage($userData);
+//				$page = USER_registrationForm($userData);
+//				echo COM_siteHeader('menu') . $page . COM_siteFooter();
 				exit;
 			}
 		} else {
@@ -1778,16 +1902,14 @@ final class UserAuth extends User {
 	 * @throws AuthError if an internal problem occurred (do *not* catch)
 	 */
 	private function getOpenPasswordResetRequests($userId) {
+		global $_TABLES;
 		try {
-			$requests = $this->db->selectValue(
-				'SELECT COUNT(*) FROM ' . $this->makeTableName('users_resets') . ' WHERE user = ? AND expires > ?',
-				[
-					$userId,
-					\time()
-				]
-			);
+			$requests = Database::getInstance()->conn->fetchColumn("SELECT COUNT(*) FROM `{$_TABLES['users_resets']}` WHERE user = ? AND expires > ?",
+							[$userId, \time()],
+							0
+						);
 
-			if (!empty($requests)) {
+			if (!empty($requests) && $requests != null) {
 				return $requests;
 			}
 			else {
@@ -1816,20 +1938,28 @@ final class UserAuth extends User {
 	 * @throws AuthError if an internal problem occurred (do *not* catch)
 	 */
 	private function createPasswordResetRequest($userId, $expiresAfter, callable $callback) {
+		global $_TABLES;
+
 		$selector = self::createRandomString(20);
 		$token = self::createRandomString(20);
 		$tokenHashed = \password_hash($token, \PASSWORD_DEFAULT);
 		$expiresAt = \time() + $expiresAfter;
 
 		try {
-			$this->db->insert(
-				$this->makeTableNameComponents('users_resets'),
-				[
-					'user' => $userId,
-					'selector' => $selector,
-					'token' => $tokenHashed,
-					'expires' => $expiresAt
-				]
+			Database::getInstance()->conn->insert(
+					$_TABLES['users_resets'],
+					[
+						'user' => $userId,
+						'selector' => $selector,
+						'token' => $tokenHashed,
+						'expires' => $expiresAt
+					],
+					[
+						Database::INTEGER,
+						Database::STRING,
+						Database::STRING,
+						Database::INTEGER
+					]
 			);
 		}
 		catch (\Error $e) {
@@ -1866,32 +1996,38 @@ final class UserAuth extends User {
 	 * @see resetPasswordAndSignIn
 	 */
 	public function resetPassword($selector, $token, $newPassword) {
+		global $_TABLES;
 		$this->throttle([ 'resetPassword', $this->getIpAddress() ], 5, (60 * 60), 10);
 		$this->throttle([ 'resetPassword', 'selector', $selector ], 3, (60 * 60), 10);
 		$this->throttle([ 'resetPassword', 'token', $token ], 3, (60 * 60), 10);
 
 		try {
-			$resetData = $this->db->selectRow(
-				'SELECT a.id, a.user, a.token, a.expires, b.email, b.resettable FROM ' . $this->makeTableName('users_resets') . ' AS a JOIN ' . $this->makeTableName('users') . ' AS b ON b.id = a.user WHERE a.selector = ?',
-				[ $selector ]
+			$resetData = Database::getInstance()->conn->fetchAssoc(
+				'SELECT a.id, a.user, a.token, a.expires, b.email, b.resettable FROM ' . $_TABLES['users_resets'] . ' AS a JOIN ' . $_TABLES['users'] . ' AS b ON b.uid = a.user WHERE a.selector = ?',
+				[ $selector ],
+				[ Database::STRING ]
 			);
 		}
 		catch (\Error $e) {
+Log::write('system',Log::DEBUG,'Error on DB');
 			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
-		if (!empty($resetData)) {
+		if (!empty($resetData) && $resetData != null) {
 			if ((int) $resetData['resettable'] === 1) {
-				if (_check_hash($token, $resetData['token'])) {
+				if (\password_verify($token,$resetData['token'])) {
 					if ($resetData['expires'] >= \time()) {
 						$newPassword = self::validatePassword($newPassword);
+Log::write('system',Log::DEBUG,'Calling updatePasswordInternal');
 						$this->updatePasswordInternal($resetData['user'], $newPassword);
+Log::write('system',Log::DEBUG,'Calling forceLogoutForUserByID');
 						$this->forceLogoutForUserById($resetData['user']);
 
 						try {
-							$this->db->delete(
-								$this->makeTableNameComponents('users_resets'),
-								[ 'id' => $resetData['id'] ]
+							Database::getInstance()->conn->delete(
+								$_TABLES['users_resets'],
+								[ 'id' => $resetData['id'] ],
+								[ Database::INTEGER ]
 							);
 						}
 						catch (\Error $e) {
@@ -2428,6 +2564,7 @@ final class UserAuth extends User {
 	 * @return int|null
 	 */
 	private function getRememberDirectiveExpiry() {
+		global $_TABLES;
 		// if the user is currently signed in
 		if ($this->isLoggedIn()) {
 			// determine the selector of any currently existing remember directive
@@ -2437,7 +2574,7 @@ final class UserAuth extends User {
 			if (isset($existingSelector)) {
 				// fetch the expiry date for the given selector
                 $existingExpiry = Database::getInstance()->conn->fetchColumn(
-                    'SELECT expires FROM ' . $this->makeTableName('users_remembered') . ' WHERE selector = ? AND user = ?',
+                    'SELECT expires FROM ' . $_TABLES['users_remembered'] . ' WHERE selector = ? AND user = ?',
                     [
 						$existingSelector,
 						$this->getUserId()
@@ -2453,4 +2590,80 @@ final class UserAuth extends User {
 
 		return null;
 	}
+
+    protected function sendPasswordReset($selector, $token)
+    {
+        global $_CONF, $_TABLES, $LANG04;
+
+        $retval = '';
+
+        try {
+            $resetData = Database::getInstance()->conn->fetchAssoc(
+                "SELECT a.id, a.user, a.token, a.selector, a.expires, b.email, b.username, b.status, b.verified, b.force_logout
+                    FROM {$_TABLES['users_resets']} AS a JOIN {$_TABLES['users']} AS b ON b.uid = a.user WHERE a.selector = ?",
+                [ $selector ],
+                [ DATABASE::STRING ]
+            );
+        }
+        catch (\Throwable $e) {
+            throw new Exceptions\DatabaseError($e->getMessage());
+        }
+
+        if ($resetData !== false && $resetData !== null) {
+            if (($_CONF['usersubmission'] == 1) && ($resetData['status'] == Status::PENDING_REVIEW)) {
+                echo COM_refresh ($_CONF['site_url'] . '/index.php?msg=48');
+            }
+            $T = new \Template($_CONF['path_layout'].'email/');
+            $T->set_file(array(
+                'html_msg'   => 'mailtemplate_html.thtml',
+                'text_msg'   => 'mailtemplate_text.thtml'
+            ));
+
+            $T->set_block('html_msg', 'content', 'contentblock');
+            $T->set_block('text_msg', 'contenttext', 'contenttextblock');
+
+            $T->set_var('content_text',sprintf ($LANG04[88], $resetData['username'],$_CONF['site_name'],$_CONF['site_url']) );
+
+            $T->parse('contentblock', 'content',true);
+            $T->parse('contenttextblock', 'contenttext',true);
+
+            $T->set_var('url',$_CONF['site_url'] . '/users.php?mode=newpwd&s=' . $selector . '&t=' . $token);
+            $T->set_var('button_text',$LANG04[91]);
+            $T->parse('contentblock', 'content',true);
+            $T->parse('contenttextblock', 'contenttext',true);
+
+            $T->unset_var('button_text');
+            $T->set_var('content_text',$LANG04[89]);
+            $T->parse('contentblock', 'content',true);
+            $T->parse('contenttextblock', 'contenttext',true);
+
+            $T->set_var('site_url',$_CONF['site_url']);
+            $T->set_var('site_name',$_CONF['site_name']);
+            $T->set_var('title',$_CONF['site_name'] . ': ' . $LANG04[16]);
+            $T->parse ('output', 'html_msg');
+            $mailhtml = $T->finish($T->get_var('output'));
+
+            $T->parse ('textoutput', 'text_msg');
+            $mailtext = $T->finish($T->get_var('textoutput'));
+
+            $msgData['htmlmessage'] = $mailhtml;
+            $msgData['textmessage'] = $mailtext;
+            $msgData['subject'] = $_CONF['site_name'] . ': ' . $LANG04[16];
+
+            $msgData['from']['name'] = $_CONF['site_name'];
+            $msgData['from']['email'] = $_CONF['noreply_mail'];
+            $msgData['to']['email'] = $resetData['email'];
+            $msgData['to']['name'] = $resetData['username'];
+
+            COM_emailNotification($msgData);
+
+        } else {
+            echo COM_refresh ($_CONF['site_url'].'/users.php?mode=getpassword');
+            exit;
+        }
+
+        return true;
+    }
+
+
 }

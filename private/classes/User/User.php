@@ -16,6 +16,7 @@ use Delight\Base64\Base64;
 use Delight\Cookie\Session;
 use glFusion\Database\Database;
 use glFusion\Log\Log;
+use glFusion\Notifiers\Email;
 
 
 /**
@@ -28,7 +29,7 @@ abstract class User {
   	/** @var string the user's current IP address */
 	private $ipAddress;
 	/** @var bool whether throttling should be enabled (e.g. in production) or disabled (e.g. during development) */
-	private $throttling;
+	protected $throttling;
 
 	/** @var string session field for whether the client is currently signed in */
 	const SESSION_FIELD_LOGGED_IN = 'auth_logged_in';
@@ -191,13 +192,23 @@ abstract class User {
 	 * @throws AuthError if an internal problem occurred (do *not* catch)
 	 */
 	protected function updatePasswordInternal($userId, $newPassword) {
-		$newPassword = \password_hash($newPassword, \PASSWORD_DEFAULT);
+		global $_TABLES;
+//		$newPassword = \password_hash($newPassword, \PASSWORD_DEFAULT);
+		$newPassword = SEC_encryptPassword($newPassword);
 
 		try {
-			$affected = $this->db->update(
-				$this->makeTableNameComponents('users'),
-				[ 'password' => $newPassword ],
-				[ 'uid' => $userId ]
+			$affected = Database::getInstance()->conn->update(
+				$_TABLES['users'],
+				[
+					'passwd' => $newPassword,
+				],
+				[
+					'uid' => $userId
+				],
+				[
+					Database::STRING,
+					Database::INTEGER
+				]
 			);
 
 			if ($affected === 0) {
@@ -370,7 +381,7 @@ abstract class User {
 	 * @param callable $callback the function that sends the confirmation email to the user
 	 * @throws AuthError if an internal problem occurred (do *not* catch)
 	 */
-	protected function createConfirmationRequest($userId, $email) {
+	protected function createConfirmationRequest($userId, $email, callable $callback = null) {
 		global $_TABLES;
 
 		$selector = self::createRandomString(16);
@@ -401,22 +412,42 @@ abstract class User {
 			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
-		self::sendConfirmationRequest($selector,$token,$email);
-
-//		if (\is_callable($callback)) {
-//			$callback($selector, $token);
-//		}
-//		else {
-//			throw new Exceptions\MissingCallbackError();
-//		}
+		if (\is_callable($callback)) {
+			$callback($selector, $token);
+		}
+		else {
+			throw new Exceptions\MissingCallbackError();
+		}
 	}
 
-	protected function sendConfirmationRequest($selector,$token,$email)
+
+	/**
+	 * Send Confirmation Request Callback
+	 */
+	protected function sendConfirmationRequest($selector,$token)
 	{
-		global $_CONF, $_SYSTEM, $LANG04;
+		global $_CONF, $_SYSTEM, $_TABLES, $LANG04;
+
+
+		try {
+			$userData = Database::getInstance()->conn->fetchAssoc(
+				"SELECT user_id, email FROM {$_TABLES['users_confirmations']} WHERE selector = ?",
+				[$selector],
+				[Database::STRING]
+			);
+		} catch (\Throwable $e) {
+			throw new Exceptions\DatabaseError($e->getMessage());
+		}
+
+		if ($userData == null) {
+			Log::write('system',Log::DEBUG,'Users.php :: sendConfirmationRequest() - Selector / Token pair not found in database.');
+			throw new Exceptions\ConfirmationRequestNotFound();
+		}
 
 		$activationLink = $_CONF['site_url'].'/users.php?mode=verify&amp;s='.$selector.'&amp;t='.$token;
-Log::write('system',Log::DEBUG,'In sendConfirmationRequest');
+
+		Log::write('system',Log::DEBUG,'Users.php :: sendConfirmationRequest() - Preparing email');
+
 		$T = new \Template($_CONF['path_layout'].'email/');
 		$T->set_file(array(
 			'html_msg'   => 'newuser_template_html.thtml',
@@ -436,19 +467,21 @@ Log::write('system',Log::DEBUG,'In sendConfirmationRequest');
 
 		$T->parse ('output', 'text_msg');
 		$mailtext = $T->finish($T->get_var('output'));
-		$isHTML = true;
+		$msgData['isHTML'] = true;
 
 		$msgData['htmlmessage'] = $mailhtml;
 		$msgData['textmessage'] = $mailtext;
 		$msgData['subject'] = $_CONF['site_name'] . ': ' . $LANG04[16];
 
-		$to = array();
-// taking out the from for now - it is causing issues with the new Notify class
-//		$from = array();
-//		$from = COM_formatEmailAddress( $_CONF['site_name'], $_CONF['noreply_mail'] );
-		$to = COM_formatEmailAddress('',$email);
-		Log::write('system',Log::DEBUG,'About to send confirmation request');
-		$rc = COM_mail( $to, $msgData['subject'], $msgData['htmlmessage'], '', $isHTML, 0,'', $msgData['textmessage'] );
+		$msgData['to'] = $userData['email'];
+
+		Log::write('system',Log::DEBUG,'Users.php :: sendConfirmationRequest() - Sending Confirmation Notification via Email::sendNotification(()');
+
+		$emailHandler = new Email();
+
+		$emailHandler->sendNotification($msgData);
+
+		return true;
 	}
 
 	/**
@@ -507,7 +540,6 @@ Log::write('system',Log::DEBUG,'In sendConfirmationRequest');
 		catch (\Throwable $e) {
 			throw new Exceptions\DatabaseError($e->getMessage());
 		}
-		exit;
 	}
 
     /**
@@ -526,10 +558,21 @@ Log::write('system',Log::DEBUG,'In sendConfirmationRequest');
 	 */
 	public function throttle(array $criteria, $supply, $interval, $burstiness = null, $simulated = null, $cost = null, $force = null) {
         global $_TABLES;
+
+		if ($this->throttling == true) {
+			Log::write('system',Log::DEBUG,'User.php :: throttling is true');
+		} else {
+			Log::write('system',Log::DEBUG,'User.php :: throttling is false');
+		}
+
+
+Log::write('system',Log::DEBUG,'Throttle is ' . $this->throttling);
+Log::write('system',Log::DEBUG,'In throttle() - simulated = ' . ($simulated ? 'true' : 'false'));
 		// validate the supplied parameters and set appropriate defaults where necessary
 		$force = ($force !== null) ? (bool) $force : false;
 
 		if (!$this->throttling && !$force) {
+Log::write('system',Log::DEBUG,'REturning the supply - because $this->throttling is false and not forced');
 			return $supply;
 		}
 
@@ -583,7 +626,8 @@ Log::write('system',Log::DEBUG,'In sendConfirmationRequest');
 
 		$accepted = $bucket['tokens'] >= $cost;
 
-		if (!$simulated) {
+		if ($simulated == false) {
+//		if (!$simulated) {
 			if ($accepted) {
 				// remove the requested number of tokens from the bucket
 				$bucket['tokens'] = \max(0, $bucket['tokens'] - $cost);
@@ -593,6 +637,7 @@ Log::write('system',Log::DEBUG,'In sendConfirmationRequest');
 			$bucket['expires_at'] = $now + \floor($capacity / $bandwidthPerSecond * 2);
 
 			// merge the updated bucket into the database
+Log::write('system',Log::DEBUG,'Updating data in database');
 			try {
                 $affected = Database::getInstance()->conn->update(
                     $_TABLES['users_throttling'],
@@ -607,7 +652,7 @@ Log::write('system',Log::DEBUG,'In sendConfirmationRequest');
 
 			if ($affected === 0) {
 				$bucket['bucket'] = $key;
-
+Log::write('system',Log::DEBUG,'Inserting data in database');
 				try {
                     Database::getInstance()->conn->insert(
                         $_TABLES['users_throttling'],
@@ -619,6 +664,8 @@ Log::write('system',Log::DEBUG,'In sendConfirmationRequest');
 					throw new Exceptions\DatabaseError($e->getMessage());
 				}
 			}
+		} else {
+			Log::write('system',Log::DEBUG,'THIS WAS SIMULATED');
 		}
 
 		if ($accepted) {

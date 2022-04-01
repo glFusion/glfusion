@@ -2,7 +2,7 @@
 /**
 * glFusion CMS
 *
-* User Manager - Create user
+* User Manager - Create user, Delete User, other??
 *
 * Based off the PHP-Auth (https://github.com/delight-im/PHP-Auth)
 * Copyright (c) delight.im (https://www.delight.im/)
@@ -22,16 +22,12 @@ if (!defined ('GVERSION')) {
     die ('This file can not be used on its own.');
 }
 
-use glFusin\User\UserAuthOauth;
 use glFusion\User\Status;
-//use glFusion\User\Exception;
-use Delight\Base64\Base64;
-use Delight\Cookie\Cookie;
-use Delight\Cookie\Session;
 use glFusion\Database\Database;
 use glFusion\Log\Log;
+use glFusion\Notifiers\Email;
 
-class UserCreate extends User
+class UserManager extends User
 {
     /** @var core data fields provided by user */
     protected $userDataFields = ['username','email','passwd','fullname','homepage','remoteusername','service'];
@@ -74,6 +70,7 @@ class UserCreate extends User
 	 * @see confirmEmail
 	 * @see confirmEmailAndSignIn
 	 */
+//@TODO - remove
 	public function register($email, $password, $username = null, callable $callback = null) {
 		$this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
 		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
@@ -115,6 +112,7 @@ class UserCreate extends User
 	 * @see confirmEmail
 	 * @see confirmEmailAndSignIn
 	 */
+//@TODO remove
 	public function registerWithUniqueUsername($email, $password, $username = null, callable $callback = null) {
 		$this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
 		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
@@ -171,6 +169,9 @@ class UserCreate extends User
     {
         global $_CONF, $_TABLES, $LANG04, $MESSAGE;
 
+		$this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
+		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
+
         // build out skeleton record
 
         $verified = 0;
@@ -191,6 +192,7 @@ class UserCreate extends User
         $data['oauth_service']  = '';       // oauth service - same as oauth_provider?
 
         // submitted data
+
         $data['regtype']        = isset($info['regtype']) && $info['regtype'] != '' ? $info['regtype'] : 'local';
         $data['username']       = isset($info['username']) ? filter_var($info['username'],FILTER_UNSAFE_RAW) : '';
         $data['email']          = isset($info['email']) ? filter_var($info['email'],FILTER_SANITIZE_EMAIL) : '';
@@ -204,13 +206,11 @@ class UserCreate extends User
         $data['oauth_username'] = isset($info['oauth_username']) ? $info['oauth_username'] : '';
         $data['oauth_email']    = isset($info['oauth_email']) ? filter_var($info['oauth_email'],FILTER_SANITIZE_EMAIL) : '';
 
-        // data validations
-
-        // email
-
         if ( !empty($data['oauth_email']) ) {
             $data['email'] = $data['oauth_email'];
         }
+
+        // Data Validations
 
         // throws Exceptions\InvalidEmailException if email is not valid
         $data['email'] = self::validateEmailAddress($data['email']);
@@ -251,13 +251,14 @@ class UserCreate extends User
         $data['passwd'] = trim($data['passwd']);
         $data['passwd_conf'] = trim($data['passwd_conf']);
 
+//@TODO - remove registration type
         if ($data['regtype'] == 'local' && $_CONF['registration_type'] == 1 ) {
             if ( empty($data['passwd']) || $data['passwd'] != $data['passwd_conf'] ) {
                 throw new Exceptions\PasswordConfirmationMismatchException($MESSAGE[67]);
             }
             $err = SEC_checkPwdComplexity($data['passwd']);
             if (count($err) > 0 ) {
-                throw new Exceptions\PasswordComplexityException('Password does not meet the complexity requireements');
+                throw new Exceptions\PasswordComplexityException('Password does not meet the complexity requirements');
             }
         }
 
@@ -272,7 +273,7 @@ class UserCreate extends User
             }
         }
 
-        /** now do spam checks and other checks as needed */
+        // spam checks
 
         $spamCheckData = array(
             'username'  => $data['username'],
@@ -303,30 +304,23 @@ class UserCreate extends User
             } else {
                 throw new Exceptions\CustomRegistrationException($msg);
             }
+//@TODO - this needs to move to the users.php - this is where we call the custom form
             if (!empty ($msg)) {
                 if (function_exists('CUSTOM_userForm')) {
                     return CUSTOM_userForm ($msg);
                 }
             }
+//@END OF TODO - move
         }
 
-        // if we made it here - we should be good to go.
+        // all validations have passed - create the user record
 
+        // create the account and send notification if passed.
         $newUserId = self::createAccount($data['username'],$data['email'],$data['passwd'],
-                        $data['fullname'],$data['homepage'],$data['oauth_username'],$data['oauth_provider']);
+                        $data['fullname'],$data['homepage'],$data['oauth_username'],$data['oauth_provider'],
+                        array($this,'sendConfirmationRequest'));
 
-        if ($newUserId != null) {
-            $verified = Database::getInstance()->conn->fetchColumn(
-                "SELECT verified FROM `{$_TABLES['users']}` WHERE uid=?",
-                [ $newUserId ],
-                0,
-                array(Database::INTEGER)
-            );
-            Session::set('auth_verified',$verified);
-            if ($verified === 0) {
-                $this->createConfirmationRequest($newUserId, $data['email']);
-            }
-        }
+        $this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, false);
 
 		return $newUserId;
     }
@@ -340,9 +334,6 @@ class UserCreate extends User
     * General createAccount function - will create the skeleton record and return
     * the new user id.
     *
-    *
-    * NOTE: Does NOT send out password emails.
-    *
     * @param    string  $username   user name (mandatory)
     * @param    string  $email      user's email address (mandatory)
     * @param    string  $passwd     password (optional, see above)
@@ -350,33 +341,46 @@ class UserCreate extends User
     * @param    string  $homepage   user's home page (optional)
     * @param    string  $remoteusername  oauth username  (optional)
     * @param    string  $service    oauth service (optional)
-    * @param    string  $ignore     used for batch uploads (optional)
-    * @return   int                 new user's ID
+    * @param    callable $callback  Used to send confirmation email (optional)
+    * @return   int                 new user's ID or null
     *
     */
-    protected function createAccount ($username, $email, $passwd = '', $fullname = '', $homepage = '', $remoteusername = '', $service = '', $ignore = 0)
+    protected function createAccount ($username, $email, $passwd = '', $fullname = '', $homepage = '', $remoteusername = '', $service = '', callable $callback = null)
     {
         global $_CONF, $_USER, $_TABLES;
+
+        \ignore_user_abort(true);
 
         $dt = new \Date('now',$_USER['tzid']);
 
         $db = Database::getInstance();
 
         $fields = array();
-        $values = array();
         $types  = array();
 
         $queueUser = false;
-        $verified = 0;
+
+        $verified = \is_callable($callback) ? 0 : 1;
 
         $regdate = $dt->toMySQL(true);
 
-        $fields = array('username'  => $username,
-                        'email'     => $email,
-                        'regdate'   => $regdate,
-                        'cookietimeout' => $_CONF['default_perm_cookie_timeout']
+        $fields = array('username'      => $username,
+                        'email'         => $email,
+                        'regdate'       => $regdate,
+                        'cookietimeout' => $_CONF['default_perm_cookie_timeout'],
+                        'status'        => Status::NORMAL,      // default value
+                        'verified'      => $verified,           // default value
+                        'account_type'  => LOCAL_USER           // default value
                 );
-        $types  = array(Database::STRING,Database::STRING,Database::STRING,Database::STRING);
+        $types  = array(
+                        Database::STRING,   // username
+                        Database::STRING,   // email
+                        Database::STRING,   // regdate
+                        Database::STRING,   // cookie timeout
+                        Database::INTEGER,  // status
+                        Database::INTEGER,  // verified
+                        Database::INTEGER   // account type
+                );
 
         if (!empty ($passwd)) {
             $fields['passwd'] = SEC_encryptPassword($passwd);
@@ -387,13 +391,10 @@ class UserCreate extends User
             $types[] = Database::STRING;
         }
         if (!empty ($homepage)) {
-
             $fields['homepage'] = $homepage;
             $types[] = Database::STRING;
         }
-        $account_type = LOCAL_USER;
 
-//this needs to move up to the main part of registerUser
         if (($_CONF['usersubmission'] == 1) && !SEC_hasRights ('user.edit')) {
             $queueUser = true;
             if (!empty ($_CONF['allow_domains'])) {
@@ -403,50 +404,26 @@ class UserCreate extends User
             }
 
             if ($queueUser) {
-                $fields['status'] = USER_ACCOUNT_AWAITING_APPROVAL;
-                $types[] = Database::INTEGER;
-
-                $fields['verified'] = 1;
-                $types[] = Database::INTEGER;
+                $fields['status'] = Status::PENDING_REVIEW;
             }
         }
-        // submission queue is disabled - determine type of notification to user
-        else {
-// reg type 1 = users enters password and must verify account
 
-            if (($_CONF['registration_type'] == 1 ) && (empty($remoteusername) || empty($service))) {
-                $fields['status'] = USER_ACCOUNT_ACTIVE;
-                $types[] = Database::INTEGER;
-
-                $fields['verified'] = 0;
-                $types[] = Database::INTEGER;
-            }
-        }
-// end of queue user and verified stuff
-
-
+        // if remote username or remote service is set - change account type to remote_user
         if (!empty($remoteusername)) {
             $fields['remoteusername'] = $remoteusername;
             $types[] = Database::STRING;
-            $account_type = REMOTE_USER;
-
-            // for now - backward compatibility - do not require verification for remote users
-            $fields['verified'] = 1;
-            $types[] = Database::INTEGER;
-
+            $fields['account_type']= REMOTE_USER;
         }
         if (!empty($service)) {
             $fields['remoteservice'] = $service;
             $types[] = Database::STRING;
         }
 
-        $fields['account_type'] = $account_type;
-        $types[] = Database::INTEGER;
+        // This is the same for all user types - it builds out the database records
+        // and makes all default group assignments.
 
-    //Insert the data into the tables
         $db->conn->beginTransaction();
         try {
-
             $db->conn->beginTransaction();
             try {
                 $db->conn->insert($_TABLES['users'],$fields,$types);
@@ -456,7 +433,7 @@ class UserCreate extends User
                 throw new Exceptions\UserAlreadyExistsException();
             } catch(\Throwable $e) {
                 $db->conn->rollBack();
-                Log::write('system',Log::ERROR,"Error inserting user into USERS table :: " . $e->getMessage());
+                Log::write('system',Log::ERROR,"UserManager::createUser() :: Error inserting user into USERS table :: " . $e->getMessage());
                 return null;
             }
 
@@ -472,7 +449,7 @@ class UserCreate extends User
                 );
             }
             if ( $uid === false  ) {
-                Log::write('system',Log::ERROR,"Error: Unable to retrieve uid after creating user");
+                Log::write('system',Log::ERROR,"UserManager::createUser() :: Error: Unable to retrieve uid after creating user");
                 $db->conn->rollBack();
                 return null;
             }
@@ -526,7 +503,7 @@ class UserCreate extends User
 
         } catch (\Exception $e) {
             $db->conn->rollBack();
-            Log::write('system',Log::ERROR,'There was an error in creating the user - Database transaction rolledback ' . $e->getMessage());
+            Log::write('system',Log::ERROR,'UserManager::createUser() - Error creating user records - Database transaction rolledback ' . $e->getMessage());
             return NULL;
         }
 
@@ -538,18 +515,27 @@ class UserCreate extends User
             CUSTOM_userCreateHook($uid);
         }
 
-        if ( $ignore == 0 ) {
-            PLG_createUser($uid);
-        }
+        // let plugins know we have a new user
+        PLG_createUser($uid);
 
         // Notify the admin?
-        if (($ignore == 0) && (isset ($_CONF['notification']) && in_array ('user', $_CONF['notification']))) {
+        if (($verified == 0) && (isset ($_CONF['notification']) && in_array ('user', $_CONF['notification']))) {
             if ($queueUser) {
                 $mode = 'inactive';
             } else {
                 $mode = 'active';
             }
-            USER_sendNotification ($username, $email, $uid, $mode);
+            try {
+                $this->notifyAdmin($username,$email,$uid,$mode);
+            } catch (\Throwable $e) {
+                Log::write('system',Log::ERROR,'UserManager::createUser() - Error notifying the admin via email of a new user registration');
+            }
+        }
+
+        // send notification if the callback was provided
+
+        if ($verified == 0) {
+            $this->createConfirmationRequest($uid, $email, $callback);
         }
 
         return $uid;
@@ -584,6 +570,51 @@ class UserCreate extends User
     protected function sendVerificationEmail()
     {
 
+    }
+
+    /**
+    * Send an email notification when a new user registers with the site.
+    *
+    * @param username string      User name of the new user
+    * @param email    string      Email address of the new user
+    * @param uid      int         User id of the new user
+    * @param mode     string      Mode user was added at.
+    *
+    */
+    protected function notifyAdmin ($username, $email, $uid, $mode='inactive')
+    {
+        global $_CONF, $_USER, $LANG01, $LANG04, $LANG08, $LANG28, $LANG29;
+
+        $dt = new \Date('now',$_USER['tzid']);
+
+        $mailbody = "$LANG04[2]: $username\n"
+                . "$LANG04[5]: $email\n"
+                . "$LANG28[14]: " . $dt->format($_CONF['date'],true) . "\n\n";
+
+        if ($mode == 'inactive') {
+            // user needs admin approval
+            $mailbody .= "$LANG01[10] {$_CONF['site_admin_url']}/moderation.php\n\n";
+        } else {
+            // user has been created, or has activated themselves:
+            $mailbody .= "$LANG29[4] {$_CONF['site_url']}/users.php?mode=profile&uid={$uid}\n\n";
+        }
+        $mailbody .= "\n------------------------------\n";
+        $mailbody .= "$LANG08[34]";
+        $mailbody .= "\n------------------------------\n";
+
+        $mailsubject = $_CONF['site_name'] . ' ' . $LANG29[40];
+
+        $msgData = array();
+
+		$msgData['textmessage'] = $mailbody;
+		$msgData['subject'] = $mailsubject;
+
+		$msgData['to'] = $_CONF['site_mail'];
+
+		Log::write('system',Log::DEBUG,'UserManager::notifyAdmin() - Sending Admin Notification via Email::sendNotification(()');
+
+        $emailHandler = new Email();
+		$emailHandler->sendNotification($msgData);
     }
 
 }

@@ -137,9 +137,6 @@ class UserAuthOauth
             }
         }
 
-        Log::write('system',Log::DEBUG,'Retval is equal to '. ($retval == true ? 1 : 0));
-        Log::write('system',Log::DEBUG,'redirect url is now ' . $redirect_url);
-
         return $retval;
     }
 
@@ -212,9 +209,8 @@ class UserAuthOauth
      */
     public function resyncUserData($info)
     {
-        global $_TABLES, $_USER, $_CONF;
+        global $_USER;
 
-        $db = Database::getInstance();
 
         $users = $this->getUserData($info);
         $userinfo = $this->getUserInfoData($info);

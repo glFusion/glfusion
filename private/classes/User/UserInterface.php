@@ -19,6 +19,8 @@
 
 namespace glFusion\User;
 
+use \glFusion\Database\Database;;
+
 class UserInterface {
 
 
@@ -321,7 +323,7 @@ class UserInterface {
     */
     public static function loginRequiredForm()
     {
-        global $_CONF, $LANG_LOGIN;
+        global $LANG_LOGIN;
 
         $options = array(
             'title'   => $LANG_LOGIN[1],
@@ -510,7 +512,7 @@ class UserInterface {
     */
     static public function newTokenForm ()
     {
-        global $_CONF, $_TABLES, $LANG01, $LANG04;
+        global $_CONF, $LANG01, $LANG04;
 
         $tokenform = new \Template ($_CONF['path_layout'] . 'users');
         $tokenform->set_file ('newtoken', 'newtoken.thtml');
@@ -538,7 +540,7 @@ class UserInterface {
     * @return   string  HTML for form used to retrieve user's password
     *
     */
-    static public function getPasswordForm()
+    static public function getPasswordPage()
     {
         global $_CONF, $LANG04;
 
@@ -566,6 +568,74 @@ class UserInterface {
         echo COM_siteFooter();
         exit;
     }
+
+
+    static public function newPasswordPage ($uid, $selector, $token)
+    {
+        global $_CONF, $_TABLES, $LANG04;
+
+        $db = Database::getInstance();
+
+        $pwform = new \Template ($_CONF['path_layout'] . 'users');
+        $pwform->set_file ('newpw','newpassword.thtml');
+        $pwform->set_var (array(
+                'user_id'       => $uid,
+                'user_name'     => $db->getItem ($_TABLES['users'], 'username',array('uid' => $uid),array(Database::INTEGER)),
+                'selector'      => $selector,
+                'token'         => $token,
+                'password_help' => SEC_showPasswordHelp(),
+                'lang_explain'  => $LANG04[90],
+                'lang_username' => $LANG04[2],
+                'lang_newpassword'  => $LANG04[4],
+                'lang_newpassword_conf' => $LANG04[108],
+                'lang_setnewpwd'    => $LANG04[91])
+        );
+
+        $form = COM_startBlock ($LANG04[92]);
+        $form .= $pwform->finish ($pwform->parse ('output', 'newpw'));
+        $form .= COM_endBlock ();
+
+        echo COM_siteHeader('menu');
+        echo $form;
+        echo COM_siteFooter();
+        exit;
+    }
+
+    /**
+    * Displays the Two Factor Auth token entry form
+    *
+    * @return   no return
+    *
+    */
+    static public function TFAvalidationPage($uid)
+    {
+        global $_CONF, $LANG_TFA;
+
+        $retval = '';
+
+        $T = new \Template($_CONF['path_layout'] . 'users');
+        $T->set_file('tfa', 'tfa-entry-form.thtml');
+
+        $T->set_var(array(
+            'uid'           => $uid,
+            'token_name'    => CSRF_TOKEN,
+            'token_value'   => SEC_createToken(),
+            'lang_two_factor'   => $LANG_TFA['two_factor'],
+            'lang_auth_code'    => $LANG_TFA['auth_code'],
+            'lang_verify'       => $LANG_TFA['verify'],
+        ));
+
+        $T->parse('output', 'tfa');
+
+        $retval .= $T->finish($T->get_var('output'));
+
+        $display = COM_siteHeader();
+        $display .= $retval;
+        $display .= COM_siteFooter();
+        echo $display;
+        exit;
+    }
+
 
 
 }
