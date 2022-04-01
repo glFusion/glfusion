@@ -204,7 +204,7 @@ class Search
         }
         if (!isset($content['title'])) $content['title'] = '';
 
-        $owner_id = isset($content['author']) : (int)$content['author'] : 2;
+        $owner_id = isset($content['author']) ? (int)$content['author'] : 2;
 
         if ((!isset($content['author_name']) || empty($content['author_name']))
               && is_numeric($content['author']) && $content['author'] > 0
