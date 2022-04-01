@@ -1709,7 +1709,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
 
             // Only add badge records if creating the table.
             if (!$have_badges) {
-                $_SQ = array();
+                $_SQL = array();
                 // Add the default badge group
                 $_SQL[] = "INSERT INTO {$_TABLES['badge_groups']}
                     (bg_order, bg_name, bg_singular) VALUES (10, 'Miscellaneous', 0)";
