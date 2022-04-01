@@ -636,6 +636,367 @@ class UserInterface {
         exit;
     }
 
+    /**
+    * Shows a profile for a user
+    *
+    * This grabs the user profile for a given user and displays it
+    *
+    * @return   string          HTML for user profile page
+    *
+    */
+    static public function userProfile()
+    {
+        global $_CONF, $_TABLES, $_USER, $LANG01, $LANG04, $LANG09, $LANG28, $LANG_LOGIN;
+        global $LANG_ADMIN;
+
+        USES_lib_user();
+
+        $db = Database::getInstance();
+
+        $retval = '';
+
+        if (COM_isAnonUser() &&
+            (($_CONF['loginrequired'] == 1) || ($_CONF['profileloginrequired'] == 1))) {
+            self::loginPage();
+        }
+
+        if ( isset($_GET['uid']) ) {
+            $user = COM_applyFilter ($_GET['uid'], true);
+            if (!is_numeric ($user) || ($user < 2)) {
+                COM_404();
+            }
+        } else if ( isset($_GET['username']) ) {
+            $username = $_GET['username'];
+            if ( !USER_validateUsername($username,true) ) {
+                COM_404();
+            }
+            if ( empty($username) || $username == '' ) {
+                COM_404();
+            }
+
+            $user = (int) $db->getItem(
+                            $_TABLES['users'],
+                            'uid',
+                            array('username'=>$username),
+                            array(Database::STRING)
+                          );
+
+            if ($user < 2) {
+                COM_404();
+            }
+        } else {
+            COM_404();
+        }
+        $msg = 0;
+        if (isset ($_GET['msg'])) {
+            $msg = COM_applyFilter ($_GET['msg'], true);
+        }
+        $plugin = '';
+
+        if (($msg > 0) && isset($_GET['plugin'])) {
+            $plugin = COM_applyFilter($_GET['plugin']);
+        }
+
+        $A = $db->conn->fetchAssoc(
+                    "SELECT u.uid,username,fullname,regdate,lastlogin,homepage,about,location,pgpkey,photo,email,status,emailfromadmin,emailfromuser,showonline
+                     FROM `{$_TABLES['userinfo']}` AS ui,`{$_TABLES['userprefs']}` AS up,`{$_TABLES['users']}` AS u
+                     WHERE ui.uid = u.uid AND ui.uid = up.uid AND u.uid = ?",
+                    array($user),
+                    array(Database::INTEGER)
+        );
+        if ($A === false || $A === null) {
+            COM_404();
+        }
+
+        if ($A['status'] == USER_ACCOUNT_DISABLED && !SEC_hasRights ('user.edit')) {
+            COM_displayMessageAndAbort (30, '', 403, 'Forbidden');
+        }
+
+        $display_name = @htmlspecialchars(COM_getDisplayName($user, $A['username'],$A['fullname']),ENT_COMPAT,COM_getEncodingt());
+
+        if ($msg > 0) {
+            $retval .= COM_showMessage($msg, $plugin,'',0,'info');
+        }
+
+        // format date/time to user preference
+        $curtime = COM_getUserDateTimeFormat ($A['regdate']);
+        $A['regdate'] = $curtime[0];
+
+        $user_templates = new \Template ($_CONF['path_layout'] . 'users');
+        $user_templates->set_file (array ('profile' => 'profile.thtml',
+                                          'email'   => 'email.thtml',
+                                          'row'     => 'commentrow.thtml',
+                                          'strow'   => 'storyrow.thtml'));
+        $user_templates->set_var ('layout_url', $_CONF['layout_url']);
+        $user_templates->set_var ('start_block_userprofile',
+                COM_startBlock ($LANG04[1] . ' ' . $display_name));
+        $user_templates->set_var ('end_block', COM_endBlock ());
+        $user_templates->set_var ('lang_username', $LANG04[2]);
+        $user_templates->set_var ('tooltip', COM_getTooltipStyle());
+
+        if ($_CONF['show_fullname'] == 1) {
+            if (empty ($A['fullname'])) {
+                $username = $A['username'];
+                $fullname = '';
+            } else {
+                $username = $A['fullname'];
+                $fullname = $A['username'];
+            }
+        } else {
+            $username = $A['username'];
+            $fullname = '';
+        }
+        $username = @htmlspecialchars($username,ENT_COMPAT,COM_getEncodingt());
+        $fullname = @htmlspecialchars($fullname,ENT_COMPAT,COM_getEncodingt());
+
+        if ($A['status'] == USER_ACCOUNT_DISABLED) {
+            $username = sprintf ('%s - %s', $username, $LANG28[42]);
+            if (!empty ($fullname)) {
+                $fullname = sprintf ('% - %s', $fullname, $LANG28[42]);
+            }
+        }
+
+        $user_templates->set_var ('username', $username);
+        $user_templates->set_var ('user_fullname', $fullname);
+
+        if (SEC_hasRights('user.edit') || (isset($_USER['uid']) && $_USER['uid'] == $A['uid'])) {
+            $edit_icon = '<img src="' . $_CONF['layout_url'] . '/images/edit.png'
+                       . '" alt="' . $LANG_ADMIN['edit']
+                       . '" title="' . $LANG_ADMIN['edit'] . '" />';
+            if ($_USER['uid'] == $A['uid']) {
+                $edit_url = "{$_CONF['site_url']}/usersettings.php";
+            } else {
+                $edit_url = "{$_CONF['site_admin_url']}/user.php?edit=x&amp;uid={$A['uid']}";
+            }
+
+            $edit_link_url = COM_createLink($edit_icon, $edit_url);
+            $user_templates->set_var('edit_icon', $edit_icon);
+            $user_templates->set_var('edit_link', $edit_link_url);
+            $user_templates->set_var('user_edit', $edit_url);
+        } else {
+            $user_templates->set_var('user_edit', '');
+        }
+
+        if (isset ($A['photo']) && empty ($A['photo'])) {
+            $A['photo'] = '(none)'; // user does not have a photo
+        }
+
+        $lastlogin = $A['lastlogin'];
+        $lasttime = COM_getUserDateTimeFormat ($lastlogin);
+
+        $photo = \USER_getPhoto ($user, $A['photo'], $A['email'], -1,0);
+        $user_templates->set_var ('user_photo', $photo);
+
+        $user_templates->set_var ('lang_membersince', $LANG04[67]);
+        $user_templates->set_var ('user_regdate', $A['regdate']);
+
+        if ($_CONF['lastlogin'] && $A['showonline']) {
+            $user_templates->set_var('lang_lastlogin', $LANG28[35]);
+            if ( !empty($lastlogin) ) {
+                $user_templates->set_var('user_lastlogin', $lasttime[0]);
+            } else {
+                $user_templates->set_var('user_lastlogin', $LANG28[36]);
+            }
+        }
+
+        if ($A['showonline']) {
+            if ( $db->getCount($_TABLES['sessions'],'uid',$user,Database::INTEGER)) {
+                $user_templates->set_var ('online', 'online');
+            }
+        }
+
+        $user_templates->set_var ('lang_email', $LANG04[5]);
+        $user_templates->set_var ('user_id', $user);
+
+        if ( $A['email'] == '' || $A['emailfromuser'] == 0 ) {
+            $user_templates->set_var ('email_option', '');
+        } else {
+            $user_templates->set_var ('lang_sendemail', $LANG04[81]);
+            $user_templates->parse ('email_option', 'email', true);
+        }
+
+        $user_templates->set_var ('lang_homepage', $LANG04[6]);
+        $user_templates->set_var ('user_homepage', COM_killJS ($A['homepage']));
+        $user_templates->set_var ('lang_location', $LANG04[106]);
+        $user_templates->set_var ('user_location', strip_tags ($A['location']));
+        $user_templates->set_var ('lang_online', $LANG04[160]);
+        $user_templates->set_var ('lang_bio', $LANG04[7]);
+        $user_templates->set_var ('user_bio', PLG_replaceTags(nl2br ($A['about']),'glfusion','about_user'));
+
+        $user_templates->set_var('follow_me',\glFusion\Social\Social::getFollowMeIcons( $user, 'follow_user_profile.thtml' ));
+
+        $user_templates->set_var ('lang_pgpkey', $LANG04[8]);
+        $user_templates->set_var ('user_pgp', nl2br ($A['pgpkey']));
+        $user_templates->set_var ('start_block_last10stories',
+                COM_startBlock ($LANG04[82] . ' ' . $display_name));
+
+        if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
+            $user_templates->set_var ('start_block_last10comments',
+                    COM_startBlock($LANG04[10] . ' ' . $display_name));
+        }
+        $user_templates->set_var ('start_block_postingstats',
+                COM_startBlock ($LANG04[83] . ' ' . $display_name));
+        $user_templates->set_var ('lang_title', $LANG09[16]);
+        $user_templates->set_var ('lang_date', $LANG09[17]);
+
+        // for alternative layouts: use these as headlines instead of block titles
+        $user_templates->set_var ('headline_last10stories', $LANG04[82] . ' ' . $display_name);
+        if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
+            $user_templates->set_var ('headline_last10comments', $LANG04[10] . ' ' . $display_name);
+        }
+        $user_templates->set_var ('headline_postingstats', $LANG04[83] . ' ' . $display_name);
+
+        $tids = array ();
+        $stmt = $db->conn->query(
+                    "SELECT tid FROM `{$_TABLES['topics']}`" . $db->getPermSQL()
+        );
+        while ($T = $stmt->fetch(Database::ASSOCIATIVE)) {
+            $tids[] = $T['tid'];
+        }
+        $topics = "'" . implode ("','", $tids) . "'";
+
+        // list of last 10 stories by this user
+        if (count($tids) > 0) {
+            $sql = "SELECT sid,title,UNIX_TIMESTAMP(date) AS unixdate
+                     FROM `{$_TABLES['stories']}` WHERE (uid = ?)
+                           AND (draft_flag = 0)
+                           AND (date <= ?)
+                           AND (tid IN (?))" . $db->getPermSQL('AND') .
+                    " ORDER BY unixdate DESC LIMIT 10";
+
+            $stmt = $db->conn->executeQuery(
+                        $sql,
+                        array(
+                            $user,
+                            $_CONF['_now']->toMySQL(true),
+                            $tids
+                        ),
+                        array(
+                            Database::INTEGER,
+                            Database::STRING,
+                            Database::PARAM_STR_ARRAY
+                        )
+            );
+            $last10Stories = $stmt->fetchAll(Database::ASSOCIATIVE);
+        } else {
+            $last10Stories = array();
+        }
+        $i = 0;
+        if (count($last10Stories) > 0) {
+            foreach($last10Stories AS $C) {
+                $user_templates->set_var ('cssid', ($i % 2) + 1);
+                $user_templates->set_var ('row_number', ($i + 1) . '.');
+                $articleUrl = COM_buildUrl ($_CONF['site_url'].'/article.php?story=' . $C['sid']);
+                $user_templates->set_var ('article_url', $articleUrl);
+                $C['title'] = str_replace ('$', '&#36;', $C['title']);
+                $user_templates->set_var ('story_title',
+                    COM_createLink(
+                        $C['title'],
+                        $articleUrl,
+                        array ('class'=>''))
+                );
+                $storytime = COM_getUserDateTimeFormat ($C['unixdate']);
+                $user_templates->set_var ('story_date', $storytime[0]);
+                $user_templates->parse ('story_row', 'strow', true);
+                $i++;
+            }
+        } else {
+            $user_templates->set_var ('story_row','<tr><td>' . $LANG01[37] . '</td></tr>');
+        }
+        if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
+            $commentCounter = 0;
+
+            $stmt = $db->conn->executeQuery(
+                        "SELECT * FROM `{$_TABLES['comments']}`
+                         WHERE uid = ? AND queued=0 ORDER BY date DESC",
+                        array($user),
+                        array(Database::INTEGER)
+            );
+
+            while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
+                if ( $commentCounter >= 10 ) {
+                    break;
+                }
+                $itemInfo = PLG_getItemInfo($row['type'], $row['sid'],'id');
+                if ( is_array($itemInfo) || $itemInfo == '' ) {
+                    continue;
+                }
+                $user_templates->set_var ('cssid', ($commentCounter % 2) + 1);
+                $user_templates->set_var ('row_number', ($commentCounter + 1) . '.');
+                $row['title'] = html_entity_decode(str_replace ('$', '&#36;', $row['title']));
+                $comment_url = $_CONF['site_url'] .
+                        '/comment.php?mode=view&amp;cid=' . $row['cid'] . '#comments';
+                $user_templates->set_var ('comment_title',
+                    COM_createLink(
+                        $row['title'],
+                        $comment_url,
+                        array ('class'=>''))
+                );
+                $commenttime = COM_getUserDateTimeFormat ($row['date']);
+                $user_templates->set_var ('comment_date', $commenttime[0]);
+                $user_templates->parse ('comment_row', 'row', true);
+                $commentCounter++;
+            }
+            if ( $commentCounter == 0 ) {
+                $user_templates->set_var('comment_row','<tr><td>' . $LANG01[29] . '</td></tr>');
+            }
+        }
+
+        // posting stats for this user
+        $user_templates->set_var ('lang_number_stories', $LANG04[84]);
+
+        $storyCount = (int) $db->conn->fetchColumn(
+                        "SELECT COUNT(*) AS count
+                         FROM `{$_TABLES['stories']}`
+                         WHERE (uid = ?) AND (draft_flag = 0) AND (date <= ?)" . $db->getPermSQL('AND'),
+                        array($user,$_CONF['_now']->toMySQL(true)),
+                        0,
+                        array(Database::INTEGER,Database::STRING)
+        );
+        $user_templates->set_var ('number_stories', COM_numberFormat($storyCount));
+        if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
+            $user_templates->set_var ('lang_number_comments', $LANG04[85]);
+
+            $commentCount = (int) $db->conn->fetchColumn(
+                        "SELECT COUNT(*) AS count FROM `{$_TABLES['comments']}`
+                         WHERE (queued = 0 AND uid = ?)",
+                        array($user),
+                        0,
+                        array(Database::INTEGER)
+            );
+            $user_templates->set_var ('number_comments', COM_numberFormat($commentCount));
+        }
+        $user_templates->set_var ('lang_all_postings_by',
+                                  $LANG04[86] . ' ' . $display_name);
+        // hook to the profile icon display
+
+        $profileIcons = PLG_profileIconDisplay($user);
+        if ( is_array($profileIcons) && count($profileIcons) > 0 ) {
+            $user_templates->set_block('profile', 'profileicon', 'pi');
+            for ($x=0;$x<count($profileIcons);$x++) {
+                if ( isset($profileIcons[$x]['url']) && $profileIcons[$x]['url'] != '' && isset($profileIcons[$x]['icon']) && $profileIcons[$x]['icon'] != '' ) {
+                    $user_templates->set_var('profile_icon_url',$profileIcons[$x]['url']);
+                    $user_templates->set_var('profile_icon_icon',$profileIcons[$x]['icon']);
+                    $user_templates->set_var('profile_icon_text',$profileIcons[$x]['text']);
+                    $user_templates->parse('pi', 'profileicon',true);
+                }
+            }
+        }
+
+        // Call custom registration function if enabled and exists
+        if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userDisplay') ) {
+            $user_templates->set_var ('customfields', CUSTOM_userDisplay ($user));
+        }
+        PLG_profileVariablesDisplay ($user, $user_templates);
+
+        $user_templates->parse ('output', 'profile');
+        $retval .= $user_templates->finish ($user_templates->get_var ('output'));
+
+        $retval .= PLG_profileBlocksDisplay ($user);
+
+        return $retval;
+    }
+
 
 
 }

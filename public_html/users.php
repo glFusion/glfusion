@@ -65,8 +65,6 @@ switch ($method) {
     case 'POST' :
         $mode = filter_input(\INPUT_POST, 'mode', \FILTER_UNSAFE_RAW);
 
-        Log::write('system',Log::DEBUG,'users.php :: Method = POST - mode = ' . $mode);
-
         switch ($mode) {
             case 'login' :
                 try {
@@ -223,7 +221,6 @@ switch ($method) {
     // oauth - initial request for token, password, etc.
     // this is also the default - so no mode means show login form
     case 'GET' :
-        Log::write('system',Log::DEBUG,'users.php :: method is GET');
         $mode = filter_input(\INPUT_GET, 'mode', \FILTER_UNSAFE_RAW);
 
         if (empty($mode)) {
@@ -232,7 +229,6 @@ switch ($method) {
                 $mode = 'oauth_login';
             }
         }
-        Log::write('system',Log::DEBUG,'users.php :: mode is '.$mode);
 
         switch ($mode) {
             case 'logout' :
@@ -330,6 +326,15 @@ switch ($method) {
                 else {
                     COM_404();
                 }
+                break;
+
+            case 'profile':
+            case 'user' :
+                echo COM_siteHeader('menu');
+                echo UserInterface::userProfile();
+                echo COM_siteFooter();
+                exit;
+
                 break;
 
             default :
