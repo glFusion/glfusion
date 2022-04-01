@@ -1693,7 +1693,6 @@ final class UserAuth extends User {
 	 * @throws AuthError if an internal problem occurred (do *not* catch)
 	 */
 	public function loginWithOauth($rememberDuration = null, callable $onBeforeSuccess = null) {
-		Log::write('system',Log::DEBUG,'in loginWithOauth()');
 		$this->throttle([ 'attemptToLogin', $this->getIpAddress() ], 4, (60 * 5), null, true);
 		$this->authenticateOauthInternal($rememberDuration, $onBeforeSuccess);
 	}
@@ -2009,7 +2008,6 @@ final class UserAuth extends User {
 			);
 		}
 		catch (\Error $e) {
-Log::write('system',Log::DEBUG,'Error on DB');
 			throw new Exceptions\DatabaseError($e->getMessage());
 		}
 
@@ -2018,9 +2016,7 @@ Log::write('system',Log::DEBUG,'Error on DB');
 				if (\password_verify($token,$resetData['token'])) {
 					if ($resetData['expires'] >= \time()) {
 						$newPassword = self::validatePassword($newPassword);
-Log::write('system',Log::DEBUG,'Calling updatePasswordInternal');
 						$this->updatePasswordInternal($resetData['user'], $newPassword);
-Log::write('system',Log::DEBUG,'Calling forceLogoutForUserByID');
 						$this->forceLogoutForUserById($resetData['user']);
 
 						try {

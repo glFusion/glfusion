@@ -129,7 +129,6 @@ class UserAuthOauth
     {
         $redirect_url = '';
         $retval = false;
-        Log::write('system',Log::DEBUG,'Inside checkAccessToken()');
         if (($success = $this->client->Initialize())) {
             $retval = $this->client->checkAccessToken($redirect_url);
             if ($this->debug_oauth) {

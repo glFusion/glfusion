@@ -559,20 +559,10 @@ abstract class User {
 	public function throttle(array $criteria, $supply, $interval, $burstiness = null, $simulated = null, $cost = null, $force = null) {
         global $_TABLES;
 
-		if ($this->throttling == true) {
-			Log::write('system',Log::DEBUG,'User.php :: throttling is true');
-		} else {
-			Log::write('system',Log::DEBUG,'User.php :: throttling is false');
-		}
-
-
-Log::write('system',Log::DEBUG,'Throttle is ' . $this->throttling);
-Log::write('system',Log::DEBUG,'In throttle() - simulated = ' . ($simulated ? 'true' : 'false'));
 		// validate the supplied parameters and set appropriate defaults where necessary
 		$force = ($force !== null) ? (bool) $force : false;
 
 		if (!$this->throttling && !$force) {
-Log::write('system',Log::DEBUG,'REturning the supply - because $this->throttling is false and not forced');
 			return $supply;
 		}
 
@@ -637,7 +627,6 @@ Log::write('system',Log::DEBUG,'REturning the supply - because $this->throttling
 			$bucket['expires_at'] = $now + \floor($capacity / $bandwidthPerSecond * 2);
 
 			// merge the updated bucket into the database
-Log::write('system',Log::DEBUG,'Updating data in database');
 			try {
                 $affected = Database::getInstance()->conn->update(
                     $_TABLES['users_throttling'],
@@ -652,7 +641,6 @@ Log::write('system',Log::DEBUG,'Updating data in database');
 
 			if ($affected === 0) {
 				$bucket['bucket'] = $key;
-Log::write('system',Log::DEBUG,'Inserting data in database');
 				try {
                     Database::getInstance()->conn->insert(
                         $_TABLES['users_throttling'],
@@ -664,8 +652,6 @@ Log::write('system',Log::DEBUG,'Inserting data in database');
 					throw new Exceptions\DatabaseError($e->getMessage());
 				}
 			}
-		} else {
-			Log::write('system',Log::DEBUG,'THIS WAS SIMULATED');
 		}
 
 		if ($accepted) {
