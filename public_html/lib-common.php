@@ -143,7 +143,7 @@ try {
         array(),
         array()
     );
-} catch(Throwable $e) {
+} catch(\Throwable $e) {
     $db->dbError($e->getMessage());
 }
 $data = $stmt->fetchAll(Database::ASSOCIATIVE);
@@ -307,13 +307,7 @@ if ( !isset($_CONF['default_photo']) || $_CONF['default_photo'] == '' ) {
 if ( !isset($_SYSTEM['admin_session']) ) {
     $_SYSTEM['admin_session'] = 1200;
 }
-/*
-$_LOGO = array();
-$resultSet = $db->conn->query("SELECT * FROM `{$_TABLES['logo']}`")->fetchAll();
-foreach($resultSet AS $row) {
-    $_LOGO[$row['config_name']] = $row['config_value'];
-}
-*/
+
 list($usec, $sec) = explode(' ', microtime());
 mt_srand( (10000000000 * (float)$usec) ^ (float)$sec );
 
@@ -5262,13 +5256,13 @@ function COM_getLanguageFromBrowser()
         foreach ($accept as $l) {
             $l = explode(';', trim($l));
             $l = $l[0];
-            if (@array_key_exists($l, $_CONF['language_files'])) {
+            if (is_array($_CONF['language_files']) && @array_key_exists($l, $_CONF['language_files'])) {
                 $retval = $_CONF['language_files'][$l];
                 break;
             } else {
                 $l = explode('-', $l);
                 $l = $l[0];
-                if (@array_key_exists($l, $_CONF['language_files'])) {
+                if (is_array($_CONF['language_files']) && @array_key_exists($l, $_CONF['language_files'])) {
                     $retval = $_CONF['language_files'][$l];
                     break;
                 }
