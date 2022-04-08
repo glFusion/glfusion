@@ -61,7 +61,7 @@ $topic = Topic::currentID();
 if (isset($_GET['topic'])) {
 //    $requestedTopic = filter_input(INPUT_GET,'topic',FILTER_SANITIZE_STRING);
     $requestedTopic = COM_applyFilter($_GET['topic']);
-    if (strtolower($requestedTopic) != strtolower($topic)) {
+    if (strtolower($requestedTopic) != strtolower($topic) || SEC_hasTopicAccess(strtolower($topic)) == false) {
         COM_404();
     }
 }
