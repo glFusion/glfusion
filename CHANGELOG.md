@@ -4,7 +4,12 @@
 
 ### Changed
 
+- Throw 404 error for topic access permission error
 - New authentication engine and session handler
+- New Badge System
+- Several bug fixes
+  - Media Gallery - fixed invalid path to mediagallery.gif in user profile
+  - Fixed language reference where it would throw an error if a language file was not found
 
 ## v2.0.1 (March 6, 2022)
 
