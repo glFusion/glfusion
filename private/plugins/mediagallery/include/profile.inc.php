@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2002-2021 by the following authors:
+*  Copyright (C) 2002-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
 */
@@ -107,7 +107,7 @@ function _mg_profileicondisplay( $uid ) {
             $album_id = $A['album_id'];
             $retval['url'] = $_MG_CONF['site_url'].'/album.php?aid='.$album_id;
             $retval['text'] = $LANG_MG01['album'];
-            $retval['icon'] = $_CONF['site_url'].'/mediagallery/mediaobjects/mediagallery.gif';
+            $retval['icon'] = $_CONF['site_url'].'/mediagallery/assets/mediagallery.gif';
         }
     }
 
