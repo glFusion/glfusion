@@ -25,8 +25,8 @@ if (!defined ('GVERSION')) {
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 use \glFusion\Cache\Cache;
-use \glFusion\Auth\Auth;
-use \glFusion\Auth\Status;
+use \glFusion\User\UserAuth;
+use \glFusion\User\Status;
 use \Delight\Cookie\Session;
 
 /**
@@ -413,7 +413,7 @@ function USER_sendActivationEmail_v2 ($selector, $token)
 {
     global $_CONF, $_SYSTEM, $_TABLES, $LANG04;
 
-    $userManager = new Auth();
+    $userManager = new UserAuth();
 
     if ( !isset($_SYSTEM['verification_token_ttl']) ) {
         $_SYSTEM['verification_token_ttl'] = 86400;
@@ -1359,11 +1359,16 @@ function USER_mergeAccounts()
 {
     global $_CONF, $_SYSTEM, $_TABLES, $_USER, $LANG04, $LANG12, $LANG20;
 
+
+$u = new UserAuth();
+return $u->userMergeAccounts();
+exit;
+
     $retval = '';
 
     $db = Database::getInstance();
 
-    $userManagerRemote = new Auth();
+    $userManagerRemote = new UserAuth();
 
     $remoteUID = (int) filter_input(INPUT_POST, 'remoteuid', FILTER_SANITIZE_NUMBER_INT);
     $localUID  = (int) filter_input(INPUT_POST, 'localuid', FILTER_SANITIZE_NUMBER_INT);
@@ -1427,12 +1432,14 @@ function USER_mergeAccounts()
         // create a new one for the local user
 
         $userManagerRemote->logOutEverywhere();
+        unset($userManagerRemote);
 
-        $userManagerLocal = new Auth();
+        $userManagerLocal = new UserAuth();
 
         try {
-            $userManagerLocal->finalizeLogin($localUID);
-        } catch (UnknownIdException $e) {
+            $userManagerLocal->userFinalLogin(true);
+//            $userManagerLocal->finalizeLogin($localUID);
+        } catch (Exceptions\UnknownIdException $e) {
 
         } catch (EmailNotVerifiedException $e) {
 
