@@ -14,6 +14,9 @@
 *  Modifications Copyright (C) 2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *
+*   NOTE: this class is not user specific - meaning it is not designed to work with the
+*         current logged in user - it is generic
+*
 */
 
 namespace glFusion\User;
@@ -31,129 +34,129 @@ class UserManager extends User
 {
     /** @var core data fields provided by user */
     protected $userDataFields = ['username','email','passwd','fullname','homepage','remoteusername','service'];
-	/** @var all the various user records */
-	protected $userId;
+    /** @var all the various user records */
+    protected $userId;
 
 
 
-    public function __construct()
+    public function __construct($userId = null)
     {
-
+        $this->$userId = $userId;
     }
 
-	/**
-	 * Attempts to sign up a user
-	 *
-	 * If you want the user's account to be activated by default, pass `null` as the callback
-	 *
-	 * If you want to make the user verify their email address first, pass an anonymous function as the callback
-	 *
-	 * The callback function must have the following signature:
-	 *
-	 * `function ($selector, $token)`
-	 *
-	 * Both pieces of information must be sent to the user, usually embedded in a link
-	 *
-	 * When the user wants to verify their email address as a next step, both pieces will be required again
-	 *
-	 * @param string $email the email address to register
-	 * @param string $password the password for the new account
-	 * @param string|null $username (optional) the username that will be displayed
-	 * @param callable|null $callback (optional) the function that sends the confirmation email to the user
-	 * @return int the ID of the user that has been created (if any)
-	 * @throws InvalidEmailException if the email address was invalid
-	 * @throws InvalidPasswordException if the password was invalid
-	 * @throws UserAlreadyExistsException if a user with the specified email address already exists
-	 * @throws TooManyRequestsException if the number of allowed attempts/requests has been exceeded
-	 * @throws AuthError if an internal problem occurred (do *not* catch)
-	 *
-	 * @see confirmEmail
-	 * @see confirmEmailAndSignIn
-	 */
+    /**
+     * Attempts to sign up a user
+     *
+     * If you want the user's account to be activated by default, pass `null` as the callback
+     *
+     * If you want to make the user verify their email address first, pass an anonymous function as the callback
+     *
+     * The callback function must have the following signature:
+     *
+     * `function ($selector, $token)`
+     *
+     * Both pieces of information must be sent to the user, usually embedded in a link
+     *
+     * When the user wants to verify their email address as a next step, both pieces will be required again
+     *
+     * @param string $email the email address to register
+     * @param string $password the password for the new account
+     * @param string|null $username (optional) the username that will be displayed
+     * @param callable|null $callback (optional) the function that sends the confirmation email to the user
+     * @return int the ID of the user that has been created (if any)
+     * @throws InvalidEmailException if the email address was invalid
+     * @throws InvalidPasswordException if the password was invalid
+     * @throws UserAlreadyExistsException if a user with the specified email address already exists
+     * @throws TooManyRequestsException if the number of allowed attempts/requests has been exceeded
+     * @throws AuthError if an internal problem occurred (do *not* catch)
+     *
+     * @see confirmEmail
+     * @see confirmEmailAndSignIn
+     */
 //@TODO - remove
-	public function register($email, $password, $username = null, callable $callback = null) {
-		$this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
-		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
+    public function register($email, $password, $username = null, callable $callback = null) {
+        $this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
+        $this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
 
-		$newUserId = $this->createUserInternal(false, $email, $password, $username, $callback);
+        $newUserId = $this->createUserInternal(false, $email, $password, $username, $callback);
 
-		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, false);
+        $this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, false);
 
-		return $newUserId;
-	}
-
-	/**
-	 * Attempts to sign up a user while ensuring that the username is unique
-	 *
-	 * If you want the user's account to be activated by default, pass `null` as the callback
-	 *
-	 * If you want to make the user verify their email address first, pass an anonymous function as the callback
-	 *
-	 * The callback function must have the following signature:
-	 *
-	 * `function ($selector, $token)`
-	 *
-	 * Both pieces of information must be sent to the user, usually embedded in a link
-	 *
-	 * When the user wants to verify their email address as a next step, both pieces will be required again
-	 *
-	 * @param string $email the email address to register
-	 * @param string $password the password for the new account
-	 * @param string|null $username (optional) the username that will be displayed
-	 * @param callable|null $callback (optional) the function that sends the confirmation email to the user
-	 * @return int the ID of the user that has been created (if any)
-	 * @throws InvalidEmailException if the email address was invalid
-	 * @throws InvalidPasswordException if the password was invalid
-	 * @throws UserAlreadyExistsException if a user with the specified email address already exists
-	 * @throws DuplicateUsernameException if the specified username wasn't unique
-	 * @throws TooManyRequestsException if the number of allowed attempts/requests has been exceeded
-	 * @throws AuthError if an internal problem occurred (do *not* catch)
-	 *
-	 * @see confirmEmail
-	 * @see confirmEmailAndSignIn
-	 */
-//@TODO remove
-	public function registerWithUniqueUsername($email, $password, $username = null, callable $callback = null) {
-		$this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
-		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
-
-		$newUserId = $this->createUserInternal(true, $email, $password, $username, $callback);
-
-		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, false);
-
-		return $newUserId;
-	}
+        return $newUserId;
+    }
 
     /**
-	 * Attempts to sign up a user
-	 *
-	 * If you want the user's account to be activated by default, pass `null` as the callback
-	 *
-	 * If you want to make the user verify their email address first, pass an anonymous function as the callback
-	 *
-	 * The callback function must have the following signature:
-	 *
-	 * `function ($selector, $token)`
-	 *
-	 * Both pieces of information must be sent to the user, usually embedded in a link
-	 *
-	 * When the user wants to verify their email address as a next step, both pieces will be required again
+     * Attempts to sign up a user while ensuring that the username is unique
+     *
+     * If you want the user's account to be activated by default, pass `null` as the callback
+     *
+     * If you want to make the user verify their email address first, pass an anonymous function as the callback
+     *
+     * The callback function must have the following signature:
+     *
+     * `function ($selector, $token)`
+     *
+     * Both pieces of information must be sent to the user, usually embedded in a link
+     *
+     * When the user wants to verify their email address as a next step, both pieces will be required again
+     *
+     * @param string $email the email address to register
+     * @param string $password the password for the new account
+     * @param string|null $username (optional) the username that will be displayed
+     * @param callable|null $callback (optional) the function that sends the confirmation email to the user
+     * @return int the ID of the user that has been created (if any)
+     * @throws InvalidEmailException if the email address was invalid
+     * @throws InvalidPasswordException if the password was invalid
+     * @throws UserAlreadyExistsException if a user with the specified email address already exists
+     * @throws DuplicateUsernameException if the specified username wasn't unique
+     * @throws TooManyRequestsException if the number of allowed attempts/requests has been exceeded
+     * @throws AuthError if an internal problem occurred (do *not* catch)
+     *
+     * @see confirmEmail
+     * @see confirmEmailAndSignIn
+     */
+//@TODO remove
+    public function registerWithUniqueUsername($email, $password, $username = null, callable $callback = null) {
+        $this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
+        $this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
+
+        $newUserId = $this->createUserInternal(true, $email, $password, $username, $callback);
+
+        $this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, false);
+
+        return $newUserId;
+    }
+
+    /**
+     * Attempts to sign up a user
+     *
+     * If you want the user's account to be activated by default, pass `null` as the callback
+     *
+     * If you want to make the user verify their email address first, pass an anonymous function as the callback
+     *
+     * The callback function must have the following signature:
+     *
+     * `function ($selector, $token)`
+     *
+     * Both pieces of information must be sent to the user, usually embedded in a link
+     *
+     * When the user wants to verify their email address as a next step, both pieces will be required again
      *
      * We have 3 ways to create a user
      *  - local registration
      *  - oauth registration
      *  - remote user registration
-	 *
-	 * @param string $email the email address to register
-	 * @param string $password the password for the new account
-	 * @param string|null $username (optional) the username that will be displayed
-	 * @param callable|null $callback (optional) the function that sends the confirmation email to the user
-	 * @return int the ID of the user that has been created (if any)
-	 * @throws InvalidEmailException if the email address was invalid
-	 * @throws InvalidPasswordException if the password was invalid
-	 * @throws UserAlreadyExistsException if a user with the specified email address already exists
-	 * @throws TooManyRequestsException if the number of allowed attempts/requests has been exceeded
-	 * @throws AuthError if an internal problem occurred (do *not* catch)
+     *
+     * @param string $email the email address to register
+     * @param string $password the password for the new account
+     * @param string|null $username (optional) the username that will be displayed
+     * @param callable|null $callback (optional) the function that sends the confirmation email to the user
+     * @return int the ID of the user that has been created (if any)
+     * @throws InvalidEmailException if the email address was invalid
+     * @throws InvalidPasswordException if the password was invalid
+     * @throws UserAlreadyExistsException if a user with the specified email address already exists
+     * @throws TooManyRequestsException if the number of allowed attempts/requests has been exceeded
+     * @throws AuthError if an internal problem occurred (do *not* catch)
      *
      * EmailConfirmationMismatchException
      * UserAlreadyExistsException
@@ -161,16 +164,16 @@ class UserManager extends User
      * PasswordConfirmationMismatchException
      * PasswordComplexityException
      * InvaidFullnameException
-	 *
-	 * @see confirmEmail
-	 * @see confirmEmailAndSignIn
-	 */
+     *
+     * @see confirmEmail
+     * @see confirmEmailAndSignIn
+     */
     public function registerUser($info = array())
     {
         global $_CONF, $_TABLES, $LANG04, $MESSAGE;
 
-		$this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
-		$this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
+        $this->throttle([ 'enumerateUsers', $this->getIpAddress() ], 1, (60 * 60), 75);
+        $this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, true);
 
         // build out skeleton record
 
@@ -322,7 +325,9 @@ class UserManager extends User
 
         $this->throttle([ 'createNewAccount', $this->getIpAddress() ], 1, (60 * 60 * 12), 5, false);
 
-		return $newUserId;
+        $this->userId = $newUserId;
+
+        return $newUserId;
     }
 
     /**
@@ -541,10 +546,154 @@ class UserManager extends User
         return $uid;
     }
 
+    public function adminSendConfirmationRequest($userId, $email)
+    {
+        $this->createConfirmationRequest(
+            $userId,
+            $email,
+            array($this,'sendConfirmationRequest')
+        );
+    }
+
+    public function adminLogoutUser($userId)
+    {
+        $this->forceLogoutForUserById($userId);
+    }
+
     public static function sanitizeUsername($username)
     {
         $filter = \sanitizer::getInstance();
         return $filter->sanitizeUsername($username);
+    }
+
+    public function deleteUser($uid)
+    {
+        global $_CONF, $_TABLES, $_USER;
+
+        $db = Database::getInstance();
+
+        if ($uid == 1) {
+            Log::write('system',Log::ERROR,"Attempted to delete the Anonymous user.");
+            return false;
+        }
+
+        // first some checks ...
+        if ($uid == $_USER['uid']) {
+            if ($_CONF['allow_account_delete'] == 0 && !$_USER->instance->isAdmin()) {
+                // you can only delete your own account (if enabled) or you need
+                // proper permissions to do so (user.delete)
+                Log::write('system',Log::ERROR,"just tried to delete their account with insufficient privileges.");
+                return false;
+            }
+        } else {
+            if (!$_USER->instance->isAdmin()) {
+                Log::write('system',Log::ERROR,"just tried to delete user $uid with insufficient privileges.");
+                return false;
+            }
+        }
+
+        if (\glFusion\Group::inGroup(1, $uid)) {
+            if (!\glFusion\Group::inGroup (1)) {
+                // can't delete a Root user without being in the Root group
+                Log::write('system',Log::ERROR,"just tried to delete Root user $uid with insufficient privileges.");
+                return false;
+            } else {
+                // ok to delete the root user as long as there will be at
+                // least one other root user left
+//@TODO
+// getMembers is not part of the class...
+                $rootusers = \glFusion\Group::getMembers(1);
+                if (count($rootusers) < 2) {
+                    Log::write('system',Log::ERROR,'can\'t delete the last user from the Root group.');
+                    return false;
+                }
+            }
+        }
+
+        // let plugins update their data for this user
+        PLG_deleteUser ($uid);
+
+        if ( function_exists('CUSTOM_userDeleteHook')) {
+            CUSTOM_userDeleteHook($uid);
+        }
+
+        // Call custom account profile delete function if enabled and exists
+        if ($_CONF['custom_registration'] && function_exists ('CUSTOM_userDelete')) {
+            CUSTOM_userDelete ($uid);
+        }
+
+        // remove from all security groups
+        $db->conn->delete($_TABLES['group_assignments'],array('ug_uid'=>$uid),array(Database::INTEGER));
+
+        // remove user information and preferences
+        $db->conn->delete($_TABLES['userprefs'], array('uid' => $uid),array(Database::INTEGER));
+        $db->conn->delete($_TABLES['userindex'], array('uid' => $uid),array(Database::INTEGER));
+        $db->conn->delete($_TABLES['usercomment'], array('uid' => $uid),array(Database::INTEGER));
+        $db->conn->delete($_TABLES['userinfo'], array('uid' => $uid),array(Database::INTEGER));
+
+        // delete remembered sessions
+        $db->conn->delete($_TABLES['users_remembered'], array('user' => $uid),array(Database::INTEGER));
+
+        // delete user photo, if enabled & exists
+        $photo = $db->getItem ($_TABLES['users'], 'photo', array('uid' => $uid),array(Database::INTEGER));
+        USER_deletePhoto ($photo, false);
+
+        // delete subscriptions
+        $db->conn->delete($_TABLES['subscriptions'],array('uid' => $uid),array(Database::INTEGER));
+
+        // in case the user owned any objects that require Admin access, assign
+        // them to the Root user with the lowest uid
+        $rootgroup = $db->getItem ($_TABLES['groups'], 'grp_id', array('grp_name' => 'Root'));
+
+        $row = $db->conn->fetchAssoc(
+            "SELECT DISTINCT ug_uid FROM `{$_TABLES['group_assignments']}` WHERE ug_main_grp_id = ? ORDER BY ug_uid LIMIT 1",
+            array($rootgroup),
+            array(Database::INTEGER)
+        );
+        $rootuser = $row['ug_uid'];
+
+        if ( $rootuser == '' || $rootuser < 2 ) {
+            $rootuser = 2;
+        }
+        $db->conn->update($_TABLES['blocks'],
+                    array('owner_id' => $rootuser),
+                    array('owner_id' => $uid),
+                    array(Database::INTEGER,Database::INTEGER)
+        );
+        $db->conn->update($_TABLES['topics'],
+                    array('owner_id' => $rootuser),
+                    array('owner_id' => $uid),
+                    array(Database::INTEGER,Database::INTEGER)
+        );
+
+        // avoid having orphaned stories/comments by making them anonymous posts
+        $db->conn->update(
+            $_TABLES['comments'],
+            array('uid' => 1),
+            array('uid' => $uid),
+            array(Database::INTEGER,Database::INTEGER)
+        );
+        $db->conn->update(
+            $_TABLES['stories'],
+            array('uid' => 1),
+            array('uid' => $uid),
+            array(Database::INTEGER,Database::INTEGER)
+        );
+
+        // delete story submissions
+        $db->conn->delete($_TABLES['storysubmission'], array('uid' => $uid),array(Database::INTEGER));
+
+        // now delete the user itself
+        $db->conn->delete($_TABLES['users'], array('uid' => $uid),array(Database::INTEGER));
+
+        // kill any active sessions and remove remembered
+        $this->adminLogoutUser($uid);
+        $db->conn->delete(
+            $_TABLES['users_remembered'],
+            ['user' => $uid ],
+            [ DATABASE::INTEGER ]
+        );
+
     }
 
     protected function validateUserData()
@@ -558,11 +707,6 @@ class UserManager extends User
     }
 
     protected function insertUserRecord()
-    {
-
-    }
-
-    protected function notifyAdmins()
     {
 
     }
@@ -606,15 +750,15 @@ class UserManager extends User
 
         $msgData = array();
 
-		$msgData['textmessage'] = $mailbody;
-		$msgData['subject'] = $mailsubject;
+        $msgData['textmessage'] = $mailbody;
+        $msgData['subject'] = $mailsubject;
 
-		$msgData['to'] = $_CONF['site_mail'];
+        $msgData['to'] = $_CONF['site_mail'];
 
-		Log::write('system',Log::DEBUG,'UserManager::notifyAdmin() - Sending Admin Notification via Email::sendNotification(()');
+        Log::write('system',Log::DEBUG,'UserManager::notifyAdmin() - Sending Admin Notification via Email::sendNotification(()');
 
         $emailHandler = new Email();
-		$emailHandler->sendNotification($msgData);
+        $emailHandler->sendNotification($msgData);
     }
 
 }

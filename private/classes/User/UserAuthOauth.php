@@ -61,9 +61,9 @@ class UserAuthOauth
         }
 
         $this->service = $service;
-    	$this->client = new \oauth_client_class;
-    	$this->client->configuration_file = $_CONF['path'].'vendor/phpclasses/oauth-api/oauth_configuration.json';
-    	$this->client->server     = $this->serviceMap[$service];
+        $this->client = new \oauth_client_class;
+        $this->client->configuration_file = $_CONF['path'].'vendor/phpclasses/oauth-api/oauth_configuration.json';
+        $this->client->server     = $this->serviceMap[$service];
         $this->client->debug      = $_SYSTEM['debug_oauth'];
         $this->client->debug_http = $_SYSTEM['debug_oauth'];
         $this->debug_oauth        = $_SYSTEM['debug_oauth'];
@@ -146,35 +146,35 @@ class UserAuthOauth
     {
         $userObject = null;
 
-    	if (($success = $this->client->Initialize())) {
-    		if (($success = $this->client->Process())) {
-    			if(strlen($this->client->authorization_error)) {
-				    $this->client->error = $this->client->authorization_error;
-				    $this->error = $this->client->authorization_error;
-				    $success = false;
-			    } elseif(strlen($this->client->access_token)) {
+        if (($success = $this->client->Initialize())) {
+            if (($success = $this->client->Process())) {
+                if(strlen($this->client->authorization_error)) {
+                    $this->client->error = $this->client->authorization_error;
+                    $this->error = $this->client->authorization_error;
+                    $success = false;
+                } elseif(strlen($this->client->access_token)) {
                     $userObject = $this->getOauthUserinfo();
                 }
-    		} else {
-    		    $this->error = $this->client->error;
-    		}
-    		$success = $this->client->Finalize($success);
-    	} else {
-    	    $this->error = $this->client->error;
-    	}
+            } else {
+                $this->error = $this->client->error;
+            }
+            $success = $this->client->Finalize($success);
+        } else {
+            $this->error = $this->client->error;
+        }
 
         if ($this->debug_oauth) {
             Log::write('system',Log::DEBUG,$this->client->debug_output);
         }
 
-    	if ($this->client->exit) {
-    		exit;
-    	}
+        if ($this->client->exit) {
+            exit;
+        }
 
-    	if ($success) {
-    	    return $userObject;
-    	}
-    	return $success;
+        if ($success) {
+            return $userObject;
+        }
+        return $success;
     }
 
 
@@ -186,14 +186,14 @@ class UserAuthOauth
         $userObject = null;
 
         if (strlen($this->client->access_token)) {
-    	    $success = $this->client->CallAPI(
-    		    $this->api_url,
-    			'GET', $this->q_api, array('FailOnAccessError'=>true), $userObject);
-    	}
-   		$success = $this->client->Finalize($success);
-    	if ($this->client->exit) {
-    		exit;
-    	}
+            $success = $this->client->CallAPI(
+                $this->api_url,
+                'GET', $this->q_api, array('FailOnAccessError'=>true), $userObject);
+        }
+           $success = $this->client->Finalize($success);
+        if ($this->client->exit) {
+            exit;
+        }
 
         return $userObject;
     }
