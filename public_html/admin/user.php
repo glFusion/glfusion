@@ -31,6 +31,8 @@ use \glFusion\Social\Social;
 use \glFusion\Admin\AdminAction;
 use \glFusion\Log\Log;
 use \glFusion\FieldList;
+use \glFusion\User\User;
+use \glFusion\User\UserManager;
 
 USES_lib_user();
 USES_lib_admin();
@@ -125,6 +127,7 @@ function USER_edit($uid = '', $msg = '')
     if (!empty ($uid) && ($uid > 1)) {
         $result = DB_query("SELECT * FROM {$_TABLES['users']},{$_TABLES['userprefs']},{$_TABLES['userinfo']},{$_TABLES['usercomment']},{$_TABLES['userindex']} WHERE {$_TABLES['users']}.uid = $uid AND {$_TABLES['userprefs']}.uid = $uid AND {$_TABLES['userinfo']}.uid = $uid AND {$_TABLES['usercomment']}.uid = $uid AND {$_TABLES['userindex']}.uid = $uid");
         $U = DB_fetchArray ($result);
+
         if (empty ($U['uid'])) {
             echo COM_refresh ($_CONF['site_admin_url'] . '/user.php');
             exit;
@@ -149,6 +152,7 @@ function USER_edit($uid = '', $msg = '')
         $U['username'] = '';
         $U['fullname'] = '';
         $U['email'] = '';
+        $U['verified'] = 0;
         $U['remoteuser'] = 0;
         $U['remoteusername'] = '';
         $U['remoteservice'] = '';
@@ -188,6 +192,8 @@ function USER_edit($uid = '', $msg = '')
         $U['fullname']       = COM_truncate(trim(USER_sanitizeName($_POST['fullname'])),80);
     if ( isset($_POST['remoteuser']) )
         $U['remoteuser'] = ($_POST['remoteuser'] == 'on' ? 1 : 0);
+    if ( isset($_POST['emailverified']))
+        $U['verified'] = ($_POST['emailverified'] == 'on' ? 1: 0);
     if ( isset($_POST['remoteusername']) )
         $U['remoteusername'] = COM_truncate(trim($_POST['remoteusername']),60);
     if ( isset($_POST['remoteservice']) )
@@ -330,6 +336,7 @@ function USER_accountPanel($U,$newuser = 0)
         'lang_cooktime'                 => $LANG04[68],
         'lang_email'                    => $LANG04[5],
         'lang_email_conf'               => $LANG04[124],
+        'lang_email_verified'           => 'Email Verified',
         'lang_deleteaccount'            => $LANG04[156],
         'lang_deleteoption'             => $LANG04[156],
         'lang_button_delete'            => $LANG04[96],
@@ -373,6 +380,8 @@ function USER_accountPanel($U,$newuser = 0)
     $remote_user_checked = '';
     $pwd_disabled = '';
     $remote_user_edit = 0;
+
+    $userform->set_var('email_verified_checked', ($U['verified'] == 1 ? ' checked="checked"' : ''));
 
     if (($_CONF['user_login_method']['3rdparty'] ||
       $_CONF['user_login_method']['oauth'] ) ) { // && $U['account_type'] & REMOTE_USER /*$allow_remote_user */) {
@@ -439,8 +448,8 @@ function USER_accountPanel($U,$newuser = 0)
     );
     $userform->set_var('email_value', @htmlspecialchars ($U['email'],ENT_NOQUOTES,COM_getEncodingt()));
 
-    $statusarray = array(USER_ACCOUNT_AWAITING_ACTIVATION   => $LANG28[43],
-                         USER_ACCOUNT_AWAITING_VERIFICATION => $LANG28[16],
+    $statusarray = array(/*USER_ACCOUNT_AWAITING_APPROVAL     => $LANG28[44],*/
+/*                         USER_ACCOUNT_AWAITING_VERIFICATION => $LANG28[16], */
                          USER_ACCOUNT_ACTIVE                => $LANG28[45]
                    );
 
@@ -468,6 +477,7 @@ function USER_accountPanel($U,$newuser = 0)
     }
     asort($statusarray);
     $options = '';
+
     foreach ($statusarray as $key => $value) {
         $options .= '<option value="' . $key . '"';
         if ($key == $U['status']) {
@@ -1410,6 +1420,8 @@ function USER_save($uid)
     $location       = strip_tags(trim($_POST['location']));
     $photo          = isset($_POST['photo']) ? $_POST['photo'] : '';
     $delete_photo   = (isset($_POST['delete_photo']) && $_POST['delete_photo'] == 'on') ? 1 : 0;
+    $verified       = (isset($_POST['emailverified']) && $_POST['emailverified'] == 'on') ? 1 : 0;
+    $sendVerification = (isset($_POST['sendverification']) && $_POST['sendverification'] == 'on') ? 1 : 0;
     $sig            = trim($_POST['sig']);
     $about          = trim($_POST['about']);
     $pgpkey         = trim($_POST['pgpkey']);
@@ -1621,6 +1633,7 @@ function USER_save($uid)
             "fullname = '".DB_escapeString($fullname)."',".
             "passwd   = '".DB_escapeString($passwd2)."',".
             "email    = '".DB_escapeString($email)."',".
+            "verified = $verified,".
             "homepage = '".DB_escapeString($homepage)."',".
             "sig      = '".DB_escapeString($sig)."',".
             "photo    = '".DB_escapeString($curphoto)."',".
@@ -1682,9 +1695,23 @@ function USER_save($uid)
                && ($userstatus == USER_ACCOUNT_ACTIVE || $userstatus == USER_ACCOUNT_AWAITING_ACTIVATION || $userstatus == USER_ACCOUNT_AWAITING_VERIFICATION) ) {
             USER_createAndSendPassword ($username, $email, $uid);
         }
-        if ($userstatus == USER_ACCOUNT_DISABLED) {
-            SESS_endUserSession($uid);
+
+        if (isset($_POST['sendverification'])) {
+            $userManager = new UserManager();
+            try {
+                $userManager->adminSendConfirmationRequest($uid,$email);
+            } catch (\Throwable $ignored) {}
         }
+
+if ($userstatus == USER_ACCOUNT_DISABLED) {
+// need to write a new function to handle this in UserAuth();
+    $userManager = new UserManager();
+    try {
+        $userManager->adminLogoutUser($uid);
+    } catch (\Throwable $ignored) {}
+//    SESS_endUserSession($uid);
+}
+
         $userChanged = true;
 
         // if groups is -1 then this user isn't allowed to change any groups so ignore

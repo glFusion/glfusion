@@ -1,6 +1,6 @@
 {# begin username & password panel #}
 <div id="pe_namepass" class="jsenabled_show">
-   <fieldset>
+   <fieldset class="uk-margin-bottom">
      <legend>{lang_name_legend}</legend>
      <div class="uk-form-row">
         <label class="uk-form-label" for="">{lang_userid}</label>
@@ -49,6 +49,20 @@
             <input type="hidden" name="oldstatus" value="{user_status}"/>
         </div>
     </div>
+
+     <div class="uk-form-row">
+        <label class="uk-form-label" for="emailverified">{lang_email_verified}</label>
+        <div class="uk-form-controls">
+          <input type="checkbox" name="emailverified" id="emailverified" {email_verified_checked}>
+        </div>
+    </div>    
+     <div class="uk-form-row">
+        <label class="uk-form-label" for="emailuser">{lang_send_verification}Send Verification Email</label>
+        <div class="uk-form-controls">
+          <input type="checkbox" name="sendverification" id="sendverification" value="1">
+        </div>
+    </div>    
+
 {!if lang_email_password}
      <div class="uk-form-row">
         <label class="uk-form-label" for="emailuser">{lang_email_password}</label>
