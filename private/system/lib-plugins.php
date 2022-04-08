@@ -1296,7 +1296,7 @@ function PLG_getModerationValues($type)
             return array(
                 'uid',
                 $_TABLES['users'],
-                'email,username,uid,remoteservice,remoteusername',
+                'email,username,uid,remoteservice,remoteusername,verified',
                 ''
             );
             break;
