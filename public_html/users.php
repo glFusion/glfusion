@@ -69,6 +69,9 @@ switch ($method) {
             case 'login' :
                 try {
                     $userManager->userLocalLoginController();
+                } catch (Exceptions\TooManyRequestsException $e) {
+                    // we have run out of trys...
+                    displayLoginErrorAndAbort(82, $LANG12[26], $LANG04[112]);
                 } catch (Exceptions\LocalLoginServiceDisabledException $e) {
                     die('Local Login has been disabled');
                 } catch (\Error $e) {
