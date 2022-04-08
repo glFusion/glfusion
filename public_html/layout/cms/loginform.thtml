@@ -1,5 +1,6 @@
 {# begin {templatelocation} #}
 <form class="uk-form uk-form-stacked tm-loginform" action="{site_url}/users.php" method="post">
+	<input type="hidden" name="mode" value="login">
 	<div class="uk-form-row">
 		<div class="uk-form-controls uk-text-center">
 			<div class="uk-form-icon">
