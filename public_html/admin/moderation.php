@@ -7,7 +7,7 @@
 * @license GNU General Public License version 2 or later
 *     http://www.opensource.org/licenses/gpl-license.php
 *
-*  Copyright (C) 2008-2021 by the following authors:
+*  Copyright (C) 2008-2022 by the following authors:
 *   Mark R. Evans   mark AT glfusion DOT org
 *   Mark Howard     mark AT usable-web DOT com
 *
@@ -28,6 +28,8 @@ use \glFusion\Log\Log;
 use \glFusion\Cache\Cache;
 use \glFusion\Admin\AdminAction;
 use \glFusion\FieldList;
+use \glFusion\User\UserManager;
+use \glFusion\User\Status;
 
 $display = '';
 if (!SEC_isModerator()) {
@@ -341,17 +343,29 @@ function MODERATE_item($action='', $type='', $id='')
                     $nrows = DB_numRows($result);
                     if ($nrows == 1) {
                         $A = DB_fetchArray($result);
+                        $sql = "UPDATE $table SET status=".Status::NORMAL." WHERE $key = '{$A['uid']}'";
+/*
+
                         if ( !empty($A['remoteservice']) && !empty($A['remoteusername']) ) {
                             $sql = "UPDATE $table SET status=".USER_ACCOUNT_ACTIVE." WHERE $key = '{$A['uid']}'";
                         } else {
                             if ( $_CONF['registration_type'] == 1 ) {
-                                $sql = "UPDATE $table SET status=".USER_ACCOUNT_AWAITING_VERIFICATION." WHERE $key = '{$A['uid']}'";
+                                $sql = "UPDATE $table SET status=".USER_ACCOUNT_ACTIVE." WHERE $key = '{$A['uid']}'";
                             } else {
-                                $sql = "UPDATE $table SET status=".USER_ACCOUNT_AWAITING_ACTIVATION." WHERE $key = '{$A['uid']}'";
+                                $sql = "UPDATE $table SET status=".USER_ACCOUNT_ACTIVE." WHERE $key = '{$A['uid']}'";
                             }
                         }
+*/
                         DB_query($sql);
-                        USER_createAndSendPassword($A['username'], $A['email'], $A['uid']);
+                        // send user a note, they are approved and need to verify their email with the link
+                        $userManager = new UserManager();
+                        try {
+                            $userManager->adminSendConfirmationRequest($A['uid'], $A['email']);
+                        } catch (\Throwable $e) {
+                            Log::write('system',Log::ERROR,$e->getMessage());
+                        }
+
+//                        USER_createAndSendPassword($A['username'], $A['email'], $A['uid']);
                     }
                     break;
 
