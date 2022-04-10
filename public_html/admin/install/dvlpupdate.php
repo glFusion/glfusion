@@ -21,6 +21,7 @@ use \glFusion\Admin\AdminActions;
 
 // Only let admin users access this page
 
+/* Removing for 2.1.0 as auth method changed
 if (!SEC_inGroup('Root')) {
     // Someone is trying to the page without proper access
     log::logAccessViolation('DvlpUpdate');
@@ -32,6 +33,7 @@ if (!SEC_inGroup('Root')) {
     echo $display;
     exit;
 }
+*/
 
 $retval = '';
 
