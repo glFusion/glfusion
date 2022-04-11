@@ -1041,8 +1041,8 @@ $_DATA[] = "INSERT INTO {$_TABLES['userprefs']} (uid, noicons, willing, dfid, tz
 # Default data for table 'users'
 #
 
-$_DATA[] = "INSERT INTO {$_TABLES['users']} (uid, username, fullname, passwd, email, homepage, sig, regdate, cookietimeout, theme, status) VALUES (1,'Anonymous','Anonymous','',NULL,NULL,'',NOW(),0,NULL,3) ";
-$_DATA[] = "INSERT INTO {$_TABLES['users']} (uid, username, fullname, passwd, email, homepage, sig, regdate, cookietimeout, theme, status) VALUES (2,'Admin','glFusion Admin Account','5f4dcc3b5aa765d61d8327deb882cf99','root@localhost','http://www.glfusion.org/','',NOW(),28800,NULL,3) ";
+$_DATA[] = "INSERT INTO {$_TABLES['users']} (uid, username, fullname, passwd, email, homepage, sig, regdate, cookietimeout, theme, status, verified) VALUES (1,'Anonymous','Anonymous','',NULL,NULL,'',NOW(),0,NULL,3,1) ";
+$_DATA[] = "INSERT INTO {$_TABLES['users']} (uid, username, fullname, passwd, email, homepage, sig, regdate, cookietimeout, theme, status, verified) VALUES (2,'Admin','glFusion Admin Account','5f4dcc3b5aa765d61d8327deb882cf99','root@localhost','http://www.glfusion.org/','',NOW(),28800,NULL,3,1) ";
 
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('totalhits','0') ";
 $_DATA[] = "INSERT INTO {$_TABLES['vars']} (name, value) VALUES ('lastemailedstories','') ";
