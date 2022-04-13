@@ -1769,7 +1769,7 @@ function INST_installAndContentPlugins()
 
     $config->_purgeCache();
     INST_errorLog($log_path,'INSTALL: Touching default log files');
-    @touch($log_path.'systemlog');
+    @touch($log_path.'system.log');
     @touch($log_path.'404.log');
 
     global $_CONF, $_SYSTEM, $_VARS, $_DB, $_DB_dbms, $_GROUPS, $_RIGHTS, $TEMPLATE_OPTIONS;
