@@ -1336,12 +1336,11 @@ function glfusion_210()
       UNIQUE KEY `bg_name` (`bg_name`),
       KEY `orderby` (`bg_order`)
     ) ENGINE=MyISAM";
-    if ($use_innodb) {
-        $statements = count($_SQL);
-        for ($i = 0; $i < $statements; $i++) {
-            $_SQL[$i] = str_replace('MyISAM', 'InnoDB', $_SQL[$i]);
-            DB_query($_SQL[$i], 1);
+    foreach ($_SQL AS $sql) {
+        if ($use_innodb) {
+            $sql = str_replace('MyISAM', 'InnoDB', $sql);
         }
+        DB_query($sql,1);
     }
 
     // Only add badge records if creating the table.
