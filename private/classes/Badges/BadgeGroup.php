@@ -27,7 +27,7 @@ class BadgeGroup
 {
     /** Cache tags affecting user group membership.
      * @var array */
-    private static $cache_tags = array('badges', 'user_group', 'groups');
+    private static $cache_tags = array('badges', 'user_group', 'groups', 'f');
 
     /** Badge Group record ID.
      * @var integer */
