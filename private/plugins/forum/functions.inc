@@ -481,7 +481,7 @@ function plugin_getfeednames_forum ()
 
 function forum_buildFeedsSql ($forumID, $limits)
 {
-    global $pi_version, $_FF_CONF;
+    global $pi_version, $_CONF, $_FF_CONF;
 
     if ( !COM_checkVersion($pi_version, $_FF_CONF['pi_version']) ) {
         return '';
