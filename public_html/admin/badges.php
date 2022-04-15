@@ -18,8 +18,8 @@ use glFusion\Badges\BadgeGroup;
 use glFusion\FieldList;
 
 // Make sure user has access to this page
-if (!SEC_hasRights('user.edit')) {
-    Log::logAccessViolation('User Preference Editor');
+if (!SEC_hasRights('system.root')) {
+    Log::logAccessViolation('Badge Administration');
     $display .= COM_siteHeader ('menu', $MESSAGE[30]);
     $display .= COM_showMessageText($MESSAGE[37],$MESSAGE[30],true,'error');
     $display .= COM_siteFooter ();
