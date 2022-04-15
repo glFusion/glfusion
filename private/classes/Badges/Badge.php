@@ -31,7 +31,7 @@ class Badge
 
     /** Cache tags affecting user group membership.
      * @var array */
-    private static $cache_tags = array('badges', 'user_group', 'groups');
+    private static $cache_tags = array('badges', 'user_group', 'groups','f');
 
     private $id = 0;
     private $bg_id = 1;
@@ -422,9 +422,9 @@ class Badge
         $all_grps = Group::getAll($uid);
         $assigned_grps = Group::getAssigned($uid);
         foreach ($badges as $id=>$badge_group) {
-            foreach ($badge_group as $grp_id=>$badge) {
+            foreach ($badge_group as $bgrp_id => $badge) {
                 $grps = $badge->inheritGroup() ? $all_grps : $assigned_grps;
-                if (in_array($grp_id, $grps)) {
+                if (in_array($badge->gl_grp,$grps)) {
                     $retval[$uid][] = $badge;
                     if (
                         $badge->getBadgeGroupId() > 0 &&
@@ -901,6 +901,7 @@ class Badge
             $newval = $oldval;
             break;
         }
+        Cache::getInstance()->deleteItemsByTags(self::$cache_tags);
         return $newval;
     }
 
