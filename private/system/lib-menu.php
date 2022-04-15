@@ -623,6 +623,11 @@ function getAdminMenu()
                 $label = $LANG01[10] . ' (' . COM_numberFormat($modnum) . ')';
                 $item_array[] = array('label' => $label, 'url' => $url);
             }
+            if (SEC_hasRights('system.root')) {
+                $url = $_CONF['site_admin_url'] . '/badges.php';
+                $label  = $LANG01[132];
+                $item_array[] = array('label' => $label, 'url' => $url);
+            }
 
             if ( $_CONF['sort_admin']) {
                 usort($item_array,'_mb_cmp');
