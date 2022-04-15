@@ -121,6 +121,49 @@ class Group
         return $retval;
      }
 
+    /**
+    * Get a list (actually an array) of all groups this group belongs to.
+    *
+    * @param    int     $basegroup  id of group
+    * @return   array               array of all groups $basegroup belongs to
+    *
+    */
+     public static function getGroupList($basegroup)
+     {
+         global $_TABLES;
+
+         $db = Database::getInstance();
+
+         $to_check = array ();
+         array_push ($to_check, $basegroup);
+
+         $checked = array ();
+
+         while (count($to_check) > 0) {
+             $thisgroup = array_pop ($to_check);
+             if ($thisgroup > 0) {
+                 $stmt = $db->conn->executeQuery(
+                         "SELECT ug_grp_id FROM `{$_TABLES['group_assignments']}`
+                           WHERE ug_main_grp_id = ?",
+                         array($thisgroup),
+                         array(Database::INTEGER)
+                 );
+
+                 while ($A = $stmt->fetch(Database::ASSOCIATIVE)) {
+                     if (!in_array ($A['ug_grp_id'], $checked)) {
+                         if (!in_array ($A['ug_grp_id'], $to_check)) {
+                             array_push ($to_check, $A['ug_grp_id']);
+                         }
+                     }
+                 }
+
+                 $checked[] = $thisgroup;
+             }
+         }
+
+         return $checked;
+     }
+
 
 /*        $grp_id = (int)DB_getItem($_TABLES['groups'],'grp_id','grp_name="' . DB_escapeString(PM Users"');
     public static function getSubGroups(
@@ -138,6 +181,43 @@ class Group
 
     public static function getMembers(int $gid*/
 
+
+    public static function getMembers($gid)
+    {
+        global $_TABLES, $_USER;
+
+        $retval = array();
+    
+        $db = Database::getInstance();
+
+        $params = array();
+        $types  = array();
+    
+        $groups = self::getGroupList($gid);
+
+        $sql = "SELECT DISTINCT uid,username FROM `{$_TABLES['users']}` AS u
+                LEFT JOIN `{$_TABLES['group_assignments']}` AS ga
+                ON ga.ug_uid = u.uid
+                WHERE u.uid > 1 AND ga.ug_main_grp_id ";
+
+        $sql .= "IN (?)";
+        $params[] = $groups;
+        $types[]  = Database::PARAM_INT_ARRAY;
+
+        $sql .= "ORDER BY username";
+
+        $stmt = $db->conn->executeQuery(
+                    $sql,
+                    $params,
+                    $types
+        );
+
+        while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
+            $retval[] = $row['username'];
+        }
+
+        return $retval;
+    }
 
     /**
     *   Gets an array of all groups directly assigned to the specified user.
