@@ -385,7 +385,7 @@ class BadgeGroup
             $sql1 = "UPDATE {$_TABLES['badge_groups']} SET ";
             $sql3 = ' WHERE bg_id = :id';
         } else {
-            $sql1 = "INSERT INTO {$_TABLES['badge_groupss']} SET ";
+            $sql1 = "INSERT INTO {$_TABLES['badge_groups']} SET ";
             $sql3 = '';
         }
 
