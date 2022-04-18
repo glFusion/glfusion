@@ -20,7 +20,6 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Cache\Cache;
 
-
 // Magic url types
 define('MAGIC_URL_EMAIL', 1);
 define('MAGIC_URL_FULL', 2);
@@ -433,10 +432,6 @@ class Formatter
             $bbcode->addParser(array('block','inline','listitem'), array(&$filter,'highlightQuery'));
         }
 
-        if ($this->processSmilies) {
-            $bbcode->addParser (array ('block', 'inline', 'listitem'), array($this,'_replacesmilie'));
-        }
-
         if ($this->parseUrls) {
             $bbcode->addParser (array('block','inline','listitem'), array ($this, 'linkify'));
         }
@@ -517,6 +512,10 @@ class Formatter
 
         if ($this->formatType == 'html') {
            $bbcode->addParser(array('block','inline','list','listitem'), array($this,'_cleanHTML'));
+        }
+
+        if ($this->processSmilies) {
+            $bbcode->addParser (array ('block', 'inline', 'listitem'), array($this,'_replacesmilie'));
         }
 
         if ($this->censor) {
