@@ -385,7 +385,7 @@ class BadgeGroup
             $sql1 = "UPDATE {$_TABLES['badge_groups']} SET ";
             $sql3 = ' WHERE bg_id = :id';
         } else {
-            $sql1 = "INSERT INTO {$_TABLES['badge_groupss']} SET ";
+            $sql1 = "INSERT INTO {$_TABLES['badge_groups']} SET ";
             $sql3 = '';
         }
 
@@ -453,6 +453,7 @@ class BadgeGroup
                 array('bg_id' => $id),
                 array(Database::INTEGER)
             );
+            Cache::getInstance()->deleteItemsByTags(self::$cache_tags);
         } catch (\Throwable $e) {
             Log::write('system', Log::ERROR, $e->getMessage());
         }
@@ -491,6 +492,7 @@ class BadgeGroup
                 Log::write('system', Log::ERROR, $e->getMessage());
                 $newval = $oldval;
             }
+            Cache::getInstance()->deleteItemsByTags(self::$cache_tags);
             break;
         default:
             // unsupported change attempted
@@ -533,6 +535,7 @@ class BadgeGroup
                     array(Database::STRING)
                 );
                 $bg_id = $db->conn->lastInsertId();
+                Cache::getInstance()->deleteItemsByTags(self::$cache_tags);
             } catch (\Throwable $e) {
                 Log::write('system', Log::ERROR, $e->getMessage());
                 $bg_id = false;
