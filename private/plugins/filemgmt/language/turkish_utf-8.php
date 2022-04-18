@@ -68,7 +68,7 @@ $LANG_FILEMGMT = array(
     'adminhome'             => "Yönetim AnaSayfa",
     'plugin_name'           => "Dosyalar Yönetimi",
     'searchlabel'           => "İndirilenler",
-    'searchlabel_results'   => "Downloads Results",
+    'searchlabel_results'   => "İndirme SonuçlarI",
     'downloads'             => "İndirilenler",
     'report'                => "En çok indirilenler",
     'usermenu1'             => "İndirilenler",
@@ -140,7 +140,7 @@ $LANG_FILEMGMT = array(
     'remote_ip'             => 'Uzak IP',
     'back_to_listing'       => 'Listeye geri dön',
     'remote_url'            => 'Uzak URL',
-    'file_missing'          => 'File Missing',
+    'file_missing'          => 'Dosya Kayıp',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
@@ -154,7 +154,7 @@ $LANG_FILEMGMT_ERRORS = array(
     "1108" => "Yinelenen dosya - dosya deposunda zaten mevcut",
     "1109" => "Bu dosya türüne izin verilmez",
     "1110" => "Yüklenen dosya için bir kategori tanımlamalı ve seçmelisiniz",
-    "1111" => "File Size exceeds site configured maximum size of %s",
+    "1111" => "Dosya Boyutu, site tarafından izin verilen maksimum %s boyutunu aşıyor",
     "9999" => "Bilinmeyen Hata"
 );
 
