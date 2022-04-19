@@ -25,6 +25,7 @@ if (!defined ('GVERSION')) {
 
 use \glFusion\Database\Database;
 use \glFusion\Log\Log;
+use \glFusion\Group;
 use \Delight\Cookie\Session;
 
 if ( !isset($_SYSTEM['token_ttl']) ) $_SYSTEM['token_ttl'] = 1200;
@@ -102,9 +103,9 @@ function SEC_getUserGroups($uid='')
 //    global $_USER;
 
 //    if (($_USER['uid'] == $uid) && SEC_inGroup('Root')) {
-//        return \Group::getAllAvailable();
+//        return Group::getAllAvailable();
 //    }
-    return \Group::getAll($uid);
+    return Group::getAll($uid);
 }
 
 /**
@@ -156,7 +157,7 @@ function SEC_groupIsRemoteUserAndHaveAccess($groupid, $groups)
 */
 function SEC_inGroup($grp_to_verify,$uid='',$cur_grp_id='')
 {
-    return \Group::inGroup($grp_to_verify, $uid);
+    return Group::inGroup($grp_to_verify, $uid);
 }
 
 /**
@@ -646,7 +647,7 @@ function SEC_getPermissionValue($perm_x)
 */
 function SEC_getFeatureGroup ($feature, $uid = '')
 {
-    $grpFeature = \Group::withFeature($feature, $uid);
+    $grpFeature = Group::withFeature($feature, $uid);
     return $grpFeature[0];
 }
 
@@ -1258,7 +1259,7 @@ function SEC_getGroupDropdownAll ($group_id, $access, $var_name='group_id')
     $T->set_var('var_name', $var_name);
 
     if ($access == 3) {
-        $usergroups = \Group::getAllAvailable();
+        $usergroups = Group::getAllAvailable();
         uksort($usergroups, "strnatcasecmp");
 
         $T->set_block('optionlist', 'options', 'opts');
