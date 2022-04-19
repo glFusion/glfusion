@@ -410,12 +410,12 @@ function Badges_getAdminField($fieldname, $fieldvalue, $A, $icon_arr)
     case 'b_order':
         $retval .= FieldList::up(
             array(
-                'url' => $base_url . '?move=up&bid=' . $A['b_id'],
+                'url' => $base_url . '?move=up&b_id=' . $A['b_id'],
             )
         );
         $retval .= FieldList::down(
             array(
-                'url' => $base_url . '?move=down&bid=' . $A['b_id'],
+                'url' => $base_url . '?move=down&b_id=' . $A['b_id'],
             )
         );
         break;
