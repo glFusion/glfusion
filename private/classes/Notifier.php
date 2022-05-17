@@ -55,7 +55,7 @@ abstract class Notifier
 
     /** Expiration timestamp, if supported.
      * @var integer */
-    protected $exp_ts = 2208988799;     // 2039-12-31 23:59:59 UTC
+    protected $exp_ts = 2145945599;     // 2037-12-31 23:59:59 UTC
 
 
     /**
@@ -155,6 +155,19 @@ abstract class Notifier
         } else {
             $this->textmessage = $msg;
         }
+        return $this;
+    }
+
+
+    /**
+     * Set the duration, in seconds, for the message.
+     *
+     * @param   integer $seconds    Number of seconds to keep the message
+     * @return  object  $this
+     */
+    public function setDuration(int $seconds) : self
+    {
+        $this->exp_ts = time() + $seconds;
         return $this;
     }
 
