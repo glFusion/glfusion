@@ -228,7 +228,7 @@ class Email extends \glFusion\Notifier
                         $email = $to;
                         $name = '';
                     }
-                    if ( filter_var($to['email'], FILTER_VALIDATE_EMAIL) ) {
+                    if ( filter_var($email, FILTER_VALIDATE_EMAIL) ) {
                         $mail->addAddress($email,$name);
                         $queued++;
                     }
