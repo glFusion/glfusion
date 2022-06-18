@@ -13,7 +13,6 @@
 */
 
 require_once 'lib-common.php';
-
 session_write_close();  //close session
 
 use \glFusion\Database\Database;
@@ -21,14 +20,19 @@ use \glFusion\Cache\Cache;
 use \glFusion\Article\Article;
 use \glFusion\Log\Log;
 
-// keep running after browser closes connection
-@ignore_user_abort(true);
+if (php_sapi_name() != 'cli') {
+    // keep running after browser closes connection
+    @ignore_user_abort(true);
 
-// check if user abort worked, if yes send output early
-$defer = !@ignore_user_abort();
-
-if(!$defer){
-    sendGIF(); // send gif
+    // check if user abort worked, if yes send output early
+    $defer = !@ignore_user_abort();
+    $force = false;
+    if(!$defer){
+        sendGIF(); // send gif
+    }
+} else {
+    $force = true;
+    $defer = false;
 }
 
 Log::write('system',Log::DEBUG,"Starting CRON");
@@ -129,8 +133,8 @@ try {
 } catch (\Throwable $ignore) {}
 Log::write('system',Log::DEBUG,'Completed Clean up activities');
 
-if ( $_CONF['cron_schedule_interval'] > 0  ) {
-    if (( $_VARS['last_scheduled_run'] + $_CONF['cron_schedule_interval'] ) <= time()) {
+if ( $force || $_CONF['cron_schedule_interval'] > 0  ) {
+    if ( $force || ( $_VARS['last_scheduled_run'] + $_CONF['cron_schedule_interval'] ) <= time()) {
         Log::write('system',Log::DEBUG,'Running last_scheduled_run items.');
         $db->conn->query("UPDATE `{$_TABLES['vars']}` SET value=UNIX_TIMESTAMP() WHERE name='last_scheduled_run'");
         Log::write('system',Log::DEBUG,'Running PLG_runScheduledTasks.');
