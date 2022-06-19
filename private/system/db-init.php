@@ -81,6 +81,7 @@ $_TABLES['users_confirmations'] = $_DB_table_prefix . 'users_confirmations';
 $_TABLES['users_remembered']    = $_DB_table_prefix . 'users_remembered';
 $_TABLES['users_resets']        = $_DB_table_prefix . 'users_resets';
 $_TABLES['users_throttling']    = $_DB_table_prefix . 'users_throttling';
+$_TABLES['sysmessages']         = $_DB_table_prefix . 'sysmessages';
 
 // force the initialization of the DB driver which forces the initial connection
 glFusion\Database\Database::getInstance();
