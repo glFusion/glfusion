@@ -1,8 +1,10 @@
 {!!if {type}=='modal' !!}
 {!!elseif {type}=='error' !!}
   {!!set status 'danger' !!}
-{!!elseif {type}=='info' !!}}
-  {!!set status 'primary' !!}
+{!!elseif {type}=='info' !!}
+  {!!if {persist} !!}
+    {!!set status 'primary' !!}
+  {!endif}
 {!else}
   {!!set status {type} !!}
 {!endif}
