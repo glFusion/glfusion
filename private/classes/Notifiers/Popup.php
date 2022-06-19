@@ -357,7 +357,7 @@ class Popup extends \glFusion\Notifier
     /**
      * Delete expired messages.
      */
-    public static function expire() : void
+    protected function _deleteExpired() : void
     {
         global $_TABLES;
 

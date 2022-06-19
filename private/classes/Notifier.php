@@ -196,6 +196,28 @@ abstract class Notifier
 
 
     /**
+     * Delete expired messages for notifiers that support it.
+     */
+    public static function deleteExpired() : void
+    {
+        foreach (self::$_providers as $key=>$info) {
+            $Provider = self::getProvider($key, false);
+            if ($Provider) {
+                $Provider->_deleteExpired();
+            }
+        }
+    }
+
+
+    /**
+     * Stub function for notifiers that don't support expiration handling.
+     */
+    protected function _deleteExpired() : void
+    {
+    }
+
+
+    /**
      * Register a notification method.
      *
      * @param   string  $key    Short description, e.g. plugin name
@@ -230,9 +252,10 @@ abstract class Notifier
      * Notifier::exists($key) first to check.
      *
      * @param   string  $key    Provider ID key
+     * @param   boolean $default    False to return NULL instead of default
      * @return  object  Provider object
      */
-    public static function getProvider(string $key) : object
+    public static function getProvider(string $key, bool $default=true) : object
     {
         $retval = NULL;
         if (array_key_exists($key, self::$_providers)) {
@@ -241,7 +264,7 @@ abstract class Notifier
                 $retval = new $cls;
             }
         }
-        if ($retval === NULL) {
+        if ($default && $retval === NULL) {
             $retval = new Notifiers\Email;
         }
         return $retval;
