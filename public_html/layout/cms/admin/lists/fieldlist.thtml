@@ -228,4 +228,12 @@
     ><i class="uk-icon uk-icon-hover uk-icon-justifiy uk-icon-arrow-circle-up uk-text-success"></i></a>
 <!-- END field-update -->
 
+<!-- BEGIN field-blank -->
+    <i class="uk-icon uk-icon-justify"
+	<!-- BEGIN attr -->
+        {name}="{value}"
+    <!-- END attr -->
+    ></i></a>
+<!-- END field-blank -->
+
 {# end admin fields #}
