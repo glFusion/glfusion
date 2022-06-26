@@ -147,13 +147,15 @@ class Popup extends \glFusion\Notifier
      * Store a message in the database that can be retrieved later.
      * This provides a more flexible method for showing popup messages
      * than the numbered-message method.
+     *
+     * @return  boolean     True on success, False on error
      */
-    public function send() : void
+    public function send() : bool
     {
         global $MESSAGE;
 
         if (empty($this->textmessage)) {
-            return;
+            return false;
         }
 
         if (empty($this->subject)) {
@@ -162,6 +164,7 @@ class Popup extends \glFusion\Notifier
         foreach ($this->recipients as $recip) {
             $this->_store($recip);
         }
+        return true;
     }
 
 
