@@ -1735,7 +1735,24 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                     KEY `expires_at` (`expires_at`)
                 ) ENGINE=MyISAM;
             ";
-        
+            $_SQL[] = "CREATE TABLE `{$_TABLES['sysmessages']}` (
+                `msg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                `uid` int(11) NOT NULL DEFAULT 1,
+                `sess_id` varchar(80) NOT NULL,
+                `pi_name` varchar(127) NOT NULL DEFAULT '',
+                `pi_code` varchar(40) DEFAULT NULL,
+                `title` varchar(255) DEFAULT NULL,
+                `message` text NOT NULL,
+                `persist` tinyint(1) unsigned DEFAULT 0,
+                `created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+                `expires` int(11) unsigned NOT NULL DEFAULT 2208988799,
+                `level` tinyint(1) unsigned NOT NULL DEFAULT 1,
+                PRIMARY KEY (`msg_id`),
+                KEY `uid` (`uid`),
+                KEY `sess_id` (`sess_id`)
+            ) ENGINE=MyISAL;
+";
+
             foreach ($_SQL AS $sql) {
                 if ($use_innodb) {
                     $sql = str_replace('MyISAM', 'InnoDB', $sql);
