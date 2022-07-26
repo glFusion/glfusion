@@ -100,8 +100,8 @@ class SysMessage extends \glFusion\Notifier
             return;
         }
 
-        if (empty($this->title)) {
-            $this->title = $MESSAGE[40];
+        if (empty($this->subject)) {
+            $this->subject = $MESSAGE[40];
         }
         foreach ($this->recipients as $recip) {
             $uid = (int)$recip['uid'];
@@ -207,9 +207,7 @@ class SysMessage extends \glFusion\Notifier
             $title = '';
             $level = Log::INFO;     // Start at the "best" level
             foreach ($msgs as $msg) {
-                $message .= '<li class="lglmessage">' .
-                    $msg['message'] .
-                    '</li>';
+                $message .= '<li>' . $msg['message'] . '</li>';
                 // If any message requests "persist", then all persist
                 if ($msg['persist']) $persist = true;
                 // Set to the highest (worst) error level
@@ -217,7 +215,7 @@ class SysMessage extends \glFusion\Notifier
                 // First title found in a message gets used instead of default
                 if (empty($title) && !empty($msg['title'])) $title = $msg['title'];
             }
-            $message = '<ul class="lglmessage">' . $message . '</ul>';
+            $message = '<ul>' . $message . '</ul>';
         }
 
         self::deleteUser();
@@ -271,7 +269,7 @@ class SysMessage extends \glFusion\Notifier
                 "SELECT title, message, persist, level
                 FROM {$_TABLES['sysmessages']}
                 WHERE $params
-                ORDER BY dt DESC",
+                ORDER BY created DESC",
                 $values,
                 $types
             )->fetchAll(Database::ASSOCIATIVE);
@@ -454,32 +452,6 @@ class SysMessage extends \glFusion\Notifier
         } else {
             $this->persist = $persist ? 1 : 0;
         }
-        return $this;
-    }
-
-
-    /**
-     * Set the message text to display.
-     *
-     * @param   string  $msg    Message text
-     * @return  object  $this
-     */
-    public function withMessage($msg)
-    {
-        $this->message = $msg;
-        return $this;
-    }
-
-
-    /**
-     * Set the message title.
-     *
-     * @param   string  $title  Title to be displayed
-     * @return  object  $this
-     */
-    public function withTitle($title)
-    {
-        $this->title = $title;
         return $this;
     }
 
