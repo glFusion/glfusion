@@ -103,7 +103,8 @@
 	$(document).ready(function() {
 		var highlight = "{highlight}";
 		if ( highlight != "" ) {
-			$("#" + highlight).closest('tr').css('background-color','#FFFF00');
+			//$("#" + highlight).closest('tr').css('background-color','#FFFF00');
+			$("#" + highlight).closest('tr').addClass('tm-highlight');
 		}
 		$('.tooltip_cfg').tooltipster({
 			contentAsHTML: true,
