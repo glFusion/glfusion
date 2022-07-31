@@ -1182,7 +1182,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         $currentURL = COM_getCurrentURL();
         if ( strpos($currentURL, $_CONF['site_admin_url']) === 0 ) {
             if ( $blockInterface['right']['location'] == 'right' || $blockInterface['right']['location'] == 'left' ) {
-                $rightblocks = -1;
+                $rightblock = -1;
             }
         }
     }
