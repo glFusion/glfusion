@@ -123,6 +123,7 @@ if ($total_media > 0) {
             $PhotoURL = $_MG_CONF['mediaobjects_url'] . '/orig/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . '.' . $mediaObject[$i]['media_mime_ext'];
             $PhotoPath = $_MG_CONF['path_mediaobjects'] . 'orig/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . '.' . $mediaObject[$i]['media_mime_ext'];
             $imgsize = @getimagesize($PhotoPath);
+            $PhotoThumb = $_MG_CONF['mediaobjects_url'] . '/tn/' . $mediaObject[$i]['media_filename'][0] .'/' . $mediaObject[$i]['media_filename'] . $mediaObject[$i]['media_mime_ext'];
             if ( $imgsize == false ) {
                 continue;
             }
