@@ -113,16 +113,23 @@ class Category
             return;
         }
 
-        $sql = "SELECT * FROM {$_TABLES['filemgmt_cat']}
-                WHERE cid = '$id'";
-        $result = DB_query($sql);
-        if (!$result || DB_numRows($result) != 1) {
-            return false;
-        } else {
-            $row = DB_fetchArray($result, false);
+        try {
+            $row = Database::getInstance()->conn->executeQuery(
+                "SELECT * FROM {$_TABLES['filemgmt_cat']}
+                WHERE cid = '$id'",
+                array($id),
+                array(Database::INTEGER)
+            )->fetchAssociative();
+        } catch (\Throwable $e) {
+            Log::write('system', Log::ERROR, __METHOD__ . ': ' . $e->getMessage());
+            $row = false;
+        }
+        if (is_array($row)) {
             $this->setVars($row, true);
             $this->isNew = false;
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -710,24 +717,42 @@ class Category
     }
 
 
-    public static function getChildren($pid=0, $checkAccess=true)
+    /**
+     * Get all the child categories from a given root.
+     *
+     * @param   integer $pid    Root category ID
+     * @param   integer $checkAccess    1 to check view, 2 to check write
+     * @return  array       Array of categories
+     */
+    public static function getChildren(int $pid=0, int $checkAccess=1) : array
     {
         global $_TABLES, $_GROUPS;
 
         $retval = array();
         $pid = (int)$pid;
-        $sql = "SELECT * FROM {$_TABLES['filemgmt_cat']} WHERE pid = $pid ";
+        $sql = "SELECT * FROM {$_TABLES['filemgmt_cat']} WHERE pid = ? ";
+        $values = array($pid);
+        $types = array(Database::INTEGER);
         if ($checkAccess) {
-            if (count($_GROUPS) == 1) {
-                $sql .= " AND grp_access = '" . current($_GROUPS) ."' ";
+            $values[] = array_values($_GROUPS);
+            $types[] = Database::PARAM_INT_ARRAY;
+            if ($checkAccess == 2) {
+                $sql .= " AND grp_writeaccess IN (?) ";
             } else {
-                $sql .= " AND grp_access IN (" . implode(',',array_values($_GROUPS)) .") ";
+                $sql .= " AND grp_access IN (?) ";
             }
         }
         $sql .= "ORDER BY cid";
-        $result = DB_query($sql);
-        while ($A = DB_fetchArray($result, false)) {
-            $retval[$A['cid']] = new self($A);
+        try {
+            $stmt = Database::getInstance()->conn->executeQuery($sql, $values, $types);
+        } catch (\Throwable $e) {
+            Log::write('system', Log::ERROR, __METHOD__ . ': ' . $e->getMessage());
+            $stmt = false;
+        }
+        if ($stmt) {
+            while ($A = $stmt->fetchAssociative()) {
+                $retval[$A['cid']] = new self($A);
+            }
         }
         return $retval;
     }
@@ -785,7 +810,7 @@ class Category
      * @param   integer $current_cat    Current category ID, to set "selected"
      * @return  string      HTML for selection options
      */
-    public static function getChildOptions($pid, $indent, $current_cat)
+    public static function getChildOptions(int $pid, string $indent, int $current_cat) : string
     {
         global $_TABLES;
 
@@ -793,21 +818,31 @@ class Category
         $retval = '';
         $spaces = ($indent+1) * 2;
 
-        $sql = "SELECT * FROM {$_TABLES['filemgmt_cat']}
-            WHERE pid = $pid
-            ORDER BY title ASC";
-        $result = DB_query($sql);
-        while (($C = DB_fetchArray($result)) != NULL) {
-            $retval .= '<option value="'.$C['cid'].'"';
-            if ( $C['cid'] == $current_cat ) {
-                $retval .= ' selected="selected"';
+        try {
+            $stmt = Database::getInstance()->conn->executeQuery(
+                "SELECT * FROM {$_TABLES['filemgmt_cat']}
+                WHERE pid = ?
+                ORDER BY title ASC",
+                array($pid),
+                array(Database::INTEGER)
+            );
+        } catch (\Throwable $e) {
+            Log::write('system', Log::ERROR, __METHOD__ . ': ' . $e->getMessage());
+            $stmt = false;
+        }
+        if ($stmt) {
+            while ($C = $stmt->fetchAssociative()) {
+                $retval .= '<option value="'.$C['cid'].'"';
+                if ( $C['cid'] == $current_cat ) {
+                    $retval .= ' selected="selected"';
+                }
+                $retval .= '>';
+                for ($x=0;$x<=$spaces;$x++) {
+                    $retval .= '&nbsp;';
+                }
+                $retval .= $C['title'].'</option>';
+                $retval .= self::getChildOptions($C['cid'], $indent+1, $current_cat);
             }
-            $retval .= '>';
-            for ($x=0;$x<=$spaces;$x++) {
-                $retval .= '&nbsp;';
-            }
-            $retval .= $C['title'].'</option>';
-            $retval .= self::getChildOptions($C['cid'], $indent+1, $current_cat);
         }
         return $retval;
     }
