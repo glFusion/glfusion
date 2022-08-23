@@ -113,6 +113,9 @@ function filemgmt_upgrade()
         case '1.9.1':
             // no DB Changes
 
+        case '1.9.2':
+            DB_query("ALTER TABLE {$_TABLES['filemgmt_cat']} ADD submitterview tinyint(1) unsigned NOT NULL DEFAULT '0';", 1);
+
         default :
             DB_query("UPDATE {$_TABLES['plugins']} SET pi_version = '".$_FM_CONF['pi_version']."',pi_gl_version = '".$_FM_CONF['gl_version']."' WHERE pi_name = 'filemgmt'");
     }

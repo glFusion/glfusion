@@ -141,6 +141,7 @@ $LANG_FILEMGMT = array(
     'back_to_listing'       => 'Back To Listing',
     'remote_url'            => 'URL Remota',
     'file_missing'          => 'File Missing',
+    'submitterview'     => 'Logged-In Submitters may view regardless of view access',
 );
 
 $LANG_FILEMGMT_ERRORS = array(

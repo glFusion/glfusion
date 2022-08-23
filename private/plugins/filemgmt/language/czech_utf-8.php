@@ -141,6 +141,7 @@ $LANG_FILEMGMT = array(
     'back_to_listing'       => 'Zpět na seznam',
     'remote_url'            => 'Vzdálený uživatel',
     'file_missing'          => 'Chybějící soubor',
+    'submitterview'     => 'Logged-In Submitters may view regardless of view access',
 );
 
 $LANG_FILEMGMT_ERRORS = array(
