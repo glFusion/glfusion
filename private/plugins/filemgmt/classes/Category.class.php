@@ -491,6 +491,17 @@ class Category
 
 
     /**
+     * Get the value of the submitterview flag.
+     *
+     * @return  integer     1 if submitter can view, 0 if not
+     */
+    public function getSubmitterView() : int
+    {
+        return (int)$this->submitterview;
+    }
+
+
+    /**
      * Determine if the current user has upload access to this category.
      *
      * @return  boolean     True if user has access, False if not

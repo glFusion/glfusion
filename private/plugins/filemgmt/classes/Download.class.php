@@ -1163,9 +1163,22 @@ class Download
      * @param   array|null  $groups     Array of groups, needed for sitemap
      * @return  boolean     True if user has access, False if not
      */
-    public function canRead($groups = NULL)
+    public function canRead(?array $groups = NULL) : bool
     {
-        return $this->lid > 0 && Category::getInstance($this->cid)->canRead($groups) && (SEC_hasRights('filemgmt.edit') || $this->status == 1);
+        global $_USER;
+
+        if ($this->lid < 1 || ($this->status == 0 && !SEC_hasRights('filemgmt.edit'))) {
+            return false;
+        }
+
+        $Cat = Category::getInstance($this->cid);
+        if (
+            $Cat->canRead($groups) ||
+            ($Cat->getSubmitterView() && $this->submitter == $_USER['uid'])
+        ) {
+            return true;
+        }
+        return false;
     }
 
 
