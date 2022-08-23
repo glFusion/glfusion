@@ -1174,7 +1174,7 @@ class Download
         $Cat = Category::getInstance($this->cid);
         if (
             $Cat->canRead($groups) ||
-            ($Cat->getSubmitterView() && $this->submitter == $_USER['uid'])
+            ($_USER['uid'] > 1 && $Cat->getSubmitterView() && $this->submitter == $_USER['uid'])
         ) {
             return true;
         }
