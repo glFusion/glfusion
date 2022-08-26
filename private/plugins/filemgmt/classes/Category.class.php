@@ -23,6 +23,9 @@ use \glFusion\Log\Log;
  */
 class Category
 {
+    const ACCESS_READ = 1;
+    const ACCESS_WRITE = 2;
+
     /** Category ID.
      * @var integer */
     private $cid = 0;
@@ -60,7 +63,6 @@ class Category
         global $_USER, $_VARS;
 
         $this->isNew = true;
-
         if (is_array($id)) {
             $this->setVars($id, true);
         } elseif ($id > 0) {
@@ -102,7 +104,7 @@ class Category
      * @param   integer $id Optional ID.  Current ID is used if zero.
      * @return  boolean     True if a record was read, False on failure
      */
-    public function Read($id = 0)
+    public function Read(int $id = 0) : bool
     {
         global $_TABLES;
 
@@ -110,13 +112,13 @@ class Category
         if ($id == 0) $id = $this->cid;
         if ($id == 0) {
             $this->error = 'Invalid ID in Read()';
-            return;
+            return false;
         }
 
         try {
             $row = Database::getInstance()->conn->executeQuery(
                 "SELECT * FROM {$_TABLES['filemgmt_cat']}
-                WHERE cid = '$id'",
+                WHERE cid = ?",
                 array($id),
                 array(Database::INTEGER)
             )->fetchAssociative();
@@ -141,7 +143,7 @@ class Category
      * @param   integer $cid    Category ID
      * @return  object          Category object
      */
-    public static function getInstance($cid)
+    public static function getInstance(int $cid)
     {
         static $cats = array();
         if (!isset($cats[$cid])) {
@@ -729,22 +731,25 @@ class Category
         global $_TABLES, $_GROUPS;
 
         $retval = array();
-        $pid = (int)$pid;
-        $sql = "SELECT * FROM {$_TABLES['filemgmt_cat']} WHERE pid = ? ";
+        $qb = Database::getInstance()->conn->createQueryBuilder();
+        $qb->select('*')
+           ->from($_TABLES['filemgmt_cat'])
+           ->where('pid = :pid')
+           ->setParameter('pid', $pid, Database::INTEGER)
+           ->orderBy('cid', 'ASC');
         $values = array($pid);
         $types = array(Database::INTEGER);
         if ($checkAccess) {
             $values[] = array_values($_GROUPS);
-            $types[] = Database::PARAM_INT_ARRAY;
-            if ($checkAccess == 2) {
-                $sql .= " AND grp_writeaccess IN (?) ";
+            if ($checkAccess == self::ACCESS_WRITE) {
+                $qb->andWhere('grp_writeaccess IN (:groups)');
             } else {
-                $sql .= " AND grp_access IN (?) ";
+                $qb->andWhere('grp_access IN (:groups)');
             }
+            $qb->setParameter('groups', array_values($_GROUPS), Database::PARAM_INT_ARRAY);
         }
-        $sql .= "ORDER BY cid";
         try {
-            $stmt = Database::getInstance()->conn->executeQuery($sql, $values, $types);
+            $stmt = $qb->execute();
         } catch (\Throwable $e) {
             Log::write('system', Log::ERROR, __METHOD__ . ': ' . $e->getMessage());
             $stmt = false;

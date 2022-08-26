@@ -168,7 +168,7 @@ case "delCat":
     COM_refresh("{$_FM_CONF['admin_url']}/index.php?categoryConfigAdmin");
     break;
 case 'modCat':
-    $content .= Filemgmt\Category::getInstance($opval)->edit();
+    $content .= Filemgmt\Category::getInstance((int)$opval)->edit();
     break;
 case 'saveCat':
 case "modCatS":
