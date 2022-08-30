@@ -2860,14 +2860,15 @@ function COM_formatBlock( $A, $noboxes = false)
                     $fretval = $function();
                }
                if ( !empty( $fretval )) {
-           $blkheader = COM_startBlock( $A['title'], $A['help'],
+            $blkheader = COM_startBlock( $A['title'], $A['help'],
                     COM_getBlockTemplate( $A['name'], 'header', $position ), $A['name'] );
             $blkfooter = COM_endBlock( COM_getBlockTemplate( $A['name'],
                     'footer', $position ));
                     $retval .= $blkheader;
                     $retval .= $fretval;
                     $retval .= $blkfooter;
-               }
+                }
+                return $retval;
             } else {
                 // Return nothing, just hide the block if its function is missing.
                 return '';
@@ -2875,6 +2876,7 @@ function COM_formatBlock( $A, $noboxes = false)
         }
     }
 
+    // Normal block
     if ( !empty( $A['content'] ) && ( trim( $A['content'] ) != '' )) {
         $blockcontent =  $A['content'] ;
 
