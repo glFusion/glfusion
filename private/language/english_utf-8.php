@@ -803,6 +803,7 @@ $LANG21 = array(
     7 => 'All',
     8 => 'Block Security Level',
     9 => 'Block Order',
+    10 => 'Hide if empty',
     11 => 'Portal Block',
     12 => 'Normal Block',
     13 => 'Portal Block Options',

@@ -803,6 +803,7 @@ $LANG21 = array(
     7 => 'Overal',
     8 => 'Blok beveiligingsniveau',
     9 => 'Blok volgorde',
+    10 => 'Hide if empty',
     11 => 'Website Blok',
     12 => 'Normaal Blok',
     13 => 'Website Blok opties',

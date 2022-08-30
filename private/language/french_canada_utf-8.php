@@ -803,6 +803,7 @@ $LANG21 = array(
     7 => 'Tous',
     8 => 'Bloquer le niveau de sécurité',
     9 => 'Ordre bloc',
+    10 => 'Hide if empty',
     11 => 'Portail Bloquer',
     12 => 'Bloquer Normale',
     13 => 'Portail options de verrouillage',

@@ -803,6 +803,7 @@ $LANG21 = array(
     7 => 'Vše',
     8 => 'Úroveň práv bloku',
     9 => 'Pořadí bloku',
+    10 => 'Hide if empty',
     11 => 'Blok Portálu',
     12 => 'Normální blok',
     13 => 'Volby Bloku Portálu',

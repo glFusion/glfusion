@@ -79,6 +79,13 @@
 		</div>
 
 		<div class="uk-form-row">
+			<label class="uk-form-label" for="hideifempty">{lang_hideifempty}</label>
+			<div class="uk-form-controls">
+				<input type="checkbox" name="hideifempty" id="hideifempty" class="uk-checkbox" value="1" {hideifempty_chk} />
+			</div>
+		</div>
+
+		<div class="uk-form-row">
 			<label class="uk-form-label" for="type">{lang_blocktype}</label>
 			<div class="uk-form-controls">
 				<select name="type" id="type" class="uk-form-width-medium">

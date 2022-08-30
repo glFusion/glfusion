@@ -803,6 +803,7 @@ $LANG21 = array(
     7 => 'Kaikki',
     8 => 'Lohkon turvallisuustaso',
     9 => 'Lohkon lajittelu',
+    10 => 'Hide if empty',
     11 => 'Sivuston lohko',
     12 => 'Normaali lohko',
     13 => 'Sivuston lohkojen asetukset',

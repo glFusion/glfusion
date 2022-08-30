@@ -23,6 +23,7 @@
 require_once '../lib-common.php';
 require_once 'auth.inc.php';
 
+use \glFusion\Database\Database;
 use \glFusion\Log\Log;
 use \glFusion\FieldList;
 
@@ -135,6 +136,10 @@ function BLOCK_editDefault($A, $access)
     }
     $block_templates->set_var('lang_blockorder', $LANG21[9]);
     $block_templates->set_var('block_order', $A['blockorder']);
+    $block_templates->set_var('lang_hideifempty', $LANG21[10]);
+    if ($A['hideifempty']) {
+        $block_templates->set_var('hideifempty_chk', 'checked="checked"');
+    }
     $block_templates->set_var('lang_accessrights', $LANG_ACCESS['accessrights']);
     $block_templates->set_var('lang_owner', $LANG_ACCESS['owner']);
     $ownername = COM_getDisplayName ($A['owner_id']);
@@ -216,6 +221,7 @@ function BLOCK_edit($bid = '', $B = array())
         $A['onleft'] = isset($B['onleft']) ? $B['onleft'] : 0;
         $A['phpblockfn'] = isset($B['phpblockfn']) ? $B['phpblockfn'] : '';
         $A['help'] = isset($B['help']) ? $B['help'] : '';
+        $A['hideifempty'] = isset($B['hideifempty']) ? (int)$B['hideifempty'] : 0;
         $A['owner_id'] = isset($B['owner_id']) ? $B['owner_id'] : $_USER['uid'];
         if ( isset($B['group_id']) ) {
             $A['group_id'] = $B['group_id'];
@@ -373,6 +379,10 @@ function BLOCK_edit($bid = '', $B = array())
         $block_templates->set_var ('allow_autotags', 'checked="checked"');
     } else {
         $block_templates->set_var ('allow_autotags', '');
+    }
+    $block_templates->set_var('lang_hideifempty', $LANG21[10]);
+    if ($A['hideifempty']) {
+        $block_templates->set_var('hideifempty_chk', 'checked="checked"');
     }
     $block_templates->set_var('gltoken_name', CSRF_TOKEN);
     $block_templates->set_var('gltoken', SEC_createToken());
@@ -643,13 +653,14 @@ function BLOCK_list()
 * @return   string                  HTML redirect or error message
 *
 */
-function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $tid, $rdfurl, $rdfupdated, $rdflimit, $phpblockfn, $onleft, $owner_id, $group_id, $perm_owner, $perm_group, $perm_members, $perm_anon, $is_enabled, $allow_autotags)
+function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $tid, $rdfurl, $rdfupdated, $rdflimit, $phpblockfn, $onleft, $owner_id, $group_id, $perm_owner, $perm_group, $perm_members, $perm_anon, $is_enabled, $allow_autotags,$hideifempty)
 {
     global $_CONF, $_USER, $_TABLES, $LANG01, $LANG21, $MESSAGE;
 
     $retval = '';
-
-    $B['bid']           = (int) $bid;
+    $bid = (int)$bid;
+    $B = array();
+    $B['bid']           = $bid;
     $B['name']          = $name;
     $B['title']         = $title;
     $B['type']          = $type;
@@ -669,8 +680,7 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
     $B['perm_anon']     = $perm_anon;
     $B['is_enabled']    = $is_enabled;
     $B['allow_autotags'] = $allow_autotags;
-
-    $bid   = (int) $bid;
+    $B['hideifempty']   = (int)$hideifempty;
 
     $MenuElementAllowedHTML = "i[class|style],div[class|style],span[class|style],img[src|class|style],em,strong,del,ins,q,abbr,dfn,small";
     $filter = sanitizer::getInstance();
@@ -787,23 +797,92 @@ function BLOCK_save($bid, $name, $title, $help, $type, $blockorder, $content, $t
             $rdfupdated = '1000-01-01 00:00:00';
         }
 
-        $name = DB_escapeString($name);
+        //$name = DB_escapeString($name);
 
-        if ($bid > 0) {
-            DB_save($_TABLES['blocks'],'bid,name,title,help,type,blockorder,content,tid,rdfurl,rdfupdated,rdflimit,phpblockfn,onleft,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon,is_enabled,allow_autotags,rdf_last_modified,rdf_etag',"$bid,'$name','$title','$help','$type','$blockorder','$content','$tid','$rdfurl','$rdfupdated','$rdflimit','$phpblockfn',$onleft,$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon,$is_enabled,$allow_autotags,NULL,NULL");
+        $values = array(
+            'name' => $name,
+            'title' => $title,
+            'help' => $help,
+            'type' => $type,
+            'blockorder' => $blockorder,
+            'content' => $content,
+            'tid' => $tid,
+            'rdfurl' => $rdfurl,
+            'rdfupdated' => $rdfupdated,
+            'rdflimit' => $rdflimit,
+            'phpblockfn' => $phpblockfn,
+            'onleft' => $onleft,
+            'owner_id' => $owner_id,
+            'group_id' => $group_id,
+            'perm_owner' => $perm_owner,
+            'perm_group' => $perm_group,
+            'perm_members' => $perm_members,
+            'perm_anon' => $perm_anon,
+            'is_enabled' => $is_enabled,
+            'allow_autotags' => $allow_autotags,
+            'rdf_last_modified' => NULL,
+            'rdf_etag' => NULL,
+            'hideifempty' => $hideifempty,
+        );
+
+        $types = array(
+            Database::STRING,
+            Database::STRING,
+            Database::STRING,
+            Database::STRING,
+            Database::INTEGER,
+            Database::STRING,
+            Database::STRING,
+            Database::STRING,
+            Database::STRING,
+            Database::INTEGER,
+            Database::STRING,
+            Database::INTEGER,
+            Database::INTEGER,
+            Database::INTEGER,
+            Database::INTEGER,
+            Database::INTEGER,
+            Database::INTEGER,
+            Database::INTEGER,
+            Database::INTEGER,
+            Database::INTEGER,
+            Database::INTEGER,
+            Database::INTEGER,
+            Database::INTEGER,
+        );
+
+        $db = Database::getInstance();
+        try {
+            if ($bid > 0) {
+                $types[] = Database::INTEGER;
+                $db->conn->update(
+                    $_TABLES['blocks'],
+                    $values,
+                    array('bid' => $bid),
+                    $types
+                );
+            } else {
+                $db->conn->insert(
+                    $_TABLES['blocks'],
+                    $values,
+                    $types
+                );
+            }
+            $status = true;
+        } catch (\Throwable $e) {
+            Log::write('system', Log::ERROR, __FUNCTION__ . ': ' . $e->getMessage());
+            $status = false;
+        }
+
+        if ($status) {
+            if (($type == 'gldefault') && ($name == 'older_stories')) {
+                COM_olderStuff ();
+            }
+            CACHE_clear();
+            COM_setMessage(11);
         } else {
-            $sql = "INSERT INTO {$_TABLES['blocks']} "
-             .'(name,title,help,type,blockorder,content,tid,rdfurl,rdfupdated,rdflimit,phpblockfn,onleft,owner_id,group_id,perm_owner,perm_group,perm_members,perm_anon,is_enabled,allow_autotags) '
-             ."VALUES ('$name','$title','$help','$type','$blockorder','$content','$tid','$rdfurl','$rdfupdated','$rdflimit','$phpblockfn',$onleft,$owner_id,$group_id,$perm_owner,$perm_group,$perm_members,$perm_anon,$is_enabled,$allow_autotags)";
-             DB_query($sql);
-             $bid = DB_insertId();
+            COM_setMessage(95);
         }
-
-        if (($type == 'gldefault') && ($name == 'older_stories')) {
-            COM_olderStuff ();
-        }
-        CACHE_clear();
-        COM_setMessage(11);
         return COM_refresh ($_CONF['site_admin_url'] . '/block.php');
     } else {
         SEC_setCookie ($_CONF['cookie_name'].'adveditor', SEC_createTokenGeneral('advancededitor'),
@@ -1042,7 +1121,8 @@ switch ($action) {
                 $help = COM_sanitizeUrl ($_POST['help'], array ('http', 'https'));
             }
 
-            $content = '';
+//@TODO look to see if $html is needed elsewhere...
+           $content = '';
             $content = isset($_POST['content']) ? $_POST['content'] : '';
 //@TODO look to see if $html is needed elsewhere...
 
@@ -1064,6 +1144,7 @@ switch ($action) {
             $perm_group     = isset ($_POST['perm_group'])  ? $_POST['perm_group'] : array();
             $perm_members   = isset ($_POST['perm_members']) ? $_POST['perm_members'] : array();
             $perm_anon      = isset ($_POST['perm_anon'])   ? $_POST['perm_anon'] : array();
+            $hideifempty    = isset ($_POST['hideifempty']) ? (int)$_POST['hideifempty'] : 0;
 
             $display .= BLOCK_save( $bid,
                                     $name,
@@ -1085,8 +1166,9 @@ switch ($action) {
                                     $perm_members,
                                     $perm_anon,
                                     $is_enabled,
-                                    $allow_autotags
-                                  );
+                                    $allow_autotags,
+                                    $hideifempty
+            );
         } else {
             COM_accessLog("User {$_USER['username']} tried to illegally edit block $bid and failed CSRF checks.");
             echo COM_refresh($_CONF['site_admin_url'] . '/index.php');

@@ -1369,6 +1369,7 @@ function glfusion_210()
         }
     }
 
+    DB_query("ALTER TABLE {$_TABLES['blocks']} ADD hideifempty tinyint(1) NOT NULL default '0' AFTER `help`", 1);
 
     // update version number
     DB_query("INSERT INTO {$_TABLES['vars']} SET value='2.1.0',name='glfusion'",1);

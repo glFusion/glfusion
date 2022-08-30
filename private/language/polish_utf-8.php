@@ -805,6 +805,7 @@ $LANG21 = array(
     7 => 'Wszystkie',
     8 => 'Bloki poziom bezpieczeństwa',
     9 => 'Zablokuj zamówienie',
+    10 => 'Hide if empty',
     11 => 'Portal Blok',
     12 => 'Normalny Blok',
     13 => 'Portal Blok Ustawienia',

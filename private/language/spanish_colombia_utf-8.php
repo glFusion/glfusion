@@ -803,6 +803,7 @@ $LANG21 = array(
     7 => 'Todo',
     8 => 'Nivel de seguridad del Bloque',
     9 => 'Secuencia',
+    10 => 'Hide if empty',
     11 => 'Bloque del Sistema',
     12 => 'Bloque Normal',
     13 => 'Opciones - Bloque del Sistema',

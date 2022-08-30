@@ -1812,6 +1812,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
             DB_query("UPDATE {$_TABLES['users']} SET status=3 WHERE status=1",1);
             DB_query("UPDATE {$_TABLES['users']} SET status=3 WHERE status=4",1);
 
+            DB_query("ALTER TABLE {$_TABLES['blocks']} ADD hideifempty tinyint(1) NOT NULL default '0' AFTER `help`", 1);
+
             $current_fusion_version = '2.1.0';
 
         default:
