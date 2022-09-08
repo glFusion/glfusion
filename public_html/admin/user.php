@@ -2449,7 +2449,7 @@ function USER_handlePhotoUpload ($uid, $delete_photo = '')
 $display = '';
 
 $action = '';
-$expected = array('edit','save','delete','import','importexec','batchadmin','delbutton_x','reminder_x' );
+$expected = array('edit','save','delete','import','importexec','batchadmin','delbutton_x','delbutton','reminder_x','reminder' );
 foreach($expected as $provided) {
     if (isset($_POST[$provided])) {
         $action = $provided;
@@ -2596,6 +2596,7 @@ switch($action) {
         break;
 
     case 'delbutton_x':
+    case 'delbutton':
         if (SEC_checkToken()) {
             $msg = USER_batchDeleteExec();
             $display .= COM_siteHeader ('menu', $LANG28[11])
@@ -2609,6 +2610,7 @@ switch($action) {
         break;
 
     case 'reminder_x':
+    case 'reminder':
         if (SEC_checkToken()) {
             $msg = USER_sendReminders();
             $display .= COM_siteHeader ('menu', $LANG28[11])
