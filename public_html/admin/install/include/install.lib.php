@@ -1739,8 +1739,8 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 `msg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                 `uid` int(11) NOT NULL DEFAULT 1,
                 `sess_id` varchar(80) NOT NULL,
-                `pi_name` varchar(127) NOT NULL DEFAULT '',
-                `pi_code` varchar(40) DEFAULT NULL,
+                `pi_name` varchar(40) NOT NULL DEFAULT 'system',
+                `pi_code` varchar(127) DEFAULT NULL,
                 `title` varchar(255) DEFAULT NULL,
                 `message` text NOT NULL,
                 `persist` tinyint(1) unsigned DEFAULT 0,
@@ -1750,8 +1750,7 @@ function INST_doDatabaseUpgrades($current_fusion_version, $use_innodb = false)
                 PRIMARY KEY (`msg_id`),
                 KEY `uid` (`uid`),
                 KEY `sess_id` (`sess_id`)
-            ) ENGINE=MyISAL;
-";
+            ) ENGINE=MyISAM;";
 
             foreach ($_SQL AS $sql) {
                 if ($use_innodb) {

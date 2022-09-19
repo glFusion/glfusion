@@ -31,6 +31,10 @@ class SysMessage extends \glFusion\Notifier
      * @var integer */
     private $level = 1;
 
+    /** Plugin name. Default is 'system';
+     * @var string */
+    private $pi_name = 'system';
+
     /** Plugin-supplied code.
      * @var string */
     private $pi_code = '';
@@ -127,6 +131,7 @@ class SysMessage extends \glFusion\Notifier
                 'msg_id',
                 array(
                     'uid' => $uid,
+                    'pi_name' => $this->pi_name,
                     'pi_code' => $this->pi_code,
                 )
             );
@@ -151,6 +156,7 @@ class SysMessage extends \glFusion\Notifier
             // Just insert a new, possibly duplicate, message
             $qb->insert($_TABLES['sysmessages'])
                ->setValue('uid', ':uid')
+               ->setValue('pi_name', ':pi_name')
                ->setValue('pi_code', ':pi_code')
                ->setValue('sess_id', ':sess_id')
                ->setValue('title', ':title')
@@ -160,6 +166,7 @@ class SysMessage extends \glFusion\Notifier
                ->setValue('level', ':level');
         }
         $qb->setParameter('uid', $uid, Database::INTEGER)
+           ->setParameter('pi_name', $this->pi_name, Database::STRING)
            ->setParameter('pi_code', $this->pi_code, Database::STRING)
            ->setParameter('sess_id', $this->sess_id, Database::STRING)
            ->setParameter('title', $this->subject, Database::STRING)
@@ -377,7 +384,7 @@ class SysMessage extends \glFusion\Notifier
      * @param   string  $level  Message level.
      * @return  object  $this
      */
-    public function withLevel($level)
+    public function setLevel($level)
     {
         switch ($level) {
         case 'error':
@@ -417,7 +424,7 @@ class SysMessage extends \glFusion\Notifier
      * @param   integer $uid    Recipient user ID
      * @return  object  $this
      */
-    public function withUid(int $uid) : self
+    public function setUid(int $uid) : self
     {
         $this->uid = $uid;
         return $this;
@@ -431,9 +438,22 @@ class SysMessage extends \glFusion\Notifier
      * @param   string  $pi_code    Plugin-supplied code
      * @return  object  $this
      */
-    public function withPlugin($pi_code) : self
+    public function setPlugin(string $pi_name) : self
     {
-        $this->pi_code = $pi_code;
+        $this->pi_name = $pi_name;
+        return $this;
+    }
+
+
+    /**
+     * Set the unique identifier for a message.
+     *
+     * @param   string  $id     Unique identifier string
+     * @return  object  $this
+     */
+    public function setCode(string $id) : self
+    {
+        $this->pi_code = $id;
         return $this;
     }
 
@@ -445,7 +465,7 @@ class SysMessage extends \glFusion\Notifier
      * @param   boolean $persist    True to persist, False to disappear
      * @return  object  $this
      */
-    public function withPersists(?bool $persist = NULL) : self
+    public function setPersists(?bool $persist = NULL) : self
     {
         if ($persist === NULL) {
             $this->persist = 1;
@@ -462,7 +482,7 @@ class SysMessage extends \glFusion\Notifier
      * @param   boolean $flag   True to use the session ID
      * @return  object  $this
      */
-    public function withSessId($flag)
+    public function setSessId($flag)
     {
         $this->sess_id = $flag ? session_id() : '';
         return $this;
@@ -475,7 +495,7 @@ class SysMessage extends \glFusion\Notifier
      * @param   boolean $flag   True to store only one, False for multiple
      * @return  object  $this
      */
-    public function withUnique(bool $flag) : self
+    public function setUnique(bool $flag) : self
     {
         if ($flag) {
             $this->unique |= self::UNIQUE;
@@ -492,7 +512,7 @@ class SysMessage extends \glFusion\Notifier
      * @param   boolean $flag   True to overwrite, False to leave alone.
      * @return  object  $this
      */
-    public function withOverwrite(bool $flag) : self
+    public function setOverwrite(bool $flag) : self
     {
         if ($flag) {
             $this->unique |= self::OVERWRITE;
