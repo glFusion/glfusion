@@ -89,7 +89,7 @@
 
 {!!if {number_comments} > 0 !!}
 			<div>
-				<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=comments&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
+				<a href="{site_url}/search.php?query=&amp;keyType=all&amp;datestart=&amp;dateend=&amp;topic=0&amp;type=comment&amp;author={user_id}&amp;results=25&amp;mode=search" title="">
 					{lang_number_comments} {number_comments}
 				</a>
 			</div>
