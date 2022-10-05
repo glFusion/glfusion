@@ -345,6 +345,28 @@ class outputHandler {
         $this->_footer['script'][$priority][] = $link;
     }
 
+
+	/**
+	 * Add a JavaScript source footer section of page
+	 *
+	 * Adds a raw footer script entry. The code must be fully formed and include
+	 * all necessary HTML. No manipulations are done to the data.
+	 *
+	 * @param  string   $href       The URL to the javascript file
+	 * @param  int      $priority   Load priority
+	 * @param  string   $mime       The mime type of the stylesheet, 'text/css'
+	 *                              used if no other type passed.
+	 * @param  boolean  $async      true - load script asynchronously
+     *
+	 * @access public
+	 * @return nothing
+	 */
+    public function addRawScriptFooter(string $code, int $priority = HEADER_PRIO_NORMAL, string $mime = 'text/javascript', bool$async = false) : void
+    {
+        $this->_footer['script'][$priority][] = $code;
+    }
+
+
 	/**
 	 * Add JavaScript to footer section of page
 	 *
