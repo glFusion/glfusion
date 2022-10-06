@@ -349,6 +349,31 @@ abstract class CommentEngine
     }
 
 
+    /**
+     * Get the count of comments submitted by user ID.
+     *
+     * @param   integer $uid        User ID
+     * @return  integer     Comment count
+     */
+    public function getCountByUser(int $uid) : int
+    {
+        return 0;
+    }
+
+
+    /**
+     * Get the latest comments from a given user.
+     *
+     * @param   integer $uid        User ID
+     * @param   integer $limit      Optional limit
+     * @return  array       Array of Comment objects
+     */
+    public function getLastX(int $uid, ?int $limit=NULL) : array
+    {
+        return array();
+    }
+
+
     abstract public function getLinkWithCount(string $type, string $sid, string $url, ?int $cmtCount = NULL);
 }
 

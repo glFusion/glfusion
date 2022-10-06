@@ -652,6 +652,7 @@ class UserInterface {
         USES_lib_user();
 
         $db = Database::getInstance();
+        $CommentEngine = \glFusion\Comments\CommentEngine::getEngine();
 
         $retval = '';
 
@@ -903,20 +904,13 @@ class UserInterface {
         } else {
             $user_templates->set_var ('story_row','<tr><td>' . $LANG01[37] . '</td></tr>');
         }
-        if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
-            $commentCounter = 0;
 
-            $stmt = $db->conn->executeQuery(
-                        "SELECT * FROM `{$_TABLES['comments']}`
-                         WHERE uid = ? AND queued=0 ORDER BY date DESC",
-                        array($user),
-                        array(Database::INTEGER)
-            );
-
-            while ($row = $stmt->fetch(Database::ASSOCIATIVE)) {
-                if ( $commentCounter >= 10 ) {
-                    break;
-                }
+        $commentCounter = 0;
+        $Comments = $CommentEngine->getLastX($user);
+        if (count($Comments) > 0) {
+            $user_templates->set_block('profile', 'comment_row', 'commentRow');
+            foreach ($Comments as $row) {
+                // Get the plugin item info to be sure it wasn't deleted.
                 $itemInfo = PLG_getItemInfo($row['type'], $row['sid'],'id');
                 if ( is_array($itemInfo) || $itemInfo == '' ) {
                     continue;
@@ -925,7 +919,7 @@ class UserInterface {
                 $user_templates->set_var ('row_number', ($commentCounter + 1) . '.');
                 $row['title'] = html_entity_decode(str_replace ('$', '&#36;', $row['title']));
                 $comment_url = $_CONF['site_url'] .
-                        '/comment.php?mode=view&amp;cid=' . $row['cid'] . '#comments';
+                        '/comment.php?mode=view&amp;cid=' . $row['cid'] . '#cid_' . $row['cid'];
                 $user_templates->set_var ('comment_title',
                     COM_createLink(
                         $row['title'],
@@ -934,11 +928,8 @@ class UserInterface {
                 );
                 $commenttime = COM_getUserDateTimeFormat ($row['date']);
                 $user_templates->set_var ('comment_date', $commenttime[0]);
-                $user_templates->parse ('comment_row', 'row', true);
+                $user_templates->parse ('commentRow', 'comment_row', true);
                 $commentCounter++;
-            }
-            if ( $commentCounter == 0 ) {
-                $user_templates->set_var('comment_row','<tr><td>' . $LANG01[29] . '</td></tr>');
             }
         }
 
@@ -954,16 +945,9 @@ class UserInterface {
                         array(Database::INTEGER,Database::STRING)
         );
         $user_templates->set_var ('number_stories', COM_numberFormat($storyCount));
-        if (!isset($_CONF['comment_engine']) || $_CONF['comment_engine'] == 'internal') {
+        $commentCount = $CommentEngine->getCountByUser($user);
+        if ($commentCount > 0) {
             $user_templates->set_var ('lang_number_comments', $LANG04[85]);
-
-            $commentCount = (int) $db->conn->fetchColumn(
-                        "SELECT COUNT(*) AS count FROM `{$_TABLES['comments']}`
-                         WHERE (queued = 0 AND uid = ?)",
-                        array($user),
-                        0,
-                        array(Database::INTEGER)
-            );
             $user_templates->set_var ('number_comments', COM_numberFormat($commentCount));
         }
         $user_templates->set_var ('lang_all_postings_by',

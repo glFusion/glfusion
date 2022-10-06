@@ -60,7 +60,7 @@ class Engine extends \glFusion\Comments\CommentEngine
      * @param   string  $sid        Item ID
      * @param   string  $url        URL to comment display
      * @param   integer $cmtCount   Optional number of comments
-     */ 
+     */
     public function getLinkWithCount(string $type, string $sid, string $url, ?int $cmtCount = NULL) : array
     {
         global $LANG01, $_CONF;

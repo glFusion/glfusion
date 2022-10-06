@@ -52,6 +52,20 @@ class CommentCollection extends \glFusion\Collection
 
 
     /**
+     * Filter results by author user ID.
+     *
+     * @param   integer $uid    User ID
+     * @return  object  $this
+     */
+    public function withUid(int $uid) : self
+    {
+        $this->_qb->andWhere('c.uid = :uid')
+                  ->setParameter('uid', $uid, Database::INTEGER);
+        return $this;
+    }
+
+
+    /**
      * For nested layouts, get the comments sorted by left/right.
      *
      * @param   string  $mode   Mode (nested, flat)
@@ -68,7 +82,7 @@ class CommentCollection extends \glFusion\Collection
                       ->andWhere('(c.lft >= c2.lft AND c.lft <= c2.rht)');
             // Flag that pindent is set so it won't get added again during execute()
             $this->_pindent_set = true;
-        } 
+        }
         return $this;
     }
 
@@ -82,7 +96,7 @@ class CommentCollection extends \glFusion\Collection
     public function withQueued(bool $queued=true) : self
     {
         $queued = $queued ? 1 : 0;
-        $this->_qb->andWhere('queued = :queued')
+        $this->_qb->andWhere('c.queued = :queued')
                   ->setParameter('queued', $queued, Database::INTEGER);
         return $this;
     }

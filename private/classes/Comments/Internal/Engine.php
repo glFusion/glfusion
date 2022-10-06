@@ -191,7 +191,6 @@ class Engine extends \glFusion\Comments\CommentEngine
                 // Link to plugin defined link or lacking that a generic link
                 // that the plugin should support (hopefully)
                 $parts = PLG_getCommentUrlId($this->type);
-                var_dump($parts);die;
                 if (is_array($parts)) {
                     $pLink = "{$parts[0]}?{$parts[1]}={$this->sid}" .
                         "&amp;type={$this->type}&amp;order={$this->order}&amp;mode={$this->mode}";
@@ -665,7 +664,7 @@ class Engine extends \glFusion\Comments\CommentEngine
      * @param   string  $sid        Item ID
      * @param   string  $url        URL to comment display
      * @param   integer $cmtCount   Optional number of comments
-     */ 
+     */
     public function getLinkWithCount(string $type, string $sid, string $url, ?int $cmtCount = NULL) : array
     {
         global $_TABLES, $LANG01;
@@ -691,5 +690,55 @@ class Engine extends \glFusion\Comments\CommentEngine
         );
         return $retval;
     }
+
+
+    /**
+     * Get the count of comments submitted by user ID.
+     *
+     * @param   integer $uid        User ID
+     * @return  integer     Comment count
+     */
+    public function getCountByUser(int $uid) : int
+    {
+        global $_TABLES;
+
+        static $counts = array();
+        if (!array_key_exists($uid, $counts)) {
+            $counts[$uid] = (int)Database::getInstance()->getCount(
+                $_TABLES['comments'],
+                array('queued', 'uid'),
+                array(0, $uid),
+                array(Database::INTEGER, Database::INTEGER)
+            );
+        }
+        return $counts[$uid];
+
+    }
+
+
+    /**
+     * Get the latest comments from a given user.
+     *
+     * @param   integer $uid        User ID
+     * @param   integer $limit      Optional limit
+     * @return  array       Array of Comment objects
+     */
+    public function getLastX(int $uid, ?int $limit=NULL) : array
+    {
+        $Coll = new CommentCollection;
+        if ($limit === NULL) {
+            $limit = 10;
+        }
+        if ($limit > 0) {
+            $Coll->withLimit($limit);
+        }
+        $objects = $Coll->withUid($uid)
+                        ->withQueued(false)
+                        ->withOrderBy('c.date', 'DESC')
+                        ->execute()
+                        ->getObjects();
+        return $objects;
+    }
+
 }
 
