@@ -428,8 +428,7 @@ class Badge
                     $retval[$uid][] = $badge;
                     if (
                         $badge->getBadgeGroupId() > 0 &&
-                        $BadgeGroups[$badge->getBadgeGroupId()]->isSingular()
-                    ) {
+                        $BadgeGroups[$badge->getBadgeGroupId()]->isSingular()) {
                         break;
                     }
                 }

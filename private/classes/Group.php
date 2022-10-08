@@ -281,10 +281,6 @@ class Group
         foreach($data AS $row) {
             $groups[ucfirst($row['grp_name'])] = $row['ug_main_grp_id'];
         }
-        if ($uid > 1) {
-            $groups['Logged-in Users'] = 13;
-            unset($groups['Non-Logged-in Users']);
-        }
 
         ksort($groups);
         $runonce[$uid] = $groups;
