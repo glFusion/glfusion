@@ -890,7 +890,7 @@ class Comment implements \ArrayAccess
         PLG_itemDeleted((int) $cid, 'comment');
 
         Cache::getInstance()->deleteItemsByTags(array('whatsnew','story_'.$sid, 'comments'));
-        echo COM_refresh(self::makeRedirectUrl($this->type, $this->sid));
+        echo COM_refresh(self::makeRedirectUrl($type, $sid));
         return 0;
     }
 
