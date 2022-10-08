@@ -249,47 +249,6 @@ class Engine extends \glFusion\Comments\CommentEngine
             $_CONF['comment_indent'] = 25;
         }
 
-        // Build the comment data record
-
-/*
-        //@TODO - appears if $preview is true- we pass the results instead of the result set
-        if ($this->preview) {
-            if ( isset($comments['comment_text'])) {
-                $comments['comment'] = $comments['comment_text'];
-            }
-
-            $A = $comments;
-            if( empty( $A['nice_date'] )) {
-                $A['nice_date'] = time();
-            }
-            if( !isset( $A['cid'] )) {
-                $A['cid'] = 0;
-            }
-            if( !isset( $A['photo'] )) {
-                if( isset( $_USER['photo'] )) {
-                    $A['photo'] = $_USER['photo'];
-                } else {
-                    $A['photo'] = '';
-                }
-            }
-            if (! isset($A['email'])) {
-                if (isset($_USER['email'])) {
-                    $A['email'] = $_USER['email'];
-                } else {
-                    $A['email'] = '';
-                }
-            }
-            $A['name'] = $A['username'];
-            $this->mode = 'flat';
-            $T->set_var('preview_mode',true);
-            $resultSet[] = $A;
-        } else {
-            //@TODO - $comments is passed from another function -
-            //          really isn't a good practice -
-            $resultSet = $comments->fetchAll(Database::ASSOCIATIVE);
-            $T->unset_var('preview_mode');
-        }
- */
         $resultSet = $Coll->getComments();
         if (count($resultSet) == 0 ) {
             return '';
@@ -513,11 +472,20 @@ class Engine extends \glFusion\Comments\CommentEngine
             //COMMENT edit rights
             $edit_type = 'edit'; // normal user edit
             if (!COM_isAnonUser()) {
-                if ( $_USER['uid'] == $A['uid'] && $_CONF['comment_edit'] == 1
-                    && ($_CONF['comment_edittime'] == 0 || ((time() - $A['nice_date']) < $_CONF['comment_edittime'] )) &&
+                if (
+                    $_USER['uid'] == $A['uid'] &&
+                    $_CONF['comment_edit'] == 1
+                    && (
+                        $_CONF['comment_edittime'] == 0 || ((time() - (int)$A['nice_date']) < $_CONF['comment_edittime'])
+                    ) &&
                     $this->ccode == self::ENABLED &&
-                    ($db->conn->fetchColumn("SELECT COUNT(*) FROM `{$_TABLES['comments']}`
-                        WHERE queued=0 AND pid=?",array($A['cid']),0,array(Database::INTEGER)) == 0)) {
+                    $db->getCount(
+                        $_TABLES['comments'],
+                        array('pid'),
+                        array($A['cid']),
+                        array(Database::INTEGER)
+                    ) == 0
+                ) {
                     $edit_option = true;
                 } else if (SEC_hasRights('comment.moderate') ) {
                     $edit_option = true;
