@@ -1575,7 +1575,7 @@ class Download
             break;
 
         case 'hits' :
-            $retval = '<a href="'.$_CONF['site_url'].'/filemgmt/downloadhistory.php?lid='.$A['lid'].'" target="_blank">';
+            $retval = '<a href="'.$_CONF['site_url'].'/filemgmt/downloadhistory.php?lid='.$fieldvalue.'" target="_blank">';
             $retval .= COM_numberFormat($fieldvalue);
             $retval .= '</a>';
             break;

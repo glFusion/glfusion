@@ -10,7 +10,6 @@
 - Several bug fixes
   - Media Gallery - fixed invalid path to mediagallery.gif in user profile
   - Fixed language reference where it would throw an error if a language file was not found
-  - Fixed File Management Administration 'Hits' download history link
 
 ## v2.0.1 (March 6, 2022)
 
