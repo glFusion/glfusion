@@ -1366,6 +1366,7 @@ function MB_editMenu( $mid=0 )
         'menuname'          => $menu->name,
         'enabled'           => $menu_active_check,
         'disabled'          => $disabled,
+        'savemode'          => $mid > 0 ? 'saveeditmenu' : 'savenewmenu',
     ));
 
     $T->parse('output', 'admin');
