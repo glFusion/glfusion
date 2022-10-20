@@ -346,7 +346,7 @@ switch ($method) {
                     COM_refresh($_CONF['site_url'].'/usersettings.php');
                     exit;
                 }
-                UserInterface::loginPage();
+                UserInterface::loginPage($_GET);
                 break;
         }
 
