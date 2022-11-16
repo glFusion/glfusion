@@ -213,7 +213,7 @@
 {!else}
 {!!set btn_size '' !!}
 {!endif}
-    <button type="{type}" value="button_value" name="{button_name}" class="uk-button {btn_size} {btn_style} {other_cls}"
+    <button type="{type}" value="{button_value}" name="{button_name}" class="uk-button {btn_size} {btn_style} {other_cls}"
     <!-- BEGIN attr -->
         {name}="{value}"
     <!-- END attr -->
