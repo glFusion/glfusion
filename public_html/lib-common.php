@@ -2891,12 +2891,14 @@ function COM_formatBlock( $A, $noboxes = false)
         if (( $A['allow_autotags'] == 1 ) && ( $A['type'] == 'normal' )) {
             $blockcontent = PLG_replaceTags( $blockcontent,'glfusion','block' );
         }
-        $blockcontent = str_replace( array( '<?', '?>' ), '', $blockcontent );
+        $blockcontent = str_replace( array( '<'.'?', '?'.'>' ), '', $blockcontent );
 
-        $retval .= COM_startBlock( $A['title'], $A['help'],
+        if (!empty($blockcontent)) {
+            $retval .= COM_startBlock( $A['title'], $A['help'],
                        COM_getBlockTemplate( $A['name'], 'header', $position ), $A['name'] )
                 . $blockcontent . PHP_EOL
                 . COM_endBlock( COM_getBlockTemplate( $A['name'], 'footer', $position ));
+        }
     }
 
     return $retval;
