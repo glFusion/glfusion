@@ -1018,7 +1018,7 @@ class Download
         $pathstring .= "<a href=\"{$_FM_CONF['url']}/index.php?id={$this->lid}\">{$hdr_title}</a>";
 
         $categorySelectHTML = '';
-        $rootCats = Category::getChildren(0, true);
+        $rootCats = Category::getChildren(0, 2);
         foreach ($rootCats as $cid=>$Cat) {
             $categorySelectHTML .= '<option value="'.$cid.'"';
             if ($cid == $this->cid) {
