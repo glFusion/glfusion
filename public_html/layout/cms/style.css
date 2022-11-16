@@ -2809,3 +2809,6 @@ span.tm-badge {
 	background-image: unset;
 }
 
+.tm-highlight {
+	background-color: #FFFF00;;
+}
