@@ -815,6 +815,24 @@ $_SQL[] = "CREATE TABLE `{$_TABLES['badge_groups']}` (
 ) ENGINE=MyISAM;
 ";
 
+$_SQL[] = "CREATE TABLE `{$_TABLES['sysmessages']}` (
+  `msg_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL DEFAULT 1,
+  `sess_id` varchar(80) NOT NULL,
+  `pi_name` varchar(127) NOT NULL DEFAULT '',
+  `pi_code` varchar(40) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `message` text NOT NULL,
+  `persist` tinyint(1) unsigned DEFAULT 0,
+  `created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `expires` int(11) unsigned NOT NULL DEFAULT 2208988799,
+  `level` tinyint(1) unsigned NOT NULL DEFAULT 1,
+  PRIMARY KEY (`msg_id`),
+  KEY `uid` (`uid`),
+  KEY `sess_id` (`sess_id`)
+) ENGINE=MyISAM;
+";
+
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (1,3) ";    // story.edit to Story Admin
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (2,3) ";    // story.moderate to  Story Admin
 $_DATA[] = "INSERT INTO {$_TABLES['access']} (acc_ft_id, acc_grp_id) VALUES (3,3) ";    // story.submit to Story Admin

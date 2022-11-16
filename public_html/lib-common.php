@@ -1468,6 +1468,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
         SESS_unSet('glfusion.infoblock');
 
     }
+    $msgTxt .= glFusion\Notifiers\Popup::showAll();
     $theme->set_var('info_block',$msgTxt);
 
     // Call to plugins to set template variables in the footer
@@ -3720,7 +3721,6 @@ function COM_showMessage($msg, $plugin = '', $title = '', $persist = false,$type
         } else {
             $message = $MESSAGE[$msg];
         }
-
         if (!empty($message)) {
             $retval .= COM_showMessageText($message, $title, $persist,$type);
         }

@@ -75,7 +75,7 @@ function glfusion_SecurityCheck()
     }
     if ( $msg != '' ) {
 
-        $retval = COM_showMessageText($msg,'',false, 'error');
+        $retval = COM_showMessageText($msg,'',true, 'error');
     }
     return $retval;
 }

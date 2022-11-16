@@ -131,6 +131,7 @@ $stmt->bindValue(1,$expireTime,Database::INTEGER);
 try {
     $stmt->execute();
 } catch (\Throwable $ignore) {}
+Notifier::deleteExpired();  // delete expired notifications
 Log::write('system',Log::DEBUG,'Completed Clean up activities');
 
 if ( $force || $_CONF['cron_schedule_interval'] > 0  ) {
