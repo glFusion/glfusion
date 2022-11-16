@@ -300,7 +300,7 @@ class Popup extends \glFusion\Notifier
 
     /**
      * Retrieve all messages for display.
-     * Gets all messages from the DB where the user ID matches for
+     * Gets all non-expired messages from the DB where the user ID matches for
      * non-anonymous users, OR the session ID matches. This allows a message
      * caused by an anonymous action to be displayed to the user after login.
      *
@@ -311,37 +311,30 @@ class Popup extends \glFusion\Notifier
     {
         global $_TABLES;
 
+        $db = Database::getInstance();
         $messages = array();
         $params = array();
-        $values = array();
-        $types = array();
+        $values = array(time());
+        $types = array(Database::INTEGER);
 
         if ($uid > 1) {
-            $params[] = 'uid = ?';
+            $fld  = 'uid';
             $values[] = $uid;
             $types[] = Database::INTEGER;
         } else {
             // Get the session ID for messages to anon users. If a message was
             // stored before the user was logged in this will allow them to see it.
-            $params[] = 'sess_id = ?';
+            $fld = 'sess_id';
             $values[] = session_id();
             $types[] = Database::STRING;
         }
-        $params = implode(' OR ' , $params);
-        if (empty($params)) {
-            return $messages;
-        }
-
-        $db = Database::getInstance();
+        $query = "SELECT title, message, persist, level
+            FROM {$_TABLES['sysmessages']}
+            WHERE expires > ? AND $fld = ?
+            ORDER BY created DESC";
         try {
-            $data = $db->conn->executeQuery(
-                "SELECT title, message, persist, level
-                FROM {$_TABLES['sysmessages']}
-                WHERE $params
-                ORDER BY created DESC",
-                $values,
-                $types
-            )->fetchAll(Database::ASSOCIATIVE);
+            $data = $db->conn->executeQuery($query, $values, $types)
+                             ->fetchAll(Database::ASSOCIATIVE);
         } catch (\Exception $e) {
             Log::write('system', Log::ERROR, __METHOD__ . ': ' . $e->getMessage());
             $data = false;
@@ -543,7 +536,7 @@ class Popup extends \glFusion\Notifier
      * @param   boolean $persist    True to persist, False to disappear
      * @return  object  $this
      */
-    public function setPersists(?bool $persist = NULL) : self
+    public function setPersists(bool $persist=true) : self
     {
         $this->persist = $persist ? 1 : 0;
         return $this;
