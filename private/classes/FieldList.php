@@ -721,5 +721,27 @@ class FieldList
         return $t->finish($t->get_var('output'));
     }
 
+    /**
+     * Create a blank icon to help with spacing.
+     */
+    public static function blank($args=array())
+    {
+        $t = self::init();
+        $t->set_block('up','field-blank');
+
+        if (isset($args['attr']) && is_array($args['attr'])) {
+            $t->set_block('field-blank','attr','attributes');
+            foreach($args['attr'] AS $name => $value) {
+                $t->set_var(array(
+                    'name' => $name,
+                    'value' => $value)
+                );
+                $t->parse('attributes','attr',true);
+            }
+        }
+        $t->parse('output','field-blank');
+        return $t->finish($t->get_var('output'));
+    }
+
 }
 ?>
