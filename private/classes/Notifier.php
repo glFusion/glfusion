@@ -55,7 +55,7 @@ abstract class Notifier
 
     /** Expiration timestamp, if supported.
      * @var integer */
-    protected $exp_ts = 2208988799;     // 2039-12-31 23:59:59 UTC
+    protected $exp_ts = 2145916799;     // 2037-12-31 23:59:59 UTC
 
 
     /**
