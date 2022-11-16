@@ -30,6 +30,7 @@ $_SQL['filemgmt_cat'] = "CREATE TABLE {$_TABLES['filemgmt_cat']} (
   imgurl varchar(150) NOT NULL default '',
   grp_access mediumint(8) NOT NULL default '0',
   grp_writeaccess mediumint(8) NOT NULL default '0',
+  submitterview tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (cid),
   KEY pid (pid)
 ) ENGINE=MyISAM";

@@ -141,6 +141,7 @@ $LANG_FILEMGMT = array(
     'back_to_listing'       => 'Listeye geri dön',
     'remote_url'            => 'Uzak URL',
     'file_missing'          => 'Dosya Kayıp',
+    'submitterview'     => 'Logged-In Submitters may view regardless of view access',
 );
 
 $LANG_FILEMGMT_ERRORS = array(

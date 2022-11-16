@@ -17,6 +17,8 @@
 */
 
 require_once '../lib-common.php';
+use glFusion\Database\Database;
+use glFusion\Log\Log;
 
 if (!in_array('filemgmt', $_PLUGINS)) {
     COM_404();
@@ -59,7 +61,8 @@ if ($lid == 0) {  // Check if the script is being called from the commentbar
     }
 }
 
-$groupsql = SEC_buildAccessSql();
+$db = Database::getInstance();
+$groupsql = $db->getAccessSql('');
 
 if ($lid > 0) {
     $File = Filemgmt\Download::getInstance($lid);
@@ -91,6 +94,9 @@ if ($lid > 0) {
     $p->parse('output', 'page');
     $display .= $p->finish ($p->get_var('output'));
 } else {
+
+    $qb = $db->conn->createQueryBuilder();
+
     // No file specified, show the listing.
     $p = new Template($_CONF['path'] . 'plugins/filemgmt/templates');
     $p->set_file(array (
@@ -100,15 +106,11 @@ if ($lid > 0) {
 
     $p->set_var('tablewidth', $_FM_CONF['shotwidth'] + 10);
 
-    // get the Group permissions SQL - will be used multiple times below
-    $groupsql = SEC_buildAccessSql();
-
-
 // determine if user can submit files and that there are valid categories to submit to...
     $p->set_var('can_submit',false);
     if (Filemgmt\Download::canSubmit()) {
         $sql = "SELECT COUNT(*) FROM {$_TABLES['filemgmt_cat']} WHERE pid=0 ";
-        $sql .= $groupsql;
+        $sql .= "AND " . $groupsql;
         list($catAccessCnt) = DB_fetchArray( DB_query($sql));
         if ( $catAccessCnt < 1 ) {
             $p->unset_var('can_submit');
@@ -131,7 +133,7 @@ if ($lid > 0) {
     $show = (int)$_FM_CONF['perpage'];
 
     $sql = "SELECT cid, title, imgurl,grp_access FROM {$_TABLES['filemgmt_cat']} WHERE pid = 0 ";
-    $sql .= $groupsql . ' ORDER BY CID';
+    $sql .= 'AND ' . $groupsql . ' ORDER BY CID';
     $result = DB_query($sql);
     $nrows = DB_numRows($result);
 
@@ -150,7 +152,7 @@ if ($lid > 0) {
     // Need to use a SQL stmt that does a join on groups user has access to  - for file count
     $sql  = "SELECT count(*)  FROM {$_TABLES['filemgmt_filedetail']} a ";
     $sql .= "LEFT JOIN {$_TABLES['filemgmt_cat']} b ON a.cid=b.cid WHERE status > 0 ";
-    $sql .= $groupsql;
+    $sql .= ' AND ' . $groupsql;
     $countsql = DB_query($sql);
     list($maxrows) = DB_fetchArray($countsql);
     $numpages = ceil($maxrows / $show);
@@ -223,23 +225,35 @@ if ($lid > 0) {
     }
     $offset = ($page - 1) * $show;
 
-    $sql = "SELECT d.*, t.description, c.grp_access
-        FROM {$_TABLES['filemgmt_filedetail']} d
-        LEFT JOIN {$_TABLES['filemgmt_cat']} c
-            ON d.cid=c.cid
-        LEFT JOIN {$_TABLES['filemgmt_filedesc']} t
-            ON t.lid = d.lid
-        WHERE d.status > 0 " . $groupsql .
-        " AND d.lid=t.lid ORDER BY date DESC LIMIT $offset, $show";
-    //echo $sql;die;
-    $result = DB_query($sql);
-    $numrows = DB_numROWS($result);
-    $countsql = DB_query("SELECT COUNT(*) FROM ".$_TABLES['filemgmt_filedetail']." WHERE status > 0");
-    $p->set_var('listing_heading', _MD_LATESTLISTING);
-    if ($numrows > 0 ) {
+    try {
+        $qb->select('d.*', 't.description', 'c.grp_access')
+           ->from($_TABLES['filemgmt_filedetail'], 'd')
+           ->leftJoin('d', $_TABLES['filemgmt_cat'], 'c', 'd.cid=c.cid')
+           ->leftJoin('d', $_TABLES['filemgmt_filedesc'], 't', 't.lid = d.lid')
+           ->where('d.status > 0')
+           ->andWhere('d.lid = t.lid')
+           ->orderBy('date', 'DESC')
+           ->setFirstResult($offset)
+           ->setMaxResults($show);
+        if ($_USER['uid'] > 1) {
+            $qb->andWhere('(c.submitterview = 1 AND d.submitter = :submitter) OR ' . $groupsql)
+               ->setParameter('submitter', $_USER['uid'], Database::INTEGER);
+        } else {
+            $qb->andWhere($groupsql);
+        }
+        $stmt = $qb->execute();
+        $numrows = $stmt->rowCount();
+    } catch (\Throwable $e) {
+        Log::write('system', Log::ERROR, __FUNCTION__ . ': ' . $e->getMessage());
+        $stmt = false;
+        $numrows = 0;
+    }
+
+    if ($stmt && $numrows) {
+        $countsql = DB_query("SELECT COUNT(*) FROM ".$_TABLES['filemgmt_filedetail']." WHERE status > 0");
+        $p->set_var('listing_heading', _MD_LATESTLISTING);
         $p->set_block('page', 'fileRecords', 'fRecord');
-        for ($x =1; $x <=$numrows; $x++) {
-            $A = DB_fetchArray($result, false);
+        while ($A = $stmt->fetchAssociative()) {
             $D = new Filemgmt\Download($A);
             $p->set_var('filelisting_record', $D->showListingRecord());
             $p->parse('fRecord', 'fileRecords', true);

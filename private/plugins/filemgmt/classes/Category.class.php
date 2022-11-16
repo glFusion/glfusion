@@ -50,6 +50,10 @@ class Category
      * @var integer */
     private $grp_writeaccess = 1;
 
+    /** Can the submitter view files, regardless of grp_access?
+     * @var boolean */
+    private $submitterview = 0;
+
 
     /**
      * Constructor.
@@ -91,7 +95,10 @@ class Category
         $this->grp_access = $row['grp_access'];
         $this->grp_writeaccess = $row['grp_writeaccess'];
         if ($fromDB) {
+            $this->submitterview = $row['submitterview'];
             $this->imgurl = $row['imgurl'];
+        } else {
+            $this->submitterview = isset($row['submitterview']) ? 1 : 0;
         }
         return $this;
     }
@@ -170,7 +177,7 @@ class Category
      * @param  array   $A      Optional array of values from $_POST
      * @return boolean         True if no errors, False otherwise
      */
-    public function save($A = array())
+    public function save(?array $A = NULL) : bool
     {
         global $_TABLES, $_FM_CONF;
 
@@ -179,6 +186,7 @@ class Category
         }
 
         if (
+            isset($_FILES) &&
             isset($_FILES['imgurl']) &&
             isset($_FILES['imgurl']['name']) &&
             !empty($_FILES['imgurl']['name'])
@@ -227,41 +235,51 @@ class Category
         // Insert or update the record, as appropriate, as long as a
         // previous error didn't occur.
         if (empty($this->Errors)) {
-            if ($this->isNew) {
-                $sql1 = "INSERT INTO {$_TABLES['filemgmt_cat']} SET ";
-                $sql3 = '';
-            } else {
-                $sql1 = "UPDATE {$_TABLES['filemgmt_cat']} SET ";
-                $sql3 = " WHERE cid = '{$this->cid}'";
-            }
-            $sql2 = "pid = '" . $this->pid . "',
-                title = '" . DB_escapeString($this->title) . "',
-                grp_access = '{$this->grp_access}',
-                grp_writeaccess = '{$this->grp_writeaccess}',
-                imgurl = '" . DB_escapeString($this->imgurl) . "'";
-            $sql = $sql1 . $sql2 . $sql3;
-            //echo $sql;die;
-            //COM_errorLog($sql);
-            DB_query($sql);
-            if (!DB_error()) {
+            $values = array(
+                'pid' => $this->pid,
+                'title' => $this->title,
+                'grp_access' => $this->grp_access,
+                'grp_writeaccess' => $this->grp_writeaccess,
+                'imgurl' => $this->imgurl,
+                'submitterview' => $this->submitterview ? 1 : 0,
+            );
+            $types = array(
+                Database::INTEGER,
+                Database::STRING,
+                Database::INTEGER,
+                Database::INTEGER,
+                Database::STRING,
+                Database::INTEGER,
+            );
+            $db = Database::getInstance();
+            try {
                 if ($this->isNew) {
-                    $this->cid = DB_insertID();
+                    $db->conn->insert(
+                        $_TABLES['filemgmt_cat'],
+                        $values,
+                        $types
+                    );
+                    $this->cid = $db->conn->lastInsertId();
+                } else {
+                    $types[] = Database::INTEGER;
+                    $db->conn->update(
+                        $_TABLES['filemgmt_cat'],
+                        $values,
+                        array('cid' => $this->cid),
+                        $types
+                    );
                 }
-                /*if (isset($_POST['old_grp']) && $_POST['old_grp'] > 0 &&
-                        $_POST['old_grp'] != $this->grp_access) {
-                    $this->_propagatePerms($_POST['old_grp']);
-                }*/
-            } else {
+            } catch (\Throwable $e) {
+                Log::write('system', Log::ERROR, __METHOD__ . ': ' . $e->getMessage());
                 $this->addError('Failed to insert or update record');
             }
         }
-
         if (empty($this->Errors)) {
             return true;
         } else {
             return false;
         }
-    }   // function Save()
+    }
 
 
     /**
@@ -357,6 +375,7 @@ class Category
             'old_grp'       => $this->grp_access,
             'grp_access_options'        => SEC_getGroupDropdownAll($this->grp_access, 3, 'grp_access'),
             'grp_writeaccess_options'   => SEC_getGroupDropdownAll($this->grp_writeaccess, 3, 'grp_writeaccess'),
+            'subview_chk' => $this->submitterview ? 'checked="checked"' : '',
             'pid_options'   => COM_optionList(
                 $_TABLES['filemgmt_cat'],
                 'cid,title',
@@ -477,6 +496,17 @@ class Category
         } else {
             return false;
         }
+    }
+
+
+    /**
+     * Get the value of the submitterview flag.
+     *
+     * @return  integer     1 if submitter can view, 0 if not
+     */
+    public function getSubmitterView() : int
+    {
+        return (int)$this->submitterview;
     }
 
 
