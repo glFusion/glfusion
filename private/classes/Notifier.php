@@ -255,7 +255,7 @@ abstract class Notifier
      * @param   boolean $default    False to return NULL instead of default
      * @return  object  Provider object
      */
-    public static function getProvider(string $key, bool $default=true) : object
+    public static function getProvider(string $key, bool $default=true) : ?object
     {
         $retval = NULL;
         if (array_key_exists($key, self::$_providers)) {

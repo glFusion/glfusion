@@ -255,8 +255,6 @@ class Popup extends \glFusion\Notifier
         global $MESSAGE, $_USER;
         $retval = '';
 
-        self::expire();
-
         $msgs = self::getByUid($_USER['uid']);
         if (empty($msgs)) {
             return '';
