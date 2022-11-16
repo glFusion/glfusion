@@ -7141,5 +7141,6 @@ if ( isset($_POST['token_revalidate']) ) {
 }
 
 glFusion\Notifier::Register('email', 'glFusion\\Notifiers\\Email', $LANG04[5]);
+glFusion\Notifier::Register('popup', 'glFusion\\Notifiers\\Popup', $MESSAGE[40]);
 
 ?>
