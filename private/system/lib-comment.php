@@ -157,6 +157,8 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 {
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG03;
 
+    echo __FUNCTION__ . ' deprecated';die;
+
     $db = Database::getInstance();
 
     $parts = explode( '/', $_SERVER['PHP_SELF'] );
@@ -335,6 +337,8 @@ function CMT_commentBar( $sid, $title, $type, $order, $mode, $ccode = 0 )
 */
 function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = false, $preview = false, $ccode = 0, $sid_author_id = '' )
 {
+    echo __FUNCTION__ . ' deprecated';
+
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG03, $MESSAGE, $_IMAGE_TYPE;
 
     $indent = 0;  // begin with 0 indent
@@ -798,6 +802,8 @@ function CMT_getComment( &$comments, $mode, $type, $order, $delete_option = fals
 function CMT_getCommentLinkWithCount( $type, $sid, $url, $cmtCount = 0, $urlRewrite = 0 ) {
     global $_CONF, $LANG01;
 
+    return glFusion\Comments\CommentEngine::getEngine()->getLinkWithCount($type, $sid, $url, $cmtCount);
+
     $retval = '';
 
     if (!isset($_CONF['comment_engine'])) {
@@ -880,6 +886,22 @@ function CMT_getCommentLinkWithCount( $type, $sid, $url, $cmtCount = 0, $urlRewr
 */
 function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $pid = 0, $page = 1, $cid = false, $delete_option = false, $ccode = 0, $sid_author_id = '' )
 {
+    $UC = glFusion\Comments\CommentEngine::getEngine();
+    if (!empty($mode)) {
+        $UC->withMode($mode);
+    }
+    return $UC->withSid($sid)
+              ->withTitle($title)
+              ->withType($type)
+              ->withOrder($order)
+              ->withPid((int)$pid)
+              ->withPage((int)$page)
+              ->withCid((int)$cid)
+              ->withDeleteOption((int)$delete_option)
+              ->withCommentCode((int)$ccode)
+              ->withSidAuthorId((int)$sid_author_id)
+              ->displayComments();
+
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG03;
 
     $retval = '';
@@ -1155,6 +1177,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 */
 function CMT_getCount($type, $sid, $queued = 0)
 {
+    return glFusion\Comments\CommentEngine::getEngine()->getCount($type, $sid, $queued);
     global $_TABLES;
 
     $db = Database::getInstance();
@@ -1185,6 +1208,19 @@ function CMT_getCount($type, $sid, $queued = 0)
 function CMT_commentForm($title,$comment,$sid,$pid='0',$type = '',$mode = '',$postmode = '')
 {
     global $_CONF, $_TABLES, $_USER, $LANG03, $LANG12, $LANG_LOGIN, $LANG_ACCESS, $LANG_ADMIN;
+
+    $vals = array(
+        'title' => $title,
+        'comment' => $comment,
+        'sid' => $sid,
+        'pid' => $pid,
+        'type' => $type,
+        'mode' => $mode,
+        'postmode' => $postmode,
+    );
+    $Comment = glFusion\Comments\Internal\Comment::fromArray($vals);
+    $CF = new glFusion\Comments\Internal\CommentForm;
+    return $CF->withComment($Comment)->render();
 
     $retval         = '';
     $cid            = 0;
@@ -1533,6 +1569,41 @@ function CMT_commentForm($title,$comment,$sid,$pid='0',$type = '',$mode = '',$po
 function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 {
     global $_CONF, $_TABLES, $_USER, $LANG03;
+    if ( COM_isAnonUser() ) {
+        if (isset($_POST['username']) ) {
+            $uname = @htmlspecialchars(strip_tags(trim(COM_checkWords(USER_sanitizeName($_POST['username'])))),ENT_QUOTES,COM_getEncodingt(),true);
+            $uname = USER_uniqueUsername($uname);
+        } else {
+            $uname = '';
+        }
+        $email = '';
+    } else {
+        $uname = $_USER['username'];
+        $email = $_USER['email'];
+    }
+
+    if (empty($title)) {
+        $info = PLG_getItemInfo($type, $sid, 'id,title');
+        $title = (isset($info['title']) ? $info['title'] : 'Comment');
+    }
+
+    $vars = array(
+        'title' => $title,
+        'comment' => $comment,
+        'sid' => $sid,
+        'pid' => $pid,
+        'type' => $type,
+        'postmode' => $postmode,
+        'uid' => $_USER['uid'],
+        'name' => $uname,
+    );
+    $Comment = glFusion\Comments\Internal\Comment::fromArray($vars);
+    if (!$Comment->save()) {
+        COM_setMsg($Comment->printErrors(), 'error');
+        return 1;
+    }
+    return 0;
+
 
     $ret = 0;
 
@@ -1819,6 +1890,8 @@ function CMT_saveComment ($title, $comment, $sid, $pid, $type, $postmode)
 */
 function CMT_sendNotification( $commentData = array())
 {
+    echo __FUNCTION__ . ' deprecated';die;
+
     global $_CONF, $_TABLES, $LANG03, $LANG08, $LANG09;
 
     $filter = sanitizer::getInstance();
@@ -1935,6 +2008,13 @@ function CMT_sendNotification( $commentData = array())
  */
 function CMT_deleteComment ($cid, $sid, $type)
 {
+    $Cmt = glFusion\Comments\Internal\Comment::getByCid($cid);
+    if ($Cmt->getSid() != $sid || $Cmt->getType() != $type) {
+        return 1;
+    }
+    $Cmt->delete();
+    return 0;
+
     global $_CONF, $_TABLES, $_USER;
 
     $ret = 0;  // Assume good status unless reported otherwise
@@ -2193,7 +2273,7 @@ function CMT_sendReport ($cid, $type)
  * @return string of comment text
 */
 function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
-
+echo __FUNCTION__ . ' deprecated';
 //@@ WE are retiring this function
 
     global $_USER, $_TABLES, $LANG03, $_CONF;
@@ -2214,6 +2294,7 @@ function CMT_prepareText($comment, $postmode, $edit = false, $cid = null) {
 
 function CMT_preview( $data )
 {
+echo __FUNCTION__ . ' deprecated';
     global $_CONF, $_TABLES,$_USER,$LANG03;
 
     $retval = '';
@@ -2535,10 +2616,13 @@ function plugin_itemlist_comment($token)
 
     $db = Database::getInstance();
 
-    $sql = "SELECT *,UNIX_TIMESTAMP(date) AS day, name AS username FROM `{$_TABLES['comments']}` WHERE queued = 1 ORDER BY date DESC";
+    $Coll = new glFusion\Comments\Internal\CommentCollection;
+    $Coll->withQueued(true)->execute();
+    $commentData = $Coll->getObjects();
+    /*$sql = "SELECT *,UNIX_TIMESTAMP(date) AS day, name AS username FROM `{$_TABLES['comments']}` WHERE queued = 1 ORDER BY date DESC";
     $stmt = $db->conn->query($sql);
 
-    $commentData = $stmt->fetchAll(Database::ASSOCIATIVE);
+    $commentData = $stmt->fetchAll(Database::ASSOCIATIVE);*/
 
     if (count($commentData) == 0) {
         return;
@@ -2550,7 +2634,8 @@ function plugin_itemlist_comment($token)
         $A['edit']      = $_CONF['site_url'].'/comment.php?mode=modedit&amp;cid='.$A['cid'].'&amp;'.CSRF_TOKEN.'='.$token;
         $A['_type_']    = 'comment';
         $A['_key_']     = 'cid';        // name of key/id field
-        $A['preview']   = CMT_preview($A); // format a comment for preview.
+        //$A['preview']   = CMT_preview($A); // format a comment for preview.
+        $A['preview'] = $A->preview();
         $A['username']  = $A['name'];
         $data_arr[]   = $A;           // push row data into array
     }
@@ -2630,19 +2715,28 @@ function plugin_moderationapprove_comment($id)
         return '';
     }
 
-    $db = Database::getInstance();
-
-    $sql = "UPDATE `{$_TABLES['comments']}` SET queued=0 WHERE cid=?";
+    $Comment = \glFusion\Comments\Internal\Comment::getByCid($id);
+    if ($Comment->getCid() < 1) {
+        return false;
+    }
+    $status = $Comment->approve();
+    /*$db = Database::getInstance();
 
     try {
-        $stmt = $db->conn->executeUpdate($sql,array($id),array(Database::INTEGER));
-    } catch(Throwable $e) {
+        $stmt = $db->conn->update(
+            $_TABLES['comments'],
+            array(0),
+            array($id),
+            array(Database::INTEGER, Database::INTEGER)
+        );
+    } catch (Throwable $e) {
         if ($db->getIgnore()) {
             $db->_errorlog("SQL Error: " . $e->getMessage());
         } else {
             $db->dbError($e->getMessage(),$sql);
         }
     }
+
     $sql = "SELECT * FROM `{$_TABLES['comments']}` WHERE cid=?";
     try {
         $row = $db->conn->fetchAssoc($sql,array($id),array(Database::INTEGER));
@@ -2656,9 +2750,9 @@ function plugin_moderationapprove_comment($id)
     }
     if ($row === false) {
         return false;
-    }
+    }*/
 
-    $cid = $id;
+/*    $cid = $id;
     $type = $row['type'];
     $sid  = $row['sid'];
     // now we need to alert everyone a comment has been saved.
@@ -2669,11 +2763,12 @@ function plugin_moderationapprove_comment($id)
         $c->deleteItemsByTag('story_'.$sid);
     }
     PLG_itemSaved($cid, 'comment');     // let others know we saved a comment to the prod table
+ */
 
-    COM_setMsg($LANG03[56],'warning');
-
+    if ($status) {
+        COM_setMsg($LANG03[56],'warning');
+    }
     // should handle notification here if we want to.
-
     return '';
 }
 

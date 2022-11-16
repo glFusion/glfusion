@@ -11,9 +11,13 @@
 		<li><strong>{story_title}</strong></li>
 		<li>{num_comments} {lang_comments}</li>
 
-		{!if subscribe}
-		<li><a class="uk-form-small" href="{subscribe_url}">{subscribe_text}</a></li>
+{!if can_subscribe}
+		{!if subscribed}
+		<li>[<a href="{site_url}/comment.php?mode=unsubscribe&amp;type={html_type}&amp;sid={html_sid}" rel="nofollow">{$LANG01['unsubscribe']}</a>]</li>
+		{!else}
+        <li>[<a href="{site_url}/comment.php?mode=subscribe&amp;type={html_type}&amp;sid={html_sid}" rel="nofollow">{$LANG01['subscribe']}</a>]</li>
 		{!endif}
+{!endif}
 	</ul>
 </div>
 

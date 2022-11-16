@@ -26,6 +26,8 @@ use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Log\Log;
 use \glFusion\Admin\AdminAction;
+use \glFusion\Comments\Internal\Comment;
+use \glFusion\Comments\Internal\CommentForm;
 
 /**
  * glFusion comment function library
@@ -74,8 +76,7 @@ function handleSubmit()
 
     $type     = COM_applyFilter ($_POST['type']);
     $sid      = COM_sanitizeID(COM_applyFilter ($_POST['sid']));
-    $title    = '';
-
+    $title    = isset($_POST['title']) ? $_POST['title'] : '';
     $pid      = COM_applyFilter($_POST['pid'],true);
     $postmode = COM_applyFilter($_POST['postmode']);
     $comment = '';
@@ -102,7 +103,7 @@ function handleSubmit()
  * @author Vincent Furia <vinny01 AT users DOT sourceforge DOT net>
  * @return string HTML (possibly a refresh)
  */
-function handleDelete()
+function XhandleDelete()
 {
     global $_CONF, $_TABLES, $_USER, $_PLUGINS, $LANG_ADM_ACTIONS;
 
@@ -320,13 +321,18 @@ function handleEdit($mod = false, $admin = false)
         $commenttext = substr($commenttext, 0, $pos);
     }
 
+    $CF = new CommentForm;
+    $CF->withCid($cid);
     if ( $mod ) {
-        $retval = CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'modedit', $postmode);
+        $CF->withMode('modedit');
+    //    $retval = CMT_commentForm ($title, $commenttext, $sid,$pid, $type, 'modedit', $postmode);
     } else {
-        $edit_type = 'edit';
-        if ( $admin == true ) $edit_type = 'adminedit';
-        $retval =  CMT_commentForm ($title, $commenttext, $sid,$pid, $type, $edit_type, $postmode);
+        $edit_type = $admin ? 'adminedit' : 'edit';
+        //if ( $admin == true ) $edit_type = 'adminedit';
+        $CF->withmode($edit_type);
+        //$retval =  CMT_commentForm ($title, $commenttext, $sid,$pid, $type, $edit_type, $postmode);
     }
+    $retval = $CF->render();
     return $retval;
 }
 
@@ -339,6 +345,11 @@ function handleEdit($mod = false, $admin = false)
  */
 function handleEditSubmit()
 {
+    $Comment = Comment::getByCid($_POST['cid']);
+    $status = $Comment->save($_POST);
+    echo COM_refresh($Comment->getRedirectUrl());
+    exit;
+
     global $_CONF, $_TABLES, $_USER, $LANG03, $LANG_ADM_ACTIONS, $_PLUGINS;
 
     $db = Database::getInstance();
@@ -639,8 +650,8 @@ if ( isset($_POST['cancel'] ) ) {
     $sid     = isset($_POST['sid']) ? COM_sanitizeID(COM_applyFilter ($_POST['sid'])) : '';
     $pid     = isset($_POST['pid']) ? COM_applyFilter ($_POST['pid'],true) : 0;
     $postmode = isset($_POST['postmode']) ? COM_applyFilter($_POST['postmode']) : 'text';
-//    $title   = isset($_POST['title']) ? strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING)) : '';
-    $title = '';
+    $title   = isset($_POST['title']) ? strip_tags(filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING)) : '';
+    //$title = '';
     $mode    = isset($_POST['mode']) ? COM_applyFilter($_POST['mode']) : '';
 
     $modedit = isset($_POST['modedit']) ? COM_applyFilter($_POST['modedit']) : '';
@@ -672,11 +683,25 @@ if ( isset($_POST['cancel'] ) ) {
     } else {
         $previewType = 'preview_new';
     }
+
+    $Comment = Comment::fromArray(array(
+        'title' => $title,
+        'comment' => $comment,
+        'sid' => $sid,
+        'pid' => $pid,
+        'type' => $type,
+        'postmode' => $postmode,
+    ) );
+    $CF = new CommentForm;
+    $CF->withComment($Comment)->withMode($previewType);
+
     if ( $moderatorEdit || $administratorEdit || $previewType == 'preview_edit') {
-        $pageBody .= CMT_commentForm ($title, $comment,$sid,$pid,$type, $previewType,$postmode);
+        //$pageBody .= CMT_commentForm ($title, $comment,$sid,$pid,$type, $previewType,$postmode);
+        $pageBody .= $CF->render();
     } else {
         $pageBody .=  PLG_displayComment($type, $sid, 0, $title, '', 'nobar', 0, 0)
-              . CMT_commentForm ($title, $comment,$sid,$pid,$type, $previewType,$postmode);
+              . $CF->render();
+              //. CMT_commentForm ($title, $comment,$sid,$pid,$type, $previewType,$postmode);
     }
 
 } elseif (isset($_POST['saveedit']) ) {
@@ -713,7 +738,10 @@ if ( isset($_POST['cancel'] ) ) {
 
 } elseif ( isset($_POST['delete'] ) || $mode == 'delete' ) {
     if (SEC_checkToken()) {
-        $pageBody .= handleDelete();
+        $url = Comment::delete($_REQUEST['cid'], $_REQUEST['sid'], $_REQUEST['type']);
+        echo $url;die;
+        //$pageBody .= handleDelete();
+        echo COM_refresh($url);
     } else {
         echo COM_refresh($_CONF['site_url'] . '/index.php');
         exit;
@@ -834,8 +862,8 @@ if ( isset($_POST['cancel'] ) ) {
 // pull data passed
                 $sid   = isset($_REQUEST['sid']) ? COM_sanitizeID(COM_applyFilter ($_REQUEST['sid'])) : '';
                 $type  = isset($_REQUEST['type']) ? COM_applyFilter ($_REQUEST['type']) : '';
-//                $title = isset($_REQUEST['title']) ? filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING) /*strip_tags($_REQUEST['title'])*/ : '';
-                $title = '';
+                $title = isset($_REQUEST['title']) ? filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING) /*strip_tags($_REQUEST['title'])*/ : '';
+//                $title = '';
 // set postmode (options are text or html)
 
                 if ( $_CONF['comment_postmode'] == 'plaintext') {
@@ -854,11 +882,10 @@ if ( isset($_POST['cancel'] ) ) {
                 }
 
 // if title is empty - grab it from the database
-// only seems to pull it if an article
+                // only seems to pull it if an article
                 if (!empty ($sid) && !empty ($type)) {
                     if (empty ($title)) {
                         if ($type == 'article') {
-
                             $title = $db->conn->fetchColumn(
                                         "SELECT title FROM `{$_TABLES['stories']}`
                                          WHERE sid=? " . $db->getPermSQL('AND') . $db->getTopicSQL('AND'),
