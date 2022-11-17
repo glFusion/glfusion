@@ -54,6 +54,7 @@ if (file_exists($langfile)) {
         include_once $custfile;
     }
 }
+use glFusion\Cache\Cache;
 
 require_once $_CONF['path'].'plugins/bad_behavior2/bad_behavior2.php';
 
@@ -138,9 +139,19 @@ function plugin_enablestatechange_bad_behavior2($enable) {
 
 function plugin_runScheduledTask_bad_behavior2()
 {
-    global $_CONF;
+    global $_CONF, $_TABLES;
 
-    if (isset($_CONF['bb2_enabled']) && $_CONF['bb2_enabled']) bb2_expireBans();
+    if ( !isset($_CONF['bb2_ban_timeout']) ) {
+        $_CONF['bb2_ban_timeout'] = 24;
+    }
+    if ($_CONF['bb2_ban_timeout'] == 0 ) {
+        return;
+    }
+    $oldBans = time() - ($_CONF['bb2_ban_timeout']*60*60);
+    $result = DB_query("DELETE FROM {$_TABLES['bad_behavior2_blacklist']} WHERE autoban != 0 AND timestamp < " . $oldBans,1);
+    if ( $result !== false ) {
+        $c = Cache::getInstance()->deleteItemsByTag('bb2_bl_data');
+    }
 }
 
 /**
