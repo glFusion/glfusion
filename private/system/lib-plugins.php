@@ -2833,6 +2833,7 @@ function PLG_runScheduledTask ()
             if (function_exists ($function)) {
                 Log::write('system',Log::DEBUG,'CRON: Running PLG_runScheduledTask for ' . $pi_name);
                 $function ();
+                Log::write('system', Log::DEBUG, 'CRON: finished PLG_runScheduledTask for ' . $pi_name);
             }
         }
     }
