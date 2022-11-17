@@ -268,8 +268,8 @@ function plugin_getfeedcontent_article($feed, &$link, &$data,$feedType, $feedVer
         array($feed),
         array(Database::INTEGER)
     );
-    if ($row !== false && $row !== null) {
 
+    if ($row !== false && $row !== null) {
         if ($row['topic'] == '::all') {
             $content = ARTICLE_getFeedContentAll(false, $row['limits'],
                             $link, $data, $row['content_length'],
@@ -340,9 +340,15 @@ function ARTICLE_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $conten
             if ($story->retrieveArticleFromVars($row) != $story::STORY_LOADED_OK) {
                 continue;
             }
-            $storytitle = $story->getDisplayItem('title');
-            $fulltext = $story->getDisplayItem('introtext') . "\n" . $story->getDisplayItem('bodytext');
-            $storytext = $story->getDisplayItem('introtext_text');
+
+            try {
+                $storytitle = $story->getDisplayItem('title');
+                $fulltext = $story->getDisplayItem('introtext') . "\n" . $story->getDisplayItem('bodytext');
+                $storytext = $story->getDisplayItem('introtext_text');
+            } catch (\Exception $e) {
+                Log::write('system', Log::ERROR, __FUNCTION__ . ': ' . $row['sid'] . ' -- ' . $e->getMessage());
+                continue;
+            }
 
             if ( $contentLength > 1 ) {
                 $fulltext  = COM_truncateHTML( $fulltext, $contentLength, ' ...');
@@ -374,7 +380,6 @@ function ARTICLE_getFeedContentPerTopic( $tid, $limit, &$link, &$update, $conten
                               'topic'      => $topic,
                               'extensions' => $extensionTags
                               );
-
             if ( $contentLength > 0 ) {
                 $article['summary'] = $storytext;
                 $article['text']    = $fulltext;
@@ -458,9 +463,15 @@ function ARTICLE_getFeedContentAll($frontpage_only, $limit, &$link, &$update, $c
         if ($story->retrieveArticleFromVars($row) != $story::STORY_LOADED_OK) {
             continue;
         }
-        $storytitle = $story->getDisplayItem('title');
-        $fulltext = $story->getDisplayItem('introtext') . "\n" . $story->getDisplayItem('bodytext');
-        $storytext = $story->getDisplayItem('introtext_text');
+
+        try {
+            $storytitle = $story->getDisplayItem('title');
+            $fulltext = $story->getDisplayItem('introtext') . "\n" . $story->getDisplayItem('bodytext');
+            $storytext = $story->getDisplayItem('introtext_text');
+        } catch (\Exception $e) {
+            Log::write('system', Log::ERROR, __FUNCTION__ . ': ' . $row['sid'] . ' -- ' . $e->getMessage());
+            continue;
+        }
 
         if ( $contentLength > 1 ) {
             $fulltext  = COM_truncateHTML($fulltext,$contentLength,' ...');
