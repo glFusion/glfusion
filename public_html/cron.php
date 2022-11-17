@@ -19,6 +19,7 @@ use \glFusion\Database\Database;
 use \glFusion\Cache\Cache;
 use \glFusion\Article\Article;
 use \glFusion\Log\Log;
+use \glFusion\Notifier;
 
 if (php_sapi_name() != 'cli') {
     // keep running after browser closes connection
