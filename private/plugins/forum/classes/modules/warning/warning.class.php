@@ -827,7 +827,7 @@ class Warning
             // Take action, if necessary
             $this->takeAction();
             // Notify the user, if selected
-            if (isset($A['notify'])) {
+            if (isset($A['notify']) && !empty($A['notify'])) {
                 $this->notifyUser($A['notify']);
             }
             return true;
