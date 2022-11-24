@@ -12,7 +12,9 @@
  */
 namespace Forum\Modules\Warning;
 use glFusion\Database\Database;
+use glFusion\Log\Log;
 use glFusion\FieldList;
+use glFusion\Notifier;
 use Forum\UserInfo;
 use Forum\Status;
 use Forum\Topic;
@@ -562,6 +564,14 @@ class Warning
             ) );
             $T->parse('wt', 'WarningTypes', true);
         }
+        $T->set_block('editform', 'NotifierTypes', 'nt');
+        foreach (Notifier::getProviders() as $name=>$Notifier) {
+            $T->set_var(array(
+                'notifier_type' => $name,
+                'notifier_dscp' => $Notifier['dscp'],
+            ) );
+            $T->parse('nt', 'NotifierTypes', true);
+        }
         $T->parse('output','editform');
         return $T->finish($T->get_var('output'));
     }
@@ -818,7 +828,7 @@ class Warning
             $this->takeAction();
             // Notify the user, if selected
             if (isset($A['notify'])) {
-                $this->notifyUser((int)$A['notify']);
+                $this->notifyUser($A['notify']);
             }
             return true;
         } catch(Throwable $e) {
@@ -830,39 +840,33 @@ class Warning
     /**
      * Notify the user being warned.
      *
-     * @param   integer $type   Type of notification (1=PM, 2=Email)
+     * @param   string  $provider   Notification provider
      */
-    private function notifyUser(int $type) : void
+    private function notifyUser(string $provider) : void
     {
         global $_CONF, $LANG_GF01;
 
+        $Topic = Topic::getInstance($this->w_topic_id);
         $T = new \Template($_CONF['path'] . '/plugins/forum/templates/admin/warning/');
-        switch ($type) {
-        case 1:         // Notify via Email
-            $T->set_file('email', 'notify_email.thtml');
-            $Topic = Topic::getInstance($this->w_topic_id);
-            $T->set_var(array(
-                'post_topic' => $Topic->getSubject(),
-                'warn_type' => $this->_WT->getDscp(),
-                'warn_dscp' => $this->getDscp(),
-            ) );
-            $T->parse('output', 'email');
-            $html_msg = $T->finish($T->get_var('output'));
-            $html2TextConverter = new \Html2Text\Html2Text($html_msg);
-            $text_msg = $html2TextConverter->getText();
-            COM_emailNotification(array(
-                'to' => array($Topic->getEmail()),
-                'from' => array(
-                        'email' => $_CONF['noreply_mail'],
-                        'name'  => $_CONF['site_name'],
-                ),
-                'htmlmessage' => $html_msg,
-                'textmessage' => $text_msg,
-                'subject' => $_CONF['site_name'] . ': ' . $LANG_GF01['warn_email_subject'],
-            ) );
-            break;
-        case 2:         // Notify via the PM plugin, maybe future
-            break;
+        $T->set_file('message', 'notify_message.thtml');
+        $T->set_var(array(
+            'post_topic' => $Topic->getSubject(),
+            'warn_type' => $this->_WT->getDscp(),
+            'warn_dscp' => $this->getDscp(),
+        ) );
+        $T->parse('output', 'message');
+        $html_msg = $T->finish($T->get_var('output'));
+        $html2TextConverter = new \Html2Text\Html2Text($html_msg);
+        $text_msg = $html2TextConverter->getText();
+        $Notifier = Notifier::getProvider($provider);
+        if ($Notifier) {
+            $Notifier->addRecipient($Topic->getUid(), $Topic->getName(), $Topic->getEmail())
+                     ->setMessage($html_msg, true)
+                     ->setMessage($text_msg, false)
+                     ->setSubject($_CONF['site_name'] . ': ' . $LANG_GF01['warn_email_subject'])
+                     ->setFromUid(0)
+                     ->setFromName($LANG_GF01['moderator'])
+                     ->send();
         }
     }
 
@@ -895,28 +899,32 @@ class Warning
         }
 
         $status = $WL->getAction();
+
+        $db = Database::getInstance();
         if ($status == Status::SITE_BAN) {
             // Update the users table with a permanent site ban.
-            $sql = "UPDATE {$_TABLES['users']}
-                SET status = " . USER_ACCOUNT_DISABLED .
-                " WHERE uid = {$this->w_uid}";
+            $table = $_TABLES['users'];
+            $values = array('status' => USER_ACCOUNT_DISABLED);
         } else {
             $expiration = time() + $WL->getDuration();
-            $field = Status::getKey($status) . '_expires';
-            $sql = "UPDATE {$_TABLES['ff_userinfo']}
-                SET $field = $expiration
-                WHERE uid = {$this->w_uid}";
+            $values = array(
+                $db->conn->quoteIdentifier(Status::getKey($status) . '_expires') => $expiration,
+            );
         }
-        $db = Database::getInstance();
         try {
-            $db->conn->executeUpdate($sql);
-            COM_errorLog(
+            $db->conn->update(
+                $table,
+                $values,
+                array('uid' => $this->w_uid),
+                array(Database::INTEGER, Database::INTEGER)
+            );
+            Log::write('system', Log::INFO,
                 "User {$this->w_uid} forum status updated: " .
                 $LANG_GF01[Status::getKey($status)]
             );
             return true;
-        } catch(Throwable $e) {
-            COM_errorLog("SQL Error: $sql");
+        } catch(\Throwable $e) {
+            Log::write('system', Log::ERROR, __METHOD__ . ': ' . $e->getMessage());
             return false;
         }
     }
