@@ -866,6 +866,8 @@ class Warning
                      ->setSubject($_CONF['site_name'] . ': ' . $LANG_GF01['warn_email_subject'])
                      ->setFromUid(0)
                      ->setFromName($LANG_GF01['moderator'])
+                     ->setPlugin('forum', 'warning')
+                     ->setLevel('error')
                      ->send();
         }
     }
@@ -906,6 +908,7 @@ class Warning
             $table = $_TABLES['users'];
             $values = array('status' => USER_ACCOUNT_DISABLED);
         } else {
+            $table = $_TABLES['ff_userinfo'];
             $expiration = time() + $WL->getDuration();
             $values = array(
                 $db->conn->quoteIdentifier(Status::getKey($status) . '_expires') => $expiration,
