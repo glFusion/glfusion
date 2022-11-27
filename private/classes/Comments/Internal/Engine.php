@@ -685,6 +685,32 @@ class Engine extends \glFusion\Comments\CommentEngine
 
 
     /**
+     * Get the count of comments for a specific item.
+     *
+     * @param   string  $type       Item type, e.g. story or plugin name
+     * @param   string  $sid        Item ID
+     * @param   integer $queued     1 for queued items, 0 for approved
+     * @return  integer     Comment count
+     */
+    public function getCountByItem(string $type, string $sid, int $queued=0) : int
+    {
+        global $_TABLES;
+
+        if ( $type == '' || $sid == '' ) {
+            return 0;
+        }
+
+        $db = Database::getInstance();
+        return $db->conn->fetchColumn(
+            "SELECT COUNT(*) FROM `{$_TABLES['comments']}` WHERE sid=? AND type=? AND queued=?",
+            array($sid, $type, $queued),
+            0,
+            array(Database::STRING, Database::STRING, Database::INTEGER)
+        );
+    }
+
+
+    /**
      * Get the latest comments from a given user.
      *
      * @param   integer $uid        User ID
