@@ -105,6 +105,7 @@ class Engine extends \glFusion\Comments\CommentEngine
             $Coll->withType($this->type)
                  ->withSid($this->sid)
                  ->withLimit($start, $limit)
+                 ->withQueued(false)
                  ->withMode($this->mode);
             switch( $this->mode ) {
             case 'flat':
