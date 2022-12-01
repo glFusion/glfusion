@@ -3,9 +3,9 @@
  * Class to handle creating XML feeds.
  *
  * @author      Lee Garner <lee@leegarner.com>
- * @copyright   Copyright (c) 2021 Lee Garner <lee@leegarner.com>
+ * @copyright   Copyright (c) 2021-2022 Lee Garner <lee@leegarner.com>
  * @package     glfusion
- * @version     0.0.1
+ * @version     0.0.2
  * @license     http://opensource.org/licenses/gpl-2.0.php
  *              GNU Public License v2 or later
  * @filesource
@@ -94,7 +94,7 @@ class XML extends \glFusion\Syndication\Feed
         }
         $rss->editor = $_CONF['site_mail'];
         $rc = $rss->saveFeed(
-            $this->format . '-' . $this->format_version,
+            strtoupper($this->format) . $this->format_version,
             self::getFeedPath($this->filename),
             0
         );
