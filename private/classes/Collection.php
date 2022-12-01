@@ -151,11 +151,12 @@ class Collection
     /**
      * Try to get data from the cache. First constructs the cache key.
      *
+     * @param   string  $key    Additional key to prepend
      * @return  array|null  Array of data, NULL if not found
      */
-    protected function tryCache() : ?array
+    protected function tryCache(string $key) : ?array
     {
-        $this->_cache_key = md5($this->_qb->getSQL() . self::json_encode($this->_qb->getParameters()));
+        $this->_cache_key = md5($key . $this->_qb->getSQL() . self::json_encode($this->_qb->getParameters()));
         $Cache = Cache::getInstance();
         if ($Cache->has($this->_cache_key)) {
             return $Cache->get($this->_cache_key);
@@ -224,7 +225,7 @@ class Collection
      */
     public function getRows() : array
     {
-        $rows = $this->tryCache();
+        $rows = $this->tryCache('rows');
         if (is_array($rows)) {
             return $rows;
         }
