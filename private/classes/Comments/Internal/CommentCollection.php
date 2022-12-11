@@ -176,7 +176,7 @@ class CommentCollection extends \glFusion\Collection
      */
     public function getObjects() : array
     {
-        $this->Comments = $this->tryCache();
+        $this->Comments = $this->tryCache('obj');
         if (is_array($this->Comments)) {
             return $this->Comments;
         }

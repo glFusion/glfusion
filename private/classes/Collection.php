@@ -44,6 +44,11 @@ class Collection
      * @var string */
     private $_cache_key = '';
 
+    /** Flag to use the cache.
+     * Normally true may be disabled by the caller.
+     * @var boolean */
+    private $_useCache = true;
+
     /** Holder for the number of rows returned from a query.
      * NULL indicates that the query has not yet been executed.
      * @var integer */
@@ -149,20 +154,37 @@ class Collection
 
 
     /**
+     * Provide a method for the caller to disable caching.
+     * Caching is enabled by default but may be undesirable sometimes,
+     * such as when ordering by RAND() which would not create a new
+     * cache key.
+     *
+     * @param   boolean $flag   True to enable cache, False to disable
+     * @return  object  $this
+     */
+    public function withCache(bool $flag=true) : self
+    {
+        $this->_useCache = $flag;
+        return $this;
+    }
+
+
+    /**
      * Try to get data from the cache. First constructs the cache key.
      *
      * @param   string  $key    Additional key to prepend
      * @return  array|null  Array of data, NULL if not found
      */
-    protected function tryCache(string $key) : ?array
+    protected function tryCache(string $key='') : ?array
     {
-        $this->_cache_key = md5($key . $this->_qb->getSQL() . self::json_encode($this->_qb->getParameters()));
-        $Cache = Cache::getInstance();
-        if ($Cache->has($this->_cache_key)) {
-            return $Cache->get($this->_cache_key);
-        } else {
-            return NULL;
+        if ($this->_useCache) {
+            $this->_cache_key = md5($key . $this->_qb->getSQL() . self::json_encode($this->_qb->getParameters()));
+            $Cache = Cache::getInstance();
+            if ($Cache->has($this->_cache_key)) {
+                return $Cache->get($this->_cache_key);
+            }
         }
+        return NULL;
     }
 
 
@@ -174,7 +196,9 @@ class Collection
      */
     protected function setCache(array $data, array $tags=array()) : void
     {
-        Cache::getInstance()->set($this->_cache_key, $data, $tags);
+        if ($this->_useCache) {
+            Cache::getInstance()->set($this->_cache_key, $data, $tags);
+        }
     }
 
 
