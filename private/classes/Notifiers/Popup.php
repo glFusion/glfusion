@@ -27,37 +27,6 @@ use glFusion\Log\Log;
  */
 class Popup extends \glFusion\Notifier
 {
-    // Flag to store only one message per uid/pi_code combination.
-    const UNIQUE = 1;
-
-    // Flag to override existing message vs. leave it alone, if unique is set.
-    const OVERWRITE = 2;
-
-    /** Message level, default "info".
-     * @var integer */
-    private $level = 1;
-
-    /** Plugin Name.
-     * @var string */
-    private $pi_name = 'glfusion';
-
-    /** Plugin-supplied code.
-     * @var string */
-    private $pi_code = '';
-
-    /** Flag for the message to persist or disappear.
-     * @var boolean */
-    private $persist = 0;
-
-    /** Session ID, set for anonymous users.
-     * @var string */
-    private $sess_id = '';
-
-    /** Flag indicating only one copy of the message should be stored.
-     * 0 = not at all, 1 = leave existing message alone, 2 = overwrite
-     * @var integer */
-    private $unique = 0;
-
     /** Recipient user ID for a specific message.
      * @var integer */
     private $uid = 0;
@@ -82,6 +51,24 @@ class Popup extends \glFusion\Notifier
             'name' => $name,
             'email' => $email,
         );
+        return $this;
+    }
+
+
+    /**
+     * Set the message content.
+     *
+     * @param   string  $msg    Message content
+     * @param   boolean $html   True if this is HTML, False for Text
+     * @return  object  $this
+     */
+    public function setMessage(string $msg, bool $html=false) : self
+    {
+        if ($html) {
+            $this->htmlmessage = $msg;
+        } else {
+            $this->textmessage = $msg;
+        }
         return $this;
     }
 
@@ -161,6 +148,16 @@ class Popup extends \glFusion\Notifier
         if (empty($this->subject)) {
             $this->subject= $MESSAGE[40];
         }
+
+        // Clean out newlines.
+        // Ignored by HTML for persistent messages, and they interfere with
+        // UIkit.notify().
+        $this->textmessage = str_replace(
+            array("\r", "\n"),
+            ' ',
+            $this->textmessage
+        );
+
         foreach ($this->recipients as $recip) {
             $this->_store($recip);
         }
@@ -460,46 +457,6 @@ class Popup extends \glFusion\Notifier
 
 
     /**
-     * Set the message level (info, error, etc).
-     * Several options can be supplied for the level values.
-     *
-     * @param   string  $level  Message level.
-     * @return  object  $this
-     */
-    public function setLevel(string $level) : self
-    {
-        switch ($level) {
-        case 'error':
-        case 'err':
-        case false:
-        case 'alert':
-        case 4:
-        case Log::ERROR:
-            $this->level = 4;
-            break;
-        case 'warn':
-        case 'warning':
-        case 3:
-        case Log::WARNING:
-            $this->level = 3;
-            break;
-        case 'success':
-        case 2:
-            // No corresponding Log level
-            $this->level = 2;
-            break;
-        case 'info':
-        case 1:
-        case Log::INFO:
-        default:
-            $this->level = 1;
-            break;
-        }
-        return $this;
-    }
-
-
-    /**
      * Set the recipient user ID.
      * Normally used only when checking if a message exists.
      *
@@ -513,81 +470,4 @@ class Popup extends \glFusion\Notifier
         return $this;
     }
 
-
-    /**
-     * Set the plugin name.
-     * This may be the plugin name or other optional ID.
-     *
-     * @param   string  $pi_code    Plugin-supplied code
-     * @return  object  $this
-     */
-    public function setPlugin(string $pi_name, ?string $pi_code=NULL) : self
-    {
-        $this->pi_name = $pi_name;
-        $this->pi_code = $pi_code;
-        return $this;
-    }
-
-
-    /**
-     * Set the flag to determine if the message stays on-screen.
-     * Assumes persistence is desired if called without a parameter.
-     *
-     * @param   boolean $persist    True to persist, False to disappear
-     * @return  object  $this
-     */
-    public function setPersists(bool $persist=true) : self
-    {
-        $this->persist = $persist ? 1 : 0;
-        return $this;
-    }
-
-
-    /**
-     * Use the session ID, used for anonymous users.
-     *
-     * @param   boolean $flag   True to use the session ID
-     * @return  object  $this
-     */
-    public function setSessId(bool $flag=true) : self
-    {
-        $this->sess_id = $flag ? session_id() : '';
-        return $this;
-    }
-
-
-    /**
-     * Set the flag indicating whether to store only one copy of this message.
-     *
-     * @param   boolean $flag   True to store only one, False for multiple
-     * @return  object  $this
-     */
-    public function setUnique(bool $flag=true) : self
-    {
-        if ($flag) {
-            $this->unique |= self::UNIQUE;
-        } else {
-            $this->unique -= self::UNIQUE;
-        }
-        return $this;
-    }
-
-
-    /**
-     * Set the flag indicating whether to overwrite this message when updated.
-     *
-     * @param   boolean $flag   True to overwrite, False to leave alone.
-     * @return  object  $this
-     */
-    public function setOverwrite(bool $flag=true) : self
-    {
-        if ($flag) {
-            $this->unique |= self::OVERWRITE;
-        } else {
-            $this->unique -= self::OVERWRITE;
-        }
-        return $this;
-    }
-
 }
-

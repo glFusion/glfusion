@@ -12,7 +12,7 @@
  * @filesource
  */
 namespace glFusion;
-use glFusion\Database\Database;
+use glFusion\Log\Log;
 
 
 /**
@@ -21,6 +21,12 @@ use glFusion\Database\Database;
  */
 abstract class Notifier
 {
+    // Flag to store only one message per uid/pi_code combination.
+    const UNIQUE = 1;
+
+    // Flag to override existing message vs. leave it alone, if unique is set.
+    const OVERWRITE = 2;
+
     /** Registered notification providers.
      * @var array */
     private static $_providers = array();
@@ -56,6 +62,31 @@ abstract class Notifier
     /** Expiration timestamp, if supported.
      * @var integer */
     protected $exp_ts = 2145916799;     // 2037-12-31 23:59:59 UTC
+
+    /** Message level, default "info".
+     * @var integer */
+    protected $level = 1;
+
+    /** Plugin Name.
+     * @var string */
+    protected $pi_name = 'glfusion';
+
+    /** Plugin-supplied code.
+     * @var string */
+    protected $pi_code = '';
+
+    /** Flag for the message to persist or disappear.
+     * @var boolean */
+    protected $persist = 1;
+
+    /** Session ID, set for anonymous users.
+     * @var string */
+    protected $sess_id = '';
+
+    /** Flag indicating only one copy of the message should be stored.
+     * 0 = not at all, 1 = leave existing message alone, 2 = overwrite
+     * @var integer */
+    protected $unique = 0;
 
 
     /**
@@ -180,6 +211,122 @@ abstract class Notifier
     public function getExpiration() : int
     {
         return $this->exp_ts;
+    }
+
+
+    /**
+     * Set the plugin name.
+     * This may be the plugin name or other optional ID.
+     *
+     * @param   string  $pi_code    Plugin-supplied code
+     * @return  object  $this
+     */
+    public function setPlugin(string $pi_name, ?string $pi_code=NULL) : self
+    {
+        $this->pi_name = $pi_name;
+        $this->pi_code = $pi_code;
+        return $this;
+    }
+
+
+    /**
+     * Set the flag to determine if the message stays on-screen.
+     * Assumes persistence is desired if called without a parameter.
+     *
+     * @param   boolean $persist    True to persist, False to disappear
+     * @return  object  $this
+     */
+    public function setPersists(bool $persist=true) : self
+    {
+        $this->persist = $persist ? 1 : 0;
+        return $this;
+    }
+
+
+    /**
+     * Use the session ID, used for anonymous users.
+     *
+     * @param   boolean $flag   True to use the session ID
+     * @return  object  $this
+     */
+    public function setSessId(bool $flag=true) : self
+    {
+        $this->sess_id = $flag ? session_id() : '';
+        return $this;
+    }
+
+
+    /**
+     * Set the flag indicating whether to store only one copy of this message.
+     *
+     * @param   boolean $flag   True to store only one, False for multiple
+     * @return  object  $this
+     */
+    public function setUnique(bool $flag=true) : self
+    {
+        if ($flag) {
+            $this->unique |= self::UNIQUE;
+        } else {
+            $this->unique -= self::UNIQUE;
+        }
+        return $this;
+    }
+
+
+    /**
+     * Set the flag indicating whether to overwrite this message when updated.
+     *
+     * @param   boolean $flag   True to overwrite, False to leave alone.
+     * @return  object  $this
+     */
+    public function setOverwrite(bool $flag=true) : self
+    {
+        if ($flag) {
+            $this->unique |= self::OVERWRITE;
+        } else {
+            $this->unique -= self::OVERWRITE;
+        }
+        return $this;
+    }
+
+
+    /**
+     * Set the message level (info, error, etc).
+     * Several options can be supplied for the level values.
+     *
+     * @param   string  $level  Message level.
+     * @return  object  $this
+     */
+    public function setLevel(string $level) : self
+    {
+        switch ($level) {
+        case 'error':
+        case 'err':
+        case false:
+        case 'alert':
+        case 4:
+        case Log::ERROR:
+            $this->level = 4;
+            break;
+        case 'warn':
+        case 'warning':
+        case 3:
+        case Log::WARNING:
+            $this->level = 3;
+            break;
+        case 'success':
+        case 2:
+            // No corresponding Log level
+            $this->level = 2;
+            break;
+        case 'info':
+        case 1:
+        case Log::INFO:
+        default:
+            $this->level = 1;
+            break;
+        }
+        return $this;
     }
 
 
