@@ -3,9 +3,9 @@
  * Class to handle creating ICS (iCalendar) feeds.
  *
  * @author      Lee Garner <lee@leegarner.com>
- * @copyright   Copyright (c) 2021 Lee Garner <lee@leegarner.com>
+ * @copyright   Copyright (c) 2021-2022 Lee Garner <lee@leegarner.com>
  * @package     glfusion
- * @version     0.0.1
+ * @version     0.0.2
  * @license     http://opensource.org/licenses/gpl-2.0.php
  *              GNU Public License v2 or later
  * @filesource
@@ -44,7 +44,7 @@ class ICS extends \glFusion\Syndication\Feed
             $vCalendar->setDescription($this->description);
         }
         if (empty($this->filename)) {
-            $this->filename = 'glfusion.rss';
+            $this->filename = 'glfusion.ics';
         }
 
         $content = PLG_getFeedContent($this->type, $this->fid, $link, $data, $this->format, $this->format_version);
@@ -164,4 +164,3 @@ class ICS extends \glFusion\Syndication\Feed
     }
 
 }
-
