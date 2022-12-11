@@ -1177,7 +1177,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 */
 function CMT_getCount($type, $sid, $queued = 0)
 {
-    return glFusion\Comments\CommentEngine::getEngine()->getCount($type, $sid, $queued);
+    return glFusion\Comments\CommentEngine::getEngine()->getCountByItem($type, $sid, $queued);
     global $_TABLES;
 
     $db = Database::getInstance();

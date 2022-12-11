@@ -362,6 +362,20 @@ abstract class CommentEngine
 
 
     /**
+     * Get the count of comments for a specific item.
+     *
+     * @param   string  $type       Item type, e.g. story or plugin name
+     * @param   string  $sid        Item ID
+     * @param   integer $queued     1 for queued items, 0 for approved
+     * @return  integer     Comment count
+     */
+    public function getCountByItem(string $type, string $sid, int $queued=0) : int
+    {
+        return 0;
+    }
+
+
+    /**
      * Get the latest comments from a given user.
      *
      * @param   integer $uid        User ID
