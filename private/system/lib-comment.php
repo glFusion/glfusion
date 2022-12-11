@@ -1177,7 +1177,7 @@ function CMT_userComments( $sid, $title, $type='article', $order='', $mode='', $
 */
 function CMT_getCount($type, $sid, $queued = 0)
 {
-    return glFusion\Comments\CommentEngine::getEngine()->getCount($type, $sid, $queued);
+    return glFusion\Comments\CommentEngine::getEngine()->getCountByItem($type, $sid, $queued);
     global $_TABLES;
 
     $db = Database::getInstance();
@@ -2637,6 +2637,7 @@ function plugin_itemlist_comment($token)
         //$A['preview']   = CMT_preview($A); // format a comment for preview.
         $A['preview'] = $A->preview();
         $A['username']  = $A['name'];
+        $A['day'] = $A['nice_date'];
         $data_arr[]   = $A;           // push row data into array
     }
 

@@ -47,11 +47,10 @@
 		<label class="uk-form-label" for="notify">Notify User</label>
 		<div class="uk-form-controls">
 			<select name="notify" class="uk-select uk-form-width-medium">
-				<option value="0" selected="selected">{$LANG_GF01['none']}</option>
-				<option value="1">{$LANG_GF01['EmailLink']}</option>
-{!if 0}
-				<option value="2">{$LANG_GF97['msgpriv']}</option>
-{!endif}
+				<option value="" selected="selected">{$LANG_GF01['none']}</option>
+<!-- BEGIN NotifierTypes -->
+				<option value="{notifier_type}">{notifier_dscp}</option>
+<!-- END NotifierTypes -->
 			</select>
 		</div>
 	</div>

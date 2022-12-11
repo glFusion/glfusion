@@ -44,7 +44,7 @@ class Status
     private static $keys = array(
         self::MODERATE => 'moderate',
         self::SUSPEND  => 'suspend',
-        self::BAN => 'forum_ban',
+        self::BAN => 'ban',
         self::SITE_BAN => 'site_ban',
     );
 

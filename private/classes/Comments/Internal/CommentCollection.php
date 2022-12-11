@@ -176,7 +176,7 @@ class CommentCollection extends \glFusion\Collection
      */
     public function getObjects() : array
     {
-        $this->Comments = $this->tryCache('obj');
+        $this->Comments = $this->tryCache();
         if (is_array($this->Comments)) {
             return $this->Comments;
         }
@@ -187,7 +187,7 @@ class CommentCollection extends \glFusion\Collection
                 $this->Comments[] = Comment::fromArray($row);
             }
             // only cache a good DB response
-            $this->setCache($this->Comments, $this->cache_tags);
+            //$this->setCache($this->Comments, $this->cache_tags);
         }
         return $this->Comments;
     }
@@ -219,4 +219,3 @@ class CommentCollection extends \glFusion\Collection
     }
 
 }
-

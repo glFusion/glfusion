@@ -86,6 +86,12 @@ function _ff_getListField_gettopic($fieldname, $fieldvalue, $A, $icon_arr)
 
 $forum_id        = COM_applyFilter($_GET['fid'],true);
 $topic_parent_id = COM_applyFilter($_GET['pid'],true);
+$usergroups = SEC_getUserGroups();
+$groups = array ();
+foreach ($usergroups as $group) {
+    $groups[] = $group;
+}
+$grouplist = implode(',',$groups);
 
 $T = new Template($_CONF['path'] . 'plugins/forum/templates/');
 $T->set_file('confirm','gettopic.thtml');
@@ -111,7 +117,7 @@ while($A = DB_fetchArray($categoryResult)) {
         $sql = "SELECT forum_id,forum_name,forum_dscp FROM {$_TABLES['ff_forums']} WHERE forum_cat =".(int) $A['id']." ORDER BY forum_order ASC";
     } else {
         $sql = "SELECT * FROM {$_TABLES['ff_moderators']} a , {$_TABLES['ff_forums']} b ";
-        $sql .= "WHERE b.forum_cat=".(int)$A['id']." AND a.mod_forum = b.forum_id AND (a.mod_uid=".(int) $_USER['uid']." OR a.mod_groupid in ($modgroups)) ORDER BY forum_order ASC";
+        $sql .= "WHERE b.forum_cat=".(int)$A['id']." AND a.mod_forum = b.forum_id AND (a.mod_uid=".(int) $_USER['uid']." OR a.mod_groupid in ($grouplist)) ORDER BY forum_order ASC";
     }
     $forumResult = DB_query($sql);
 
@@ -152,13 +158,6 @@ $text_arr = array(
 $defsort_arr = array('field'     => 'date',
                      'direction' => 'DESC');
 
-$groups = array ();
-$usergroups = SEC_getUserGroups();
-foreach ($usergroups as $group) {
-    $groups[] = $group;
-}
-$grouplist = implode(',',$groups);
-
 $sql = "SELECT * FROM {$_TABLES['ff_topic']} WHERE pid=0 AND id<> ".(int) $topic_parent_id." AND forum=".(int) $forum_id;
 
 $query_arr = array('table'          => 'topic',
@@ -176,5 +175,3 @@ $retval = $T->finish($T->get_var('output'));
 
 echo $retval;
 exit();
-
-?>

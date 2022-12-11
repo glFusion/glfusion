@@ -27,7 +27,7 @@ use glFusion\Notifiers\Email;
 abstract class User {
 
       /** @var string the user's current IP address */
-    private $ipAddress;
+    protected $ipAddress;
     /** @var bool whether throttling should be enabled (e.g. in production) or disabled (e.g. during development) */
     protected $throttling;
 

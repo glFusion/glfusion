@@ -140,7 +140,7 @@ if(DB_count($_TABLES['ff_forums']) == 0) {
             } else {
                 $mod_stick = "1";
             }
-            if (count($_POST['sel_forum']) > 0) {
+            if (isset($_POST['sel_forum']) && count($_POST['sel_forum']) > 0) {
                 if ($_POST['modtype'] == 'user') {
                     foreach ($_POST['sel_user'] as $modMemberUID) {
                         $modMemberUID = COM_applyFilter($modMemberUID,true);
@@ -202,13 +202,19 @@ if(DB_count($_TABLES['ff_forums']) == 0) {
         $display .= $addmod->finish ($addmod->get_var('output'));
 
     } else {
-
         $showforumssql = DB_query("SELECT forum_name,forum_id FROM {$_TABLES['ff_forums']}");
         $sel_forums = '<option value="0">'.$LANG_GF94['allforums'].'</option>';
-        $selected_forum = isset($_POST['sel_forum']) ? $_POST['sel_forum']: 0;
-
+        if (isset($_POST['sel_forum'])) {
+            if (!is_array($_POST['sel_forum'])) {
+                $selected_forums = array($_POST['sel_forum']);
+            } else {
+                $selected_forums = $_POST['sel_forum'];
+            }
+        } else {
+            $selected_forums = array();
+        }
         while($showforum = DB_fetchArray($showforumssql)){
-            if ($selected_forum == $showforum['forum_id']) {
+            if (in_array($showforum['forum_id'], $selected_forums)) {
                 $sel_forums .= '<option value="' .$showforum['forum_id']. '" selected="selected">' .$showforum['forum_name']. '</option>';
             } else {
                 $sel_forums .= '<option value="' .$showforum['forum_id']. '">' .$showforum['forum_name']. '</option>';
@@ -247,9 +253,9 @@ if(DB_count($_TABLES['ff_forums']) == 0) {
         $moderators->set_var ('LANG_filterview', $LANG_GF93['filterview']);
 
         $sql = "SELECT * FROM {$_TABLES['ff_moderators']} ";
-        if ($selected_forum > 0) {
-            $sql .= "WHERE mod_forum='{$selected_forum}' ";
-            if ($_POST['filtermode'] == 'group') {
+        if (!empty($selected_forums)) {
+            $sql .= "WHERE mod_forum IN (" . implode(',', $selected_forums) . ')';
+            if (isset($_POST['filtermode']) && $_POST['filtermode'] == 'group') {
                 $sql .= " AND  mod_groupid > '0' ";
             } else {
                 $sql .= " AND mod_groupid = '0' ";
@@ -316,4 +322,3 @@ $display .= COM_endBlock();
 $display .= FF_adminfooter();
 $display .= FF_siteFooter();
 echo $display;
-?>
