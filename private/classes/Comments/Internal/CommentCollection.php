@@ -176,10 +176,10 @@ class CommentCollection extends \glFusion\Collection
      */
     public function getObjects() : array
     {
-        /*$this->Comments = $this->tryCache();
+        $this->Comments = $this->tryCache();
         if (is_array($this->Comments)) {
             return $this->Comments;
-        }*/
+        }
 
         $this->Comments = array();
         if ($this->_stmt) {
@@ -219,4 +219,3 @@ class CommentCollection extends \glFusion\Collection
     }
 
 }
-
