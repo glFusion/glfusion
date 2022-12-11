@@ -2637,6 +2637,7 @@ function plugin_itemlist_comment($token)
         //$A['preview']   = CMT_preview($A); // format a comment for preview.
         $A['preview'] = $A->preview();
         $A['username']  = $A['name'];
+        $A['day'] = $A['nice_date'];
         $data_arr[]   = $A;           // push row data into array
     }
 
