@@ -191,14 +191,14 @@ if (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
     }
     $metaDesc = trim($shortComment).$tailString;
 
-    $outputHandle->addMeta('property','og:site_name',$_CONF['site_name']);
-    $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
-    $outputHandle->addMeta('property','og:title',$pagetitle);
-    $outputHandle->addMeta('property','og:type','article');
-    $outputHandle->addMeta('property','og:url',$permalink);
+    $outputHandle->addMeta('property','og:site_name',$_CONF['site_name'], HEADER_PRIO_NORMAL);
+    $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US', HEADER_PRIO_NORMAL);
+    $outputHandle->addMeta('property','og:title',$pagetitle, HEADER_PRIO_NORMAL);
+    $outputHandle->addMeta('property','og:type','article', HEADER_PRIO_NORMAL);
+    $outputHandle->addMeta('property','og:url',$permalink, HEADER_PRIO_NORMAL);
     $metaStoryImage = '';
     if ( $story_image != '' ) {
-        $outputHandle->addMeta('property','og:image',$_CONF['site_url'].$story_image);
+        $outputHandle->addMeta('property','og:image',$_CONF['site_url'].$story_image, HEADER_PRIO_NORMAL);
         $metaStoryImage = $_CONF['site_url'].$story_image;
         if ( $story_image[0] == '/') {
             $siPath = substr($story_image,1);
@@ -207,26 +207,26 @@ if (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
         }
         $siSize = @getimagesize ($_CONF['path_html'].$siPath  );
         if ( $siSize !== FALSE ) {
-            $outputHandle->addMeta('property','og:image:width',$siSize[0]);
-            $outputHandle->addMeta('property','og:image:height',$siSize[1]);
-            $outputHandle->addMeta('property','og:image:type',$siSize['mime']);
+            $outputHandle->addMeta('property','og:image:width',$siSize[0], HEADER_PRIO_NORMAL);
+            $outputHandle->addMeta('property','og:image:height',$siSize[1], HEADER_PRIO_NORMAL);
+            $outputHandle->addMeta('property','og:image:type',$siSize['mime'], HEADER_PRIO_NORMAL);
         }
     } else {
         if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $introtext, $arrResult)) {
-            $outputHandle->addMeta('property','og:image',$arrResult[2]);
+            $outputHandle->addMeta('property','og:image',$arrResult[2], HEADER_PRIO_NORMAL);
             $metaStoryImage = $arrResult[2];
         } else if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->getDisplayItem('bodytext'), $arrResult)) {
-            $outputHandle->addMeta('property','og:image',$arrResult[2]);
+            $outputHandle->addMeta('property','og:image',$arrResult[2], HEADER_PRIO_NORMAL);
             $metaStoryImage = $arrResult[2];
         }
     }
     if (!empty($story->get('subtitle'))) {
-        $outputHandle->addMeta('property','og:description',$story->getDisplayItem('subtitle'));
+        $outputHandle->addMeta('property','og:description',$story->getDisplayItem('subtitle'), HEADER_PRIO_NORMAL);
     } else {
-        $outputHandle->addMeta('property','og:description',$metaDesc);
+        $outputHandle->addMeta('property','og:description',$metaDesc, HEADER_PRIO_NORMAL);
     }
 
-    $outputHandle->addMeta('name','description',$metaDesc);
+    $outputHandle->addMeta('name','description',$metaDesc, HEADER_PRIO_NORMAL);
 
     // look for twitter social site config
 
@@ -248,15 +248,15 @@ if (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
         } else {
             $outputHandle->addMeta('property','twitter:card','summary');
         }
-        $outputHandle->addMeta('property','twitter:site','@'.$twitterSiteUser);
-        $outputHandle->addMeta('property','twitter:title',$pagetitle);
+        $outputHandle->addMeta('property','twitter:site','@'.$twitterSiteUser, HEADER_PRIO_NORMAL);
+        $outputHandle->addMeta('property','twitter:title',$pagetitle, HEADER_PRIO_NORMAL);
         if (!empty($story->get('subtitle'))) {
-            $outputHandle->addMeta('property','twitter:description',$story->getDisplayItem('subtitle'));
+            $outputHandle->addMeta('property','twitter:description',$story->getDisplayItem('subtitle'), HEADER_PRIO_NORMAL);
         } else {
-            $outputHandle->addMeta('property','twitter:description',$metaDesc);
+            $outputHandle->addMeta('property','twitter:description',$metaDesc, HEADER_PRIO_NORMAL);
         }
         if ( $metaStoryImage != '' ) {
-            $outputHandle->addMeta('property','twitter:image',$metaStoryImage . '?' . rand());
+            $outputHandle->addMeta('property','twitter:image',$metaStoryImage . '?' . rand(), HEADER_PRIO_NORMAL);
         }
     }
 
