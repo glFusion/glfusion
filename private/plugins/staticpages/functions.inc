@@ -374,6 +374,13 @@ function SP_displayPage ($page, $A, $comment_order = 'ASC', $comment_mode ='nest
 
 
     $content = SP_render_content ($A['sp_content'], $A['sp_php']);
+    $imgData = COM_getFirstImage($content);
+    if ($imgData) {
+        $outputHandle->addMeta('property','og:image',$imgData[2], HEADER_PRIO_NORMAL);
+    }
+    $outputHandle->addMeta('property', 'og:title', $A['sp_title'], HEADER_PRIO_NORMAL);
+    $outputHandle->addMeta('property', 'og:url', COM_getCurrentUrl(), HEADER_PRIO_NORMAL);
+
     $spage->set_var('content', $content );
 
     $dt = new Date($A['sp_date'],$_USER['tzid']);

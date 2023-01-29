@@ -1521,7 +1521,6 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
 
     $tmp = $theme->finish($theme->parse( 'index_header', 'header' ));
     echo $tmp;  // send the header.thtml
-
     $retval = $theme->finish( $theme->get_var( 'index_footer' ));
 
     _js_out();
@@ -7040,6 +7039,31 @@ function COM_anonymizeIP($ip)
         return "";
     }
 }
+
+
+/**
+ * Get information about the first image tag in the content.
+ * Also ensures the image URL is absolute.
+ *
+ * @param   string  $content    Page content
+ * @return  array|null      Image information, NULL if none found
+ */
+function COM_getFirstImage(string $content) : ?array
+{
+    global $_CONF;
+
+    if ( preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $content, $arrResult) ) {
+        // Make sure image is an absolute URL. Recent glFusion versions
+        // store img tags as a relative URL, older versions as absolute.
+        if (substr($arrResult[2], 0, strlen($_CONF['site_url'])) != $_CONF['site_url']) {
+            $arrResult[2] = $_CONF['site_url'] . $arrResult[2];
+        }
+        return $arrResult;
+    } else {
+        return NULL;
+    }
+}
+
 
 /**
  * Loads the specified library or class normally not loaded by lib-common.php
