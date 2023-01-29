@@ -1169,7 +1169,7 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     global $_CONF, $_TABLES, $_USER, $LANG01, $LANG12, $LANG_BUTTONS, $LANG_DIRECTION,
            $_IMAGE_TYPE, $topic, $_COM_VERBOSE, $_PAGE_TIMER, $theme_what,
            $theme_pagetitle, $theme_headercode, $theme_layout,
-           $_LOGO, $uiStyles;
+           $_LOGO, $uiStyles, $LANG_LOCALE;
 
     COM_hit();
 
@@ -1407,9 +1407,24 @@ function COM_siteFooter( $rightblock = -1, $custom = '' )
     // grab header data from outputHandler
     $outputHandle = outputHandler::getInstance();
 
+    // Add default og: properties. Priority is HEADER_PRIO_VERYLOW to not
+    // conflict with defaults set in the metatags plugin, if any.
     if ( isset($_CONF['fb_appid']) && $_CONF['fb_appid'] != '' ) {
         $outputHandle->addMeta('property','fb:app_id',$_CONF['fb_appid']);
     }
+    $outputHandle->addMeta('property', 'og:url', COM_getCurrentUrl());
+    $outputHandle->addMeta('property', 'og:type', 'website');
+    if (isset($_CONF['site_slogan']) && !empty($_CONF['site_slogan'])) {
+        $outputHandle->addMeta('property', 'og:description', $_CONF['site_slogan']);
+        $outputHandle->addMeta('property', 'og:title', $_CONF['site_slogan']);
+    } elseif (isset($_CONF['site_name']) && !empty($_CONF['site_name'])) {
+        $outputHandle->addMeta('property', 'og:title', $_CONF['site_name']);
+        $outputHandle->addMeta('property', 'og:description', $_CONF['site_name']);
+    }
+    if (isset($_CONF['site_name']) && !empty($_CONF['site_name'])) {
+        $outputHandle->addMeta('property', 'og:site_name', $_CONF['site_name']);
+    }
+    $outputHandle->addMeta('property','og:locale',isset($LANG_LOCALE) ? $LANG_LOCALE : 'en_US');
 
     $jsFooter = '<script src="'.$_CONF['layout_url'].'/js/footer.js"></script>';
 

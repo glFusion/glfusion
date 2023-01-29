@@ -308,9 +308,10 @@ class outputHandler {
         //$this->_header['meta'][] = $link = '<meta '.$type.'="' .  $name . '" content="' . $content . '"/>' . LB;
         // This blocks any duplicate "<meta name=..." tags, as well as any in
         // the $norepeat array
-        if (    ($type == 'name' || in_array($name, self::$norepeat['meta'])) &&
-                isset($this->_header['meta'][$type][$name]) &&
-                $this->_header['meta'][$type][$name]['priority'] <= $priority
+        if (
+            ($type == 'property' || $type == 'name' || in_array($name, self::$norepeat['meta'])) &&
+            isset($this->_header['meta'][$type][$name]) &&
+            $this->_header['meta'][$type][$name]['priority'] <= $priority
         ) {
             return;
         }
