@@ -213,11 +213,17 @@ if (($mode == 'print') && ($_CONF['hideprintericon'] == 0)) {
         }
     } else {
         if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $introtext, $arrResult)) {
-            $outputHandle->addMeta('property','og:image',$arrResult[2], HEADER_PRIO_NORMAL);
             $metaStoryImage = $arrResult[2];
         } else if (preg_match('/<img[^>]+src=([\'"])?((?(1).+?|[^\s>]+))(?(1)\1)/si', $story->getDisplayItem('bodytext'), $arrResult)) {
-            $outputHandle->addMeta('property','og:image',$arrResult[2], HEADER_PRIO_NORMAL);
             $metaStoryImage = $arrResult[2];
+        }
+        if (!empty($metaStoryImage)) {
+            // Make sure image is an absolute URL. Recent glFusion versions
+            // store img tags as a relative URL, older versions as absolute.
+            if (substr($metaStoryImage, 0, strlen($_CONF['site_url'])) != $_CONF['site_url']) {
+                $metaStoryImage = $_CONF['site_url'] . $metaStoryImage;
+            }
+            $outputHandle->addMeta('property','og:image',$metaStoryImage, HEADER_PRIO_NORMAL);
         }
     }
     if (!empty($story->get('subtitle'))) {
