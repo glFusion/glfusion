@@ -1207,17 +1207,13 @@ class Article
                         $topicRec['perm_anon']
                       );
 
+            // Set the actual integer value before converting to boolean
             $this->topic_access = $access;
 
-            if ($access > 0) {
-                $access = true;
-            }
+            $access = $access > 0;
         }
 
-        if ($access === false) {
-            return false;
-        }
-        return true;
+        return $access;
     }
 
     /*
