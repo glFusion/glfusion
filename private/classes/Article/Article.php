@@ -2502,6 +2502,9 @@ class Article
         SESS_clearContext();
         $output = $this->template->finish($this->template->get_var('finalstory'));
         $output = PLG_outputFilter($output, 'article');
+        if (isset($_GET['query'])) {
+            $output = COM_highlightQuery($output, $_GET['query']);
+        }
         unset($this->template);
         return $output;
     }
