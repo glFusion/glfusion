@@ -1641,7 +1641,7 @@ function COM_optionList( $table, $selection, $selected='', $sortcol=1, $where=''
     while ($A = $stmt->fetch()) {
         $retval .= '<option value="' . $A[0] . '"';
         if (
-            (is_array($selected) && in_array($selected, $A[0])) ||
+            (is_array($selected) && in_array($A[0], $selected)) ||
             (!is_array($selected) && $A[0] == $selected)
         ) {
             $retval .= ' selected="selected"';
