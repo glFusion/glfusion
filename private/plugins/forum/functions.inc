@@ -135,14 +135,13 @@ spl_autoload_register(function ($class)
     // base directory for the namespace prefix
     $base_dir = __DIR__ . '/classes/';
 
-    // get the relative class name
-    $relative_class = substr($class, $len);
+    // get the relative class filename
+    $relative_class = str_replace('\\', '/', strtolower(substr($class, $len))) . '.class.php';
 
     // replace the namespace prefix with the base directory, replace namespace
     // separators with directory separators in the relative class name, append
     // with .php
-    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.class.php';
-    $file = strtolower($file);
+    $file = $base_dir . $relative_class;
 
     // if the file exists, require it
     if (file_exists($file)) {
