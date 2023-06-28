@@ -2393,6 +2393,7 @@ $LANG_LOGO = array(
     'default'           => 'Par défaut',
     'yes'               => 'Oui',
     'no'                => 'Aucun',
+    'logo_image'        => 'Logo Image',
 );
 
 ###############################################################################

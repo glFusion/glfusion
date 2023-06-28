@@ -69,7 +69,7 @@ class AdminList extends Theme
             } else {
                 $img_url = COM_createImage(
                     $_CONF['path_images_url'] . '/' . $Theme->getImageName(),
-                    _('Logo Image'),
+                    $LANG_LOGO['logo_image'],
                     array(
                         'class' => 'themeAdminImage',
                     )

@@ -2393,6 +2393,7 @@ $LANG_LOGO = array(
     'default'           => 'Oletus',
     'yes'               => 'Kyll&auml;',
     'no'                => 'Ei',
+    'logo_image'        => 'Logo Image',
 );
 
 ###############################################################################
